@@ -1,0 +1,28 @@
+//自定义导出路径
+//global string $exportPath = "D:/gl_source/resource/md5/cube";//"D:/testMD5_maya";
+
+global int $start = 1;
+global int $end = 24;
+
+/*
+string $array[3] = {"first\n", "second\n", "third\n"}; 
+print($array[0]); // Prints "first\n" 
+print($array[1]); // Prints "second\n" 
+print($array[2]); // Prints "third\n" 
+*/
+
+
+global proc export(){
+	string $mesh[1] = {"pCube"}; 
+	string $cycles[1] = {"D:/gl_source/testMD5_maya/a7.mb"};//目标文件
+	string $path = "D:/gl_source/resource/md5/cube";
+	md5Exporter($mesh,1,1,1,0,$cycles,$path);
+}
+
+
+//======================================================================
+if(`window -q -ex md5ExportTools`) deleteUI md5ExportTools;
+window -s false  -mxb false -width 150 - height 100 -title "md5 export" md5ExportTools;
+columnLayout -adjustableColumn true;
+    button -label "导出" -command "export();";
+showWindow;

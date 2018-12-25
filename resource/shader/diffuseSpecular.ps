@@ -1,0 +1,13 @@
+uniform sampler2D texture1;
+varying vec4 color;
+void main(void)
+{
+	vec4 finalColor=texture2D(texture1, gl_TexCoord[0].st);	
+
+	//ÌùÍ¼+ÑÕÉ«
+	vec4 out_color=clamp((finalColor + color),0.0,1.0);	
+	gl_FragColor = out_color;
+
+	//ÑÕÉ«
+	//gl_FragColor = color;
+}

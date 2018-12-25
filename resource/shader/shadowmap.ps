@@ -1,0 +1,9 @@
+varying vec4 position;  
+void main()  
+{  
+	float zFar = 100.0f;  
+	float zNear= 10.0f;
+	float zDiff = zFar - zNear;  
+	float interpolatedDepth = (position.w / position.z) * zFar * zNear / zDiff + 0.5 * (zFar + zNear) / zDiff + 0.5;  
+    	gl_FragColor = vec4(vec3(pow(interpolatedDepth, 15.0)), 1.0);  
+}

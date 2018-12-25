@@ -1,0 +1,1919 @@
+//==========================================================================================================================
+//md5Exporter.mel written by Chris Edwards
+//
+//Version 1.1.2
+//
+//Visit www.zbufferstudios.com or go directly to scripts.zbufferstudios.com for more MEL scripts
+//Email me with questions: scripts@zbufferstudios.com
+//
+//Description: Export md5 files (both .md5mesh and .md5anim).
+//User may optionally create the .mtr files to go along with the .md5 file--texture files will be copied to the project path.
+//
+///Directions: Run md5Exporter() with appropriate inputs, OR run the md5ExporterOptions() for use with a GUI
+//==========================================================================================================================
+
+source "D:\\gl_source\\testMD5_maya\\func.mel";
+//结束帧
+proc int endFrame(){
+	global int $end;
+	return $end;
+	//int $v = `playbackOptions -q -aet`;
+	int $v = `playbackOptions -q -maxTime`;
+	return $v;
+}
+proc string getAbsPath(){
+	//return "/models/md5/";
+	return "/";
+}
+//开始帧
+proc int startFrame(){
+	global int $start;
+	return $start;
+	
+	//int $v = `playbackOptions -q -ast`;
+	int $v = `playbackOptions -q -minTime`;
+	return $v;
+}
+
+
+//print("导出帧范围:"+startFrame()+"~"+endFrame()+",导出路径:"+$exportPath+"\n");
+
+//#######################################################
+
+global string $md5Path;			//used by fileBrowser
+global string $cyclePath;		//used by fileBrowser
+global string $jointLines[];	//used to optimize the export times for the md5anim file (caches info from the md5mesh build)
+global string $trash[];			//garbage collection
+global int $md5MayaIndex[];				//index is md5 vertex, and content is maya uv
+global int $mayaMD5Index[];				//index is maya uv, and content is md5 vertex
+
+/*
+	主功能函数
+*/
+global proc md5Exporter(string $mesh[], int $triangulate, 
+			int $buildMesh, 
+			int $buildAnim, 
+			int $buildMat,
+			string $cycles[],string $path)
+{
+	//global string $exportPath;
+
+	//##########################################
+	//赋值
+	//$path = $exportPath;
+	//$mesh[0]="pCube";
+	//##########################################
+
+	string $cys = "";	
+	for($m = 0;$m < size($cycles);$m++){
+		$cys += $cycles[$m]+",";
+	}
+	
+	print("===================================\n是否构建Mesh = "+$buildMesh+""+
+	"|是否构建动画 = "+$buildAnim+""+
+	"|是否构建材质 = "+$buildMat+""+
+	"|$cycles长度 = " + size($cycles)+"=> (" + $cys + ")" +
+	"|导出路径 = " + "(" + $path + ")" + ""+
+	"|$mesh数量 = " + size($mesh) + ""+
+	
+	"\n");
+	
+	//检测mesh
+	if(size($mesh) > 0){
+		for($k = 0;$k < size($mesh); $k++){
+			print("mesh "+ $k + " = (" + $mesh[$k]+")\n");
+			if($mesh[$k] == ""){
+				error "mesh 名为空!!!";
+				return;
+			}
+		}
+	}
+	
+	
+	/*
+	if($path == ""){
+		error "===============没有填写导出路径!!!=================";
+		return;
+	}
+	*/
+	if(size($mesh) == 0){
+		error "$mesh数量 = 0";
+		return;
+	}
+	
+	
+	global string $trash[];
+	
+	//print ("global string $trash[]长度 = "+size($trash) + "\n");
+	//print("$cycles.length = " + size($cycles)+ "\n");
+	//print($cycles);
+	//print("\n");
+	
+	//return;//************************************************
+	
+	if(size($mesh))
+	{
+		string $triMesh[]; //copy of model to be operated upon
+		string $shader[]; //shader attached to the original model
+		string $buffer[];
+		int $faces[];
+		int $tris[];
+
+		for($i=0;$i<size($cycles);$i++)
+		{
+			file -f -o $cycles[$i];		//open the cycle[打开场景]
+			refresh;					//make sure scene refreshes(刷新场景)
+			
+			//================================
+			//Build md5mesh file
+			//================================
+			if($buildMesh && $i == 0)
+			{
+	
+				//if these two variables are equal then the mesh is already triangulated
+				$faces = `polyEvaluate -f $mesh[0]`;
+				$tris = `polyEvaluate -t $mesh[0]`;
+	
+				//================================
+				//Prepare the mesh
+				//================================
+	
+				//check if triangulated (or will be triangulated), otherwise throw error
+				if($tris[0] == $faces[0] && $buildMesh) {
+					$triMesh = `duplicate -ic -rr $mesh[0]`;
+				}
+				else if($triangulate && $buildMesh)
+				{
+					$triMesh[0] = md5Triangulate($mesh[0]);
+				}
+				else if($buildMesh){
+					 error "This script requires a triangulated mesh. Consider activating auto triangulate!";
+				}
+	
+				//make sure there are no unnecessary UVs--i.e. merge any containg the same locations--md5 requires this
+				if($buildMesh)
+				{
+					$numuvs = `polyEvaluate -uv $triMesh[0]`;
+					polyMergeUV -d 0.001 ($triMesh[0]+".map[0:"+($numuvs[0]-1)+"]");
+				}
+	
+				//get the shader
+				if($buildMesh) $shape = `ls -dag -s $triMesh[0]`;
+				else $shape = `ls -dag -s $mesh[0]`;
+				string $SG[] = `listConnections -scn true -d true -t shadingEngine $shape[0]`;
+				$shader = `listConnections -scn true -d true -t phongE $SG[0]`;
+
+				string $data = ""; //the info to write
+
+				//build header
+				$data += md5Header(`file -q -sn`, $path, "Mesh");
+
+				//build mesh
+				catch($data += md5Mesh($triMesh[0], $shader[0], $path));
+
+				//build footer
+				$data += md5Footer($path, "Mesh");
+
+				//write the md5mesh file
+				md5Writer(($path+getAbsPath()+(trimNumeric($triMesh[0]))+".md5mesh"), $data, "Writing md5Mesh File");
+			}
+
+			//================================
+			//Build md5anim file
+			//================================
+			if($buildAnim)
+			{
+				$data = ""; //the info to write
+
+				//build header
+				$data += md5Header(`file -q -sn`, $path, "Anim");
+
+				//build animation
+				catch($data += md5Anim($mesh[0]));	//because triangulation is irrelevant to the animation file
+
+				//build footer
+				$data += md5Footer($path, "Anim");
+
+				//write the md5anim file
+				string $cycle = basenameEx($cycles[$i]);				
+				int $tokens = `tokenize $cycle "_" $buffer`;
+				if(size($buffer[($tokens-1)])) $cycle = $buffer[($tokens-1)];
+				md5Writer(($path+getAbsPath()+$mesh[$i]+"_"+$cycle+".md5anim"), $data, "Writing md5Anim File");
+			}
+
+			//================================
+			//Build mtr file
+			//================================
+			
+			if($buildMat && $i == 0)
+			{
+				$data = ""; //the info to write
+				
+				//get the shader
+				$shape = `ls -dag -s $mesh[0]`;
+				string $SG[] = `listConnections -scn true -d true -t shadingEngine $shape[0]`;
+				$shader = `listConnections -scn true -d true -t phongE $SG[0]`;
+				
+				//query the data and copy the texture files
+				if($shader[0]!="")
+				{
+					catch($data = md5Material($shader[0], $path));
+				}
+				else print "No valid shader found, not exporting material file!";
+
+				//write the material file
+				md5Writer(($path + "/materials/" + $mesh[0] + ".mtr"), $data, "Writing MTR File");
+			}
+		}
+
+		//================================
+		//Build def file
+		//================================
+		//取消构建定义文件
+		
+		//if($buildAnim || $buildMesh)
+		//{
+			//$data = "";
+			//$data += buildDefFile($mesh[0],$cycles,$path);
+			//md5Writer(($path+"/def/"+$mesh[0]+".def"), $data, "Writing Def File");
+		//}
+		
+	}
+	else error "You must have a mesh selected in order to run this command!";
+
+	//take out the trash
+	if(size($trash)) delete $trash;
+	clear $trash;
+
+}//end of md5Exporter()
+
+
+
+//==========================================================================================================================
+global proc md5ExporterOptions(){
+
+	global string $md5Path;
+	global string $cyclePath;
+
+	//GUI procedure
+	if(`window -q -ex md5Options`) deleteUI md5Options;
+	window -s false -t "www.zbufferstudios.com" -mxb false md5Options;
+		columnLayout -adj true;
+			//image -h 30 -w 370 -bgc 1 .1 .1 -i (`internalVar -ubd`+"md5ExportGraphic.bmp");
+			rowLayout -nc 2 -cw2 250 110 -cat 2 "right" 0;
+				text -w 50 -l "Options" -al "left" -fn "boldLabelFont";
+				button -l "About" -c "confirmDialog -title \"MD5 Exporter\" -message \"    Written by Chris Edwards.\\nscripts@zbufferstudios.com\" -button \"Close\" -defaultButton \"Close\" -cancelButton \"No\"";
+				setParent ..;
+			frameLayout -lv 0 -bs "in" -mw 10;
+				columnLayout -adj true -rs 5;
+					checkBox -l "将mesh自动转化为三角形" -al "left" -v 1 md5Triangle;	//Auto Triangulate
+					checkBox -l "构建Mesh" -al "left" -v 1 md5BuildMesh;	//Build Mesh
+					checkBox -l "构建动画" -al "left" -v 1 md5BuildAnim;//Build Animation
+					checkBox -l "构建材质" -al "left" -v 0 md5BuildMat;//Build Material
+					checkBox -l "Multiple Cycles" -al "left" -v 0 -onc "textFieldButtonGrp -e -en true -tx \"\" md5CyclePath" -ofc "textFieldButtonGrp -e -tx `file -q -sn` -en false md5CyclePath" md5Cycles;
+					textFieldButtonGrp -l "Path" -cal 1 "left" -cal 3 "left" -cw 3 45 -cw 1 30 -ad3 2 -cat 1 "both" 2 -cat 3 "both" 0 -bl "Browse" -bc "fileBrowserDialog -m 4 -fc \"cyclePath\" -an \"Save\"; textFieldButtonGrp -e -tx $cyclePath md5CyclePath;" -tx `file -q -sn` -en false md5CyclePath;
+					setParent ..;
+				setParent ..;
+			text -l "导出设置" -al "left" -fn "boldLabelFont";
+			
+			//button -h 20 -l "赋予材质" -c "md5MakeShader(`filterExpand -ex true -sm 12`)";
+			
+			frameLayout -lv 0 -bs "in" -mw 10 -mh 5;
+				columnLayout -adj true;
+					//填写需要导出的Mesh名
+					textFieldGrp -l "Mesh" -cw 1 30 -cal 1 "left" -cat 1 "both" 0 -cw 2 200 md5Meshes;
+					setParent ..;
+				setParent ..;
+			menuBarLayout md5Menus;
+				menu -l "Project Presets" -aob true md5ProjMenu;
+					md5UpdatePresets;
+					setParent md5Menus;
+				setParent ..;
+			text -l "" -h 5; //spacer text
+			textFieldButtonGrp -l "导出路径" -cal 1 "left" -cw 3 50 -cw 1 50 -ad3 2 -cat 1 "both" 2 -cat 3 "both" 0 -bl "Browse" -bc "fileBrowserDialog -m 4 -fc \"md5Path\" -an \"Save\"; textFieldButtonGrp -e -tx $md5Path md5PathField;" md5PathField;
+			text -l "" -h 5; //spacer text
+			separator;
+			button -h 50 -l "导出数据" -c "{string $mesh = `textFieldGrp -q -tx md5Meshes`;md5Exporter({$mesh}, `checkBox -q -v md5Triangle`, `checkBox -q -v md5BuildMesh`, `checkBox -q -v md5BuildAnim`,`checkBox -q -v md5BuildMat`,(getCycles(`checkBox -q -v md5Cycles`,`textFieldButtonGrp -q -tx md5CyclePath`)),`textFieldButtonGrp -q -tx md5PathField`);}";
+
+	scriptJob -p md5Options -e "SelectionChanged" md5SelChanged -protected;		//makes sure values are up to date
+	scriptJob -p md5Options -cu true -e "deleteAll" md5NewScene -protected;			//makes sure values are up to date
+	window -e -w 370 md5Options;
+	md5NewScene;		//sets up initial values
+	showWindow md5Options;
+
+}//end of md5ExporterOptions()
+//==========================================================================================================================
+global proc string md5Triangulate(string $mesh){ //triangulates the mesh
+
+	string $triMesh[] = `duplicate -ic -rr $mesh`;
+
+	polyTriangulate $triMesh[0];
+	//delete -ch $triMesh[0];
+
+	return $triMesh[0];
+
+}//end of md5Triangulate()
+//==========================================================================================================================
+global proc md5Writer(string $path, string $data, string $title){
+
+	//start the progress window
+	int $amount = 0;
+    startProgress($amount, $title, "Writing: 0%", 1);
+
+  	// Check if the dialog has been cancelled
+    if ( `progressWindow -query -isCancelled` )
+    {
+	    endProgress;
+	    error "Cancelled";
+    }
+
+	//open the file for writing
+	$fileId=`fopen $path "w"`;
+
+	//write the data to the file
+	fwrite $fileId $data;
+
+	//close the file
+	fclose $fileId;
+
+	$amount += 100;
+	editProgress($amount, $title, ("Building: "+$amount+"%"), 1);
+
+    pause -seconds 1;
+
+	//close the progress window
+	endProgress;
+
+}//end of md5Writer()
+//==========================================================================================================================
+global proc string md5Mesh(string $mesh, string $shader, string $path){
+
+	print("md5Mesh方法获取的$mesh参数=(" + $mesh+")\n");
+	
+	global string $jointLines[];
+	global string $trash[];
+	global int $md5MayaIndex[];
+	global int $mayaMD5Index[];
+
+	//start the progress window
+	int $amount = 0;
+	startProgress($amount, "Building Mesh", "Building: 0%", 1);
+
+	string $meshData;								//stores the return data for the file writer
+	$trash[size($trash)] = $mesh;
+	string $buffer[];
+
+	$name = trimNumeric($mesh);						//used to remove numbers (due to the above duplication)
+
+    //get the skin cluster..error if no skin cluster
+     
+    
+    if( `objExists $name` ){
+    		
+    }
+    else{
+    	error("未找到对象:("+$name+")\n");
+    	return "";	
+    }
+	string $cluster = findRelatedSkinCluster($name);
+	if(!`objExists $cluster`) error "No skin cluster found!";
+
+	string $meshes[] = `skinCluster -q -g $cluster`; 	//meshes driven by the skin cluster
+	int $numMeshes = size($meshes); 					//number of meshes affected by skin cluster
+
+	//get the influences
+	string $influences[] = `skinCluster -q -inf $cluster`;
+
+	//get the full joint hierarchy
+	string $hierarchy[];
+	string $top = rootOf($influences[0]);
+	//if($top != ("|"+$top)) $top = "origin";
+	string $sorted = sortedHierarchy($top);
+	tokenize $sorted "|" $hierarchy;
+
+	int $numJoints = size($hierarchy); 				//number of joints in the skin cluster
+	
+	//Restore to starting position (coming from bind pose)
+	int $s = startFrame();
+	currentTime -e $s;//移动到开始帧
+	
+	//Have to set the X orientation of the origin joint to 90 0 0 in order to be correctly oriented to Z up
+	string $axis = `upAxis -q -ax`;
+	if ($axis == "y") setAttr ($hierarchy[0]+".r") 90 0 0;
+
+	$numverts = `polyEvaluate -v $mesh`;
+	$numfaces = `polyEvaluate -f $mesh`;
+	$numuvs = `polyEvaluate -uv $mesh`;
+
+	float $progressCycles = float($numverts[0]+$numfaces[0]+$numuvs[0]);
+	float $progress = 0;
+
+  	// Check if the dialog has been cancelled
+    if ( `progressWindow -query -isCancelled` )
+    {
+	    endProgress;
+	    if(size($trash)) delete $trash;
+	    clear $trash;
+	    error "Cancelled";
+    }
+	//////////////////////////
+    //build the joint list
+
+    	 //build joint section header
+		$meshData += ("numJoints " + $numJoints + "\nnumMeshes " + ($numMeshes/2) + "\n\n");
+    	$meshData += "joints {\n";
+
+    md5MeshJoints($mesh);	//creates the joints section of the mesh
+    for($line in $jointLines)
+    {
+    	$meshData += $line;
+	}
+
+	//////////////////////////
+    //build the mesh info--IMPORTANT: THE WEIGHTS LIST IS ACTUALLY DETERMINED FIRST FOR USE IN THE UV LIST (FOR WEIGHT INDICES) THOUGH IT IS PRINTED LAST
+	/////////////////////////
+
+  	// Check if the dialog has been cancelled
+    if ( `progressWindow -query -isCancelled` )
+    {
+	    endProgress;
+	    if(size($trash)) delete $trash;
+	    clear $trash;
+	    error "Cancelled";
+    }
+    
+    	
+	    //WEIGHTS MUST BE DONE IN BIND POSE UNLIKE OTHER PARTS OF THE MESH FILE
+	    if ($axis == "y") setAttr ($hierarchy[0]+".r") 0 0 0;
+	    select -r $hierarchy[0];
+	    gotoBindPose;
+    
+    	//Get info of the vertex weights list and build the data lines array. This data structure is then used by the UV list for indexing
+    	//Later the dataLines array is used for creating the vertex weights portion (written after the tris section is built)
+
+    	//build the weights list IMPORTANT TO NOTE: THIS IS THE ACTUAL VERTEX POSITION LIST
+    	//a vertex seems to be as many "weights" as it has portions of joint weight
+    		//--->so if vertex 0 is divided between 3 joints...its actually weights[0:2], etc...
+
+    		//weight weightIndex joint bias ( pos.x pos.y pos.z )
+	    	//get the number of weights
+	    	int $numWeights = 0;
+	    	float $weight;
+	    	int $weightedJoint[];		//stores the joint index for a given weight
+	    	int $weightsPerVertex[];	//Used later with UV list for indexing
+	    	int $weightAtVertex[];		//Used later with UV list for indexing
+	    	$locator = `spaceLocator`;	//locator for finding the local space position of the vertex
+	    	$trash[size($trash)] = $locator[0];
+	    	float $loc[];
+	    	float $localSpace[];		//holds the final position for each vertex local to the joint
+	    	string $dataLines[];		//holds each weight data line as it is constructed for $meshData
+	    	string $firstParent;
+	    	int $count;
+			float $sum;
+			float $deficit;
+			float $wTransforms[];
+	    	for($i=0;$i<$numverts[0];$i++)
+	    	{
+		    	//get list of joints affecting the point after pruning weights smaller than 0.01
+		    	$transforms = jointsAffecting($cluster, ($mesh+".vtx["+$i+"]"));
+		    	clear $wTransforms;
+		    	for($each in $transforms)
+				{
+					$wTransforms[size($wTransforms)] = `skinPercent -t $each -q $cluster ($mesh+".vtx["+$i+"]")`;
+				}
+
+				$sum = sumFloatArray($wTransforms,0,(size($wTransforms)-1));
+
+			   	//get these transforms normalized back to totalling 1
+				$deficit = 1 - $sum;
+				for($j=0;$j<size($transforms);$j++)
+				{
+					$wTransforms[$j] = $wTransforms[$j] + ($deficit/(size($transforms)));
+				}
+				$wTransforms = normalizeWeights($wTransforms);
+
+		    	$weightsPerVertex[$i] = size($transforms);		//Gives a way to easily look up the number of weights for a UV
+				$weightAtVertex[$i] = $numWeights;				//Gives an easy way to look up the starting weight index for a UV
+		    	$numWeights += $weightsPerVertex[$i];			//Tracks the total number of weights for the mesh
+				$count = 0;										//keeps track of index for $wTransforms
+		    	for($each in $transforms)
+		    	{
+			    	//find the index of the influencing joint
+			    	for($j=0;$j<$numJoints;$j++)
+			    	{
+				    	if($hierarchy[$j] == $each) $weightedJoint[size($weightedJoint)] = $j;
+			    	}
+
+			    	//store the joint influence for that vertex
+			    	$weight = $wTransforms[$count];
+			    	$count++;
+
+			    	//the xyz position of a "weight" is local to the joint that controls the weight...
+			    		//--->use a locator parented to the joint and placed at the vertex to get this location
+			    	$firstParent = firstParentOf($locator[0]);
+			    	if($firstParent!="") parent -w $locator[0];
+			    	parent $locator[0] $each;
+			    	xform -ro 0 0 0 -t 0 0 0 $locator[0];
+			    	$loc = `pointPosition ($mesh+".vtx["+$i+"]")`;
+			    	xform -ws -t $loc[0] $loc[1] $loc[2] $locator[0];
+			    	$localSpace = clampFloat(`xform -q -os -t $locator[0]`);
+
+			    	//build dataLines
+			    	$dataLines[size($dataLines)] = ($weightedJoint[(size($weightedJoint)-1)] + " " + $weight + " ( " + $localSpace[0] + " " + $localSpace[1] + " " + $localSpace[2] + " )");
+		    	}
+		    	//update progress
+			    $progress++;
+			    $amount =  int(`ceil ($progress/$progressCycles*100)`);
+			    editProgress($amount, "Building Mesh", ("Building: "+$amount+"%"), 1);
+
+	    	}
+
+	    //Restore to starting position (coming from bind pose)
+	    int $start = startFrame();
+	    currentTime -e $start;
+
+    	//Now proceed with normal flow of the file structure
+    	
+		//Have to set the X orientation of the origin joint to 90 0 0 in order to be correctly oriented to Z up
+		if ($axis == "y") setAttr ($hierarchy[0]+".r") 90 0 0;
+    	
+
+	  	// Check if the dialog has been cancelled
+	    if ( `progressWindow -query -isCancelled` )
+	    {
+		    endProgress;
+		    if(size($trash)) delete $trash;
+		    clear $trash;
+		    error "Cancelled";
+	    }
+
+    	//build the mesh section header
+   		$meshData += ("mesh {\n\t\/\/ meshes:" + $name + "\n\tshader \"textures/" + (trimNumeric($shader)) + ".tga\"\n\n");
+
+   		//build the vert list IMPORTANT TO NOTE: THIS LIST IS ACTUALLY THE UVS DESPITE THE NAME
+   		$meshData += ("\tnumverts " + $numuvs[0] + "\n");
+
+   		//kill progress
+   		endProgress;
+
+   		//Convert the Maya internal vertex list into the md5 format--specifically use the face-vertex indices to re-index the UVs
+   		//UVs will now use an array called md5MayaIndex[] in order to crosscheck the md5 vertex index with the corresponding Maya UV
+   		buildVertIndex($mesh);
+
+   		//begin progress again
+   		startProgress($amount, "Building Mesh", ("Building: "+$amount+"%"), 1);
+
+   		//Now proceed with querying the info and building
+   		string $vertex[];		//the vertex that corresponds to the given uv
+   		string $transforms[];	//the joints affecting the given vertex
+   		float $uvpos[];			//the position of the uv
+   		for($i=0;$i<$numuvs[0];$i++)
+   		{
+	   		$vertex = `polyListComponentConversion -tv ($mesh+".map["+$md5MayaIndex[$i]+"]")`;
+	   		tokenize $vertex[0] "[]" $buffer;
+	   		$uvpos = `polyEditUV -q ($mesh+".map["+$md5MayaIndex[$i]+"]")`;
+	   		//ALSO NOTE: ORIGIN FOR DIRECTX UV SYSTEM IS AT TOP LEFT
+   				//--->therefore, must flip the V portion of the UVs read in from Maya (open gl is origin in lower left)
+	   		$meshData += ("\tvert " + $i + " ( " + $uvpos[0] + " " + (1-$uvpos[1]) + " ) " + ($weightAtVertex[(int($buffer[1]))]) + " " + ($weightsPerVertex[(int($buffer[1]))]) + "\n"); //vert vertIndex ( s t ) startWeight countWeight
+
+	   		//update progress
+			$progress++;
+			$amount =  int(`ceil ($progress/$progressCycles*100)`);
+			editProgress($amount, "Building Mesh", ("Building: "+$amount+"%"), 1);
+
+   		}
+
+  	// Check if the dialog has been cancelled
+    if ( `progressWindow -query -isCancelled` )
+    {
+	    endProgress;
+	    if(size($trash)) delete $trash;
+	    clear $trash;
+	    error "Cancelled";
+    }
+
+   	//Build the Tri List
+   	$meshData += ("\n\tnumtris " + $numfaces[0] + "\n");
+
+   	string $verts[];
+   	string $faceuv;
+   	int $faceuvs[];
+   	string $value[];
+	for($i=0; $i<$numfaces[0]; $i++)
+	{
+		//gets the md5 vert for the maya vert (thru the maya uv for that maya vert)
+		clear $faceuvs;
+		//append data
+		$verts = faceVerts(($mesh+".f["+$i+"]"));
+		for($vert in $verts)
+		{
+			$faceuv = faceUV(($mesh+".f["+$i+"]"),$vert);
+			tokenize $faceuv "[]" $buffer;
+			$faceuvs[size($faceuvs)] = $mayaMD5Index[(int($buffer[1]))];
+		}
+
+		//md5 utilizes clockwise face-vertex ordering (maya uses counter-clockwise)--so use the end of the array to the front instead
+		$meshData += ("\ttri " + $i + " " + $faceuvs[2] + " " +$faceuvs[1]+ " "+ $faceuvs[0]+"\n"); //tri triIndex vertIndex[0] vertIndex[1] vertIndex[2]
+
+		//update progress
+		$progress++;
+		$amount =  int(`ceil ($progress/$progressCycles*100)`);
+		editProgress($amount, "Building Mesh", ("Building: "+$amount+"%"), 1);
+
+	}
+
+  	// Check if the dialog has been cancelled
+    if ( `progressWindow -query -isCancelled` )
+    {
+	    endProgress;
+	    if(size($trash)) delete $trash;
+	    clear $trash;
+	    error "Cancelled";
+    }
+
+	//Build Vertex Weight List
+	//Here we use the above generated data lines to finally update meshData with the vertex weight list.
+
+	    	//update meshData
+    		$meshData += ("\n\tnumweights " + $numWeights + "\n");
+	    	for($i=0; $i<size($dataLines);$i++)
+	    	{
+		    	$meshData += ("\tweight " + $i + " " + $dataLines[$i] + "\n");
+	    	}
+
+	//end of mesh info
+	$meshData += "}";
+
+	//reset the joint orientation if necessary
+	string $axis = `upAxis -q -ax`;
+	if ($axis == "y") setAttr ($hierarchy[0]+".r") 0 0 0;
+
+	//make sure model is at starting pose for base frame
+	int $baseframe = startFrame();
+	currentTime -e $baseframe;
+
+	//take out the trash
+	if(size($trash)) delete $trash;
+	clear $trash;
+
+	//end progressWindow
+	endProgress;
+
+	return $meshData;
+
+}//end of md5Mesh()
+//==========================================================================================================================
+global proc string md5Header(string $mayafile, string $path, string $mode){
+
+	string $header;
+
+	//start the progress window
+	int $amount = 0;
+	startProgress($amount,("Building " + $mode + " File Header"), "Building: 0%", 1);
+
+  	// Check if the dialog has been cancelled
+    if ( `progressWindow -query -isCancelled` )
+    {
+	    endProgress;
+	    error "Cancelled";
+    }
+
+	$header += "MD5Version 10\n\/\/Created with md5Exporter.mel by Chris Edwards, scripts.zbufferstudios.com\ncommandline \"\"\n\n";
+
+	$amount += 100;
+
+	editProgress($amount, ("Building " + $mode + " File Header"), ("Building: "+$amount+"%"), 1);
+
+    pause -seconds 1;
+
+    endProgress;
+
+	return $header;
+
+}//end of md5Header()
+//==========================================================================================================================
+global proc string md5Anim(string $mesh){
+
+	global string $trash[];
+
+	//start the progress window
+	int $amount = 0;
+	startProgress($amount, "Building Animation", "Building: 0%", 1);
+
+	string $animData;
+	int $numframes = endFrame() - startFrame() + 1;
+	int $baseframe = startFrame();
+	string $currentUnit = `currentUnit -q -t`;
+	int $rate;
+
+	//remove all static channels
+	delete -all -staticChannels;
+
+	//set time to base frame
+	currentTime -e $baseframe;
+
+	//figure frame rate--only supporting a literal amount such as 14fps, OR film and ntsc strings currently
+	
+	/*
+	if($rate=(int($currentUnit)));
+	else if($currentUnit == "film") $rate = 24;
+	else if($currentUnit == "ntsc") $rate = 30;
+	else if($currentUnit == "pal") $rate = 25;
+	else error "Unsupported framerate!";
+	*/
+	
+	//print("******************** $rate = " + $rate + "\n");
+	
+	$rate = 24;
+
+	//get the skin cluster..error if no skin cluster
+	string $cluster = findRelatedSkinCluster($mesh);
+	if(!`objExists $cluster`) error "No skin cluster found!";
+
+	string $meshes[] = `skinCluster -q -g $cluster`; 	//meshes driven by the skin cluster
+	int $numMeshes = size($meshes); 					//number of meshes affected by skin cluster
+
+	//get the influences
+	string $influences[] = `skinCluster -q -inf $cluster`;
+
+	//get the full joint hierarchy
+	string $hierarchy[];
+	string $top = rootOf($influences[0]);
+	//if($top != ("|"+$top)) $top = "origin";
+	string $sorted = sortedHierarchy($top);
+	tokenize $sorted "|" $hierarchy;
+	
+	string $locators[] = md5AnimJoints($mesh);	//creates the joints section of the mesh and stores the created locators
+	$trash = stringArrayRemoveDuplicates(stringArrayCatenate($trash,$locators));	//set trash pickup
+	
+	int $numJoints = size($hierarchy); 				//number of joints in the skin cluster
+
+	//parse the hierarchy to get the $numAnimated components, binary code for each joint, and the start frame for each joint
+	int $numAnimated;	//total number of animated channels in hierarchy (for translate and rotate)
+	int $code[];		//binary code for each joint (tx,ty,tz) (qx,qy,qz) -->2^0+...+2^6 ->ex. 63 for all 6 channels
+	int $aIndex[];		//starting index on the number of animated components where that joint starts
+	string $rot[];
+	string $tran[];
+	for($i=0;$i<size($hierarchy);$i++)
+	{
+		$tran = `listConnections -s 1 -c 1 -t animCurveTL $hierarchy[$i]`;			//yields translation curves
+		$rot = `listConnections -s 1 -c 1 -t animCurveTA $hierarchy[$i]`;			//yields rotation curves
+		if((size($tran)/2 + size($rot)/2)) $aIndex[$i] = $numAnimated;
+		else $aIndex[$i] = 0;
+		$numAnimated += (size($tran)/2 + size($rot)/2);
+		for($j=0;$j<size($tran);$j++)
+		{
+			if(`gmatch $tran[$j] "*.translateX"`) $code[$i]+=1;
+			if(`gmatch $tran[$j] "*.translateY"`) $code[$i]+=2;
+			if(`gmatch $tran[$j] "*.translateZ"`) $code[$i]+=4;
+		}
+		for($k=0;$k<size($rot);$k++)
+		{
+			if(`gmatch $rot[$k] "*.rotateX"`) $code[$i]+=8;
+			if(`gmatch $rot[$k] "*.rotateY"`) $code[$i]+=16;
+			if(`gmatch $rot[$k] "*.rotateZ"`) $code[$i]+=32;
+		}
+	}
+
+	//build the anim data header
+	$animData += ("numFrames " + $numframes + "\nnumJoints " + $numJoints + "\nframeRate " + $rate + "\nnumAnimatedComponents "+ $numAnimated + "\n\n");
+
+	//build the hierarchy section
+		// "name"   parent flags startIndex
+
+		float $progressCycles = ($numJoints*2) + ($numframes*2);
+		float $progress = 0;
+
+		string $parentName;			//name of the parent
+		string $parent[];			//parents of the given joint
+		int $pIndex[]; 				//parent index list
+
+		$animData += "hierarchy {\n";
+		for($i=0;$i<$numJoints;$i++)
+		{
+			$parent = `listRelatives -p $hierarchy[$i]`;
+			//build the pIndex list (parent indices)
+    		for($j=0;$j<$numJoints;$j++)
+    		{
+				if($parent[0] == $hierarchy[$j]) $pIndex[$i] = $j;
+	 			else if(`firstParentOf $hierarchy[$i]` == "") $pIndex[$i] = -1;
+	 			//else $pIndex[$i] = -1;
+    		}
+
+			if($pIndex[$i] == -1) $parentName = "";
+			else $parentName = $hierarchy[$pIndex[$i]];
+			
+			//$animData += ("\t\""+$hierarchy[$i]+"\" "+$pIndex[$i]+" "+$code[$i]+" "+$aIndex[$i]+"\t\/\/ "+$parentName+"\n");
+			$animData += ("\t\""+$hierarchy[$i]+"\"\t"+$pIndex[$i]+" "+$code[$i]+" "+$aIndex[$i]+"\t\/\/ "+$parentName+"\n");
+			//update progress
+			$progress++;
+			$amount =  int(`ceil ($progress/$progressCycles*100)`);
+			editProgress($amount, "Building Animation", ("Building: "+$amount+"%"), 1);
+
+		}
+		$animData += "}\n\n";
+
+	  	// Check if the dialog has been cancelled
+	    if ( `progressWindow -query -isCancelled` )
+	    {
+		    endProgress;
+		    if(size($trash)) delete $trash;
+			clear $trash;
+		    error "Cancelled";
+	    }
+
+	//make sure model is at starting pose for base frame
+	currentTime -e $baseframe;
+
+	//build the bounding box section
+		//( min.x min.y min.z ) ( max.x max.y max.z )
+		float $bb[];
+		string $axis = `upAxis -q -ax`;
+		$animData += "bounds {\n";
+		for($i=$baseframe; $i<=$numframes;$i++)
+		{
+			currentTime -e $i;
+			$bb = `xform -q -bb $mesh`;
+			if ($axis == "y")
+			$animData += "\t ( "+ $bb[0] + " " + (-1*$bb[5]) + " " +$bb[1] + " ) ( " + $bb[3] + " " + (-1*$bb[2]) + " " + $bb[4] + " " +")\n";
+			else
+			$animData += "\t ( "+ $bb[0] + " " + $bb[1] + " " +$bb[2] + " ) ( " + $bb[3] + " " + $bb[4] + " " + $bb[5] + " " +")\n";
+
+			//update progress
+			$progress++;
+			$amount =  int(`ceil ($progress/$progressCycles*100)`);
+			editProgress($amount, "Building Animation", ("Building: "+$amount+"%"), 1);
+
+		}
+
+		$animData += "}\n\n";
+
+	  	// Check if the dialog has been cancelled
+	    if ( `progressWindow -query -isCancelled` )
+	    {
+		    endProgress;
+		   	if(size($trash)) delete $trash;
+			clear $trash;
+		    error "Cancelled";
+	    }
+
+	//make sure model is at starting pose for base frame
+	currentTime -e $baseframe;
+
+	//build the base frame
+		//( pos.x pos.y pos.z ) ( orient.x orient.y orient.z )
+		float $r[];
+		float $loc[];
+		float $quat[];
+
+		$animData += "baseframe {\n";
+		for($i=0;$i<$numJoints;$i++)
+		{
+			$loc = clampFloat(`xform -q -t $locators[$i]`);
+			if($i==1 && $axis == "y") $loc = {$loc[0],$loc[2]*-1,$loc[1]};
+			$r = clampFloat(`xform -q -ro $locators[$i]`);
+			if($i == 0) $r = {0,0,0};
+			if($i==1 && $axis == "y")
+			{
+				setAttr ($hierarchy[0]+".r") 90 0 0;
+				$r = clampFloat(`xform -q -ro $locators[$i]`);
+				setAttr ($hierarchy[0]+".r") 0 0 0;
+			}
+			$quat = clampFloat(quatRot($r[0],$r[1],$r[2]));
+			$animData += ("\t ( "+$loc[0]+" "+$loc[1]+" "+$loc[2]+ " ) ( " + $quat[0]+" "+$quat[1]+" "+$quat[2] +" )\n");
+
+			//update progress
+			$progress++;
+			$amount =  int(`ceil ($progress/$progressCycles*100)`);
+			editProgress($amount, "Building Animation", ("Building: "+$amount+"%"), 1);
+
+		}
+		$animData += "}\n\n";
+
+	  	// Check if the dialog has been cancelled
+	    if ( `progressWindow -query -isCancelled` )
+	    {
+		    endProgress;
+		   	if(size($trash)) delete $trash;
+			clear $trash;
+		    error "Cancelled";
+	    }
+
+	//build all other frames
+		//( pos.x pos.y pos.z ) ( orient.x orient.y orient.z )
+		float $locs[];
+		float $quats[];
+		float $orient[];
+		string $frameLine;
+		
+		print("骨骼数量 $numJoints = " + $numJoints + "\n");
+		
+		for($i=$baseframe; $i<=(endFrame());$i++)
+		{
+			currentTime -e $i;
+			$animData += ("frame " + ($i-$baseframe) + " {\n");
+
+			for($j=0;$j<$numJoints;$j++)
+			{
+	    		//get world space locations for the joint
+	    		$locs = clampFloat(`xform -q -t $locators[$j]`);
+	    		if($j==1 && $axis == "y") {
+	    			$locs = {$locs[0],$locs[2]*-1,$locs[1]};
+				}
+	    		//get the quaternions for the joint
+	    		$orient = clampFloat(`xform -q -ro $locators[$j]`);
+	    		if($j==1 && $axis == "y")
+				{
+					setAttr ($hierarchy[0]+".r") 90 0 0;
+					$orient = clampFloat(`xform -q -ro $locators[$j]`);
+					setAttr ($hierarchy[0]+".r") 0 0 0;
+				}
+				$quats = clampFloat(quatRot($orient[0],$orient[1],$orient[2]));
+
+	    		//decide which values get written...
+				int $bicode=$code[$j];			//binary code for the joint
+				int $rem = $bicode;				//remainder of operations
+				$frameLine = "";				//temp storage for the operation
+
+				//check Qz
+				if($rem/32)				//then Qz is written
+				{
+					$frameLine = ($quats[2] + " " + $frameLine);
+				}
+				if(($rem = $rem%32));	//go to next attribute
+				else					//go to next joint
+				{
+					if($frameLine!="") $animData += ("\t"+$frameLine+"\n");
+					continue;
+				}
+
+				//check Qy
+				if($rem/16)				//then Qy is written
+				{
+					$frameLine = ($quats[1] + " " + $frameLine);
+				}
+				if(($rem = $rem%16));	//go to next attribute
+				else					//go to next joint
+				{
+					$animData += ("\t"+$frameLine+"\n");
+					continue;
+				}
+
+				//check Qx
+				if($rem/8)				//then Qx is written
+				{
+					$frameLine = ($quats[0] + " " + $frameLine);
+				}
+				if(($rem = $rem%8));	//go to next attribute
+				else					//go to next joint
+				{
+					$animData += ("\t"+$frameLine+"\n");
+					continue;
+				}
+
+				//check Tz
+				if($rem/4)				//then Tx is written
+				{
+					$frameLine = ($locs[2] + " " + $frameLine);
+				}
+				if($rem = $rem%4);		//go to next attribute
+				else					//go to next joint
+				{
+					$animData += ("\t"+$frameLine+"\n");
+					continue;
+				}
+
+				//check Ty
+				if($rem/2)				//then Ty is written
+				{
+					$frameLine = ($locs[1] + " " + $frameLine);
+				}
+				if($rem = $rem%2);		//go to next attribute
+				else					//go to next joint
+				{
+					$animData += ("\t"+$frameLine+"\n");
+					continue;
+				}
+
+				//check Tx
+				if($rem/1)				//then Tx is written
+				{
+					$frameLine = ($locs[0] + " " + $frameLine);
+				}
+				if($rem = $rem%1);		//should never be true
+				else					//go to next joint
+				{
+					$animData += ("\t"+$frameLine+"\n");
+					continue;
+				}
+			}
+
+			$animData += "}\n\n";
+
+			//update progress
+			$progress++;
+			$amount =  int(`ceil ($progress/$progressCycles*100)`);
+			editProgress($amount, "Building Animation", ("Building: "+$amount+"%"), 1);
+
+		}
+
+	//clean up scene and memory
+	currentTime -e $baseframe;
+
+	// Check if the dialog has been cancelled
+	if ( `progressWindow -query -isCancelled` )
+	{
+	    endProgress;
+	    if(size($trash)) delete $trash;
+		clear $trash;
+	    error "Cancelled";
+	}
+
+	pause -sec 1;
+
+	//take out the trash
+	if(size($trash)) delete $trash;
+	clear $trash;
+
+	//end progress window
+	endProgress;
+
+	return $animData;
+
+}//end of md5Anim()
+//==========================================================================================================================
+//移除名字中的0-9数字
+global proc string trimNumeric(string $name){ //removes any numeric characters from the string
+
+	string $charArray[] = charArray($name);
+	/*
+	for($char in $charArray)
+	{
+		print($char+",");
+	}
+	*/
+	string $temp[];
+	for($char in $charArray)
+	{
+		if(!`gmatch $char "[0-9]"`) $temp[size($temp)] = $char;
+	}
+	string $newName = stringArrayToString($temp, "");
+
+	return $newName;
+
+}//end of trimNumeric()
+//==========================================================================================================================
+global proc string[] charArray(string $name){//turns a string into an array of each character
+
+	int $size = size($name);
+	string $charArray[];
+	for($i=1;$i<=$size;$i++)
+	{
+		$charArray[$i] = `substring $name $i $i`;
+	}
+
+	return $charArray;
+
+}//end of charArray()
+//==========================================================================================================================
+global proc md5AddPreset(string $path){
+
+	if(size($path))
+	{
+		string $result = `promptDialog
+	 		-title "Add Preset"
+	 		-message "Enter Name:"
+	 		-button "OK" -button "Cancel"
+	 		-defaultButton "OK" -cancelButton "Cancel"
+	 		-dismissString "Cancel"`;
+
+	 	if($result == "Cancel") return;
+
+		$name = `promptDialog -query -text`;
+
+		//append to preset file
+		$file = (`internalVar -usd`+"md5Exporter.pp");
+		$fileId=`fopen $file "a"`;
+		fprint $fileId ($name + "," + $path + ",");
+
+		//close file
+	 	fclose $fileId;
+
+	 	//rebuild the menu
+	 	md5UpdatePresets;
+	}else error "Please supply a project path!";
+
+}//end of md5AddPreset()
+//==========================================================================================================================
+global proc md5DeletePreset(string $preset){
+
+	$file = (`internalVar -usd`+"md5Exporter.pp");
+	string $presets[];
+	string $output;
+
+	//open .pp file for reading if exists
+	if(`filetest -r $file`)
+	{
+		$fileId=`fopen $file "r"`;
+
+		//get array of presets
+		$presets[size($presets)] = `fgetword $fileId "\n"`;
+
+		//close the .pp file for reading
+	 	fclose $fileId;
+
+ 		tokenize $presets[0] "," $presets;
+
+	 	//parse out undesired portions
+	 	for($i=0;$i<size($presets);$i+=2)
+	 	{
+		 	if($presets[$i] != $preset) $output += ($presets[$i] + "," + $presets[$i+1] + ",");
+	 	}
+
+		//open .pp file for writing
+		$fileId=`fopen $file "w"`;
+
+		//write new data
+		fprint $fileId $output;
+
+		//close .pp file for writing
+ 		fclose $fileId;
+	}else error "No preset file exists!";
+
+	//rebuilt the menu
+	md5UpdatePresets;
+
+}//end md5DeletePreset()
+//==========================================================================================================================
+global proc md5UpdatePresets(){
+
+	$file = (`internalVar -usd`+"md5Exporter.pp");
+	string $presets[];
+
+	menu -e -dai md5ProjMenu;
+
+	//add default presets
+	menuItem -p md5ProjMenu -l "Doom 3" -c "textFieldGrp -e -tx \"C:/Program Files/Doom 3/base\" md5PathField";
+	menuItem -p md5ProjMenu -l "Quake 4" -c "textFieldGrp -e -tx \"C:/Program Files/id Software/Quake 4/q4base\" md5PathField";
+	menuItem -p md5ProjMenu -l "Prey" -c "textFieldGrp -e -tx \"C:/Program Files/Prey/base/\" md5PathField";
+
+	//open .pp file for reading (if exists)
+	if(`filetest -r $file`)
+	{
+		$fileId=`fopen $file "r"`;
+
+		//get array of presets
+		$presets[size($presets)] = `fgetword $fileId "\n"`;
+
+		//close the .pp file for reading
+	 	fclose $fileId;
+ 	}
+ 	tokenize $presets[0] "," $presets;
+ 	if(size($presets)>1)
+ 	{
+		//add custom presets
+		for($i=0;$i<size($presets);$i+=2)
+		{
+			menuItem -p md5ProjMenu -l $presets[$i] -c ("textFieldGrp -e -tx \"" + $presets[$i+1] + "\" md5PathField");
+			menuItem -p md5ProjMenu -ob true -c ("md5DeletePreset(\"" + $presets[$i] + "\")");
+		}
+ 	}
+	//finish off the menu
+	menuItem -p md5ProjMenu -l "Add Preset" -c "md5AddPreset(`textFieldGrp -q -tx md5PathField`)";
+
+}//end of md5UpdatePresets()
+//==========================================================================================================================
+/*
+	构建一个材质
+*/
+global proc string md5MakeShader(string $mesh[]){
+	//print `size($mesh)`
+	//$len = size($mesh)
+
+/*	
+		int $myInts[]={1,2,3,4,5,6};
+$numInts=size($myInts);
+// Result: 6 //
+
+string $myString = "a string";
+$strSize=size($myString);
+// Result: 8 //
+
+// Also, please see the examples for the <b>clear</b> command.
+*/
+
+	int $len = size($mesh);
+	print ("mesh数量"+$len+"\n");
+	for($n = 0 ;$n < $len ;$n++ ){
+		print ("mesh的name:"+$mesh[$n]+"\n");
+	}
+	
+	if($len <= 0){
+		return "";
+	}
+
+	string $shader = `shadingNode -asShader phongE -n $mesh[0]`;								//the phong e shader
+	string $SG = `sets -em -r true -nss true`;													//the shading group
+	connectAttr -f ($shader+".outColor") ($SG+".surfaceShader");								//connect the shader and SG
+	string $diffuse = `shadingNode -asTexture file -n ($mesh[0]+"_diffuse")`;					//diffuse color map
+	string $spec = `shadingNode -asTexture file -n ($mesh[0]+"_spec")`;							//specular map
+	string $local = `shadingNode -asTexture file -n ($mesh[0]+"_bump")`;						//normal map
+	string $editor = `shadingNode -asTexture file -n ($mesh[0]+"_editor")`;						//editor texture
+	addAttr -ln "editor" -dt float3 $shader;													//add the editor texture input
+	string $files[4] = {$diffuse, $spec, $local, $editor};										//file array
+	string $loadList[] = {"diffuse", "specular", "normal", "editor"};
+
+	//create and connect the placer nodes
+	string $placer;
+	for($i=0;$i<4;$i++)
+	{
+		$placer = `shadingNode -asUtility place2dTexture`;
+		connectAttr -f ($placer+".coverage") ($files[$i]+".coverage");
+		connectAttr -f ($placer+".translateFrame") ($files[$i]+".translateFrame");
+		connectAttr -f ($placer+".rotateFrame") ($files[$i]+".rotateFrame");
+		connectAttr -f ($placer+".mirrorU") ($files[$i]+".mirrorU");
+		connectAttr -f ($placer+".mirrorV") ($files[$i]+".mirrorV");
+		connectAttr -f ($placer+".stagger") ($files[$i]+".stagger");
+		connectAttr -f ($placer+".wrapU") ($files[$i]+".wrapU");
+		connectAttr -f ($placer+".wrapV") ($files[$i]+".wrapV");
+		connectAttr -f ($placer+".repeatUV") ($files[$i]+".repeatUV");
+		connectAttr -f ($placer+".offset") ($files[$i]+".offset");
+		connectAttr -f ($placer+".rotateUV") ($files[$i]+".rotateUV");
+		connectAttr -f ($placer+".noiseUV") ($files[$i]+".noiseUV");
+		connectAttr -f ($placer+".vertexUvOne") ($files[$i]+".vertexUvOne");
+		connectAttr -f ($placer+".vertexUvTwo") ($files[$i]+".vertexUvTwo");
+		connectAttr -f ($placer+".vertexUvThree") ($files[$i]+".vertexUvThree");
+		connectAttr -f ($placer+".vertexCameraOne") ($files[$i]+".vertexCameraOne");
+		connectAttr -f ($placer+".outUV") ($files[$i]+".uv");
+		connectAttr -f ($placer+".outUvFilterSize") ($files[$i]+".uvFilterSize");
+	}
+
+	//connect the textures
+	connectAttr -f ($diffuse+".outColor") ($shader+".color");
+	connectAttr -f ($spec+".outColor") ($shader+".specularColor");
+	connectAttr -f ($local+".outColor") ($shader+".normalCamera");
+	connectAttr -f ($editor+".outColor") ($shader+".editor");
+
+	//attach shader to mesh
+	$shape = `ls -dag -s $mesh[0]`;
+	sets -fe $SG $shape[0];
+
+	//prompt user for each texture
+	for($i=0;$i<4;$i++)
+	{
+		$result = `confirmDialog -ma "center" -title "Choose Textures" -message ("Load "+ $loadList[$i]+ " map?")
+ 			-button "Browse" -button "Skip" -defaultButton "Browse"
+ 			-cancelButton "Skip" -dismissString "Skip"`;
+ 		if($result == "Skip") continue;
+		setAttr -typ "string" ($files[$i]+".fileTextureName") `fileDialog -dm "*.tga"`;
+	}
+
+	return $shader;
+
+}//end of md5MakeShader()
+//==========================================================================================================================
+global proc md5Path(string $path, string $objType){
+
+	global string $md5Path;
+
+	$md5Path = $path;
+
+}//end of md5Path()
+//==========================================================================================================================
+global proc cyclePath(string $path, string $objType){
+
+	global string $cyclePath;
+
+	$cyclePath = $path;
+
+}//end of cyclePath()
+//==========================================================================================================================
+global proc string md5Material(string $shader, string $path){	//configure the .mtr file for export
+
+	string $matData;
+	$name = trimNumeric($shader);
+
+	//start the progress window
+	int $amount = 0;
+	startProgress($amount, "Building Material", "Building: 0%", 1);
+
+    //make material and texture folders if don't exist already
+    if(!`filetest -d ($path+"/textures/")`) sysFile -md ($path+"/textures/");
+    if(!`filetest -d ($path+"/materials/")`) sysFile -md ($path+"/materials/");
+
+  	// Check if the dialog has been cancelled
+    if ( `progressWindow -query -isCancelled` )
+    {
+	    endProgress;
+	    error "Cancelled";
+    }
+
+	//begin building the material data
+	$dNode = basenameEx(`connectionInfo -sfd ($shader+".color")`);
+	$sNode = basenameEx(`connectionInfo -sfd ($shader+".specularColor")`);
+	$localNode = basenameEx(`connectionInfo -sfd ($shader+".normalCamera")`);
+	if(`attributeQuery -n $shader -ex editor`) $edNode = basenameEx(`connectionInfo -sfd ($shader+".editor")`);
+
+	//only append lines for textures that exist
+	$matData += ("textures/" + $name + "\n{\n");
+	if(`objExists $dNode`) $matData += ("\tdiffusemap " + "textures/" + $name +"_d.tga\n"); 		//adds diffuse if necessary
+	if(`objExists $sNode`) $matData += ("\tspecularmap " + "textures/" +  $name +"_s.tga\n");		//adds spec if necessary
+	if(`objExists $localNode`) $matData += ("\tbumpmap " + "textures/" +  $name +"_local.tga\n");	//adds bump if necessary
+	if(`objExists $edNode`) $matData += ("\tqer_editorimage " + "textures/" +  $name +"_ed.tga\n");		//adds editor if necessary
+	$matData += "}";
+
+	//copy and rename texture files: _d, _s, _local, and _ed
+	if(`objExists $dNode`) sysFile -cp ($path+"/textures/"+$name+"_d."+(fileExtension(`getAttr ($dNode+".fileTextureName")`))) `getAttr ($dNode+".fileTextureName")`; 					//copy the diffuse
+
+		//update progress window
+		$amount += 25;
+		editProgress($amount, "Building Material", ("Building: "+$amount+"%"), 1);
+
+	if(`objExists $sNode`) sysFile -cp ($path+"/textures/"+$name+"_s."+(fileExtension(`getAttr ($sNode+".fileTextureName")`))) `getAttr ($sNode+".fileTextureName")`;						//copy the spec
+
+		//update progress window
+		$amount += 25;
+		editProgress($amount, "Building Material", ("Building: "+$amount+"%"), 1);
+
+	if(`objExists $localNode`) sysFile -cp ($path+"/textures/"+$name+"_local."+(fileExtension(`getAttr ($localNode+".fileTextureName")`))) `getAttr ($localNode+".fileTextureName")`; 	//copy the bump
+
+		//update progress window
+		$amount += 25;
+		editProgress($amount, "Building Material", ("Building: "+$amount+"%"), 1);
+
+	if(`objExists $edNode`) sysFile -cp ($path+"/textures/"+$name+"_ed."+(fileExtension(`getAttr ($edNode+".fileTextureName")`))) `getAttr ($edNode+".fileTextureName")`; 				//copy the editor
+
+		//update progress window
+		$amount += 25;
+		editProgress($amount, "Building Material", ("Building: "+$amount+"%"), 1);
+		pause -sec 1;
+
+  	// Check if the dialog has been cancelled
+    if ( `progressWindow -query -isCancelled` )
+    {
+	    endProgress;
+	    error "Cancelled";
+    }
+
+    endProgress;
+
+   //return the material data
+	return $matData;
+
+}//end of md5Material()
+//==========================================================================================================================
+global proc string md5Footer(string $path, string $mode){ //configure the footer data
+
+	string $footer;
+
+	//start the progress window
+	int $amount = 0;
+	startProgress($amount, ("Building " + $mode + " File Footer"), "Building: 0%", 1);
+
+    //create the models path for the MD5 file if it doesn't already exist
+    //if(!`filetest -d ($path+"/models/md5/")`) sysFile -md ($path+"/models/md5/");
+
+  	// Check if the dialog has been cancelled
+    if ( `progressWindow -query -isCancelled` )
+    {
+	    endProgress;
+	    error "Cancelled";
+    }
+
+	$amount += 100;
+	editProgress($amount, ("Building " + $mode + " File Footer"), ("Building: "+$amount+"%"), 1);
+    pause -seconds 1;
+    endProgress;
+
+	return $footer;
+
+}//end of md5Footer()
+//==========================================================================================================================
+global proc string[] jointsAffecting(string $skinCluster, string $component){
+
+	string $influences[] = `skinPercent -q -t $skinCluster $component`;
+	float $values[] = `skinPercent -q -v $skinCluster $component`;
+	string $affecting[]; //return value
+	//$values = normalizeWeights(clampFloat($values));
+
+	for($i=0;$i<size($influences);$i++)
+	{
+		if($values[$i]>=0.01) $affecting[size($affecting)] = $influences[$i];
+	}
+
+	return $affecting;
+
+}//end of jointsAffecting()
+//==========================================================================================================================
+global proc float[] clampFloat(float $inArray[]){
+
+	float $outArray[];
+
+	for($each in $inArray)
+	{
+		if((`abs $each`)<0.0001) $outArray[size($outArray)] = 0.0;
+		else $outArray[size($outArray)] = $each;
+	}
+
+	return $outArray;
+
+}//end of clampFloat()
+//==========================================================================================================================
+global proc float[] normalizeWeights(float $x[]){
+
+	float $temp[];
+	float $y;
+	float $xr[] = $x;
+	float $nonZero[];
+	int $nonZeroIndices[];
+
+	for($i = 0; $i<size($x); $i++)
+	{
+		if($x[$i]>0)
+		{
+			$nonZeroIndices[size($nonZeroIndices)] = $i;
+			$nonZero[size($nonZero)] = $x[$i];
+		}
+	}
+
+	for($j = 0; $j<size($nonZero); $j++)
+	{
+		if($j == (size($nonZero)-1))
+		{
+			$y = 1 - sumFloatArray($nonZero, 0, ($j-1));
+			$temp = clampFloat({$y});
+			$nonZero[$j] = $temp[0];
+		}
+		else $nonZero[$j] = ((1-sumFloatArray($nonZero, 0, ($j-1))) - (sumFloatArray($nonZero, ($j+1), (size($nonZero)-1))));
+	}
+
+	for($k = 0; $k<size($nonZeroIndices); $k++)
+	{
+		$xr[($nonZeroIndices[$k])] = $nonZero[$k];
+	}
+
+	return $xr;
+
+}//end of normalizeFloatPair()
+//==========================================================================================================================
+global proc float sumFloatArray(float $inArray[], int $inpoint, int $outpoint){
+
+	float $sum;
+
+	for($i = $inpoint; $i <= $outpoint; $i++)
+	{
+		$sum += $inArray[$i];
+	}
+
+	return $sum;
+
+}//end of sumFloatArray()
+//==========================================================================================================================
+global proc string faceUV(string $face, string $vtx){
+
+	string $uv[];
+	string $faceToUV[] = flattenList(`polyListComponentConversion -tuv $face`);
+	string $vertexToUV[] = flattenList(`polyListComponentConversion -tuv $vtx`);
+
+	// Create an intersector (if doesnt exist already)
+ 	if(!`stringArrayIntersector -q -ex aseIntersector`) stringArrayIntersector aseIntersector;
+
+ 	// Intersect the given uv vertices with the face vertices to find the right match up
+ 	stringArrayIntersector -edit -intersect $faceToUV aseIntersector;
+ 	stringArrayIntersector -edit -intersect $vertexToUV aseIntersector;
+
+ 	// Get the desired UV
+ 	$uv = `stringArrayIntersector -query aseIntersector`;
+
+ 	// Reset the intersector
+ 	stringArrayIntersector -edit -reset aseIntersector;
+
+	return $uv[0];
+
+}//end of faceUV()
+//==========================================================================================================================
+global proc string[] flattenList(string $list[]){ //flattens a list into a format consistent with that of  `ls -fl` command
+
+	string $newList[];
+	string $new;
+	string $buffer[];
+	int $indexList[];
+	string $returnList[];
+	string $obj;
+
+	for($each in $list)
+	{
+		tokenize $each "[]" $buffer;
+		$newList[size($newList)] = $buffer[1];
+	}
+	$obj = $buffer[0];
+
+	for($each in $newList)
+	{
+		tokenize $each ":" $buffer;
+		if(size($buffer)>1) catchQuiet($diff = int($buffer[1])-int($buffer[0]));
+		else $diff = 0;
+		for($i=0;$i<=$diff;$i++)
+		{
+			$indexList[size($indexList)] = int($buffer[0])+$i;
+		}
+	}
+	for($index in $indexList)
+	{
+		$returnList[size($returnList)] = ($obj+"["+$index+"]");
+	}
+
+	return $returnList;
+
+}//end of flattenList()
+//==========================================================================================================================
+global proc float[] quatRot ( float $x, float $y, float $z ){
+
+	float $quatRot[] = {};
+
+	$x = deg_to_rad( $x );
+	$y = deg_to_rad( $y );
+	$z = deg_to_rad( $z );
+
+	float $chr;
+	float $chp;
+	float $chd;
+	float $shr;
+	float $shr;
+	float $shr;
+
+	$chr = cos($x/2);  $shr = sin($x/2); // Radians of course
+	$chp = cos($y/2);  $shp = sin($y/2);
+	$chd = cos($z/2);  $shd = sin($z/2);
+
+	$quatRot[0]=-($chd*$chp*$shr-$shd*$shp*$chr);
+	$quatRot[1]=-($chd*$shp*$chr+$shd*$chp*$shr);
+	$quatRot[2]=-($shd*$chp*$chr-$chd*$shp*$shr);
+	$quatRot[3]=-($chd*$chp*$chr+$shd*$shp*$shr);
+
+	return $quatRot;
+
+}//end of quatRot()
+//==========================================================================================================================
+global proc string[] md5MeshJoints(string $mesh){
+
+	global string $jointLines[];
+	global string $trash[];
+	clear $jointLines;
+	string $locators[];		//return value
+	string $temp[];
+
+    //get the skin cluster..error if no skin cluster
+	string $cluster = findRelatedSkinCluster($mesh);
+	if(!`objExists $cluster`) error "No skin cluster found!";
+
+	string $meshes[] = `skinCluster -q -g $cluster`; 	//meshes driven by the skin cluster
+	int $numMeshes = size($meshes); 					//number of meshes affected by skin cluster
+
+	//get the influences
+	string $influences[] = `skinCluster -q -inf $cluster`;
+
+	//get the full joint hierarchy
+	string $hierarchy[];
+	string $top = rootOf($influences[0]);
+	//if($top != ("|"+$top)) $top = "origin";
+	string $sorted = sortedHierarchy($top);
+	tokenize $sorted "|" $hierarchy;
+
+	//create a series of locators for each joint and parent constrain them without offset to each joint
+	for($each in $hierarchy)
+	{
+		$temp = `spaceLocator`;
+		parentConstraint $each $temp[0];
+		$locators[size($locators)] = $temp[0];
+	}
+
+	//add them to garbage collection
+	$trash = stringArrayRemoveDuplicates(stringArrayCatenate($trash,$locators));
+
+	int $numJoints = size($hierarchy); 			//number of joints in the skin cluster
+
+		int $pIndex[]; 							//parent index list
+		float $locations[]; 					//world space locations of joints (three times size of joint list)
+		string $parent[];						//parents of the given joint
+		float $orient[];						//euler rotational values
+		float $quaternion[];					//quaternion rotational values
+		string $axis = `upAxis -q -ax`;			//determine up axis
+
+		for($i=0;$i<$numJoints;$i++)
+		{
+			$parent = `listRelatives -p $hierarchy[$i]`;
+			//build the pIndex list (parent indices)
+    		for($j=0;$j<$numJoints;$j++)
+    		{
+				if($parent[0] == $hierarchy[$j]) $pIndex[$i] = $j;
+				else if(`firstParentOf $hierarchy[$i]` == "") $pIndex[$i] = -1;
+	 			//else if(`tolower $hierarchy[$i]` == "origin") $pIndex[$i] = -1;
+	 			//else $pIndex[$i] = -1;
+    		}
+
+    		 //get world space locations for the joint--FROM LOCATOR
+	    	$locations = clampFloat(`xform -q -t $locators[$i]`);
+	    	if($i==0) $locations = {0,0,0};
+
+    		//get the quaternions for the joint-->FROM LOCATOR
+	    	$orient = `xform -q -ro $locators[$i]`;
+	    	if($i==0) $orient = {0,0,0};
+	    	$quaternion = clampFloat(quatRot($orient[0],$orient[1],$orient[2]));
+
+    		//build each joint entry
+    		if($pIndex[$i]<0) $jointLines[size($jointLines)] = ("\t\"" + $hierarchy[$i] + "\" " + $pIndex[$i] + " ( " + $locations[0] + " " + $locations[1] + " " + $locations[2] + " ) ( " + $quaternion[0] + " " + $quaternion[1] + " " + $quaternion[2] + " )\t\/\/ \n");
+    		else $jointLines[size($jointLines)] = ("\t\"" + $hierarchy[$i] + "\" " + $pIndex[$i] + " ( " + $locations[0] + " " + $locations[1] + " " + $locations[2] + " ) ( " + $quaternion[0] + " " + $quaternion[1] + " " + $quaternion[2] + " )\t\/\/ " + $hierarchy[($pIndex[$i])] + "\n");
+		}
+
+		$jointLines[size($jointLines)] = "}\n\n";
+
+		return $locators;
+
+}//end of md5MeshJoints()
+//==========================================================================================================================
+global proc string[] md5AnimJoints(string $mesh){
+	
+	global string $trash[];
+	string $locators[];		//return value
+	string $temp[];
+
+    //get the skin cluster..error if no skin cluster
+	string $cluster = findRelatedSkinCluster($mesh);
+	if(!`objExists $cluster`) error "No skin cluster found!";
+
+	string $meshes[] = `skinCluster -q -g $cluster`; 	//meshes driven by the skin cluster
+	int $numMeshes = size($meshes); 					//number of meshes affected by skin cluster
+
+	//get the influences
+	string $influences[] = `skinCluster -q -inf $cluster`;
+
+	//get the full joint hierarchy
+	string $hierarchy[];
+	string $top = rootOf($influences[0]);
+	//if($top != ("|"+$top)) $top = "origin";
+	string $sorted = sortedHierarchy($top);
+	tokenize $sorted "|" $hierarchy;
+
+	//create locator for each joint, parent them to the joint's parent then parent constrain the locator to the joint without offset
+	for($i=0; $i<size($hierarchy);$i++)
+	{
+		$temp = `spaceLocator`;
+		//if($each != "origin" && $each != "Hips") parent $temp[0] (firstParentOf($each));
+		if($i>1) parent $temp[0] (firstParentOf($hierarchy[$i]));
+		parentConstraint $hierarchy[$i] $temp[0];
+		$locators[size($locators)] = $temp[0];
+	}
+
+	//add them to garbage collection
+	$trash = stringArrayRemoveDuplicates(stringArrayCatenate($trash,$locators));
+
+	return $locators;
+
+}//end of md5AnimJoints()
+//==========================================================================================================================
+global proc string buildDefFile(string $mesh, string $cycles[], string $path){
+
+	//start the progress window
+	int $amount = 0;
+	startProgress($amount, "Building Definition", "Building: 0%", 1);
+
+	int $tokens;
+	string $cycle;
+	string $buffer[];
+	string $data = ("\/\/ " + (capitalizeString($mesh)) + " Entity\n\n\/\/ " + $mesh + " model def\nmodel " + $mesh + "\n{\n\tmesh models/md5/" + $mesh + ".md5mesh\n");
+
+	for($each in $cycles)
+	{
+		$cycle = basenameEx($each);
+		$tokens = `tokenize $cycle "_" $buffer`;
+		if(size($buffer[($tokens-1)])) $cycle = $buffer[($tokens-1)];
+
+		$data += ("\tanim "+$cycle+" "+("models/md5/"+$mesh+"_"+$cycle+".md5anim")+"\n");
+	}
+
+	$data += ("}\n\/\/ "+$mesh+" entity def\nentityDef "+$mesh+"\n{\n\t\"inherit\" \"func_animate\"\n\t\"model\" \""+$mesh+"\"\n}\n\/\/ EOF");
+	if(!`filetest -d ($path+"/def/")`) sysFile -md ($path+"/def/");
+
+	//update progress window
+	$amount += 100;
+	editProgress($amount, "Building Definition", ("Building: "+$amount+"%"), 1);
+	pause -sec 1;
+
+	//kill progress
+	endProgress;
+
+	return $data;
+
+}//end of buildDefFile()
+//==========================================================================================================================
+global proc buildVertIndex(string $mesh){	//has no return value, using global variables for multiple returns
+
+	global int $md5MayaIndex[];				//index is md5 vertex, and content is maya uv
+	global int $mayaMD5Index[];				//index is maya uv, and content is md5 vertex
+	clear $md5MayaIndex;					//clears the cache
+	clear $mayaMD5Index;					//clears the cache
+	string $md5Maya[];						//$md5MayaIndex used for string functions
+
+	string $buffer[];						//temp storage
+	string $verts[];						//the vertices of the face in CCW order (native Maya)
+	string $uvString;						//return from faceUV function
+	int $numfaces[] = `polyEvaluate -f $mesh`;
+	int $numuvs[] = `polyEvaluate -uv $mesh`;
+
+	//start progress window
+	int $amount = 0;
+	float $progressCycles = float($numfaces[0]+$numuvs[0]*2);
+	float $progress = 0;
+	startProgress($amount, "Converting Mesh Data Structures", "Converting: 0%", 1);
+
+	for($i=0;$i<$numfaces[0];$i++)			//face loop
+	{
+		$face = ($mesh+".f["+$i+"]");
+
+		//get the list of vertices for the face into an actually useful format
+		$verts = faceVerts($face);
+
+		//now that the vert list is formatted, we can use it to figure out the UVs
+		//for each vertex, find its face uv, and record that integer to the md5Maya array at the end of the array
+		for($vert in $verts)
+		{
+			$uvString = faceUV($face,$vert);
+			tokenize $uvString "[]" $buffer;
+			$md5Maya[size($md5Maya)] = $buffer[1];
+		}
+
+		//edit progress window
+		$progress++;
+		$amount = int(`ceil ($progress/$progressCycles*100)`);
+		editProgress($amount, "Converting Mesh Data Structures", ("Converting: "+$amount+"%"), 1);
+
+	}
+
+	//remove duplicate UVs--once a UV has been logged into the index, it is no longer necessary. we only care about where it is first defined.
+	$md5Maya = stringArrayRemoveDuplicates($md5Maya);
+
+	//load the real array
+	for($each in $md5Maya)
+	{
+		$md5MayaIndex[size($md5MayaIndex)] = int($each);
+
+		//edit progress window
+		$progress++;
+		$amount = int(`ceil ($progress/$progressCycles*100)`);
+		editProgress($amount, "Converting Mesh Data Structures", ("Converting: "+$amount+"%"), 1);
+
+	}
+
+	//build the $mayaMD5Index--stores for building face/vert index list (to be more efficient later)
+	for($k=0;$k<size($md5MayaIndex);$k++)
+	{
+		$index = $md5MayaIndex[$k];
+		$mayaMD5Index[$index] = $k;
+
+		//edit progress window
+		$progress++;
+		$amount = int(`ceil ($progress/$progressCycles*100)`);
+		editProgress($amount, "Converting Mesh Data Structures", ("Converting: "+$amount+"%"), 1);
+	}
+
+	//end progress window
+	endProgress;
+
+}//end of buildVertIndex()
+//==========================================================================================================================
+global proc string[] faceVerts(string $face){ //lists vertices in face-index order (like polyInfo -vf) but in useful format
+
+		string $vertString[] = `polyInfo -fv $face`;
+		string $buffer[];
+		$mesh = `polyListComponentConversion $face`;
+		$mesh = `listTransforms $mesh[0]`;
+		tokenizeList($vertString[0], $buffer);
+		string $verts[];
+		for($i = 2; $i<size($buffer); $i++)
+		{
+			$verts[size($verts)] = ($mesh[0]+".vtx["+$buffer[$i]+"]");
+		}
+
+		return $verts;	//form of OBJ.vtx[x1],OBJ.vtx[x2],...
+
+}//end of faceVerts()
+//==========================================================================================================================
+global proc string sortedHierarchy(string $top){		//this recursive function gets an alphabetically sorted hierarchy
+
+	string $children[] = sort(justJoints(`listRelatives -c $top`)); //calls to remove non-joint sections of a hierarchy
+	string $hierarchy[] = {$top};
+	string $buffer[];
+	string $path;
+
+	for($child in $children)
+	{
+		tokenize (sortedHierarchy($child)) "|" $buffer;
+		$hierarchy = stringArrayCatenate($hierarchy,$buffer);
+	}
+
+	$path = stringArrayToString($hierarchy, "|");
+
+	return $path;
+
+}//end of sortedHierarchy()
+//==========================================================================================================================
+global proc startProgress(int $amount, string $title, string $status, int $isInterruptable){
+
+	//start the progress window
+	progressWindow
+       -title $title
+       -progress $amount
+       -status $status
+       -isInterruptable $isInterruptable;
+
+}//end of startProgress()
+//==========================================================================================================================
+global proc editProgress(int $amount, string $title, string $status, int $isInterruptable){
+
+	//edit the progress window
+	progressWindow -edit
+       -title $title
+       -progress $amount
+       -status $status
+       -isInterruptable $isInterruptable;
+
+}//end of editProgress()
+//==========================================================================================================================
+global proc endProgress(){
+
+	progressWindow -ep;
+
+}//end of endProgress()
+//==========================================================================================================================
+global proc string[] getCycles(int $mult, string $path){
+
+	string $cycles[];
+
+	if($mult) $cycles = `getFileList -fld ($path+"/") -fs "*.m?"`;		//gets all .mb and .ma files
+	else $cycles = {$path};											//the current file
+
+	if(!(size($cycles))) error "No files found!";
+
+	return $cycles;
+
+}//end of get_mbPath()
+//==========================================================================================================================
+global proc md5NewScene(){  //script job to update the file path for the md5CyclePath textFieldButtonGrp on new file
+/*
+	textFieldButtonGrp -e -tx `file -q -sn` md5CyclePath;
+	string $poly[] = `listTransforms "-typ mesh"`;	
+	textFieldGrp -e -tx $poly[0] md5Meshes;
+*/
+	
+	/*
+	string $poly[] = `listTransforms "-typ mesh"`;
+	print("当前场景中的所有的Mesh类型的对象 conut = "+size($poly)+"[");
+	for($i = 0;$i< size($poly);$i++){
+		print ("index = "+$i+" mesh.name ("+$poly[$i]+"),");
+	}
+	print("]\n");
+	*/
+	
+	
+
+}//end of md5NewScene()
+//==========================================================================================================================
+global proc md5SelChanged(){
+	
+	$meshes = `filterExpand -ex true -sm 12`;	//get selected mesh shapes
+	
+	if(size($meshes))textFieldGrp -e -tx $meshes[0] md5Meshes;
+	
+}//end of md5SelChanged()
+//==========================================================================================================================
+global proc string[] justJoints(string $hierarchy[]){
+	
+	string $joints[];
+	string $joint[];
+	
+	for($each in $hierarchy)
+	{
+		$joint = `ls -typ joint $each`; 
+		if($joint[0] == "") $joint = `ls -typ transform $each`;
+		if($joint[0] != "") $joints[size($joints)] = $joint[0];
+	}
+	
+	return $joints;
+	
+}//end of justJoints()
+//==========================================================================================================================
+//end of script
+
+//启动界面
+//md5ExporterOptions();
+
+//print(endFrame());
+
+
+
+
+
+//			button -h 50 -l "导出数据" -c "{string $mesh = `textFieldGrp -q -tx md5Meshes`;md5Exporter({$mesh}, `checkBox -q -v md5Triangle`, `checkBox -q -v md5BuildMesh`, `checkBox -q -v md5BuildAnim`,`checkBox -q -v md5BuildMat`,(getCycles(`checkBox -q -v md5Cycles`,`textFieldButtonGrp -q -tx md5CyclePath`)),`textFieldButtonGrp -q -tx md5PathField`);}";
+
+

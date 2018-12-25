@@ -1,0 +1,25 @@
+lua使用table
+http://www.runoob.com/lua/lua-tables.html
+
+2.
+*************************************************************************
+	//高光开关
+	int bSpecular = glGetUniformLocation(program3D,"bSpecular");
+
+	//时间线
+	int iGlobalTime = glGetUniformLocation(program3D,"_iGlobalTime");
+
+	//颜色
+	int _lineColor = glGetUniformLocation(program3D,"_lineColor");
+	
+	//使用flat渲染
+	int _useFlat = glGetUniformLocation(program3D,"_useFlat");
+	
+	//线宽度(line.vs)
+	int _LineWidth = glGetUniformLocation(program3D,"_LineWidth");
+
+这种处理很不好,因为有的时候没有这些属性也取了一遍
+3.
+*************************************************************************
+//渲染文本(非常耗费性能,待优化)
+//drawText(p);

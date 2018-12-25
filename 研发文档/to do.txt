@@ -1,0 +1,28 @@
+1
+
+{
+				//测试代码
+				int i = 0;
+				struct RGB rgb;
+				rgb.red = 255;
+				rgb.green = 0;
+				rgb.blue = 0;
+				for(i = 0;i < width;i++){
+				//	jgl_drawPontPixelRGB(image,i,0,width,height,&rgb);
+				}
+				for(i = 0;i < height;i++){
+					jgl_drawPontPixelRGB(image,0,i,width,height,&rgb);
+				}
+			}
+
+10:44 2018/11/16
+
+2.resm资源池
+
+3.tree结构存储显示层级.tree的遍历去显示隐藏对象
+
+4.maya md5 export of mel
+
+5.<1>四元数转化为矩阵 <2>测试
+
+	

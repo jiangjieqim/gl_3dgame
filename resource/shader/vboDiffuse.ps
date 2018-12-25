@@ -1,0 +1,27 @@
+#version 110
+
+uniform sampler2D texture1;
+varying vec2 out_texcoord;
+
+uniform vec4 _diffuseFlatColor;
+
+uniform bool _useFlat;
+
+uniform float _Alpha;
+
+void main(void)
+{
+	if(_useFlat){
+		gl_FragColor = _diffuseFlatColor;	//纯色,不使用贴图
+	}else{
+		vec4 finalColor=texture2D(texture1, out_texcoord);
+		if(_Alpha<1.0)
+		{
+			finalColor.a = _Alpha;
+		}
+		if(finalColor.a<=0.0)
+			discard;
+		else
+			gl_FragColor = finalColor;
+	}
+}

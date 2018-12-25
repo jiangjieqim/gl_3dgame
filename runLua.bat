@@ -1,0 +1,2 @@
+cd dll
+test.exe

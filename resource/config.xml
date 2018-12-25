@@ -1,0 +1,7 @@
+<res id="0" rate="1.0"  w="512" h="256" bgcolor="1.0,1.0,1.0" log="log.txt" pickSize="16" monster="//resource//monster.xml" pool="64,100@128,100@256,100@512,100@1024,100@8192,100@81920,100@262144,100@1048576,100" desc="pool:内存池配置数据"/>
+
+<res id="memory" value="false" desc="是否使用调试模式的内存池"/>
+
+<res id="1" value="256" desc="名字最11大长度"/>
+
+<res id="LuaScript" value="6.lua" desc="入口lua脚本3"/>

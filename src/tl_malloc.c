@@ -1,0 +1,194 @@
+#include "tools.h"
+#include "gettime.h"
+
+#define EMemoryDisable  0//未使用
+#define	EMemoryEnable   1//已经使用
+
+struct LStackNode* memList;//内存节点列表
+
+struct MemoryNode{
+	/**
+	* 字节长度
+	*/
+	void* p;
+	/**
+	* 字节长度                                                                  
+	*/
+	int length;
+	/**
+	* 是否使用了                                                                    
+	*/
+	int bUse;
+};
+
+//	总字节长度
+static int g_total;
+
+//存储需要申请的内存块大小
+static int g_size;
+
+//临时节点
+static void* g_node;
+
+//未使用的节点个数
+static int g_disable_cnt;
+
+//未使用的节点数据字节总大小
+static int g_disable_bytes;
+/************************************************************************/
+/* 是否在memory_free之后直接free系统回收                         */
+/************************************************************************/
+static int g_bFreeClear = 1;
+
+static int
+f_getInfo(int data,int parm){
+	struct MemoryNode* node = (struct MemoryNode*)data;
+	if(node->bUse == EMemoryDisable){
+		g_disable_cnt++;
+		g_disable_bytes+=node->length;
+		//log_color(0xffff00,"0x%x \t%d bytes\n",node,node->length);
+	}
+	else{
+		//log_color(0x00ff00,"0x%x \t%d bytes\n",node,node->length);
+	}
+	return 1;
+}
+
+void
+memory_get_info(){
+	g_disable_bytes = 0;
+	g_disable_cnt = 0;
+	if(memList){
+		LStack_ergodic(memList,f_getInfo,0);
+	}
+	log_color(0xffff00,"空置节点总数:%d,总大小:%d字节,内存池总占用:%d字节\n",g_disable_cnt,g_disable_bytes,g_total);
+}
+
+static int
+f_findnew(int data,int parm)
+{
+	struct MemoryNode* node = (struct MemoryNode*)data;
+	if(node->bUse == EMemoryDisable){
+		g_disable_cnt++;
+		g_disable_bytes+=node->length;
+		if(node->length >= g_size){
+			g_node = node->p;
+			//memset(node->p,0,node->length);
+			node->bUse = EMemoryEnable;
+			//log_color(0xff0000,"%d 取内存池中的数据:0x%x  %d bytes \ttotal = %.3f kb\n",g_cnt,node->p,node->length,f_getTotalKB());
+			//g_cnt++;
+			return 0;
+		}
+	}
+	return 1;
+}
+
+void*
+memory_new(int size)
+{
+	struct MemoryNode* node;
+	if(!memList){
+		memList =	LStack_create();
+	}
+	
+	//多一个字节,处理\0情况,字符数串的结束标志
+	size += 1;
+
+	g_size = size;
+	g_node = 0;
+
+	LStack_ergodic(memList,f_findnew,0);
+
+
+	if(g_node){
+		return g_node;
+	}
+
+	///////////////////////////////////////////////////
+	node = (struct MemoryNode*)MALLOC(sizeof(struct MemoryNode));
+	//memset(node,0,sizeof(struct MemoryNode));
+
+	node->bUse = EMemoryEnable;
+	node->length = size;
+	g_total += size;
+	node->p = MALLOC(size);
+	memset(node->p,0,size);
+
+	LStack_push(memList,(int)node);
+
+	//log_color(0xff0000,"memory_new 内存申请开辟 %.3f kb\n",(float)(g_total)/1024);
+
+	return node->p;
+}
+
+//删除一个节点会调用free系统回收内存,会增加系统GC负担
+static void
+f_freeNode(struct MemoryNode* node){
+	g_total-=node->length;
+	FREE(node->p);
+	LStack_delNode(memList,node);
+}
+
+//遍历删除
+static int 
+f_findfree(int data,int parm){
+	struct MemoryNode* node = (struct MemoryNode*)data;
+	if(node->p == g_node){
+		node->bUse = EMemoryDisable;
+		if(g_bFreeClear){
+			f_freeNode(node);
+		}
+		return 0;
+	}
+	return 1;
+}
+
+//遍历删除
+static int 
+f_gc(int data,int parm){
+	struct MemoryNode* node = (struct MemoryNode*)data;
+	if(node->bUse == EMemoryDisable){
+		f_freeNode(node);
+	}
+	return 1;
+}
+
+/*
+int memory_get_total(){
+	return g_total;
+}
+*/
+
+//Garbage Collection
+void memory_gc(){
+	int n = g_total;
+	int m = get_longTime();
+	//log_color(0xffff00,"gc之前%d字节,",g_total);
+	LStack_ergodic(memList,f_gc,0);
+	log_color(0xffff00,"gc之前%d字节,消耗%d毫秒,之后%d字节,回收了%d字节(%.3fkb)\n",n,(get_longTime() - m), g_total , (n - g_total), (float)(n - g_total) / 1024.0f);
+}
+
+static void 
+f_free(void *p,int _stat){
+	g_bFreeClear = _stat;
+	g_node = p;
+	LStack_ergodic(memList,f_findfree,0);
+}
+
+void 
+memory_retrieve(void* p){
+	f_free(p,1);
+}
+
+void  
+memory_free(void* p){
+/*
+	int stat;
+	va_list ap; 
+	va_start(ap, p);
+	stat = va_arg(ap, int);
+	g_bFreeClear = stat == TRUE ? TRUE : FALSE;
+	log_color(0xff0000,"%d %d\n",stat,g_bFreeClear);
+*/
+	f_free(p,0);
+}

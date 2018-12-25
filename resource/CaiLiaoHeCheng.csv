@@ -1,0 +1,3 @@
+,策划看合成物品道具名,合成物品,策划用合成时下一级道具的名称,合成时下一级物品id,合成所需数量,合成成功率,合成消耗元宝类型,合成一个消耗的金币,合成一个消耗的元宝,合成一个消耗的绑定元宝,合成可抵扣元宝的道具,是否公告
+,,itemid,,nextid,neednum,odds,type,needmoney,needgold,needbgold,deitem,gonggao
+1,1级强化石,qianghua10,2级强化石,qianghua20,5,1,,50000,,,,

@@ -1,0 +1,11 @@
+<monster id="body" mesh="//resource//body.md5mesh" anim="/walk.md5anim@/att.md5anim@/skill01.md5anim@/skill01.md5anim@/stand.md5anim" path="resource//md5//2" tex="//body.bmp" start="0" name="md5file1" type="1"/>
+<monster id="box" mesh="box.obj" path="resource//md5//3//" tex="checkerboard.bmp" name="boxfile" type="0"/>
+<monster id="wolf" mesh="//wolfbody.md5mesh" anim="/walk.md5anim@/stand.md5anim" path="resource//md5//4//" tex="wolf.bmp" start="0" name="md5file2" type="1"/>
+
+<monster id="horse" name="horse" ray="1" mesh="//resource//md2//horse.md2" tex="//resource//texture//horse.bmp" type="2" anim="stand,0,39@run,40,45@attack,46,53@pain,54,65@jump,66,71@filp,72,83@salute,84,94@taunt,95,111@dead,178,197@" fps="7" defaultAnim="stand" desc="这是一个md2带几个动作的怪物模型"/>
+
+<monster id="cirle" name="mySphere" ray="1" mesh="//resource//obj//arcanevoidwraith.obj" tex="//resource//texture//green.bmp" type="0" desc="这是一个圆环obj3d模型"/>
+
+<monster id="sphere" name="mySphere" ray="1" mesh="//resource//obj//sphere.obj" tex="//resource//texture//green.bmp" type="0" desc="这是一个圆环obj3d模型"/>
+
+<monster id="arrow" name="arrow" ray="1" mesh="//resource//obj//arrow.obj" tex="//resource//texture//green.bmp" type="0" desc="这是一个箭头obj3d模型"/>

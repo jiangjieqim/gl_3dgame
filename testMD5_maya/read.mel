@@ -1,0 +1,35 @@
+/*
+	1.Script Editor中的Script的Show Line Numbers,当有错误的时候,会显示错误行号.
+	2.source "D:\\testMD5_maya\\md5Exporter.mel";
+	3.Mesh名字中不能有数字[0-9],不然会被剔除掉导出失败.
+
+*/
+
+
+
+
+
+proc string f_seachSkinCluster(string $skinObj){
+	if( `objExists $skinObj` ) {
+		string $cluster = findRelatedSkinCluster($skinObj);	//"pCube1"
+		if(!`objExists $cluster`){
+			//error "没有找到 skin cluster found!";
+		}else{
+			//print("找到!\n");
+			return true;
+		}
+	}
+	return false;
+}
+
+print(f_seachSkinCluster("pCube1")+"\n");
+
+
+//获取开始时间
+int $i = `playbackOptions -q -maxTime`;
+
+//Sets the end of the playback time range. Query returns a float. 
+print(`playbackOptions -q -maxTime`);
+
+currentTime -e `playbackOptions -q -ast`;
+

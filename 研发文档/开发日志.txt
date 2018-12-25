@@ -1,0 +1,343 @@
+工程用vs2005开发.在source/Test目录下启动
+1.GAvatar和引擎无关性.GAvatar只由Scene来控制和管理,EX指关心内核内容,上层应用用在Scene中实现.
+_____
+|scene|
+￣￣￣
+↑
+______
+|Ex   |
+￣￣￣
+↑
+______
+|Core  |tools.h jgl.h
+￣￣￣
+=============================================
+Ex.h 引擎接口服务于框架层,该接口服务于业务逻辑.
+Tools.h 通用接口
+Mem.h 内存管理模块
+Array.h 可变长数组
+Md5.h md5模型解析器,带动作解析
+Obj.h obj模型解析器
+Pcsv.h csv解析器
+Base.h包含模型对象的基本操作,位移,旋转,缩放
+
+
+
+
+2.向量接口Vec 单独一个vec.c管理
+3.编译批处理文件buildlist.txt
+
+4.2018.2.6 接口合并为tools.h(算法工具集相关),tlgl.h(Opengl渲染相关接口),ex.h(引擎相关接口)
+
+5.优化结构用flags标识各种状态 一个int 可以有32个状态标识
+
+6.把glsl独立到外部文件,利于调试.
+
+
+=============================================
+7.
+很多示例中都是利用uniform参数从应用程序中向shader里传递当前模型视图矩阵和模型视图投影矩阵，其实对于初学者来说，
+我们大可以先用GLSL的内建变量：gl_ModelViewMatrix和gl_ModelViewProjectionMatrix代替，而顶点坐标的变换则直接可以利用内建函数ftransform()实现。
+当然，如果你想自己传递这些参数也是可以的，后面会介绍一下。
+而gl_Vertex和gl_Normal则分别表示当前传入的顶点的物体坐标系坐标和表面法向量，gl_Position则是用来传输投影坐标系内顶点坐标的内建变量。
+注意内建变量是不用声明的，直接使用就行
+
+8.贴图存储为24位的BMP格式,尺寸为2的指数次
+
+9.float fract(float x) 取小数位上数据 1.05f 返回0.05f
+
+10.用shader的文件名作为key存储shader.一个shader可以对应多个材质
+
+11.bat文件说明
+initroot.bat:初始化环境变量,如include,lib,cl.exe根目录等
+
+12.sample文件夹为测试用例目录
+
+13.
+
+glGetUniformLocation — Returns the location of a uniform variable
+	glGetUniformLocation is available only if the GL version is 2.0 or greater.
+	从着色器对象中返回一个统一变量	(GLSL的版本必须>=2.0以上才支持)
+============================================================================================
+glGenTextures(GLsizei n, GLuint *textures)
+	n：用来生成纹理的数量
+	textures：存储纹理索引的第一个元素指针
+	glGenTextures函数根据纹理参数返回n个纹理索引。纹理名称集合不必是一个连续的整数集合。
+
+============================================================================================
+void glDeleteTextures(  GLsizei n, const GLuint * textures);
+	n：用来生成纹理的数量
+	textures：存储纹理索引的第一个元素指针
+
+glGenTextures和glDeleteTextures如malloc和free一样,申请了要记得释放
+
+============================================================================================
+glBindTexture (GLenum target, GLuint texture)
+	target —— 纹理被绑定的目标，它只能取值GL_TEXTURE_1D、GL_TEXTURE_2D、GL_TEXTURE_3D或者GL_TEXTURE_CUBE_MAP；
+	texture —— 纹理的名称，并且，该纹理的名称在当前的应用中不能被再次使用。
+	glBindTexture可以让你创建或使用一个已命名的纹理，调用glBindTexture方法，
+				将target设置为GL_TEXTURE_1D、GL_TEXTURE_2D、GL_TEXTURE_3D或者GL_TEXTURE_CUBE_MAP，
+				并将texture设置为你想要绑定的新纹理的名称，即可将纹理名绑定至当前活动纹理单元目标。
+				当一个纹理与目标绑定时，该目标之前的绑定关系将自动被打破。纹理的名称是一个无符号的整数。
+				在每个纹理目标中，0被保留用以代表默认纹理。
+				纹理名称与相应的纹理内容位于当前GL rendering上下文的共享对象空间中。
+============================================================================================
+glActiveTexture(GLenum texture);//选择当前活跃的纹理单元
+
+14.	
+glVertexAttribPointer 指定了渲染时索引值为 index 的顶点属性数组的数据格式和位置。
+OpenGL函数。
+
+void glVertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride,const GLvoid * pointer);
+
+参数：
+	index
+	指定要修改的顶点属性的索引值
+
+	size
+	指定每个顶点属性的组件数量。必须为1、2、3或者4。初始值为4。（如position是由3个（x,y,z）组成，而颜色是4个（r,g,b,a））
+
+	type
+	指定数组中每个组件的数据类型。可用的符号常量有GL_BYTE, GL_UNSIGNED_BYTE, GL_SHORT,GL_UNSIGNED_SHORT, GL_FIXED, 和 GL_FLOAT，初始值为GL_FLOAT。
+
+	normalized
+	指定当被访问时，固定点数据值是否应该被归一化（GL_TRUE）或者直接转换为固定点值（GL_FALSE）。
+
+	stride
+	指定连续顶点属性之间的偏移量。如果为0，那么顶点属性会被理解为：它们是紧密排列在一起的。初始值为0。
+
+	pointer
+	指定第一个组件在数组的第一个顶点属性中的偏移量。该数组与GL_ARRAY_BUFFER绑定，储存于缓冲区中。初始值为0；
+==============================================================================================================================================================================
+15
+
+uniform变量是外部application程序传递给（vertex和fragment）shader的变量。因此它是application通过函数glUniform**（）函数赋值的。在（vertex和fragment）shader程序内部，uniform变量就像是C语言里面的常量（const ），它不能被shader程序修改。（shader只能用，不能改）
+
+如果uniform变量在vertex和fragment两者之间声明方式完全一样，则它可以在vertex和fragment共享使用。（相当于一个被vertex和fragment shader共享的全局变量）
+
+uniform变量一般用来表示：变换矩阵，材质，光照参数和颜色等信息。
+
+以下是例子：
+
+uniform mat4 viewProjMatrix; //投影+视图矩阵
+uniform mat4 viewMatrix;        //视图矩阵
+uniform vec3 lightPosition;     //光源位置
+
+
+2.attribute变量
+attribute变量是只能在vertex shader中使用的变量。
+（它不能在fragment shader中声明attribute变量，也不能被fragment shader中使用）
+
+一般用attribute变量来表示一些顶点的数据，如：顶点坐标，法线，纹理坐标，顶点颜色等。
+
+在application中，一般用函数glBindAttribLocation（）来绑定每个attribute变量的位置，然后用函数glVertexAttribPointer（）为每个attribute变量赋值。
+
+以下是例子：
+
+	uniform mat4 u_matViewProjection;
+	attribute vec4 a_position;
+	attribute vec2 a_texCoord0;
+	varying vec2 v_texCoord;
+	void main(void)
+	{
+		gl_Position = u_matViewProjection * a_position;
+		v_texCoord = a_texCoord0;
+	}
+
+3.varying变量
+varying变量是vertex和fragment shader之间做数据传递用的。
+一般vertex shader修改varying变量的值，然后fragment shader使用该varying变量的值。
+因此varying变量在vertex和fragment shader二者之间的声明必须是一致的。application不能使用此变量。
+
+以下是例子：
+
+
+以下是例子：
+
+	// Vertex shader
+	uniform mat4 u_matViewProjection;
+	attribute vec4 a_position;
+	attribute vec2 a_texCoord0;
+	varying vec2 v_texCoord; // Varying in vertex shader
+	void main(void)
+	{
+	gl_Position = u_matViewProjection * a_position;
+	v_texCoord = a_texCoord0;
+	}
+
+
+	// Fragment shader
+	precision mediump float;
+	varying vec2 v_texCoord; // Varying in fragment shader
+	uniform sampler2D s_baseMap;
+	uniform sampler2D s_lightMap;
+	void main()
+	{
+	vec4 baseColor;
+	vec4 lightColor;
+	baseColor = texture2D(s_baseMap, v_texCoord);
+	lightColor = texture2D(s_lightMap, v_texCoord);
+	gl_FragColor = baseColor * (lightColor + 0.25);
+}
+/*
+uniform变量是外部application程序传递给（vertex和fragment）shader的变量。因此它是application通过函数glUniform**（）函数赋值的。在（vertex和fragment）shader程序内部，uniform变量就像是C语言里面的常量（const ），它不能被shader程序修改。（shader只能用，不能改）
+
+如果uniform变量在vertex和fragment两者之间声明方式完全一样，则它可以在vertex和fragment共享使用。（相当于一个被vertex和fragment shader共享的全局变量）
+
+uniform变量一般用来表示：变换矩阵，材质，光照参数和颜色等信息。
+
+以下是例子：
+
+uniform mat4 viewProjMatrix; //投影+视图矩阵
+uniform mat4 viewMatrix;        //视图矩阵
+uniform vec3 lightPosition;     //光源位置
+
+
+2.attribute变量
+attribute变量是只能在vertex shader中使用的变量。
+（它不能在fragment shader中声明attribute变量，也不能被fragment shader中使用）
+
+一般用attribute变量来表示一些顶点的数据，如：顶点坐标，法线，纹理坐标，顶点颜色等。
+
+在application中，一般用函数glBindAttribLocation（）来绑定每个attribute变量的位置，然后用函数glVertexAttribPointer（）为每个attribute变量赋值。
+
+以下是例子：
+
+	uniform mat4 u_matViewProjection;
+	attribute vec4 a_position;
+	attribute vec2 a_texCoord0;
+	varying vec2 v_texCoord;
+	void main(void)
+	{
+		gl_Position = u_matViewProjection * a_position;
+		v_texCoord = a_texCoord0;
+	}
+
+3.varying变量
+varying变量是vertex和fragment shader之间做数据传递用的。
+一般vertex shader修改varying变量的值，然后fragment shader使用该varying变量的值。
+因此varying变量在vertex和fragment shader二者之间的声明必须是一致的。application不能使用此变量。
+
+以下是例子：
+
+
+以下是例子：
+
+	// Vertex shader
+	uniform mat4 u_matViewProjection;
+	attribute vec4 a_position;
+	attribute vec2 a_texCoord0;
+	varying vec2 v_texCoord; // Varying in vertex shader
+	void main(void)
+	{
+	gl_Position = u_matViewProjection * a_position;
+	v_texCoord = a_texCoord0;
+	}
+
+
+	// Fragment shader
+	precision mediump float;
+	varying vec2 v_texCoord; // Varying in fragment shader
+	uniform sampler2D s_baseMap;
+	uniform sampler2D s_lightMap;
+	void main()
+	{
+	vec4 baseColor;
+	vec4 lightColor;
+	baseColor = texture2D(s_baseMap, v_texCoord);
+	lightColor = texture2D(s_lightMap, v_texCoord);
+	gl_FragColor = baseColor * (lightColor + 0.25);
+}
+====================================================================================================================================================================================
+
+//
+////屏蔽警告
+//#pragma warning(disable:4996)
+
+bug:
+loadXml(ok)
+void drawText(struct EX* p)
+翻转法线数据
+
+StrCutSplit要优化
+
+3d max显示法线 翻转法线
+
+md2,md5 没有顶点法线信息
+
+设置一个反转法线的接口
+
+shoadowMap Texture(阴影贴图)
+
+glsl编辑器
+
+=========================================================================================
+md2 关键帧数据
+顶点元 * 缩放因子 + 偏移因子
+
+
+static box设置为动态的
+
+透明材质相关
+
+windows打开相关面板(用存opengl实现)
+
+sprite 设置uv接口
+
+c传递一个函数指针参数给lua
+
+dispose使用一个接口实现.
+===================================================================
+ue 设置lua语法着色
+高级->配置->编辑器显示->语法高亮
+
+ue设置主题颜色
+布局->主题
+
+UV需要上下翻转
+
+
+
+
+
+
+--------------------------------------------------------
+--创建一个Sprite
+local spr1=sprite_create("b1",0,0,72,24,"myBtnFn");
+sprite_texName(spr1,"smallbtn.tga");
+
+
+
+setv(spr1,FLAGS_BUTTON_EFFECT);--设置按钮点击效果
+
+--创建一个CheckBox
+local a = 1;
+function spr2CallBack(ptr)
+	a=a*-1;
+	if(a==1) then
+		sprite_texName(ptr,"checkbox.png");
+	else
+		sprite_texName(ptr,"dagou.png");
+	end
+	--print(ptr..a);
+end
+
+local spr2=sprite_create("b2",0,30,22,22,"spr2CallBack");
+sprite_texName(spr2,"checkbox.png");
+setv(spr2,FLAGS_BUTTON_EFFECT);
+
+do
+	local spr3=sprite_create("b3",0,80,28,28,"");
+	local x,y,width,height=sprite_texName(spr3,"tri.png");
+	print(x);
+	print(y);
+
+	print(width);
+	print(height);
+	setv(spr3,FLAGS_BUTTON_EFFECT);
+end
+
+------------------------------------------------------------
+
+int* const pCurIndex	//指针不可变
+const int* pCurIndex	//指针指向的值不可变
