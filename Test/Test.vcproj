@@ -133,7 +133,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="d:\gl_source\include"
+				AdditionalIncludeDirectories="D:\glTest\gl_3dgame\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -163,7 +163,7 @@
 				OutputFile=".\Debug/Test.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="d:\gl_source\lib"
+				AdditionalLibraryDirectories="D:\glTest\gl_3dgame\lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/Test.pdb"
 				SubSystem="1"
@@ -314,7 +314,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\lauxlib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\lua.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\luaconf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\lualib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\matrix4.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\md5.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\msocket.h"
 				>
 			</File>
 			<File
@@ -330,7 +354,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\pick.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\sprite.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\tl_malloc.h"
 				>
 			</File>
 			<File
