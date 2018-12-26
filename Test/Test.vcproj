@@ -330,15 +330,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\matrix4.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\md5.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\msocket.h"
 				>
 			</File>
 			<File
