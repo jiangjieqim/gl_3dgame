@@ -34,5 +34,9 @@ cd include
 
 del *.exe
 
+cd ..\src
+del *.exe
+
+
 
 
