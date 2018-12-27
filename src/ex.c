@@ -179,15 +179,16 @@ void* ex_findNodeByName(struct EX* ptr,const char* name){
 	p=top;
 	while((int)LStack_next(p)){
 		int data;
-		struct HeadInfo base;
+		struct HeadInfo* base = NULL;
 		void* n;
 
 		p=(void*)LStack_next(p);
 		data = LStack_data(p);
 
 		n = (void*)data;
-		base_get(n,&base);
-		if(!strcmp((const char*)base.name,name)){
+		//base_get(n,&base);
+		base = base_get2(n);
+		if(base!= NULL && !strcmp((const char*)base->name,name)){
 			return n;
 		}
 	}
@@ -200,10 +201,12 @@ void* ex_findNodeByName(struct EX* ptr,const char* name){
 void ex_addNode(struct EX* p, void* _node){
 	//EngineX* p = this;
 	if(_node!=NULL){
-		struct HeadInfo base;
-		base_get(_node,&base);
-		if( ex_findNodeByName(p,base.name) != NULL){
-			printf("error! 重名的对象_engine :%s\n",base.name);
+		//struct HeadInfo base;
+		struct HeadInfo* b;
+		//base_get(_node,&base);
+		b = base_get2(_node);
+		if( ex_findNodeByName(p,b->name) != NULL){
+			printf("error! 重名的对象_engine :%s\n",b->name);
 			assert(0);
 		}else{
 			LStack_push(p->renderList,(int)_node);

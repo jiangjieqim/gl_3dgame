@@ -463,9 +463,9 @@ void base_dispose(struct HeadInfo* base);
 struct HeadInfo* base_get2(void* p);
 
 /*
-	填充 HeadInfo 结构体,根据head信息获取相关信息
+	填充 HeadInfo 结构体,根据head信息获取相关信息,需要尾部传递一个HeadInfo*引用
 */
-void base_get(void* point,struct HeadInfo* base);
+//void base_get(void* point,struct HeadInfo* base);
 
 //实心渲染
 void base_renderFill(struct HeadInfo* node);
