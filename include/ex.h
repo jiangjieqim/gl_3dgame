@@ -133,6 +133,8 @@ struct EX
 	*/
 	void (*loopCallBack)(void);
 
+	void (*drawLine_callBack)(void);
+
 	/*
 		当前鼠标状态
 	*/
@@ -462,4 +464,8 @@ void* ex_findNodeByName(struct EX* ptr,const char* name);
 	获取引擎的一个默认材质,共享使用,在处理没有材质的时候后调用
 */
 void* ex_get_defaultMaterial();
+/*
+	绘制线段
+*/
+void ex_drawline();
 #endif

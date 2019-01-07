@@ -738,7 +738,22 @@ void ex_updatePerspctiveModelView()
 //
 //	return vbo;
 //}
+void ex_drawline(){
 
+	/*
+	glLineWidth(1.0f);//直线的宽度。
+
+	//for(i = 0;i < count;i++){
+		glBegin(GL_LINES); 
+		//glVertex3f(-h/2, 0,gap*i);
+		glVertex3f(0.0, 0.0f ,0.0f);
+		glVertex3f(1.0, 0.0f ,0.0f);
+		glEnd();
+	//} 
+	*/
+	if(ex_getInstance()->drawLine_callBack)
+		ex_getInstance()->drawLine_callBack();
+}
 void _new()
 {
 	struct EX* p = ex_getInstance();
@@ -782,8 +797,9 @@ void _new()
 	//ex_updatePerspctiveModelView();
 	p->allVertexTotal = 0;
 	ex_renderlistCall(render_3dNode);
-	//drawLine(2000);
 
+	//drawLine(2000);
+	ex_drawline();
 	
 	//ex_renderlistCall(sprite_drawRender);//test
 	if(TRUE)//FALSE

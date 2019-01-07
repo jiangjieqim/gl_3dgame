@@ -15,20 +15,20 @@ scrollBar_bind(animsc,
 	end
 )
 
-local _scale = 0.1
+local _scale = 1
 
 local obj1 = func_loadobj('quad','wolf.tga','center')
 setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
 func_set_scale(obj1,_scale)
-
+--[[
 local obj = func_loadobj('quad','wolf.tga',name)
 setv(obj,FLAGS_DRAW_PLOYGON_LINE)
 func_set_scale(obj,_scale)
 
 local obj1 = func_loadobj('quad','wolf.tga',name1)
---setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
+setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
 func_set_scale(obj1,_scale)
-
+--]]
 func_set_camera_pos(0,0,-5)
 
 

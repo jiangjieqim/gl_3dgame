@@ -21,8 +21,11 @@ static float n1Len;
 
 static struct Vec3 axis;
 
-static struct Vec3 outDirection;
+struct Vec3 outDirection;
 
+struct Vec3 normalpos1;//目标向量的单位向量
+
+struct Vec3 normalpos2;
 //static struct Vec3 start;
 //axis.x = 0;
 //axis.y = 0;
@@ -46,18 +49,31 @@ static void
 f_print_vec(char* key,struct Vec3* p){
 	printf("%s p = %.3f\t%.3f\t%.3f\n",key,p->x,p->y,p->z);
 }
+static void
+f_call(){
+	glBegin(GL_LINES); 
+	glVertex3f(0.0, 0.0f ,0.0f);
+	glVertex3f(normalpos1.x, normalpos1.y ,normalpos1.z);
+	//glVertex3f(-1.0, -1.0f ,0.0f);
+	glEnd();
 
+	glBegin(GL_LINES); 
+	glVertex3f(0.0, 0.0f ,0.0f);
+	glVertex3f(normalpos2.x, normalpos2.y ,normalpos2.z);
+	glEnd();
+}
 //四元数测试方法
 int
 REG_test_unit_01(lua_State *L){
+
 	const char* name=lua_tostring(L,1);
 	float value = lua_tonumber(L,2);
 	const char* name1=lua_tostring(L,3);
 
-	int n = (int)ex_find_node(name);
+	//int n = (int)ex_find_node(name);
 
-	int n1 = (int)ex_find_node(name1);
-	struct HeadInfo* b =  base_get2(n1);
+	//int n1 = (int)ex_find_node(name1);
+	//struct HeadInfo* b =  base_get2(n1);
 	Matrix44f m;//目标矩阵
 
 	//半径长
@@ -66,14 +82,19 @@ REG_test_unit_01(lua_State *L){
 	Quat4_t s;
 	Quat4_t e;
 	Quat4_t o;
-	struct Vec3 normalpos1;//目标向量的单位向量
+	
 	struct Vec3 subpos1;
 	struct Vec3 down;
 	//down.x = 0;
 	//down.y = -1;
 	//down.z = 0;
 	
+	{
 
+		if(!ex_getInstance()->drawLine_callBack){
+			ex_getInstance()->drawLine_callBack = f_call;
+		}
+	}
 
 	if(!pos1){
 		
@@ -124,13 +145,14 @@ REG_test_unit_01(lua_State *L){
 	
 	//转化为矩阵
 	
-	Quat_to_matrrix(o,m);
+	//Quat_to_matrrix(o,m);
 
 	//打印矩阵
 	//mat4x4_printf("四元数矩阵",m);
 	
-	base_setPos(base_get2(n),o[X] * len,o[Y] * len,o[Z] * len);//设置其坐标
-	
+	//base_setPos(base_get2(n),o[X] * len,o[Y] * len,o[Z] * len);//设置其坐标
+	normalpos2.x = o[X];normalpos2.y = o[Y];normalpos2.z = o[Z];
+
 	//vec3Sub()
 	subpos1.x = o[X] - normalpos1.x;
 	subpos1.y = o[Y] - normalpos1.y;
@@ -158,7 +180,7 @@ REG_test_unit_01(lua_State *L){
 		 struct Vec3 oe;
 		 vec3Set(&oa,s[X],s[Y],s[Z]);
 		 
-		 base_set_position(base_get2(n1),&normalpos1);
+		 //base_set_position(base_get2(n1),&normalpos1);
 		 f_print_vec("normalpos1",&normalpos1);
 		
 	}
