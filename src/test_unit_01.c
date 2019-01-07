@@ -152,55 +152,14 @@ REG_test_unit_01(lua_State *L){
 
 	//=====================================================
 	{
-		                                                                                                                                                                                                     
-		////目标向量
-		//struct Vec3 target;
-		//struct Vec3 c;
-		//c.x = 0;c.y = 0;c.z = 1;
-		//vec3Cross(&normalpos1,&c,&target);//叉乘获取垂直向量
-		//
-		
-		//base_setPos(base_get2(n1),
-		//	(subpos1.x)*n1Len,
-		//	(subpos1.y)*n1Len,
-		//	(subpos1.z)*n1Len);
-		
-
-		//subpos1.x = subpos1.x + e[X] ;
-		//subpos1.y = subpos1.y + e[Y] ;
-		//subpos1.z = subpos1.z + e[Z] ;
-		
-		
-		/*base_setPos(base_get2(n1),
-			(pos1->x),
-			(pos1->y),
-			(pos1->z));*/
-		//base_set_position(b,&normalpos1);
-		//vec3Mult(&subpos1,-1);
-
-		//base_set_position(b,&subpos1);//	subpos1	,	normalpos1
-		 {
-			 //float f = vecDot(&normalpos1,&down);
-			 //double d = f;
-			 //printf("%f\n",f/*(1-f) * 180*/);//点乘求值
-
-			 struct Vec3 oa;
-			 struct Vec3 oc;
-			 struct Vec3 od;
-			 struct Vec3 oe;
-			 vec3Set(&oa,s[X],s[Y],s[Z]);
-			 //vec3Set(&oc,e[X],e[Y],e[Z]);
-			 //vec3Sub(&oc,&oa,&od);
-			 //
-			 ////vec3Add(&od,&normalpos1,&oe);
-			 //vec3Normalize(&od);
-			 //base_set_position(b,&od);
-			
-			 base_set_position(base_get2(n1),&oa);
-			 f_print_vec("oa",&oa);
-			 //vec3Cross(&oa,&c,&target);
-
-		 }
+		 struct Vec3 oa;
+		 struct Vec3 oc;
+		 struct Vec3 od;
+		 struct Vec3 oe;
+		 vec3Set(&oa,s[X],s[Y],s[Z]);
+		 
+		 base_set_position(base_get2(n1),&normalpos1);
+		 f_print_vec("normalpos1",&normalpos1);
 		
 	}
 	
