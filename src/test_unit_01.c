@@ -43,8 +43,8 @@ static struct Vec3 outDirection;
 
 //打印向量
 static void
-f_print_vec(struct Vec3* p){
-	printf("p = %.3f\t%.3f\t%.3f\n",p->x,p->y,p->z);
+f_print_vec(char* key,struct Vec3* p){
+	printf("%s p = %.3f\t%.3f\t%.3f\n",key,p->x,p->y,p->z);
 }
 
 //四元数测试方法
@@ -146,7 +146,7 @@ REG_test_unit_01(lua_State *L){
 	//获取垂直轴
 	vec3Cross(&down,&axis,&outDirection);//叉乘获取垂直向量
 	//f_print_vec(&normalpos1);
-	f_print_vec(&outDirection);
+	f_print_vec("outDirection",&outDirection);
 	//printf("\n");
 
 
@@ -196,8 +196,8 @@ REG_test_unit_01(lua_State *L){
 			 //vec3Normalize(&od);
 			 //base_set_position(b,&od);
 			
-			 //base_set_position(base_get2(n),&normalpos1);
-
+			 base_set_position(base_get2(n1),&oa);
+			 f_print_vec("oa",&oa);
 			 //vec3Cross(&oa,&c,&target);
 
 		 }
