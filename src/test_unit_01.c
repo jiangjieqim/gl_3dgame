@@ -66,9 +66,9 @@ f_call(){
 int
 REG_test_unit_01(lua_State *L){
 
-	const char* name=lua_tostring(L,1);
-	float value = lua_tonumber(L,2);
-	const char* name1=lua_tostring(L,3);
+	//const char* name=lua_tostring(L,1);
+	float value = lua_tonumber(L,1);
+	//const char* name1=lua_tostring(L,3);
 
 	//int n = (int)ex_find_node(name);
 

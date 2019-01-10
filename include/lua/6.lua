@@ -7,13 +7,16 @@ local name1 = 'torus1'
 
 local animsc = scrollBar_new(0,0)
 scrollBar_setRange(animsc,0,1)
+local tf = scrollBar_add_text(animsc,'')
 
 scrollBar_bind(animsc,
 	function(sc)
-		test_unit_01(name,sc.value,name1)
+		test_unit_01(sc.value)
 		--print(sc.value)
+		tf_setText(tf,sc.value)
 	end
 )
+
 
 local _scale = 1
 
