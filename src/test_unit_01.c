@@ -15,8 +15,10 @@
 #include "node.h"
 #include "animtor.h"
 #include "tl_malloc.h"
+//#################      åŠ è½½MyDll.libåº“      ##################
 #pragma comment (lib, "MyDll.lib")
 _declspec(dllimport) int jjqadd(int a,int b);
+//##############################################################
 static struct Vec3* pos1;
 static float n1Len;
 
@@ -24,7 +26,7 @@ static struct Vec3 axis;
 
 struct Vec3 outDirection;
 
-struct Vec3 normalpos1;//Ä¿±êÏòÁ¿µÄµ¥Î»ÏòÁ¿
+struct Vec3 normalpos1;//ç›®æ ‡å‘é‡çš„å•ä½å‘é‡
 
 struct Vec3 normalpos2;
 //static struct Vec3 start;
@@ -36,16 +38,16 @@ struct Vec3 normalpos2;
 //pos1.z = 0;
 
 ///************************************************************************/
-///*  m:Ğı×ªÖá    
-//	n:Ä¿±êÖá
-//	o:´¹Ö±Öá
+///*  m:æ—‹è½¬è½´    
+//	n:ç›®æ ‡è½´
+//	o:å‚ç›´è½´
 ///************************************************************************/
 //static void
 //f_get_direction(struct Vec3* n,struct Vec3* m,struct Vec3* o){
 //	
 //}
 
-//´òÓ¡ÏòÁ¿
+//æ‰“å°å‘é‡
 static void
 f_print_vec(char* key,struct Vec3* p){
 	printf("%s p = %.3f\t%.3f\t%.3f\n",key,p->x,p->y,p->z);
@@ -63,7 +65,7 @@ f_call(){
 	glVertex3f(normalpos2.x, normalpos2.y ,normalpos2.z);
 	glEnd();
 }
-//ËÄÔªÊı²âÊÔ·½·¨
+//å››å…ƒæ•°æµ‹è¯•æ–¹æ³•
 int
 REG_test_unit_01(lua_State *L){
 
@@ -75,9 +77,9 @@ REG_test_unit_01(lua_State *L){
 
 	//int n1 = (int)ex_find_node(name1);
 	//struct HeadInfo* b =  base_get2(n1);
-	Matrix44f m;//Ä¿±ê¾ØÕó
+	Matrix44f m;//ç›®æ ‡çŸ©é˜µ
 
-	//°ë¾¶³¤
+	//åŠå¾„é•¿
 	float len = 1.0;
 	
 	Quat4_t s;
@@ -101,7 +103,7 @@ REG_test_unit_01(lua_State *L){
 
 	if(!pos1){
 		
-		//³õÊ¼»¯pos1×ø±ê
+		//åˆå§‹åŒ–pos1åæ ‡
 		pos1 = malloc(sizeof(struct Vec3));
 		pos1->x = -0.25;
 		pos1->y = -0.35;
@@ -111,21 +113,21 @@ REG_test_unit_01(lua_State *L){
 	}
 	vec3Set(&normalpos1,pos1-> x,pos1->y,pos1->z);
 	vec3Normalize(&normalpos1);
-	//Çópos1µÄ±êÁ¿
+	//æ±‚pos1çš„æ ‡é‡
 
 	s[W] = 0;
 	s[X] = 0;
 	s[Y] = -1;
 	s[Z] = 0;
 	/*
-	//Ğı×ª90¶È
+	//æ—‹è½¬90åº¦
 	e[W] = 1;
 	e[X] = 0;
 	e[Y] = 1;
 	e[Z] = 0;
 	*/
 	/*
-	//Ğı×ª45¶È
+	//æ—‹è½¬45åº¦
 	e[W] = 1;
 	e[X] = 0.707;
 	e[Y] = 0.707;
@@ -141,19 +143,19 @@ REG_test_unit_01(lua_State *L){
 	e[X] =  -1;
 	e[Y] = 0;
 	e[Z] = 0;
-	Quat_slerp(s,e,value,o);//ËÄÔªÊıÇòÃæÆ½»¬²åÖµ
+	Quat_slerp(s,e,value,o);//å››å…ƒæ•°çƒé¢å¹³æ»‘æ’å€¼
 	
 	
 	//printf("t = %.2f\tw = %.2f\tx = %.2f\ty = %.2f\tz = %.2f\n",value,o[W],o[X],o[Y],o[Z]);
 	
-	//×ª»¯Îª¾ØÕó
+	//è½¬åŒ–ä¸ºçŸ©é˜µ
 	
 	//Quat_to_matrrix(o,m);
 
-	//´òÓ¡¾ØÕó
-	//mat4x4_printf("ËÄÔªÊı¾ØÕó",m);
+	//æ‰“å°çŸ©é˜µ
+	//mat4x4_printf("å››å…ƒæ•°çŸ©é˜µ",m);
 	
-	//base_setPos(base_get2(n),o[X] * len,o[Y] * len,o[Z] * len);//ÉèÖÃÆä×ø±ê
+	//base_setPos(base_get2(n),o[X] * len,o[Y] * len,o[Z] * len);//è®¾ç½®å…¶åæ ‡
 	normalpos2.x = o[X];normalpos2.y = o[Y];normalpos2.z = o[Z];
 
 	//vec3Sub()
@@ -163,13 +165,13 @@ REG_test_unit_01(lua_State *L){
 
 
 	//=====================================================
-	//ÉèÖÃÖá
+	//è®¾ç½®è½´
 	axis.x = axis.y = 0;axis.z = 1.0;
 
 	vec3Set(&down,o[X],o[Y],o[Z]);      
 
-	//»ñÈ¡´¹Ö±Öá
-	vec3Cross(&down,&axis,&outDirection);//²æ³Ë»ñÈ¡´¹Ö±ÏòÁ¿
+	//è·å–å‚ç›´è½´
+	vec3Cross(&down,&axis,&outDirection);//å‰ä¹˜è·å–å‚ç›´å‘é‡
 	//f_print_vec(&normalpos1);
 	f_print_vec("outDirection",&outDirection);
 	//printf("\n");
