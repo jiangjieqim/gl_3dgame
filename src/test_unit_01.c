@@ -15,7 +15,8 @@
 #include "node.h"
 #include "animtor.h"
 #include "tl_malloc.h"
-
+#pragma comment (lib, "MyDll.lib")
+_declspec(dllimport) int jjqadd(int a,int b);
 static struct Vec3* pos1;
 static float n1Len;
 
@@ -90,6 +91,8 @@ REG_test_unit_01(lua_State *L){
 	//down.z = 0;
 	
 	{
+
+		printf("%d\n",jjqadd(2,9));
 
 		if(!ex_getInstance()->drawLine_callBack){
 			ex_getInstance()->drawLine_callBack = f_call;
