@@ -1037,12 +1037,12 @@ void md5_setAnim(void* _md5,const char* animName){
 	}
 }
 
-int md5_getCurFrame(void* _md5){
+int md5_getFrameIndex(void* _md5){
 	struct MD5* md5 = (struct MD5*)_md5;
 	return ((struct anim_info_t*)(md5->animInfo))->curr_frame;
 }
 
-int md5_getCurAnimFrameCount(void* p){
+int md5_getTotalFrame(void* p){
 	struct md5_anim_t* md5anim = (struct md5_anim_t*)((struct MD5*)p)->curAnim;
 	return md5anim->num_frames;
 }

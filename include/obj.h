@@ -12,18 +12,20 @@
 //typedef  int _UNSIGNED_SHORT;
 struct ExportOBJ_Data
 {
+	/*顶点引用*/
 	float *ptrVertex;
+	/*uv引用*/
 	float *ptrUV;
+	/*法线引用*/
 	float* ptrNormal;
-	int vertexCount;		/*顶点索引数量*/
-
-	//索引
+	/*顶点索引数量*/
+	int vertexCount;		
+	/*索引引用*/
 	_UNSIGNED_SHORT *ptrIndex;
+	/*索引数量*/
 	int indexLength;
-
-	int renderVertCount;//需要渲染的顶点个数
-
-	
+	/*需要渲染的顶点个数*/
+	int renderVertCount;
 };
 /*
 	obj文件加载并开始解析 ,len:数组的长度

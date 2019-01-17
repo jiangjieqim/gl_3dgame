@@ -42,7 +42,7 @@ void
 jgl_subImage(GLuint texName,const char* imgUrl,int offsetX,int offsetY,int subImageWidth,int subImageHeight);
 
 /*
-	创建一块位图内存,并且填充为纯色,这里其实创建的是一块缓冲区buffer
+	创建一块位图内存,并且填充为纯色,这里其实创建的是一块CPU中的缓冲区buffer
 */
 GLbyte*
 jgl_createRGB_Bitmap(int imageWidth,int imageHeight);

@@ -20,7 +20,6 @@ struct MD5{
 	void* animInfo;					//anim_info_t
 	void *skeleton;					//md5_joint_t
 };
-
 /*
 	加载网格模型
 */
@@ -56,12 +55,12 @@ int md5_getFrameNum(void* _md5,char* animType);
 /*
 	获取当前动画的所有总关键帧数
 */
-int md5_getCurAnimFrameCount(void* p);
+int md5_getTotalFrame(void* p);
 
 /*
 	获取当前的md5关键帧索引
 */
-int md5_getCurFrame(void* _md5);
+int md5_getFrameIndex(void* _md5);
 /*
 	绘制骨骼节点
 */
