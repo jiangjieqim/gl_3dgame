@@ -82,7 +82,7 @@ end
 
 local function loadMd2(x)
 
-	local obj=func_loadmd2('horse')
+	local obj=func_loadmd2()--'horse'
 	func_set_x(obj,x or 0)
 	func_changeFlags(obj,FLAGS_RAY)					--设置为可拾取状态
 	func_changeFlags(obj,FLAGS_DRAW_RAY_COLLISION)	--绘制射线盒子

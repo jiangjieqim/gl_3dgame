@@ -30,20 +30,18 @@ loadObj(struct CollideBox* ptr,const char* url)
  *构造md2的静态盒子列表
  */
 static void
-push_md2Frame(struct CollideBox* ptr,struct MD2_ParseObj* _md2Parse,int gap,int frameCount)
+push_md2Frame(struct CollideBox* ptr,void* _md2Parse,int gap,int frameCount)
 {
 	int i;
 	struct MD2_Frame* frame;
 	
-	int _numFrames = _md2Parse->_numFrames;
-	if(frameCount > 0)
-	{
+	int _numFrames = md2parse_totalFrames(_md2Parse);// _md2Parse->numFrames;
+	if(frameCount > 0){
 		_numFrames = frameCount;
 	}
 
-	for(i = 0;i < _numFrames;i++)
-	{
-		frame = &(_md2Parse->pframe[i]);
+	for(i = 0;i < _numFrames;i++){
+		frame = md2parse_getFrame(_md2Parse,i);//&(_md2Parse->pframe[i]);
 		pushCollionBox(ptr,(int)frame->vertices,frame->vertCount);
 	}
 }
@@ -52,12 +50,12 @@ loadmd2(struct CollideBox* ptr,const char* url,int frameCount)
 {
 	char* _objStr;
 	int fileSize;
-	struct MD2_ParseObj* _parse;
+	void * _parse;
 	int dataType = OBJ_UV_VERTEX_NORMAL;
 	_objStr=tl_loadfile((char*)url,&fileSize);
 	
-	_parse=(struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
-	md2parse_load(_parse,_objStr,fileSize);
+	//_parse=(struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
+	_parse = md2parse_load(_objStr,fileSize);
 	push_md2Frame(ptr,_parse,tl_getGap(dataType),frameCount);
 	
 	md2parse_dispose(_parse);

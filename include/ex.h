@@ -69,7 +69,8 @@ struct MD2_Object
 	/*
 	*	解析器句柄,该对象只是存储md2模型的数据结构
 	*/
-	struct MD2_ParseObj* parseHandle;
+	//struct MD2_ParseObj* parseHandle;
+	void* parseHandle;
 };
 
 //鼠标状态

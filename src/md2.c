@@ -2,6 +2,120 @@
 #include "md2.h"
 //====================================================================================
 //MD2接口实现
+struct MD2_ParseObj{
+	//############################################################
+	/** 关键帧列表引用*/
+	struct MD2_Frame* _pframe;
+
+	/**
+	 * 总帧数
+	 */
+	int _numFrames;
+	/*
+	*	数据
+	*/                                                                                                                                                                                                                                                                                                                                                                   
+	struct BytesVO* b;
+	
+	//版本号
+	int _version;
+	
+	//文件标志：844121161（"IPD2"）；
+	int _ident;
+	/**
+	 * 纹理宽度
+	 */
+	int _skinWidth;
+	/**
+	 * 纹理高度
+	 */
+	int _skinHeight;
+	/**
+	* 每一帧的字节数
+	*/
+	int _frameSize;
+	
+	/**
+	 * 纹理数目
+	 */
+	int	_numSkins;
+	/**
+	 * 顶点数目(每一帧)
+	 */    
+	int _numVertices;
+	/**
+	 * 纹理坐标数目 (每一帧)
+	 */    
+	int _numST;
+	/**
+	 * 三角形数目 (每一帧)
+	 */
+	int _numTris;
+	/**
+	 * gl命令数目(每一帧)
+	 */
+	int _numGlCmds;
+	
+	/**
+	 * 纹理的偏移位置
+	 */
+	int _offsetSkins;
+	/**
+	 * 纹理坐标的偏移位置
+	 */
+	int _offsetST;
+	/**
+	 * 三角形索引的偏移位置
+	 */
+	int _offsetTris;
+	/**
+	 * 第一帧的偏移位置
+	 */
+	int _offsetFrames;
+	/**
+	 * OpenGL命令的偏移位置
+	 */
+	int _offsetGlCmds;
+	/**
+	 * 文件结尾的偏移位置
+	 */
+	int _offsetEnd;
+	/**
+	*	解析头部信息的标示
+	*/
+	int _parsedHeader;
+	//============================
+	/*
+	*	解析uv的标示
+	*/
+	int _parsedUV;
+	/*
+	*	解析面片标示
+	*/
+	int _parsedFaces;
+	/*
+	*	关键帧标示
+	*/
+	int _parsedFrames;
+
+	/**
+	 * 顶点-坐标组合索引对；_vertIndices对应_uvIndices且_vertIndices.length<=_indices.length;
+	 */
+	struct List* _vertIndices;
+
+	/**
+	*	uv索引
+	*/
+	struct List* _uvIndices;
+
+	/**
+	* 三角形索引，三个一组，_indices = 3 * _numTris;
+	*/
+	struct List* _indices;
+	
+	float* _uvs;
+
+	float* _finalUV;
+};
 
 static int fHasTime()
 {
@@ -26,9 +140,9 @@ static void f_parseHeader(struct MD2_ParseObj* _md2)
 	bs_readInt(b,&(_md2->_skinHeight));
 	bs_readInt(b,&(_md2->_frameSize));
 	bs_readInt(b,&(_md2->_numSkins));
-	bs_readInt(b,&(_md2->numVertices));
+	bs_readInt(b,&(_md2->_numVertices));
 	bs_readInt(b,&(_md2->_numST));
-	bs_readInt(b,&(_md2->numTris));
+	bs_readInt(b,&(_md2->_numTris));
 	bs_readInt(b,&(_md2->_numGlCmds));
 	bs_readInt(b,&(_md2->_numFrames));
 	bs_readInt(b,&(_md2->_offsetSkins));
@@ -212,16 +326,17 @@ void fBuildVertices(struct MD2_ParseObj* _md2,struct List* _l,const char* frameN
 	//设置关键帧名
 
 
-	frame = &(_md2->pframe[frameIndex]);
-	memset(frame->name,0,G_BUFFER_16_SIZE);
+	frame = &(_md2->_pframe[frameIndex]);
+	memset(frame->_name,0,G_BUFFER_16_SIZE);
 	if(frameName != 0)
 	{
-		memcpy(frame->name,frameName,strlen(frameName));
+		memcpy(frame->_name,frameName,strlen(frameName));
+		//printf("_name:%s\n",frame->_name);
 	}
 	frame->vertices = vertices;
 	frame->vertCount = triangleNum * 3;
-	frame->indices = indices;
-	frame->index = frameIndex;
+	frame->_indices = indices;
+	frame->_index = frameIndex;
 	
 	//输出关键帧名字
 	//printf("name: %s index:%d\n",frame->name,frame->index);
@@ -246,11 +361,11 @@ fParseFrames(struct MD2_ParseObj* _md2)
 	char name[16];
 
 #ifdef _DEBUG_MODE_
-	printf("md2:关键帧数 = %d 顶点总数 = %d\n",_md2->_numFrames,_md2->numVertices);
+	printf("md2:关键帧数 = %d 顶点总数 = %d\n",_md2->_numFrames,_md2->_numVertices);
 #endif
 	
 	//开辟关键帧列表这里开辟了所有的缓存区,那么释放其实只要一次
-	_md2->pframe = (struct MD2_Frame*)tl_malloc(sizeof(struct MD2_Frame) * _md2->_numFrames);
+	_md2->_pframe = (struct MD2_Frame*)tl_malloc(sizeof(struct MD2_Frame) * _md2->_numFrames);
 	
 	//printf(/*"%0x\n%0x\n"*/"%d\n%d\n",&(_md2->pframe[0]),&(_md2->pframe[1]));
 	
@@ -301,7 +416,7 @@ fParseFrames(struct MD2_ParseObj* _md2)
 			}
 		}
 
-		for (j = 0; j < _md2->numVertices; j++,b->mPos++) 
+		for (j = 0; j < _md2->_numVertices; j++,b->mPos++) 
 		{
 			
 			//顶点坐标
@@ -406,7 +521,7 @@ fParseFaces(struct MD2_ParseObj* _md2)
 
 	//printf("_md2->numTris:%d (_md2->b)->mPos:%d _md2->_offsetTris:%d\n",_md2->numTris,(_md2->b)->mPos,_md2->_offsetTris);
 	//(_md2->b)->mPos = _md2->_offsetTris;
-	for (i = 0; i < _md2->numTris; i++) 
+	for (i = 0; i < _md2->_numTris; i++) 
 	{
 		//collect vertex indices
 		bs_readShort(byte,&a);
@@ -442,12 +557,14 @@ fParseFaces(struct MD2_ParseObj* _md2)
 	_md2->_parsedFaces = 1;
 }
 
-void md2parse_load(struct MD2_ParseObj* _md2,const char* str,int len){
-
+void* md2parse_load(const char* str,int len){
+	struct MD2_ParseObj* _md2;
 #ifdef  _DEBUG_MODE_
 	int __time = get_longTime();
 	printf("############################### md2文件开始解析(%d字节)\n",len);
 #endif
+
+	_md2 = (struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
 	_md2->b = (struct BytesVO*)tl_malloc(sizeof(struct BytesVO));
 	
 	(_md2->b)->bigEndian = IS_BIG_ENDIAN;
@@ -524,17 +641,18 @@ void md2parse_load(struct MD2_ParseObj* _md2,const char* str,int len){
 #ifdef  _DEBUG_MODE_
 	printf("############################### md2文件解析结束,耗时 %ld 毫秒\n\n",(get_longTime()-__time));
 #endif
-
+	
+	return _md2;
 }
-void md2parse_dispose(struct MD2_ParseObj* _md2){
-	int i;
-	int len =  _md2->_numFrames;
-
+void md2parse_dispose(void* ptr){
+	int i,len;
+	struct MD2_ParseObj* _md2 = (struct MD2_ParseObj*)ptr;
+	len =  _md2->_numFrames;
 	//_md2->pframe需要逐个free
 	for(i = 0;i < len;i++){
-		struct MD2_Frame* frame = &(_md2->pframe[i]);
-		if(frame->indices){
-			tl_free(frame->indices);
+		struct MD2_Frame* frame = &(_md2->_pframe[i]);
+		if(frame->_indices){
+			tl_free(frame->_indices);
 		}
 		if(frame->vertices){
 			tl_free(frame->vertices);
@@ -542,7 +660,28 @@ void md2parse_dispose(struct MD2_ParseObj* _md2){
 		//memset(frame,0,sizeof(struct MD2_Frame));
 		//tl_free(frame);
 	}
-	tl_free(_md2->pframe);
+	tl_free(_md2->_pframe);
 	tl_free(_md2);
 }
+/**
+*	md2的总帧数
+*/
+int md2parse_totalFrames(void* ptr){
+	return ((struct MD2_ParseObj*)ptr)->_numFrames;
+}
+/**
+*	获取指定索引的MD2_Frame引用
+*/
+void* md2parse_getFrame(void* ptr,int index){
+	struct MD2_ParseObj* p = (struct MD2_ParseObj*)ptr;
+	return &(p->_pframe[index]);
+}
+///*
+//	获取顶点个数和,顶点引用
+//*/
+//void md2parse_getFrameVertex(void* md2Frame,float* pVertices,int* pVertCnt){
+//	struct MD2_Frame* p = (struct MD2_Frame*)md2Frame;
+//	pVertices = p->vertices;
+//	*pVertCnt = p->vertCount;
+//}
 //====================================================================================

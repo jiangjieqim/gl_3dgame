@@ -1,7 +1,7 @@
---动作控制器管理
+--md2动作控制器管理
 dofile("..\\include\\lua\\core.lua")
 
-print('动作控制')
+print('md2动作控制')
 local function 
 f_load(line)
 	--load md2
@@ -69,5 +69,5 @@ f_anim_control_ui(m)
 	listbox_select(list,0)--默认选0号索引
 end
 ---------------------------------------------------------------------------
-func_set_camera_pos(0,0,-130)
+func_set_camera_pos(0,0,-30)
 f_anim_control_ui(f_load(true))

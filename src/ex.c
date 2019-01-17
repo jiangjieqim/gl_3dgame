@@ -564,16 +564,18 @@ md2_load(struct MD2_Object* _md2,const char* str,int len,const char* name)
 	struct FrameAnim* frameAnim = NULL;
 	long usetime=get_longTime();
 
-	_md2->parseHandle = (struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
+	int numFrames = md2parse_totalFrames(_md2->parseHandle);// _md2->parseHandle->numFrames;
 
-	md2parse_load(_md2->parseHandle,str,len);
+	//_md2->parseHandle = (struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
 
-	if(!_md2->parseHandle->_numFrames){
+	_md2->parseHandle = md2parse_load(str,len);
+	
+	if(!numFrames){
 		printf("关键帧数为0!\n");
 		assert(0);
 	}
 
-	printf("解析文件[%s]花费%ld毫秒,关键帧数=%d\n",name,get_longTime()-usetime,_md2->parseHandle->_numFrames);
+	printf("解析文件[%s]花费%ld毫秒,关键帧数=%d\n",name,get_longTime()-usetime,numFrames);
 
 	_md2->base = base_create(TYPE_MD2_FILE,name,0.0,0.0,0.0);
 	base = _md2->base;
@@ -584,9 +586,9 @@ md2_load(struct MD2_Object* _md2,const char* str,int len,const char* name)
 	memset(frameAnim,0,sizeof(struct FrameAnim));
 
 	frameAnim->frameStart = 0;
-	frameAnim->frameEnd = _md2->parseHandle->_numFrames-1;
+	frameAnim->frameEnd = numFrames-1;
 
-	if(_md2->parseHandle->_numFrames <=0){
+	if(numFrames <=0){
 		printf("检测到没有关键帧数据\n");
 		assert(0);
 	}
@@ -601,23 +603,14 @@ void md2_render(struct MD2_Object* _md2){
 	//计算关键帧
 	base_calculateFrame(frameAnim);
 
-	frame = &(_md2->parseHandle->pframe[frameAnim->curFrame]);
+	frame =	md2parse_getFrame(_md2->parseHandle,frameAnim->curFrame);//&(_md2->parseHandle->pframe[frameAnim->curFrame]);
 	//frame = &(_md2->parseHandle->pframe[0]);//只读取第一帧
-
+	
 	//设置数据
 	p=&(base->rData);
 	p->vertex = frame->vertices;
 	p->vertLen= frame->vertCount;
-
-	/*{
-
-		int i;
-		for(i = 0;i < 8;i++)
-		{
-			printf("%f,",frame->vertices[i]);
-		}
-		printf("\n");
-	}*/
+	//md2parse_getFrameVertex(frame,&p->vertex,&p->vertLen);
 
 	//实体绘制
 	base_renderFill(base);
@@ -1058,14 +1051,17 @@ load_model(char* name,const char* url,float x,float y,float z,float scale)
 	添加md2关键帧顶点数据
 */
 static void
-pushMd2Frame(struct Obj_vbo_model* ptr,struct MD2_ParseObj* _md2Parse,int gap)
+pushMd2Frame(struct Obj_vbo_model* ptr,void* _md2Parse,int gap)
 {
 	int i;
 	struct MD2_Frame* frame;
 	
-	for(i = 0;i < _md2Parse->_numFrames;i++)
+	for(i = 0;i </* _md2Parse->numFrames*/md2parse_totalFrames(_md2Parse);i++)
 	{
-		frame = &(_md2Parse->pframe[i]);
+		frame = md2parse_getFrame(_md2Parse,i);//&(_md2Parse->pframe[i]);
+		//md2parse_getFrameVertex(frame,&vertexData.vertex,&vertexData.vertLen);
+		//struct VertexData vertexData;
+		//objVBO_pushNode(ptr,vertexData.vertex,vertexData.vertLen * gap);//压入一个关键帧数据到VBO
 		objVBO_pushNode(ptr,frame->vertices,frame->vertCount * gap);//压入一个关键帧数据到VBO
 	}
 }
@@ -1077,7 +1073,7 @@ vbo_md2Load(const char* name,const char* url)
 	int fileSize;
 	//struct Obj_vbo_model* ptr;
 	//md2解析器,负责解析数据
-	struct MD2_ParseObj* _parse;
+	void* _parse;
 
 	struct Node* node;
 	//int gap; //= UV_GAP+NORMAL_GAP+VERTEX_GAP;
@@ -1091,8 +1087,8 @@ vbo_md2Load(const char* name,const char* url)
 	node->ptrVBO = objVBO_create(name,dataType);
 	_objStr=tl_loadfile((char*)url,&fileSize);
 	//////////////////////////////////////////////////////////////////////////
-	_parse=(struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
-	md2parse_load(_parse,_objStr,fileSize);
+	//_parse=(struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
+	_parse=md2parse_load(_objStr,fileSize);
 	
 	pushMd2Frame(node->ptrVBO,_parse,tl_getGap(dataType));
 
@@ -1228,7 +1224,7 @@ load_animConfig(void* ptr,char* animConf,long fps)
 		struct MD2_Object* md2 = (struct MD2_Object* )ptr;
 
 		//检查关键帧配置是否异常
-		if(!check_md2AnimConf(md2->parseHandle->_numFrames,animConf))
+		if(!check_md2AnimConf(md2parse_totalFrames(md2->parseHandle)/*md2->parseHandle->numFrames*/,animConf))
 		{
 			assert(0);
 			return 0;
@@ -1289,7 +1285,7 @@ load_md2(const char* name,const char* model,float x,float y,float z,float scale)
 
 	base->scale = scale;
 
-	frame = &(md2->parseHandle->pframe[0]);//取第1帧为射线拾取的索引
+	frame =	md2parse_getFrame(md2->parseHandle,0);	// &(md2->parseHandle->pframe[0]);//取第1帧为射线拾取的索引
 	base_createRayVertex(&base->rayVertexData,frame->vertices,frame->vertCount);
 
 	printf("创建md2 [%s],每%ld毫秒切换一帧, 坐标x:%.3f,y:%.3f,z:%.3f 当前动作:%s\n",name,base->frameAnim->fpsInterval,x,y,z,base->frameAnim->curAnim);
