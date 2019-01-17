@@ -82,7 +82,7 @@ end
 
 local function loadMd2(x)
 
-	local obj=func_loadmd2()
+	local obj=func_loadmd2('horse')
 	func_set_x(obj,x or 0)
 	func_changeFlags(obj,FLAGS_RAY)					--设置为可拾取状态
 	func_changeFlags(obj,FLAGS_DRAW_RAY_COLLISION)	--绘制射线盒子
@@ -98,12 +98,12 @@ end
 ---[[
 dofile("..\\include\\lua\\modelUI.lua")
 
-func_set_camera_pos(0,0,-10)
+func_set_camera_pos(0,0,-10)-- -10
 modelUI_init()
-loadMD5('wolf',0,0.04)
+--loadMD5('wolf',0,0.04)
 --loadMD5('wolf1',1)
 
 --loadObj(0)
---loadMd2(3)
+loadMd2(3)
 --]]
 

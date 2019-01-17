@@ -16,6 +16,7 @@
 #include "node.h"
 #include "atlas.h"
 #include "obj.h"
+#include "md2.h"
 #include "tl_malloc.h"
 /*
 	鼠标左键是否常按着

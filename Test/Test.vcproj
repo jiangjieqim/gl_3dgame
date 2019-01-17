@@ -233,6 +233,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\md2.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\md5.c"
 				>
 			</File>
@@ -327,6 +331,10 @@
 			</File>
 			<File
 				RelativePath="..\include\lualib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\md2.h"
 				>
 			</File>
 			<File
