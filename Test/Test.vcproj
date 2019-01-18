@@ -378,10 +378,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\pick.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\psv.h"
 				>
 			</File>
