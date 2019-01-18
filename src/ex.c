@@ -956,7 +956,7 @@ void* load_md5(const char* _name,const char* url,float x,float y,float z,float s
 	tl_createAbsBoundBox(_base->boundLength,_base->boundHeight,_base->boundWidth,_base->staticBoxVert);*/
 	_base->rayVertexData.vertLen = BOX_SIZE;
 	_base->rayVertexData.vertex = tl_malloc(sizeof(float)*_base->rayVertexData.vertLen);
-	tl_setAbsBoundBox(1,1,1,_base->rayVertexData.vertex);//默认一个半径0.5的立方体
+	tlgl_setAbsBoundBox(1,1,1,_base->rayVertexData.vertex);//默认一个半径0.5的立方体
 	
 	//======================================================================================
 	//加载md5模型

@@ -543,4 +543,11 @@ void tlgl_setVboSize(int size,int isAdd);
 	获取vbo尺寸
 */
 int tlgl_getVboSize();
+
+/*
+ *	设置固定长宽高的包围盒
+ *	x,y,z 为长宽高
+ */
+void tlgl_setAbsBoundBox(float x,float y,float z,float* outTriData);
+
 #endif

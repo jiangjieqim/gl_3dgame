@@ -103,6 +103,100 @@ struct md5_bbox_t{
 #define _MD5_VERSION_VALUE_ 10
 #define _SIGN_JOINT_ "joints {"
 #define _SIGN_MESH_ "mesh {"
+
+//----------------------------------------------------------------
+
+//字符分割结构体
+struct StringSplit{
+	char* dest;/*源字符串*/
+	char* sign;/*目标搜索字符串*/
+	char* pOutstr;/*字符输出缓存区*/
+	int pos;/*当前指针移动的坐标*/
+	int isEnd;/*isEnd == -1	搜索结束,isEnd == 0搜索还未到字符串末尾*/
+};
+
+static void 
+f_strSplitLoop(struct StringSplit* sp){
+	const char* dest = sp->dest;
+	const char* sign = sp->sign;
+	int *pos = &sp->pos;
+	char* pOutstr = sp->pOutstr;
+
+	int _l = (int)strlen(sign);
+	int len,i,_sta = 0;
+	char* __dest;
+	int outStrLength = G_BUFFER_MAX_SIZE;	//单个输出的字符长度
+	int cl = G_BUFFER_16_SIZE;				//标识符的长度
+	int cut = 0;
+	//============================================
+	__dest = (char*)dest + *pos; 
+	len = (int)strlen(__dest);
+
+	if((int)strlen(__dest) >= _l)
+	{
+		char tmp[G_BUFFER_16_SIZE];
+		memset(tmp,0,G_BUFFER_16_SIZE);
+		tl_strsub(__dest,tmp,len-_l,len-1);
+		if(strcmp(tmp,sign) == 0)
+		{
+			//去掉最后一个字符串
+			len -= _l;
+			cut = 1;
+		}
+	}
+
+	if(strlen(__dest) < strlen(sign) || (int)strlen(sign) > cl)
+	{
+		printf("cmp is little than %d __dest:(%s) \n",cl,__dest);
+		sp->isEnd = -1;
+		return;
+	}
+
+	for(i = 0;i < len;i++)
+	{
+		char cmp[G_BUFFER_16_SIZE];
+		if(len-i<_l)
+		{
+			break;
+		}
+		memset(cmp,0,cl);
+		tl_strsub((const char*)__dest,cmp,i,i+_l-1);
+		if(strcmp((const char*)cmp,sign) == 0)
+		{
+			if(i-_l>=outStrLength)
+			{
+				printf("error, one line is too long!\n");
+				sp->isEnd = -1;
+				return;
+			}
+			memset(pOutstr,0,outStrLength);
+			tl_strsub(__dest,pOutstr,_sta,i-_sta-1);
+			_sta = i+_l;
+			*pos += _sta;
+			sp->isEnd = 0;
+			return;
+		}
+	}
+	memset(pOutstr,0,outStrLength);
+	if(cut == 0)
+	{
+		tl_strsub(__dest,pOutstr,_sta,_sta+len);
+	}
+	else
+	{
+		tl_strsub(__dest,pOutstr,_sta,_sta+len-_l);
+	}
+	sp->isEnd = -1;
+}
+
+static void 
+f_strSplitInit(struct StringSplit* p,const char* dest,const char* sign,char* pOutstr){
+	p->dest = (char*)dest;
+	p->sign = (char*)sign;
+	p->pos = 0;
+	p->isEnd = 0;
+	p->pOutstr = pOutstr;
+}
 /*
 	下一帧
 	setframe:	自定义设置关键帧的值,默认从1开始
@@ -647,11 +741,11 @@ static void parseFrame(const char* data,int* curPos,int offset,float *animFrameD
 	memset(_out,0,offset);
 	memcpy(_out,data+*curPos,offset-1);
 	
-	tl_strSplitInit(&sp,_out," ",b);
+	f_strSplitInit(&sp,_out," ",b);
 
 	while(sp.isEnd!=-1)
 	{
-		tl_strSplitLoop(&sp);
+		f_strSplitLoop(&sp);
 		if(((int)strlen(b) == 1) && (b[0] == 13 || (strcmp(b,"\n") == 0))){
 		}else{
 			sscanf(b,"%f",&animFrameData[index]);
@@ -697,11 +791,11 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 	
 	printf("md5Anim:%s,len:%d kb\n",anim->animName,(int)strlen(_animData)/1024);
 
-	tl_strSplitInit(&_sp,_animData,"\n",buff);
+	f_strSplitInit(&_sp,_animData,"\n",buff);
 
 	while(_sp.isEnd!=-1)
 	{
-		tl_strSplitLoop(&_sp);
+		f_strSplitLoop(&_sp);
 
 		if (sscanf (buff, " MD5Version %d", &version) == 1)
 		{
@@ -760,7 +854,7 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 		{
 			for (i = 0; i < anim->num_joints; ++i)
 			{
-				tl_strSplitLoop(&_sp);
+				f_strSplitLoop(&_sp);
 				
 				/* Read joint info */
 				parseJoints(buff,&jointInfos[i]);
@@ -771,7 +865,7 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 		{
 			for (i = 0; i < anim->num_frames; ++i)
 			{
-				tl_strSplitLoop(&_sp);
+				f_strSplitLoop(&_sp);
 
 				/* Read bounding box */
 				sscanf (buff, " ( %f %f %f ) ( %f %f %f )",
@@ -784,7 +878,7 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 		{
 			for (i = 0; i < anim->num_joints; ++i)
 			{
-				tl_strSplitLoop(&_sp);
+				f_strSplitLoop(&_sp);
 
 				/* Read base frame joint */
 				if (sscanf (buff, " ( %f %f %f ) ( %f %f %f )",
