@@ -5,7 +5,7 @@
 #include "tools.h"
 #include "atlas.h"
 #include "tmat.h"
-
+#include "xml.h"
 
 /*
 	根据图集资源id获取配置

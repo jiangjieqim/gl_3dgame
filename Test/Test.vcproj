@@ -284,6 +284,10 @@
 				RelativePath="..\src\tools.c"
 				>
 			</File>
+			<File
+				RelativePath="..\src\xml.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -383,6 +387,10 @@
 			</File>
 			<File
 				RelativePath="..\include\tools.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\xml.h"
 				>
 			</File>
 		</Filter>
