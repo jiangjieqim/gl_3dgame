@@ -1,6 +1,10 @@
+#include <assert.h>
+#include <string.h>
+#include <stdio.h>
+
 #include "tools.h"
 #include "xml.h"
-#include <assert.h>
+
 struct FindXmlNode{
 	char* key;
 	char* value;

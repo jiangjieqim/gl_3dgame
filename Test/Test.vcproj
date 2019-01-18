@@ -237,6 +237,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\list.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\md2.c"
 				>
 			</File>
@@ -335,6 +339,10 @@
 			</File>
 			<File
 				RelativePath="..\include\lauxlib.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\list.h"
 				>
 			</File>
 			<File

@@ -2,7 +2,22 @@
 //=============================================================================
 #ifndef _PCSV_H_
 #define _PCSV_H_
+struct PCsvVO{
+	/*
+	数据行list
+	*/
+	struct LStackNode* list;
 
+	/*
+	关键字索引
+	*/
+	int keyIndex;
+
+	/*
+	引用数组,无需释放
+	*/
+	struct Array* keylist;
+};
 
 //测试用例
 /************************************
