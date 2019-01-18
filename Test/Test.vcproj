@@ -217,6 +217,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\byte.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\collide.c"
 				>
 			</File>
@@ -295,6 +299,10 @@
 			</File>
 			<File
 				RelativePath="..\include\atlas.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\byte.h"
 				>
 			</File>
 			<File

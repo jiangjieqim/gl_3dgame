@@ -1,5 +1,6 @@
 #include "tools.h"
 #include "md2.h"
+#include "byte.h"
 //====================================================================================
 //MD2接口实现
 struct MD2_ParseObj{
