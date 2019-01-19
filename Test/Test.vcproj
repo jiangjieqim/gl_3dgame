@@ -277,6 +277,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\text.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\tl_malloc.c"
 				>
 			</File>
@@ -383,6 +387,10 @@
 			</File>
 			<File
 				RelativePath="..\include\sprite.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\text.h"
 				>
 			</File>
 			<File
