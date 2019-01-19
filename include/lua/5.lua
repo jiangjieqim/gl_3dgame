@@ -108,7 +108,7 @@ local function
 f_shader_init()
 	local list =  listbox_new()
 	
-	listbox_add(list,"diffuse")
+	listbox_add(list,"diffuse")	--Âş·´Éä
 	listbox_add(list,"ploygonLine")
 	listbox_add(list,"outline")
 	listbox_add(list,"point")
