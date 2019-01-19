@@ -36,7 +36,7 @@ tf_create(int bufferSize,int x,int y,
 	tf->r = r;
 	tf->g = g;
 	tf->b = b;
-	ex_addNode(ex_getInstance(),tf);
+	ex_add(tf);
 	//printf("tf_create:%s ,%d,%d\n",text,x,y);
 	return tf;
 }

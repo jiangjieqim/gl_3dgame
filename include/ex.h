@@ -198,29 +198,6 @@ void setCamPos(float x,float y,float z);
 void setBgColor(float r,float g,float b);
 
 /*
-	开启引擎某个状态
-*/
-void set(int type);
-
-/*
-	关闭某个状态(重置该状态位为0)
-
-	0001
-&	0000
-=	0000
-
-	0001
-|	0000
-=	0001
-
-*/
-void reset(int t);
-/*
-	获取引擎当前的状态
-*/
-//int getState(int type);
-
-/*
 	打印引擎当前信息
 */
 void ex_info();
@@ -237,8 +214,7 @@ void ex_update_uiPos();
 /*
 	添加一个渲染节点
 */
-void ex_addNode(struct EX* p, void* _node);
-
+void ex_add(void* ptr);
 /*
 	获取引擎句柄
 */
@@ -250,22 +226,17 @@ struct EX* ex_getInstance();
 int ex_load_model(char* name,const char* url,float x,float y,float z,float scale);
 
 /*
-	设置ptr的状态
-*/
-void setv_ptr(void* ptr,int flags);
-
-/*
 	设置动作
 */
-void setanim(void* ptr,const char* animKey);
+void ex_set_anim(void* ptr,const char* animKey);
 /*
 	在屏幕左上角显示日志文本
 */
 void ex_showLog(const char* buffer);
-/*
- *	显示一个数字日志
- */
-void ex_showLogFloat(float v);
+///*
+// *	显示一个数字日志
+// */
+//void ex_showLogFloat(float v);
 
 /*
 	回调lua函数
@@ -301,10 +272,7 @@ int ex_load_vbo(char* name,const char* url);
 
 //void updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar);
 void ex_updatePerspctiveModelView();
-/*
- *设置对象的朝向目标
- */
-void setLookTarget(void* ptr,float x,float y,float z);
+
 /*
 	寻找节点
 */
@@ -316,15 +284,16 @@ ex_find_ptr(struct EX* ptr,const char* name);
 struct HeadInfo* 
 ex_find_headinfo(struct EX* p,const char* name);
 /*
-	获取引擎的一个默认材质,共享使用,在处理没有材质的时候后调用
-*/
-void* ex_get_defaultMaterial();
-/*
-	绘制线段
-*/
-void ex_drawline();
-/*
 	删除引擎中的一个对象
 */
 void ex_ptrRemove(void* ptr);
+
+/*
+ *设置对象的朝向目标
+ */
+void setLookTarget(void* ptr,float x,float y,float z);
+/*
+	获取引擎的一个默认材质,共享使用,在处理没有材质的时候后调用
+*/
+void* ex_get_defaultMaterial();
 #endif

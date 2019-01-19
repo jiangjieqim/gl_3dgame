@@ -90,7 +90,7 @@ struct Sprite
 /*
 	≥ı ºªØ∞¥≈•
 */
-struct Sprite* sprite_create(struct EX* ex,
+struct Sprite* sprite_create(
 	char* _spriteName,
 	int x,int y,
 	int width,int height,

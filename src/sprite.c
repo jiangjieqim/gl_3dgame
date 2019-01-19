@@ -403,7 +403,7 @@ InitType(struct Sprite* pSpr)
 }
 
 struct Sprite* 
-sprite_create(struct EX* ex,char* _spriteName,
+sprite_create(char* _spriteName,
 			  int x,int y,int width,int height,
 			  void (*clickCallBack)(struct Sprite* ,int ,int ),
 			  const char* luaFunName)
@@ -454,7 +454,7 @@ sprite_create(struct EX* ex,char* _spriteName,
 	if(base){
 		setv(&base->flags,FLAGS_VISIBLE);//FLAGS_RAY
 		pSpr->clickCallBack = clickCallBack;
-		ex_addNode(ex,pSpr);
+		ex_add(pSpr);
 	}
 
 	pSpr->pos_z = ex_zBuffer();

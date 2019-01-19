@@ -131,7 +131,8 @@ void* ex_find_ptr(struct EX* ptr,const char* name){
 /*
 添加一个渲染节点
 */
-void ex_addNode(struct EX* p, void* _node){
+static void 
+f_addNode(struct EX* p, void* _node){
 	//EngineX* p = this;
 	if(_node!=NULL){
 		//struct HeadInfo base;
@@ -146,7 +147,9 @@ void ex_addNode(struct EX* p, void* _node){
 		}
 	}
 }
-
+void ex_add(void* ptr){
+	f_addNode(ex_getInstance(),ptr);
+}
 ///*
 //获取模型类型
 //*/
@@ -423,7 +426,7 @@ load_md2(const char* name,const char* model,float x,float y,float z,float scale)
 
 	updateMat4x4(base);
 
-	ex_addNode(p,md2);
+	f_addNode(p,md2);
 
 	return md2;
 }
@@ -431,7 +434,7 @@ load_md2(const char* name,const char* model,float x,float y,float z,float scale)
 *	销毁Ent3D对象
 */
 static void 
-ent_dispose(struct Ent3D* p){
+f_ent_dispose(struct Ent3D* p){
 	
 	tl_free(p->vertex);
 
@@ -470,7 +473,8 @@ void md5Model_dispose(struct MD5* _md5)
 	tl_free((void*)_md5);
 }
 
-static void ent_render(struct Ent3D* ent){
+static void 
+f_ent_render(struct Ent3D* ent){
 	struct HeadInfo* base =(struct HeadInfo*)ent->base;
 
 	struct VertexData* p=&(base->rData);
@@ -521,7 +525,7 @@ void render_3dNode(int data)
 
 	if(objType== TYPE_OBJ_FILE)
 	{
-		ent_render((struct Ent3D*)data);
+		f_ent_render((struct Ent3D*)data);
 	}
 	else if(objType == TYPE_MD5_FILE)
 	{
@@ -547,7 +551,8 @@ void render_3dNode(int data)
 /*
 	回调
 */
-void ex_renderlistCall(void _callBack(int))
+static void 
+f_renderlistCall(void _callBack(int))
 {
 	struct EX* ex = ex_getInstance();
 	struct LStackNode* s = (struct LStackNode* )ex->renderList;
@@ -720,7 +725,12 @@ void ex_updatePerspctiveModelView()
 //
 //	return vbo;
 //}
-void ex_drawline(){
+
+/*
+	绘制线段
+*/
+static void 
+f_drawline(){
 
 	/*
 	glLineWidth(1.0f);//直线的宽度。
@@ -778,10 +788,10 @@ void _new()
 	
 	//ex_updatePerspctiveModelView();
 	p->allVertexTotal = 0;
-	ex_renderlistCall(render_3dNode);
+	f_renderlistCall(render_3dNode);
 
 	//drawLine(2000);
-	ex_drawline();
+	f_drawline();
 	
 	//ex_renderlistCall(sprite_drawRender);//test
 	if(TRUE)//FALSE
@@ -810,8 +820,8 @@ void _new()
 		//	objVBO_renderNode(vbo,material,myMatirx,GL_FILL);
 		//}
 		
-		ex_renderlistCall(sprite_drawRender);
-		ex_renderlistCall(tf_render);
+		f_renderlistCall(sprite_drawRender);
+		f_renderlistCall(tf_render);
 
 		//渲染文本(非常耗费性能,待优化)
 		//drawText(p);
@@ -845,7 +855,7 @@ struct HeadInfo* ex_find_headinfo(struct EX* p,const char* name){
 void 
 ex_update_uiPos()
 {
-	ex_renderlistCall(sprite_updatePos);	
+	f_renderlistCall(sprite_updatePos);	
 }
 //
 ///*
@@ -954,7 +964,7 @@ load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
 	updateMat4x4(_base);
 
 	//添加到渲染列表
-	ex_addNode(engine,md5);
+	f_addNode(engine,md5);
 
 	return md5;
 }
@@ -1011,7 +1021,7 @@ load_obj(const char* name,const char* mesh_s,
 	updateMat4x4(base);
 
 	//添加到渲染列表
-	ex_addNode(engine,ent);
+	f_addNode(engine,ent);
 
 	return ent;
 }
@@ -1095,7 +1105,7 @@ vbo_md2Load(const char* name,const char* url)
 	md2parse_dispose(_parse);
 	tl_free(_objStr);
 	
-	ex_addNode(ex_getInstance(),node);
+	f_addNode(ex_getInstance(),node);
 
 	//printf("[%s]动作总数:%d\n",url,node->anim->allLength);
 	return (int)node;
@@ -1153,7 +1163,7 @@ vbo_loadObj3d(char* name,const char* url)
 	tl_free(_objStr);
 
 	//node->base = node->ptrVBO->base;
-	ex_addNode(ex_getInstance(),node);
+	f_addNode(ex_getInstance(),node);
 	return (int)node;
 }
 
@@ -1183,13 +1193,13 @@ int ex_load_vbo(char* name,const char* url)
 }
 
 
-void 
-setv_ptr(void* ptr,int flags)
-{
-	struct HeadInfo* b = base_get(ptr);
-	//setv(&((struct HeadInfo*)base_get2(ptr)->flags),flags);
-	setv(&b->flags,flags);
-}
+//void 
+//setv_ptr(void* ptr,int flags)
+//{
+//	struct HeadInfo* b = base_get(ptr);
+//	//setv(&((struct HeadInfo*)base_get2(ptr)->flags),flags);
+//	setv(&b->flags,flags);
+//}
 //为ptr设置材质material
 //void 
 //setMaterial(void* ptr,void* material)
@@ -1239,7 +1249,7 @@ ex_load_anim_config(void* ptr,char* animConf,long fps)
 	设置动作
 */
 void 
-setanim(void* ptr,const char* animKey)
+ex_set_anim(void* ptr,const char* animKey)
 {
 	struct HeadInfo* base = base_get(ptr);
 	if(base->curType == TYPE_MD2_FILE)
@@ -1375,7 +1385,7 @@ void mouseMove(int x,int y)
 	}*/
 	
 	//只有当鼠标移动的时候才会更新Sprite
-	ex_renderlistCall(sprite_mouseMove);	
+	f_renderlistCall(sprite_mouseMove);	
 }
 
 void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
@@ -1394,7 +1404,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	if(button == GLUT_LEFT_BUTTON && action == GLUT_DOWN)
 	{
 		//界面射线拾取检测
-		ex_renderlistCall(render_hitUiNode);
+		f_renderlistCall(render_hitUiNode);
 		isLeftDown = 1;
 		if(ex->isHitRaySprite){
 			//点击了界面就忽略掉3d场景中的模型
@@ -1430,7 +1440,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	//ui鼠标事件
 	//uimouse(button,action,xMouse,yMouse);
 	
-	ex_renderlistCall(sprite_action);
+	f_renderlistCall(sprite_action);
 	glutPostRedisplay();
 
 }
@@ -1471,7 +1481,7 @@ void setCamPos(float x,float y,float z){
 	struct EX* ex = ex_getInstance();	
 	ex->camx = x;	ex->camy = y;	ex->camz = z;
 	//更新渲染列表中的矩阵
-	ex_renderlistCall(update3DNode);
+	f_renderlistCall(update3DNode);
 	//printf("setCamPos	%f,%f,%f\n",x,y,z);
 	ex_updatePerspctiveModelView();
 }
@@ -1542,15 +1552,15 @@ ex_showLog(const char* buffer)
 	tf_setText(e->logTf,buffer);
 }
 
-void
-ex_showLogFloat(float v)
-{
-	char buffer[G_BUFFER_1024_SIZE];
-	struct EX* e = ex_getInstance();
-	getLog();
-	sprintf_s(buffer,G_BUFFER_1024_SIZE,"%f",v);
-	tf_setText(e->logTf,buffer);
-}
+//void
+//ex_showLogFloat(float v)
+//{
+//	char buffer[G_BUFFER_1024_SIZE];
+//	struct EX* e = ex_getInstance();
+//	getLog();
+//	sprintf_s(buffer,G_BUFFER_1024_SIZE,"%f",v);
+//	tf_setText(e->logTf,buffer);
+//}
 
 void ex_callParmLuaFun(const char* luaFunName,const char* parm)
 {
@@ -1659,7 +1669,7 @@ void ex_ptrRemove(void* ptr){
 			md2_dispose((struct MD2_Object*)ptr);
 			break;
 		case TYPE_OBJ_FILE:
-			ent_dispose((struct Ent3D*)ptr);
+			f_ent_dispose((struct Ent3D*)ptr);
 			break;
 		case TYPE_MD5_FILE:
 			md5Model_dispose((struct MD5*)ptr);
