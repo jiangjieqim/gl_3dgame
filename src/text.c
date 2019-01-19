@@ -1,8 +1,11 @@
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
+
 #include "tools.h"
 #include "text.h"
 #include "ex.h"
+
 struct TextField* 
 tf_create(int bufferSize,int x,int y,
 		  float r,float g,float b)

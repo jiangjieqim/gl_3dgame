@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
 #include "tools.h"
 #include "tlgl.h"
 #include "tmat.h"
@@ -19,6 +18,7 @@
 #include "md2.h"
 #include "tl_malloc.h"
 #include "text.h"
+
 struct MD2_Object
 {
 	/*
@@ -32,6 +32,19 @@ struct MD2_Object
 	//struct MD2_ParseObj* parseHandle;
 	void* parseHandle;
 };
+
+struct Ent3D{
+	struct HeadInfo* base;
+
+	/*顶点个数*/
+	int vertexCount;
+
+	/*顶点数组*/
+	GLfloat* vertex;
+
+};
+
+
 /*
 	鼠标左键是否常按着
 */
@@ -86,13 +99,13 @@ int ex_mouseIsLeftDown()
 {
 	return isLeftDown;
 }
-void* ex_find_node(const char* name){
-	return ex_findNodeByName(ex_getInstance(),name);
-}
+//void* ex_find_node(const char* name){
+//	return ex_findNodeByName(ex_getInstance(),name);
+//}
 /*
 根据name寻找对象(name为一个字符串)
 */
-void* ex_findNodeByName(struct EX* ptr,const char* name){
+void* ex_find_ptr(struct EX* ptr,const char* name){
 	struct LStackNode* s = (struct LStackNode* )ptr->renderList;
 	void* top,*p;
 	top = s;
@@ -125,7 +138,7 @@ void ex_addNode(struct EX* p, void* _node){
 		struct HeadInfo* b;
 		//base_get(_node,&base);
 		b = base_get(_node);
-		if( ex_findNodeByName(p,b->name) != NULL){
+		if( ex_find_ptr(p,b->name) != NULL){
 			printf("error! 重名的对象_engine :%s\n",b->name);
 			assert(0);
 		}else{
@@ -825,8 +838,8 @@ void render(void)
 	_new();
 }
 
-struct HeadInfo* ex_find(struct EX* p,const char* name){
-	return base_get(ex_findNodeByName(p,name));
+struct HeadInfo* ex_find_headinfo(struct EX* p,const char* name){
+	return base_get(ex_find_ptr(p,name));
 }
 
 void 
@@ -1004,7 +1017,7 @@ load_obj(const char* name,const char* mesh_s,
 }
 //固定管线
 int
-load_model(char* name,const char* url,float x,float y,float z,float scale)
+ex_load_model(char* name,const char* url,float x,float y,float z,float scale)
 {
 	char suffix[G_BUFFER_16_SIZE];
 	tl_getSuffixByPath((char*)url,suffix,G_BUFFER_16_SIZE);
@@ -1144,7 +1157,7 @@ vbo_loadObj3d(char* name,const char* url)
 	return (int)node;
 }
 
-int load_VBO_model(char* name,const char* url)
+int ex_load_vbo(char* name,const char* url)
 {
 	char suffix[G_BUFFER_16_SIZE];
 	
@@ -1177,18 +1190,18 @@ setv_ptr(void* ptr,int flags)
 	//setv(&((struct HeadInfo*)base_get2(ptr)->flags),flags);
 	setv(&b->flags,flags);
 }
-
-void 
-setMaterial(void* ptr,void* material)
-{
-	(struct HeadInfo*)base_get(ptr)->tmat = material;
-}
+//为ptr设置材质material
+//void 
+//setMaterial(void* ptr,void* material)
+//{
+//	(struct HeadInfo*)base_get(ptr)->tmat = material;
+//}
 
 /*
 	加载md2动作配置
 */
 int 
-load_animConfig(void* ptr,char* animConf,long fps)
+ex_load_anim_config(void* ptr,char* animConf,long fps)
 {
 	//const char* defaultAnim,
 	struct HeadInfo* base = base_get(ptr);
@@ -1491,10 +1504,10 @@ void setBgColor(float r,float g,float b){
 //	e->_st = (~t)&e->_st; 
 //}
 
-void ex_bind(int argc,char** argv){
-	
-}
-
+/*
+	切换标识
+*/
+/*
 void ex_switch_baseFlags(struct HeadInfo* _node,int flag){
 	//选择切换模式//int flag =  FLAGS_GLSL_OUTLINE;
 	int *v = &_node->flags;
@@ -1506,8 +1519,8 @@ void ex_switch_baseFlags(struct HeadInfo* _node,int flag){
 	{
 		setv(v,flag);
 	}
-
 }
+*/
 /*
  *初始化日志tf句柄
  */

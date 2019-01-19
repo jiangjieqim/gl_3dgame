@@ -2,28 +2,10 @@
 #define _EX_H_
 #include "tlgl.h"
 #include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-
+//#include "lualib.h"
+//#include "lauxlib.h"
 
 #define  SPRITE_TRIANGLE_COUNT	18	//一个sprite 2d面片需要的三角形(2 * 3 * 3)数据长度
-
-
-typedef struct Ent3D{
-	struct HeadInfo* base;
-
-	//struct VBO_Obj* vbo;
-
-	/*顶点个数*/
-	int vertexCount;
-
-	/*顶点数组*/
-	GLfloat* vertex;
-
-}Ent3D;
-
-
-
 
 //鼠标状态
 struct MouseState
@@ -71,10 +53,10 @@ struct EX
 	*/
 	GLdouble zFar;
 
-	/*
-	*	点击拾取模型
-	*/
-	struct Ent3D* pick3DObject;
+	///*
+	//*	点击拾取模型
+	//*/
+	//struct Ent3D* pick3DObject;
 
 	/*
 		屏幕尺寸
@@ -161,17 +143,12 @@ struct EX
 struct EX* ex_create();
 
 /*
-渲染循环
+*	渲染循环
 */
 void render(void);
 
 /*
-根据name获取HeadInfo;
-*/
-struct HeadInfo* ex_find(struct EX* p,const char* name);
-void* ex_find_node(const char* name);
-/*
-初始化
+*	初始化
 */
 void ex_init(struct EX* p,GLdouble zfar);
 
@@ -183,7 +160,7 @@ void ex_dispose(struct EX* p);
 /*
 	加载动作配置,设置
 */
-int load_animConfig(void* ptr,char* animConf,long fps);
+int ex_load_anim_config(void* ptr,char* animConf,long fps);
 
 /*
 gluUnProject -- map window coordinates to object coordinates 
@@ -226,11 +203,6 @@ void setBgColor(float r,float g,float b);
 void set(int type);
 
 /*
-	初始化绑定相关接口
-*/
-void ex_bind(int argc,char** argv);
-
-/*
 	关闭某个状态(重置该状态位为0)
 
 	0001
@@ -254,11 +226,6 @@ void reset(int t);
 void ex_info();
 
 /*
-	切换标识
-*/
-void ex_switch_baseFlags(struct HeadInfo* _node,int flag);
-
-/*
 	鼠标是否常按着
 */
 int ex_mouseIsLeftDown();
@@ -280,11 +247,8 @@ struct EX* ex_getInstance();
 	加载一个obj,或者md2等
 	float rayRadius	:射线拾取半径
 */
-int load_model(char* name,const char* url,float x,float y,float z,float scale);
-/*
-	为ptr设置材质material
-*/
-void setMaterial(void* ptr,void* material);
+int ex_load_model(char* name,const char* url,float x,float y,float z,float scale);
+
 /*
 	设置ptr的状态
 */
@@ -333,7 +297,7 @@ int ex_zBuffer();
 /*
 	加载VBO模式的模型
 */
-int load_VBO_model(char* name,const char* url);
+int ex_load_vbo(char* name,const char* url);
 
 //void updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar);
 void ex_updatePerspctiveModelView();
@@ -344,7 +308,13 @@ void setLookTarget(void* ptr,float x,float y,float z);
 /*
 	寻找节点
 */
-void* ex_findNodeByName(struct EX* ptr,const char* name);
+void* 
+ex_find_ptr(struct EX* ptr,const char* name);
+/*
+*	根据name获取HeadInfo;
+*/
+struct HeadInfo* 
+ex_find_headinfo(struct EX* p,const char* name);
 /*
 	获取引擎的一个默认材质,共享使用,在处理没有材质的时候后调用
 */
