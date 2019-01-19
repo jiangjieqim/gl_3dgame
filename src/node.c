@@ -58,7 +58,7 @@ node_bindAnim(struct Node* p)
 static void 
 drawCollion(struct Node* p)
 {
-	struct HeadInfo* b = base_get2(p);
+	struct HeadInfo* b = base_get(p);
 	struct VertexData* vd =collide_cur(p->ptrCollide);
 	drawLineByColor(b,vd->vertex,vd->vertLen,b->boxR,b->boxG,b->boxB);
 }
@@ -85,7 +85,7 @@ f_setShader(struct HeadInfo* base,const char* shader)
 static void 
 setDefaultShader(struct Node* ptr)
 {
-	struct HeadInfo* base =	base_get2(ptr);
+	struct HeadInfo* base =	base_get(ptr);
 	char _shaderName[G_BUFFER_32_SIZE];
 	tmat_getShader(base->tmat,_shaderName,G_BUFFER_32_SIZE);
 	f_setShader(base,_shaderName);
@@ -127,7 +127,7 @@ lineVBO_CallBack(int input,struct ObjVBO* vbo)
  */
 void
 node_render(struct Node* p){
-	struct HeadInfo* base =	base_get2(p);
+	struct HeadInfo* base =	base_get(p);
 
 	if(!getv(&(base->flags),FLAGS_VISIBLE))
 		return;

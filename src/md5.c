@@ -516,7 +516,7 @@ anim_adaptivePlay(struct MD5* p,int fps,double curent_time){
 		}
 	}else{
 		(*frameTicket) = 0;
-		anim_nextFrame( md5anim,animInfo,curent_time,base_get2((void*)p)->custframe);
+		anim_nextFrame( md5anim,animInfo,curent_time,base_get((void*)p)->custframe);
 	}
 
 
@@ -524,7 +524,7 @@ anim_adaptivePlay(struct MD5* p,int fps,double curent_time){
 static void 
 anim_VertexArray(struct MD5* p,int fps,double curent_time)
 {
-	struct HeadInfo* base = base_get2((void*)p);
+	struct HeadInfo* base = base_get((void*)p);
 	struct md5_anim_t* md5anim = (struct md5_anim_t*)p->curAnim;
 	struct anim_info_t* animInfo = (struct anim_info_t*)p->animInfo;
 	struct MD5_model* _model = (struct MD5_model*)(p->model);
@@ -1155,7 +1155,7 @@ void md5_render(struct MD5* md5,int fps){
 	int i;
 	struct MD5_model* _model = (struct MD5_model*)(md5->model);
 
-	struct HeadInfo* base = base_get2((void*)md5);
+	struct HeadInfo* base = base_get((void*)md5);
 
 	double curtime = (double)gettime_cur();//tlgl_getCurTime();
 	

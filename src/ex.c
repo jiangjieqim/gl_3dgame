@@ -18,6 +18,20 @@
 #include "obj.h"
 #include "md2.h"
 #include "tl_malloc.h"
+
+struct MD2_Object
+{
+	/*
+	*	头部基础信息,可继承
+	*/
+	struct HeadInfo* base;
+
+	/*
+	*	解析器句柄,该对象只是存储md2模型的数据结构
+	*/
+	//struct MD2_ParseObj* parseHandle;
+	void* parseHandle;
+};
 /*
 	鼠标左键是否常按着
 */
@@ -84,7 +98,7 @@ void tf_setPos(struct TextField* tf,int x,int y){
 	获取文本的总长度
 */
 int 
-tf_getTextWidth(struct TextField* tf)
+tf_getWidth(struct TextField* tf)
 {
 	return tf->textWidth;
 }
@@ -125,7 +139,7 @@ void tf_dispose(struct TextField* tf)
 
 void tf_render(int data)
 {
-	struct HeadInfo* base = base_get2((void*)data);
+	struct HeadInfo* base = base_get((void*)data);
 	if(getv(&base->flags,FLAGS_VISIBLE) && base->curType == TYPE_TEXT_FILE)
 	{
 		struct EX* e = ex_getInstance();
@@ -160,7 +174,32 @@ void tf_render(int data)
 	}
 }
 //==============================================================
+/*
+*	md2渲染回调
+*/
+static void 
+md2_render(struct MD2_Object* _md2){
 
+	struct FrameAnim* frameAnim = _md2->base->frameAnim;
+	struct HeadInfo* base =(struct HeadInfo*)_md2->base;
+	struct MD2_Frame* frame;
+	struct VertexData* p;
+
+	//计算关键帧
+	base_calculateFrame(frameAnim);
+
+	frame =	md2parse_getFrame(_md2->parseHandle,frameAnim->curFrame);//&(_md2->parseHandle->pframe[frameAnim->curFrame]);
+	//frame = &(_md2->parseHandle->pframe[0]);//只读取第一帧
+
+	//设置数据
+	p=&(base->rData);
+	p->vertex = frame->vertices;
+	p->vertLen= frame->vertCount;
+	//md2parse_getFrameVertex(frame,&p->vertex,&p->vertLen);
+
+	//实体绘制
+	base_renderFill(base);
+}
 void render_3dNode(int data);
 void render_uiNode(int data);
 int ex_mouseIsLeftDown()
@@ -188,7 +227,7 @@ void* ex_findNodeByName(struct EX* ptr,const char* name){
 
 		n = (void*)data;
 		//base_get(n,&base);
-		base = base_get2(n);
+		base = base_get(n);
 		if(base!= NULL && !strcmp((const char*)base->name,name)){
 			return n;
 		}
@@ -205,7 +244,7 @@ void ex_addNode(struct EX* p, void* _node){
 		//struct HeadInfo base;
 		struct HeadInfo* b;
 		//base_get(_node,&base);
-		b = base_get2(_node);
+		b = base_get(_node);
 		if( ex_findNodeByName(p,b->name) != NULL){
 			printf("error! 重名的对象_engine :%s\n",b->name);
 			assert(0);
@@ -262,6 +301,54 @@ void ex_addNode(struct EX* p, void* _node){
 //	
 //	f_createMaterialTexture(tmat);
 //}
+
+//=================================================================
+/*
+
+	1.转化为编辑网格
+	2.运行脚本md2Export.ms
+	3.勾选Save Anumation (Frame Step设置成1),Generate Normal,Active Time Segment
+	4.Export
+
+*	加载并解析md2模型动画
+*	字节流序列使用大端方式
+*/
+static void 
+md2_load(struct MD2_Object* _md2,const char* str,int len,const char* name)
+{
+	struct HeadInfo* base=NULL;
+	struct FrameAnim* frameAnim = NULL;
+	long usetime=get_longTime();
+
+	int numFrames = md2parse_totalFrames(_md2->parseHandle);// _md2->parseHandle->numFrames;
+
+	//_md2->parseHandle = (struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
+
+	_md2->parseHandle = md2parse_load(str,len);
+	
+	if(!numFrames){
+		printf("关键帧数为0!\n");
+		assert(0);
+	}
+
+	printf("解析文件[%s]花费%ld毫秒,关键帧数=%d\n",name,get_longTime()-usetime,numFrames);
+
+	_md2->base = base_create(TYPE_MD2_FILE,name,0.0,0.0,0.0);
+	base = _md2->base;
+
+	//关键帧管理器
+	base->frameAnim = (struct FrameAnim*)tl_malloc(sizeof(struct FrameAnim));
+	frameAnim = base->frameAnim;
+	memset(frameAnim,0,sizeof(struct FrameAnim));
+
+	frameAnim->frameStart = 0;
+	frameAnim->frameEnd = numFrames-1;
+
+	if(numFrames <=0){
+		printf("检测到没有关键帧数据\n");
+		assert(0);
+	}
+}
 
 /*
 渲染界面
@@ -384,10 +471,74 @@ drawLine(float h){
 		glVertex3f(-gap*i,0,h/2 );
 		glEnd();
 	}
-
 }
+/*
+	添加一个md2模型到引擎
 
-void ent_dispose(struct Ent3D* p){
+	使用方法:
+	gMd2=ex_md2Add(p,"horse",
+	"E:\\source\\resource\\md2\\horse.md2",
+	"E:\\source/resource/md2/horse.bmp",
+	"stand,0,39|run,40,45|attack,46,53|pain,54,65|jump,66,71|filp,72,83|salute,84,94|taunt,95,111|dead,178,197|",1);
+
+	const char* model:	模型路径
+	const char* tex:	贴图路径
+	char* animConf:		动作配置
+	const char* defaultAnim:	默认第一个动作
+
+	lineSize:		线框的尺寸 >0就有线框,否则无
+	isCanSelect:	是否可以被选择到
+
+	void (*render)(struct HeadInfo*)	:渲染回调
+
+	int flags	:标示
+*/
+static struct MD2_Object* 
+load_md2(const char* name,const char* model,float x,float y,float z,float scale)
+{	
+	struct EX* p = ex_getInstance();
+
+	int len;
+
+	struct MD2_Frame* frame;
+
+	struct MD2_Object* md2 = (struct MD2_Object*)tl_malloc(sizeof(struct MD2_Object));
+	char* data = tl_loadfile(model,&len);
+	struct HeadInfo* base = NULL;
+
+	memset(md2,0,sizeof(struct MD2_Object));
+
+	md2_load(md2,(const char*)data,len,name);
+
+	base = md2->base;
+	
+	tl_free(data);
+
+	//设置坐标
+	tl_set_vec(&base->x,x,y,z);
+
+	base->scale = scale;
+
+	frame =	md2parse_getFrame(md2->parseHandle,0);	// &(md2->parseHandle->pframe[0]);//取第1帧为射线拾取的索引
+	base_createRayVertex(&base->rayVertexData,frame->vertices,frame->vertCount);
+
+	printf("创建md2 [%s],每%ld毫秒切换一帧, 坐标x:%.3f,y:%.3f,z:%.3f 当前动作:%s\n",name,base->frameAnim->fpsInterval,x,y,z,base->frameAnim->curAnim);
+
+	//默认设置为跑步状态
+	//base_curAnim(base->frameAnim,defaultAnim);
+
+
+	updateMat4x4(base);
+
+	ex_addNode(p,md2);
+
+	return md2;
+}
+/*
+*	销毁Ent3D对象
+*/
+static void 
+ent_dispose(struct Ent3D* p){
 	
 	tl_free(p->vertex);
 
@@ -397,8 +548,11 @@ void ent_dispose(struct Ent3D* p){
 	LStack_delNode(ex_getInstance()->renderList,(int)p);
 	tl_free((void*)p);
 }
-
-void md2_dispose(struct MD2_Object* _md2)
+/*
+*	销毁md2对象
+*/
+static void 
+md2_dispose(struct MD2_Object* _md2)
 {
 	md2parse_dispose(_md2->parseHandle);
 	_md2->parseHandle = NULL;
@@ -469,7 +623,7 @@ getAllVertex(int data)
 void render_3dNode(int data)
 {
 	struct EX*e = ex_getInstance();	
-	struct HeadInfo* base = base_get2((void*)data);
+	struct HeadInfo* base = base_get((void*)data);
 	int objType = base->curType;
 
 	if(objType== TYPE_OBJ_FILE)
@@ -556,65 +710,6 @@ static int check_md2AnimConf(int allFrameCount,const char* animConf)
 	return anim.isCorrect;
 }
 
-//=================================================================
-void 
-md2_load(struct MD2_Object* _md2,const char* str,int len,const char* name)
-{
-	struct HeadInfo* base=NULL;
-	struct FrameAnim* frameAnim = NULL;
-	long usetime=get_longTime();
-
-	int numFrames = md2parse_totalFrames(_md2->parseHandle);// _md2->parseHandle->numFrames;
-
-	//_md2->parseHandle = (struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
-
-	_md2->parseHandle = md2parse_load(str,len);
-	
-	if(!numFrames){
-		printf("关键帧数为0!\n");
-		assert(0);
-	}
-
-	printf("解析文件[%s]花费%ld毫秒,关键帧数=%d\n",name,get_longTime()-usetime,numFrames);
-
-	_md2->base = base_create(TYPE_MD2_FILE,name,0.0,0.0,0.0);
-	base = _md2->base;
-
-	//关键帧管理器
-	base->frameAnim = (struct FrameAnim*)tl_malloc(sizeof(struct FrameAnim));
-	frameAnim = base->frameAnim;
-	memset(frameAnim,0,sizeof(struct FrameAnim));
-
-	frameAnim->frameStart = 0;
-	frameAnim->frameEnd = numFrames-1;
-
-	if(numFrames <=0){
-		printf("检测到没有关键帧数据\n");
-		assert(0);
-	}
-}
-
-void md2_render(struct MD2_Object* _md2){
-	struct FrameAnim* frameAnim = _md2->base->frameAnim;
-	struct HeadInfo* base =(struct HeadInfo*)_md2->base;
-	struct MD2_Frame* frame;
-	struct VertexData* p;
-
-	//计算关键帧
-	base_calculateFrame(frameAnim);
-
-	frame =	md2parse_getFrame(_md2->parseHandle,frameAnim->curFrame);//&(_md2->parseHandle->pframe[frameAnim->curFrame]);
-	//frame = &(_md2->parseHandle->pframe[0]);//只读取第一帧
-	
-	//设置数据
-	p=&(base->rData);
-	p->vertex = frame->vertices;
-	p->vertLen= frame->vertCount;
-	//md2parse_getFrameVertex(frame,&p->vertex,&p->vertLen);
-
-	//实体绘制
-	base_renderFill(base);
-}
 //void mat4x4_zero_d(GLdouble m[16]){
 //	int i;
 //	for(i= 0; i <16; i++)
@@ -851,7 +946,7 @@ void render(void)
 }
 
 struct HeadInfo* ex_find(struct EX* p,const char* name){
-	return base_get2(ex_findNodeByName(p,name));
+	return base_get(ex_findNodeByName(p,name));
 }
 
 void 
@@ -928,7 +1023,8 @@ void ex_dispose(struct EX* p){
 /*
 	加载md5模型
 */
-void* load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
+static void* 
+load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
 {
 	struct EX* engine = ex_getInstance();
 	struct MD5* md5 = NULL;
@@ -988,9 +1084,12 @@ static void f_end3d_loadMesh(struct Ent3D* ent,const char* path)
 }
 
 /*
-因为是静态模型,所以可以计算出检测边界值,所以这里采用优化处理的方式
+	因为是静态模型,所以可以计算出检测边界值,所以这里采用优化处理的方式
+	创建ent 解析OBJ静态模型对象 使用VBO
+	flags:	标识
 */
-struct Ent3D* load_obj(const char* name,const char* mesh_s,
+static struct Ent3D* 
+load_obj(const char* name,const char* mesh_s,
 	float x,float y,float z,float scale)
 {
 	struct EX* engine = ex_getInstance();
@@ -1133,6 +1232,7 @@ vbo_loadObj3d(char* name,const char* url)
 	//parseType = OBJ_UV_VERTEX;
 	//解析obj数据
 	obj_parse((char*)_objStr,&_bufferSize,&verts,parseType);
+
 	//////////////////////////////////////////////////////////////////////////
 	node->ptrVBO = objVBO_create(name,parseType);
 
@@ -1193,7 +1293,7 @@ int load_VBO_model(char* name,const char* url)
 void 
 setv_ptr(void* ptr,int flags)
 {
-	struct HeadInfo* b = base_get2(ptr);
+	struct HeadInfo* b = base_get(ptr);
 	//setv(&((struct HeadInfo*)base_get2(ptr)->flags),flags);
 	setv(&b->flags,flags);
 }
@@ -1201,7 +1301,7 @@ setv_ptr(void* ptr,int flags)
 void 
 setMaterial(void* ptr,void* material)
 {
-	(struct HeadInfo*)base_get2(ptr)->tmat = material;
+	(struct HeadInfo*)base_get(ptr)->tmat = material;
 }
 
 /*
@@ -1211,7 +1311,7 @@ int
 load_animConfig(void* ptr,char* animConf,long fps)
 {
 	//const char* defaultAnim,
-	struct HeadInfo* base = base_get2(ptr);
+	struct HeadInfo* base = base_get(ptr);
 	int animConfLen = (int)strlen(animConf);
 	if(animConfLen>G_BUFFER_128_SIZE){
 		printf("参数animConf 动作配置太长 len:%d\n",animConfLen);
@@ -1248,7 +1348,7 @@ load_animConfig(void* ptr,char* animConf,long fps)
 void 
 setanim(void* ptr,const char* animKey)
 {
-	struct HeadInfo* base = base_get2(ptr);
+	struct HeadInfo* base = base_get(ptr);
 	if(base->curType == TYPE_MD2_FILE)
 	{
 		base_curAnim(base->frameAnim,animKey);
@@ -1259,47 +1359,6 @@ setanim(void* ptr,const char* animKey)
 	}
 }
 
-struct MD2_Object* 
-load_md2(const char* name,const char* model,float x,float y,float z,float scale)
-{	
-	struct EX* p = ex_getInstance();
-
-	int len;
-
-	struct MD2_Frame* frame;
-
-	struct MD2_Object* md2 = (struct MD2_Object*)tl_malloc(sizeof(struct MD2_Object));
-	char* data = tl_loadfile(model,&len);
-	struct HeadInfo* base = NULL;
-
-	memset(md2,0,sizeof(struct MD2_Object));
-
-	md2_load(md2,(const char*)data,len,name);
-
-	base = md2->base;
-	
-	tl_free(data);
-
-	//设置坐标
-	tl_set_vec(&base->x,x,y,z);
-
-	base->scale = scale;
-
-	frame =	md2parse_getFrame(md2->parseHandle,0);	// &(md2->parseHandle->pframe[0]);//取第1帧为射线拾取的索引
-	base_createRayVertex(&base->rayVertexData,frame->vertices,frame->vertCount);
-
-	printf("创建md2 [%s],每%ld毫秒切换一帧, 坐标x:%.3f,y:%.3f,z:%.3f 当前动作:%s\n",name,base->frameAnim->fpsInterval,x,y,z,base->frameAnim->curAnim);
-
-	//默认设置为跑步状态
-	//base_curAnim(base->frameAnim,defaultAnim);
-
-
-	updateMat4x4(base);
-
-	ex_addNode(p,md2);
-
-	return md2;
-}
 //static int 
 //OnMouseDown(struct Sprite* pBtn,int mousex, int mousey)
 //{
@@ -1379,7 +1438,7 @@ render_hitUiNode(int data)
 	{
 		struct EX* p = ex_getInstance();
 
-		struct HeadInfo* base = base_get2((void*)data);
+		struct HeadInfo* base = base_get((void*)data);
 		//renderSprite(data);
 		struct Sprite* spr = (struct Sprite*)data;
 		struct HitUiInfo info;
@@ -1512,7 +1571,7 @@ void onKeyboardCallBack(unsigned char key, int x, int y){
 
 void update3DNode(int data)
 {
-	updateMat4x4(base_get2((void*)data));
+	updateMat4x4(base_get((void*)data));
 }
 
 void setCamPos(float x,float y,float z){
@@ -1637,7 +1696,7 @@ void ex_callIntLuaFun(const char* luaFunName,int value)
 void 
 setLookTarget(void* ptr,float x,float y,float z)
 {
-	struct HeadInfo* b = base_get2(ptr);
+	struct HeadInfo* b = base_get(ptr);
 	b->lookat = 1;
 	b->target.x = x;
 	b->target.y = y;
@@ -1653,3 +1712,64 @@ setLookTarget(void* ptr,float x,float y,float z)
 		updateMat4x4(b);
 }
 
+void ex_ptrRemove(void* ptr){
+	struct HeadInfo* b = base_get((void*)ptr);
+	if(!b)
+	{
+		log_code(ERROR_PTR_REMOVE_FAIL);
+		printf("ex_ptr_remove移除失败,找不到对象0x%0x\n",ptr);
+		assert(0);
+		return;
+	}
+	//int curType = b->curType;
+/*
+	if(curType==TYPE_SPRITE_FLIE)
+	{
+		sprite_dipose((struct Sprite*)ptr);
+	}
+	else if(curType==TYPE_TEXT_FILE)
+	{
+		tf_dispose((struct TextField*)ptr);
+	}
+	else if(b->curType ==  TYPE_OBJ_VBO_FILE)
+	{
+		//md2,obj的vbo模式
+		//objVBO_dispose((struct Obj_vbo_model*)ptr);
+		node_dispose((struct Node*)ptr);
+	}
+	else if(b->curType == TYPE_MD2_FILE)
+	{
+		md2_dispose((struct MD2_Object*)ptr);
+	}
+	else if(b->curType == TYPE_OBJ_FILE)
+	{
+		ent_dispose((struct Ent3D*)ptr);
+	}
+	else if(b->curType == TYPE_MD5_FILE)
+	{
+		md5Model_dispose((struct MD5*)ptr);
+	}
+*/
+	switch(b->curType){
+		case TYPE_SPRITE_FLIE:
+			sprite_dipose((struct Sprite*)ptr);
+			break;
+		case TYPE_TEXT_FILE:
+			tf_dispose((struct TextField*)ptr);
+			break;
+		case TYPE_OBJ_VBO_FILE:
+			//md2,obj的vbo模式
+			//objVBO_dispose((struct Obj_vbo_model*)ptr);
+			node_dispose((struct Node*)ptr);
+			break;
+		case TYPE_MD2_FILE:
+			md2_dispose((struct MD2_Object*)ptr);
+			break;
+		case TYPE_OBJ_FILE:
+			ent_dispose((struct Ent3D*)ptr);
+			break;
+		case TYPE_MD5_FILE:
+			md5Model_dispose((struct MD5*)ptr);
+			break;
+	}
+}

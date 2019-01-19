@@ -133,7 +133,7 @@ objVBO_render(int data,int parms)
 {
 	if(data){
 		struct Node* ptr = (struct Node*)parms;
-		struct HeadInfo* base =	base_get2(ptr);
+		struct HeadInfo* base =	base_get(ptr);
 		
 		objVBO_renderNode((struct ObjVBO*)data,(struct GMaterial*)base->tmat,base->tmat->curGlslType,base->m,base_get_ploygonLineMode(base),
 			base,

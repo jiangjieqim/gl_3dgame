@@ -38,7 +38,7 @@ void tf_setText(struct TextField* tf,const char* str);
 /*
  *	获取当前文本的宽度
  */
-int tf_getTextWidth(struct TextField* tf);
+int tf_getWidth(struct TextField* tf);
 void tf_copy(struct TextField *tf_source,struct TextField *tf_dest);
 /*
 	获取文本
@@ -59,19 +59,7 @@ typedef struct Ent3D{
 }Ent3D;
 
 
-struct MD2_Object
-{
-	/*
-	*	头部基础信息,可继承
-	*/
-	struct HeadInfo* base;
 
-	/*
-	*	解析器句柄,该对象只是存储md2模型的数据结构
-	*/
-	//struct MD2_ParseObj* parseHandle;
-	void* parseHandle;
-};
 
 //鼠标状态
 struct MouseState
@@ -202,31 +190,9 @@ struct EX
 };
 
 //接口定义
-/*
-
-	1.转化为编辑网格
-	2.运行脚本md2Export.ms
-	3.勾选Save Anumation (Frame Step设置成1),Generate Normal,Active Time Segment
-	4.Export
-
-*	加载并解析md2模型动画
-*	字节流序列使用大端方式
-*/
-void md2_load(struct MD2_Object* _md2,const char* str,int len,const char* name);
-/*
-*	渲染回调
-*/
-void md2_render(struct MD2_Object* _md2);
-/*
-*	销毁
-*/
-void md2_dispose(struct MD2_Object* _md2);
-
-
-void ent_dispose(struct Ent3D* p);
 //=====================================================
 /*
-创建引擎设备上下文
+*	创建引擎设备上下文
 */
 struct EX* ex_create();
 
@@ -246,56 +212,10 @@ void* ex_find_node(const char* name);
 void ex_init(struct EX* p,GLdouble zfar);
 
 /*
-销毁引擎
+*	销毁引擎
 */
 void ex_dispose(struct EX* p);
 
-/*
-创建md5模型
-*/
-void* createMD5(struct EX* engine,struct XMLSList* xml,const char* id,const char* targetName,float x,float y,float z,float _scale);
-
-
-/*
-创建ent 解析OBJ静态模型对象 使用VBO
-flags:	标识
-*/
-struct Ent3D* load_obj(const char* targetName,const char* mesh_s,
-	float x,float y,float z,
-	float scale);
-
-/*
-	加载md5模型
-*/
-void* load_md5(const char* name,const char* url,float x,float y,float z,float scale);
-
-/*
-添加一个md2模型到引擎
-
-使用方法:
-gMd2=ex_md2Add(p,"horse",
-"E:\\source\\resource\\md2\\horse.md2",
-"E:\\source/resource/md2/horse.bmp",
-"stand,0,39|run,40,45|attack,46,53|pain,54,65|jump,66,71|filp,72,83|salute,84,94|taunt,95,111|dead,178,197|",1);
-
-const char* model:	模型路径
-const char* tex:	贴图路径
-char* animConf:		动作配置
-const char* defaultAnim:	默认第一个动作
-
-lineSize:		线框的尺寸 >0就有线框,否则无
-isCanSelect:	是否可以被选择到
-
-void (*render)(struct HeadInfo*)	:渲染回调
-
-int flags	:标示
-*/
-struct MD2_Object* load_md2(
-	const char* name,
-	const char* model,
-	float x,float y,float z,
-	float scale
-	);
 /*
 	加载动作配置,设置
 */
@@ -469,4 +389,8 @@ void* ex_get_defaultMaterial();
 	绘制线段
 */
 void ex_drawline();
+/*
+	删除引擎中的一个对象
+*/
+void ex_ptrRemove(void* ptr);
 #endif

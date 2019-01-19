@@ -78,6 +78,8 @@ local function loadObj(x,model)
 	func_set_pick(obj,"f_pick")
 	--]]
 	func_set_x(obj,x)
+	
+
 end
 
 local function loadMd2(x)
@@ -100,10 +102,10 @@ dofile("..\\include\\lua\\modelUI.lua")
 
 func_set_camera_pos(0,0,-10)-- -10
 modelUI_init()
-loadMD5('wolf',0,0.04)
+--loadMD5('wolf',0,0.04)
 --loadMD5('wolf1',1)
 
---loadObj(0)
+loadObj(0)
 --loadMd2(3)
 --]]
 

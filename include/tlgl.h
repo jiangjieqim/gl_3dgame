@@ -460,7 +460,7 @@ void base_seachPick(struct LStackNode* list,struct Vec3* nearPoint,struct Vec3* 
 */
 void base_dispose(struct HeadInfo* base);
 
-struct HeadInfo* base_get2(void* p);
+struct HeadInfo* base_get(void* p);
 
 /*
 	填充 HeadInfo 结构体,根据head信息获取相关信息,需要尾部传递一个HeadInfo*引用
@@ -549,5 +549,10 @@ int tlgl_getVboSize();
  *	x,y,z 为长宽高
  */
 void tlgl_setAbsBoundBox(float x,float y,float z,float* outTriData);
-
+/*
+*	vertexs:	顶点首地址
+*	count:		顶点的个数
+*	取绝对值最大的做碰撞盒(8个float跨度)
+*/
+void tlgl_absMax(float* vertexs,int count,float* out);
 #endif

@@ -465,7 +465,7 @@ sprite_create(struct EX* ex,char* _spriteName,
 void 
 sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h)
 {
-	struct HeadInfo* base = base_get2((void*)pSpr);
+	struct HeadInfo* base = base_get((void*)pSpr);
 
 	if(pSpr->mWidth>w ||pSpr->mHeight>h)
 	{
@@ -489,7 +489,7 @@ int
 sprite_isEnable(int data)
 {
 	int objType;
-	struct HeadInfo* base = base_get2((void*)data);
+	struct HeadInfo* base = base_get((void*)data);
 	
 	objType = base->curType;
 
@@ -570,7 +570,7 @@ renderSprite(struct Sprite* p)
 
 	if(material){
 		//void* material = getMaterial(p);//p->atals->material;
-		struct HeadInfo* base = base_get2(p);
+		struct HeadInfo* base = base_get(p);
 
 		if(!material){
 			printf("(%s)Sprite没有赋予材质\n",((struct HeadInfo*)p->base)->name);
@@ -778,7 +778,7 @@ changeDragXY(struct Sprite* p,int* px,int* py){
 		//	fLuaDragMove(p->callLuaDragMove,progress);//发送更新事件
 		if(p->callLuaDragMove)
 		{
-			struct HeadInfo* b = base_get2(p);
+			struct HeadInfo* b = base_get(p);
 			fLuaDragMove(p->callLuaDragMove,b->name,progress);
 		}
 	}
@@ -790,7 +790,7 @@ sprite_mouseMove(int data)
 	struct EX* e = ex_getInstance();	
 	if(sprite_isEnable(data))
 	{
-		struct HeadInfo* base = base_get2((void*)data);
+		struct HeadInfo* base = base_get((void*)data);
 		if(getv(&base->flags,FLAGS_DRAG))
 		{
 			struct Sprite* ptr = (struct Sprite*)data;
