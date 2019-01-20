@@ -4,8 +4,10 @@
 #include <string.h>
 
 #include "tools.h"
+#include "tl_malloc.h"
 #include "psv.h"
 #include "gettime.h"
+#include "array.h"
 
 struct PCsvNodeVO
 {

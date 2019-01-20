@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "tools.h"
 #include "gettime.h"
 
@@ -126,7 +128,7 @@ static void
 f_freeNode(struct MemoryNode* node){
 	g_total-=node->length;
 	FREE(node->p);
-	LStack_delNode(memList,node);
+	LStack_delNode(memList,(int)node);
 }
 
 //±éÀúÉ¾³ı

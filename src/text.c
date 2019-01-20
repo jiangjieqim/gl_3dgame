@@ -5,6 +5,7 @@
 #include "tools.h"
 #include "text.h"
 #include "ex.h"
+#include "tl_malloc.h"
 
 struct TextField* 
 tf_create(int bufferSize,int x,int y,

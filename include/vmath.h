@@ -211,6 +211,27 @@ void vec3Div(struct Vec3* o,float v);
 float vecToAngle(struct Vec3* a,struct Vec3* b);
 
 /*
+*
+*	射线与三角形的交点数据结构
+*
+*/
+struct HitResultObject{
+	//拾取的交点坐标
+	float x,y,z;
+
+	//是否已经拾取到,拾取到:TL_TRUE,未拾取到:TL_FALSE
+	int isHit;
+
+	//拾取的对象名字
+	char name[G_BUFFER_32_SIZE];
+
+	//射线与三角形的交点 距离 射线起点的距离
+	float distance;
+
+	//三角形的三个顶点
+	//float pickTriangle[9];
+};
+/*
  *  射线拾取
  *  
  *  当拾取到多个交点的时候该方法只取离交点最近的交点
@@ -221,6 +242,32 @@ float vecToAngle(struct Vec3* a,struct Vec3* b);
  *	fpos		:对象坐标
  */
 void tl_pickTriangle(float* tri,int dataCount,struct Vec3* nearPoint,struct Vec3* farPoint,struct Vec3* fpos,struct HitResultObject* pResult);
+
+/*
+	功能描述:射线与三角形相交
+	-----------------------------
+	orig	:射线起始坐标
+	dir		:方向向量			(射线向量-目标目标向量=方向向量)
+	vert0~2	:三角形3个顶点坐标
+
+	pHit	: 0不相交,1相交
+	out		:x,y,z 交点坐标
+	-----------------------------
+	使用方法:
+	void testHit(){
+	double orig[3] = {0,-0.5,0.5};//射线坐标
+	double target[3] = {0,-1,0};//目标点
+	double dir[3] = {orig[0]-target[0],orig[1]-target[1],orig[2]-target[2]};//射线向量-目标目标向量=方向向量
+	double vert0[3] = {0,0,0};
+	double vert1[3] = {-1,-1,0};
+	double vert2[3] = {1,-1,0};
+	double out[3];
+	int hit;
+	tl_hitTriangle(orig,dir,vert0,vert1,vert2,out,&hit);
+	printf("是否有交点 %d,交点坐标 x:%f y:%f z:%f\n",hit,out[0],out[1],out[2]);
+}
+*/
+void tl_hitTriangle(float orig[3],float dir[3],float vert0[3],float vert1[3],float vert2[3],float* out,int* pHit);
 
 //#ifdef _cplusplus
 //}

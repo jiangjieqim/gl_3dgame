@@ -3,6 +3,7 @@
 #include <string.h>
 #include "tools.h"
 #include "gettime.h"
+#include "tl_malloc.h"
 #include "global_define.h"
 #include "obj.h"
 //=================================================================================

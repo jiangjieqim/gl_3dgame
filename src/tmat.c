@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "tools.h"
+#include "tl_malloc.h"
 #include "tmat.h"
 #include "tlgl.h"
 #include "jgl.h"

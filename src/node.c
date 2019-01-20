@@ -1,9 +1,12 @@
 #include <string.h>
+#include <stdio.h>
+
 #include "tools.h"
 #include "node.h"
 #include "anim.h"
 #include "ex.h"
 #include "collide.h"
+#include "tl_malloc.h"
 #include "tmat.h"
 //´´½¨
 struct Node* node_create(const char* name)

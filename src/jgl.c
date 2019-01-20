@@ -3,14 +3,15 @@
 #include <gl/glut.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <assert.h>
 #pragma comment(lib,"glew32.lib")
 #pragma comment(lib,"glut32.lib")
 
-#include <assert.h>
+#include "tl_malloc.h"
 #include "gettime.h"
 #include "tools.h"
 #include "jgl.h"
+#include "bmp.h"
 
 //#define _DEBUG_PRINT_RGB_	//¥Ú”°rgb
 

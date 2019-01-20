@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "tools.h"
+#include "tl_malloc.h"
 #include "atlas.h"
 #include "tmat.h"
 #include "xml.h"

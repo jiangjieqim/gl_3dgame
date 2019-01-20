@@ -1,5 +1,6 @@
 #include <string.h>
 #include "tools.h"
+#include "tl_malloc.h"
 #include "animtor.h"
 
 /*

@@ -1,7 +1,13 @@
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+
 #include "tools.h"
+#include "tl_malloc.h"
 #include "md2.h"
 #include "byte.h"
 #include "list.h"
+#include "gettime.h"
 //====================================================================================
 //MD2接口实现
 struct MD2_ParseObj{

@@ -10,6 +10,7 @@
 #include "gettime.h"
 #include "obj.h"
 #include "obj_vbo.h"
+#include "tl_malloc.h"
 
 //构造两个三角形所需要的数据大小(Glfloat数据的个数)
 enum {

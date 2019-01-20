@@ -1,7 +1,9 @@
 #include <string.h>
 #include <assert.h>
+#include <stdio.h>
 
 #include "global_define.h"
+#include "tl_malloc.h"
 #include "tlgl.h"
 #include "obj.h"
 #include "obj_vbo.h"

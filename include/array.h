@@ -1,6 +1,19 @@
 #ifndef _ARR_
 #define _ARR_
 
+
+#define  ARRAY_HEAP 1	//堆内存需要tl_free释放
+#define  ARRAY_STACK 0 //栈内存,自动释放
+
+/*
+	可边长数据
+*/
+typedef struct Array{
+	int* ptr;
+	int length;	//数组长度
+	int cur;	//当前游标
+	int mode;	//数组模式
+}Array;
 /*
 	数组创建
 */

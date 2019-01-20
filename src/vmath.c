@@ -73,7 +73,10 @@ mat4x4_lookAt(Matrix44f out,struct Vec3* eye,struct Vec3* center,struct Vec3* up
 	float centery = center->y;
 	float centerz = center->z;
 
-	if (abs(eyex - centerx) < EPSILON && abs(eyey - centery) < EPSILON && abs(eyez - centerz) < EPSILON) {
+	if (abs(eyex - centerx) < EPSILON && 
+		abs(eyey - centery) < EPSILON &&
+		abs(eyez - centerz) < EPSILON) 
+	{
 		mat4x4_identity(out);
 		return;
 	}
@@ -82,7 +85,7 @@ mat4x4_lookAt(Matrix44f out,struct Vec3* eye,struct Vec3* center,struct Vec3* up
 	z1 = eyey - centery;
 	z2 = eyez - centerz;
 
-	len = 1 / sqrt(z0 * z0 + z1 * z1 + z2 * z2);
+	len = 1 / (float)sqrt(z0 * z0 + z1 * z1 + z2 * z2);
 	z0 *= len;
 	z1 *= len;
 	z2 *= len;
@@ -90,7 +93,7 @@ mat4x4_lookAt(Matrix44f out,struct Vec3* eye,struct Vec3* center,struct Vec3* up
 	x0 = upy * z2 - upz * z1;
 	x1 = upz * z0 - upx * z2;
 	x2 = upx * z1 - upy * z0;
-	len = sqrt(x0 * x0 + x1 * x1 + x2 * x2);
+	len = (float)sqrt(x0 * x0 + x1 * x1 + x2 * x2);
 	if (!len) {
 		x0 = 0;
 		x1 = 0;
@@ -106,7 +109,7 @@ mat4x4_lookAt(Matrix44f out,struct Vec3* eye,struct Vec3* center,struct Vec3* up
 	y1 = z2 * x0 - z0 * x2;
 	y2 = z0 * x1 - z1 * x0;
 
-	len = sqrt(y0 * y0 + y1 * y1 + y2 * y2);
+	len = (float)sqrt(y0 * y0 + y1 * y1 + y2 * y2);
 	if (!len) {
 		y0 = 0;
 		y1 = 0;
@@ -192,7 +195,7 @@ void mat4x4_invert(Matrix44f out,Matrix44f a) {
 	if (!det) {
 		return;
 	}
-	det = 1.0 / det;
+	det = (float)(1.0 / det);
 
 	out[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
 	out[1] = (a02 * b10 - a01 * b11 - a03 * b09) * det;
@@ -234,7 +237,7 @@ void mat4x4_transformMat4(float out[4],float a[4],Matrix44f m) {
 		y = a[1],
 		z = a[2];
 	float w = m[3] * x + m[7] * y + m[11] * z + m[15];
-	w = w || 1.0;
+	w = (float)(w || 1.0);
 	out[0] = (m[0] * x + m[4] * y + m[8] * z + m[12]) / w;
 	out[1] = (m[1] * x + m[5] * y + m[9] * z + m[13]) / w;
 	out[2] = (m[2] * x + m[6] * y + m[10] * z + m[14]) / w;

@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "tools.h"
+#include "tl_malloc.h"
 #include "gettime.h"
 #include "anim.h"
 #include "animtor.h"

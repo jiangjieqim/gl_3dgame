@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "tools.h"
 #include "gettime.h"
 
@@ -15,7 +17,7 @@
 #include "node.h"
 #include "animtor.h"
 #include "tl_malloc.h"
-//#################      加载MyDll.lib库      ##################
+//#################      加载MyDll.lib�?     ##################
 #pragma comment (lib, "MyDll.lib")
 _declspec(dllimport) int jjqadd(int a,int b);
 //##############################################################
@@ -26,7 +28,7 @@ static struct Vec3 axis;
 
 struct Vec3 outDirection;
 
-struct Vec3 normalpos1;//目标向量的单位向量
+struct Vec3 normalpos1;//目标向量的单位向�?
 
 struct Vec3 normalpos2;
 //static struct Vec3 start;
@@ -38,9 +40,9 @@ struct Vec3 normalpos2;
 //pos1.z = 0;
 
 ///************************************************************************/
-///*  m:旋转轴    
-//	n:目标轴
-//	o:垂直轴
+///*  m:旋转�?   
+//	n:目标�?
+//	o:垂直�?
 ///************************************************************************/
 //static void
 //f_get_direction(struct Vec3* n,struct Vec3* m,struct Vec3* o){
@@ -65,7 +67,7 @@ f_call(){
 	glVertex3f(normalpos2.x, normalpos2.y ,normalpos2.z);
 	glEnd();
 }
-//四元数测试方法
+//四元数测试方�?
 int
 REG_test_unit_01(lua_State *L){
 
@@ -77,9 +79,9 @@ REG_test_unit_01(lua_State *L){
 
 	//int n1 = (int)ex_find_node(name1);
 	//struct HeadInfo* b =  base_get2(n1);
-	Matrix44f m;//目标矩阵
+	//Matrix44f m;//目标矩阵
 
-	//半径长
+	//半径�?
 	float len = 1.0;
 	
 	Quat4_t s;
@@ -113,21 +115,21 @@ REG_test_unit_01(lua_State *L){
 	}
 	vec3Set(&normalpos1,pos1-> x,pos1->y,pos1->z);
 	vec3Normalize(&normalpos1);
-	//求pos1的标量
+	//求pos1的标�?
 
 	s[W] = 0;
 	s[X] = 0;
 	s[Y] = -1;
 	s[Z] = 0;
 	/*
-	//旋转90度
+	//旋转90�?
 	e[W] = 1;
 	e[X] = 0;
 	e[Y] = 1;
 	e[Z] = 0;
 	*/
 	/*
-	//旋转45度
+	//旋转45�?
 	e[W] = 1;
 	e[X] = 0.707;
 	e[Y] = 0.707;
@@ -143,19 +145,19 @@ REG_test_unit_01(lua_State *L){
 	e[X] =  -1;
 	e[Y] = 0;
 	e[Z] = 0;
-	Quat_slerp(s,e,value,o);//四元数球面平滑插值
+	Quat_slerp(s,e,value,o);//四元数球面平滑插�?
 	
 	
 	//printf("t = %.2f\tw = %.2f\tx = %.2f\ty = %.2f\tz = %.2f\n",value,o[W],o[X],o[Y],o[Z]);
 	
-	//转化为矩阵
+	//转化为矩�?
 	
 	//Quat_to_matrrix(o,m);
 
 	//打印矩阵
-	//mat4x4_printf("四元数矩阵",m);
+	//mat4x4_printf("四元数矩�?,m);
 	
-	//base_setPos(base_get2(n),o[X] * len,o[Y] * len,o[Z] * len);//设置其坐标
+	//base_setPos(base_get2(n),o[X] * len,o[Y] * len,o[Z] * len);//设置其坐�?
 	normalpos2.x = o[X];normalpos2.y = o[Y];normalpos2.z = o[Z];
 
 	//vec3Sub()
@@ -165,12 +167,12 @@ REG_test_unit_01(lua_State *L){
 
 
 	//=====================================================
-	//设置轴
+	//设置�?
 	axis.x = axis.y = 0;axis.z = 1.0;
 
 	vec3Set(&down,o[X],o[Y],o[Z]);      
 
-	//获取垂直轴
+	//获取垂直�?
 	vec3Cross(&down,&axis,&outDirection);//叉乘获取垂直向量
 	//f_print_vec(&normalpos1);
 	f_print_vec("outDirection",&outDirection);
@@ -180,9 +182,9 @@ REG_test_unit_01(lua_State *L){
 	//=====================================================
 	{
 		 struct Vec3 oa;
-		 struct Vec3 oc;
-		 struct Vec3 od;
-		 struct Vec3 oe;
+		 //struct Vec3 oc;
+		 //struct Vec3 od;
+		 //struct Vec3 oe;
 		 vec3Set(&oa,s[X],s[Y],s[Z]);
 		 
 		 //base_set_position(base_get2(n1),&normalpos1);

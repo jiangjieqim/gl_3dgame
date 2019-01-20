@@ -1,5 +1,7 @@
 #include <string.h>
+
 #include "tools.h"
+#include "tl_malloc.h"
 #include "collide.h"
 #include "obj.h"
 #include "gettime.h"
