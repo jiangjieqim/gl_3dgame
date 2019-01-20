@@ -149,7 +149,7 @@ struct EX* ex_create();
 /*
 *	‰÷»æ—≠ª∑
 */
-void render(void);
+void ex_render(void);
 
 /*
 *	≥ı ºªØ

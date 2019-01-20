@@ -2,8 +2,8 @@
 #define _OBJ_VBO_
 #include <gl/glew.h>
 #include <gl/glut.h>
-#include "tools.h"
 
+#include "tools.h"
 #include "anim.h"
 
 /*

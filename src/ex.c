@@ -862,7 +862,7 @@ void _new()
 	}
 	//printf("**** %d\n",p->fps);
 }
-void render(void)
+void ex_render(void)
 {
 	_new();
 }
