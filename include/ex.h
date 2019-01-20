@@ -133,6 +133,10 @@ struct EX
 		默认材质
 	*/
 	void* defaultMaterial;
+	///************************************************************************/
+	///* 临时变量															
+	///************************************************************************/
+	//int _temp_fpsOut;
 };
 
 //接口定义
@@ -296,4 +300,10 @@ void setLookTarget(void* ptr,float x,float y,float z);
 	获取引擎的一个默认材质,共享使用,在处理没有材质的时候后调用
 */
 void* ex_get_defaultMaterial();
+
+/*
+	获取fps
+*/
+int ex_fps();
+
 #endif

@@ -192,3 +192,95 @@ memory_free(void* p){
 */
 	f_free(p,0);
 }
+
+
+void* tl_malloc(int size){
+	return memory_new(size);
+/*
+
+	struct MemHandle* instance = GetInstance();
+	if(instance->stat){
+		int needSize;	
+		//此方法可以使用配置生成
+
+		int fSize = 0;
+		N* _node = NULL;
+		int _stat= getNextSize(size,instance->bufferList,instance->bufferCount,&needSize);
+
+		if(_stat==MEM_NOT_FOUNT)
+		{
+			printf("请求的内存为:%d字节,重新设置内存池大小\n",size);
+			assert(0);
+		}
+		else if(_stat == MEM_NEED_MORE)
+		{
+			printf("需要更大的内存块 %d\n",size);
+			assert(0);
+		}
+
+		fSize = needSize;
+
+		_node=findNode(instance,fSize);
+		if(_node != NULL){
+			_node->uesd = MEM_USED;
+#ifdef _SHOW_MALLOC_LOG_
+			printf("申请 0x%x %d/%d\n",n,_node->len,tl_memsize());
+#endif
+			return _node->p;
+		}else{
+			//内存池内存不够,为内存池添加节点
+			
+			//printf("请求内存%d字节未找到,可以重新申请的内存块,检索内存:%d字节\n",size,fSize);
+			
+			
+			//assert(0);
+		
+		
+		//printf("新申请内存:%d字节\n",fSize);
+		//	instance->maxSize+=fSize;
+		//	realloc(instance->buffer,instance->maxSize);
+		//	{
+		//		struct MemNode* _n=	ex_addNode(instance ,fSize);
+		//		return _n->p;
+		//	}
+			
+			
+			return tl_malloc(fSize);
+		}
+		printf("tl_malloc (%d bytes) fail!\n",size);
+		return NULL;
+	}
+	//printf("MALLOC ");
+	return MALLOC(size);
+*/
+}
+
+void tl_free(void* p){
+	memory_free(p);
+	return;
+/*
+	struct MemHandle* t = GetInstance();
+	if(t->stat){	
+
+		struct MemDelNode delNode;
+		memset(&delNode,0,sizeof(struct MemDelNode));
+		delNode.stat = FALSE;
+		delNode.target = p;
+		LStack_ergodic(GetInstance()->list,freeDelNode,(int)&delNode);
+
+		if(delNode.stat== FALSE){
+			printf("tl_free 0x%x 失败,找不到释放的节点!\n",(int)p);
+			assert(0);
+		}else{
+			struct MemNode* n = delNode.result;
+			#ifdef _SHOW_MALLOC_LOG_
+			printf("        释放 0x%x %d/%d\n",n,n->len,tl_memsize());
+			#endif
+		}
+		p = NULL;
+
+		return;
+	}
+	FREE(p);
+	*/
+}

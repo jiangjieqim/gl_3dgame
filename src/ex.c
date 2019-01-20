@@ -66,7 +66,25 @@ ex_get_defaultMaterial(){
 
 	return ex_getInstance()->defaultMaterial;
 }
-
+static int _temp_fpsOut=-1;
+/*
+	计算fps
+*/
+static void 
+f_calculate_fps(){
+	static float _fps = 0;        
+	static float lastTime = 0.0f; 
+	float currentTime = gettime_cur();//(float)clock()*0.001f;
+	++_fps;
+	if( currentTime - lastTime > 1.0f ){
+		lastTime = currentTime;
+		_temp_fpsOut = (int)_fps;
+		_fps = 0;
+	}
+}
+int ex_fps(){
+	return _temp_fpsOut;
+}
 /*
 *	md2渲染回调
 */
@@ -321,8 +339,9 @@ static char buffer[G_BUFFER_256_SIZE];
 /*
 绘制文本
 */
-void drawText(struct EX* p){
-	//EngineX* p = this;
+static void 
+drawText(){
+	struct EX* p = ex_getInstance();
 	
 	int vbo = tlgl_getVboSize();
 	int j;
@@ -824,14 +843,14 @@ void _new()
 		f_renderlistCall(tf_render);
 
 		//渲染文本(非常耗费性能,待优化)
-		//drawText(p);
+		drawText(p);
 	}
 
 	glutSwapBuffers ();
 	glutPostRedisplay ();
 	//计算fps
-	tl_calculate_fps();
-	p->fps = tl_get_fps();
+	f_calculate_fps();
+	p->fps = ex_fps();
 
 	//渐变管理器回调
 	ramp_callBack();

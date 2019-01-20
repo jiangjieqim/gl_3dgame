@@ -33,4 +33,9 @@ void memory_gc();
 /************************************************************************/
 //int memory_get_total();
 
+/*开辟一块内存*/
+void* tl_malloc(int size);
+
+/*释放一块内存*/
+void tl_free(void* s);
 #endif

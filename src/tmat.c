@@ -122,7 +122,7 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M)
 
 	if(iGlobalTime!=-1)
 	{
-		playTime+= 1.0f / (tl_get_fps()*10);
+		playTime+= 1.0f / (ex_fps()*10);
 		glUniform1f(iGlobalTime,playTime);
 	}
 
