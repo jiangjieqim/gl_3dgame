@@ -1,8 +1,10 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "tools.h"
+#include "tl_malloc.h"
 #include "array.h"
 
 //=================================================================================

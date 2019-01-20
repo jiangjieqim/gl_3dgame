@@ -221,6 +221,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\bmp.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\byte.c"
 				>
 			</File>
@@ -327,6 +331,10 @@
 			</File>
 			<File
 				RelativePath="..\include\atlas.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\bmp.h"
 				>
 			</File>
 			<File
