@@ -101,11 +101,15 @@ end
 dofile("..\\include\\lua\\modelUI.lua")
 
 func_set_camera_pos(0,0,-10)-- -10
+
+--初始化界面控制器
 modelUI_init()
-loadMD5('wolf',0,0.04)
+
+
+loadMD5('wolf',1,0.02)
 --loadMD5('wolf1',1)
 
---loadObj(0)
---loadMd2(3)
+loadObj(0)
+loadMd2(3)
 --]]
 

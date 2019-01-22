@@ -6,6 +6,25 @@
 //#include "lauxlib.h"
 
 #define  SPRITE_TRIANGLE_COUNT	18	//一个sprite 2d面片需要的三角形(2 * 3 * 3)数据长度
+/*
+	EX->flags(32位,存储32个状态)
+
+	EX_FLAGS_RAY:
+	射线拾取开关枚举,这是一个总开关
+	设置静态碰撞盒子,设置成TRUE就可以射线检测,不检测射线拾取,这是一个整体开关,单个模型可以单独设置
+*/
+#define EX_FLAGS_RAY 0x01
+/*
+	是否显示调试信息的文本在标题处
+*/
+#define EX_FLAGS_DRAW_DEBUG_TEXT 0x02
+
+enum E_RenderMode
+{
+	E_RenderModeNormal = 1,				//			固定管线渲染模式
+	E_RenderModeVBO = 2,				//			VBO渲染模式
+};
+
 
 //鼠标状态
 struct MouseState
@@ -224,10 +243,11 @@ void ex_add(void* ptr);
 */
 struct EX* ex_getInstance();
 /*
-	加载一个obj,或者md2等
-	float rayRadius	:射线拾取半径
+	加载一个模型
+	E_RenderMode mode:	管线使用的渲染模式
 */
-int ex_load_model(char* name,const char* url,float x,float y,float z,float scale);
+int 
+ex_load_model(char* name,const char* url,enum E_RenderMode mode);
 
 /*
 	设置动作
@@ -269,10 +289,6 @@ void ex_callIntLuaFun(const char* luaFunName,int value);
 */
 int ex_zBuffer();
 
-/*
-	加载VBO模式的模型
-*/
-int ex_load_vbo(char* name,const char* url);
 
 //void updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar);
 void ex_updatePerspctiveModelView();

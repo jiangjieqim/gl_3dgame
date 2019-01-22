@@ -82,7 +82,7 @@ local function f_frame(sc)
 	--tf_setText(setframe_tf,"setframe:" .. string.format("%0.0f", v)  ..frame);
 	--local frame = get_attr(model,"getCurFrame")
 	
-	local str =  string.format()
+	--local str =  string.format()
 	
 	
 	tf_setText(setframeTF,'setframe '..v..','..tostring(get_attr(f_getModel(),"getCurFrame")))

@@ -1,10 +1,9 @@
 ﻿#include <stdio.h>
 #include "tools.h"
 #include "ex.h"
-//#include "tl_malloc.h"
 //#################          ##################
-#pragma comment (lib, "MyDll.lib")
-_declspec(dllimport) int jjqadd(int a,int b);
+//#pragma comment (lib, "MyDll.lib")
+//_declspec(dllimport) int jjqadd(int a,int b);
 //##############################################################
 struct Vec3* pos1;
 static float n1Len;

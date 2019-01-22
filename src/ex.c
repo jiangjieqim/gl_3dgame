@@ -843,7 +843,9 @@ void _new()
 		f_renderlistCall(tf_render);
 
 		//渲染文本(非常耗费性能,待优化)
-		drawText(p);
+		if(getv(&p->flags,EX_FLAGS_DRAW_DEBUG_TEXT)) {
+			drawText(p);
+		}
 	}
 
 	glutSwapBuffers ();
@@ -1044,23 +1046,35 @@ load_obj(const char* name,const char* mesh_s,
 
 	return ent;
 }
-//固定管线
+
 int
-ex_load_model(char* name,const char* url,float x,float y,float z,float scale)
-{
-	char suffix[G_BUFFER_16_SIZE];
-	tl_getSuffixByPath((char*)url,suffix,G_BUFFER_16_SIZE);
-	if(!strcmp(suffix,"obj"))
-	{
-		return (int)load_obj(name,url,x,y,z,scale);
-	}
-	else if(!strcmp(suffix,"md2"))
-	{
-		return (int)load_md2(name,url,x,y,z,scale);
-	}
-	else if(!strcmp(suffix,"md5mesh"))
-	{
-		return (int)load_md5(name,url,x,y,z,scale);
+ex_load_model(char* name,const char* url,enum E_RenderMode mode){
+
+	switch(mode){
+		case E_RenderModeNormal:
+			{
+				float x,y,z;
+				float scale = 1.0;
+				
+				char suffix[G_BUFFER_16_SIZE];
+				x = y = z = 0;
+				tl_getSuffixByPath((char*)url,suffix,G_BUFFER_16_SIZE);
+				if(!strcmp(suffix,"obj"))
+				{
+					return (int)load_obj(name,url,x,y,z,scale);
+				}
+				else if(!strcmp(suffix,"md2"))
+				{
+					return (int)load_md2(name,url,x,y,z,scale);
+				}
+				else if(!strcmp(suffix,"md5mesh"))
+				{
+					return (int)load_md5(name,url,x,y,z,scale);
+				}
+				return 0;
+			}
+		case E_RenderModeVBO:
+			return f_load_vbo(name,url);
 	}
 	return 0;
 }
@@ -1185,12 +1199,13 @@ vbo_loadObj3d(char* name,const char* url)
 	f_addNode(ex_getInstance(),node);
 	return (int)node;
 }
-
-int ex_load_vbo(char* name,const char* url)
+//加载VBO模式的模型
+static int 
+f_load_vbo(char* name,const char* url)
 {
 	char suffix[G_BUFFER_16_SIZE];
 	
-	log_color(0x00ff00,"load_VBO_model创建模型对象:(%s)\n",name);
+	log_color(0x00ff00,"VBO模式创建模型对象:(%s)\n",name);
 
 	tl_getSuffixByPath((char*)url,suffix,G_BUFFER_16_SIZE);
 	if(!strcmp(suffix,"obj"))

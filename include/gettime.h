@@ -1,8 +1,6 @@
 #ifndef _GET_TIME_H_
 #define _GET_TIME_H_
 
-
-
 #define	ERROR_SUIFFIX  1//错误的后缀
 #define	ERROR_BAD_COLOR_VALUE  2//错误的颜色值
 #define	ERROR_NOT_EXIST_FILE  3	//无法找到文件
@@ -39,10 +37,11 @@ log_put(const char* s,int color);
 /************************************************************************/
 /* 输出错误代码                                                                     */
 /************************************************************************/
-void log_code(int c);
+void 
+log_code(int c);
 
 /*
-输出指定color颜色的日志
+*	输出指定color颜色的日志
 */
 int 
 log_color(int color,char* format, ...);

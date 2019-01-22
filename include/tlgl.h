@@ -17,15 +17,9 @@
 //#define SHADER_NORMAL_MAP	0x04	//法线材质
 //#define SHADER_MULT_TEXTURE 0x05	//多重纹理
 //#define SHADER_SHADOW_MAP	0x06	//阴影
-/*
 
-EX->flags(32位,存储32个状态)
 
-EX_FLAGS_RAY:
-射线拾取开关枚举,这是一个总开关
-设置静态碰撞盒子,设置成TRUE就可以射线检测,不检测射线拾取,这是一个整体开关,单个模型可以单独设置
-*/
-#define EX_FLAGS_RAY 0x01
+
 
 /******************************************************************************************/
 /*
@@ -406,6 +400,11 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 */
 void base_setPos(struct HeadInfo* base,float x,float y,float z);
 void base_set_position(struct HeadInfo* base,struct Vec3* pos);
+/************************************************************************/
+/* 设置对象的缩放值                                                                  
+/************************************************************************/
+void 
+base_set_scale(void* p,float scale);
 /*
 	更新矩阵
 */
