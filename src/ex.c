@@ -111,8 +111,12 @@ md2_render(struct MD2_Object* _md2){
 	//实体绘制
 	base_renderFill(base);
 }
-void render_3dNode(int data);
-void render_uiNode(int data);
+//加载VBO模式的模型
+static int 
+f_load_vbo(char* name,const char* url);
+
+static void render_3dNode(int data);
+//static void render_uiNode(int data);
 int ex_mouseIsLeftDown()
 {
 	return isLeftDown;
@@ -536,7 +540,8 @@ getAllVertex(int data)
 /*
 渲染一个节点
 */
-void render_3dNode(int data)
+static void 
+render_3dNode(int data)
 {
 	struct EX*e = ex_getInstance();	
 	struct HeadInfo* base = base_get((void*)data);

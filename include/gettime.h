@@ -22,7 +22,7 @@ long get_longTime();
 /*生成当前的时间2015/1/2 0:20:1*/
 void get_allTime(char* out,int bufferSize);
 /*输出日志 ,写入本地或者上传到web服务器*/
-void outputlog(char* _str);
+void log_write(const char* _str);
 /*
 	获取当前运行的时间
 */

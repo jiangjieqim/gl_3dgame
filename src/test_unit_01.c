@@ -1,5 +1,6 @@
 ﻿#include <stdio.h>
 #include "tools.h"
+#include "tl_malloc.h"
 #include "ex.h"
 //#################          ##################
 //#pragma comment (lib, "MyDll.lib")
@@ -54,7 +55,7 @@ REG_test_unit_01(lua_State *L){
 	}
 
 	if(!pos1){
-		pos1 = malloc(sizeof(struct Vec3));
+		pos1 = tl_malloc(sizeof(struct Vec3));
 		pos1->x = -0.25;
 		pos1->y = -0.35;
 		pos1->z = 0;
