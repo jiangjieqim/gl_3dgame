@@ -841,7 +841,7 @@ tl_pickTriangle(float* tri,int dataCount,
 *	向量转化为角度
 */
 double
-vec_rotateAngle(double x1,double y1, double x2,double y2,double* pAngle) {
+vec_rotateAngle(double x1,double y1, double x2,double y2) {
 	double epsilon = 0.000001;//1.0e-6;//1乘10的-6次幂,0.000001
 	double nyPI = PI;//acos(-1.0);
 	double dist, dot, degree,angle;
@@ -878,14 +878,8 @@ vec_rotateAngle(double x1,double y1, double x2,double y2,double* pAngle) {
 		}
 	}
 	
-	//取负
-	angle*=-1;//*************
-	
-	if(pAngle != 0){
-		*pAngle = angle;
-	}
-	degree = angle*180.0f/nyPI;
-	//printf("getRotateAngle\t%lf\t%lf\t%lf\t%lf\t dot=%lf\n",x1,y1,x2,y2,dot);
-	degree-=90;
-	return degree;
+	//degree = angle*180.0f/nyPI;
+
+	//return -angle + PI/2;//取负后加1/2的PI
+	return -angle;
 }

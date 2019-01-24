@@ -32,10 +32,15 @@ struct Vec3 normalpos2;
 //       sub.y /= d;
 //       return sub
 //   }
+#define  _ARROW_OBJ_ "myBox"
 
 static void
 f_print_vec(char* key,struct Vec3* p){
 	printf("%s p = %.3f\t%.3f\t%.3f\n",key,p->x,p->y,p->z);
+}
+static double
+f_toAngle(double value){
+	return value * 180.0f / PI;
 }
 static void
 f_call(){
@@ -50,8 +55,16 @@ f_call(){
 	glVertex3f(normalpos2.x, normalpos2.y ,normalpos2.z);
 	glEnd();
 }
+//拾取坐标
+static void
+box_rayPick(struct HitResultObject* hit){
+	//printf("%s\n",hit->name);
 
-int
+	struct HeadInfo* base =  base_get(ex_find(_ARROW_OBJ_));
+	base->rz=vec_rotateAngle(hit->x, hit->y, 1.0f, 0.0f);
+	updateMat4x4(base);
+}
+struct HeadInfo* obj1Base;
 REG_test_unit_01(lua_State *L){
 	float value = lua_tonumber(L,1);
 	float len = 1.0;
@@ -61,6 +74,7 @@ REG_test_unit_01(lua_State *L){
 	
 	void* box;
 	struct HeadInfo* base;
+	
 	struct Vec3 subpos1;
 	struct Vec3 down;
 	{
@@ -73,9 +87,16 @@ REG_test_unit_01(lua_State *L){
 	}
 
 	//测试旋转对象
-	box = ex_find("myBox");
+	box = ex_find(_ARROW_OBJ_);
 	base = base_get(box);
 
+	if(!obj1Base){
+		obj1Base =  base_get(ex_find("myObj1"));
+		obj1Base->pPickCallBack = box_rayPick;
+	}
+	/*if(!base->pPickCallBack){
+		base->pPickCallBack = box_rayPick;
+	}*/
 
 	if(!pos1){
 		pos1 = tl_malloc(sizeof(struct Vec3));
@@ -131,12 +152,14 @@ REG_test_unit_01(lua_State *L){
 		//f_print_vec("normalpos1",&normalpos1);
 		
 		//方向向量outDirection基于x水平轴1,0的角度
-		angle = vec_rotateAngle(outDirection.x, outDirection.y, 1.0f, 0.0f,&_ang);
+		_ang = vec_rotateAngle(outDirection.x, outDirection.y, 1.0f, 0.0f);
+		angle=f_toAngle(_ang);
 		if(base){
+
 			base->rz = _ang;
 			updateMat4x4(base);
 		}
-		printf("outDirection:\t%f\t%f\t%f\nnormalpos1:\t%f\t%f\t%f angle=%f \t _ang=%lf\n\n",outDirection.x,outDirection.y,outDirection.z,normalpos1.x,normalpos1.y,normalpos1.z,angle,_ang);
+		printf("outDirection:\t%.3f\t%.3f\t%.3f\nnormalpos1:\t%.3f\t%.3f\t%.3f angle=%.2f \t _ang=%.2f\n\n",outDirection.x,outDirection.y,outDirection.z,normalpos1.x,normalpos1.y,normalpos1.z,angle,_ang);
 	}
 	return 0;
 }

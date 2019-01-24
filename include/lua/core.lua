@@ -450,13 +450,15 @@ function func_loadobj(objName,tex,nName,vbo)
 	if(vbo == nil) then
 		vbo = true
 	end
+	
+	
 	--vbo = vbo or true
 	
 	---[[
 
 	local o;
 	local _path = "\\resource\\obj\\"..objName..".obj";
-	print(_path,vbo,nName);
+	print("===============>",_path,vbo,nName,tex);
 	if(vbo == true) then
 		o=load_VBO_model(name,_path);
 	else

@@ -1430,6 +1430,23 @@ void mouseMove(int x,int y)
 	//只有当鼠标移动的时候才会更新Sprite
 	f_renderlistCall(sprite_mouseMove);	
 }
+static void
+f_rayPick(struct HitResultObject* hit){
+	struct EX* ex = ex_getInstance();
+	if(ex->mRayPickCallBack!=0){
+		//引擎回调
+		ex->mRayPickCallBack(hit);
+	}
+	{
+		//################HeadInfo拾取点击回调
+		struct HeadInfo* base = (struct HeadInfo*)base_get(ex_find(hit->name));
+		void (*pPickCallBack)(void* ptrHit) = base->pPickCallBack;
+		if(pPickCallBack!=0){
+			pPickCallBack((void*)hit);
+		}
+	}
+}
+
 
 void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	struct EX* ex = ex_getInstance();
@@ -1459,7 +1476,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 		}else{
 			//3D世界拾取
 			if(getv(&(ex->flags),EX_FLAGS_RAY)){
-				hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,ex->mRayPickCallBack);
+				hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,f_rayPick);
 			}
 		}
 	}

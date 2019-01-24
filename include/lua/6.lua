@@ -20,7 +20,9 @@ scrollBar_bind(animsc,
 
 local _scale = 1
 
-local obj1 = func_loadobj('quad','wolf.tga','center')
+local obj1 = func_loadobj('quad',nil,'myObj1',false)--quad
+setv(obj1,FLAGS_RAY)		
+setv(obj1,FLAGS_DRAW_RAY_COLLISION)
 setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
 
 
@@ -39,12 +41,10 @@ func_set_scale(obj1,_scale)
 --local md5file = func_loadmd5('wolf',0.02,"\\resource\\texture\\wolf.tga")
 
 --加载一个obj模型
-local box = func_loadobj('box','wolf.tga','myBox',false)--'box' 'torus'
+--VBO没有渲染出材质
+local box = func_loadobj('arrow',nil,'myBox',true)--'box' 'torus' 'teapot' 'arrow'
 setv(box,FLAGS_RAY)					--设置为可拾取状态
-setv(box,FLAGS_DRAW_PLOYGON_LINE)
 setv(box,FLAGS_DRAW_RAY_COLLISION)
---setv(box,FLAGS_DRAW_PLOYGON_LINE)
+setv(box,FLAGS_DRAW_PLOYGON_LINE)
 
 func_set_camera_pos(0,0,-5)
-
-

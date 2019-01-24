@@ -273,7 +273,7 @@ typedef struct Md2Info
 /*
 	基础结构体,用于ent3d和md2继承
 */
-typedef struct HeadInfo{
+struct HeadInfo{
 
 	/*类型*/
 	int curType;
@@ -347,7 +347,10 @@ typedef struct HeadInfo{
 		渲染节点回调接口,此接口做向外扩展用
 	*/
 	void (*renderCallBack)(void* ptr);
-
+	/************************************************************************/
+	/* 拾取回调                                                                     */
+	/************************************************************************/
+	void (*pPickCallBack)(void* ptrHit);
 	/*
 		输入的变换矩阵
 	*/
@@ -383,7 +386,7 @@ typedef struct HeadInfo{
 	*/
 	float boxR,boxG,boxB;
 
-}HeadInfo;
+};
 
 //接口定义部分
 
