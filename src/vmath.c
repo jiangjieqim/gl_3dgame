@@ -679,7 +679,15 @@ vec3IsZero(struct Vec3* v){
 	}
 	return 0;
 }
-void vec3CalculateNormal(struct Vec3* a,struct Vec3* b,struct Vec3* c,struct Vec3* res)
+void 
+vec3Normalize(struct Vec3* v){
+	float length = vec3Length(v);
+	v->x = v->x / length;
+	v->y = v->y / length;
+	v->z = v->z / length;
+}
+void 
+vec3CalculateNormal(struct Vec3* a,struct Vec3* b,struct Vec3* c,struct Vec3* res)
 {
 	struct Vec3 out1,out2;
 	vec3Sub(a,b,&out1);
