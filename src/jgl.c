@@ -155,7 +155,8 @@ jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iC
 		xfile = (char*)szFileName;
 
 	// Attempt to open the file
-	pFile = fopen(xfile, "rb");
+	//pFile = fopen(xfile, "rb");
+	fopen_s(pFile,xfile,"rb");
 	if(pFile == NULL){
 		log_code(ERROR_NOT_EXIST_FILE);
 		printf("(%s)º”‘ÿ ß∞‹\n",outStr);
