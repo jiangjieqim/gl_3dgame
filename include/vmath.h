@@ -211,6 +211,12 @@ void vec3Div(struct Vec3* o,float v);
 float vecToAngle(struct Vec3* a,struct Vec3* b);
 
 /*
+*	2d向量转化为角度
+*/
+double
+vec_rotateAngle(double x1,double y1, double x2,double y2,double* pAngle);
+
+/*
 *
 *	射线与三角形的交点数据结构
 *

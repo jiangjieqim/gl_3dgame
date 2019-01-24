@@ -836,3 +836,56 @@ tl_pickTriangle(float* tri,int dataCount,
 	}
 	//return _distance;
 }
+
+/*
+*	向量转化为角度
+*/
+double
+vec_rotateAngle(double x1,double y1, double x2,double y2,double* pAngle) {
+	double epsilon = 0.000001;//1.0e-6;//1乘10的-6次幂,0.000001
+	double nyPI = PI;//acos(-1.0);
+	double dist, dot, degree,angle;
+
+	// normalize 单位向量
+	dist = sqrt(x1*x1 + y1*y1);
+	if(dist > 1.0) dist = 1.0f;
+
+	x1 /= dist;
+	y1 /= dist;
+	dist =sqrt(x2*x2 + y2*y2);
+
+	if(dist > 1.0) dist = 1.0f;
+
+	x2 /= dist;
+	y2 /= dist;
+	// dot product	点乘
+	dot = x1*x2+y1*y2;
+	
+	if (fabs(dot-1.0f) <= epsilon)
+		angle = 0.0;
+	else if (fabs(dot+1.0f)<=epsilon){
+		angle = nyPI;
+	}else {
+		float cross;
+
+		angle = acos(dot);
+		//cross product
+		cross = x1*y2 - x2*y1;
+		// vector p2 is clockwise from vector p1 
+		// with respect to the origin (0.0)
+		if (cross < 0) {
+			angle = 2 * nyPI - angle;
+		}
+	}
+	
+	//取负
+	angle*=-1;//*************
+	
+	if(pAngle != 0){
+		*pAngle = angle;
+	}
+	degree = angle*180.0f/nyPI;
+	//printf("getRotateAngle\t%lf\t%lf\t%lf\t%lf\t dot=%lf\n",x1,y1,x2,y2,dot);
+	degree-=90;
+	return degree;
+}

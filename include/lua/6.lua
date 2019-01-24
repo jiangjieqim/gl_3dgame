@@ -32,6 +32,13 @@ local obj1 = func_loadobj('quad','wolf.tga',name1)
 setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
 func_set_scale(obj1,_scale)
 --]]
+
+--local md5file = func_loadmd5('wolf',0.02,"\\resource\\texture\\wolf.tga")
+
+--加载一个obj模型
+local box = func_loadobj('box','wolf.tga','myBox')--'box' 'torus'
+--setv(box,FLAGS_DRAW_PLOYGON_LINE)
+
 func_set_camera_pos(0,0,-5)
 
 

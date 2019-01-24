@@ -150,6 +150,10 @@ void* ex_find_ptr(struct EX* ptr,const char* name){
 	return NULL;
 }
 
+void* ex_find(const char* name){
+	return ex_find_ptr((void*)ex_getInstance(),name);
+}
+
 /*
 添加一个渲染节点
 */
@@ -1053,7 +1057,7 @@ load_obj(const char* name,const char* mesh_s,
 }
 
 int
-ex_load_model(char* name,const char* url,enum E_RenderMode mode){
+ex_load_model(char* name,const char* url,int mode){
 
 	switch(mode){
 		case E_RenderModeNormal:

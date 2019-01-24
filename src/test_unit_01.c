@@ -2,6 +2,7 @@
 #include <math.h>
 #include "tools.h"
 #include "tl_malloc.h"
+#include "vmath.h"
 #include "ex.h"
 //#################          ##################
 //#pragma comment (lib, "MyDll.lib")
@@ -18,50 +19,7 @@ struct Vec3 normalpos1;
 
 struct Vec3 normalpos2;
 //##############################################################
-/*
-*	向量转化为角度
-*/
-static double
-getRotateAngle(double x1,double y1, double x2,double y2) {
-	double epsilon = 0.000001;//1.0e-6;//1乘10的-6次幂,0.000001
-	double nyPI = PI;//acos(-1.0);
-	double dist, dot, degree,angle;
 
-	// normalize 单位向量
-	dist = sqrt(x1*x1 + y1*y1);
-	if(dist > 1.0) dist = 1.0f;
-
-	x1 /= dist;
-	y1 /= dist;
-	dist =sqrt(x2*x2 + y2*y2);
-
-	if(dist > 1.0) dist = 1.0f;
-
-	x2 /= dist;
-	y2 /= dist;
-	// dot product	点乘
-	dot = x1*x2+y1*y2;
-	
-	if (fabs(dot-1.0f) <= epsilon)
-		angle = 0.0;
-	else if (fabs(dot+1.0f)<=epsilon){
-		angle = nyPI;
-	}else {
-		float cross;
-
-		angle = acos(dot);
-		//cross product
-		cross = x1*y2 - x2*y1;
-		// vector p2 is clockwise from vector p1 
-		// with respect to the origin (0.0)
-		if (cross < 0) {
-			angle = 2 * nyPI - angle;
-		}
-	}
-	degree = angle*180.0f/nyPI;
-	//printf("getRotateAngle\t%lf\t%lf\t%lf\t%lf\t dot=%lf\n",x1,y1,x2,y2,dot);
-	return degree;
-}
 ///**
 //    * 求两个向量的单位方向向量
 //    * s: 起始向量 
@@ -100,7 +58,9 @@ REG_test_unit_01(lua_State *L){
 	Quat4_t s;
 	Quat4_t e;
 	Quat4_t o;
-
+	
+	void* box;
+	struct HeadInfo* base;
 	struct Vec3 subpos1;
 	struct Vec3 down;
 	{
@@ -112,6 +72,11 @@ REG_test_unit_01(lua_State *L){
 		}
 	}
 
+	//测试旋转对象
+	box = ex_find("myBox");
+	base = base_get(box);
+
+
 	if(!pos1){
 		pos1 = tl_malloc(sizeof(struct Vec3));
 		pos1->x = -0.25;
@@ -122,8 +87,16 @@ REG_test_unit_01(lua_State *L){
 	vec3Set(&normalpos1,pos1-> x,pos1->y,pos1->z);
 	vec3Normalize(&normalpos1);//求得单位向量
 
-	s[W] = 0;s[X] = 0;s[Y] = -1;s[Z] = 0;//起始四元数
-	e[W] = 1;e[X] =  -1;e[Y] = 0;e[Z] = 0;//结束四元数
+	s[W] = 0;	
+	//s[X] = 0;s[Y] = -1;
+	s[X] = 1;s[Y] = 0;
+	s[Z] = 0;//起始四元数
+
+
+	e[W] = 1;	
+	//e[X] =  -1;e[Y] = 0;
+	e[X] =  0;e[Y] = -1;
+	e[Z] = 0;//结束四元数
 	Quat_slerp(s,e,value,o);//s 转化到 e 输出到o
 
 	normalpos2.x = o[X];normalpos2.y = o[Y];normalpos2.z = o[Z];
@@ -141,13 +114,12 @@ REG_test_unit_01(lua_State *L){
 	vec3Set(&down,o[X],o[Y],o[Z]);      
 
 	vec3Cross(&down,&axis,&outDirection);
-	//f_print_vec(&normalpos1);
-	//f_print_vec("outDirection",&outDirection);
-	//printf("\n");
+	
 
 
 	//=====================================================
 	{
+		double _ang;
 		float angle;
 		struct Vec3 oa;
 		//struct Vec3 oc;
@@ -159,9 +131,12 @@ REG_test_unit_01(lua_State *L){
 		//f_print_vec("normalpos1",&normalpos1);
 		
 		//方向向量outDirection基于x水平轴1,0的角度
-		angle=-getRotateAngle(outDirection.x, outDirection.y, 1.0f, 0.0f);
-
-		printf("outDirection:\t%f\t%f\t%f\nnormalpos1:\t%f\t%f\t%f angle=%f\n\n",outDirection.x,outDirection.y,outDirection.z,normalpos1.x,normalpos1.y,normalpos1.z,angle);
+		angle = vec_rotateAngle(outDirection.x, outDirection.y, 1.0f, 0.0f,&_ang);
+		if(base){
+			base->rz = _ang;
+			updateMat4x4(base);
+		}
+		printf("outDirection:\t%f\t%f\t%f\nnormalpos1:\t%f\t%f\t%f angle=%f \t _ang=%lf\n\n",outDirection.x,outDirection.y,outDirection.z,normalpos1.x,normalpos1.y,normalpos1.z,angle,_ang);
 	}
 	return 0;
 }

@@ -19,12 +19,9 @@
 */
 #define EX_FLAGS_DRAW_DEBUG_TEXT 0x02
 
-enum E_RenderMode
-{
-	E_RenderModeNormal = 1,				//			固定管线渲染模式
-	E_RenderModeVBO = 2,				//			VBO渲染模式
-};
-
+//##############################################################
+#define	E_RenderModeNormal	1			//			固定管线渲染模式
+#define	E_RenderModeVBO		2			//			VBO渲染模式
 
 //鼠标状态
 struct MouseState
@@ -247,7 +244,7 @@ struct EX* ex_getInstance();
 	E_RenderMode mode:	管线使用的渲染模式
 */
 int 
-ex_load_model(char* name,const char* url,enum E_RenderMode mode);
+ex_load_model(char* name,const char* url,int mode);
 
 /*
 	设置动作
@@ -303,6 +300,12 @@ ex_find_ptr(struct EX* ptr,const char* name);
 */
 struct HeadInfo* 
 ex_find_headinfo(struct EX* p,const char* name);
+
+/************************************************************************/
+/* 搜索节点                                                                     */
+/************************************************************************/
+void* 
+ex_find(const char* name);
 /*
 	删除引擎中的一个对象
 */
