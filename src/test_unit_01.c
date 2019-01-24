@@ -1,4 +1,5 @@
 ﻿#include <stdio.h>
+#include <math.h>
 #include "tools.h"
 #include "tl_malloc.h"
 #include "ex.h"
@@ -20,57 +21,59 @@ struct Vec3 normalpos2;
 /*
 *	向量转化为角度
 */
-static float
-getRotateAngle(float x1,float y1, float x2,float y2) {
-	const epsilon = 0.000001;//1.0e-6;//1乘10的-6次幂,0.000001
-	const nyPI = PI;//acos(-1.0);
-	float dist = 0, dot = 0, degree = 0,angle = 0;
+static double
+getRotateAngle(double x1,double y1, double x2,double y2) {
+	double epsilon = 0.000001;//1.0e-6;//1乘10的-6次幂,0.000001
+	double nyPI = PI;//acos(-1.0);
+	double dist, dot, degree,angle;
 
-	// normalize
-	dist = sqrt(x1 * x1 + y1 * y1);
+	// normalize 单位向量
+	dist = sqrt(x1*x1 + y1*y1);
 	if(dist > 1.0) dist = 1.0f;
-	
+
 	x1 /= dist;
 	y1 /= dist;
-	dist =sqrt(x2 * x2 + y2 * y2);
+	dist =sqrt(x2*x2 + y2*y2);
 
 	if(dist > 1.0) dist = 1.0f;
 
 	x2 /= dist;
 	y2 /= dist;
-	// dot product
-	dot = x1 * x2 + y1 * y2;
-	if (abs(dot - 1.0) <= epsilon)
+	// dot product	点乘
+	dot = x1*x2+y1*y2;
+	
+	if (fabs(dot-1.0f) <= epsilon)
 		angle = 0.0;
-	else if (abs(dot + 1.0) <= epsilon)
+	else if (fabs(dot+1.0f)<=epsilon){
 		angle = nyPI;
-	else {
+	}else {
 		float cross;
 
 		angle = acos(dot);
 		//cross product
-		cross = x1 * y2 - x2 * y1;
+		cross = x1*y2 - x2*y1;
 		// vector p2 is clockwise from vector p1 
 		// with respect to the origin (0.0)
 		if (cross < 0) {
 			angle = 2 * nyPI - angle;
 		}
 	}
-	degree = angle * 180.0 / nyPI;
+	degree = angle*180.0f/nyPI;
+	//printf("getRotateAngle\t%lf\t%lf\t%lf\t%lf\t dot=%lf\n",x1,y1,x2,y2,dot);
 	return degree;
 }
- ///**
- //    * 求两个向量的单位方向向量
- //    * s: 起始向量 
- //    * e: 结束向量
- //    */
- //   float convertNormalVec(s: egret.Point, e: egret.Point): egret.Point {
- //       let sub: egret.Point = new egret.Point(e.x - s.x, e.y - s.y)
- //       let d: number = egret.Point.distance(s, e)//Math.sqrt(e.x)
- //       sub.x /= d;
- //       sub.y /= d;
- //       return sub
- //   }
+///**
+//    * 求两个向量的单位方向向量
+//    * s: 起始向量 
+//    * e: 结束向量
+//    */
+//   float convertNormalVec(s: egret.Point, e: egret.Point): egret.Point {
+//       let sub: egret.Point = new egret.Point(e.x - s.x, e.y - s.y)
+//       let d: number = egret.Point.distance(s, e)//Math.sqrt(e.x)
+//       sub.x /= d;
+//       sub.y /= d;
+//       return sub
+//   }
 
 static void
 f_print_vec(char* key,struct Vec3* p){
@@ -154,9 +157,11 @@ REG_test_unit_01(lua_State *L){
 
 		//base_set_position(base_get2(n1),&normalpos1);
 		//f_print_vec("normalpos1",&normalpos1);
+		
+		//方向向量outDirection基于x水平轴1,0的角度
 		angle=-getRotateAngle(outDirection.x, outDirection.y, 1.0f, 0.0f);
 
-		printf("outDirection:\t%f\t%f\t%f\nnormalpos1:\t%f\t%f\t%f\nangle=%f\n\n",outDirection.x,outDirection.y,outDirection.z,normalpos1.x,normalpos1.y,normalpos1.z,angle);
+		printf("outDirection:\t%f\t%f\t%f\nnormalpos1:\t%f\t%f\t%f angle=%f\n\n",outDirection.x,outDirection.y,outDirection.z,normalpos1.x,normalpos1.y,normalpos1.z,angle);
 	}
 	return 0;
 }
