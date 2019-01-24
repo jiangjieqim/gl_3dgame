@@ -1443,9 +1443,14 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 
 	ex->isHitRaySprite = 0;
 
-	//鼠标点击了屏幕交互操作(开启了射线拾取状态,左键+鼠标按下)
+	//左键+鼠标按下
 	if(button == GLUT_LEFT_BUTTON && action == GLUT_DOWN)
 	{
+		
+
+		//鼠标点击了屏幕交互操作(开启了射线拾取状态)
+
+
 		//界面射线拾取检测
 		f_renderlistCall(render_hitUiNode);
 		isLeftDown = 1;

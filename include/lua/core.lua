@@ -432,7 +432,7 @@ function func_loadmd2(objName,tex,type)
 	return o;
 end
 --加载一个obj 使用vbo模式
-function func_loadobj(objName,tex,nName)
+function func_loadobj(objName,tex,nName,vbo)
 	local name
 	if(nName==nil) then
 		name = getName()
@@ -447,10 +447,21 @@ function func_loadobj(objName,tex,nName)
 	--if( tex == nil) then tex = defalutTex end
 	
 	tex = tex or defalutTex
-		
+	if(vbo == nil) then
+		vbo = true
+	end
+	--vbo = vbo or true
 	
 	---[[
-	local o=load_VBO_model(name,"\\resource\\obj\\"..objName..".obj");
+
+	local o;
+	local _path = "\\resource\\obj\\"..objName..".obj";
+	print(_path,vbo,nName);
+	if(vbo == true) then
+		o=load_VBO_model(name,_path);
+	else
+		o=load_model(name,_path,0,0,0,1.0);	
+	end
 	setv(o,FLAGS_VISIBLE);
 	local m=createMaterial("vboDiffuse","\\resource\\texture\\"..tex);
 	setMaterial(o,m);
