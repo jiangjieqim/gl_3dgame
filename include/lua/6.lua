@@ -42,9 +42,12 @@ func_set_scale(obj1,_scale)
 
 --加载一个obj模型
 --VBO没有渲染出材质
-local box = func_loadobj('arrow',nil,'myBox',true)--'box' 'torus' 'teapot' 'arrow'
+local box = func_loadobj('arrow',nil,'myBox',false)--'box' 'torus' 'teapot' 'arrow'
 setv(box,FLAGS_RAY)					--设置为可拾取状态
 setv(box,FLAGS_DRAW_RAY_COLLISION)
-setv(box,FLAGS_DRAW_PLOYGON_LINE)
+--setv(box,FLAGS_DRAW_PLOYGON_LINE)
+
+
+local obj=func_loadmd2()--'horse'
 
 func_set_camera_pos(0,0,-5)
