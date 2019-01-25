@@ -458,19 +458,21 @@ function func_loadobj(objName,tex,nName,vbo)
 
 	local o;
 	local _path = "\\resource\\obj\\"..objName..".obj";
-	
-	local vboTex = "\\resource\\texture\\"..tex;
+	local _shader;
+	local _texturePath = "\\resource\\texture\\"..tex;
 
 	if(vbo == true) then
+		_shader = "vboDiffuse";
 		o=load_VBO_model(name,_path);
 	else
+		_shader = "diffuse";
 		o=load_model(name,_path,0,0,0,1.0);	
 	end
 	setv(o,FLAGS_VISIBLE);
 	
-	print("func_loadobj===============>",vboTex,string.format("加载得模型(%s),模型名(%s)是否是VBO模式:%s",_path,nName,tostring(vbo)));
+	--print("func_loadobj===============>",_texturePath,string.format("加载得模型(%s),模型名(%s)是否是VBO模式:%s",_path,nName,tostring(vbo)));
 
-	local m=createMaterial("vboDiffuse",vboTex);
+	local m=createMaterial(_shader,_texturePath);
 	setMaterial(o,m);
 	return o;
 	--]]
