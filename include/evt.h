@@ -1,10 +1,18 @@
 #ifndef _EVT_H_
 #define _EVT_H_
 
+
+
 //事件结构体
 struct EvtInfo{
-	int evt;
-	int ptr;
+	/*
+	 *  事件 id
+	 */
+	int evtId;
+	/*
+	 *	回调函数引用
+	 */
+	void (*ptr)();
 };
 
 //绑定事件

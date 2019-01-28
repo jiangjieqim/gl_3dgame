@@ -24,7 +24,7 @@ f_check_evt(void* evtList,int event,void (*evtCallBack)(struct EvtInfo*)){
 		node = (struct EvtInfo*)data;
 
 		//if(data == (int)evtCallBack){
-		if(node->evt == event){
+		if(node->evtId == event && node->ptr == evtCallBack){
 			//ÒÑ×¢²á¸Ãº¯Êý
 			return 0;
 		}
