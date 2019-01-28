@@ -18,6 +18,7 @@
 #define EX_FLAGS_RAY 0x01
 #define EX_FLAGS_DRAW_DEBUG_TEXT 0x02	/*是否显示调试信息的文本在标题处*/
 #define EX_FLAGS_RAY_TO_UI 0x04			/*是否点击到了界面元素*/
+#define EX_FLAGS_LEFT_DOWN 0x08			/*鼠标是否左键常按着*/
 
 //##############################################################
 #define	E_RenderModeNormal	1			//			固定管线渲染模式
@@ -42,16 +43,11 @@ struct EX
 	*	摄影机坐标
 	*/
 	float camx,camy,camz;
-
+	float camRotateX,camRotateY,camRotateZ;
 	/*
 		各种枚举定义,二进制位存储
 	*/
 	int flags;
-	
-	///*
-	//frame per second 每一关键帧需要的毫秒
-	//*/
-	//int fps;
 
 	/*
 	渲染节点对象列表
@@ -132,7 +128,7 @@ struct EX
 	Matrix44f ui_perspectiveMatrix;
 	Matrix44f ui_modelViewMatrix;
 
-	float camRotateX,camRotateY,camRotateZ;
+	
 
 	//struct Atals* myAtals;//废弃
 
@@ -140,10 +136,7 @@ struct EX
 		默认材质
 	*/
 	void* defaultMaterial;
-	///************************************************************************/
-	///* 临时变量															
-	///************************************************************************/
-	//int _temp_fpsOut;
+	
 };
 
 //接口定义
@@ -213,10 +206,6 @@ void setBgColor(float r,float g,float b);
 */
 void ex_info();
 
-/*
-	鼠标是否常按着
-*/
-int ex_mouseIsLeftDown();
 /*
 	更新场景中的界面坐标
 */
@@ -313,6 +302,7 @@ void* ex_get_defaultMaterial();
 
 /*
 	获取fps
+	frame per second 每一关键帧需要的毫秒
 */
 int ex_fps();
 

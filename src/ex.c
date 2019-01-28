@@ -48,7 +48,7 @@ struct Ent3D{
 /*
 	鼠标左键是否常按着
 */
-static int isLeftDown = 0;
+//static int isLeftDown = 0;
 
 static struct EX g_ex;
 struct EX* ex_getInstance(){
@@ -117,10 +117,10 @@ f_load_vbo(char* name,const char* url);
 
 static void render_3dNode(int data);
 //static void render_uiNode(int data);
-int ex_mouseIsLeftDown()
-{
-	return isLeftDown;
-}
+//int ex_mouseIsLeftDown()
+//{
+//	return isLeftDown;
+//}
 //void* ex_find_node(const char* name){
 //	return ex_findNodeByName(ex_getInstance(),name);
 //}
@@ -1478,7 +1478,9 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 
 		//界面射线拾取检测
 		f_renderlistCall(render_hitUiNode);
-		isLeftDown = 1;
+		
+		setv(&(ex->flags),EX_FLAGS_LEFT_DOWN);//isLeftDown = 1;
+
 		if(getv(&(ex->flags),EX_FLAGS_RAY_TO_UI)){
 			//printf("点击了界面就忽略掉3d场景中的模型\n");
 		}else{
@@ -1490,8 +1492,8 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	}
 
 	if(action == GLUT_UP)
-	{
-		isLeftDown = 0;
+	{	
+		resetv(&(ex->flags),EX_FLAGS_LEFT_DOWN);//isLeftDown = 0;
 	}
 	
 	if(button == GLUT_MIDDLE_BUTTON)
