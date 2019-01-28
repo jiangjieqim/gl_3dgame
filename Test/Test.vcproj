@@ -233,6 +233,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\evt.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ex.c"
 				>
 			</File>
@@ -343,6 +347,10 @@
 			</File>
 			<File
 				RelativePath="..\include\collide.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\evt.h"
 				>
 			</File>
 			<File
