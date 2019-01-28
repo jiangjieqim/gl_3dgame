@@ -6,18 +6,18 @@
 //#include "lauxlib.h"
 
 #define  SPRITE_TRIANGLE_COUNT	18	//一个sprite 2d面片需要的三角形(2 * 3 * 3)数据长度
-/*
-	EX->flags(32位,存储32个状态)
 
+/************************************************************************/
+/*  EX->flags(32位,存储32个状态)										*/
+/************************************************************************/
+/*
 	EX_FLAGS_RAY:
 	射线拾取开关枚举,这是一个总开关
 	设置静态碰撞盒子,设置成TRUE就可以射线检测,不检测射线拾取,这是一个整体开关,单个模型可以单独设置
 */
 #define EX_FLAGS_RAY 0x01
-/*
-	是否显示调试信息的文本在标题处
-*/
-#define EX_FLAGS_DRAW_DEBUG_TEXT 0x02
+#define EX_FLAGS_DRAW_DEBUG_TEXT 0x02	/*是否显示调试信息的文本在标题处*/
+#define EX_FLAGS_RAY_TO_UI 0x04			/*是否点击到了界面元素*/
 
 //##############################################################
 #define	E_RenderModeNormal	1			//			固定管线渲染模式
@@ -48,10 +48,10 @@ struct EX
 	*/
 	int flags;
 	
-	/*
-	frame per second 每一关键帧需要的毫秒
-	*/
-	int fps;
+	///*
+	//frame per second 每一关键帧需要的毫秒
+	//*/
+	//int fps;
 
 	/*
 	渲染节点对象列表
@@ -69,10 +69,6 @@ struct EX
 	*/
 	GLdouble zFar;
 
-	///*
-	//*	点击拾取模型
-	//*/
-	//struct Ent3D* pick3DObject;
 
 	/*
 		屏幕尺寸
@@ -101,11 +97,6 @@ struct EX
 	//	sprite顶点数据源,引擎释放后要清理该资源
 	//*/
 	//struct VertexData spriteVert;
-
-	/*
-		是否已经点击到了界面
-	*/
-	int isHitRaySprite;
 
 	/*
 		日志文本

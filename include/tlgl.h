@@ -506,10 +506,11 @@ GLboolean base_cullface(struct HeadInfo* base);
 
 /*
 	开始检测
+	GLint xMouse, GLint yMouse:鼠标拾取的2d屏幕坐标
 	mRayPickCallBack 回调
 */
 void hit_mouse(GLint xMouse, GLint yMouse,float screenWidth,float screenHeight,
-			   struct LStackNode *renderList,
+			   struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMatrix,
 			   void (*mRayPickCallBack)(struct HitResultObject*));
 
 

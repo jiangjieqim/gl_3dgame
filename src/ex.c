@@ -328,9 +328,10 @@ void ex_info(){
 	char buffer[G_BUFFER_1024_SIZE];
 	int j=0;
 	int buffer_size = G_BUFFER_1024_SIZE;
+	int fps = ex_fps();
 	memset(buffer,0,G_BUFFER_1024_SIZE);
 	j+=sprintf_s(buffer+j,buffer_size, "**********************************************\n");
-	j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",ex->fps);
+	j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
 	j+=sprintf_s(buffer+j,buffer_size, "屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
 	j+=sprintf_s(buffer+j,buffer_size, "程序已执行:%.3f 秒\n",gettime_cur());
 	j+=sprintf_s(buffer+j,buffer_size, "内存池已使用 %f mb\n",(float)tl_memByteSize()/1024/1024);
@@ -355,6 +356,7 @@ drawText(){
 	int j;
 	int size=-1;
 	GLint total_mem_kb,cur_avail_mem_kb;
+	int fps = ex_fps();
 	memset(buffer,0,G_BUFFER_256_SIZE);
 	
 	tlgl_getGPU_memery(&total_mem_kb,&cur_avail_mem_kb);
@@ -364,7 +366,7 @@ drawText(){
 		size = (int)tl_memByteSize();
 	}
 
-	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d, tl_memByteSize=%d bytes ", p->fps,size);
+	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d, tl_memByteSize=%d bytes ",fps,size);
 	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"(vbo:%d bytes %.3f kb)cam: %f,%f,%f VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0,p->camx,p->camy,p->camz,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,gettime_cur());
 	
 	ex_showLog(buffer);
@@ -861,7 +863,6 @@ void _new()
 	glutPostRedisplay ();
 	//计算fps
 	f_calculate_fps();
-	p->fps = ex_fps();
 
 	//渐变管理器回调
 	ramp_callBack();
@@ -1390,8 +1391,10 @@ render_hitUiNode(int data)
 		struct HitUiInfo info;
 		if(hasMouseClick(spr) && hitUiTest(spr,p->mouseState.xMouse,p->mouseState.yMouse,&info)){
 
-			p->isHitRaySprite = 1;//设置拾取状态
+			//p->isHitRaySprite = 1;//设置拾取状态
 
+			setv(&(p->flags),EX_FLAGS_RAY_TO_UI);
+			
 			spr->m_bPressed = 1;//设置鼠标的按下状态
 			
 			if(getv(&base->flags,FLAGS_DRAG))
@@ -1430,6 +1433,9 @@ void mouseMove(int x,int y)
 	//只有当鼠标移动的时候才会更新Sprite
 	f_renderlistCall(sprite_mouseMove);	
 }
+/************************************************************************/
+/* 点击回调                                                             */
+/************************************************************************/
 static void
 f_rayPick(struct HitResultObject* hit){
 	struct EX* ex = ex_getInstance();
@@ -1437,8 +1443,9 @@ f_rayPick(struct HitResultObject* hit){
 		//引擎回调
 		ex->mRayPickCallBack(hit);
 	}
+
+	//################HeadInfo拾取点击回调
 	{
-		//################HeadInfo拾取点击回调
 		struct HeadInfo* base = (struct HeadInfo*)base_get(ex_find(hit->name));
 		void (*pPickCallBack)(void* ptrHit) = base->pPickCallBack;
 		if(pPickCallBack!=0){
@@ -1458,7 +1465,8 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	
 	//printf("%d\n",button);
 
-	ex->isHitRaySprite = 0;
+	//ex->isHitRaySprite = 0;
+	resetv(&(ex->flags),EX_FLAGS_RAY_TO_UI);
 
 	//左键+鼠标按下
 	if(button == GLUT_LEFT_BUTTON && action == GLUT_DOWN)
@@ -1471,12 +1479,12 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 		//界面射线拾取检测
 		f_renderlistCall(render_hitUiNode);
 		isLeftDown = 1;
-		if(ex->isHitRaySprite){
-			//点击了界面就忽略掉3d场景中的模型
+		if(getv(&(ex->flags),EX_FLAGS_RAY_TO_UI)){
+			//printf("点击了界面就忽略掉3d场景中的模型\n");
 		}else{
 			//3D世界拾取
 			if(getv(&(ex->flags),EX_FLAGS_RAY)){
-				hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,f_rayPick);
+				hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,ex->perspectiveMatrix,ex->modelViewMatrix,f_rayPick);
 			}
 		}
 	}
