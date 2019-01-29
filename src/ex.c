@@ -18,7 +18,7 @@
 #include "md2.h"
 #include "tl_malloc.h"
 #include "text.h"
-
+#include "evt.h"
 struct MD2_Object
 {
 	/*
@@ -759,8 +759,8 @@ void ex_updatePerspctiveModelView()
 /*
 	绘制线段
 */
-static void 
-f_drawline(){
+//static void 
+//f_drawline(){
 
 	/*
 	glLineWidth(1.0f);//直线的宽度。
@@ -773,9 +773,9 @@ f_drawline(){
 		glEnd();
 	//} 
 	*/
-	if(ex_getInstance()->drawLine_callBack)
-		ex_getInstance()->drawLine_callBack();
-}
+	//if(ex_getInstance()->drawLine_callBack)
+	//	ex_getInstance()->drawLine_callBack();
+//}
 void _new()
 {
 	struct EX* p = ex_getInstance();
@@ -821,7 +821,9 @@ void _new()
 	f_renderlistCall(render_3dNode);
 
 	//drawLine(2000);
-	f_drawline();
+	//f_drawline();
+
+	evt_dispatch(p->evtList,EVENT_ENGINE_RENDER_3D,0);
 	
 	//ex_renderlistCall(sprite_drawRender);//test
 	if(TRUE)//FALSE
@@ -943,12 +945,13 @@ void ex_init(struct EX* p,GLdouble zfar)
 	
 	//==========================================
 	//loadSpriteVert(p);
-	
+	p->evtList = (void*)LStack_create();
 }
 
 void ex_dispose(struct EX* p){
 	LStack_delete((struct LStackNode*)p->renderList);
-
+	evt_dispose(p->evtList);
+	
 	/*if(p->spriteVert.vertex){
 		tl_free(p->spriteVert.vertex);
 	}*/

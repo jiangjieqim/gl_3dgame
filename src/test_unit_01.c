@@ -64,6 +64,14 @@ box_rayPick(struct HitResultObject* hit){
 	base->rz=vec_rotateAngle(hit->x, hit->y, 1.0f, 0.0f);
 	updateMat4x4(base);
 }
+
+
+static int _initStat = 0;
+
+static void f_drawLineEvt(int evtId,void* data){
+	f_call();
+}
+
 struct HeadInfo* obj1Base;
 REG_test_unit_01(lua_State *L){
 	float value = lua_tonumber(L,1);
@@ -78,11 +86,11 @@ REG_test_unit_01(lua_State *L){
 	struct Vec3 subpos1;
 	struct Vec3 down;
 	{
+		if(!_initStat){
+			//添加一个3D渲染回调
+			evt_on(ex_getInstance()->evtList,EVENT_ENGINE_RENDER_3D,f_drawLineEvt);
 
-		//printf("%d\n",jjqadd(2,9));
-
-		if(!ex_getInstance()->drawLine_callBack){
-			ex_getInstance()->drawLine_callBack = f_call;
+			_initStat = 1;
 		}
 	}
 

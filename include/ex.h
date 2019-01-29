@@ -24,6 +24,12 @@
 #define	E_RenderModeNormal	1			//			固定管线渲染模式
 #define	E_RenderModeVBO		2			//			VBO渲染模式
 
+/************************************************************************/
+/* 引擎事件定义                                                         */
+/************************************************************************/
+#define EVENT_ENGINE_RENDER_3D 100				//引擎渲染回调
+
+
 //鼠标状态
 struct MouseState
 {
@@ -75,8 +81,6 @@ struct EX
 		渲染循环回调
 	*/
 	void (*loopCallBack)(void);
-
-	void (*drawLine_callBack)(void);
 
 	/*
 		当前鼠标状态
@@ -136,6 +140,11 @@ struct EX
 		默认材质
 	*/
 	void* defaultMaterial;
+	
+	/*
+		事件列表
+	*/
+	void* evtList;
 	
 };
 
