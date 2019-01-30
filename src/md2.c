@@ -367,6 +367,8 @@ fParseFrames(struct MD2_ParseObj* _md2)
 
 	//关键帧名
 	char name[16];
+	char _tempName[16];
+	memset(_tempName,0,16);
 
 #ifdef _DEBUG_MODE_
 	printf("md2:关键帧数 = %d 顶点总数 = %d\n",_md2->_numFrames,_md2->_numVertices);
@@ -452,8 +454,15 @@ fParseFrames(struct MD2_ParseObj* _md2)
 		k = 0;
 
 		//if(name!=NULL && strcmp(name,"run")==0){
-		//printf("动画name: %s\n",name);
-
+		{
+			//打印动画信息数据
+			int _stat = strcmp(_tempName,name);
+			if(_stat!=0){
+				memset(_tempName,0,16);
+				memcpy(_tempName,name,strlen(name));
+				printf("动画name: (%s)\t结束索引:%d\n",name,i);
+			}
+		}
 		fBuildVertices(_md2,tvertices,(const char*)name,i);
 		//}
 
