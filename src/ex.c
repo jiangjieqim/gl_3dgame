@@ -1441,20 +1441,11 @@ void mouseMove(int x,int y)
 /************************************************************************/
 static void
 f_rayPick(struct HitResultObject* hit){
-	struct EX* ex = ex_getInstance();
-	if(ex->mRayPickCallBack!=0){
-		//引擎回调
-		ex->mRayPickCallBack(hit);
-	}
+	//引擎点击回调	
+	evt_dispatch(ex_getInstance(),EVENT_RAY_PICK,(void*)hit);
 
 	//################HeadInfo拾取点击回调
-	{
-		struct HeadInfo* base = (struct HeadInfo*)base_get(ex_find(hit->name));
-		void (*pPickCallBack)(void* ptrHit) = base->pPickCallBack;
-		if(pPickCallBack!=0){
-			pPickCallBack((void*)hit);
-		}
-	}
+	evt_dispatch((void*)base_get(ex_find(hit->name)),EVENT_RAY_PICK,(void*)hit);
 }
 
 

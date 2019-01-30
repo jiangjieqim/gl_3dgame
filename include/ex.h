@@ -92,17 +92,6 @@ struct EX
 	struct MouseState mouseState;
 
 	/*
-		点击回调方法引用
-	*/
-	void (*mRayPickCallBack)(struct HitResultObject* hit);
-
-
-	///*
-	//	sprite顶点数据源,引擎释放后要清理该资源
-	//*/
-	//struct VertexData spriteVert;
-
-	/*
 		日志文本
 	*/
 	struct TextField* logTf;

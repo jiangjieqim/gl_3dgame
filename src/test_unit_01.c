@@ -57,7 +57,8 @@ f_call(){
 }
 //拾取坐标
 static void
-box_rayPick(struct HitResultObject* hit){
+box_rayPick(int evtId,void* data){
+	struct HitResultObject* hit = (struct HitResultObject*)data;
 	//printf("%s\n",hit->name);
 
 	struct HeadInfo* base =  base_get(ex_find(_ARROW_OBJ_));
@@ -80,28 +81,35 @@ REG_test_unit_01(lua_State *L){
 	Quat4_t e;
 	Quat4_t o;
 	
-	void* box;
+	
 	struct HeadInfo* base;
 	
 	struct Vec3 subpos1;
 	struct Vec3 down;
-	{
-		if(!_initStat){
-			//添加一个3D渲染回调
-			evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLineEvt);
+	
+	if(!_initStat){
+		//初始化
 
-			_initStat = 1;
+		//添加一个3D渲染回调
+		evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLineEvt);
+
+
+		if(!obj1Base){
+			obj1Base =  base_get(ex_find("myObj1"));
+			//添加对象拾取监听事件
+			evt_on(obj1Base,EVENT_RAY_PICK,box_rayPick);
 		}
+
+
+		_initStat = 1;
 	}
+	
 
 	//测试旋转对象
-	box = ex_find(_ARROW_OBJ_);
-	base = base_get(box);
+	base = base_get(ex_find(_ARROW_OBJ_));
+	
 
-	if(!obj1Base){
-		obj1Base =  base_get(ex_find("myObj1"));
-		obj1Base->pPickCallBack = box_rayPick;
-	}
+	
 	/*if(!base->pPickCallBack){
 		base->pPickCallBack = box_rayPick;
 	}*/
