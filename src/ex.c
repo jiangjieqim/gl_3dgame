@@ -823,7 +823,7 @@ void _new()
 	//drawLine(2000);
 	//f_drawline();
 
-	evt_dispatch(p->evtList,EVENT_ENGINE_RENDER_3D,0);
+	evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
 	
 	//ex_renderlistCall(sprite_drawRender);//test
 	if(TRUE)//FALSE
@@ -950,7 +950,7 @@ void ex_init(struct EX* p,GLdouble zfar)
 
 void ex_dispose(struct EX* p){
 	LStack_delete((struct LStackNode*)p->renderList);
-	evt_dispose(p->evtList);
+	evt_dispose(p);
 	
 	/*if(p->spriteVert.vertex){
 		tl_free(p->spriteVert.vertex);

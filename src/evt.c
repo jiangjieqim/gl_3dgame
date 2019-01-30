@@ -11,6 +11,21 @@ struct EvtInfo{
 	 */
 	void (*ptr)(int evtId,void* data);
 };
+
+
+struct EvtParent{
+	void* evtList;
+};
+//获取对象ptr引用中的evtList引用地址.
+static void* 
+f_get(void* ptr){
+	struct EvtParent* a;
+	if(ptr){
+		struct EvtParent* p = (struct EvtParent*)ptr;
+		return p->evtList;
+	}
+	return 0;
+}
 /************************************************************************/
 /* 检测是否已经绑定了函数                                               */
 /************************************************************************/
@@ -45,9 +60,12 @@ f_check_evt(void* evtList,int event,void (*evtCallBack)(struct EvtInfo*)){
 }
 //绑定事件
 void
-evt_on(void* evtList,int evtId,void (*evtCallBack)(int,void*)){
+evt_on(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
+	void* evtList = f_get(ptr);
+	
 	struct EvtInfo* data;
 	struct LStackNode* list;
+
 	if(!f_check_evt(evtList,evtId,evtCallBack)){
 		return;
 	}
@@ -60,7 +78,8 @@ evt_on(void* evtList,int evtId,void (*evtCallBack)(int,void*)){
 
 //解绑事件
 void
-evt_off(void* evtList,int event,void (*evtCallBack)(int,void*)){
+evt_off(void* ptr,int event,void (*evtCallBack)(int,void*)){
+	void* evtList = f_get(ptr);
 	struct LStackNode* s = (struct LStackNode* )evtList;
 	struct EvtInfo* node;
 	void* top,*p;
@@ -86,7 +105,8 @@ evt_off(void* evtList,int event,void (*evtCallBack)(int,void*)){
 }
 
 void
-evt_dispatch(void* evtList,int evtID,void* sendData){
+evt_dispatch(void* ptr,int evtID,void* sendData){
+	void* evtList = f_get(ptr);
 	struct LStackNode* s = (struct LStackNode* )evtList;
 	struct EvtInfo* node;
 	void* top,*p;
@@ -108,7 +128,8 @@ evt_dispatch(void* evtList,int evtID,void* sendData){
 }
 
 void 
-evt_dispose(void* evtList){
+evt_dispose(void* ptr){
+	void* evtList = f_get(ptr);
 	struct LStackNode* s = (struct LStackNode* )evtList;
 	struct EvtInfo* node;
 	void* top,*p;

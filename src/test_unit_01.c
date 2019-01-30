@@ -88,7 +88,7 @@ REG_test_unit_01(lua_State *L){
 	{
 		if(!_initStat){
 			//添加一个3D渲染回调
-			evt_on(ex_getInstance()->evtList,EVENT_ENGINE_RENDER_3D,f_drawLineEvt);
+			evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLineEvt);
 
 			_initStat = 1;
 		}
