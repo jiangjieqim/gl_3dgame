@@ -34,9 +34,29 @@ func_set_scale(obj1,_scale)
 local box = func_loadobj('arrow',nil,'myBox',false)--'box' 'torus' 'teapot' 'arrow'
 --setv(box,FLAGS_RAY)					--设置为可拾取状态
 setv(box,FLAGS_DRAW_RAY_COLLISION)
---setv(box,FLAGS_DRAW_PLOYGON_LINE)
+setv(box,FLAGS_DRAW_PLOYGON_LINE)
 
 
---local obj=func_loadmd2()--'horse'
 
-func_set_camera_pos(0,0,-5)
+
+--创建地板
+local _floor = func_loadobj('box',nil,'_floor',false);
+func_set_scale(_floor,20);
+func_set_y(_floor,-10);
+setv(_floor,FLAGS_RAY)
+setv(_floor,FLAGS_DRAW_RAY_COLLISION)
+setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
+
+
+local horse=func_loadmd2('horse','1.tga','vbo','_horse')--'horse'
+func_setRotateX(horse,PI/2)--旋转一个轴向
+func_set_scale(horse,0.1)
+func_set_x(horse,-5)
+func_set_z(horse,-5)
+
+local _target = func_loadobj('box',nil,'_target',false);
+setv(_target,FLAGS_DRAW_PLOYGON_LINE)
+
+
+
+func_set_camera_pos(0,-5,-20)

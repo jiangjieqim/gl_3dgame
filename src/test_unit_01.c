@@ -8,6 +8,10 @@
 //#pragma comment (lib, "MyDll.lib")
 //_declspec(dllimport) int jjqadd(int a,int b);
 //##############################################################
+static void* _floor;//地板对象
+static void* _horse;//模型对象
+static void* _target;//目标物
+
 struct Vec3* pos1;
 static float n1Len;
 
@@ -66,6 +70,30 @@ box_rayPick(int evtId,void* data){
 	updateMat4x4(base);
 }
 
+//地板点击触发
+static void
+floor_rayPick(int evtId,void* data){
+	struct HitResultObject* hit = (struct HitResultObject*)data;
+	struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
+	//horse->x
+	//vec3Sub()
+	{
+		struct Vec3 pos;
+		float x = hit->x - ptrHorse->x;
+		float y = hit->y - ptrHorse->y;
+		float z = hit->z - ptrHorse->z;
+		pos.x = x;
+		pos.y = y;
+		pos.z = z;
+
+		vec3Normalize(&pos);//求单位向量
+		printf("************* %s,%.3f,%.3f,%.3f\t,%.3f,%.3f,%.3f\n", hit->name,hit->x,hit->y,hit->z,pos.x,pos.y,pos.z);
+		ptrHorse->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);//设置角色的朝向
+		updateMat4x4(ptrHorse);//更新角色矩阵
+
+		base_setPos(_target, hit->x, hit->y, hit->z);//设置拾取小盒子的位置
+	}
+}
 
 static int _initStat = 0;
 
@@ -99,6 +127,18 @@ REG_test_unit_01(lua_State *L){
 			//添加对象拾取监听事件
 			evt_on(obj1Base,EVENT_RAY_PICK,box_rayPick);
 		}
+
+		//_floor = ex_load_model("floor","\\resource\\obj\\teapot.obj",E_RenderModeVBO);
+		//base_set_scale(_floor,1.0f);
+		//setv(_floor,FLAGS_VISIBLE);
+		_floor = base_get(ex_find("_floor"));
+		evt_on(_floor,EVENT_RAY_PICK,floor_rayPick);
+
+		_horse =  base_get(ex_find("_horse"));
+
+		// x,z		基于y轴旋转
+		_target = base_get(ex_find("_target"));
+		
 
 
 		_initStat = 1;

@@ -405,12 +405,13 @@ end
 
 
 --¼ÓÔØmd2Ä£ÐÍ
-function func_loadmd2(objName,tex,type)
+function func_loadmd2(objName,tex,type,modelName)
 	local time = func_getTime()
 	--if(type == nil) then type = "vbo" end
 	type = type or 'vbo'
 	
-	local name =getName();
+	
+	local name = modelName or getName();
 	
 	--if( objName == nil or objName == "") then objName = "bauul" end
 	objName = objName or "triangle"
