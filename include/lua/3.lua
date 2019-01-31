@@ -108,7 +108,7 @@ modelUI_init()
 loadMD5('wolf',0,0.02)
 --loadMD5('wolf1',1)
 
---loadObj(0)
+loadObj(1)
 --loadMd2(3)
 --]]
 

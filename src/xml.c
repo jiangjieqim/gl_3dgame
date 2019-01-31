@@ -235,7 +235,7 @@ int xml_getint(const struct XmlNode* node,const char* key)
 {
 	int res;
 	fillData(node,key);
-	sscanf(node->parentXml->buffer,"%d",&res);
+	sscanf_s(node->parentXml->buffer,"%d",&res);
 	return res;
 }
 
@@ -292,7 +292,7 @@ getKeyPos(const char* str,const char* key){
 	int bufferSzie = G_BUFFER_64_SIZE;
 	char buffer[G_BUFFER_64_SIZE];
 
-	if(strlen(key)+strlen(G_SIGN_COMMA)>bufferSzie)
+	if(strlen(key)+strlen(G_SIGN_COMMA)>(size_t)bufferSzie)
 	{
 		printf("¹Ø¼ü×Ö(%s)Òç³ö\n",key);
 		assert(0);

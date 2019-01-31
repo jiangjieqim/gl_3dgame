@@ -1060,7 +1060,7 @@ load_obj(const char* name,const char* mesh_s,
 	return ent;
 }
 
-int
+void*
 ex_load_model(char* name,const char* url,int mode){
 
 	switch(mode){
@@ -1074,20 +1074,20 @@ ex_load_model(char* name,const char* url,int mode){
 				tl_getSuffixByPath((char*)url,suffix,G_BUFFER_16_SIZE);
 				if(!strcmp(suffix,"obj"))
 				{
-					return (int)load_obj(name,url,x,y,z,scale);
+					return (void*)load_obj(name,url,x,y,z,scale);
 				}
 				else if(!strcmp(suffix,"md2"))
 				{
-					return (int)load_md2(name,url,x,y,z,scale);
+					return (void*)load_md2(name,url,x,y,z,scale);
 				}
 				else if(!strcmp(suffix,"md5mesh"))
 				{
-					return (int)load_md5(name,url,x,y,z,scale);
+					return (void*)load_md5(name,url,x,y,z,scale);
 				}
 				return 0;
 			}
 		case E_RenderModeVBO:
-			return f_load_vbo(name,url);
+			return (void*)f_load_vbo(name,url);
 	}
 	return 0;
 }

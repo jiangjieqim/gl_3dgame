@@ -265,7 +265,7 @@ static void setMd5Joint(struct MD5_model * _md5,const char* _chs,int* pJointInde
 	struct md5_joint_t *j = &_md5->baseSkel[*pJointIndex];
 	if(*pJointIndex >= _md5->numJoints)
 		return;
-	if (sscanf (_chs, "%s %d ( %f %f %f ) ( %f %f %f )", j->name, &j->parent, &j->sk_pos[X],&j->sk_pos[Y], &j->sk_pos[Z],&j->orient[X],&j->orient[Y], &j->orient[Z]) == 8){
+	if (sscanf_s(_chs, "%s %d ( %f %f %f ) ( %f %f %f )", j->name,G_BUFFER_64_SIZE, &j->parent, &j->sk_pos[X],&j->sk_pos[Y], &j->sk_pos[Z],&j->orient[X],&j->orient[Y], &j->orient[Z]) == 8){
 		Quat_computeW (j->orient);
 	}
 	(*pJointIndex)++;
@@ -286,7 +286,7 @@ static void setMesh(struct MD5_model * _md5,const char* _chs,int* pCurMeshIndex)
 		len = (int)strlen(mesh->shader);
 		tl_strsub(mesh->shader,mesh->shader,1,len);
 		mesh->shader[len-2]=0;
-	}else if(sscanf (_chs, " numverts %d", &mesh->num_verts) == 1){
+	}else if(sscanf_s (_chs, " numverts %d", &mesh->num_verts) == 1){
 		/*获取mesh顶点个数*/
 		if(mesh->num_verts >0){
 			mesh->vertices = (struct md5_vertex_t *)tl_malloc (sizeof (struct md5_vertex_t) * mesh->num_verts);
@@ -296,7 +296,7 @@ static void setMesh(struct MD5_model * _md5,const char* _chs,int* pCurMeshIndex)
 		if(mesh->num_verts > _md5->max_verts){
 			_md5->max_verts = mesh->num_verts;
 		}
-	}else if (sscanf (_chs, " numtris %d", &mesh->num_tris) == 1){
+	}else if (sscanf_s (_chs, " numtris %d", &mesh->num_tris) == 1){
 		/*获取三角形的个数*/
 		if (mesh->num_tris > 0){
 			mesh->vertexCount = mesh->num_tris * 3;
@@ -306,12 +306,12 @@ static void setMesh(struct MD5_model * _md5,const char* _chs,int* pCurMeshIndex)
 		}
 		if (mesh->num_tris > _md5->max_tris)
 			_md5->max_tris = mesh->num_tris;
-	}else if (sscanf (_chs, " numweights %d", &mesh->num_weights) == 1){
+	}else if (sscanf_s (_chs, " numweights %d", &mesh->num_weights) == 1){
 		/*权重个数 开辟权重内存*/
 		if (mesh->num_weights > 0){
 			mesh->weights = (struct md5_weight_t *)tl_malloc (sizeof (struct md5_weight_t) * mesh->num_weights);
 		}
-	}else if (sscanf (_chs, " vert %d ( %f %f ) %d %d", &vert_index,&fdata[0], &fdata[1], &idata[0], &idata[1]) == 5){
+	}else if (sscanf_s (_chs, " vert %d ( %f %f ) %d %d", &vert_index,&fdata[0], &fdata[1], &idata[0], &idata[1]) == 5){
 		/* 复制顶点数据 */
 		pVertex = &mesh->vertices[vert_index];
 		pVertex->st[0] = fdata[0];
@@ -321,12 +321,12 @@ static void setMesh(struct MD5_model * _md5,const char* _chs,int* pCurMeshIndex)
 
 //		printf("%d,",pVertex->verCount);
 
-	}else if (sscanf (_chs, " tri %d %d %d %d", &tri_index,&idata[0], &idata[1], &idata[2]) == 4){
+	}else if (sscanf_s (_chs, " tri %d %d %d %d", &tri_index,&idata[0], &idata[1], &idata[2]) == 4){
 		/* 复制三角形数据*/
 		mesh->triangles[tri_index ].index[0] = idata[0];
 		mesh->triangles[tri_index ].index[1] = idata[1];
 		mesh->triangles[tri_index ].index[2] = idata[2];
-	}else if (sscanf (_chs, " weight %d %d %f ( %f %f %f )", &weight_index, &idata[0], &fdata[3], &fdata[0], &fdata[1], &fdata[2]) == 6){
+	}else if (sscanf_s(_chs, " weight %d %d %f ( %f %f %f )", &weight_index, &idata[0], &fdata[3], &fdata[0], &fdata[1], &fdata[2]) == 6){
 		/* 复制顶点权重数据· */
 		mesh->weights[weight_index].joint  = idata[0];//骨骼索引
 		mesh->weights[weight_index].bias   = fdata[3];//权重值(0~1)
@@ -682,7 +682,8 @@ struct md5_joint_t *skelFrame,
 
 		parent = jointInfos[i].parent;
 		thisJoint->parent = parent;
-		strcpy (thisJoint->name, jointInfos[i].name);
+		//strcpy (thisJoint->name, jointInfos[i].name);
+		strcpy_s(thisJoint->name,strlen(jointInfos[i].name) + 1,jointInfos[i].name);
 
 		/* Has parent? */
 		if (thisJoint->parent < 0){
@@ -722,7 +723,7 @@ static void parseJoints(char* str,struct joint_info_t* pJoint){
 	memcpy(pJoint->name,str+len,pos-len);
 	len = (int)strlen("\t");
 	memcpy(_temp,str+pos+len,strlen(str)-pos-len);	
-	sscanf (_temp, "%d %d %d", &(pJoint->parent), &(pJoint->flags),&(pJoint->startIndex));
+	sscanf_s(_temp, "%d %d %d", &(pJoint->parent), &(pJoint->flags),&(pJoint->startIndex));
 	//printf("[%s] %d %d %d \n",pJoint->name,pJoint->parent,pJoint->flags,pJoint->startIndex);
 }
 /*
@@ -749,7 +750,7 @@ static void parseFrame(const char* data,int* curPos,int offset,float *animFrameD
 		f_strSplitLoop(&sp);
 		if(((int)strlen(b) == 1) && (b[0] == 13 || (strcmp(b,"\n") == 0))){
 		}else{
-			sscanf(b,"%f",&animFrameData[index]);
+			sscanf_s(b,"%f",&animFrameData[index]);
 			index++;
 		}
 	}
@@ -798,7 +799,7 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 	{
 		f_strSplitLoop(&_sp);
 
-		if (sscanf (buff, " MD5Version %d", &version) == 1)
+		if (sscanf_s (buff, " MD5Version %d", &version) == 1)
 		{
 			if (version != 10)
 			{
@@ -808,7 +809,7 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 				return;
 			}
 		}
-		else if (sscanf (buff, " numFrames %d", &anim->num_frames) == 1)
+		else if (sscanf_s (buff, " numFrames %d", &anim->num_frames) == 1)
 		{
 			/* Allocate memory for skeleton frames and bounding boxes */
 			if (anim->num_frames > 0)
@@ -817,7 +818,7 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 				anim->bboxes = (struct md5_bbox_t *)tl_malloc (sizeof(struct md5_bbox_t)*anim->num_frames);
 			}
 		}
-		else if (sscanf (buff, " numJoints %d", &anim->num_joints) == 1)
+		else if (sscanf_s (buff, " numJoints %d", &anim->num_joints) == 1)
 		{
 			if (anim->num_joints > 0)
 			{
@@ -836,14 +837,14 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 					tl_malloc (sizeof (struct baseframe_joint_t) * anim->num_joints);
 			}
 		}
-		else if (sscanf (buff, " frameRate %d", &anim->frameRate) == 1)
+		else if (sscanf_s (buff, " frameRate %d", &anim->frameRate) == 1)
 		{
 
 			/*
 			printf ("md5anim: animation's frame rate is %d\n", anim->frameRate);
 			*/
 		}
-		else if (sscanf (buff, " numAnimatedComponents %d", &numAnimatedComponents) == 1)
+		else if (sscanf_s (buff, " numAnimatedComponents %d", &numAnimatedComponents) == 1)
 		{
 			if (numAnimatedComponents > 0)
 			{
@@ -869,7 +870,7 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 				f_strSplitLoop(&_sp);
 
 				/* Read bounding box */
-				sscanf (buff, " ( %f %f %f ) ( %f %f %f )",
+				sscanf_s (buff, " ( %f %f %f ) ( %f %f %f )",
 					&anim->bboxes[i].min[0], &anim->bboxes[i].min[1],
 					&anim->bboxes[i].min[2], &anim->bboxes[i].max[0],
 					&anim->bboxes[i].max[1], &anim->bboxes[i].max[2]);
@@ -882,7 +883,7 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 				f_strSplitLoop(&_sp);
 
 				/* Read base frame joint */
-				if (sscanf (buff, " ( %f %f %f ) ( %f %f %f )",
+				if (sscanf_s (buff, " ( %f %f %f ) ( %f %f %f )",
 					&baseFrame[i].pos[0], &baseFrame[i].pos[1],
 					&baseFrame[i].pos[2], &baseFrame[i].orient[0],
 					&baseFrame[i].orient[1], &baseFrame[i].orient[2]) == 6)
@@ -892,7 +893,7 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 				}
 			}
 		}
-		else if (sscanf (buff, " frame %d", &frame_index) == 1)
+		else if (sscanf_s (buff, " frame %d", &frame_index) == 1)
 		{
 			
 			int _len = tl_strpos(_animData+_sp.pos,"}",1);//查询结束符"}"的位置

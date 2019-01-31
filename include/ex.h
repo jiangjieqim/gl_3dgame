@@ -222,7 +222,7 @@ struct EX* ex_getInstance();
 	加载一个模型
 	E_RenderMode mode:	管线使用的渲染模式
 */
-int 
+void* 
 ex_load_model(char* name,const char* url,int mode);
 
 /*

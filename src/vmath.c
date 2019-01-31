@@ -73,9 +73,9 @@ mat4x4_lookAt(Matrix44f out,struct Vec3* eye,struct Vec3* center,struct Vec3* up
 	float centery = center->y;
 	float centerz = center->z;
 
-	if (abs(eyex - centerx) < EPSILON && 
-		abs(eyey - centery) < EPSILON &&
-		abs(eyez - centerz) < EPSILON) 
+	if (fabs(eyex - centerx) < EPSILON && 
+		fabs(eyey - centery) < EPSILON &&
+		fabs(eyez - centerz) < EPSILON) 
 	{
 		mat4x4_identity(out);
 		return;
@@ -844,7 +844,7 @@ double
 vec_rotateAngle(double x1,double y1, double x2,double y2) {
 	double epsilon = 0.000001;//1.0e-6;//1乘10的-6次幂,0.000001
 	double nyPI = PI;//acos(-1.0);
-	double dist, dot, degree,angle;
+	double dist, dot,angle;
 
 	// normalize 单位向量
 	dist = sqrt(x1*x1 + y1*y1);
@@ -866,7 +866,7 @@ vec_rotateAngle(double x1,double y1, double x2,double y2) {
 	else if (fabs(dot+1.0f)<=epsilon){
 		angle = nyPI;
 	}else {
-		float cross;
+		double cross;
 
 		angle = acos(dot);
 		//cross product

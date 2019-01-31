@@ -283,10 +283,14 @@ void
 Create(struct ObjParseVOType * obj,const char* soures){
 	int len;
 	char* _buffer;
-	//;
+	
 	int byteSize = 0;
-	//char seps[] = OBJ_SIGN_BR;
+	
 	char* token;
+
+	char seps[] = "\n"; 
+	char *next_token = NULL;
+
 	len = sizeof(char) * (int)strlen(soures) + 1;
 	_buffer = (char*)tl_malloc(len);
 	memset(_buffer,0,len);
@@ -299,8 +303,9 @@ Create(struct ObjParseVOType * obj,const char* soures){
 	obj->groupCount = 0;
 	
 	obj->everyFloatCount=GetFloatGap(obj->exportType);
-
-	token = strtok(_buffer,OBJ_SIGN_BR);
+	
+	//token = strtok(_buffer,OBJ_SIGN_BR);
+	token = strtok_s(_buffer, seps, &next_token);
 	while(token!= NULL){
 		char b[3];
 		memset(b,0,3);
@@ -327,7 +332,8 @@ Create(struct ObjParseVOType * obj,const char* soures){
 		}else{
 
 		}
-		token = strtok( NULL, OBJ_SIGN_BR );
+		//token = strtok( NULL, OBJ_SIGN_BR );
+		token = strtok_s(NULL, seps, &next_token);
 	}
 	obj->uvIndex = 0;
 	obj->vertexIndex = 0;
