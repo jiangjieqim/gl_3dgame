@@ -4,4 +4,4 @@
 
 <res id="1" value="256" desc="名字最11大长度"/>
 
-<res id="LuaScript" value="3.lua" desc="入口lua脚本3"/>
+<res id="LuaScript" value="5.lua" desc="入口lua脚本"/>

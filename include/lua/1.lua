@@ -26,7 +26,9 @@ f_load(line)
 	--切割一个动作
 	change_attr(md2,"animtor_push","stand","0,39");
 	change_attr(md2,"animtor_push","run","40,45");
+	change_attr(md2,"animtor_push","attack","45,53");
 	change_attr(md2,"animtor_push","jump","66,71");
+	change_attr(md2,"animtor_push","crwalk","153,159");
 	
 	--设置初始动作
 	change_attr(md2,"animtor_setcur","jump");
@@ -55,7 +57,10 @@ f_anim_control_ui(m)
 	local list =  listbox_new(0,15)
 	listbox_add(list,"stand")
 	listbox_add(list,"run")
+	listbox_add(list,"attack")
 	listbox_add(list,"jump")
+	listbox_add(list,"crwalk")
+
 	listbox_bind(list,
 		function(_l)
 			
@@ -69,5 +74,5 @@ f_anim_control_ui(m)
 	listbox_select(list,0)--默认选0号索引
 end
 ---------------------------------------------------------------------------
-func_set_camera_pos(0,0,-30)
+func_set_camera_pos(0,0,-90)
 f_anim_control_ui(f_load(true))

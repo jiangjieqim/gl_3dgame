@@ -98,7 +98,8 @@ floor_rayPick(int evtId,void* data){
 
 static int _initStat = 0;
 
-static void f_drawLineEvt(int evtId,void* data){
+static void 
+f_drawLine(int evtId,void* data){
 	f_call();
 }
 
@@ -120,7 +121,7 @@ REG_test_unit_01(lua_State *L){
 		//初始化
 
 		//添加一个3D渲染回调
-		evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLineEvt);
+		evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLine);
 
 
 		if(!obj1Base){

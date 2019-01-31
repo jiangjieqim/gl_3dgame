@@ -568,7 +568,10 @@ end
 function func_get_longTime()
 	return get_attr(nil,"get_longTime");
 end
-
+--获取fps
+function func_fps()
+	return get_attr(nil,"fps");
+end
 --设置动作
 function func_set_anim(o,anim)
 	change_attr(o,"animtor_setcur",anim);

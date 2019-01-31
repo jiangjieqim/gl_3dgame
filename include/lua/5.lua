@@ -1,6 +1,8 @@
 dofile("..\\include\\lua\\core.lua")
 
-print('材质测试')
+func_print('#######################\t材质测试\t#######################',0xff0000)
+local _model_ptr;
+
 --初始化标示
 local function 
 f_set_obj_flags(o)
@@ -102,7 +104,35 @@ f_setLabel(_l,obj)
 	end
 
 end
+--###############################################################
+--渲染回调
+local _ticket = 0;
+local tt = 0;
 
+function func_drawCall(v)
+	--print(func_fps())
+	--drawCall回调
+	if(func_get_longTime() - tt<=20) then
+		--相关毫秒一次
+		return
+	end
+	
+	tt = func_get_longTime();
+	
+	if(_model_ptr) then
+		--_temp += PI--func_fps()*PI
+		local f = func_get_longTime()/ func_fps()--*PI 
+		
+		_ticket=_ticket+(1000/func_fps()) * 0.1
+		
+		--_ticket = _ticket % PI;
+		print(string.format("f = %.3f fps = %d ticket = %.3f",f, func_fps(),_ticket))
+		
+		func_setRotateX(_model_ptr,_ticket)
+	end
+	
+end
+--###############################################################
 --初始化listbox,用来测试不同的材质
 local function
 f_shader_init()
@@ -136,6 +166,8 @@ f_shader_init()
 			if(obj) then
 			
 				g_model = obj
+				
+				_model_ptr = g_model
 				
 				local s = string.format('index = %d\tlabel = [%s]\t	vbo:%s',
 					listbox_get_index(_l),
