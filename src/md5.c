@@ -9,6 +9,7 @@
 #include "tmat.h"
 #include "tools.h"
 #include "gettime.h"
+#include "tl_malloc.h"
 //=========================================================================
 struct MD5_model{
 	char version[G_CHAR_SIZE_];/*	∞Ê±æ–≈œ¢*/

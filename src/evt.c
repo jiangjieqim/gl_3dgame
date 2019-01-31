@@ -1,5 +1,6 @@
 #include "tools.h"
 #include "evt.h"
+#include "tl_malloc.h"
 //事件结构体
 struct EvtInfo{
 	/*
@@ -19,7 +20,6 @@ struct EvtParent{
 //获取对象ptr引用中的evtList引用地址.
 static void* 
 f_get(void* ptr){
-	struct EvtParent* a;
 	if(ptr){
 		struct EvtParent* p = (struct EvtParent*)ptr;
 		return p->evtList;
@@ -30,7 +30,7 @@ f_get(void* ptr){
 /* 检测是否已经绑定了函数                                               */
 /************************************************************************/
 static int 
-f_check_evt(void* evtList,int event,void (*evtCallBack)(struct EvtInfo*)){
+f_check_evt(void* evtList,int event,void (*evtCallBack)(int,void*)){
 
 	struct LStackNode* s = (struct LStackNode* )evtList;
 	struct EvtInfo* node;
@@ -73,7 +73,7 @@ evt_on(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
 	data->evtId = evtId;
 	data->ptr = evtCallBack;
 	list =(struct LStackNode*)evtList;
-	LStack_push(list,data);
+	LStack_push(list,(int)data);
 }
 
 //解绑事件
@@ -98,7 +98,7 @@ evt_off(void* ptr,int event,void (*evtCallBack)(int,void*)){
 			node->evtId = 0;
 			node->ptr = 0;
 			LStack_delNode(s,data);
-			tl_free(node);
+			tl_free((void*)node);
 		}
 	}
 
