@@ -1,4 +1,6 @@
 #include <string.h>
+#include <assert.h>
+
 #include "tools.h"
 #include "tl_malloc.h"
 #include "animtor.h"
@@ -95,10 +97,13 @@ f_animtor_get(struct Animtor* p,char* const animKey,int* const start,int* const 
 }
 
 int 
-animtor_setcur(struct Animtor* p,char* const animKey)
-{
+animtor_setcur(struct Animtor* p,char* const animKey){
 	int s,e;
+	if(!strcmp(p->cur_anim,animKey)){
+		return 1;//assert(0);/*动作相同*/
+	}
 	if(f_animtor_get(p,animKey,&s,&e)){
+		
 		memset(p->cur_anim,0,G_BUFFER_64_SIZE);
 		memcpy(p->cur_anim,animKey,strlen(animKey));
 		p->cur_start = s;
@@ -107,6 +112,7 @@ animtor_setcur(struct Animtor* p,char* const animKey)
 	}
 	return 0;
 }
+
 void animtor_play_start_end(struct Animtor* p,const int s,int e)
 {
 	p->cur_start = s;

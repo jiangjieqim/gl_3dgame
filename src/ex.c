@@ -1310,7 +1310,19 @@ ex_set_anim(void* ptr,const char* animKey)
 		md5_setAnim((void*)ptr,animKey);
 	}
 }
+int 
+ex_animtor_ptr_setcur(void* ptr,const char* str){
+	struct Node* node = (struct Node*)ptr;
+	struct Animtor* animtor=anim_get_animtor(node->anim);
 
+	if(!animtor_setcur(animtor,(char* const)str))
+	{
+		struct HeadInfo* base = base_get(ptr);
+		printf("为(%s)设置动作:%s失败\n",base->name,str);
+		return 0;
+	}
+	return 1;
+}
 //static int 
 //OnMouseDown(struct Sprite* pBtn,int mousex, int mousey)
 //{

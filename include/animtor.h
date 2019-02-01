@@ -28,6 +28,7 @@ void animtor_push(struct Animtor* p,const char* animKey,const int start,const in
 	设置当前的动作
 */
 int animtor_setcur(struct Animtor* p,char* const animKey);
+
 /*
 	计算关键帧
 */

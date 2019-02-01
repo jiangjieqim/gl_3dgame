@@ -229,6 +229,8 @@ ex_load_model(char* name,const char* url,int mode);
 	设置动作
 */
 void ex_set_anim(void* ptr,const char* animKey);
+//设置动作
+int ex_animtor_ptr_setcur(void* ptr,const char* animKey);
 /*
 	在屏幕左上角显示日志文本
 */

@@ -5,6 +5,10 @@
 #include "vmath.h"
 #include "ex.h"
 #include "evt.h"
+#include "gettime.h"
+//#include "anim.h"
+//#include "node.h"
+
 //#################          ##################
 //#pragma comment (lib, "MyDll.lib")
 //_declspec(dllimport) int jjqadd(int a,int b);
@@ -70,8 +74,34 @@ box_rayPick(int evtId,void* data){
 	base->rz=vec_rotateAngle(hit->x, hit->y, 1.0f, 0.0f);
 	updateMat4x4(base);
 }
-
+static void 
+f_playCallBack(void* data){
+	//struct HeadInfo* _pObj = (struct HeadInfo*)data;
+	//base_curAnim(_pObj->frameAnim,"stand");
+	struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
+	ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"stand");
+}
+//static struct BaseLoopVO* tmp=NULL;
+//static struct BaseLoopVO* tmp1=NULL;
 //地板点击触发
+static struct Vec3 startPos;
+static struct Vec3 endPos;
+static struct Vec3 direction;
+
+static void*
+f_get_posList(struct Vec3 p,struct Vec3 t){
+	float distance = vec3Distance(&p,&t);
+	struct Vec3 o;
+	vec3Sub(&t,&p,&o);
+	vec3Normalize(&o);
+
+	printf("距离 = %.3f,单位向量 = %.3f,%.3f,%.3f",distance,o.x,o.y,o.z);
+	//memcpy(&direction,&o,sizeof(struct Vec3));
+	vec3Set(&direction,o.x,o.y,o.z);
+
+	return 0;
+}
+
 static void
 floor_rayPick(int evtId,void* data){
 	struct HitResultObject* hit = (struct HitResultObject*)data;
@@ -79,6 +109,8 @@ floor_rayPick(int evtId,void* data){
 	//horse->x
 	//vec3Sub()
 	{
+		long time = 2000.0f;//播放的时间
+
 		struct Vec3 pos;
 		float x = hit->x - ptrHorse->x;
 		float y = hit->y - ptrHorse->y;
@@ -93,16 +125,56 @@ floor_rayPick(int evtId,void* data){
 		updateMat4x4(ptrHorse);//更新角色矩阵
 
 		base_setPos(_target, hit->x, hit->y, hit->z);//设置拾取小盒子的位置
+
+		//#####################################
+		//ramp_stopPlaying(tmp);
+		//ramp_stopPlaying(tmp1);
+
+		//base_curAnim(ptrHorse->frameAnim,"run");
+		
+		ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"run");
+		/*
+		tmp1=ramp_delay(f_playCallBack,_target,time);
+
+		tmp=ramp_vec_trace(&ptrHorse->x,&ptrHorse->y,&ptrHorse->z,hit->x,hit->y,hit->z,time,ex_fps());
+		*/
+		{
+			
+			startPos.x = ptrHorse->x;startPos.y = ptrHorse->y;startPos.z = ptrHorse->z;
+			endPos.x = hit->x;endPos.y = ptrHorse->y;endPos.z = hit->z;
+			f_get_posList(startPos,endPos);
+		}
 	}
 }
 
 static int _initStat = 0;
+static int _ticket = 0;
 
 static void 
 f_drawLine(int evtId,void* data){
 	f_call();
-}
 
+	if(get_longTime()-_ticket<100){
+		
+	}else{
+		_ticket = get_longTime();
+		if(_horse){
+			struct Vec3 pos;
+			float distance;
+			struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
+			pos.x = ptrHorse->x;pos.y = ptrHorse->y;pos.z = ptrHorse->z;
+			distance = vec3Distance(&endPos,&pos);
+			if(distance>=1.0){
+				printf("distance:%.3f\n",distance);
+				ptrHorse->x+=direction.x;ptrHorse->y+=direction.y;ptrHorse->z+=direction.z;
+				pos.x = ptrHorse->x;pos.y = ptrHorse->y;pos.z = ptrHorse->z;
+				base_set_position(ptrHorse,&pos);
+			}else{
+				ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"stand");
+			}
+		}
+	}
+}
 struct HeadInfo* obj1Base;
 REG_test_unit_01(lua_State *L){
 	float value = lua_tonumber(L,1);
@@ -119,7 +191,8 @@ REG_test_unit_01(lua_State *L){
 	
 	if(!_initStat){
 		//初始化
-
+		//struct Node* node;
+		void* _ptr;
 		//添加一个3D渲染回调
 		evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLine);
 
@@ -135,9 +208,11 @@ REG_test_unit_01(lua_State *L){
 		//setv(_floor,FLAGS_VISIBLE);
 		_floor = base_get(ex_find("_floor"));
 		evt_on(_floor,EVENT_RAY_PICK,floor_rayPick);
+		_ptr = ex_find("_horse");
+		_horse =  base_get(_ptr);
 
-		_horse =  base_get(ex_find("_horse"));
-
+		//node = (struct Node*)_ptr;
+		//anim_set_fps(node->anim,7);
 		// x,z		基于y轴旋转
 		_target = base_get(ex_find("_target"));
 		

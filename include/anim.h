@@ -55,7 +55,7 @@ void anim_play(struct VBOAnim* anim,int index,void (*callBack)(int,int),int para
 void anim_playByFPS(struct VBOAnim* p,void (*callBack)(int,int),int param);
 
 /*
-	设置动作的fps
+	自定义设置动作的fps,该值被设置之后会采用设置的帧率计算关键帧
 */
 void anim_set_fps(struct VBOAnim* p,int fps);
 

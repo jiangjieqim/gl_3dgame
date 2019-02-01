@@ -48,12 +48,29 @@ setv(_floor,FLAGS_DRAW_RAY_COLLISION)
 setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
 
 --加载一个角色模型
-local horse=func_loadmd2('bauul','bauul.tga','vbo')--'horse'
-func_rename(horse,'_horse');
-func_setRotateX(horse,PI/2)--旋转一个轴向
-func_set_scale(horse,0.1)
-func_set_x(horse,-5)
-func_set_z(horse,-5)
+
+
+local function f_init()
+	local horse=func_loadmd2('bauul','bauul.tga','vbo')--'horse'
+	func_rename(horse,'_horse');
+	
+	func_setRotateX(horse,PI/2)--旋转一个轴向
+	func_set_scale(horse,0.1)
+	func_set_x(horse,-5)
+	func_set_z(horse,-5)
+	
+	change_attr(horse,"animtor_push","stand","0,19");
+
+	change_attr(horse,"animtor_push","run","40,45");
+
+	func_set_anim(horse,"stand")
+	
+	--func_set_ptr_fps(horse,1)
+	
+	change_attr(horse,"animtor_play");--播放
+end
+
+local horse=f_init()
 
 local _target = func_loadobj('box',nil,'_target',false);
 setv(_target,FLAGS_DRAW_PLOYGON_LINE)
@@ -61,3 +78,11 @@ setv(_target,FLAGS_DRAW_PLOYGON_LINE)
 
 
 func_set_camera_pos(0,-5,-20)
+
+
+--drawCall回调
+function func_drawCall(v)
+	
+	
+	
+end

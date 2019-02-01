@@ -577,6 +577,10 @@ end
 function func_fps()
 	return get_attr(nil,"fps");
 end
+--设置对象的关键帧帧率
+function func_set_ptr_fps(o,v)
+	change_attr(o,"fps",tostring(v))
+end
 --设置动作
 function func_set_anim(o,anim)
 	change_attr(o,"animtor_setcur",anim);
