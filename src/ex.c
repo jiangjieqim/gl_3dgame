@@ -1685,7 +1685,17 @@ setLookTarget(void* ptr,float x,float y,float z)
 	else
 		updateMat4x4(b);
 }
-
+int 
+ex_rename(void* p,const char* name){
+	if(!ex_find(name)){
+		memset(base_get(p)->name,0,G_BUFFER_32_SIZE);
+		memcpy(base_get(p)->name,name,strlen(name));
+		return 1;
+	}
+	log_code(ERROR_RENAME);
+	assert(0);
+	return 0;
+}
 void ex_ptrRemove(void* ptr){
 	struct HeadInfo* b = base_get((void*)ptr);
 	if(!b)

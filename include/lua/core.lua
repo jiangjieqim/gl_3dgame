@@ -310,6 +310,11 @@ function func_setRotateZ(o,value)
 	change_attr(o,"rz",tostring(value));
 end
 
+--重命名
+function func_rename(o,value)
+	change_attr(o,"rename",tostring(value));
+end
+
 --设置ray拾取半径
 function func_set_rayRadius(o,value)
 	change_attr(o,"set_rayRadius",tostring(value));

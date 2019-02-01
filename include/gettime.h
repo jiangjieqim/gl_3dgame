@@ -9,9 +9,8 @@
 #define	ERROR_PTR_TYPE_FAIL 6	//类型匹配错误,未实现该类型的逻辑
 #define ERROR_BAD_VALUE 7	//错误值
 #define	ERROR_FLAGS 8	//错误的标示状态位
-
 #define ERROR_GET_FRAME 9 //获取动作帧
-
+#define ERROR_RENAME 10		//重命名
 
 /*
  *	获取当前时间 精确到豪秒
