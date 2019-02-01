@@ -601,6 +601,10 @@ function func_is_vbo(obj,tips)
 	return false
 end
 
+function func_drawCall(v)
+	
+end
+
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件

@@ -21,7 +21,7 @@ void memory_retrieve(void* p);
 /*
 	获取信息
 */
-void memory_get_info();
+void memory_get_info(int* pDisable_bytes,int* pDisable_cnt);
 
 /*
 	Garbage Collection	垃圾回收

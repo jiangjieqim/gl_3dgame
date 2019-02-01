@@ -55,15 +55,24 @@ f_getInfo(int data,int parm){
 	}
 	return 1;
 }
-
-void
-memory_get_info(){
+/*
+	节点信息计算
+*/
+static void
+f_calculate_mem(){
 	g_disable_bytes = 0;
 	g_disable_cnt = 0;
 	if(memList){
 		LStack_ergodic(memList,f_getInfo,0);
 	}
-	log_color(0xffff00,"空置节点总数:%d,总大小:%d字节,内存池总占用:%d字节\n",g_disable_cnt,g_disable_bytes,g_total);
+}
+void
+memory_get_info(int* pDisable_bytes,int* pDisable_cnt){
+	f_calculate_mem();
+	//log_color(0xffff00,"空置节点总数:%d,总大小:%d字节,内存池总占用:%d字节\n",g_disable_cnt,g_disable_bytes,g_total);
+	if(pDisable_cnt)*pDisable_cnt = g_disable_cnt;
+
+	if(pDisable_bytes)*pDisable_bytes = g_disable_bytes;
 }
 
 static int

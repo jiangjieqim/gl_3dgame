@@ -124,9 +124,7 @@ function func_drawCall(v)
 		local f = func_get_longTime()/ func_fps()--*PI 
 		
 		_ticket=_ticket+(1000/func_fps()) * 0.1
-		
-		--_ticket = _ticket % PI;
-		print(string.format("f = %.3f fps = %d ticket = %.3f",f, func_fps(),_ticket))
+		--print(string.format("f = %.3f fps = %d ticket = %.3f",f, func_fps(),_ticket))
 		
 		func_setRotateX(_model_ptr,_ticket)
 	end

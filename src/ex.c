@@ -325,24 +325,25 @@ void renderUI(GLenum mode){
 void ex_info(){
 	struct EX* ex = ex_getInstance();
 	//EngineX* p = this;
+
+	int totleByte,nodeCnt;
 	char buffer[G_BUFFER_1024_SIZE];
 	int j=0;
 	int buffer_size = G_BUFFER_1024_SIZE;
 	int fps = ex_fps();
+	memory_get_info(&totleByte,&nodeCnt);
 	memset(buffer,0,G_BUFFER_1024_SIZE);
 	j+=sprintf_s(buffer+j,buffer_size, "**********************************************\n");
 	j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
 	j+=sprintf_s(buffer+j,buffer_size, "屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
 	j+=sprintf_s(buffer+j,buffer_size, "程序已执行:%.3f 秒\n",gettime_cur());
-	j+=sprintf_s(buffer+j,buffer_size, "内存池已使用 %f mb\n",(float)tl_memByteSize()/1024/1024);
-	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d 摄影机坐标:%f %f %f\n%s\n",LStack_length(ex->renderList),ex->camx,ex->camy,ex->camz,"F4:静态多边形显示线框 \nF12:包围盒显示");
+	j+=sprintf_s(buffer+j,buffer_size, "内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
+	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d 摄影机坐标:%.3f %.3f %.3f\n%s\n",LStack_length(ex->renderList),ex->camx,ex->camy,ex->camz,"F4:静态多边形显示线框 \nF12:包围盒显示");
 	j+=sprintf_s(buffer+j,buffer_size, "vbo使用:%d bytes\n",tlgl_getVboSize());
 	j+=sprintf_s(buffer+j,buffer_size, "当前(射线检测)状态:%d\n",getv(&(ex->flags),EX_FLAGS_RAY));
 	//printf("%s\n",buffer);
 	log_color(0x00ff00,"%s\n",buffer);
 	//printf("当前(射线检测)状态:%d\n",getv(&(ex->flags),EX_FLAGS_RAY));
-
-	memory_get_info();
 }
 static char buffer[G_BUFFER_256_SIZE];
 /*
@@ -361,13 +362,14 @@ drawText(){
 	
 	tlgl_getGPU_memery(&total_mem_kb,&cur_avail_mem_kb);
 
-	if(tl_memGetStat())
+	//if(tl_memGetStat())
 	{
-		size = (int)tl_memByteSize();
+		//size = (int)tl_memByteSize();
+		memory_get_info(&size,0);
 	}
 
-	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d, tl_memByteSize=%d bytes ",fps,size);
-	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"(vbo:%d bytes %.3f kb)cam: %f,%f,%f VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0,p->camx,p->camy,p->camz,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,gettime_cur());
+	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d total %d bytes ",fps,size);
+	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb) cam: %f,%f,%f VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0,p->camx,p->camy,p->camz,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,gettime_cur());
 	
 	ex_showLog(buffer);
 }
