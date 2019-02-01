@@ -47,8 +47,8 @@ setv(_floor,FLAGS_RAY)
 setv(_floor,FLAGS_DRAW_RAY_COLLISION)
 setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
 
-
-local horse=func_loadmd2('horse','1.tga','vbo','_horse')--'horse'
+--加载一个角色模型
+local horse=func_loadmd2('bauul','bauul.tga','vbo','_horse')--'horse'
 func_setRotateX(horse,PI/2)--旋转一个轴向
 func_set_scale(horse,0.1)
 func_set_x(horse,-5)
