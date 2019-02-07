@@ -65,7 +65,7 @@ local function f_init()
 
 	func_set_anim(horse,"stand")
 	
-	--func_set_ptr_fps(horse,1)
+	func_set_ptr_fps(horse,3)
 	
 	change_attr(horse,"animtor_play");--²¥·Å
 end

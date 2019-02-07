@@ -95,7 +95,7 @@ f_get_posList(struct Vec3 p,struct Vec3 t){
 	vec3Sub(&t,&p,&o);
 	vec3Normalize(&o);
 
-	printf("距离 = %.3f,单位向量 = %.3f,%.3f,%.3f",distance,o.x,o.y,o.z);
+	printf("距离\t%.3f,单位向量\t%.3f,%.3f,%.3f\n",distance,o.x,o.y,o.z);
 	//memcpy(&direction,&o,sizeof(struct Vec3));
 	vec3Set(&direction,o.x,o.y,o.z);
 
@@ -120,7 +120,7 @@ floor_rayPick(int evtId,void* data){
 		pos.z = z;
 
 		vec3Normalize(&pos);//求单位向量
-		printf("************* %s,%.3f,%.3f,%.3f\t,%.3f,%.3f,%.3f\n", hit->name,hit->x,hit->y,hit->z,pos.x,pos.y,pos.z);
+		//printf("************* %s,%.3f,%.3f,%.3f\t,%.3f,%.3f,%.3f\n", hit->name,hit->x,hit->y,hit->z,pos.x,pos.y,pos.z);
 		ptrHorse->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);//设置角色的朝向
 		updateMat4x4(ptrHorse);//更新角色矩阵
 
@@ -138,12 +138,11 @@ floor_rayPick(int evtId,void* data){
 
 		tmp=ramp_vec_trace(&ptrHorse->x,&ptrHorse->y,&ptrHorse->z,hit->x,hit->y,hit->z,time,ex_fps());
 		*/
-		{
-			
-			startPos.x = ptrHorse->x;startPos.y = ptrHorse->y;startPos.z = ptrHorse->z;
-			endPos.x = hit->x;endPos.y = ptrHorse->y;endPos.z = hit->z;
-			f_get_posList(startPos,endPos);
-		}
+
+		startPos.x = ptrHorse->x;startPos.y = ptrHorse->y;startPos.z = ptrHorse->z;
+		endPos.x = hit->x;endPos.y = ptrHorse->y;endPos.z = hit->z;
+		f_get_posList(startPos,endPos);
+
 	}
 }
 
@@ -155,7 +154,7 @@ f_drawLine(int evtId,void* data){
 	f_call();
 
 	if(get_longTime()-_ticket<100){
-		
+		//100毫秒后执行
 	}else{
 		_ticket = get_longTime();
 		if(_horse){
@@ -165,7 +164,7 @@ f_drawLine(int evtId,void* data){
 			pos.x = ptrHorse->x;pos.y = ptrHorse->y;pos.z = ptrHorse->z;
 			distance = vec3Distance(&endPos,&pos);
 			if(distance>=1.0){
-				printf("distance:%.3f\n",distance);
+				//printf("distance:%.3f\n",distance);
 				ptrHorse->x+=direction.x;ptrHorse->y+=direction.y;ptrHorse->z+=direction.z;
 				pos.x = ptrHorse->x;pos.y = ptrHorse->y;pos.z = ptrHorse->z;
 				base_set_position(ptrHorse,&pos);
