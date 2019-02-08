@@ -3,7 +3,7 @@ func_print('四元数旋转测试',0xff0000)
 
 
 
-local animsc = scrollBar_new(0,0)
+local animsc = scrollBar_new(0,20)
 scrollBar_setRange(animsc,0,1)
 local tf = scrollBar_add_text(animsc,'')
 
@@ -59,9 +59,11 @@ local function f_init()
 	func_set_x(horse,-5)
 	func_set_z(horse,-5)
 	
-	change_attr(horse,"animtor_push","stand","0,19");
+	change_attr(horse,"animtor_push","stand","0,39");
 
 	change_attr(horse,"animtor_push","run","40,45");
+	
+	change_attr(horse,"animtor_push","jump","66,71");
 
 	func_set_anim(horse,"stand")
 	

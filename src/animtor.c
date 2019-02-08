@@ -143,6 +143,10 @@ animtor_calculateFrame(struct Animtor* p,int* const pCurIndex)
 		*pCurIndex = p->cur_start;
 	}	
 	if(*pCurIndex >= p->cur_end){
+		if(p->playend){
+			p->playend((void*)p);
+			return;
+		}
 		*pCurIndex=p->cur_start-1;
 	}
 	if(p->isPlaying)

@@ -15,6 +15,8 @@ struct Animtor
 	int cur_end;
 	//是否在播放
 	int isPlaying;
+	//当前动作播放完成之后回调
+	void (*playend)(void*);
 };
 struct Animtor* animtor_create();
 

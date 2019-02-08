@@ -11,7 +11,7 @@
 #define	ERROR_FLAGS 8	//错误的标示状态位
 #define ERROR_GET_FRAME 9 //获取动作帧
 #define ERROR_RENAME 10		//重命名
-
+#define ERROR_SET_FRAME 11 //设置动作帧
 /*
  *	获取当前时间 精确到豪秒
  *	clock函数测出来的时间为进程运行时间，单位为滴答数(ticks)。

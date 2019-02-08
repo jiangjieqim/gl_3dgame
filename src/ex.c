@@ -1311,7 +1311,7 @@ ex_set_anim(void* ptr,const char* animKey)
 	}
 }
 int 
-ex_animtor_ptr_setcur(void* ptr,const char* str){
+ex_animtor_ptr_setcur(void* ptr,const char* str,void (*playend)(void*)){
 	struct Node* node = (struct Node*)ptr;
 	struct Animtor* animtor=anim_get_animtor(node->anim);
 
@@ -1319,7 +1319,10 @@ ex_animtor_ptr_setcur(void* ptr,const char* str){
 	{
 		struct HeadInfo* base = base_get(ptr);
 		printf("为(%s)设置动作:%s失败\n",base->name,str);
+		log_code(ERROR_SET_FRAME);
 		return 0;
+	}else{
+		animtor->playend = playend;
 	}
 	return 1;
 }

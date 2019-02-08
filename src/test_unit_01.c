@@ -6,6 +6,7 @@
 #include "ex.h"
 #include "evt.h"
 #include "gettime.h"
+//#include "animtor.h"
 //#include "anim.h"
 //#include "node.h"
 
@@ -43,6 +44,12 @@ struct Vec3 normalpos2;
 //   }
 #define  _ARROW_OBJ_ "myBox"
 
+static void*
+f_getHorse(){
+	struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
+	return ex_find(ptrHorse->name);
+}
+
 static void
 f_print_vec(char* key,struct Vec3* p){
 	printf("%s p = %.3f\t%.3f\t%.3f\n",key,p->x,p->y,p->z);
@@ -79,7 +86,7 @@ f_playCallBack(void* data){
 	//struct HeadInfo* _pObj = (struct HeadInfo*)data;
 	//base_curAnim(_pObj->frameAnim,"stand");
 	struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
-	ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"stand");
+	ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"stand",0);
 }
 //static struct BaseLoopVO* tmp=NULL;
 //static struct BaseLoopVO* tmp1=NULL;
@@ -132,7 +139,7 @@ floor_rayPick(int evtId,void* data){
 
 		//base_curAnim(ptrHorse->frameAnim,"run");
 		
-		ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"run");
+		ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"run",0);
 		/*
 		tmp1=ramp_delay(f_playCallBack,_target,time);
 
@@ -148,19 +155,26 @@ floor_rayPick(int evtId,void* data){
 
 static int _initStat = 0;
 static int _ticket = 0;
+
+static void
+playend(void* p){
+	ex_animtor_ptr_setcur(f_getHorse(),"stand",0);
+}
 //键盘事件
 static void
 f_key(int evtId,void* data){
 	struct E_KeyBoard* pkey = (struct E_KeyBoard*)data;
 
-	struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
+	//struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
 	//printf("key\t=\t%d\n",pkey->key);
 	switch(pkey->key){
 		case KEY_A:
-			ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"run");
+			ex_animtor_ptr_setcur(f_getHorse(),"jump",playend);//设置一次跳跃动作
 			break;
 	}
 }
+
+static int animStat=0;
 static void 
 f_drawLine(int evtId,void* data){
 	f_call();
@@ -176,12 +190,16 @@ f_drawLine(int evtId,void* data){
 			pos.x = ptrHorse->x;pos.y = ptrHorse->y;pos.z = ptrHorse->z;
 			distance = vec3Distance(&endPos,&pos);
 			if(distance>=1.0){
+				animStat = 0;
 				//printf("distance:%.3f\n",distance);
 				ptrHorse->x+=direction.x;ptrHorse->y+=direction.y;ptrHorse->z+=direction.z;
 				pos.x = ptrHorse->x;pos.y = ptrHorse->y;pos.z = ptrHorse->z;
 				base_set_position(ptrHorse,&pos);
 			}else{
-				ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"stand");
+				if(!animStat){
+					ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"stand",0);
+				}
+				animStat = 1;
 			}
 		}
 	}

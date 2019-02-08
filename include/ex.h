@@ -236,8 +236,12 @@ ex_load_model(char* name,const char* url,int mode);
 	设置动作
 */
 void ex_set_anim(void* ptr,const char* animKey);
-//设置动作
-int ex_animtor_ptr_setcur(void* ptr,const char* animKey);
+/*
+ *	设置动作
+ *	playend:当前动作关键帧播放完成之后回调该函数引用
+ */
+int 
+ex_animtor_ptr_setcur(void* ptr,const char* animKey,void (*playend)(void*));
 /*
 	在屏幕左上角显示日志文本
 */
