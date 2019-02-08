@@ -148,7 +148,19 @@ floor_rayPick(int evtId,void* data){
 
 static int _initStat = 0;
 static int _ticket = 0;
+//键盘事件
+static void
+f_key(int evtId,void* data){
+	struct E_KeyBoard* pkey = (struct E_KeyBoard*)data;
 
+	struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
+	//printf("key\t=\t%d\n",pkey->key);
+	switch(pkey->key){
+		case KEY_A:
+			ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"run");
+			break;
+	}
+}
 static void 
 f_drawLine(int evtId,void* data){
 	f_call();
@@ -195,7 +207,6 @@ REG_test_unit_01(lua_State *L){
 		//添加一个3D渲染回调
 		evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLine);
 
-
 		if(!obj1Base){
 			obj1Base =  base_get(ex_find("myObj1"));
 			//添加对象拾取监听事件
@@ -214,8 +225,9 @@ REG_test_unit_01(lua_State *L){
 		//anim_set_fps(node->anim,7);
 		// x,z		基于y轴旋转
 		_target = base_get(ex_find("_target"));
-		
 
+		evt_on(ex_getInstance(),EVENT_ENGINE_KEYBOARD,f_key);
+		
 
 		_initStat = 1;
 	}
@@ -260,7 +272,7 @@ REG_test_unit_01(lua_State *L){
 	subpos1.z = o[Z] - normalpos1.z;
 
 
-	//=====================================================
+	//======================================= ==============
 
 	axis.x = axis.y = 0;axis.z = 1.0;
 

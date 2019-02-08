@@ -1529,29 +1529,12 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 }
 //按键控制
 void onKeyboardCallBack(unsigned char key, int x, int y){
-	//struct EX* ex = ex_getInstance();
-	////摄影机的移动速度
-	//float _camSpeed = 10.0f;
-	////struct EngineXOBJ* ep = engineObj;
-
-	//printf("======>key=%d\n",key);
-	//switch(key){
-	//	case KEY_ESC:
-	//		exit(0);
-	//		break;
-	//	case KEY_1:
-	//		ex->camy+=_camSpeed;
-	//		break;
-	//	case KEY_2:
-	//		ex->camy-=_camSpeed;
-	//		break;
-	//	case KEY_A:
-	//		
-	//		break;
-	//	case KEY_D:
-
-	//		break;
-	//}
+	struct E_KeyBoard ekey;
+	ekey.key = key;
+	ekey.x = x;
+	ekey.y = y;
+	//printf("key=\t%d %d %d\n",key,x,y);
+	evt_dispatch(ex_getInstance(),EVENT_ENGINE_KEYBOARD,(void*)&ekey);
 }
 
 

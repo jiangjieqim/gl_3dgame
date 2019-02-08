@@ -1,3 +1,4 @@
+echo %time%
 @rem œÓƒø”√vs2005±‡“Î
 
 call initroot.bat
@@ -20,12 +21,13 @@ cd src
 cl test.c tlgl.c ex.c tools.c tmat.c md5.c jgl.c gettime.c sprite.c atlas.c obj_vbo.c anim.c node.c collide.c animtor.c obj.c md2.c tl_malloc.c test_unit_01.c byte.c xml.c psv.c list.c text.c vmath.c array.c bmp.c evt.c
 
 link *.obj
-
+echo %time%
 del *.obj
 
 copy test.exe ..\dll\test.exe
 del test.exe 
 cd ..\dll\ 
+
 test.exe 
  
 cd ..

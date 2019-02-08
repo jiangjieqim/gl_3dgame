@@ -28,7 +28,14 @@
 /* 引擎事件定义                                                         */
 /************************************************************************/
 #define EVENT_ENGINE_RENDER_3D 100				//引擎渲染回调
+#define EVENT_ENGINE_KEYBOARD  101				//全局键盘事件
 
+//键盘事件状态
+struct E_KeyBoard
+{
+	unsigned char key;
+	int x,y;
+};
 
 //鼠标状态
 struct MouseState

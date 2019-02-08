@@ -39,7 +39,7 @@ setv(box,FLAGS_DRAW_PLOYGON_LINE)
 
 
 
---创建地板
+--创建一个可点击的地板
 local _floor = func_loadobj('box',nil,'_floor',false);
 func_set_scale(_floor,20);
 func_set_y(_floor,-10);
@@ -65,9 +65,11 @@ local function f_init()
 
 	func_set_anim(horse,"stand")
 	
-	func_set_ptr_fps(horse,3)
+	func_set_ptr_fps(horse,7)
 	
 	change_attr(horse,"animtor_play");--播放
+	
+	return horse;
 end
 
 local horse=f_init()
