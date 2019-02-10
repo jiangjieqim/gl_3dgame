@@ -8,9 +8,10 @@
 #include "gettime.h"
 
 
-//camera控制器
-
-
+/*
+	camera控制器
+	实现一个tween的渐变的接口 ,角位移的渐变插值用tween实现渐变
+*/
 
 
 //#include "animtor.h"
@@ -124,7 +125,7 @@ floor_rayPick(int evtId,void* data){
 	//vec3Sub()
 	{
 		long time = 2000.0f;//播放的时间
-
+		double tangle;
 		struct Vec3 pos;
 		float x = hit->x - ptrHorse->x;
 		float y = hit->y - ptrHorse->y;
@@ -133,11 +134,13 @@ floor_rayPick(int evtId,void* data){
 		pos.y = y;
 		pos.z = z;
 
-		//return;
-
 		vec3Normalize(&pos);//求单位向量
 		//printf("************* %s,%.3f,%.3f,%.3f\t,%.3f,%.3f,%.3f\n", hit->name,hit->x,hit->y,hit->z,pos.x,pos.y,pos.z);
-		ptrHorse->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);//设置角色的朝向
+		tangle = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);//设置角色的朝向
+		
+		log_color(0x00ff00,"角位移插值:%.3f -> %.3f = %.3f\n",ptrHorse->ry,tangle,tangle - ptrHorse->ry);
+
+		ptrHorse->ry = tangle;
 		updateMat4x4(ptrHorse);//更新角色矩阵
 
 		base_setPos(_target, hit->x, hit->y, hit->z);//设置拾取小盒子的位置
@@ -164,7 +167,7 @@ floor_rayPick(int evtId,void* data){
 
 //static int _initStat = 0;
 static int _ticket = 0;
-
+static int _followTicket = 0;//跟随对象的ticket监听事件插值
 static void
 playend(void* p){
 	ex_animtor_ptr_setcur(f_getHorse(), "stand",0);
@@ -195,10 +198,23 @@ f_key(int evtId,void* data){
 }
 
 static int animStat=0;
-static void 
-f_drawLine(int evtId,void* data){
-	f_call();
 
+static void
+f_followCamera(){
+	if(get_longTime()- _followTicket >= 1000){
+		struct Vec3 p;
+		struct ECamera cam = ex_getInstance()->cam;
+		vec3Set(&p,cam.x,cam.y,cam.z);
+		
+		_followTicket = get_longTime();
+		//vec3Distance()
+		
+		//printf("f_followCamera时间戳:%d\n",get_longTime());
+	}
+}
+
+static void
+f_move(){
 	if(get_longTime()-_ticket<100){
 		//100毫秒后执行
 	}else{
@@ -224,6 +240,16 @@ f_drawLine(int evtId,void* data){
 		}
 	}
 }
+
+static void 
+f_drawLine(int evtId,void* data){
+	f_call();
+	f_move();
+	f_followCamera();
+}
+
+
+
 struct HeadInfo* obj1Base;
 
 REG_test_unit_01_init(lua_State *L){

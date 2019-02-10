@@ -460,7 +460,7 @@ fParseFrames(struct MD2_ParseObj* _md2)
 			if(_stat!=0){
 				memset(_tempName,0,16);
 				memcpy(_tempName,name,strlen(name));
-				printf("动画name: (%s)\t结束索引:%d\n",name,i);
+				//log_color(0xffff00,"动画name: (%s)\t结束索引:%d\n",name,i);
 			}
 		}
 		fBuildVertices(_md2,tvertices,(const char*)name,i);
