@@ -7,6 +7,9 @@ local animsc = scrollBar_new(0,20)
 scrollBar_setRange(animsc,0,1)
 local tf = scrollBar_add_text(animsc,'')
 
+
+
+
 scrollBar_bind(animsc,
 	function(sc)
 		test_unit_01(sc.value)
@@ -56,8 +59,8 @@ local function f_init()
 	
 	func_setRotateX(horse,PI/2)--旋转一个轴向
 	func_set_scale(horse,0.1)
-	func_set_x(horse,-5)
-	func_set_z(horse,-5)
+	--func_set_x(horse,-5)
+	--func_set_z(horse,-5)
 	
 	change_attr(horse,"animtor_push","stand","0,39");
 
@@ -81,7 +84,7 @@ setv(_target,FLAGS_DRAW_PLOYGON_LINE)
 
 
 
-func_set_camera_pos(0,-5,-20)
+--func_set_camera_pos(0,-5,-20)
 
 
 --drawCall回调
@@ -90,3 +93,5 @@ function func_drawCall(v)
 	
 	
 end
+
+test_unit_01_init();

@@ -325,7 +325,7 @@ void renderUI(GLenum mode){
 void ex_info(){
 	struct EX* ex = ex_getInstance();
 	//EngineX* p = this;
-
+	struct ECamera cam = ex->cam;
 	int totleByte,nodeCnt;
 	char buffer[G_BUFFER_1024_SIZE];
 	int j=0;
@@ -338,7 +338,7 @@ void ex_info(){
 	j+=sprintf_s(buffer+j,buffer_size, "屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
 	j+=sprintf_s(buffer+j,buffer_size, "程序已执行:%.3f 秒\n",gettime_cur());
 	j+=sprintf_s(buffer+j,buffer_size, "内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
-	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d 摄影机坐标:%.3f %.3f %.3f\n%s\n",LStack_length(ex->renderList),ex->camx,ex->camy,ex->camz,"F4:静态多边形显示线框 \nF12:包围盒显示");
+	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d 摄影机坐标:%.3f %.3f %.3f 跟随目标引用:%0x r pi = %.3f %.3f %.3f \n%s\n",LStack_length(ex->renderList),cam.x,cam.y,cam.z,cam.ptrFollow,cam.rx/PI,cam.ry/PI,cam.rz/PI,"F4:静态多边形显示线框 \nF12:包围盒显示");
 	j+=sprintf_s(buffer+j,buffer_size, "vbo使用:%d bytes\n",tlgl_getVboSize());
 	j+=sprintf_s(buffer+j,buffer_size, "当前(射线检测)状态:%d\n",getv(&(ex->flags),EX_FLAGS_RAY));
 	//printf("%s\n",buffer);
@@ -352,7 +352,7 @@ static char buffer[G_BUFFER_256_SIZE];
 static void 
 drawText(){
 	struct EX* p = ex_getInstance();
-	
+	struct ECamera cam = p->cam;
 	int vbo = tlgl_getVboSize();
 	int j;
 	int size=-1;
@@ -369,7 +369,7 @@ drawText(){
 	}
 
 	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d total %d bytes ",fps,size);
-	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb) cam: %f,%f,%f VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0,p->camx,p->camy,p->camz,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,gettime_cur());
+	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb) cam: %f,%f,%f VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0,cam.x,cam.y,cam.z,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,gettime_cur());
 	
 	ex_showLog(buffer);
 }
@@ -654,7 +654,7 @@ static int check_md2AnimConf(int allFrameCount,const char* animConf)
 //}
 
 //GLdouble outModel[16];
-
+/*
 static void
 changeCam()
 {
@@ -662,12 +662,13 @@ changeCam()
 	struct EX* p = ex_getInstance();
 	Matrix44f rx,ry,rz,temp1,temp2;
 	Matrix44f pos;
+	struct ECamera cam = p->cam;
 	
 	mat4x4_zero(temp1);
 	mat4x4_zero(temp2);
 
 	mat4x4_identity(pos);
-	mat4x4_translate(pos,p->camx,p->camy,p->camz);
+	mat4x4_translate(pos,cam.x,cam.y,cam.z);
 
 	mat4x4_zero(p->modelViewMatrix);
 
@@ -691,10 +692,12 @@ changeCam()
 
 	multi2(p->modelViewMatrix,pos,temp2);
 }
-
+*/
 static void 
 updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar){
 	struct EX* p = ex_getInstance();
+
+	struct ECamera cam = p->cam;
 	//只是处理鼠标拾取操作用来获取坐标使用gluUnProject,3d物体 不使用该方式(使用用户自定义的透视矩阵,视图矩阵,模型矩阵)
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
@@ -703,10 +706,10 @@ updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLd
 	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity ();
 
-	glRotatef(-180/PI*p->camRotateX,1,0,0);
-	glRotatef(-180/PI*p->camRotateY,0,1,0);
-	glRotatef(-180/PI*p->camRotateZ,0,0,1);
-	glTranslatef(p->camx,p->camy,p->camz);
+	glRotatef(-180/PI*p->cam.rx,1,0,0);
+	glRotatef(-180/PI*p->cam.ry,0,1,0);
+	glRotatef(-180/PI*p->cam.rz,0,0,1);
+	glTranslatef(cam.x,cam.y,cam.z);
 
 	mat4x4_zero(p->modelViewMatrix);
 	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
@@ -1540,21 +1543,34 @@ void onKeyboardCallBack(unsigned char key, int x, int y){
 	evt_dispatch(ex_getInstance(),EVENT_ENGINE_KEYBOARD,(void*)&ekey);
 }
 
-
-void update3DNode(int data)
-{
+static void 
+update3DNode(int data){
 	updateMat4x4(base_get((void*)data));
 }
 
-void setCamPos(float x,float y,float z){
+void 
+ex_cam_set_pos(float x,float y,float z){
 	struct EX* ex = ex_getInstance();	
-	ex->camx = x;	ex->camy = y;	ex->camz = z;
+	struct ECamera* cam = &ex->cam;
+/*
+	if(cam->ptrFollow){
+		return;
+	}
+*/
+	//ex->camx = x;	ex->camy = y;	ex->camz = z;
+	cam->x = x; cam->y = y; cam->z = z;
+
 	//更新渲染列表中的矩阵
 	f_renderlistCall(update3DNode);
 	//printf("setCamPos	%f,%f,%f\n",x,y,z);
 	ex_updatePerspctiveModelView();
 }
-
+void 
+ex_cam_bind(void* ptr){
+	struct EX* ex = ex_getInstance();	
+	struct ECamera* cam = &ex->cam;
+	cam->ptrFollow = ptr;
+}
 struct EX* ex_create()
 {
 	return ex_getInstance();

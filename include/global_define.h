@@ -93,7 +93,10 @@ enum
 #define KEY_1 49
 #define KEY_2 50
 #define KEY_A 97
+#define KEY_B 98
+#define KEY_C 99
 #define KEY_D 100
+#define KEY_I 105
 
 //文件类型定义
 #define TYPE_OBJ_FILE 0	//obj类型

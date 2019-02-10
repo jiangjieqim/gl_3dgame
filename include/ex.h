@@ -47,10 +47,18 @@ struct MouseState
 	
 	int moveX,moveY;//当前移动的位置
 };
-
+struct ECamera{
+	/*
+	*	摄影机坐标
+	*/
+	float x,y,z;
+	float rx,ry,rz;
+	void* ptrFollow;//跟随的引用对象
+	float followDistance;//距离跟随对象的距离
+};
 //=============================================================================================================
 struct EX
-{	
+{	 
 	//public
 	/*
 		事件列表
@@ -59,8 +67,9 @@ struct EX
 	/*
 	*	摄影机坐标
 	*/
-	float camx,camy,camz;
-	float camRotateX,camRotateY,camRotateZ;
+	//float camx,camy,camz;
+	//float camRotateX,camRotateY,camRotateZ;
+	struct ECamera cam;//camera
 	/*
 		各种枚举定义,二进制位存储
 	*/
@@ -200,8 +209,10 @@ void onKeyboardCallBack(unsigned char key, int x, int y);
 /*
 设置摄影机的坐标
 */
-void setCamPos(float x,float y,float z);
+void ex_cam_set_pos(float x,float y,float z);
 
+//绑定camera对象的引用
+void ex_cam_bind(void* ptr);
 /*
 设置渲染的背景颜色
 */

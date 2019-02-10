@@ -6,6 +6,13 @@
 #include "ex.h"
 #include "evt.h"
 #include "gettime.h"
+
+
+//camera控制器
+
+
+
+
 //#include "animtor.h"
 //#include "anim.h"
 //#include "node.h"
@@ -126,6 +133,8 @@ floor_rayPick(int evtId,void* data){
 		pos.y = y;
 		pos.z = z;
 
+		//return;
+
 		vec3Normalize(&pos);//求单位向量
 		//printf("************* %s,%.3f,%.3f,%.3f\t,%.3f,%.3f,%.3f\n", hit->name,hit->x,hit->y,hit->z,pos.x,pos.y,pos.z);
 		ptrHorse->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);//设置角色的朝向
@@ -153,24 +162,35 @@ floor_rayPick(int evtId,void* data){
 	}
 }
 
-static int _initStat = 0;
+//static int _initStat = 0;
 static int _ticket = 0;
 
 static void
 playend(void* p){
-	ex_animtor_ptr_setcur(f_getHorse(),"stand",0);
+	ex_animtor_ptr_setcur(f_getHorse(), "stand",0);
 }
 //键盘事件
 static void
 f_key(int evtId,void* data){
 	struct E_KeyBoard* pkey = (struct E_KeyBoard*)data;
 
-	//struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
-	//printf("key\t=\t%d\n",pkey->key);
+	//printf("key = %d\n",pkey->key);
 	switch(pkey->key){
 		case KEY_A:
 			ex_animtor_ptr_setcur(f_getHorse(),"jump",playend);//设置一次跳跃动作
 			break;
+		case KEY_B:
+			ex_getInstance()->cam.rx += PI * 0.1;
+			ex_updatePerspctiveModelView();
+			break;
+		case KEY_C:
+			ex_getInstance()->cam.rx -= PI * 0.1;
+			ex_updatePerspctiveModelView();
+			break;
+		case KEY_I:
+			ex_info();
+			break;
+
 	}
 }
 
@@ -205,19 +225,56 @@ f_drawLine(int evtId,void* data){
 	}
 }
 struct HeadInfo* obj1Base;
+
+REG_test_unit_01_init(lua_State *L){
+	//初始化
+	//struct Node* node;
+	void* _ptr;
+	//添加一个3D渲染回调
+	evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLine);
+
+	if(!obj1Base){
+		obj1Base =  base_get(ex_find("myObj1"));
+		//添加对象拾取监听事件
+		evt_on(obj1Base,EVENT_RAY_PICK,box_rayPick);
+	}
+
+	//_floor = ex_load_model("floor","\\resource\\obj\\teapot.obj",E_RenderModeVBO);
+	//base_set_scale(_floor,1.0f);
+	//setv(_floor,FLAGS_VISIBLE);
+	_floor = base_get(ex_find("_floor"));
+	evt_on(_floor,EVENT_RAY_PICK,floor_rayPick);
+	_ptr = ex_find("_horse");
+	_horse =  base_get(_ptr);
+
+	//node = (struct Node*)_ptr;
+	//anim_set_fps(node->anim,7);
+	// x,z		基于y轴旋转
+	_target = base_get(ex_find("_target"));
+
+	evt_on(ex_getInstance(),EVENT_ENGINE_KEYBOARD,f_key);
+	ex_cam_bind(f_getHorse());
+
+	ex_cam_set_pos(0,-20,0);
+	ex_getInstance()->cam.rx = PI * 1.5;
+
+	
+	//_initStat = 1;
+
+	return 0;
+}
 REG_test_unit_01(lua_State *L){
 	float value = lua_tonumber(L,1);
 	float len = 1.0;
 	Quat4_t s;
 	Quat4_t e;
 	Quat4_t o;
-	
-	
+		
 	struct HeadInfo* base;
 	
 	struct Vec3 subpos1;
 	struct Vec3 down;
-	
+/*	
 	if(!_initStat){
 		//初始化
 		//struct Node* node;
@@ -245,11 +302,10 @@ REG_test_unit_01(lua_State *L){
 		_target = base_get(ex_find("_target"));
 
 		evt_on(ex_getInstance(),EVENT_ENGINE_KEYBOARD,f_key);
-		
 
 		_initStat = 1;
 	}
-	
+*/	
 
 	//测试旋转对象
 	base = base_get(ex_find(_ARROW_OBJ_));
