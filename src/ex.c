@@ -781,8 +781,8 @@ void ex_updatePerspctiveModelView()
 	//if(ex_getInstance()->drawLine_callBack)
 	//	ex_getInstance()->drawLine_callBack();
 //}
-void _new()
-{
+static void 
+_new(){
 	struct EX* p = ex_getInstance();
 
 	if(p->_screenWidth <= 0 || p->_screenHeight<=0)
@@ -954,8 +954,11 @@ void ex_init(struct EX* p,GLdouble zfar)
 }
 
 void ex_dispose(struct EX* p){
+	printf("销毁引擎设备!\n");
+	//getch();
 	LStack_delete((struct LStackNode*)p->renderList);
 	evt_dispose(p);
+	memory_gc();
 	
 	/*if(p->spriteVert.vertex){
 		tl_free(p->spriteVert.vertex);

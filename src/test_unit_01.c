@@ -177,7 +177,7 @@ static void
 f_key(int evtId,void* data){
 	struct E_KeyBoard* pkey = (struct E_KeyBoard*)data;
 
-	//printf("key = %d\n",pkey->key);
+	printf("key = %d\n",pkey->key);
 	switch(pkey->key){
 		case KEY_A:
 			ex_animtor_ptr_setcur(f_getHorse(),"jump",playend);//设置一次跳跃动作
@@ -193,7 +193,10 @@ f_key(int evtId,void* data){
 		case KEY_I:
 			ex_info();
 			break;
-
+		case KEY_ESC:
+			ex_dispose(ex_getInstance());
+			exit(0);
+			break;
 	}
 }
 

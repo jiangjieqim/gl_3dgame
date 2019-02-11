@@ -39,6 +39,4 @@ del *.exe
 cd ..\src
 del *.exe
 
-
-
-
+pause

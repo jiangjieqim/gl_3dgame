@@ -174,9 +174,8 @@ int memory_get_total(){
 void memory_gc(){
 	int n = g_total;
 	int m = get_longTime();
-	//log_color(0xffff00,"gc之前%d字节,",g_total);
 	LStack_ergodic(memList,f_gc,0);
-	log_color(0xffff00,"gc之前%d字节,消耗%d毫秒,之后%d字节,回收了%d字节(%.3fkb)\n",n,(get_longTime() - m), g_total , (n - g_total), (float)(n - g_total) / 1024.0f);
+	log_color(0xffff00,"gc之前%d字节(%.3fkb),消耗%d毫秒,gc之后%d字节(%.3fkb),回收了%d字节(%.3fkb)\n",n,n/1024.0f,(get_longTime() - m), g_total,g_total / 1024.0f , (n - g_total), (float)(n - g_total) / 1024.0f);
 }
 
 static void 
