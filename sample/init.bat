@@ -22,7 +22,7 @@ set INCLUDE=%INCLUDE%%cd%\include\;%cur%\;
 @rem 增加本地lib路径
 set LIB=%LIB%%cd%\lib\;
 
-cd include
+cd src
 
 @rem jgl.c gettime.c 
 cl %cur%\%f%.c  tools.c gettime.c jgl.c

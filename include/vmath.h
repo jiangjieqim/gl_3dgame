@@ -20,9 +20,9 @@ struct Vec2{
 /*
 *	3DÏòÁ¿
 */
-struct Vec3{
+typedef struct Vec3{
 	float x,y,z;
-};
+}Vec3;
 
 struct Vec4
 {

@@ -177,7 +177,7 @@ static void
 f_key(int evtId,void* data){
 	struct E_KeyBoard* pkey = (struct E_KeyBoard*)data;
 
-	printf("key = %d\n",pkey->key);
+	//printf("key = %d\n",pkey->key);
 	switch(pkey->key){
 		case KEY_A:
 			ex_animtor_ptr_setcur(f_getHorse(),"jump",playend);//设置一次跳跃动作
@@ -204,15 +204,34 @@ static int animStat=0;
 
 static void
 f_followCamera(){
+	const float limt = 10.0;//限制长度
 	if(get_longTime()- _followTicket >= 1000){
-		struct Vec3 p;
+		Vec3 p;
+		Vec3 target;
+		Vec3 sub;
+		float dis;
 		struct ECamera cam = ex_getInstance()->cam;
+		struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
 		vec3Set(&p,cam.x,cam.y,cam.z);
-		
+		vec3Set(&target,ptrHorse->x,ptrHorse->y,ptrHorse->z);
+		vec3Sub(&p,&target,&sub);
+		vec3Normalize(&sub);
+		dis = vec3Distance(&p,&target);
+		//if(dis > limt){
+		{
+			Vec3 end;
+			vec3Mult(&sub,limt);
+			vec3Add(&target,&sub,&end);
+			ex_cam_set_pos(end.x,end.y,end.z);//使camera距离角色的距离适中保持limt长度
+		}
+		//}
+
 		_followTicket = get_longTime();
-		//vec3Distance()
 		
-		//printf("f_followCamera时间戳:%d\n",get_longTime());
+		printf("%.3f\n",dis);
+		
+		
+		printf("f_followCamera时间戳:%d\tcam.y=%.3f\n",get_longTime(),cam.y);
 	}
 }
 
