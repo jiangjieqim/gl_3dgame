@@ -14,7 +14,7 @@
 #define ERROR_SET_FRAME 11 //设置动作帧
 /*
  *	获取当前时间 精确到豪秒
- *	clock函数测出来的时间为进程运行时间，单位为滴答数(ticks)。
+ *	clock函数测出来的时间为当前进程已经运行的时间，单位为滴答数(ticks)。
  */
 long get_longTime();
 

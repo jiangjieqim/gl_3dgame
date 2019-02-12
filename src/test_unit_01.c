@@ -227,11 +227,8 @@ f_followCamera(){
 		//}
 
 		_followTicket = get_longTime();
-		
-		printf("%.3f\n",dis);
-		
-		
-		printf("f_followCamera时间戳:%d\tcam.y=%.3f\n",get_longTime(),cam.y);
+				
+		printf("dis=%.3f,f_followCamera时间戳:%d\tcam.y=%.3f\n",dis,get_longTime(),cam.y);
 	}
 }
 
