@@ -639,7 +639,8 @@ void vec3Set(struct Vec3* v,float x,float y,float z){
 }
 void 
 vec3Reverse(Vec3* v){
-	v->x*=-1; v->y*=-1; v->z*=-1;
+	//v->x*=-1; v->y*=-1; v->z*=-1;
+	vec3Mult(v,-1);
 }
 void vec3Add(struct Vec3* a,struct Vec3* b,struct Vec3* out){
 	out->x = a->x+b->x;
