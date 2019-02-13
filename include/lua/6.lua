@@ -40,18 +40,16 @@ setv(box,FLAGS_DRAW_RAY_COLLISION)
 setv(box,FLAGS_DRAW_PLOYGON_LINE)
 
 
-
-
 --创建一个可点击的地板
 local _floor = func_loadobj('box',nil,'_floor',false);
-func_set_scale(_floor,20);
-func_set_y(_floor,-10);
+local _floorRadius = 30--地板半径
+func_set_scale(_floor,_floorRadius*2);
+func_set_y(_floor,-_floorRadius);
 setv(_floor,FLAGS_RAY)
 setv(_floor,FLAGS_DRAW_RAY_COLLISION)
 setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
 
 --加载一个角色模型
-
 
 local function f_init()
 	local horse=func_loadmd2('bauul','bauul.tga','vbo')--'horse'

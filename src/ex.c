@@ -338,7 +338,13 @@ void ex_info(){
 	j+=sprintf_s(buffer+j,buffer_size, "屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
 	j+=sprintf_s(buffer+j,buffer_size, "程序已执行:%.3f 秒\n",gettime_cur());
 	j+=sprintf_s(buffer+j,buffer_size, "内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
-	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d 摄影机坐标:%.3f %.3f %.3f 跟随目标引用:%0x r pi = %.3f %.3f %.3f \n%s\n",LStack_length(ex->renderList),cam.x,cam.y,cam.z,cam.ptrFollow,cam.rx/PI,cam.ry/PI,cam.rz/PI,"F4:静态多边形显示线框 \nF12:包围盒显示");
+	
+	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d 摄影机坐标:%.3f %.3f %.3f 跟随目标引用:%0x r pi = %.3f %.3f %.3f 相对于偏移角色%.3f %.3f %.3f\n%s\n",LStack_length(ex->renderList),
+		cam.x,cam.y,cam.z,cam.ptrFollow,
+		cam.rx/PI,cam.ry/PI,cam.rz/PI,
+		cam.followOffset.x,cam.followOffset.y,cam.followOffset.z,
+		"F4:静态多边形显示线框 \nF12:包围盒显示");
+
 	j+=sprintf_s(buffer+j,buffer_size, "vbo使用:%d bytes\n",tlgl_getVboSize());
 	j+=sprintf_s(buffer+j,buffer_size, "当前(射线检测)状态:%d\n",getv(&(ex->flags),EX_FLAGS_RAY));
 	//printf("%s\n",buffer);

@@ -205,11 +205,12 @@ static int animStat=0;
 static void
 f_followCamera(){
 	const float limt = 10.0;//限制长度
-	if(get_longTime()- _followTicket >= 1000){
+	if(get_longTime()- _followTicket >= 100){
+/*
 		Vec3 p;
 		Vec3 target;
 		Vec3 sub;
-		float dis;
+		float dis;//cam距离角色的距离
 		struct ECamera cam = ex_getInstance()->cam;
 		struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
 		vec3Set(&p,cam.x,cam.y,cam.z);
@@ -222,13 +223,28 @@ f_followCamera(){
 			Vec3 end;
 			vec3Mult(&sub,limt);
 			vec3Add(&target,&sub,&end);
-			ex_cam_set_pos(end.x,end.y,end.z);//使camera距离角色的距离适中保持limt长度
+			//ex_cam_set_pos(end.x,end.y,end.z);//使camera距离角色的距离适中保持limt长度
 		}
 		//}
-
-		_followTicket = get_longTime();
-				
 		printf("dis=%.3f,f_followCamera时间戳:%d\tcam.y=%.3f\n",dis,get_longTime(),cam.y);
+*/
+
+		//设置camera距离角色一定偏移
+
+		struct ECamera* cam = &ex_getInstance()->cam;
+		//Vec3* offset = &cam.followOffset;
+		Vec3 rolePos,camPos;
+		struct HeadInfo* role = (struct HeadInfo*)_horse;
+		
+		//float offset = -0.0f;//偏移
+		ex_getInstance()->cam.rx = PI * 1.7;
+		ex_cam_set_pos(-role->x,-20.0f,-role->z+cam->y);
+
+		vec3Set(&rolePos,role->x,role->y,role->z);
+		vec3Set(&camPos,cam->x,cam->y,cam->z);
+		vec3Sub(&rolePos,&camPos,&cam->followOffset);
+		//vec3Normalize(&cam->followOffset);
+		_followTicket = get_longTime();
 	}
 }
 
@@ -300,8 +316,8 @@ REG_test_unit_01_init(lua_State *L){
 	evt_on(ex_getInstance(),EVENT_ENGINE_KEYBOARD,f_key);
 	ex_cam_bind(f_getHorse());
 
-	ex_cam_set_pos(0,-20,0);
-	ex_getInstance()->cam.rx = PI * 1.5;
+	//ex_cam_set_pos(0,-20,0);
+	
 
 	
 	//_initStat = 1;
