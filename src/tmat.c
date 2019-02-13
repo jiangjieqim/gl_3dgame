@@ -118,6 +118,9 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M)
 	//线宽度(line.vs)
 	int _LineWidth = glGetUniformLocation(program3D,"_LineWidth");
 
+	//uv缩放值
+	int _uvScale =glGetUniformLocation(program3D,"_uvScale");
+
 	//更新位图
 	f_updateTexture(program3D,_material);
 
@@ -172,6 +175,14 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M)
 		printf("didn`t exist _LineWidth");
 #endif
 */
+	}
+
+	if(_uvScale!=-1){
+		if(_material->uvScale != 0){
+			glUniform1f(_uvScale,_material->uvScale);
+		}else{
+			glUniform1f(_uvScale,1.0f);
+		}
 	}
 
 	if(mat1!=-1){//模型变换矩阵

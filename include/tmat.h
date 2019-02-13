@@ -37,7 +37,7 @@ struct GMaterial{
 	
 	struct Vec4 _lineColor;
 	float lineWidth;
-
+	float uvScale;//uvËõ·ÅÖµ
 	struct Vec4 _outlineColor;
 
 	//int diffuseOutLine;

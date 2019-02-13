@@ -102,15 +102,15 @@ strConvertFloatArray(const char *_sourceString,float* array,int startIndex,const
 }
 */
 
-
-
+//static int g_normal = 1;
 /*
 	½âÎö¶¥µã
 	str="1/2/3"
 */
 static void 
-ParseVertex(struct ObjParseVOType* obj,const char* str,struct Vertex* pVertex)
-{
+ParseVertex(struct ObjParseVOType* obj,const char* str,struct Vertex* pVertex){
+	//float uv_scale = 100.0f;
+
 	int outIndex=0,gap=0,tIndex=0;
 	int i0,i1,i2;
 	sscanf_s(str,"%d/%d/%d",&i0,&i1,&i2);
@@ -123,14 +123,14 @@ ParseVertex(struct ObjParseVOType* obj,const char* str,struct Vertex* pVertex)
 
 	tIndex = i1 - 1;
 	gap = UV_GAP;
-	pVertex->u  = obj->uvArray[tIndex*gap];
-	pVertex->v  = obj->uvArray[tIndex*gap+1];
+	pVertex->u  = obj->uvArray[tIndex*gap];		//* uv_scale;
+	pVertex->v  = obj->uvArray[tIndex*gap+1];	//* uv_scale;
 
 	tIndex = i2 - 1;
 	gap = NORMAL_GAP;
-	pVertex->normalX = obj->normalArray[tIndex*gap];
-	pVertex->normalY = obj->normalArray[tIndex*gap+1];
-	pVertex->normalZ = obj->normalArray[tIndex*gap+2];
+	pVertex->normalX = obj->normalArray[tIndex*gap];//* g_normal;
+	pVertex->normalY = obj->normalArray[tIndex*gap+1];//* g_normal;
+	pVertex->normalZ = obj->normalArray[tIndex*gap+2];//* g_normal;
 }
 
 /*
