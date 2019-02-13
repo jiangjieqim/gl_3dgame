@@ -184,7 +184,10 @@ void vec3Mult(struct Vec3* a,float value);
 *向量点乘
 */
 float vecDot(struct Vec3* a,struct Vec3* b);
-
+/*
+*向量取反
+*/
+void vec3Reverse(Vec3* v);
 /*
 *	求两向量的距离
 */
