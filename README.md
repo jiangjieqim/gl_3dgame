@@ -16,4 +16,4 @@
 引擎对象:
 <exobject name='model1' modelurl='md2/monster.md2' mat='mat1'/>
 ```  
-
+9.16:46 2019/2/14 实现一个tween渐变接口
