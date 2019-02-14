@@ -1,4 +1,4 @@
-**说明**  
+﻿**说明**  
 基于Opengl的3d引擎,C做的底层接口,Lua封装的组件  
 1.优化精简tools.h接口  
 2.2019.1.24 vbo模式的渲染的无法拾取,勿忘修复之.  
@@ -17,3 +17,15 @@
 <exobject name='model1' modelurl='md2/monster.md2' mat='mat1'/>
 ```  
 9.16:46 2019/2/14 需要实现一个tween渐变接口,上层业务应该用lua隔离出来
+
+
+10.1:26 2019/2/15存疑的记录代码片段  
+```
+int ex_zBuffer()
+{
+	struct EX* p = ex_getInstance();
+	//return p->zBuffer++;//这里存疑,UI正交zbuffer叠加的影响
+	return -1;
+}
+
+```

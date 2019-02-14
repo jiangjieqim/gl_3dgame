@@ -158,8 +158,15 @@ floor_rayPick(int evtId,void* data){
 		tmp=ramp_vec_trace(&ptrHorse->x,&ptrHorse->y,&ptrHorse->z,hit->x,hit->y,hit->z,time,ex_fps());
 		*/
 
-		startPos.x = ptrHorse->x;startPos.y = ptrHorse->y;startPos.z = ptrHorse->z;
-		endPos.x = hit->x;endPos.y = ptrHorse->y;endPos.z = hit->z;
+		startPos.x = ptrHorse->x;
+		startPos.y = ptrHorse->y;
+		startPos.z = ptrHorse->z;
+
+		endPos.x = hit->x;
+		endPos.y = ptrHorse->y;
+		endPos.z = hit->z;
+
+		//printf("y = %.3f\n",endPos.y);
 		f_get_posList(startPos,endPos);
 
 	}
@@ -230,7 +237,7 @@ f_followCamera(){
 */
 
 		//设置camera距离角色一定偏移
-
+		
 		struct ECamera* cam = &ex_getInstance()->cam;
 		//Vec3* offset = &cam.followOffset;
 		Vec3 rolePos,camPos;
@@ -264,8 +271,13 @@ f_move(){
 			if(distance>=1.0){
 				animStat = 0;
 				//printf("distance:%.3f\n",distance);
-				ptrHorse->x+=direction.x;ptrHorse->y+=direction.y;ptrHorse->z+=direction.z;
-				pos.x = ptrHorse->x;pos.y = ptrHorse->y;pos.z = ptrHorse->z;
+				ptrHorse->x+=direction.x;
+				ptrHorse->y+=direction.y;
+				ptrHorse->z+=direction.z;
+
+				pos.x = ptrHorse->x;
+				pos.y = ptrHorse->y;
+				pos.z = ptrHorse->z;
 				base_set_position(ptrHorse,&pos);
 			}else{
 				if(!animStat){

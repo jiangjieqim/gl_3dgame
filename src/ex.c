@@ -797,27 +797,6 @@ _new(){
 		return;
 	}
 
-	//if(tmodel==NULL)
-	//{
-	//	Matrix44f m_scale,xyz;
-	//	
-	//	float s = 100;
-
-	//	tmodel = load_vbo();
-	//	//tmat_createMaterial("sprite",tgaURL,0);
-	//	//ex_getInstance()->myAtals->material
-	//	mat4x4_zero(myMatirx);
-	//	mat4x4_identity(m_scale);
-	//	mat4x4_scale(m_scale,s,s,s);
-
-	//	mat4x4_identity(xyz);
-	//	mat4x4_translate(xyz,0,0,0);
-
-	//	multi2(myMatirx,xyz,m_scale);//位移矩阵
-
-	//	tmaterial = tmat_createMaterial("spritevbo","//resource//texture//1.tga",0);//vboDiffuse
-	//}
-
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//填充背景为白色
@@ -855,13 +834,6 @@ _new(){
 		glGetFloatv(GL_PROJECTION_MATRIX,p->ui_perspectiveMatrix);
 		mat4x4_transpose(p->ui_perspectiveMatrix);
 
-
-		//if(tmaterial)
-		//{
-		//	struct GMaterial* material = tmaterial;//(struct GMaterial*)(p->myAtals)->material;
-		//	struct ObjVBO* vbo=(struct ObjVBO*)LStatk_getAddressByIndex(tmodel->ptrList,0);
-		//	objVBO_renderNode(vbo,material,myMatirx,GL_FILL);
-		//}
 		
 		f_renderlistCall(sprite_drawRender);
 		f_renderlistCall(tf_render);
@@ -921,7 +893,8 @@ ex_update_uiPos()
 int ex_zBuffer()
 {
 	struct EX* p = ex_getInstance();
-	return p->zBuffer++;
+	//return p->zBuffer++;//这里存疑,UI正交zbuffer叠加的影响
+	return -1;
 }
 
 static void
@@ -945,8 +918,10 @@ initPerspective(Matrix44f mat,float r,float t,float b,float n,float f,float l)
 	mat[15] = 1;
 }
 
-void ex_init(struct EX* p,GLdouble zfar)
-{	
+void 
+ex_init(struct EX* p,GLdouble zfar){	
+	//p->allzBuffer在-90000初始化的时候会被模型挡在后面
+	//计算出所有的透视模型最小深度
 	p->allzBuffer = -90000;//初始化一个Z深度
 	p->zBuffer = p->allzBuffer+1;
 

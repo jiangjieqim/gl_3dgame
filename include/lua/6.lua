@@ -1,22 +1,56 @@
 dofile("..\\include\\lua\\core.lua");
 func_print('四元数旋转测试',0xff0000)
 
+local _floorObj--地板对象
 
-
-local animsc = scrollBar_new(0,20)
+local animsc,animscTf,uvScaleTf;
+--[[
+= scrollBar_new(0,20)
 scrollBar_setRange(animsc,0,1)
 local tf = scrollBar_add_text(animsc,'')
+--]]
 
+local function f_animscHandle(sc)
+	test_unit_01(sc.value)
+	--print(sc.value)
+	tf_setText(animscTf,sc.value)
+end
 
+--切换状态
+local function f_onFloorHandle(b)
+	--btn_label(b,"ployline:"..tostring(func_changeFlags( f_getModel(),FLAGS_DRAW_PLOYGON_LINE)))
+	local _stat = func_changeFlags(_floorObj,FLAGS_DRAW_PLOYGON_LINE);
+	btn_label(b,string.format("floor %d",(_stat and 1 or 0)));
+end
 
+local function f_uvScHandle(sc)
+	func_set_glsl_parms(_floorObj,'uvScale',sc.value)
+	tf_setText(uvScaleTf,string.format("uv %.1f",sc.value))
+end
 
-scrollBar_bind(animsc,
-	function(sc)
-		test_unit_01(sc.value)
-		--print(sc.value)
-		tf_setText(tf,sc.value)
-	end
-)
+--初始化界面
+local function f_init_ui()
+	--layout ui
+	
+	animsc = scrollBar_new(0,20)
+	scrollBar_setRange(animsc,0,1)
+	animscTf = scrollBar_add_text(animsc,'')
+	scrollBar_bind(animsc,f_animscHandle)
+	------------------------------
+	
+	local btn = btn_create(0,40)
+	btn_label(btn,"floor")
+	btn_bindClick(btn,f_onFloorHandle)--切换显示是否要线框渲染
+	
+	------------------------------	
+	local uvScaleSc = scrollBar_new(0,60)
+	scrollBar_setRange(uvScaleSc,1,20)
+	scrollBar_bind(uvScaleSc,f_uvScHandle)
+	uvScaleTf = scrollBar_add_text(uvScaleSc,'')
+	
+end
+
+f_init_ui();
 
 
 local _scale = 1
@@ -37,17 +71,20 @@ setv(box,FLAGS_DRAW_RAY_COLLISION)
 setv(box,FLAGS_DRAW_PLOYGON_LINE)
 
 ------------------------------------------------------------------
---创建一个可点击的地板
-local _floor = func_loadobj('box',nil,'_floor',false);
-local _floorRadius = 30--地板半径
-func_set_scale(_floor,_floorRadius*2);
-func_set_y(_floor,-_floorRadius);
-setv(_floor,FLAGS_RAY)
-setv(_floor,FLAGS_DRAW_RAY_COLLISION)
---setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
-setv(_floor,FLAGS_DISABLE_CULL_FACE)
-func_set_glsl_parms(_floor,'uvScale',10)--设置diffuse.vs (uniform float _uvScale)uv重复值
-
+local function f_create_floor()
+	--创建一个可点击的地板
+	local _floor = func_loadobj('plane','box.tga','_floor',false);
+	--local _floorRadius = 30--地板半径
+	--func_set_scale(_floor,_floorRadius*2);
+	--func_set_y(_floor,-_floorRadius);
+	func_set_scale(_floor,30);
+	setv(_floor,FLAGS_RAY)
+	setv(_floor,FLAGS_DRAW_RAY_COLLISION)
+	--setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
+	setv(_floor,FLAGS_DISABLE_CULL_FACE)
+	func_set_glsl_parms(_floor,'uvScale',10)--设置diffuse.vs (uniform float _uvScale)uv重复值
+	return _floor
+end
 ------------------------------------------------------------------
 
 --加载一个角色模型
@@ -59,6 +96,8 @@ local function f_init()
 	func_set_scale(horse,0.1)
 	--func_set_x(horse,-5)
 	--func_set_z(horse,-5)
+	--setv(horse,FLAGS_DRAW_RAY_COLLISION)
+	
 	
 	change_attr(horse,"animtor_push","stand","0,39");
 
@@ -75,12 +114,19 @@ local function f_init()
 	return horse;
 end
 
-local horse=f_init()
+
+_floorObj = f_create_floor();
+local horseModel=f_init()
 
 local _target = func_loadobj('box',nil,'_target',false);
 setv(_target,FLAGS_DRAW_PLOYGON_LINE)
 
 --func_set_camera_pos(0,-5,-20)
+
+
+
+
+
 
 --drawCall回调
 function func_drawCall(v)
@@ -88,5 +134,9 @@ function func_drawCall(v)
 	
 	
 end
+
+
+
+--f_init_ui();
 
 test_unit_01_init();
