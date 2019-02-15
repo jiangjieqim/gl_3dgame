@@ -479,6 +479,8 @@ function func_loadobj(objName,tex,nName,vbo)
 	--print("func_loadobj===============>",_texturePath,string.format("加载得模型(%s),模型名(%s)是否是VBO模式:%s",_path,nName,tostring(vbo)));
 
 	local m=createMaterial(_shader,_texturePath);
+	--local m = core_load("//resource//mat1.mat");
+	
 	setMaterial(o,m);
 	return o;
 	--]]

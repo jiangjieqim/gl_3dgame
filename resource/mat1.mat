@@ -1,1 +1,1 @@
-<mat id="0" name="mat1" shader="diffuse" shaderParm="uvScale:2,_LineWidth:2" tex="1.tga,2.tga"/>
+<mat id="0" name="mat1" shader="diffuse" shaderParm="uvScale:2,_LineWidth:2" tex0="\resource\texture\1.tga"/>

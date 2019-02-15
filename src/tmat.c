@@ -426,29 +426,28 @@ f_initMaterial(struct GMaterial* tmat){
 }
 
 void* 
-tmat_create(const char* glslType,int texCnt,...){//char* tex0,char* tex1
+tmat_create(const char* glslType,int texCnt,...){
 	
 	struct GMaterial* tmat = (struct GMaterial*)tl_malloc(sizeof(struct GMaterial));
 	memset(tmat,0,sizeof(struct GMaterial));
-
-	//if(tex0!=NULL && strlen(tex0)){
-	//	f_tmat_pushTex(tmat,tex0);
-	//}
-	//if(tex1!=NULL && strlen(tex1)){
-	//	f_tmat_pushTex(tmat,tex1);
-	//}
-	{
+	
+	if(texCnt > MATERIAL_TEXTURE_COUNT){
+		log_code(ERROR_BAD_VALUE);//超出预留的贴图数量
+		assert(0);
+	}
+	else{
 		int i;
 		va_list ap;
 		va_start(ap, texCnt);
 		for(i = 0; i < texCnt; i++){
 			int p = va_arg(ap, int);			
-			if(p) {
+			if(p && strlen((char*)p) > 0) {
 				f_tmat_pushTex(tmat,(char*)p);
 			}
 		}
 		va_end(ap);
 	}
+
 	AssignShader(tmat,glslType);
 
 	//开始构造贴图
