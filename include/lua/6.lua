@@ -1,7 +1,8 @@
 dofile("..\\include\\lua\\core.lua");
-func_print('ËÄÔªÊıĞı×ª²âÊÔ',0xff0000)
+func_print('å››å…ƒæ•°æ—‹è½¬æµ‹è¯•',0xff0000)
 
-local _floorObj--µØ°å¶ÔÏó
+local _floorObj--åœ°æ¿å¯¹è±¡
+local _target;--æ‹¾å–å¯¹è±¡
 local animsc,animscTf,uvScaleTf;
 --[[
 = scrollBar_new(0,20)
@@ -9,10 +10,10 @@ scrollBar_setRange(animsc,0,1)
 local tf = scrollBar_add_text(animsc,'')
 --]]
 --------------------------------------------------------------------------
---´´½¨Ğ¡·½¿é
+--åˆ›å»ºå°æ–¹å—
 local function f_create_cube()
 	local _scale = 1
-	--Ğ¡·½¿é
+	--å°æ–¹å—
 	local obj1 = func_loadobj('quad',nil,'myObj1',false)--quad
 	setv(obj1,FLAGS_RAY)		
 	setv(obj1,FLAGS_DRAW_RAY_COLLISION)
@@ -26,7 +27,7 @@ local function f_animscHandle(sc)
 	tf_setText(animscTf,sc.value)
 end
 
---ÇĞ»»×´Ì¬
+--åˆ‡æ¢çŠ¶æ€
 local function f_onFloorHandle(b)
 	--btn_label(b,"ployline:"..tostring(func_changeFlags( f_getModel(),FLAGS_DRAW_PLOYGON_LINE)))
 	local _stat = func_changeFlags(_floorObj,FLAGS_DRAW_PLOYGON_LINE);
@@ -38,7 +39,7 @@ local function f_uvScHandle(sc)
 	tf_setText(uvScaleTf,string.format("uv %.1f",sc.value))
 end
 
---³õÊ¼»¯½çÃæ
+--åˆå§‹åŒ–ç•Œé¢
 local function f_init_ui()
 	--layout ui
 	
@@ -50,7 +51,7 @@ local function f_init_ui()
 	
 	local btn = btn_create(0,40)
 	btn_label(btn,"floor")
-	btn_bindClick(btn,f_onFloorHandle)--ÇĞ»»ÏÔÊ¾ÊÇ·ñÒªÏß¿òäÖÈ¾
+	btn_bindClick(btn,f_onFloorHandle)--åˆ‡æ¢æ˜¾ç¤ºæ˜¯å¦è¦çº¿æ¡†æ¸²æŸ“
 	
 	------------------------------	
 	local uvScaleSc = scrollBar_new(0,60)
@@ -66,18 +67,19 @@ f_init_ui();
 
 --local md5file = func_loadmd5('wolf',0.02,"\\resource\\texture\\wolf.tga")
 
---¼ÓÔØÒ»¸öobjÄ£ĞÍ
---VBOÃ»ÓĞäÖÈ¾³ö²ÄÖÊ
-local box = func_loadobj('arrow',nil,'myBox',false)--'box' 'torus' 'teapot' 'arrow'
---setv(box,FLAGS_RAY)					--ÉèÖÃÎª¿ÉÊ°È¡×´Ì¬
-setv(box,FLAGS_DRAW_RAY_COLLISION)
-setv(box,FLAGS_DRAW_PLOYGON_LINE)
-
+local function f_create_box()
+	--åŠ è½½ä¸€ä¸ªobjæ¨¡å‹
+	--VBOæ²¡æœ‰æ¸²æŸ“å‡ºæè´¨
+	local box = func_loadobj('arrow',nil,'myBox',false)--'box' 'torus' 'teapot' 'arrow'
+	--setv(box,FLAGS_RAY)					--è®¾ç½®ä¸ºå¯æ‹¾å–çŠ¶æ€
+	setv(box,FLAGS_DRAW_RAY_COLLISION)
+	setv(box,FLAGS_DRAW_PLOYGON_LINE)
+end
 ------------------------------------------------------------------
 local function f_create_floor()
-	--´´½¨Ò»¸ö¿Éµã»÷µÄµØ°å
+	--åˆ›å»ºä¸€ä¸ªå¯ç‚¹å‡»çš„åœ°æ¿
 	local _floor = func_loadobj('plane','box.tga','_floor',false);
-	--local _floorRadius = 30--µØ°å°ë¾¶
+	--local _floorRadius = 30--åœ°æ¿åŠå¾„
 	--func_set_scale(_floor,_floorRadius*2);
 	--func_set_y(_floor,-_floorRadius);
 	func_set_scale(_floor,30);
@@ -85,22 +87,21 @@ local function f_create_floor()
 	setv(_floor,FLAGS_DRAW_RAY_COLLISION)
 	setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
 	setv(_floor,FLAGS_DISABLE_CULL_FACE)
-	func_set_glsl_parms(_floor,'uvScale',10)--ÉèÖÃdiffuse.vs (uniform float _uvScale)uvÖØ¸´Öµ
+	func_set_glsl_parms(_floor,'uvScale',10)--è®¾ç½®diffuse.vs (uniform float _uvScale)uvé‡å¤å€¼
 	return _floor
 end
 ------------------------------------------------------------------
 
---¼ÓÔØÒ»¸ö½ÇÉ«Ä£ĞÍ
-local function f_init()
+--åŠ è½½ä¸€ä¸ªè§’è‰²æ¨¡å‹
+local function f_init_character()
 	local url = 'triangle';--bauul
-	url = 'bauul'
+	--url = 'bauul'--è§’è‰²æ¨¡å‹ä¼šåŠ è½½çš„æ¯”è¾ƒæ…¢,å¯ä»¥ç”¨ä¸€ä¸ªä¸‰è§’å½¢æ›¿ä»£
 	
 	local horse=func_loadmd2(url,'bauul.tga','vbo')--'horse'
 	func_rename(horse,'_horse');
 	
-	func_setRotateX(horse,PI/2)--Ğı×ªÒ»¸öÖáÏò
-	
-	
+	func_setRotateX(horse,PI/2)--æ—‹è½¬ä¸€ä¸ªè½´å‘
+		
 	func_set_scale(horse,url == 'bauul' and 0.1 or 1)
 	
 	--func_set_x(horse,-5)
@@ -115,35 +116,26 @@ local function f_init()
 	
 	func_set_ptr_fps(horse,7)
 	
-	change_attr(horse,"animtor_play");--²¥·Å
+	change_attr(horse,"animtor_play");--æ’­æ”¾
 	
 	return horse;
 end
-
+f_create_box();
 f_create_cube();
 
 _floorObj = f_create_floor();
-local horseModel=f_init()
+f_init_character()
 
-local _target = func_loadobj('box',nil,'_target',false);
+
+_target = func_loadobj('box',nil,'_target',false);
 setv(_target,FLAGS_DRAW_PLOYGON_LINE)
 
 --func_set_camera_pos(0,-5,-20)
-
-
-
-
-
-
---drawCall»Øµ÷
+local _f = 0;
+--drawCallå›è°ƒ
 function func_drawCall(v)
-	
-	
-	
+	_f = _f + func_fps()*0.00001;
+	func_setRotateZ(_target,_f);
 end
-
-
-
 --f_init_ui();
-
 test_unit_01_init();

@@ -352,11 +352,27 @@ void ex_info(){
 	//printf("当前(射线检测)状态:%d\n",getv(&(ex->flags),EX_FLAGS_RAY));
 }
 static char buffer[G_BUFFER_256_SIZE];
+
+/*
+ *显示fps
+ */
+static void
+f_drawFps(){
+	char _str[G_BUFFER_64_SIZE];
+	sprintf_s(_str, G_BUFFER_64_SIZE,"%d",ex_fps());
+	ex_showLog(_str);
+}
+
 /*
 绘制文本
 */
 static void 
 drawText(){
+	
+	f_drawFps();
+	return;
+
+	{	
 	struct EX* p = ex_getInstance();
 	struct ECamera cam = p->cam;
 	int vbo = tlgl_getVboSize();
@@ -378,6 +394,7 @@ drawText(){
 	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb) cam: %f,%f,%f VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0,cam.x,cam.y,cam.z,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,gettime_cur());
 	
 	ex_showLog(buffer);
+	}
 }
 
 static void 
@@ -1604,18 +1621,15 @@ void ex_switch_baseFlags(struct HeadInfo* _node,int flag){
  *初始化日志tf句柄
  */
 static void
-getLog()
-{
+getLog(){
 	struct EX* e = ex_getInstance();
-	if(!e->logTf)
-	{
-		e->logTf = tf_create(G_BUFFER_1024_SIZE,140,0,0,1.0,0);
+	if(!e->logTf){
+		e->logTf = tf_create(G_BUFFER_1024_SIZE,0,0,0,1.0,0);
 	}
 }
 
 void 
-ex_showLog(const char* buffer)
-{
+ex_showLog(const char* buffer){
 	struct EX* e = ex_getInstance();
 	getLog();
 	tf_setText(e->logTf,buffer);
