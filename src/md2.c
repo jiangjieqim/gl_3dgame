@@ -578,7 +578,7 @@ void* md2parse_load(const char* str,int len){
 	struct MD2_ParseObj* _md2;
 #ifdef  _DEBUG_MODE_
 	int __time = get_longTime();
-	printf("############################### md2文件开始解析(%d字节)\n",len);
+	log_color(0x00ff00,"############################### md2文件开始解析(%d字节)\n",len);
 #endif
 
 	_md2 = (struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
@@ -656,7 +656,7 @@ void* md2parse_load(const char* str,int len){
 	tl_free(_md2->b);
 
 #ifdef  _DEBUG_MODE_
-	printf("############################### md2文件解析结束,耗时 %ld 毫秒\n\n",(get_longTime()-__time));
+	log_color(0x00ff00,"############################### md2文件解析结束,耗时 %ld 毫秒\n\n",(get_longTime()-__time));
 #endif
 	
 	return _md2;

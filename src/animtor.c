@@ -11,7 +11,13 @@
 struct AnimatorFrame
 {
 	char* name;
+	/*
+	 *开始索引
+	 */
 	int s;
+	/*
+	 *结束索引
+	 */
 	int e;
 };
 
@@ -76,6 +82,9 @@ find(int data,int parms)
 	if(!strcmp(p->name,pfind->name))
 	{
 		pfind->r = 1;
+
+		//pfind->s = 0; pfind->e = 1; return;
+
 		pfind->s = p->s;
 		pfind->e = p->e;
 	}
@@ -85,8 +94,7 @@ find(int data,int parms)
 	return 0未找到 1获取成功
 */
 static int 
-f_animtor_get(struct Animtor* p,char* const animKey,int* const start,int* const end)
-{
+f_animtor_get(struct Animtor* p,char* const animKey,int* const start,int* const end){
 	struct FindResult pFind;
 	memset(&pFind,0,sizeof(struct FindResult));
 	pFind.name = animKey;
