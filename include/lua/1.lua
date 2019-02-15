@@ -24,11 +24,13 @@ f_load(line)
 	
 	--	"stand,0,39@run,40,45@attack,46,53@pain,54,65@jump,66,71@filp,72,83@salute,84,94@taunt,95,111@dead,178,197@"
 	--切割一个动作
-	change_attr(md2,"animtor_push","stand","0,39");
-	change_attr(md2,"animtor_push","run","40,45");
-	change_attr(md2,"animtor_push","attack","45,53");
-	change_attr(md2,"animtor_push","jump","66,71");
-	change_attr(md2,"animtor_push","crwalk","153,159");
+	
+	func_anim_push(md2,"stand",0,39);
+	func_anim_push(md2,"run",40,45);
+	func_anim_push(md2,"attack",45,53);
+	func_anim_push(md2,"jump",66,71);
+	func_anim_push(md2,"crwalk",153,159);
+
 	
 	--设置初始动作
 	change_attr(md2,"animtor_setcur","jump");

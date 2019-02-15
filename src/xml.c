@@ -225,14 +225,13 @@ struct XmlNode* xml_getrow(struct XMLSList* xml,const char* tParms,const char* t
 /*
 	将获取的数据设置到xml->out中
 */
-static void fillData(const struct XmlNode* node,const char* key)
-{
+static void 
+fillData(const struct XmlNode* node,const char* key){
 	const struct XMLSList* xml = node->parentXml;
 	xml_getstr(node,key,xml->buffer,NUM_STR_LENGTH);
 }
 
-int xml_getint(const struct XmlNode* node,const char* key)
-{
+int xml_getint(const struct XmlNode* node,const char* key){
 	int res;
 	fillData(node,key);
 	sscanf_s(node->parentXml->buffer,"%d",&res);

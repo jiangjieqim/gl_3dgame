@@ -610,6 +610,10 @@ function func_is_vbo(obj,tips)
 	return false
 end
 
+--∑÷∏Ó≈‰÷√∂Øª≠
+function func_anim_push(obj,animname,s,e)
+	change_attr(obj,"animtor_push",animname,string.format('%s,%s',s,e));
+end
 function func_drawCall(v)
 	
 end

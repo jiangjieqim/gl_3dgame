@@ -2,14 +2,24 @@ dofile("..\\include\\lua\\core.lua");
 func_print('四元数旋转测试',0xff0000)
 
 local _floorObj--地板对象
-
 local animsc,animscTf,uvScaleTf;
 --[[
 = scrollBar_new(0,20)
 scrollBar_setRange(animsc,0,1)
 local tf = scrollBar_add_text(animsc,'')
 --]]
-
+--------------------------------------------------------------------------
+--创建小方块
+local function f_create_cube()
+	local _scale = 1
+	--小方块
+	local obj1 = func_loadobj('quad',nil,'myObj1',false)--quad
+	setv(obj1,FLAGS_RAY)		
+	setv(obj1,FLAGS_DRAW_RAY_COLLISION)
+	setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
+	func_set_scale(obj1,_scale)
+	return obj1
+end
 local function f_animscHandle(sc)
 	test_unit_01(sc.value)
 	--print(sc.value)
@@ -53,13 +63,6 @@ end
 f_init_ui();
 
 
-local _scale = 1
---小方块
-local obj1 = func_loadobj('quad',nil,'myObj1',false)--quad
-setv(obj1,FLAGS_RAY)		
-setv(obj1,FLAGS_DRAW_RAY_COLLISION)
-setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
-func_set_scale(obj1,_scale)
 
 --local md5file = func_loadmd5('wolf',0.02,"\\resource\\texture\\wolf.tga")
 
@@ -80,7 +83,7 @@ local function f_create_floor()
 	func_set_scale(_floor,30);
 	setv(_floor,FLAGS_RAY)
 	setv(_floor,FLAGS_DRAW_RAY_COLLISION)
-	--setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
+	setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
 	setv(_floor,FLAGS_DISABLE_CULL_FACE)
 	func_set_glsl_parms(_floor,'uvScale',10)--设置diffuse.vs (uniform float _uvScale)uv重复值
 	return _floor
@@ -90,7 +93,7 @@ end
 --加载一个角色模型
 local function f_init()
 	local url = 'triangle';--bauul
-	--url = 'bauul'
+	url = 'bauul'
 	
 	local horse=func_loadmd2(url,'bauul.tga','vbo')--'horse'
 	func_rename(horse,'_horse');
@@ -103,11 +106,11 @@ local function f_init()
 	--func_set_x(horse,-5)
 	--func_set_z(horse,-5)
 	--setv(horse,FLAGS_DRAW_RAY_COLLISION)
-	
-	change_attr(horse,"animtor_push","stand","0,39");
-	change_attr(horse,"animtor_push","run","40,45");	
-	change_attr(horse,"animtor_push","jump","66,71");
 
+	func_anim_push(horse,"stand",0,39);
+	func_anim_push(horse,"run",40,45);
+	func_anim_push(horse,"jump",66,71);
+	
 	func_set_anim(horse,"stand")
 	
 	func_set_ptr_fps(horse,7)
@@ -117,6 +120,7 @@ local function f_init()
 	return horse;
 end
 
+f_create_cube();
 
 _floorObj = f_create_floor();
 local horseModel=f_init()
