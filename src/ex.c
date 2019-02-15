@@ -1624,7 +1624,7 @@ static void
 getLog(){
 	struct EX* e = ex_getInstance();
 	if(!e->logTf){
-		e->logTf = tf_create(G_BUFFER_1024_SIZE,0,0,0,1.0,0);
+		e->logTf = tf_create(G_BUFFER_1024_SIZE,0,0,1.0,0.0,0);
 	}
 }
 

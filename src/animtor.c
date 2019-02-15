@@ -8,8 +8,7 @@
 /*
 	动作片段
 */
-struct AnimatorFrame
-{
+struct AnimatorFrame{
 	char* name;
 	/*
 	 *开始索引

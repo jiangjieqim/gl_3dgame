@@ -38,7 +38,9 @@ local function f_uvScHandle(sc)
 	func_set_glsl_parms(_floorObj,'uvScale',sc.value)
 	tf_setText(uvScaleTf,string.format("uv %.1f",sc.value))
 end
-
+local function f_switchCamBtnHandle(b)
+	print("swotch cam")
+end
 --初始化界面
 local function f_init_ui()
 	--layout ui
@@ -58,6 +60,10 @@ local function f_init_ui()
 	scrollBar_setRange(uvScaleSc,1,20)
 	scrollBar_bind(uvScaleSc,f_uvScHandle)
 	uvScaleTf = scrollBar_add_text(uvScaleSc,'')
+	
+	local switchCamBtn=btn_create(0,80)
+	btn_label(switchCamBtn,"switchCam")
+	btn_bindClick(switchCamBtn,f_switchCamBtnHandle)
 	
 end
 
