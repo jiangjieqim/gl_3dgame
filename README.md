@@ -29,3 +29,7 @@ int ex_zBuffer()
 }
 
 ```
+
+(11)23:47 2019/2/15 
+  config.xml 为ANSI格式  
+  debug模式下esc退出空指针异常的bug  

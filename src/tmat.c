@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "tools.h"
 #include "tl_malloc.h"
@@ -245,7 +246,8 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M)
 /*
 	往材质中压入一个贴图路径,curTexIndex会自+1(curTexIndex从0开始)
 */
-static void f_tmat_pushTex(struct GMaterial* p,const char* path){
+static void 
+f_tmat_pushTex(struct GMaterial* p,const char* path){
 	if(path!=0){
 		int len = strlen(path);
 		char* _s;
@@ -422,24 +424,37 @@ f_initMaterial(struct GMaterial* tmat){
 	//设置flat颜色
 	tmat_setFlatColor(tmat,0.43,0.51,0.96);
 }
-void* tmat_createMaterial(const char* glslType,char* tex0,char* tex1){
+
+void* 
+tmat_create(const char* glslType,int texCnt,...){//char* tex0,char* tex1
 	
 	struct GMaterial* tmat = (struct GMaterial*)tl_malloc(sizeof(struct GMaterial));
 	memset(tmat,0,sizeof(struct GMaterial));
 
-	if(tex0!=NULL && strlen(tex0)){
-		f_tmat_pushTex(tmat,tex0);
+	//if(tex0!=NULL && strlen(tex0)){
+	//	f_tmat_pushTex(tmat,tex0);
+	//}
+	//if(tex1!=NULL && strlen(tex1)){
+	//	f_tmat_pushTex(tmat,tex1);
+	//}
+	{
+		int i;
+		va_list ap;
+		va_start(ap, texCnt);
+		for(i = 0; i < texCnt; i++){
+			int p = va_arg(ap, int);			
+			if(p) {
+				f_tmat_pushTex(tmat,(char*)p);
+			}
+		}
+		va_end(ap);
 	}
-	if(tex1!=NULL && strlen(tex1)){
-		f_tmat_pushTex(tmat,tex1);
-	}
-	
 	AssignShader(tmat,glslType);
 
 	//开始构造贴图
 	f_createMaterialTexture(tmat);
 
-	//清理纹理路径列表路径
+	//清理纹理路径列表需要的堆内存数据
 	f_clearTexArray(tmat);
 
 	f_initMaterial(tmat);

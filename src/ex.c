@@ -19,6 +19,7 @@
 #include "tl_malloc.h"
 #include "text.h"
 #include "evt.h"
+#include "xml.h"
 struct MD2_Object
 {
 	/*
@@ -61,7 +62,7 @@ struct EX* ex_getInstance(){
 void*
 ex_get_defaultMaterial(){
 	if(!ex_getInstance()->defaultMaterial){
-		ex_getInstance()->defaultMaterial =	tmat_createMaterial("spritevbo",0,0);
+		ex_getInstance()->defaultMaterial =	tmat_create("spritevbo",0);//没有传递贴图
 	}
 
 	return ex_getInstance()->defaultMaterial;
@@ -1768,4 +1769,33 @@ void ex_ptrRemove(void* ptr){
 			md5Model_dispose((struct MD5*)ptr);
 			break;
 	}
+}
+
+void* 
+ex_load(char* url){
+	char* _data =  tl_loadfile(url,0);
+	//HANDLE hOut =  GetHandle();
+
+	void* xml = xml_parse(_data);
+	char suffix[G_BUFFER_16_SIZE];
+	//void* _node =	xml_getrow(xml,"id","0");
+	void* _node=xml_getNodeByIndex(xml,0);
+	tl_getSuffixByPath((char*)url,suffix,G_BUFFER_16_SIZE);
+	
+	/*****************		材质配置文件     ***************************/
+	if(!strcmp(suffix,"mat")){
+		//return (void*)load_obj(name,url,x,y,z,scale);
+		char glslName[G_BUFFER_64_SIZE];
+		char tex[G_BUFFER_128_SIZE];
+		char shaderParm[G_BUFFER_256_SIZE];
+
+		xml_getstr(_node,"shader",glslName,G_BUFFER_64_SIZE);
+		xml_getstr(_node,"tex",tex,G_BUFFER_128_SIZE);
+		xml_getstr(_node,"shaderParm",shaderParm,G_BUFFER_256_SIZE);
+		log_color(0xff0000,"******************%s\n%s\n%s\n",glslName,tex,shaderParm);
+	}
+
+	xml_del(xml);
+
+	return 0;
 }

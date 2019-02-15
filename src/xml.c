@@ -167,7 +167,8 @@ void xml_del(struct XMLSList* xml){
 
 }
 
-static int findXmlNode(int data,int _inputParam){
+static int 
+findXmlNode(int data,int _inputParam){
 
 	struct FindXmlNode* fNode = (struct FindXmlNode*)_inputParam;
 	struct XmlNode* _node = (struct XmlNode*)data;
@@ -210,8 +211,8 @@ static int findXmlNode(int data,int _inputParam){
 	return 1;
 }
 
-struct XmlNode* xml_getrow(struct XMLSList* xml,const char* tParms,const char* tParmsValue)
-{
+struct XmlNode* 
+xml_getrow(struct XMLSList* xml,const char* tParms,const char* tParmsValue){
 	struct FindXmlNode _mynode;
 	memset(&_mynode,0,sizeof(struct FindXmlNode));
 	_mynode.key = (char*)tParms;
@@ -221,6 +222,14 @@ struct XmlNode* xml_getrow(struct XMLSList* xml,const char* tParms,const char* t
 		printf("未找到关键字:%s,value:%s\n",tParms,tParmsValue);
 	}
 	return _mynode.result;
+}
+
+void* 
+xml_getNodeByIndex(void* _xml,int index){
+	struct XMLSList* xml = (struct XMLSList*)_xml;
+	int _out = 0;
+	LStatk_getNodeByIndex(xml->list,index,&_out);
+	return (void*)_out;
 }
 /*
 	将获取的数据设置到xml->out中

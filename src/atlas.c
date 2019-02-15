@@ -70,7 +70,7 @@ atals_load(const char* path,const char* name){
 	getTextureInfo(ptr->xml,name,&ptr->width,&ptr->height);
 	
 	//创建一个材质
-	ptr->material = tmat_createMaterial("spritevbo",tgaURL,0);
+	ptr->material = tmat_create("spritevbo",1,tgaURL);
 	//ptr->material = tmat_createTex("spritevbo",64,64);
 
 	return ptr;

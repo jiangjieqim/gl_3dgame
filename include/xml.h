@@ -16,8 +16,7 @@
 	pNode		--用来保存XmlNode指针
 
 */
-struct XMLSList
-{
+typedef struct XMLSList{
 	struct LStackNode* list;
 	char* data;
 	char* buffer;
@@ -31,8 +30,7 @@ start		--起始坐标
 end			--结束坐标
 row			--行描述数据
 */
-struct XmlNode
-{
+typedef struct XmlNode{
 	//父结点引用
 	struct XMLSList* parentXml;
 	int parent;
@@ -93,8 +91,13 @@ Function:	xml_getRow
 获取表内的一行
 
 */
-struct XmlNode* xml_getrow(struct XMLSList* xml,const char* parms,const char* parmsValue);
-
+struct XmlNode* 
+xml_getrow(struct XMLSList* xml,const char* parms,const char* parmsValue);
+/*
+ *根据索引获取node引用
+ **/
+void* 
+xml_getNodeByIndex(void* xml,int index);
 /*
 销毁xml句柄
 */

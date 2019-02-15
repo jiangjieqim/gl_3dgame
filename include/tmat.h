@@ -51,8 +51,10 @@ struct GMaterial{
 
 /*
 	创建一个材质,隐藏返回引用
+	texCount:贴图数量
 */
-void*  tmat_createMaterial(const char* glslName,char* tex0,char* tex1);
+void*  
+tmat_create(const char* glslName,int texCount,...);
 
 /*
 	创建一个空贴图的材质
