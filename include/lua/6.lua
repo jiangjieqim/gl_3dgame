@@ -90,23 +90,22 @@ end
 --加载一个角色模型
 local function f_init()
 	local url = 'triangle';--bauul
-	url = 'bauul'
+	--url = 'bauul'
 	
 	local horse=func_loadmd2(url,'bauul.tga','vbo')--'horse'
 	func_rename(horse,'_horse');
 	
 	func_setRotateX(horse,PI/2)--旋转一个轴向
-	func_set_scale(horse,0.1)
+	
+	
+	func_set_scale(horse,url == 'bauul' and 0.1 or 1)
 	
 	--func_set_x(horse,-5)
 	--func_set_z(horse,-5)
 	--setv(horse,FLAGS_DRAW_RAY_COLLISION)
 	
-	
 	change_attr(horse,"animtor_push","stand","0,39");
-
-	change_attr(horse,"animtor_push","run","40,45");
-	
+	change_attr(horse,"animtor_push","run","40,45");	
 	change_attr(horse,"animtor_push","jump","66,71");
 
 	func_set_anim(horse,"stand")

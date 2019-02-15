@@ -96,7 +96,7 @@ Function:	xml_getRow
 struct XmlNode* xml_getrow(struct XMLSList* xml,const char* parms,const char* parmsValue);
 
 /*
-É¾³ýxml
+Ïú»Ùxml¾ä±ú
 */
 void xml_del(struct XMLSList* xml);
 

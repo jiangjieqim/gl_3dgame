@@ -11,7 +11,10 @@ struct Node
 {
 	struct HeadInfo* base;
 	struct Obj_vbo_model* ptrVBO;
-	struct VBOAnim* anim;	
+	/*
+	*	动作管理器
+	*/
+	void* anim;	
 	struct CollideBox* ptrCollide;//碰撞盒引用
 	void (*renderCallBack)(int,struct ObjVBO*);//渲染回调
 };

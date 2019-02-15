@@ -8,6 +8,35 @@
 #include "anim.h"
 #include "animtor.h"
 
+/************************************************************************
+*	动作管理器
+*	无关乎底层是用VBO还是直接模式,只是管理动画配置,fps
+/************************************************************************/
+typedef struct VBOAnim{
+	int allLength;//动作总长度
+	int _tempLength;
+	int curIndex;//当前动作索引
+
+	int* nodeList;//int 数组储存struct ObjVBO*
+
+	/*
+	 * 只有>0的时候才是有动作的
+	 * 每一帧的间隔时间
+	 * fps = 60;
+	 * fpsInterval = 1000 / fps = 16.6666;
+	 */
+	long fpsInterval;
+	
+	/*
+	*	插值
+	*/
+	long interpolation;
+
+	/*
+	*	动作管理器
+	*/
+	struct Animtor* pAnimtor;
+};
 static void
 addListCallBack(int data,int parms)
 {
@@ -19,20 +48,24 @@ addListCallBack(int data,int parms)
 }
 
 struct Animtor* 
-anim_get_animtor(struct VBOAnim* p)
-{
+anim_get_animtor(void* ptr){
+	struct VBOAnim* p = (struct VBOAnim*)ptr;
 	if(!p->pAnimtor)
 		p->pAnimtor=animtor_create();
 	
 	return p->pAnimtor;
 }
-
+int
+anim_total(void* p){
+	struct VBOAnim* ptr=(struct VBOAnim*)(p);
+	return ptr->allLength;
+}
 /*
 	销毁
 */
 void
-anim_dispose(struct VBOAnim* anim)
-{
+anim_dispose(void* p){
+	struct VBOAnim* anim = (struct VBOAnim*)p;
 	if(anim->pAnimtor)
 	{
 		animtor_dispose(anim->pAnimtor);
@@ -45,7 +78,7 @@ anim_dispose(struct VBOAnim* anim)
 /*
 	将VBO转化为动作列表
 */
-struct VBOAnim*
+void*
 anim_create(struct LStackNode* list)
 {
 	int length;
@@ -65,8 +98,8 @@ anim_create(struct LStackNode* list)
 	播放指定索引号的动作
 */
 void
-anim_play(struct VBOAnim* anim,int index,void (*callBack)(int,int),int param)
-{
+anim_play(void* p,int index,void (*callBack)(int,int),int param){
+	struct VBOAnim* anim = (struct VBOAnim*)p;
 	int data=anim->nodeList[index];
 	callBack(data,param);
 }
@@ -112,8 +145,8 @@ calculateFrame(struct VBOAnim* p)
 	struct VBOAnim* p,主要设置p->curIndex索引号
 */
 void
-anim_playByFPS(struct VBOAnim* p,void (*callBack)(int,int),int parm)
-{
+anim_playByFPS(void* ptr,void (*callBack)(int,int),int parm){
+	struct VBOAnim* p = (struct VBOAnim*)ptr;
 	if(p->fpsInterval!=0)
 	{
 		calculateFrame(p);
@@ -122,8 +155,8 @@ anim_playByFPS(struct VBOAnim* p,void (*callBack)(int,int),int parm)
 }
 
 void
-anim_set_fps(struct VBOAnim* p,int fps)
-{
+anim_set_fps(void* ptr,int fps){
+	struct VBOAnim* p = (struct VBOAnim*)ptr;
 	if(fps==0)
 	{
 		//printf("fps = %d ,设置了错误的帧率\n",fps);
