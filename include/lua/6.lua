@@ -90,7 +90,7 @@ end
 --加载一个角色模型
 local function f_init()
 	local url = 'triangle';--bauul
-	
+	url = 'bauul'
 	
 	local horse=func_loadmd2(url,'bauul.tga','vbo')--'horse'
 	func_rename(horse,'_horse');

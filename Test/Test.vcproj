@@ -194,6 +194,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="build_end.bat"
 			/>
 		</Configuration>
 	</Configurations>
