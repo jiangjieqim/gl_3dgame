@@ -146,8 +146,12 @@ end
 --f_init_ui();
 test_unit_01_init();
 
+--xml ½Ó¿Ú²âÊÔ
 local xml = core_xml("load","//resource//monster.xml");
 local node = core_xml("getNodeByIndex",xml,0);
-
+node = core_xml("getrow",xml,"id","arrow");
+local s = core_xml("getstr",node,"mesh",128);
+local n = core_xml("getfloat",node,"ray") + 1
+print("["..s.."]n = "..n);
 
 core_xml("del",xml);

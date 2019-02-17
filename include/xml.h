@@ -112,7 +112,8 @@ bufferSize	--缓冲区大小
 return	--1：获取成功, 2:获取失败
 
 */
-int xml_getstr(const struct XmlNode* node,const char* key,char* buffer,int bufferSize);
+int xml_getstr(const struct XmlNode* node,const char* key,
+			   char* buffer,int bufferSize);
 
 /*
 	获取int
