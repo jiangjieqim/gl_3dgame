@@ -59,6 +59,44 @@ function func_get_default_tex()
 end
 
 --[[
+	根据一个配置加载生成一个数据对象
+
+--]]
+function func_load(url)
+	
+	local suffix = get_suffix(url);
+	--print(s);
+	local result;
+	local xml = xml_load(url);
+	
+	if(suffix == "mat") then
+		local node = xml_get_node_by_index(xml,0);
+		local shader = xml_get_str(node,"shader");
+		
+		local shaderParm = xml_get_str(node,"shaderParm");
+		result = createMaterial(shader,
+			xml_get_str(node,"tex0"),
+			xml_get_str(node,"tex1"),
+			xml_get_str(node,"tex2"),
+			xml_get_str(node,"tex3"),
+			xml_get_str(node,"tex4"),
+			xml_get_str(node,"tex5"),
+			xml_get_str(node,"tex6"),
+			xml_get_str(node,"tex7")
+		);
+		
+	elseif(suffix == "obj") then
+	
+	end
+	
+	xml_del(xml);
+	
+	return result;
+end
+
+
+
+--[[
 	point:tabel引用保存在一个全局tabel中
 --]]
 function func_tableSave(point)
@@ -483,6 +521,7 @@ function func_loadobj(objName,tex,nName,vbo)
 
 	local m=createMaterial(_shader,_texturePath);
 	--local m = core_load("//resource//mat1.mat");
+	--local m = func_load("//resource//mat1.mat");
 	
 	setMaterial(o,m);
 	return o;
@@ -624,12 +663,6 @@ function func_drawCall(v)
 	
 end
 
-function func_load(url)
-	
-	local s = get_suffix(url);
-	print(s);
-	
-end
 
 
 

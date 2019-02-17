@@ -101,7 +101,7 @@ end
 --加载一个角色模型
 local function f_init_character()
 	local url = 'triangle';--bauul
-	url = 'bauul'--角色模型会加载的比较慢,可以用一个三角形替代
+	--url = 'bauul'--角色模型会加载的比较慢,可以用一个三角形替代
 	
 	local horse=func_loadmd2(url,'bauul.tga','vbo')--'horse'
 	func_rename(horse,'_horse');
@@ -168,10 +168,7 @@ local str = xml_get_str(node,"mesh");
 
 local f = xml_get_float(node,"ray")
 
-print(str,f);
+print(string.format("%s,%.3f",str,f));
 xml_del(xml);
 
-
-
 func_load("//resource//monster.xml");
-
