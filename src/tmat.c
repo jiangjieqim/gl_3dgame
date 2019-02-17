@@ -406,7 +406,7 @@ static void f_createMaterialTexture(struct GMaterial *p)
 	赋着色器
 */
 static void 
-AssignShader(struct GMaterial* tmat,const char* glslType)
+f_assignShader(struct GMaterial* tmat,const char* glslType)
 {
 	memset(tmat->glslType,0,G_BUFFER_32_SIZE);
 	memcpy(tmat->glslType,glslType,strlen(glslType));
@@ -448,7 +448,7 @@ tmat_create(const char* glslType,int texCnt,...){
 		va_end(ap);
 	}
 
-	AssignShader(tmat,glslType);
+	f_assignShader(tmat,glslType);
 
 	//开始构造贴图
 	f_createMaterialTexture(tmat);
@@ -475,7 +475,7 @@ tmat_createTex(const char* glslType,GLint width,GLint height){
 		tmat->curTexIndex++;
 		f_tmat_createTexFromGPU(tmat,0,tex);
 	}
-	AssignShader(tmat,glslType);
+	f_assignShader(tmat,glslType);
 	f_initMaterial(tmat);
 	
 	return tmat;

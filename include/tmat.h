@@ -13,7 +13,7 @@
 	材质结构体
 	和着色器相关,配合各种参数,调用GLSL
 */
-struct GMaterial{
+typedef struct GMaterial{
 
 	/*
 	*	默认的着色器类型

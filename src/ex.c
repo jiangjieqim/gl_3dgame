@@ -1770,7 +1770,31 @@ void ex_ptrRemove(void* ptr){
 			break;
 	}
 }
+static void*
+f_load_material(void* _node){
+	//return (void*)load_obj(name,url,x,y,z,scale);
+	char glslName[G_BUFFER_64_SIZE];
 
+	//预制3张贴图
+	char tex0[G_BUFFER_128_SIZE];
+	char tex1[G_BUFFER_128_SIZE];
+	char tex2[G_BUFFER_128_SIZE];
+
+	char shaderParm[G_BUFFER_256_SIZE];
+
+	xml_getstr(_node,"shader",glslName,G_BUFFER_64_SIZE);
+
+	xml_getstr(_node,"tex0",tex0,G_BUFFER_128_SIZE);
+	xml_getstr(_node,"tex1",tex1,G_BUFFER_128_SIZE);
+	xml_getstr(_node,"tex2",tex2,G_BUFFER_128_SIZE);
+
+	xml_getstr(_node,"shaderParm",shaderParm,G_BUFFER_256_SIZE);
+
+	//log_color(0xffff00,"******************%s\n[%s]\n%s\n",
+	//	glslName,tex2,shaderParm);
+
+	return tmat_create(glslName,3,tex0,tex1,tex2);
+}
 void* 
 core_load(const char* url){
 	void* ptr = 0;
@@ -1785,28 +1809,7 @@ core_load(const char* url){
 	
 	/*****************		材质配置文件     ***************************/
 	if(!strcmp(suffix,"mat")){
-		//return (void*)load_obj(name,url,x,y,z,scale);
-		char glslName[G_BUFFER_64_SIZE];
-
-		//预制3张贴图
-		char tex0[G_BUFFER_128_SIZE];
-		char tex1[G_BUFFER_128_SIZE];
-		char tex2[G_BUFFER_128_SIZE];
-		
-		char shaderParm[G_BUFFER_256_SIZE];
-
-		xml_getstr(_node,"shader",glslName,G_BUFFER_64_SIZE);
-		
-		xml_getstr(_node,"tex0",tex0,G_BUFFER_128_SIZE);
-		xml_getstr(_node,"tex1",tex1,G_BUFFER_128_SIZE);
-		xml_getstr(_node,"tex2",tex2,G_BUFFER_128_SIZE);
-		
-		xml_getstr(_node,"shaderParm",shaderParm,G_BUFFER_256_SIZE);
-		
-		//log_color(0xffff00,"******************%s\n[%s]\n%s\n",
-		//	glslName,tex2,shaderParm);
-		
-		ptr = tmat_create(glslName,3,tex0,tex1,tex2);
+		ptr = f_load_material(_node);
 	}
 	else{
 		log_color(0xff0000,"构建%s失败\n",url);
