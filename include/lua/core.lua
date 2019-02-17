@@ -1,6 +1,9 @@
 --调试宏,测试状态下开启
 DEBUG = true
 
+dofile("..\\include\\lua\\xml.lua")	--xml组件
+
+
 CONST_DIRECTION_HORIZONTAL = 0	--水平,横
 CONST_DIRECTION_VERTICAL   = 1 	--垂直,竖
 
@@ -616,9 +619,29 @@ end
 function func_anim_push(obj,animname,s,e)
 	change_attr(obj,"animtor_push",animname,string.format('%s,%s',s,e));
 end
+--渲染回调
 function func_drawCall(v)
 	
 end
+
+function func_load(url)
+	
+	local s = get_suffix(url);
+	print(s);
+	
+end
+
+
+
+
+
+
+
+
+
+
+
+
 
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
