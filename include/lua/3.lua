@@ -40,18 +40,25 @@ local function f_init(model)
 end
 
 
-local function loadMD5(name,x,scale)
+local function loadMD5(name)
 	local model
-	x = x or 0
-	scale = scale or 0.015
+	--x = x or 0
+	--scale = scale or 0.015
+	
+	--[[
 	if(name == 'wolf') then
 		model = func_loadmd5('wolf',scale,"\\resource\\texture\\wolf.tga")		
 		func_set_rayRadius(model,30)--设置静态碰撞检测盒
 	else
 		model  = func_loadmd5('cube',1.0,"\\resource\\texture\\wolf.tga","pCube.md5mesh","pCube_a7.md5anim")
 	end
-	
-	func_set_x(model,x)
+	--]]
+	model=load_model(name,"\\resource\\md5\\wolf\\body.md5mesh");	
+	setMaterial(model,func_load("//resource//material//wolf.mat"));
+	md5_loadAnim(model, "\\resource\\md5\\wolf\\walk.md5anim","walk");
+
+	setv(model,FLAGS_VISIBLE);
+	--func_set_x(model,x)
 	
 	f_init(model)
 	
@@ -59,11 +66,14 @@ local function loadMD5(name,x,scale)
 end
 --local model = func_loadobj()--加载一个obj模型
 --local model = func_loadmd2('triangle') ;func_setCameraPos(0,0,-5)--md2模型
-local function loadObj(x,model)
-	x = x or 0
-	model = model or 'tri'--'box'--'torus'
-	local obj = func_loadobj(model)--box	'torus'
+local function loadObj(model)
 	
+	local name = func_create_name();
+	model = model or 'tri'--'box'--'torus'
+	--local obj = func_loadobj(model)--box	'torus'
+	local obj = load_model(name,string.format("\\resource\\obj\\%s.obj",model));	
+	setMaterial(obj,func_load("//resource//material//wolf.mat"));
+	setv(obj,FLAGS_VISIBLE);
 	---[[
 	func_changeFlags(obj,FLAGS_RAY)					--设置为可拾取状态
 	func_changeFlags(obj,FLAGS_DRAW_RAY_COLLISION)	--绘制射线盒子
@@ -77,15 +87,19 @@ local function loadObj(x,model)
 
 	func_set_pick(obj,"f_pick")
 	--]]
-	func_set_x(obj,x)
 	
-
+	
+	return obj
 end
 
 local function loadMd2(x)
 
-	local obj=func_loadmd2()--'horse'
-	func_set_x(obj,x or 0)
+	--local obj=func_loadmd2()--'horse'
+	
+	local obj=load_VBO_model(func_create_name(),"\\resource\\md2\\horse.md2");
+	setMaterial(obj,func_load("//resource//material//horse.mat"));
+	setv(obj,FLAGS_VISIBLE);
+	--func_set_x(obj,x or 0)
 	func_changeFlags(obj,FLAGS_RAY)					--设置为可拾取状态
 	func_changeFlags(obj,FLAGS_DRAW_RAY_COLLISION)	--绘制射线盒子
 	func_changeFlags(obj,FLAGS_DISABLE_CULL_FACE)		--显示双面显示
@@ -105,10 +119,18 @@ func_set_camera_pos(0,0,-5)-- -10
 --初始化界面控制器
 modelUI_init()
 
-loadMD5('wolf',0,0.02)
+local _md5 = loadMD5('wolf')
+func_set_scale(_md5,0.02)
+func_set_rayRadius(_md5,30)--设置静态碰撞检测盒
 --loadMD5('wolf1',1)
 
-loadObj(1)
---loadMd2(3)
---]]
+local obj1 = loadObj()
+func_set_x(obj1,1)
+
+local _md2 = loadMd2()
+func_set_scale(_md2,0.02)
+func_set_rayRadius(_md2,30)
+func_set_x(_md2,2)
+
+
 
