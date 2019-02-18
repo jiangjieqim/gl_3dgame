@@ -314,6 +314,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\tween.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\vmath.c"
 				>
 			</File>
@@ -444,6 +448,10 @@
 			</File>
 			<File
 				RelativePath="..\include\tools.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\tween.h"
 				>
 			</File>
 			<File
