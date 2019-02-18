@@ -43,6 +43,23 @@ end
 local function f_switchCamBtnHandle(b)
 	print("swotch cam")
 end
+
+local function f_gcList(_l)
+	local s = string.format('index = %d\tlabel = [%s]',
+				listbox_get_index(_l),
+				listbox_get_label(_l))
+			
+	print(s)
+	
+	local label = listbox_get_label(_l)
+		
+	if(label == 'delete') then 
+		listbox_del(_l) --删除组件
+	end
+	
+	if(label== 'gc') then func_gc() end--gc
+end
+
 --初始化界面
 local function f_init_ui()
 	--layout ui
@@ -66,6 +83,14 @@ local function f_init_ui()
 	local switchCamBtn=btn_create(0,80)
 	btn_label(switchCamBtn,"switchCam")
 	btn_bindClick(switchCamBtn,f_switchCamBtnHandle)
+	
+		
+		
+	local list =  listbox_new(0,100)
+	listbox_set_label(list,"gclist");
+	listbox_add(list,"gc")
+	listbox_add(list,"delete")
+	listbox_bind(list,f_gcList)
 	
 end
 
@@ -104,7 +129,7 @@ end
 --加载一个角色模型
 local function f_init_character()
 	local url = 'triangle';--bauul
-	url = 'bauul'--角色模型会加载的比较慢,可以用一个三角形替代
+	--url = 'bauul'--角色模型会加载的比较慢,可以用一个三角形替代
 	
 	local horse=func_loadmd2(url,'bauul.tga','vbo')--'horse'
 	func_rename(horse,'_horse');
@@ -164,7 +189,7 @@ core_xml("del",xml);
 --]]
 
 
-
+--[[
 local xml = xml_load("//resource//monster.xml");
 local node = xml_get_node(xml,"id","arrow");
 local str = xml_get_str(node,"mesh");
@@ -175,3 +200,5 @@ print(string.format("%s,%.3f",str,f));
 xml_del(xml);
 
 func_load("//resource//monster.xml");
+
+--]]
