@@ -53,8 +53,8 @@ struct ECamera{
 	*/
 	float x,y,z;
 	float rx,ry,rz;
-	void* ptrFollow;//跟随的引用对象
-	float followDistance;//距离跟随对象的距离
+	//void* ptrFollow;//跟随的引用对象
+	//float followDistance;//距离跟随对象的距离
 	Vec3 followOffset;//相对于跟随角色的偏移值
 };
 //=============================================================================================================
@@ -213,7 +213,7 @@ void onKeyboardCallBack(unsigned char key, int x, int y);
 void ex_cam_set_pos(float x,float y,float z);
 
 //绑定camera对象的引用
-void ex_cam_bind(void* ptr);
+//void ex_cam_bind(void* ptr);
 /*
 设置渲染的背景颜色
 */

@@ -6,7 +6,7 @@
 #include "ex.h"
 #include "evt.h"
 #include "gettime.h"
-
+#include "ring.h"
 
 /*
 	camera控制器
@@ -36,6 +36,8 @@ struct Vec3 outDirection;
 struct Vec3 normalpos1;
 
 struct Vec3 normalpos2;
+
+static void* _camRing;
 //##############################################################
 
 ///**
@@ -198,7 +200,11 @@ f_key(int evtId,void* data){
 			ex_updatePerspctiveModelView();
 			break;
 		case KEY_I:
-			ex_info();
+			{
+				int index = (int)ring_pre(_camRing);
+				printf("ring_next = %d\n",index);
+			}
+			//ex_info();
 			break;
 		case KEY_ESC:
 			ex_dispose(ex_getInstance());
@@ -211,7 +217,6 @@ static int animStat=0;
 
 static void
 f_followCamera(){
-	const float limt = 10.0;//限制长度
 	if(get_longTime()- _followTicket >= 100){
 /*
 		Vec3 p;
@@ -245,7 +250,7 @@ f_followCamera(){
 		
 		//float offset = -0.0f;//偏移
 		ex_getInstance()->cam.rx = PI * 1.7;
-		ex_cam_set_pos(-role->x,-10.0f,-role->z+cam->y);//-20
+		ex_cam_set_pos(-role->x,-20.0f,-role->z+cam->y);//-20
 
 		vec3Set(&rolePos,role->x,role->y,role->z);
 		vec3Set(&camPos,cam->x,cam->y,cam->z);
@@ -291,9 +296,23 @@ f_move(){
 
 static void 
 f_drawLine(int evtId,void* data){
+
+	const int camType = 2;
+
 	f_call();
 	f_move();
-	f_followCamera();
+
+	switch(camType){
+		case 1:
+			f_followCamera();
+			break;
+		case 2:
+			ex_cam_set_pos(0,0,-5);
+			break;
+	}
+
+
+	
 }
 
 
@@ -327,7 +346,7 @@ REG_test_unit_01_init(lua_State *L){
 	_target = base_get(ex_find("_target"));
 
 	evt_on(ex_getInstance(),EVENT_ENGINE_KEYBOARD,f_key);
-	ex_cam_bind(f_getHorse());
+	//ex_cam_bind(f_getHorse());
 
 	//ex_cam_set_pos(0,-20,0);
 	
@@ -335,6 +354,10 @@ REG_test_unit_01_init(lua_State *L){
 	
 	//_initStat = 1;
 
+	_camRing = ring_create();
+	ring_push(_camRing,(void*)1);
+	ring_push(_camRing,(void*)2);
+	ring_push(_camRing,(void*)3);
 	return 0;
 }
 REG_test_unit_01(lua_State *L){

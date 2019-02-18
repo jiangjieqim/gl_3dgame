@@ -278,6 +278,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ring.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\sprite.c"
 				>
 			</File>
@@ -412,6 +416,10 @@
 			</File>
 			<File
 				RelativePath="..\include\psv.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ring.h"
 				>
 			</File>
 			<File

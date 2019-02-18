@@ -323,7 +323,8 @@ void renderUI(GLenum mode){
 /*
 打印引擎当前信息
 */
-void ex_info(){
+void 
+ex_info(){
 	struct EX* ex = ex_getInstance();
 	//EngineX* p = this;
 	struct ECamera cam = ex->cam;
@@ -341,11 +342,11 @@ void ex_info(){
 	j+=sprintf_s(buffer+j,buffer_size, "内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
 	
 	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d 摄影机坐标:%.3f %.3f %.3f 跟随目标引用:%0x r pi = %.3f %.3f %.3f 相对于偏移角色%.3f %.3f %.3f\n%s\n",LStack_length(ex->renderList),
-		cam.x,cam.y,cam.z,cam.ptrFollow,
+		cam.x,cam.y,cam.z,0,
 		cam.rx/PI,cam.ry/PI,cam.rz/PI,
 		cam.followOffset.x,cam.followOffset.y,cam.followOffset.z,
 		"F4:静态多边形显示线框 \nF12:包围盒显示");
-
+	
 	j+=sprintf_s(buffer+j,buffer_size, "vbo使用:%d bytes\n",tlgl_getVboSize());
 	j+=sprintf_s(buffer+j,buffer_size, "当前(射线检测)状态:%d\n",getv(&(ex->flags),EX_FLAGS_RAY));
 	//printf("%s\n",buffer);
@@ -1567,12 +1568,12 @@ ex_cam_set_pos(float x,float y,float z){
 	//printf("setCamPos	%f,%f,%f\n",x,y,z);
 	ex_updatePerspctiveModelView();
 }
-void 
-ex_cam_bind(void* ptr){
-	struct EX* ex = ex_getInstance();	
-	struct ECamera* cam = &ex->cam;
-	cam->ptrFollow = ptr;
-}
+//void 
+//ex_cam_bind(void* ptr){
+//	struct EX* ex = ex_getInstance();	
+//	struct ECamera* cam = &ex->cam;
+//	cam->ptrFollow = ptr;
+//}
 struct EX* ex_create()
 {
 	return ex_getInstance();
