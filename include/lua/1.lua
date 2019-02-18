@@ -13,20 +13,15 @@ f_load(line)
 	local md2
 	local name = "horse";
 	--local md2=load_md2vbo_byName(name,func_get_default_tex())
-	
 	--local tex = func_get_default_tex()
-	
 	--local md2 = func_loadmd2(name,tex)
 	
 	--vbo
 	md2=load_VBO_model(name,getPath(name));
 	--非vbo要去检查mat是否是支持非vbo的材质
 	--md2 = load_model(name,getPath(name));	
-	
 	setMaterial(md2,func_load("//resource//material//horse.mat"));
-	
 	setv(md2,FLAGS_VISIBLE);
-
 	setv(md2,FLAGS_RAY);
 	if(line)then
 		setv(md2,FLAGS_DRAW_PLOYGON_LINE);--设置线框渲染

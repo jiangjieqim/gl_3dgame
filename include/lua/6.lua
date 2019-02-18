@@ -14,10 +14,12 @@ local tf = scrollBar_add_text(animsc,'')
 local function f_create_cube()
 	local _scale = 1
 	--小方块
-	local obj1 = func_loadobj('quad',nil,'myObj1',false)--quad
+	local obj1 = load_model("myObj1","\\resource\\obj\\quad.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
+	setMaterial(obj1,func_load("//resource//material//wolf.mat"));
+	setv(obj1,FLAGS_VISIBLE);
 	setv(obj1,FLAGS_RAY)		
 	setv(obj1,FLAGS_DRAW_RAY_COLLISION)
-	setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
+	--setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
 	func_set_scale(obj1,_scale)
 	return obj1
 end
@@ -67,24 +69,25 @@ local function f_init_ui()
 	
 end
 
-
-
-
-
 --local md5file = func_loadmd5('wolf',0.02,"\\resource\\texture\\wolf.tga")
 
 local function f_create_box()
 	--加载一个obj模型
 	--VBO没有渲染出材质
-	local box = func_loadobj('arrow',nil,'myBox',false)--'box' 'torus' 'teapot' 'arrow'
+	local box = load_model("myBox","\\resource\\obj\\arrow.obj")--func_loadobj('arrow',nil,'myBox',false)--'box' 'torus' 'teapot' 'arrow'
 	--setv(box,FLAGS_RAY)					--设置为可拾取状态
+	setMaterial(box,func_load("//resource//material//wolf.mat"));
+	setv(box,FLAGS_VISIBLE);
 	setv(box,FLAGS_DRAW_RAY_COLLISION)
 	setv(box,FLAGS_DRAW_PLOYGON_LINE)
 end
 ------------------------------------------------------------------
 local function f_create_floor()
 	--创建一个可点击的地板
-	local _floor = func_loadobj('plane','box.tga','_floor',false);
+	--local _floor = func_loadobj('plane','box.tga','_floor',false);
+	local _floor = load_model("_floor","\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
+	setMaterial(_floor,func_load("//resource//material//floor.mat"));	
+	setv(_floor,FLAGS_VISIBLE);
 	--local _floorRadius = 30--地板半径
 	--func_set_scale(_floor,_floorRadius*2);
 	--func_set_y(_floor,-_floorRadius);
@@ -101,7 +104,7 @@ end
 --加载一个角色模型
 local function f_init_character()
 	local url = 'triangle';--bauul
-	--url = 'bauul'--角色模型会加载的比较慢,可以用一个三角形替代
+	url = 'bauul'--角色模型会加载的比较慢,可以用一个三角形替代
 	
 	local horse=func_loadmd2(url,'bauul.tga','vbo')--'horse'
 	func_rename(horse,'_horse');

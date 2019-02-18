@@ -245,7 +245,7 @@ f_followCamera(){
 		
 		//float offset = -0.0f;//偏移
 		ex_getInstance()->cam.rx = PI * 1.7;
-		ex_cam_set_pos(-role->x,-20.0f,-role->z+cam->y);
+		ex_cam_set_pos(-role->x,-10.0f,-role->z+cam->y);//-20
 
 		vec3Set(&rolePos,role->x,role->y,role->z);
 		vec3Set(&camPos,cam->x,cam->y,cam->z);

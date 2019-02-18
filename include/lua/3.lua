@@ -105,7 +105,7 @@ local function loadMd2(x)
 	func_changeFlags(obj,FLAGS_DISABLE_CULL_FACE)		--显示双面显示
 	--func_changeFlags(obj,FLAGS_GLSL_OUTLINE)
 	
-	func_bind_collide(obj)
+	func_bind_collide(obj,"\\resource\\md2\\horse.md2")
 	f_add_model(obj)
 	func_set_pick(obj,"f_pick")
 	return obj
@@ -118,18 +118,16 @@ func_set_camera_pos(0,0,-5)-- -10
 
 --初始化界面控制器
 modelUI_init()
-
+---[[
 local _md5 = loadMD5('wolf')
 func_set_scale(_md5,0.02)
 func_set_rayRadius(_md5,30)--设置静态碰撞检测盒
---loadMD5('wolf1',1)
 
 local obj1 = loadObj()
 func_set_x(obj1,1)
-
+--]]
 local _md2 = loadMd2()
 func_set_scale(_md2,0.02)
-func_set_rayRadius(_md2,30)
 func_set_x(_md2,2)
 
 
