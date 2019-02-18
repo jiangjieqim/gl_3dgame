@@ -334,4 +334,8 @@ int ex_fps();
 /************************************************************************/
 int ex_rename(void* p,const char* name);
 
+//获取引擎对象的标识位
+void ex_setv(void* p,int flag);
+void ex_resetv(void* ptr,int flag);
+int ex_getv(void* ptr,int flag);
 #endif

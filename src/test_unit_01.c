@@ -38,6 +38,11 @@ struct Vec3 normalpos1;
 struct Vec3 normalpos2;
 
 static void* _camRing;
+
+#define CAM_1_FOLLOW 1
+#define CAM_2 2
+
+static int camType;
 //##############################################################
 
 ///**
@@ -199,12 +204,23 @@ f_key(int evtId,void* data){
 			ex_getInstance()->cam.rx -= PI * 0.1;
 			ex_updatePerspctiveModelView();
 			break;
-		case KEY_I:
+		case KEY_D:
 			{
-				int index = (int)ring_pre(_camRing);
-				printf("ring_next = %d\n",index);
+				void* floorPtr = ex_find("_floor");
+				camType = (int)ring_next(_camRing);
+				switch(camType){
+					case CAM_1_FOLLOW:
+						ex_setv(floorPtr,FLAGS_RAY);
+						break;
+					case CAM_2:
+						ex_resetv(floorPtr,FLAGS_RAY);
+						break;
+				}
+				printf("ring = %d\n",(int)ring_cur(_camRing));
 			}
-			//ex_info();
+			break;
+		case KEY_I:
+			ex_info();
 			break;
 		case KEY_ESC:
 			ex_dispose(ex_getInstance());
@@ -297,17 +313,19 @@ f_move(){
 static void 
 f_drawLine(int evtId,void* data){
 
-	const int camType = 2;
+	camType = (int)ring_cur(_camRing);
 
 	f_call();
 	f_move();
 
 	switch(camType){
-		case 1:
+		case CAM_1_FOLLOW:
 			f_followCamera();
 			break;
-		case 2:
+		case CAM_2:
+			ex_getInstance()->cam.rx = 0;
 			ex_cam_set_pos(0,0,-5);
+			
 			break;
 	}
 
@@ -326,12 +344,10 @@ REG_test_unit_01_init(lua_State *L){
 	//添加一个3D渲染回调
 	evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLine);
 
-	if(!obj1Base){
-		obj1Base =  base_get(ex_find("myObj1"));
-		//添加对象拾取监听事件
-		evt_on(obj1Base,EVENT_RAY_PICK,box_rayPick);
-	}
-
+	obj1Base =  base_get(ex_find("myObj1"));
+	//添加对象拾取监听事件
+	evt_on(obj1Base,EVENT_RAY_PICK,box_rayPick);
+	
 	//_floor = ex_load_model("floor","\\resource\\obj\\teapot.obj",E_RenderModeVBO);
 	//base_set_scale(_floor,1.0f);
 	//setv(_floor,FLAGS_VISIBLE);
@@ -357,7 +373,7 @@ REG_test_unit_01_init(lua_State *L){
 	_camRing = ring_create();
 	ring_push(_camRing,(void*)1);
 	ring_push(_camRing,(void*)2);
-	ring_push(_camRing,(void*)3);
+	//ring_push(_camRing,(void*)3);
 	return 0;
 }
 REG_test_unit_01(lua_State *L){

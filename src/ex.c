@@ -1771,3 +1771,21 @@ void ex_ptrRemove(void* ptr){
 			break;
 	}
 }
+
+void 
+ex_setv(void* ptr,int flag){
+	struct HeadInfo* base=base_get((void*)ptr);
+	setv(&base->flags,flag);
+}
+
+void
+ex_resetv(void* ptr,int flag){
+	struct HeadInfo* base=base_get((void*)ptr);
+	resetv(&base->flags,flag);
+}
+
+int 
+ex_getv(void* ptr,int flag){
+	struct HeadInfo* base=base_get((void*)ptr);
+	return getv(&base->flags,flag);
+}

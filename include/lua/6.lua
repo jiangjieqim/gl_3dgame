@@ -19,7 +19,7 @@ local function f_create_cube()
 	setv(obj1,FLAGS_VISIBLE);
 	setv(obj1,FLAGS_RAY)		
 	setv(obj1,FLAGS_DRAW_RAY_COLLISION)
-	--setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
+	setv(obj1,FLAGS_DRAW_PLOYGON_LINE)
 	func_set_scale(obj1,_scale)
 	return obj1
 end
