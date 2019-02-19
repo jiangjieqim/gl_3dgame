@@ -21,6 +21,8 @@
 #include "evt.h"
 #include "xml.h"
 #include "tween.h"
+//static long _delayTime=0;
+static long _longTime=0;
 struct MD2_Object
 {
 	/*
@@ -362,6 +364,7 @@ static char buffer[G_BUFFER_256_SIZE];
 static void
 f_drawFps(){
 	char _str[G_BUFFER_64_SIZE];
+	//sprintf_s(_str, G_BUFFER_64_SIZE,"%ld",/*ex_fps()*/ex_delay_time());
 	sprintf_s(_str, G_BUFFER_64_SIZE,"%d",ex_fps());
 	ex_showLog(_str);
 }
@@ -807,16 +810,32 @@ void ex_updatePerspctiveModelView()
 	//if(ex_getInstance()->drawLine_callBack)
 	//	ex_getInstance()->drawLine_callBack();
 //}
+
+
+
+static long _delayTime;
+long ex_delay_time(){
+	return _delayTime;//_delayTime;
+}
 static void 
 _new(){
 	struct EX* p = ex_getInstance();
-	long _longTime;
+	//long _time;
 	if(p->_screenWidth <= 0 || p->_screenHeight<=0)
 	{
 		//屏幕尺寸0的时候不进行渲染
 		return;
 	}
-	_longTime = get_longTime();
+	/*_time =  get_longTime();
+	_delayTime = _time - _longTime;
+	_longTime = _time;*/
+	//_time =  get_longTime();
+	//_delayTime = _time - _longTime;
+	_delayTime = get_longTime() - _longTime;
+	
+	_longTime =  get_longTime();
+	
+
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//填充背景为白色

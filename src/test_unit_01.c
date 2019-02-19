@@ -337,7 +337,7 @@ f_drawLine(int evtId,void* data){
 
 
 struct HeadInfo* obj1Base;
-
+static double a = 1;
 REG_test_unit_01_init(lua_State *L){
 	//初始化
 	//struct Node* node;
@@ -377,15 +377,18 @@ REG_test_unit_01_init(lua_State *L){
 	//ring_push(_camRing,(void*)3);
 
 	{
-		float a = 1;
-		float b = 2;
-		tween_to(1000,4,
-			&a,10.56f,
-			&b,20.22f);
+		
+		double b = 2;
+		//tween_to(1000,4,
+		//	&a,10.56f,
+		//	&b,20.22f);
 		/*tween_to(2000,5,
 			&a,30.56f,
 			&b,20.22f);*/
 
+
+		tween_to(300,2,
+			&a,10.56f);
 	}
 	return 0;
 }
