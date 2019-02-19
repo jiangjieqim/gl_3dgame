@@ -15,10 +15,9 @@ typedef struct {
 	double* p;
 	double s;//开始值
 	double t;//目标值
-	
-
 }TNode;
 typedef struct{
+	void* obj;
 	/*
 		节点长度
 	*/
@@ -33,28 +32,42 @@ typedef struct{
 		开始的时间
 	*/
 	int startTime;
-	void (*callBack)();
+	void (*updateCallBack)();
+	void (*endCallBack)();
 	TNode* ptr;
 }TweenNode;
 /*
 	终止tween
 */
-static void
-f_tween_stop(void* ptr){
-	TweenNode* _node = (TweenNode*)ptr;
-	tl_free(_node->ptr);
-	LStack_delNode(g_list,(int)_node);
-	//tl_free(_node);
+void
+tween_stop(void* ptr){
+	if(!tween_is_play(ptr))	{
+		return;
+	}
+	{
+		TweenNode* _node = (TweenNode*)ptr;
+		if(_node->endCallBack)	_node->endCallBack(_node->obj);
+		tl_free(_node->ptr);
+		LStack_delNode(g_list,(int)_node);
+		tl_free(_node);
+	}
+	
 }
 /*
 	渐变
 */
 void* 
-tween_to(int time,void (*callBack)(),int cnt,...){
+tween_to(void* obj,
+		 int time,
+		 void (*end)(void*),
+		 void (*update)(void*),
+		 int cnt,...){
 	TweenNode* _node = (TweenNode*)tl_malloc(sizeof(TweenNode));
+	_node->obj = obj;
 	_node->length = cnt/2;
 	_node->ptr = (TNode*)tl_malloc(sizeof(TNode) * cnt/2);
-	_node->callBack = callBack;
+	_node->updateCallBack = update;
+	_node->endCallBack = end;
 	_node->startTime = get_longTime();
 	_node->needTime = time;
 	//###############################################
@@ -123,17 +136,32 @@ f_tween_play(TweenNode* _node,long _longTime){
 	_node->useTime = _longTime - _node->startTime;
 
 	if( _node->useTime >= _node->needTime){
-		f_tween_stop(_node);
+		tween_stop(_node);
 	}else{
 		int i;
 		for(i = 0;i < _node->length;i++)	
 			f_nodeRun(_node,(TNode*)&_node->ptr[i]);
 
-		if( _node->callBack)	_node->callBack();
+		if( _node->updateCallBack)	_node->updateCallBack(_node->obj);
 		//printf("%ld\n",_node->useTime);
 	}
 }
 
+int 
+tween_is_play(void* ptr){
+	struct LStackNode* s = (struct LStackNode* )g_list;
+	void* top,*p;
+	if(!g_list)	return 0;
+	top = s;
+	p=top;
+	while((int)LStack_next(p)){
+		int data;
+		p=(void*)LStack_next(p);
+		data = LStack_data(p);
+		if((int)ptr == data)	return 1;
+	}
+	return 0;
+}
 void
 tween_run(long _longTime){
 	struct LStackNode* s = (struct LStackNode* )g_list;

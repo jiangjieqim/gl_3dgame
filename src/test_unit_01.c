@@ -186,14 +186,19 @@ static int _followTicket = 0;//跟随对象的ticket监听事件插值
 
 static double a = 1;
 static void
-f_callBack(){
-	printf("a = %.3f\n",a);
+f_callBack(void* ptr){
+	
+}
+
+static void f_callBackEnd(void* ptr){
+	printf("time = %ld %.3f,%0x\n",get_longTime(),a,ptr);
 }
 
 static void
 playend(void* p){
 	ex_animtor_ptr_setcur(f_getHorse(), "stand",0);
 }
+static void* _tweenPtr;
 //键盘事件
 static void
 f_key(int evtId,void* data){
@@ -227,12 +232,16 @@ f_key(int evtId,void* data){
 				printf("ring = %d\n",(int)ring_cur(_camRing));
 			}
 			break;
+		case KEY_1:
+			ex_info();
+			break;
 		case KEY_I:
-			a = 1;
-			tween_to(200,f_callBack,
-				2,
-				&a,10.56f);
-			//ex_info();
+			
+			if(!tween_is_play(_tweenPtr)){
+				a = 1;
+				printf("time = %ld\n",get_longTime());
+				_tweenPtr=tween_to(0,500,f_callBackEnd,f_callBack,2,&a,10.56f);
+			}
 			break;
 		case KEY_ESC:
 			ex_dispose(ex_getInstance());
