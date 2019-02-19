@@ -7,9 +7,8 @@
 void* 
 tween_to(int time,int cnt,...);
 
-/*
-	终止tween
-*/
+
+//将此方法放在渲染循环里
 void
-tween_stop(void* ptr);
+tween_run(long _longTime);
 #endif

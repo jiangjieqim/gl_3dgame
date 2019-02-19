@@ -20,6 +20,7 @@
 #include "text.h"
 #include "evt.h"
 #include "xml.h"
+#include "tween.h"
 struct MD2_Object
 {
 	/*
@@ -809,13 +810,13 @@ void ex_updatePerspctiveModelView()
 static void 
 _new(){
 	struct EX* p = ex_getInstance();
-
+	long _longTime;
 	if(p->_screenWidth <= 0 || p->_screenHeight<=0)
 	{
 		//屏幕尺寸0的时候不进行渲染
 		return;
 	}
-
+	_longTime = get_longTime();
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//填充背景为白色
@@ -876,6 +877,8 @@ _new(){
 	{
 		p->loopCallBack();
 	}
+
+	tween_run(_longTime);
 	//printf("**** %d\n",p->fps);
 }
 void ex_render(void)

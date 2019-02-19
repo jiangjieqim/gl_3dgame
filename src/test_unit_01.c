@@ -7,6 +7,7 @@
 #include "evt.h"
 #include "gettime.h"
 #include "ring.h"
+#include "tween.h"
 
 /*
 	camera控制器
@@ -65,10 +66,10 @@ f_getHorse(){
 	return ex_find(ptrHorse->name);
 }
 
-static void
-f_print_vec(char* key,struct Vec3* p){
-	printf("%s p = %.3f\t%.3f\t%.3f\n",key,p->x,p->y,p->z);
-}
+//static void
+//f_print_vec(char* key,struct Vec3* p){
+//	printf("%s p = %.3f\t%.3f\t%.3f\n",key,p->x,p->y,p->z);
+//}
 static double
 f_toAngle(double value){
 	return value * 180.0f / PI;
@@ -374,6 +375,18 @@ REG_test_unit_01_init(lua_State *L){
 	ring_push(_camRing,(void*)1);
 	ring_push(_camRing,(void*)2);
 	//ring_push(_camRing,(void*)3);
+
+	{
+		float a = 1;
+		float b = 2;
+		tween_to(1000,4,
+			&a,10.56f,
+			&b,20.22f);
+		/*tween_to(2000,5,
+			&a,30.56f,
+			&b,20.22f);*/
+
+	}
 	return 0;
 }
 REG_test_unit_01(lua_State *L){
