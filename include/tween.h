@@ -5,7 +5,7 @@
 	渐变
 */
 void* 
-tween_to(int time,int cnt,...);
+tween_to(int time,void (*callBack)(),int cnt,...);
 
 
 //将此方法放在渲染循环里

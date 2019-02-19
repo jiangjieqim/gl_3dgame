@@ -33,6 +33,7 @@ typedef struct{
 		开始的时间
 	*/
 	int startTime;
+	void (*callBack)();
 	TNode* ptr;
 }TweenNode;
 /*
@@ -49,10 +50,11 @@ f_tween_stop(void* ptr){
 	渐变
 */
 void* 
-tween_to(int time,int cnt,...){
+tween_to(int time,void (*callBack)(),int cnt,...){
 	TweenNode* _node = (TweenNode*)tl_malloc(sizeof(TweenNode));
 	_node->length = cnt/2;
 	_node->ptr = (TNode*)tl_malloc(sizeof(TNode) * cnt/2);
+	_node->callBack = callBack;
 	_node->startTime = get_longTime();
 	_node->needTime = time;
 	//###############################################
@@ -91,25 +93,35 @@ tween_to(int time,int cnt,...){
 	LStack_push(g_list,(int)_node);
 	return _node;
 }
+//每一次回调的时间间隔
+static long g_delay = 0;
+static long g_last= 0;
 static void
 f_nodeRun(TweenNode* _node,TNode* _nptr){
 	double s = _nptr->s;
 	double e = _nptr->t;
-	int c = 20;//_node->needTime / ex_delay_time();
-	double v = (e - s)/_node->needTime;
+	//int c = 20;//_node->needTime / ex_delay_time();
+	double v = _node->needTime/g_delay;
+	double f = (e-s)/v;
+	if(v <= 0) return;
+	
 	/*double* ptr = (double*)_nptr->p;
 	*ptr += v;*/
 	//printf("%.3f\t%.3f\n",s,(double*)_nptr->p);
 	//printf("delay_time = %ld\n",ex_delay_time());
-	*_nptr->p+=v;
-	printf("%ld %.3f %.3f %.3f\n",_node->useTime,v,*_nptr->p,e -s);
+	if(f > 0 && *_nptr->p+f > e||f<0 && *_nptr->p+f < e){
+		*_nptr->p = e;
+	}else{
+		*_nptr->p+=f;
+	}
+//	printf("%ld v = %.3f p = %.3f %.3f \t%ld %.3f\n",_node->useTime,v,*_nptr->p,e,g_delay,f);
 }
-
+//处理一个节点
 static void
 f_tween_play(TweenNode* _node,long _longTime){
-	
-	_node->useTime =_longTime - _node->startTime;
-	
+
+	_node->useTime = _longTime - _node->startTime;
+
 	if( _node->useTime >= _node->needTime){
 		f_tween_stop(_node);
 	}else{
@@ -117,13 +129,24 @@ f_tween_play(TweenNode* _node,long _longTime){
 		for(i = 0;i < _node->length;i++)	
 			f_nodeRun(_node,(TNode*)&_node->ptr[i]);
 
+		if( _node->callBack)	_node->callBack();
 		//printf("%ld\n",_node->useTime);
 	}
 }
+
 void
 tween_run(long _longTime){
 	struct LStackNode* s = (struct LStackNode* )g_list;
 	void* top,*p;
+
+	if(!g_list)	return;
+
+	g_delay = _longTime - g_last;
+	
+	if(g_delay < 1 )	return;
+
+	g_last = _longTime;
+	
 	top = s;
 	p=top;
 	while((int)LStack_next(p)){

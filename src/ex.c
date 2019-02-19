@@ -365,7 +365,7 @@ static void
 f_drawFps(){
 	char _str[G_BUFFER_64_SIZE];
 	//sprintf_s(_str, G_BUFFER_64_SIZE,"%ld",/*ex_fps()*/ex_delay_time());
-	sprintf_s(_str, G_BUFFER_64_SIZE,"%d",ex_fps());
+	sprintf_s(_str, G_BUFFER_64_SIZE,"%d %ld",ex_fps(),ex_delay_time());
 	ex_showLog(_str);
 }
 
@@ -817,6 +817,7 @@ static long _delayTime;
 long ex_delay_time(){
 	return _delayTime;//_delayTime;
 }
+//#include <windows.h>
 static void 
 _new(){
 	struct EX* p = ex_getInstance();
@@ -826,6 +827,14 @@ _new(){
 		//屏幕尺寸0的时候不进行渲染
 		return;
 	}
+	
+	/*if(ex_fps()>60){
+		f_calculate_fps();
+		printf("fps = %d\n",ex_fps());
+		Sleep(1000);
+		return;
+	}*/
+	//printf("fps = %d\n",ex_fps());
 	/*_time =  get_longTime();
 	_delayTime = _time - _longTime;
 	_longTime = _time;*/

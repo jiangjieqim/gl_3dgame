@@ -183,6 +183,13 @@ floor_rayPick(int evtId,void* data){
 //static int _initStat = 0;
 static int _ticket = 0;
 static int _followTicket = 0;//跟随对象的ticket监听事件插值
+
+static double a = 1;
+static void
+f_callBack(){
+	printf("a = %.3f\n",a);
+}
+
 static void
 playend(void* p){
 	ex_animtor_ptr_setcur(f_getHorse(), "stand",0);
@@ -221,7 +228,11 @@ f_key(int evtId,void* data){
 			}
 			break;
 		case KEY_I:
-			ex_info();
+			a = 1;
+			tween_to(200,f_callBack,
+				2,
+				&a,10.56f);
+			//ex_info();
 			break;
 		case KEY_ESC:
 			ex_dispose(ex_getInstance());
@@ -337,7 +348,7 @@ f_drawLine(int evtId,void* data){
 
 
 struct HeadInfo* obj1Base;
-static double a = 1;
+
 REG_test_unit_01_init(lua_State *L){
 	//初始化
 	//struct Node* node;
@@ -378,7 +389,7 @@ REG_test_unit_01_init(lua_State *L){
 
 	{
 		
-		double b = 2;
+		//double b = 2;
 		//tween_to(1000,4,
 		//	&a,10.56f,
 		//	&b,20.22f);
@@ -387,8 +398,7 @@ REG_test_unit_01_init(lua_State *L){
 			&b,20.22f);*/
 
 
-		tween_to(300,2,
-			&a,10.56f);
+		
 	}
 	return 0;
 }
