@@ -251,12 +251,15 @@ md2_load(struct MD2_Object* _md2,const char* str,int len,const char* name)
 	struct FrameAnim* frameAnim = NULL;
 	long usetime=get_longTime();
 
-	int numFrames = md2parse_totalFrames(_md2->parseHandle);// _md2->parseHandle->numFrames;
+	int numFrames;
 
 	//_md2->parseHandle = (struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
 
 	_md2->parseHandle = md2parse_load(str,len);
-	
+	numFrames = md2parse_totalFrames(_md2->parseHandle);// _md2->parseHandle->numFrames;
+
+
+
 	if(!numFrames){
 		printf("关键帧数为0!\n");
 		assert(0);
@@ -1347,6 +1350,10 @@ ex_set_anim(void* ptr,const char* animKey)
 	else if(base->curType == TYPE_MD5_FILE)
 	{
 		md5_setAnim((void*)ptr,animKey);
+	}
+	else{
+		printf("类型:%d未实现\n",base->curType);
+		assert(0);
 	}
 }
 int 

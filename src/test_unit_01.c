@@ -365,7 +365,15 @@ f_drawLine(int evtId,void* data){
 struct HeadInfo* obj1Base;
 
 REG_test_unit_01_init(lua_State *L){
-	//初始化
+	
+
+	void* md2 = ex_load_model("kk","\\resource\\md2\\horse.md2",E_RenderModeNormal);
+	ex_load_anim_config(md2,"walk,40,45",60);
+	ex_set_anim(md2,"walk");
+	
+	/*
+	 
+	 //初始化
 	//struct Node* node;
 	void* _ptr;
 	//添加一个3D渲染回调
@@ -408,13 +416,13 @@ REG_test_unit_01_init(lua_State *L){
 		//tween_to(1000,4,
 		//	&a,10.56f,
 		//	&b,20.22f);
-		/*tween_to(2000,5,
-			&a,30.56f,
-			&b,20.22f);*/
-
+		//tween_to(2000,5,
+		//	&a,30.56f,
+		//	&b,20.22f);
 
 		
 	}
+*/
 	return 0;
 }
 REG_test_unit_01(lua_State *L){
