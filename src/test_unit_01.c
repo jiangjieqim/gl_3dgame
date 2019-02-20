@@ -368,9 +368,12 @@ REG_test_unit_01_init(lua_State *L){
 	
 
 	void* md2 = ex_load_model("kk","\\resource\\md2\\horse.md2",E_RenderModeNormal);
-	ex_load_anim_config(md2,"walk,40,45",60);
+	void* mat = tmat_create("diffuse",1,"\\resource\\texture\\horse.bmp");
+	ex_load_anim_config(md2,"walk,40,45",7);
 	ex_set_anim(md2,"walk");
-	
+	ex_set_material(md2,mat);
+	ex_setv(md2,FLAGS_VISIBLE);
+
 	/*
 	 
 	 //初始化

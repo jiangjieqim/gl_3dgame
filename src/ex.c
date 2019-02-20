@@ -1739,6 +1739,11 @@ setLookTarget(void* ptr,float x,float y,float z)
 	else
 		updateMat4x4(b);
 }
+void
+ex_set_material(void* ptr,void* material){
+	struct HeadInfo*  base = base_get(ptr);
+	base->tmat = (struct GMaterial*)material;
+}
 int 
 ex_rename(void* p,const char* name){
 	if(!ex_find(name)){

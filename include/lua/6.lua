@@ -155,6 +155,8 @@ local function f_init_character()
 	return horse;
 end
 
+
+--[[
 f_init_ui();
 f_create_box();
 f_create_cube();
@@ -172,6 +174,8 @@ function func_drawCall(v)
 	func_setRotateZ(_target,_f);
 end
 --f_init_ui();
+
+]]--
 test_unit_01_init();
 
 --xml ½Ó¿Ú²âÊÔ
