@@ -330,6 +330,12 @@ void* ex_get_defaultMaterial();
 /************************************************************************/
 int ex_rename(void* p,const char* name);
 
+/*
+	设置材质
+*/
+void 
+ex_set_material(void* ptr,void* material);
+
 //获取引擎对象的标识位
 void ex_setv(void* p,int flag);
 void ex_resetv(void* ptr,int flag);
@@ -344,5 +350,11 @@ extern int g_fps;
 	每一关键帧的延迟毫秒数                                                                    
 ************************************************************************/
 extern long g_delayTime;
+
+
+/*
+ *获取偏移值
+ */
+int ex_get_gap(int type);
 
 #endif

@@ -903,7 +903,7 @@ _new(){
 	f_calculate_fps();
 
 	//渐变管理器回调
-	ramp_callBack();
+	//ramp_callBack();
 
 	//外部循环回调
 	if(p->loopCallBack!=NULL)
@@ -1182,7 +1182,7 @@ vbo_md2Load(const char* name,const char* url)
 	//_parse=(struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
 	_parse=md2parse_load(_objStr,fileSize);
 	
-	pushMd2Frame(node->ptrVBO,_parse,tl_getGap(dataType));
+	pushMd2Frame(node->ptrVBO,_parse,ex_get_gap(dataType));
 
 	//构造动作管理器
 	//ptr->anim = anim_create(ptr->ptrList);
@@ -1833,4 +1833,14 @@ int
 ex_getv(void* ptr,int flag){
 	struct HeadInfo* base=base_get((void*)ptr);
 	return getv(&base->flags,flag);
+}
+
+
+int ex_get_gap(int type)
+{
+	if(type == OBJ_UV_VERTEX)
+	{
+		return UV_GAP + VERTEX_GAP;
+	}
+	return UV_GAP + VERTEX_GAP + NORMAL_GAP;
 }

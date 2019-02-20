@@ -1047,43 +1047,6 @@ void md5_loadMesh(struct MD5* p,const char* path){
 	tl_free(_md5MeshData);
 	_md5MeshData = NULL;
 }
-
-//static struct md5_anim_t* 
-//getAnimType(void* _md5,int animType)
-//{
-//	struct MD5* md5 = (struct MD5*)_md5;
-//	void *top;
-//	void *p;
-//	int data;
-//	int isChange = 0;
-//	struct md5_anim_t* cur;
-//	struct md5_anim_t* res = NULL;
-//	void* s = (void*)md5->pAnimList;
-//	if(s != NULL)
-//	{
-//		top = s;
-//		p=top;
-//		while((int)LStack_next(p)){
-//			p=(void*)LStack_next(p);
-//			data = LStack_data(p);
-//			cur = (struct md5_anim_t*)data;
-//			if(animType == cur->animType){
-//				isChange = 1;
-//				res = cur;
-//				break;
-//			}
-//		}
-//		if(!isChange){
-//			//未找到此动作
-//			char typeName[G_BUFFER_32_SIZE];
-//			tl_strType(ANIM_STR,animType,typeName,G_BUFFER_32_SIZE);
-//			printf("无法找到动作:%s animType:%d\n",typeName,animType);
-//			assert(0);
-//		}
-//	}
-//	return res;
-//}
-
 /*
 	根据动画名获取动作结构
 */
@@ -1115,8 +1078,6 @@ getAnimByName(void* _md5,const char* animName)
 		}
 		if(!isChange){
 			//未找到此动作
-			//char typeName[G_BUFFER_32_SIZE];
-			//tl_strType(ANIM_STR,animType,typeName,G_BUFFER_32_SIZE);
 			printf("无法找到动作:%s\n",animName);
 			assert(0);
 		}

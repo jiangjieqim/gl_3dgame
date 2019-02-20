@@ -286,6 +286,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\str.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\test.c"
 				>
 			</File>
@@ -432,6 +436,10 @@
 			</File>
 			<File
 				RelativePath="..\include\sprite.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\str.h"
 				>
 			</File>
 			<File

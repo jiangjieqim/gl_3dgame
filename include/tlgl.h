@@ -143,7 +143,7 @@ int  tlgl_createShader(GLchar* vertex,GLchar* fragment,GLuint* outProgram);
 *	绘制AABB包围盒
 *	float r,float g,float b 线框的颜色
 */
-void tlgl_AABB(float* trianglesArray,int vertexCount,float* triData,CallBackFun callBack,int parms,float r,float g,float b,int isDraw);
+void tlgl_AABB(float* trianglesArray,int vertexCount,float* triData,int (*CallBackFun)(char*),int parms,float r,float g,float b,int isDraw);
 
 
 /*

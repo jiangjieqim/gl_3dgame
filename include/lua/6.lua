@@ -156,7 +156,7 @@ local function f_init_character()
 end
 
 
---[[
+---[
 f_init_ui();
 f_create_box();
 f_create_cube();
@@ -173,9 +173,6 @@ function func_drawCall(v)
 	_f = _f + func_fps()*0.00001;
 	func_setRotateZ(_target,_f);
 end
---f_init_ui();
-
-]]--
 test_unit_01_init();
 
 --xml ½Ó¿Ú²âÊÔ

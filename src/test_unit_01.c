@@ -363,9 +363,8 @@ f_drawLine(int evtId,void* data){
 
 
 struct HeadInfo* obj1Base;
-
-REG_test_unit_01_init(lua_State *L){
-	
+static void
+f_test_model(){
 
 	void* md2 = ex_load_model("kk","\\resource\\md2\\horse.md2",E_RenderModeNormal);
 	void* mat = tmat_create("diffuse",1,"\\resource\\texture\\horse.bmp");
@@ -373,9 +372,10 @@ REG_test_unit_01_init(lua_State *L){
 	ex_set_anim(md2,"walk");
 	ex_set_material(md2,mat);
 	ex_setv(md2,FLAGS_VISIBLE);
+}
+REG_test_unit_01_init(lua_State *L){
+	
 
-	/*
-	 
 	 //初始化
 	//struct Node* node;
 	void* _ptr;
@@ -425,7 +425,7 @@ REG_test_unit_01_init(lua_State *L){
 
 		
 	}
-*/
+
 	return 0;
 }
 REG_test_unit_01(lua_State *L){

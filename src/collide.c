@@ -58,7 +58,7 @@ loadmd2(struct CollideBox* ptr,const char* url,int frameCount)
 	
 	//_parse=(struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
 	_parse = md2parse_load(_objStr,fileSize);
-	push_md2Frame(ptr,_parse,tl_getGap(dataType),frameCount);
+	push_md2Frame(ptr,_parse,ex_get_gap(dataType),frameCount);
 	
 	md2parse_dispose(_parse);
 	tl_free(_objStr);
