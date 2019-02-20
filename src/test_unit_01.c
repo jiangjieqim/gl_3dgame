@@ -9,6 +9,8 @@
 #include "ring.h"
 #include "tween.h"
 
+#include "common.h"
+
 /*
 	camera控制器
 	实现一个tween的渐变的接口 ,角位移的渐变插值用tween实现渐变
@@ -241,6 +243,7 @@ f_key(int evtId,void* data){
 				a = 1;
 				printf("time = %ld\n",get_longTime());
 				_tweenPtr=tween_to(0,500,f_callBackEnd,f_callBack,2,&a,10.56f);
+				x_md2load("dasjlkdsjld");
 			}
 			break;
 		case KEY_ESC:
