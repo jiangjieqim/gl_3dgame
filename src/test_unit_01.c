@@ -201,6 +201,7 @@ playend(void* p){
 	ex_animtor_ptr_setcur(f_getHorse(), "stand",0);
 }
 static void* _tweenPtr;
+
 //键盘事件
 static void
 f_key(int evtId,void* data){
@@ -244,6 +245,8 @@ f_key(int evtId,void* data){
 				printf("time = %ld\n",get_longTime());
 				_tweenPtr=tween_to(0,500,f_callBackEnd,f_callBack,2,&a,10.56f);
 				x_md2load("dasjlkdsjld");
+				printf("%d\n",dllGlobalVar);
+				dllGlobalVar++;
 			}
 			break;
 		case KEY_ESC:

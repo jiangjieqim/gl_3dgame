@@ -6,6 +6,7 @@
 #include <stdarg.h>
 
 #define BUILDING_DLL
+
 #include "common.h"
 int 
 x_md2load(const char* path){
@@ -42,4 +43,5 @@ tl_newName(char* buffer,int bufferSize){
 	memset(buffer,0,bufferSize);
 	sprintf_s(buffer,bufferSize,"instance%d",_nameId);
 	_nameId++;
+	dllGlobalVar = _nameId;
 }

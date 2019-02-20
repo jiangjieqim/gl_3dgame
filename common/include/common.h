@@ -30,4 +30,6 @@ void  tl_writeAppandFile(const char* filePath,char* buffer);
 */
 DLLIMPORT
 void tl_newName(char* buffer,int bufferSize);
+
+DLLIMPORT int dllGlobalVar;
 #endif
