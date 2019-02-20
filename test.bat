@@ -7,7 +7,7 @@ call initroot.bat
 
 
 @rem 增加本地include路径
-set INCLUDE=%INCLUDE%%cd%\include\;
+set INCLUDE=%INCLUDE%%cd%\include\;%cd%\common\include\;
 
 @rem 增加本地lib路径
 set LIB=%LIB%%cd%\lib\;
