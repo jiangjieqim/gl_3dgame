@@ -22,6 +22,10 @@
 #include "xml.h"
 #include "tween.h"
 //static long _delayTime=0;
+
+long g_delayTime;
+int  g_fps=-1;
+
 static long _longTime=0;
 struct MD2_Object
 {
@@ -70,7 +74,7 @@ ex_get_defaultMaterial(){
 
 	return ex_getInstance()->defaultMaterial;
 }
-static int _temp_fpsOut=-1;
+
 /*
 	计算fps
 */
@@ -82,12 +86,13 @@ f_calculate_fps(){
 	++_fps;
 	if( currentTime - lastTime > 1.0f ){
 		lastTime = currentTime;
-		_temp_fpsOut = (int)_fps;
+		g_fps = (int)_fps;
 		_fps = 0;
 	}
 }
-int ex_fps(){
-	return _temp_fpsOut;
+static int 
+f_get_fps(){
+	return g_fps;
 }
 /*
 *	md2渲染回调
@@ -335,7 +340,7 @@ ex_info(){
 	char buffer[G_BUFFER_1024_SIZE];
 	int j=0;
 	int buffer_size = G_BUFFER_1024_SIZE;
-	int fps = ex_fps();
+	int fps = f_get_fps();
 	memory_get_info(&totleByte,&nodeCnt);
 	memset(buffer,0,G_BUFFER_1024_SIZE);
 	j+=sprintf_s(buffer+j,buffer_size, "**********************************************\n");
@@ -365,7 +370,7 @@ static void
 f_drawFps(){
 	char _str[G_BUFFER_64_SIZE];
 	//sprintf_s(_str, G_BUFFER_64_SIZE,"%ld",/*ex_fps()*/ex_delay_time());
-	sprintf_s(_str, G_BUFFER_64_SIZE,"%d %ld",ex_fps(),ex_delay_time());
+	sprintf_s(_str, G_BUFFER_64_SIZE,"%d %ld",f_get_fps(),g_delayTime);
 	ex_showLog(_str);
 }
 
@@ -385,7 +390,7 @@ drawText(){
 	int j;
 	int size=-1;
 	GLint total_mem_kb,cur_avail_mem_kb;
-	int fps = ex_fps();
+	int fps = f_get_fps();
 	memset(buffer,0,G_BUFFER_256_SIZE);
 	
 	tlgl_getGPU_memery(&total_mem_kb,&cur_avail_mem_kb);
@@ -813,10 +818,7 @@ void ex_updatePerspctiveModelView()
 
 
 
-static long _delayTime;
-long ex_delay_time(){
-	return _delayTime;//_delayTime;
-}
+
 //#include <windows.h>
 static void 
 _new(){
@@ -840,7 +842,7 @@ _new(){
 	_longTime = _time;*/
 	//_time =  get_longTime();
 	//_delayTime = _time - _longTime;
-	_delayTime = get_longTime() - _longTime;
+	g_delayTime = get_longTime() - _longTime;
 	
 	_longTime =  get_longTime();
 	
