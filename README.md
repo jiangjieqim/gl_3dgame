@@ -33,4 +33,10 @@ int ex_zBuffer()
 (11)23:47 2019/2/15 
   config.xml 为ANSI格式  
   debug模式下esc退出空指针异常的bug  
-(12)8:51 2019/2/20 分割层common.dll(公共组件层)和excore.dll(引擎层) exrender(渲染层)
+(12)8:51 2019/2/20 分割层common.dll(公共组件层)和excore.dll(引擎层) exrender(渲染层) 
+
+(13)14:50 2019/2/21 
+查看dll函数列表  
+prompt  
+dumpbin /exports C:\gl_3dgame\common\Debug\common.dll  
+项目common添加宏BUILDING_DLL  
