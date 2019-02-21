@@ -8,6 +8,7 @@
 #include "collide.h"
 #include "tl_malloc.h"
 #include "tmat.h"
+#include "base.h"
 //´´½¨
 struct Node* node_create(const char* name)
 {
@@ -16,7 +17,7 @@ struct Node* node_create(const char* name)
 
 	ptr->base = base_create(TYPE_OBJ_VBO_FILE,name,0,0,0);
 	ptr->base->isNode = 1;
-	updateMat4x4(ptr->base);
+	base_updateMat4x4(ptr->base);
 
 	return ptr;
 }
@@ -64,7 +65,7 @@ drawCollion(struct Node* p)
 {
 	struct HeadInfo* b = base_get(p);
 	struct VertexData* vd =collide_cur(p->ptrCollide);
-	drawLineByColor(b,vd->vertex,vd->vertLen,b->boxR,b->boxG,b->boxB);
+	base_drawLineByColor(b,vd->vertex,vd->vertLen,b->boxR,b->boxG,b->boxB);
 }
 
 /*

@@ -8,19 +8,6 @@
 #include "tmat.h"
 #include "vmath.h"
 
-
-/*shader类型*/
-//#define SHADER_DIFFUSE 0x01
-
-//#define SHADER_BUMP 0x03
-//
-//#define SHADER_NORMAL_MAP	0x04	//法线材质
-//#define SHADER_MULT_TEXTURE 0x05	//多重纹理
-//#define SHADER_SHADOW_MAP	0x06	//阴影
-
-
-
-
 /******************************************************************************************/
 /*
 	单个显示对象的	FLAGS
@@ -77,7 +64,17 @@ enum {
 	 */
 	OBJ_UV_VERTEX_NORMAL=1,
 };
+struct VertexData
+{
+	//GLfloat数据的长度
+	int vertLen;
 
+	//顶点数据引用,这是一个引用
+	GLfloat* vertex;
+
+	//VBO数据
+	//struct VBO_Obj* vbo;
+};
 
 struct TLGLinfo{
 	/*景色深*/
@@ -85,63 +82,6 @@ struct TLGLinfo{
 	int* pScreenWidth;
 	int* pScreenHeight;
 };
-
-/*
-*	动作管理结构体
-*	用于切换关键帧,播放动作
-*/
-typedef struct FrameAnim
-{
-	/*
-	 *	当前动作的起始关键帧和结束关键帧索引号(从0开始)
-	 */
-	int frameStart;
-	/*
-	 *	结束帧索引,该索引从0开始
-	 */
-	int frameEnd;
-	
-	/*
-	 * 每一帧的间隔时间
-	 * fps = 60;
-	 * fpsInterval = 1000 / fps = 16.6666;
-	 */
-	long fpsInterval;
-
-	/*
-	 * 当前的插值
-	 */
-	long _subTick;
-
-	/*
-	*	当前关键帧索引号(从0开始)
-	*/
-	int curFrame;
-
-	
-	/*
-	*当前动作
-	*/
-	char curAnim[G_BUFFER_16_SIZE];
-	/*
-	*前一次动作
-	*/
-	char oldAnim[G_BUFFER_16_SIZE];
-	
-	/*
-	*	动作片段配置
-	*	"stand,0,39|run,40,45|"
-	*/
-	char animConfig[G_BUFFER_128_SIZE];
-
-	/*
-	*	播放一次动作回调
-	*/
-	//CallBackFun playOnceCallBack;
-	void (*playOnce)(struct FrameAnim*);
-	
-
-}FrameAnim;
 
 /*屏幕尺寸*/
 //void tlgl_screenSize(float* w,float* h);
@@ -224,321 +164,8 @@ void tlgl_drawPloyLine();
 */
 void tlgl_render_triangles(GLfloat* vertex,int vertexCount);
 
-/*
-	渲染一个带材质的模型
-*/
-void base_renderByMaterial(struct HeadInfo* base);
-
-//=========================================================================================================
-struct MaterialList
-{
-	struct LStackNode* texList;		/*贴图指针*/
-
-	struct LStackNode* vboList;		/*vbo列表*/
-};
-
-/*
-	贴图结构体
-*/
-struct Tex
-{
-	int w,h;
-	char texName[G_BUFFER_64_SIZE];			/*贴图名*/
-	//GLubyte* image;							/*贴图数据*/
-	int use;							/*使用的个数*/
-	int mTextureID;
-};
-//
-///*
-//	材质结构体
-//*/
-//struct Material{
-//	GLuint programObject;					/*着色器对象*/
-//	GLuint mTextureID;						/*Texture指针*/
-//};
-
-struct VertexData
-{
-	//GLfloat数据的长度
-	int vertLen;
-	
-	//顶点数据引用,这是一个引用
-	GLfloat* vertex;
-
-	//VBO数据
-	//struct VBO_Obj* vbo;
-};
-
-/*
-	Base 包含模型对象的基本操作,位移,旋转,缩放
-	这里和模型类型是否是md2,md5,obj无关,类似于它们的父类
-*/
-
-typedef struct Md2Info
-{
-	//开始帧
-	int s;
-	
-	//结束关键帧
-	int e;
-
-	//动作片段名
-	char* animName;
-
-	//记录是否找到
-	int findState;
-}Md2Info;
-
-///*
-//	顶点数据
-//*/
-//struct VertexData
-//{
-//	float* vert;	//顶点引用
-//	int count;		//float 数据个数
-//};
-
-/*
-	基础结构体,用于ent3d和md2继承
-*/
-struct HeadInfo{
-	/*事件引用*/
-	void* evtList;
-	/*类型*/
-	int curType;
-	
-	/*名字,可用于查询,作为唯一实例*/
-	char name[G_BUFFER_32_SIZE];
-	/*文件后缀*/
-	char suffix[G_BUFFER_16_SIZE];
-
-	/*坐标*/
-	float x,y,z;
-
-	float rx,ry,rz;
-
-	/*缩放值*/
-	float scale;
-	
-	/*
-		材质引用	===>struct GMaterial* tmat;
-	*/
-	struct GMaterial* tmat;
-
-	//char curShader[G_BUFFER_32_SIZE];//当前使用的shader
-
-	///*
-	//	vbo引用
-	//*/
-	//void* vboPtr;
-
-	/*
-	*	动态包围盒顶点数组引用
-	*/
-	float* boxVertPtr;
-
-	///*
-	//*	静态包围盒顶点数组,用来做射线拾取的
-	//*/
-	//float* staticBoxVert;
-
-	/*
-		静态顶点数据
-	*/
-	struct VertexData rayVertexData;
-
-	///*
-	//*	静态包围盒的长宽高
-	//*/
-	//float boundWidth,boundHeight,boundLength;
-
-	/*
-		标识位,标识各种状态
-	*/
-	int flags;
-	
-	/*
-	*	动作管理器
-	*/
-	struct FrameAnim* frameAnim;
-
-	///*
-	//*	渲染回调
-	//*/
-	//void (*render)(struct HeadInfo*);
-
-	/*
-	*	被渲染数据(顶点数据)
-	*/
-	struct VertexData rData;
-
-	/*
-		渲染节点回调接口,此接口做向外扩展用
-	*/
-	void (*renderCallBack)(void* ptr);
-	
-	/*
-		输入的变换矩阵
-	*/
-	Matrix44f m;
-	
-	/************************************************************************/
-	/* 四元数矩阵															*/
-	/************************************************************************/
-	Matrix44f quat_m;
-
-	struct Vec3 target;
-	int lookat;
-	
-	//做计时器存储的变量
-	long time;
-	
-	/*单个对象的关键帧帧率*/
-	int fpsInterval;
-	
-
-	/*
-	自定义设置当前的关键帧索引,0开始										
-	-1标示没有使用的状态,0代表使用指定的关键帧,初始化的时候设置成-1
-	*/
-	int custframe;
-	
-	/*
-		lua拾取回调
-	*/
-	char* luaPickCallBack;
-	/*
-		拾取框颜色
-	*/
-	float boxR,boxG,boxB;
-	/*是否是一个Node*结构*/
-	int isNode;
-};
-
-//接口定义部分
-
-/*
-*	curType:			模型类型
-*	name:				模型名,用于搜索
-*	x,y,z:				初始化坐标
-*	const char* tex:	贴图路径
-*/
-struct HeadInfo* base_create(int curType,const char* name,float x,float y,float z);
-
-/*
-	设置坐标
-*/
-void base_setPos(struct HeadInfo* base,float x,float y,float z);
-void base_set_position(struct HeadInfo* base,struct Vec3* pos);
-/************************************************************************/
-/* 设置对象的缩放值                                                                  
-/************************************************************************/
-void 
-base_set_scale(void* p,float scale);
-/*
-	更新矩阵
-*/
-void updateMat4x4(struct HeadInfo* base);
-/*
-*	绘制包围盒
-*	void (*translateCallBack)(struct HeadInfo*)	:矩阵变形回调
-*/
-//void base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount,void (*translateCallBack)(struct HeadInfo*));
-
-/*
- *	静态碰撞盒子 只是获取碰撞盒子数据不进行绘制
- *	初始化静态碰撞盒
- */
-void base_md2_staticBox(struct HeadInfo* base);
-
-/*
-	创建射线拾取盒子
-	float* inputVertex	三角形顶点序列
-	inoutVertexCount	float个数
-*/
-void base_createRayVertex(struct VertexData* rayVertexData,float* inputVertex,int inputVertexCount);
-
-/*
-*	设置动作
-*/
-void base_curAnim(struct FrameAnim* frameAnim,const char* anim);
-
-/*
-*	该接口只播放一次动作,播放完一次循环后,恢复上一个动作
-*/
-void base_playOnce(struct FrameAnim* frameAnim,const char* anim);
-
-/*
-*	计算关键帧
-*/
-void base_calculateFrame(struct FrameAnim* frameAnim);
-
-/*
-	获取渲染模式是否是线框还是实体模式
-*/
-int base_get_ploygonLineMode(struct HeadInfo* base);
-
-/*
-*	在渲染列表射线拾取
-*	struct Vec3* offset	这是一个偏移向量,可以作为视图矩阵的偏移值
-*/
-void base_seachPick(struct LStackNode* list,struct Vec3* nearPoint,struct Vec3* farPoint,struct HitResultObject* last);
-
-/*
-*	销毁
-*/
-void base_dispose(struct HeadInfo* base);
-
-struct HeadInfo* base_get(void* p);
-
-/*
-	填充 HeadInfo 结构体,根据head信息获取相关信息,需要尾部传递一个HeadInfo*引用
-*/
-//void base_get(void* point,struct HeadInfo* base);
-
-//实心渲染
-void base_renderFill(struct HeadInfo* node);
-
-/*
-	使用ms毫秒移动到x,y,z坐标
-	在单位时间内移动到一个目标向量,这是一个渐变的过程
-*/
-void base_trace(struct HeadInfo* base,float x,float y,float z,float ms);
-
-///*
-//	初始化静态包围盒
-//*/
-//void base_boxStaticVert_init(struct HeadInfo* base);
-
-/*
-	是否可以播放动画
-*/
-//int base_isCanAnimation(struct HeadInfo* ptr);
-/*
-	设置一个点击拾取的lua函数回调
-*/
-void base_setLuaPick(struct HeadInfo* base,const char* luaFunctionName);
-
-/************************************************************************/
-/* 设置后缀                                                    */
-/************************************************************************/
-void base_set_suffix(struct HeadInfo* base,const char* str);
-/*
-	双面绘制
-*/
-GLboolean base_cullface(struct HeadInfo* base);
-//==========================================================================
 
 
-
-/*
-	开始检测
-	GLint xMouse, GLint yMouse:鼠标拾取的2d屏幕坐标
-	mRayPickCallBack 回调
-*/
-void hit_mouse(GLint xMouse, GLint yMouse,float screenWidth,float screenHeight,
-			   struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMatrix,
-			   void (*mRayPickCallBack)(struct HitResultObject*));
 
 
 /*
@@ -547,11 +174,7 @@ void hit_mouse(GLint xMouse, GLint yMouse,float screenWidth,float screenHeight,
 GLuint tlgl_getShader(const char* glslType);
 
 
-//struct VBO_Obj* mat_loadModel(const char* path,int arrayLength);
-/*
-	绘制静态包围盒,该包围盒是自定义长宽高的
-*/
-void tlgl_staticBox(struct HeadInfo* base);
+
 
 
 /*
@@ -559,10 +182,6 @@ void tlgl_staticBox(struct HeadInfo* base);
 */
 void tlgl_getGPU_memery(GLint* total_mem_kb,GLint* cur_avail_mem_kb);
 
-/*
- *	绘制线框
- */
-void drawLineByColor(struct HeadInfo* base,GLfloat* vertex,int vertLen,float r,float g,float b);
 
 /*
 	设置vbo尺寸
@@ -585,4 +204,24 @@ void tlgl_setAbsBoundBox(float x,float y,float z,float* outTriData);
 *	取绝对值最大的做碰撞盒(8个float跨度)
 */
 void tlgl_absMax(float* vertexs,int count,float* out);
+
+int 
+tlgl_aabb(float* trianglesArray,int vertexCount,float* outData);
+
+void 
+tlgl_triangles(float* _array,int _arrayCount,GLenum mode);
+
+GLint
+tlgl_UnProject(GLfloat winx, GLfloat winy, GLfloat winz,
+			   const GLfloat modelMatrix[16], 
+			   const GLfloat projMatrix[16],
+			   const GLint viewport[4],
+			   GLfloat *objx, GLfloat *objy, GLfloat *objz);
+
+/*
+	绘制多边形法线(固定管线)
+	float normalSize  法线的长度
+*/
+void 
+tlgl_drawNormal(struct VertexData* rData,float normalSize);
 #endif

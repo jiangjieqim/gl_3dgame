@@ -22,6 +22,8 @@
 #include "evt.h"
 #include "xml.h"
 #include "tween.h"
+#include "base.h"
+#include "frame.h"
 //static long _delayTime=0;
 
 long g_delayTime;
@@ -107,7 +109,7 @@ md2_render(struct MD2_Object* _md2){
 	struct VertexData* p;
 
 	//计算关键帧
-	base_calculateFrame(frameAnim);
+	frame_run(frameAnim);
 
 	frame =	md2parse_getFrame(_md2->parseHandle,frameAnim->curFrame);//&(_md2->parseHandle->pframe[frameAnim->curFrame]);
 	//frame = &(_md2->parseHandle->pframe[0]);//只读取第一帧
@@ -249,7 +251,7 @@ static void
 md2_load(struct MD2_Object* _md2,const char* str,int len,const char* name)
 {
 	struct HeadInfo* base=NULL;
-	struct FrameAnim* frameAnim = NULL;
+	struct FrameAnim* frameAnim = 0;
 	long usetime=get_longTime();
 
 	int numFrames;
@@ -493,7 +495,7 @@ load_md2(const char* name,const char* model,float x,float y,float z,float scale)
 	//base_curAnim(base->frameAnim,defaultAnim);
 
 
-	updateMat4x4(base);
+	base_updateMat4x4(base);
 
 	f_addNode(p,md2);
 
@@ -1013,7 +1015,7 @@ load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
 	//加载md5模型
 	md5_loadMesh((struct MD5* )md5,url);
 	_base->curType = TYPE_MD5_FILE;
-	updateMat4x4(_base);
+	base_updateMat4x4(_base);
 
 	//添加到渲染列表
 	f_addNode(engine,md5);
@@ -1070,7 +1072,7 @@ load_obj(const char* name,const char* mesh_s,
 
 	base_createRayVertex(&base->rayVertexData,ent->vertex,ent->vertexCount);
 
-	updateMat4x4(base);
+	base_updateMat4x4(base);
 
 	//添加到渲染列表
 	f_addNode(engine,ent);
@@ -1319,7 +1321,7 @@ ex_set_anim(void* ptr,const char* animKey)
 	struct HeadInfo* base = base_get(ptr);
 	if(base->curType == TYPE_MD2_FILE)
 	{
-		base_curAnim(base->frameAnim,animKey);
+		frame_set(base->frameAnim,animKey);
 	}
 	else if(base->curType == TYPE_MD5_FILE)
 	{
@@ -1517,7 +1519,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 		}else{
 			//3D世界拾取
 			if(getv(&(ex->flags),EX_FLAGS_RAY)){
-				hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,ex->perspectiveMatrix,ex->modelViewMatrix,f_rayPick);
+				base_hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,ex->perspectiveMatrix,ex->modelViewMatrix,f_rayPick);
 			}
 		}
 	}
@@ -1562,7 +1564,7 @@ void onKeyboardCallBack(unsigned char key, int x, int y){
 
 static void 
 update3DNode(int data){
-	updateMat4x4(base_get((void*)data));
+	base_updateMat4x4(base_get((void*)data));
 }
 
 void 
@@ -1711,7 +1713,7 @@ setLookTarget(void* ptr,float x,float y,float z)
 		assert(0);
 	}
 	else
-		updateMat4x4(b);
+		base_updateMat4x4(b);
 }
 void
 ex_set_material(void* ptr,void* material){

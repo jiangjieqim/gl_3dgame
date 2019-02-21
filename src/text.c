@@ -6,6 +6,7 @@
 #include "text.h"
 #include "ex.h"
 #include "tl_malloc.h"
+#include "base.h"
 static void 
 f_address2str(int v,char* buffer,int bufferSize){
 	memset(buffer,0,bufferSize);

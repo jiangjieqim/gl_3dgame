@@ -10,6 +10,7 @@
 #include "tmat.h"
 #include "anim.h"
 #include "node.h"
+#include "base.h"
 
 //Ïú»Ù
 static void

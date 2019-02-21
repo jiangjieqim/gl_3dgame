@@ -218,6 +218,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\base.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\bmp.c"
 				>
 			</File>
@@ -227,6 +231,10 @@
 			</File>
 			<File
 				RelativePath="..\src\ex.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\frame.c"
 				>
 			</File>
 			<File
@@ -295,6 +303,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\base.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\bmp.h"
 				>
 			</File>
@@ -304,6 +316,10 @@
 			</File>
 			<File
 				RelativePath="..\include\ex.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\frame.h"
 				>
 			</File>
 			<File

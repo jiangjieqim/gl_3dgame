@@ -10,7 +10,7 @@
 #include "gettime.h"
 #include "ring.h"
 #include "tween.h"
-
+#include "base.h"
 
 
 /*
@@ -99,7 +99,7 @@ box_rayPick(int evtId,void* data){
 
 	struct HeadInfo* base =  base_get(ex_find(_ARROW_OBJ_));
 	base->rz=vec_rotateAngle(hit->x, hit->y, 1.0f, 0.0f);
-	updateMat4x4(base);
+	base_updateMat4x4(base);
 }
 static void 
 f_playCallBack(void* data){
@@ -153,7 +153,7 @@ floor_rayPick(int evtId,void* data){
 		log_color(0x00ff00,"角位移插值:%.3f -> %.3f = %.3f\n",ptrHorse->ry,tangle,tangle - ptrHorse->ry);
 
 		ptrHorse->ry = tangle;
-		updateMat4x4(ptrHorse);//更新角色矩阵
+		base_updateMat4x4(ptrHorse);//更新角色矩阵
 
 		base_setPos(_target, hit->x, hit->y, hit->z);//设置拾取小盒子的位置
 
@@ -544,7 +544,7 @@ REG_test_unit_01(lua_State *L){
 		if(base){
 
 			base->rz = _ang;
-			updateMat4x4(base);
+			base_updateMat4x4(base);
 		}
 		printf("outDirection:\t%.3f\t%.3f\t%.3f\nnormalpos1:\t%.3f\t%.3f\t%.3f angle=%.2f \t _ang=%.2f\n\n",outDirection.x,outDirection.y,outDirection.z,normalpos1.x,normalpos1.y,normalpos1.z,angle,_ang);
 	}

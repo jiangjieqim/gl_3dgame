@@ -7,7 +7,7 @@
 #include "gettime.h"
 #include "md2.h"
 #include "ex.h"
-
+#include "base.h"
 static void 
 pushCollionBox(struct CollideBox* ptr,int verts,int vertsCount)
 {
