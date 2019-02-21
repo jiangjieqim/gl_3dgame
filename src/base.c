@@ -156,14 +156,6 @@ void base_set_suffix(struct HeadInfo* base,const char* str){
 }
 
 
-void 
-base_createRayVertex(struct VertexData* rayVertexData,
-					 float* inputVertex,int inputVertexCount)
-{
-	rayVertexData->vertLen = BOX_SIZE;
-	rayVertexData->vertex = (float*)tl_malloc(sizeof(float)*rayVertexData->vertLen);
-	tlgl_aabb(inputVertex,inputVertexCount,rayVertexData->vertex);
-}
 
 
 

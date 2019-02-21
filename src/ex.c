@@ -487,7 +487,7 @@ load_md2(const char* name,const char* model,float x,float y,float z,float scale)
 	base->scale = scale;
 
 	frame =	md2parse_getFrame(md2->parseHandle,0);	// &(md2->parseHandle->pframe[0]);//取第1帧为射线拾取的索引
-	base_createRayVertex(&base->rayVertexData,frame->vertices,frame->vertCount);
+	tlgl_createRay(&base->rayVertexData,frame->vertices,frame->vertCount);
 
 	printf("创建md2 [%s],每%ld毫秒切换一帧, 坐标x:%.3f,y:%.3f,z:%.3f 当前动作:%s\n",name,base->frameAnim->fpsInterval,x,y,z,base->frameAnim->curAnim);
 
@@ -1070,7 +1070,7 @@ load_obj(const char* name,const char* mesh_s,
 
 	f_end3d_loadMesh(ent,mesh_s);//加载解析数据
 
-	base_createRayVertex(&base->rayVertexData,ent->vertex,ent->vertexCount);
+	tlgl_createRay(&base->rayVertexData,ent->vertex,ent->vertexCount);
 
 	base_updateMat4x4(base);
 

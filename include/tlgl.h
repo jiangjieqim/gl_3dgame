@@ -224,4 +224,13 @@ tlgl_UnProject(GLfloat winx, GLfloat winy, GLfloat winz,
 */
 void 
 tlgl_drawNormal(struct VertexData* rData,float normalSize);
+
+/*
+	创建射线拾取盒子
+	float* inputVertex	三角形顶点序列
+	inoutVertexCount	float个数
+*/
+void tlgl_createRay(struct VertexData* rayVertexData,float* inputVertex,int inputVertexCount);
+
+
 #endif

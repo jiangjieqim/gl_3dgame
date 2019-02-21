@@ -178,13 +178,6 @@ void base_updateMat4x4(struct HeadInfo* base);
  */
 void base_md2_staticBox(struct HeadInfo* base);
 
-/*
-	创建射线拾取盒子
-	float* inputVertex	三角形顶点序列
-	inoutVertexCount	float个数
-*/
-void base_createRayVertex(struct VertexData* rayVertexData,float* inputVertex,int inputVertexCount);
-
 
 
 

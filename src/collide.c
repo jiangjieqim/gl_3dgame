@@ -12,7 +12,7 @@ static void
 pushCollionBox(struct CollideBox* ptr,int verts,int vertsCount)
 {
 	struct VertexData* pvd = tl_malloc(sizeof(struct VertexData));
-	base_createRayVertex(pvd,(float*)verts,vertsCount);
+	tlgl_createRay(pvd,(float*)verts,vertsCount);
 	LStack_push(ptr->list,pvd);
 }
 
