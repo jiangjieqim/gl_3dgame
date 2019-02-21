@@ -374,5 +374,9 @@ extern long g_delayTime;
  *获取偏移值
  */
 int ex_get_gap(int type);
+/*
+	弹出一个窗口
+*/
+void ex_alert(const char* msg);
 
 #endif

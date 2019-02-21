@@ -300,9 +300,10 @@ end
 --[[
 	设置坐标(兼容模式)
 --]]
-function func_setPos(p,x,y,z)
+function func_setPos(p,x,y)
 	
-	local t = func_getGameObjectType(p)
+	local t = func_get_type(p)
+	
 	local pos = x..","..y
 	
 	if(t == TYPE_SPRITE_FLIE) then
@@ -316,6 +317,9 @@ function func_setPos(p,x,y,z)
 	end
 	
 end
+
+
+
 
 --内存回收
 function func_gc()
@@ -617,6 +621,13 @@ end
 function func_get_longTime()
 	return get_attr(nil,"get_longTime");
 end
+
+--获取进程运行时间
+function func_screenSize()
+	local w,h=get_attr(nil,"screenSize");
+	return w,h
+end
+
 --获取fps
 function func_fps()
 	return get_attr(nil,"fps");
@@ -679,4 +690,8 @@ end
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件
+dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
+
+
+

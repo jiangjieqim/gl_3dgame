@@ -168,10 +168,14 @@ end
 function btn_visible(btn,vis)
 	local f = FLAGS_VISIBLE
 	if(vis) then
-		setv(btn.label,f);
+		if(btn.label) then
+			setv(btn.label,f);
+		end
 		setv(btn.sprite,f);
 	else
-		resetv(btn.label,f);
+		if(btn.label) then
+			resetv(btn.label,f);
+		end
 		resetv(btn.sprite,f);
 	end
 end

@@ -55,14 +55,6 @@ f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
 	tlgl_drawColorLine(base->m,base->tmat,base->boxVertPtr,dataLength,base->boxR,base->boxG,base->boxB);
 }
 /*
-static
-void f_base_custRender(struct HeadInfo* base)
-{
-	if(base->renderCallBack!=NULL)	base->renderCallBack(base);	
-}
-*/
-
-/*
 	当位置，缩放,旋转发生变化的时候更新矩阵
 */
 void 

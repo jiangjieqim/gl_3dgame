@@ -1680,6 +1680,10 @@ void ex_callParmLuaFun(const char* luaFunName,const char* parm)
 	}
 }
 
+void ex_alert(const char* msg){
+	ex_callParmLuaFun("alert",msg);
+}
+
 void ex_callIntLuaFun(const char* luaFunName,int value)
 {
 	if((size_t)strlen(luaFunName))
