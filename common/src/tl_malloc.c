@@ -95,7 +95,7 @@ f_findnew(int data,int parm)
 	return 1;
 }
 
-void*
+static void*
 memory_new(int size)
 {
 	struct MemoryNode* node;
@@ -186,12 +186,12 @@ f_free(void *p,int _stat){
 	LStack_ergodic(memList,f_findfree,0);
 }
 
-void 
+static void 
 memory_retrieve(void* p){
 	f_free(p,1);
 }
 
-void  
+static void  
 memory_free(void* p){
 /*
 	int stat;

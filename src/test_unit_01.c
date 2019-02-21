@@ -381,6 +381,8 @@ REG_test_unit_01_init(lua_State *L){
 	 //初始化
 	//struct Node* node;
 	void* _ptr;
+	//_ptr = MALLOC(10);
+
 	//添加一个3D渲染回调
 	evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLine);
 
