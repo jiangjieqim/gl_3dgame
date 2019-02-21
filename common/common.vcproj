@@ -41,11 +41,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;COMMON_EXPORTS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;COMMON_EXPORTS;BUILDING_DLL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
@@ -180,6 +181,22 @@
 				RelativePath=".\src\common.c"
 				>
 			</File>
+			<File
+				RelativePath=".\src\gettime.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\tl_malloc.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\tools.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\vmath.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -188,6 +205,26 @@
 			>
 			<File
 				RelativePath=".\include\common.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\def.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\gettime.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\tl_malloc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\tools.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\vmath.h"
 				>
 			</File>
 		</Filter>

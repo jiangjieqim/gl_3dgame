@@ -6,7 +6,7 @@
 #include <gl/glut.h>
 
 #include "tmat.h"
-
+#include "vmath.h"
 
 
 /*shader¿‡–Õ*/

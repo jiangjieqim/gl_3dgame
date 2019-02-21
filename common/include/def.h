@@ -1,6 +1,21 @@
 #ifndef _DEF_H_
 #define _DEF_H_
 
+
+
+
+
+
+//#define BUILDING_DLL
+
+#ifdef BUILDING_DLL
+#define DLLIMPORT __declspec(dllexport)
+#else
+#define DLLIMPORT __declspec(dllimport)
+#endif
+
+//#define DLLIMPORT extern
+
 //公共宏部分
 
 //*****************************************************************************
@@ -28,5 +43,7 @@
 #define  TRUE 1
 #define FALSE 0
 //*****************************************************************************
+
+
 
 #endif

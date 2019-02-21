@@ -1,3 +1,5 @@
+//#define BUILDING_DLL
+
 #include <stdio.h>     
 #include <stdlib.h>
 #include <string.h>
@@ -5,9 +7,13 @@
 #include <assert.h>
 #include <stdarg.h>
 
-#define BUILDING_DLL
+
 
 #include "common.h"
+//#include "gettime.h"
+//#include "vmath.h"
+//#include "tools.h"
+//#include "tl_malloc.h"
 
 //Ïà¶ÔÂ·¾¶
 char* g_local_path[256];
@@ -49,7 +55,7 @@ tl_newName(char* buffer,int bufferSize){
 	memset(buffer,0,bufferSize);
 	sprintf_s(buffer,bufferSize,"instance%d",_nameId);
 	_nameId++;
-	dllGlobalVar = _nameId;
+	//dllGlobalVar = _nameId;
 }
 
 /*

@@ -242,10 +242,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\gettime.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\jgl.c"
 				>
 			</File>
@@ -302,10 +298,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\tl_malloc.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\tlgl.c"
 				>
 			</File>
@@ -314,15 +306,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\tools.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\tween.c"
-				>
-			</File>
-			<File
-				RelativePath="..\src\vmath.c"
 				>
 			</File>
 			<File
@@ -376,10 +360,6 @@
 			</File>
 			<File
 				RelativePath="..\include\ex.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\gettime.h"
 				>
 			</File>
 			<File
@@ -447,10 +427,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\tl_malloc.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\tlgl.h"
 				>
 			</File>
@@ -459,15 +435,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\tools.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\tween.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\vmath.h"
 				>
 			</File>
 			<File

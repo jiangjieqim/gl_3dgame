@@ -1,10 +1,7 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
-#ifdef BUILDING_DLL
-#define DLLIMPORT __declspec(dllexport)
-#else
-#define DLLIMPORT __declspec(dllimport)
-#endif
+
+#include "def.h"
 
 DLLIMPORT 
 int x_md2load(const char* path);
@@ -32,7 +29,7 @@ void  tl_writeAppandFile(const char* filePath,char* buffer);
 DLLIMPORT
 void tl_newName(char* buffer,int bufferSize);
 
-DLLIMPORT int dllGlobalVar;
+//DLLIMPORT int dllGlobalVar;
 
 /*
 	相对于程序的路径
@@ -41,5 +38,6 @@ DLLIMPORT char* g_local_path[256];
 
 /*路径转化*/
 DLLIMPORT int tl_convert_path(char* in,char* out,int outBufferSize);
+
 
 #endif

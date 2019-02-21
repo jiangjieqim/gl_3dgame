@@ -2,7 +2,7 @@
 #define _TMAT_H_
 #include "tools.h"
 #include "tlgl.h"
-
+#include "vmath.h"
 
 /*
 	预留的贴图数量,最多可以用8张贴图
