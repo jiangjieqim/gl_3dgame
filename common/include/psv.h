@@ -2,6 +2,9 @@
 //=============================================================================
 #ifndef _PCSV_H_
 #define _PCSV_H_
+
+#include "def.h"
+
 struct PCsvVO{
 	/*
 	数据行list
@@ -45,17 +48,17 @@ printf("===========>%d bytes\n",tl_memByteSize());
 *	const char* key		:主键
 *	int checkIndex		:用第几行作为key名列表,从0开始(csv表中 只用一行作为主键键名.如果是第1行作为主键,checkIndex=0)
 */
-struct PCsvVO* pcsv_load(const char* path,const char* mainkey,int checkIndex);
+DLLIMPORT struct PCsvVO* pcsv_load(const char* path,const char* mainkey,int checkIndex);
 /*
 销毁PCsvVO数据
 */
-void pcsv_dispose(struct PCsvVO* p);
+DLLIMPORT void pcsv_dispose(struct PCsvVO* p);
 
 /*
 根据keyValue匹配主键的值获取该行数据
 注意:这里的Array不需要用array_free释放,因为在pcsv_dispose会释放
 */
-struct Array* pcsv_getValue(struct PCsvVO* p,const char* keyValue);
+DLLIMPORT struct Array* pcsv_getValue(struct PCsvVO* p,const char* keyValue);
 
 //========================================================================
 #endif

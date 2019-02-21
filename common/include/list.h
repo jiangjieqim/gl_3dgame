@@ -1,5 +1,6 @@
 #ifndef _LIST_H_
 #define _LIST_H_
+#include "def.h"
 /**
 *	列表结构体
 */
@@ -33,14 +34,14 @@ int main(int argc, char* argv[])
 /*
 *	初始化一个列表,起始长度为0
 */
-void list_create(struct List* _l);
+DLLIMPORT void list_create(struct List* _l);
 /*
 *	为列表添加一个float数据,索引从0位开始增加
 */
-void list_add(struct List* _l,float value);
+DLLIMPORT void list_add(struct List* _l,float value);
 /*
 *	销毁列表	
 */
-void list_dispose(struct List* _l);
+DLLIMPORT void list_dispose(struct List* _l);
 #endif
 //=======================================================================

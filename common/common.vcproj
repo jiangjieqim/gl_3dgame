@@ -178,11 +178,39 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\src\array.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\byte.c"
+				>
+			</File>
+			<File
 				RelativePath=".\src\common.c"
 				>
 			</File>
 			<File
+				RelativePath=".\src\evt.c"
+				>
+			</File>
+			<File
 				RelativePath=".\src\gettime.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\list.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\psv.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\ring.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\str.c"
 				>
 			</File>
 			<File
@@ -194,7 +222,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\tween.c"
+				>
+			</File>
+			<File
 				RelativePath=".\src\vmath.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\xml.c"
 				>
 			</File>
 		</Filter>
@@ -204,6 +240,14 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\include\array.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\byte.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\common.h"
 				>
 			</File>
@@ -212,7 +256,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\evt.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\gettime.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\list.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\psv.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\ring.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\str.h"
 				>
 			</File>
 			<File
@@ -224,7 +288,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\tween.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\vmath.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\xml.h"
 				>
 			</File>
 		</Filter>

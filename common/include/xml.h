@@ -1,6 +1,6 @@
 #ifndef _XML_H_
 #define _XML_H_
-
+#include "def.h"
 /*
 *	Type:XMLSList
 *	-------------
@@ -83,7 +83,7 @@ Type:XmlNode
 	getchar();
 	--------------------------------------
 */
-struct XMLSList* xml_parse(const char* str);
+DLLIMPORT struct XMLSList* xml_parse(const char* str);
 
 /*
 Function:	xml_getRow
@@ -91,17 +91,17 @@ Function:	xml_getRow
 获取表内的一行
 
 */
-struct XmlNode* 
+DLLIMPORT struct XmlNode* 
 xml_getrow(struct XMLSList* xml,const char* parms,const char* parmsValue);
 /*
  *根据索引获取node引用
  **/
-void* 
+DLLIMPORT void* 
 xml_getNodeByIndex(void* xml,int index);
 /*
 销毁xml句柄
 */
-void xml_del(struct XMLSList* xml);
+DLLIMPORT void xml_del(struct XMLSList* xml);
 
 /*
 获取参数值
@@ -112,21 +112,21 @@ bufferSize	--缓冲区大小
 return	--1：获取成功, 2:获取失败
 
 */
-int xml_getstr(const struct XmlNode* node,const char* key,
+DLLIMPORT int xml_getstr(const struct XmlNode* node,const char* key,
 			   char* buffer,int bufferSize);
 
 /*
 	获取int
 */
-int xml_getint(const struct XmlNode* node,const char* key);
+DLLIMPORT int xml_getint(const struct XmlNode* node,const char* key);
 
 /*
 	获取float
 */
-float xml_getfloat(const struct XmlNode* node,const char* key);
+DLLIMPORT float xml_getfloat(const struct XmlNode* node,const char* key);
 
 /*
 	返回一个tl_malloc的字符串引用,在堆上,用完要释放
 */
-char* xml_getCopystr(const struct XmlNode* node,const char* key);
+DLLIMPORT char* xml_getCopystr(const struct XmlNode* node,const char* key);
 #endif

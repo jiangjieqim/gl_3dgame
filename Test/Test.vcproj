@@ -214,10 +214,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\array.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\atlas.c"
 				>
 			</File>
@@ -226,15 +222,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\byte.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\collide.c"
-				>
-			</File>
-			<File
-				RelativePath="..\src\evt.c"
 				>
 			</File>
 			<File
@@ -243,10 +231,6 @@
 			</File>
 			<File
 				RelativePath="..\src\jgl.c"
-				>
-			</File>
-			<File
-				RelativePath="..\src\list.c"
 				>
 			</File>
 			<File
@@ -270,19 +254,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\psv.c"
-				>
-			</File>
-			<File
-				RelativePath="..\src\ring.c"
-				>
-			</File>
-			<File
 				RelativePath="..\src\sprite.c"
-				>
-			</File>
-			<File
-				RelativePath="..\src\str.c"
 				>
 			</File>
 			<File
@@ -305,14 +277,6 @@
 				RelativePath="..\src\tmat.c"
 				>
 			</File>
-			<File
-				RelativePath="..\src\tween.c"
-				>
-			</File>
-			<File
-				RelativePath="..\src\xml.c"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -327,10 +291,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\array.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\atlas.h"
 				>
 			</File>
@@ -339,23 +299,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\byte.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\collide.h"
-				>
-			</File>
-			<File
-				RelativePath="..\common\include\common.h"
-				>
-			</File>
-			<File
-				RelativePath="..\common\include\def.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\evt.h"
 				>
 			</File>
 			<File
@@ -368,10 +312,6 @@
 			</File>
 			<File
 				RelativePath="..\include\lauxlib.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\list.h"
 				>
 			</File>
 			<File
@@ -407,19 +347,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\psv.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\ring.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\sprite.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\str.h"
 				>
 			</File>
 			<File
@@ -432,14 +360,6 @@
 			</File>
 			<File
 				RelativePath="..\include\tmat.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\tween.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\xml.h"
 				>
 			</File>
 		</Filter>

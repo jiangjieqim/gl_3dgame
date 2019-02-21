@@ -80,7 +80,7 @@ void str_replace(void* ptr, char *oldstr, char *pDst){
 	_ss = str_create("");
 
 	ts = pstr->s;
-	i=strcspn(ts,oldstr);
+	i=(int)strcspn(ts,oldstr);
 
 	if(i){
 		mode = 1;
@@ -101,7 +101,7 @@ void str_replace(void* ptr, char *oldstr, char *pDst){
 		}
 
 		_new = ts +_l;
-		n=strcspn(_new,oldstr);
+		n=(int)strcspn(_new,oldstr);
 		str_appand_s(_ss,_new,n);
 		ts = _new+n;
 		i = n;
