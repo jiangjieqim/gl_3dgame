@@ -65,7 +65,7 @@ drawCollion(struct Node* p)
 {
 	struct HeadInfo* b = base_get(p);
 	struct VertexData* vd =collide_cur(p->ptrCollide);
-	base_drawLineByColor(b,vd->vertex,vd->vertLen,b->boxR,b->boxG,b->boxB);
+	tlgl_drawColorLine(b->m,b->tmat,vd->vertex,vd->vertLen,b->boxR,b->boxG,b->boxB);
 }
 
 /*

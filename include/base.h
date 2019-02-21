@@ -78,7 +78,7 @@ struct HeadInfo{
 	/*
 		渲染节点回调接口,此接口做向外扩展用
 	*/
-	void (*renderCallBack)(void* ptr);
+	//void (*renderCallBack)(void* ptr);
 	
 	/*
 		输入的变换矩阵
@@ -245,17 +245,5 @@ GLboolean base_cullface(struct HeadInfo* base);
 void base_hit_mouse(GLint xMouse, GLint yMouse,float screenWidth,float screenHeight,
 			   struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMatrix,
 			   void (*mRayPickCallBack)(struct HitResultObject*));
-
-			   
-/*
- *	绘制线框
- */
-void base_drawLineByColor(struct HeadInfo* base,GLfloat* vertex,int vertLen,float r,float g,float b);
-
-//struct VBO_Obj* mat_loadModel(const char* path,int arrayLength);
-/*
-	绘制静态包围盒,该包围盒是自定义长宽高的
-*/
-void base_staticBox(struct HeadInfo* base);
 
 #endif

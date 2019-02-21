@@ -31,21 +31,36 @@ base_get(void* p){
 	return b->base;
 }
 
-static void f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount);
 static void f_outline(struct HeadInfo* base);
 
 static void f_renderLine(struct HeadInfo* base);
 
 static void f_outlineByGLSL(struct HeadInfo* base,float r,float g,float b);
 
+static void 
+f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
+
+	int dataLength;
+	if(!getv(&base->flags,FLAGS_RENDER_BOUND_BOX)){
+		return;
+	}
+
+	if(!base->boxVertPtr)//这里把boxVertPtr剥离出去
+	{
+		base->boxVertPtr = tl_malloc(sizeof(float)*BOX_SIZE);
+	}
+	//生成包围盒数据,将数据填充到base->boxVert中,这里的顶点会自己变化
+	dataLength=tlgl_aabb(vertices,vertCount,base->boxVertPtr);
+
+	tlgl_drawColorLine(base->m,base->tmat,base->boxVertPtr,dataLength,base->boxR,base->boxG,base->boxB);
+}
+/*
 static
 void f_base_custRender(struct HeadInfo* base)
 {
-	if(base->renderCallBack!=NULL)
-	{
-		base->renderCallBack(base);
-	}
+	if(base->renderCallBack!=NULL)	base->renderCallBack(base);	
 }
+*/
 
 /*
 	当位置，缩放,旋转发生变化的时候更新矩阵
@@ -79,48 +94,6 @@ base_updateMat4x4(struct HeadInfo* base){
 	mat4x4_rotateZ(rz,base->rz);
 	
 	mat4x4_mult(5,base->m,xyz,ry,rx,rz,scale);	//矩阵base->m = xyz * ry * rx * rz * scale
-	//mat4x4_mult(6,base->m,xyz,ry,rx,rz,base->quat_m,scale);
-	//mat4x4_mult(6,base->m,xyz,base->quat_m,ry,rx,rz,scale);
-
-/*
-	if(base->curType == TYPE_SPRITE_FLIE || base->curType==TYPE_TEXT_FILE)
-	{
-		//2d类型
-		multi2(base->m,xyz,result);//位移矩阵
-	}
-	else
-	{
-		
-		if(!base->lookat){
-			//不在朝向目标
-			multi2(base->m,xyz,result);
-
-		}else{
-			struct EX* p =ex_getInstance();
-			Matrix44f _look,tt;
-			struct Vec3 eye;
-			struct Vec3 center;
-			struct Vec3 up;
-			eye.x = -p->camx;//base->target.x;
-			eye.y = -p->camy;//base->target.y;
-			eye.z = -p->camz;//base->target.z;
-
-			center.x = base->x;
-			center.y = base->y;
-			center.z = base->z;
-
-			up.x = 0;
-			up.y = 1;
-			up.z = 0;
-			mat4x4_zero(tt);
-			mat4x4_lookAt(_look,&eye,&center,&up);
-			
-			mat4x4_transpose(_look);
-			multi2(tt,_look,result);
-			multi2(base->m,xyz,tt);
-		}
-	}
-*/
 }
 
 /*
@@ -154,10 +127,6 @@ void base_set_suffix(struct HeadInfo* base,const char* str){
 	tl_strsub(str,base->suffix,pos + n,strlen(str) - n);
 	//printf("[%s]\n",base->suffix);
 }
-
-
-
-
 
 struct HeadInfo* base_create(int curType,const char* name,float x,float y,float z)
 {
@@ -247,31 +216,28 @@ void base_dispose(struct HeadInfo* base){
 
 	tl_free(base);
 }
-void 
-base_drawLineByColor(struct HeadInfo* base,GLfloat* vertex,int vertLen,float r,float g,float b)
-{
-	struct GMaterial* m = (struct GMaterial*)base->tmat;
-	m->_lineColor.x = r;
-	m->_lineColor.y = g;
-	m->_lineColor.z = b;
-	tmat_render(base->tmat,"diffuseStateBox",base->m);
-	tlgl_triangles(vertex,vertLen,GL_LINE);
+/*
+	绘制静态包围盒,该包围盒是自定义长宽高的
+*/
+static void 
+f_base_staticBox(struct HeadInfo* base){
+
+	struct VertexData* ray = &base->rayVertexData;
+	if(!getv(&base->flags,FLAGS_DRAW_RAY_COLLISION) || !ray->vertex || !ray->vertLen){
+		return;
+	}
+	tlgl_drawColorLine(base->m,base->tmat,ray->vertex,ray->vertLen,base->boxR,base->boxG,base->boxB);
 }
-//void f_closeRenderState(){
-//	//解绑着色器对象
-//	glUseProgram(0);
-//	glActiveTexture(0);
-//	glBindTexture(GL_TEXTURE_2D,0);
-//}
-void base_renderFill(struct HeadInfo* base)
-{
+
+void base_renderFill(struct HeadInfo* base){
 	struct VertexData* node=&base->rData;
 
 	//绘制静态包围盒
-	base_staticBox(base);
+	f_base_staticBox(base);
 
 	if(!getv(&(base->flags),FLAGS_VISIBLE))
 	{
+		//是否隐藏mesh
 		return;
 	}
 
@@ -300,45 +266,14 @@ void base_renderFill(struct HeadInfo* base)
 	f_outline(base);
 
 	//自定义的回调渲染方式
-	f_base_custRender(base);
+	//f_base_custRender(base);
+	//if(base->renderCallBack!=NULL)	base->renderCallBack(base);
 
 	//这里需要关闭所有着色器中的状态...
 
 }
 
 
-static void f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
-
-	int dataLength;
-	if(!getv(&base->flags,FLAGS_RENDER_BOUND_BOX)){
-		return;
-	}
-
-	/*glPushMatrix();
-	glLoadIdentity();
-	glTranslatef(base->x,base->y,base->z);*/
-	
-	//生成包围盒顶点数据
-	//f_base_boxVert_init(base);
-
-	if(!base->boxVertPtr)
-	{
-		base->boxVertPtr = tl_malloc(sizeof(float)*BOX_SIZE);
-	}
-	//生成包围盒数据,将数据填充到base->boxVert中
-	dataLength=tlgl_aabb(vertices,vertCount,base->boxVertPtr);
-
-	//渲染三角形线框
-	//tlgl_drawTrianglesLine(base->boxVertPtr,dataLength,0.0f,1.0f,0.0f);		//base->boxVertLength
-
-	//tmat_render(base->tmat,"diffuseStateBox",base->m,0);
-	//tlgl_triangles(base->boxVertPtr,dataLength,GL_LINE);
-
-	base_drawLineByColor(base,base->boxVertPtr,dataLength,base->boxR,base->boxG,base->boxB);
-
-
-	//glPopMatrix();
-}
 /*
 	渲染混合三角形
 */
@@ -403,17 +338,6 @@ static void f_renderLine(struct HeadInfo* base){
 }
 
 
-/*
-	绘制静态包围盒,该包围盒是自定义长宽高的
-*/
-void base_staticBox(struct HeadInfo* base){
-
-	struct VertexData* ray = &base->rayVertexData;
-	if(!getv(&base->flags,FLAGS_DRAW_RAY_COLLISION) || !ray->vertex || !ray->vertLen){
-		return;
-	}
-	base_drawLineByColor(base,ray->vertex,ray->vertLen,base->boxR,base->boxG,base->boxB);
-}
 
 void 
 base_seachPick(struct LStackNode* s,struct Vec3* nearPoint,struct Vec3* farPoint,struct HitResultObject* last){

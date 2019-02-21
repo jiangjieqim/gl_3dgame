@@ -232,5 +232,12 @@ tlgl_drawNormal(struct VertexData* rData,float normalSize);
 */
 void tlgl_createRay(struct VertexData* rayVertexData,float* inputVertex,int inputVertexCount);
 
-
+/*
+ *	绘制一个设置线框的mesh
+ */
+void tlgl_drawColorLine(
+				   Matrix44f matrix44f,struct GMaterial* m,
+				   GLfloat* vertex,int vertLen,
+				   float r,float g,float b
+				   );
 #endif
