@@ -98,22 +98,16 @@ enum
 #define KEY_D 100
 #define KEY_I 105
 
-//文件类型定义
-#define TYPE_OBJ_FILE 0	//obj类型
-#define TYPE_MD5_FILE 1 //md5类型
-#define TYPE_MD2_FILE 2 //md2类型
-#define TYPE_SPRITE_FLIE 3//UI界面类型中的sprite
-#define TYPE_TEXT_FILE	4	//文本类型
-#define TYPE_OBJ_VBO_FILE	5//VBO文件数据
 
-#define  SUFFIX_OBJ "obj"
-#define  SUFFIX_MD5MESH "md5mesh"
-#define  SUFFIX_MD2 "md2"
+
+//#define  SUFFIX_OBJ "obj"
+//#define  SUFFIX_MD5MESH "md5mesh"
+//#define  SUFFIX_MD2 "md2"
 
 
 /* 文件类型*/
-#define TYPE_UNKNOW_FILE -1
-#define FILE_FORMAT_STR "obj,md5mesh"
-#define TYPE_ERROR_FILE -1//无法识别的类型
+//#define TYPE_UNKNOW_FILE -1
+//#define FILE_FORMAT_STR "obj,md5mesh"
+//#define TYPE_ERROR_FILE -1//无法识别的类型
 
 #endif

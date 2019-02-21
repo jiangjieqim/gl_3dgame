@@ -32,4 +32,13 @@ DLLIMPORT
 void tl_newName(char* buffer,int bufferSize);
 
 DLLIMPORT int dllGlobalVar;
+
+/*
+	相对于程序的路径
+ */
+DLLIMPORT char* g_local_path[256];
+
+/*路径转化*/
+DLLIMPORT int tl_convert_path(char* in,char* out,int outBufferSize);
+
 #endif

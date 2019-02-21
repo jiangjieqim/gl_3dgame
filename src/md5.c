@@ -1023,17 +1023,20 @@ void md5_loadMesh(struct MD5* p,const char* path){
 	char* _md5MeshData = NULL;
 	int length;
 	
-	char suffix[G_BUFFER_16_SIZE];
+	//char suffix[G_BUFFER_16_SIZE];
 	struct md5_anim_t* pAnim=NULL;
 	struct anim_info_t* animInfo=NULL;
 	struct md5_joint_t *skeleton = NULL;
+	struct HeadInfo* base = (struct HeadInfo*)p->base;
 	p->frameTicket = 0;
 
 	//设置当前类型
 	//memset(suffix,0,G_BUFFER_16_SIZE);
-	tl_getSuffixByPath((char*)path,suffix,G_BUFFER_16_SIZE);
+	//tl_getSuffixByPath((char*)path,suffix,G_BUFFER_16_SIZE);
 
-	((struct HeadInfo*)p->base)->curType = tl_typeStr(FILE_FORMAT_STR,suffix);
+	base->curType = TYPE_MD5_FILE;
+		
+		//tl_typeStr(FILE_FORMAT_STR,suffix);
 
 	base_set_suffix((struct HeadInfo*)p->base,path);
 

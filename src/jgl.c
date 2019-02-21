@@ -7,6 +7,8 @@
 #pragma comment(lib,"glew32.lib")
 #pragma comment(lib,"glut32.lib")
 
+#include "common.h"
+
 #include "tl_malloc.h"
 #include "gettime.h"
 #include "tools.h"

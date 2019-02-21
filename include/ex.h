@@ -24,6 +24,15 @@
 #define	E_RenderModeNormal	1			//			固定管线渲染模式
 #define	E_RenderModeVBO		2			//			VBO渲染模式
 
+//文件类型定义
+#define TYPE_OBJ_FILE 0	//obj类型
+#define TYPE_MD5_FILE 1 //md5类型
+#define TYPE_MD2_FILE 2 //md2类型
+#define TYPE_SPRITE_FLIE 3//UI界面类型中的sprite
+#define TYPE_TEXT_FILE	4	//文本类型
+#define TYPE_OBJ_VBO_FILE	5//VBO文件数据
+
+
 /************************************************************************/
 /* 引擎事件定义                                                         */
 /************************************************************************/
