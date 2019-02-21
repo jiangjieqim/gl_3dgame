@@ -2,6 +2,7 @@
 #include <string.h>
 #include <assert.h>
 
+#include "common.h"
 #include "tools.h"
 #include "ex.h"
 #include "tmat.h"
@@ -11,7 +12,7 @@
 #include "obj.h"
 #include "obj_vbo.h"
 #include "tl_malloc.h"
-#include "common.h"
+
 
 //构造两个三角形所需要的数据大小(Glfloat数据的个数)
 enum {

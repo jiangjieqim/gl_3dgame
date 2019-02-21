@@ -335,6 +335,9 @@ static void setMesh(struct MD5_model * _md5,const char* _chs,int* pCurMeshIndex)
 		mesh->weights[weight_index].pos[2] = fdata[2];//权重坐标z
 	}
 }
+
+#define G_SIGN_RIGHT_BRACKETS "}"
+
 static void parseLine(char *_oneline,struct MD5_model* _md5,int* jointIndex,
 	int * pCurLine,int* pCurMeshIndex){
 	//printf("index:%d\n",*index);
@@ -375,6 +378,7 @@ static void parseLine(char *_oneline,struct MD5_model* _md5,int* jointIndex,
 		//	printf("end\n");
 	}
 }
+
 /*
 *	绘制骨骼节点
 */
@@ -1034,7 +1038,7 @@ void md5_loadMesh(struct MD5* p,const char* path){
 	//memset(suffix,0,G_BUFFER_16_SIZE);
 	//tl_getSuffixByPath((char*)path,suffix,G_BUFFER_16_SIZE);
 
-	base->curType = TYPE_MD5_FILE;
+	//base->curType = TYPE_MD5_FILE;
 		
 		//tl_typeStr(FILE_FORMAT_STR,suffix);
 

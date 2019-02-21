@@ -6,6 +6,15 @@
 #include "tl_malloc.h"
 #include "xml.h"
 
+#define G_SIGN_QUOTATION "\""	/*Ë«ÒýºÅ*/
+#define G_SIGN_HALFWAY_LINE "|"	/*ÖÐÏß*/
+#define G_SIGN_COMMA ","		/*¶ººÅ*/
+#define G_SIGN_NULL ""			/*¿Õ×Ö·û´®*/
+#define G_SIGN_XML_LEFT '<'
+#define G_SIGN_XML_RIGHT '>'
+#define G_SIGN_SPACE " "		/*¿Õ¸ñ*/
+#define G_SIGN_EQUAL "="		/*µÈºÅ*/
+
 struct FindXmlNode{
 	char* key;
 	char* value;

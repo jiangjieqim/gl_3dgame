@@ -1,5 +1,6 @@
 #ifndef _VMATH_H_
 #define _VMATH_H_
+#include "def.h"
 //四元数数学库
 /* Quaternion (x, y, z, w) */
 typedef float Quat4_t[4];

@@ -367,6 +367,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\common\include\def.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\evt.h"
 				>
 			</File>
@@ -376,10 +380,6 @@
 			</File>
 			<File
 				RelativePath="..\include\gettime.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\global_define.h"
 				>
 			</File>
 			<File

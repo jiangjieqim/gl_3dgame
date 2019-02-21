@@ -1038,7 +1038,7 @@ load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
 	//======================================================================================
 	//加载md5模型
 	md5_loadMesh((struct MD5* )md5,url);
-	
+	_base->curType = TYPE_MD5_FILE;
 	updateMat4x4(_base);
 
 	//添加到渲染列表

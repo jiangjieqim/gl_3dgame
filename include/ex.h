@@ -32,6 +32,15 @@
 #define TYPE_TEXT_FILE	4	//文本类型
 #define TYPE_OBJ_VBO_FILE	5//VBO文件数据
 
+//键值枚举
+#define KEY_ESC 27
+#define KEY_1 49
+#define KEY_2 50
+#define KEY_A 97
+#define KEY_B 98
+#define KEY_C 99
+#define KEY_D 100
+#define KEY_I 105
 
 /************************************************************************/
 /* 引擎事件定义                                                         */

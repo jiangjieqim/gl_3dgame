@@ -42,9 +42,6 @@
 #define FLAGS_DRAW_PLOYGON_POINT	8192	//点模式
 #define FLAGS_DISABLE_CULL_FACE		16384	//设置显示双面
 
-
-
-
 #define SHADER_FLAG_FLAT_COLOR			0x01	//设置平滑着色器
 
 
@@ -55,6 +52,32 @@
 
 /******************************************************************************************/
 #define OBJ_SPAN_COUNT				8		//obj模型文件 数据结构跨距间隔
+#define BOX_SIZE 108		//6面体(12个三角形)包围盒尺寸(float个数)
+
+//顶点数据间隔数
+enum
+{
+	UV_GAP		=	2,		//uv索引间隔
+	NORMAL_GAP	=	3,		//normal索引间隔
+	VERTEX_GAP	=	3		//顶点索引间隔
+};
+
+//=================================================================================================
+//顶点分布方式
+//#define OBJ_UV_VERTEX			0
+//#define OBJ_UV_VERTEX_NORMAL	1
+enum {
+	//OBJ_NULL = -1,
+	/*
+	 * uv vertex
+	 */
+	OBJ_UV_VERTEX=0,
+	/*
+	 * uv vertex normal
+	 */
+	OBJ_UV_VERTEX_NORMAL=1,
+};
+
 
 struct TLGLinfo{
 	/*景色深*/
@@ -388,7 +411,8 @@ struct HeadInfo{
 		拾取框颜色
 	*/
 	float boxR,boxG,boxB;
-
+	/*是否是一个Node*结构*/
+	int isNode;
 };
 
 //接口定义部分
@@ -489,7 +513,7 @@ void base_trace(struct HeadInfo* base,float x,float y,float z,float ms);
 /*
 	是否可以播放动画
 */
-int base_isCanAnimation(struct HeadInfo* ptr);
+//int base_isCanAnimation(struct HeadInfo* ptr);
 /*
 	设置一个点击拾取的lua函数回调
 */

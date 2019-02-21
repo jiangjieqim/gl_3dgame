@@ -5,6 +5,7 @@
 #else
 #define DLLIMPORT __declspec(dllimport)
 #endif
+
 DLLIMPORT 
 int x_md2load(const char* path);
 

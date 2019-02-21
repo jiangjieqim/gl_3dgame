@@ -1,5 +1,7 @@
 ﻿#include <stdio.h>
 #include <math.h>
+
+#include "common.h"
 #include "tools.h"
 #include "tl_malloc.h"
 #include "vmath.h"
@@ -9,7 +11,7 @@
 #include "ring.h"
 #include "tween.h"
 
-#include "common.h"
+
 
 /*
 	camera控制器
