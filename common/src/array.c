@@ -23,7 +23,8 @@ void array_free(struct Array* p){
 	for(i = 0;i < p->length;i++){
 		int node = p->ptr[i];
 		if(node && p->mode == ARRAY_HEAP){
-			tl_free((void*)node);
+			void* pn = (void*)node;
+			tl_free(pn);
 			p->ptr[i] = 0;
 		}
 	}
@@ -32,7 +33,7 @@ void array_free(struct Array* p){
 	tl_free(p);
 	p = NULL;
 }
-
+/*
 void array_log(struct Array* p){
 	int i = 0;
 	printf("数组长度:%d\n",array_len(p));
@@ -41,17 +42,17 @@ void array_log(struct Array* p){
 		printf("0x%0x array[%d]:%d\n",&(p->ptr[i]),i,node);
 	}
 }
-
+*/
 int array_len(struct Array* ptr){
 	return ptr->length;
 }
 
-void array_put(struct Array* ptr,int d){
+void array_put(struct Array* ptr,void* d){
 	if(ptr->cur+1 > ptr->length){
 		printf("数组越界!\n");
 		assert(0);
 	}
-	ptr->ptr[ptr->cur] = d;
+	ptr->ptr[ptr->cur] = (int)d;
 	ptr->cur++;
 }
 
@@ -81,7 +82,7 @@ static void f_arradd(struct Array* ptr,const char* source,
 							 char* _str = (char*)tl_malloc(n);
 							 memset(_str,0,n);
 							 memcpy(_str,source+s,e - s);
-							 array_put(ptr,(int)_str);
+							 array_put(ptr,_str);
 							 //printf("(%s)\n",_str);
 						 }
 }

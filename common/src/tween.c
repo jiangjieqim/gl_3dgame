@@ -103,7 +103,7 @@ tween_to(void* obj,
 	if(g_list==0){
 		g_list = LStack_create();
 	}
-	LStack_push(g_list,(int)_node);
+	LStack_push(g_list,_node);
 	return _node;
 }
 //每一次回调的时间间隔

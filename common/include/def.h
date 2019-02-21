@@ -1,11 +1,6 @@
 #ifndef _DEF_H_
 #define _DEF_H_
 
-
-
-
-
-
 //#define BUILDING_DLL
 
 #ifdef BUILDING_DLL

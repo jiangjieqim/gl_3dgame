@@ -246,7 +246,7 @@ f_key(int evtId,void* data){
 				a = 1;
 				printf("time = %ld\n",get_longTime());
 				_tweenPtr=tween_to(0,500,f_callBackEnd,f_callBack,2,&a,10.56f);
-				x_md2load("dasjlkdsjld");
+				//x_md2load("dasjlkdsjld");
 				//printf("%d fps=%d\n",dllGlobalVar,g_fps);
 				//dllGlobalVar++;
 			}

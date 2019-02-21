@@ -13,7 +13,7 @@ pushCollionBox(struct CollideBox* ptr,int verts,int vertsCount)
 {
 	struct VertexData* pvd = tl_malloc(sizeof(struct VertexData));
 	base_createRayVertex(pvd,(float*)verts,vertsCount);
-	LStack_push(ptr->list,(int)pvd);
+	LStack_push(ptr->list,pvd);
 }
 
 static void

@@ -27,7 +27,7 @@ ring_cur(void* ptr){
 //压入数据
 void ring_push(void* ptr,void* node){
 	Ring * r = (Ring*)ptr;
-	LStack_push(r->list,(int)node);
+	LStack_push(r->list,node);
 }
 //下一个数据
 void* ring_next(void* ptr){

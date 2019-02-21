@@ -3,8 +3,8 @@
 
 #include "def.h"
 
-DLLIMPORT 
-int x_md2load(const char* path);
+//DLLIMPORT 
+//int x_md2load(const char* path);
 
 /*
  *	判断是否存在文件file,存在返回1 不存在返回0

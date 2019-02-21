@@ -62,7 +62,7 @@ animtor_push(struct Animtor* p,const char* animKey,const int start,const int end
 
 	clip->s = start;
 	clip->e = end;
-	LStack_push(p->list,(int)clip);
+	LStack_push(p->list,clip);
 }
 
 struct FindResult

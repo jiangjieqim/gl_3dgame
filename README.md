@@ -40,3 +40,6 @@ int ex_zBuffer()
 prompt  
 dumpbin /exports C:\gl_3dgame\common\Debug\common.dll  
 项目common添加宏BUILDING_DLL  
+
+warning C4312: "类型转换" 
+属性->c++->常规->检查64位可移植问题->-"否" 

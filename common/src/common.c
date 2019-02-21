@@ -20,11 +20,11 @@ char* g_local_path[256];
 
 
 
-int 
-x_md2load(const char* path){
-	printf("path = %s\n",path);
-	return 1;
-}
+//int 
+//x_md2load(const char* path){
+//	printf("path = %s\n",path);
+//	return 1;
+//}
 
 int 
 tl_is_file_exist(const char* file){

@@ -39,4 +39,5 @@ DLLIMPORT void* tl_malloc(int size);
 
 /*สอทลาปฟ้ฤฺดๆ*/
 DLLIMPORT void tl_free(void* s);
+
 #endif

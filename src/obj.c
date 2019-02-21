@@ -6,6 +6,7 @@
 #include "tl_malloc.h"
 #include "obj.h"
 #include "tlgl.h"
+#include "str.h"
 //=================================================================================
 
 
@@ -169,14 +170,14 @@ ParseObjData(struct ObjParseVOType* obj,struct ExportOBJ_Data* ptrData,const cha
 		struct ConvertData* uv = tl_malloc(sizeof(struct ConvertData));
 		uv->index = vertexIndex;
 		uv->oldIndex = i1 - 1;
-		LStack_push(obj->_uvList,(int)uv);
+		LStack_push(obj->_uvList,uv);
 	}
 	//组织normal数据
 	{
 		struct ConvertData* normal = tl_malloc(sizeof(struct ConvertData));
 		normal->index = vertexIndex;
 		normal->oldIndex = i2 - 1;
-		LStack_push(obj->_normalList,(int)normal);
+		LStack_push(obj->_normalList,normal);
 	}
 }
 
@@ -514,7 +515,7 @@ obj_getData(const char* data)
 
 	Create(_obj,data);
 	
-	tl_splitByStr((const char*)data,OBJ_SIGN_CHAR_BR,f_objSplit,(int*)_obj);
+	str_split((const char*)data,OBJ_SIGN_CHAR_BR,f_objSplit,(int*)_obj);
 
 	//obj->vertexArray = (float*)tl_malloc(sizeof(float) * obj->vertexCount * OBJ_VERTEX_GAP);
 
@@ -632,7 +633,7 @@ obj_parse(const char* data,int* _outLength,int* outArray,int exportType)
 
 	if(t!=NULL){
 		
-		tl_splitByStr((const char*)data,OBJ_SIGN_CHAR_BR,f_objSplit,(int*)t);
+		str_split((const char*)data,OBJ_SIGN_CHAR_BR,f_objSplit,(int*)t);
 
 		*outArray = (int)t->outArray;
 		*_outLength = t->outLen;

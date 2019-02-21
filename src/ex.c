@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "tools.h"
+#include "str.h"
 #include "tlgl.h"
 #include "tmat.h"
 #include "ex.h"
@@ -82,7 +83,7 @@ static void
 f_calculate_fps(){
 	static float _fps = 0;        
 	static float lastTime = 0.0f; 
-	float currentTime = gettime_cur();//(float)clock()*0.001f;
+	float currentTime = get_longTime()*0.001;//(float)clock()*0.001f;
 	++_fps;
 	if( currentTime - lastTime > 1.0f ){
 		lastTime = currentTime;
@@ -178,7 +179,7 @@ f_addNode(struct EX* p, void* _node){
 			printf("error! 重名的对象_engine :%s\n",b->name);
 			assert(0);
 		}else{
-			LStack_push(p->renderList,(int)_node);
+			LStack_push(p->renderList,_node);
 		}
 	}
 }
@@ -349,7 +350,7 @@ ex_info(){
 	j+=sprintf_s(buffer+j,buffer_size, "**********************************************\n");
 	j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
 	j+=sprintf_s(buffer+j,buffer_size, "屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
-	j+=sprintf_s(buffer+j,buffer_size, "程序已执行:%.3f 秒\n",gettime_cur());
+	j+=sprintf_s(buffer+j,buffer_size, "程序已执行:%.3f 秒\n",get_longTime()*0.001);
 	j+=sprintf_s(buffer+j,buffer_size, "内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
 	
 	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d 摄影机坐标:%.3f %.3f %.3f 跟随目标引用:%0x r pi = %.3f %.3f %.3f 相对于偏移角色%.3f %.3f %.3f\n%s\n",LStack_length(ex->renderList),
@@ -405,7 +406,7 @@ drawText(){
 	}
 
 	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d total %d bytes ",fps,size);
-	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb) cam: %f,%f,%f VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0,cam.x,cam.y,cam.z,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,gettime_cur());
+	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb) cam: %f,%f,%f VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0,cam.x,cam.y,cam.z,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,get_longTime()*0.001);
 	
 	ex_showLog(buffer);
 	}
@@ -662,7 +663,7 @@ static void f_animSpliteCheck(int* inputParms,char* splitStr)
 */
 static void f_animObjSplit(int* inputParms,char* splitStr)
 {
-	tl_splitByStr((const char*)splitStr,',',f_animSpliteCheck,inputParms);
+	str_split((const char*)splitStr,',',f_animSpliteCheck,inputParms);
 }
 /*
 		"stand,0,51@run,40,45@"
@@ -673,7 +674,7 @@ static int check_md2AnimConf(int allFrameCount,const char* animConf)
 	struct AnimCheck anim;
 	anim.isCorrect = 1;
 	anim.allFrameCount = allFrameCount;
-	tl_splitByStr((const char*)animConf,'@',f_animObjSplit,(int*)&anim);
+	str_split((const char*)animConf,'@',f_animObjSplit,(int*)&anim);
 	return anim.isCorrect;
 }
 
@@ -770,33 +771,6 @@ void ex_updatePerspctiveModelView()
 	struct EX* p = ex_getInstance();
 	updatePerspectiveMatrix(45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
 }
-
-//static struct Obj_vbo_model* tmodel;
-//static struct GMaterial* tmaterial;
-//static Matrix44f myMatirx;
-///*
-// *构造VBO
-// */
-//static struct Obj_vbo_model* 
-//load_vbo()
-//{
-//	struct Obj_vbo_model* vbo;
-//	char* _objStr;
-//
-//	int verts,_bufferSize;
-//	char buffer[G_BUFFER_64_SIZE];
-//
-//	_objStr=tl_loadfile("\\resource\\obj\\quad.obj",0);//quad,teapot
-//	obj_parse((char*)_objStr,&_bufferSize,&verts,OBJ_UV_VERTEX_NORMAL);
-//	tl_address2str((int)_objStr,buffer,G_BUFFER_64_SIZE);
-//	
-//	vbo = objVBO_create(buffer,OBJ_UV_VERTEX);//OBJ_UV_VERTEX,OBJ_UV_VERTEX_NORMAL
-//	objVBO_pushNode(vbo ,(GLfloat*)verts,_bufferSize);
-//	tl_free((void*)verts);
-//	tl_free(_objStr);
-//
-//	return vbo;
-//}
 
 /*
 	绘制线段
@@ -1174,7 +1148,7 @@ vbo_md2Load(const char* name,const char* url)
 	node = node_create(name);
 	base_set_suffix(node->base,url);
 	
-	//log_put("加载文件",url);
+	
 
 	node->ptrVBO = objVBO_create(name,dataType);
 	_objStr=tl_loadfile((char*)url,&fileSize);

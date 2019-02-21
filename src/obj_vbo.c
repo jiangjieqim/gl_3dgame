@@ -304,7 +304,7 @@ CreateNewNode(struct Obj_vbo_model* _pvboModel)
 {
 	struct ObjVBO* vboPtr=tl_malloc(sizeof(struct ObjVBO));
 	memset(vboPtr,0,sizeof(struct ObjVBO));
-	LStack_push((void*)_pvboModel->ptrList,(int)vboPtr);
+	LStack_push((void*)_pvboModel->ptrList,vboPtr);
 	return vboPtr;
 }
 

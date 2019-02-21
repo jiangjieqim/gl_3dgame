@@ -6,7 +6,11 @@
 #include "text.h"
 #include "ex.h"
 #include "tl_malloc.h"
-
+static void 
+f_address2str(int v,char* buffer,int bufferSize){
+	memset(buffer,0,bufferSize);
+	sprintf_s(buffer,bufferSize,"0x%0x",v);
+}
 struct TextField* 
 tf_create(int bufferSize,int x,int y,
 		  float r,float g,float b)
@@ -21,7 +25,7 @@ tf_create(int bufferSize,int x,int y,
 	//设置文本高度
 	tf->height = 10;//GLUT_BITMAP_TIMES_ROMAN_10
 	
-	tl_address2str((int)tf,buffer,G_BUFFER_64_SIZE);
+	f_address2str((int)tf,buffer,G_BUFFER_64_SIZE);
 
 	tf->base = base_create(TYPE_TEXT_FILE,buffer,0,0,0);
 	base = (struct HeadInfo*)tf->base;

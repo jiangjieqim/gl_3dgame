@@ -27,7 +27,7 @@ DLLIMPORT void array_free(struct Array* ptr);
 /*
 	存储数据局
 */
-DLLIMPORT void array_put(struct Array* ptr,int d);
+DLLIMPORT void array_put(struct Array* ptr,void* d);
 /*
 	数组长度
 */
@@ -43,7 +43,7 @@ DLLIMPORT int array_set(struct Array* p,int index,int data);
 /*
 	打印数组数据
 */
-DLLIMPORT void array_log(struct Array* p);
+//DLLIMPORT void array_log(struct Array* p);
 
 /*
 	根据key切割成多个字符文件,保存在数组中,字符串切割成字符串数组

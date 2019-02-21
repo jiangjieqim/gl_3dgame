@@ -163,7 +163,7 @@ struct PCsvVO* pcsv_load(const char* path,const char* mainkey,int checkIndex){
 				}
 			}
 
-			LStack_push(pcsv->list,(int)_csvVO);
+			LStack_push(pcsv->list,_csvVO);
 		}
 		
 		start=end+offset;

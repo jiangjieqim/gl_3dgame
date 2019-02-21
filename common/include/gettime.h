@@ -23,19 +23,14 @@ DLLIMPORT long get_longTime();
 
 /*生成当前的时间2015/1/2 0:20:1*/
 DLLIMPORT void get_allTime(char* out,int bufferSize);
+
 /*输出日志 ,写入本地或者上传到web服务器*/
 DLLIMPORT void log_write(const char* _str);
 /*
 	获取当前运行的时间
 */
-DLLIMPORT float gettime_cur();
+//DLLIMPORT float gettime_cur();
 
-/************************************************************************
-* 输出一段有色彩的日志             
-* unsigned short color 颜色
-/************************************************************************/
-DLLIMPORT void
-log_put(const char* s,int color);
 /************************************************************************/
 /* 输出错误代码                                                 */
 /************************************************************************/

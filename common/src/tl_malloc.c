@@ -126,7 +126,7 @@ memory_new(int size)
 	node->p = MALLOC(size);
 	memset(node->p,0,size);
 
-	LStack_push(memList,(int)node);
+	LStack_push(memList,node);
 
 	//log_color(0xff0000,"memory_new ÄÚ´æÉêÇë¿ª±Ù %.3f kb\n",(float)(g_total)/1024);
 

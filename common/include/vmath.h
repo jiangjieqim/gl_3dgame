@@ -4,9 +4,6 @@
 //四元数数学库
 /* Quaternion (x, y, z, w) */
 typedef float Quat4_t[4];
-//#ifdef _cplusplus
-//extern "C" {
-//#endif
 /*
 0(0,0)	1(0,1)		2(0,2)		3(0,3)
 4(1,0)	5(1,1)		6(1,2)		7(1,3)
@@ -281,11 +278,7 @@ DLLIMPORT void tl_pickTriangle(float* tri,int dataCount,struct Vec3* nearPoint,s
 	printf("是否有交点 %d,交点坐标 x:%f y:%f z:%f\n",hit,out[0],out[1],out[2]);
 }
 */
-DLLIMPORT void tl_hitTriangle(float orig[3],float dir[3],float vert0[3],float vert1[3],float vert2[3],float* out,int* pHit);
-
-//#ifdef _cplusplus
-//}
-//#endif
+void tl_hitTriangle(float orig[3],float dir[3],float vert0[3],float vert1[3],float vert2[3],float* out,int* pHit);
 
 
 #endif

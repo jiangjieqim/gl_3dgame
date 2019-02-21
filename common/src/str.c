@@ -1,5 +1,8 @@
 #include <memory.h>
 #include <string.h>
+#include <assert.h>
+#include <stdio.h>
+
 #include "tools.h"
 #include "tl_malloc.h"
 #include "str.h"
@@ -69,7 +72,7 @@ void str_appand_s(void* ptr,const char * s,int length )
 	_tmps = 0;
 }
 void str_replace(void* ptr, char *oldstr, char *pDst){
-	
+
 	struct Str* pstr=(struct Str*)ptr;
 	Str* _ss;
 	char* ts;
@@ -123,4 +126,135 @@ void str_copy(void* ptr,struct Str* dest){
 	memcpy(s,dest->s,str_length(dest));
 	tl_free(target->s);
 	target->s = s;
+}
+
+void str_delchar(char *str,char ch){
+	//char ts[G_BUFFER_256_SIZE];
+	int len,i,j=0;
+	char* ts = NULL;
+	len = (int)strlen(str);
+	ts = (char*)tl_malloc(len+1);
+	memset(ts,0,len+1);
+	for(i = 0;i< len;i++){
+		if(str[i]!=ch){
+			ts[j] = str[i];
+			j++;
+		}
+	}
+	memset(str,0,strlen(str));
+	memcpy(str,ts,strlen(ts));
+	tl_free(ts);
+}
+
+int str_pos(const char *haystack,const char *needle,int ignorecase)  {  
+	register unsigned char c, needc;
+	unsigned char const *from, *end;
+	const char *findreset;
+	int i;
+	int len = (int)strlen(haystack);
+	int needlen = (int)strlen(needle);
+	from = (unsigned char *)haystack;
+	end = (unsigned char *)haystack + len;
+	findreset = needle;
+
+	for ( i = 0; from < end; ++i) {
+		c = *from++;
+		needc = *needle;
+		if (ignorecase) {
+			if (c >= 65 && c < 97)
+				c += 32;
+			if (needc >= 65 && needc < 97)
+				needc += 32;
+		}
+		if(c == needc) {
+			++needle;
+			if(*needle == '\0') {
+				if (len == needlen) 
+					return 0;
+				else
+					return i - needlen+1;
+			}
+		}  
+		else {  
+			if(*needle == '\0' && needlen > 0)
+				return i - needlen +1;
+			needle = findreset;  
+		}
+	}  
+	return  -1;  
+}
+static void 
+f_splitByStrNode(char* str,const char* dest,int signStrLength,int start,int i,void (*pCallBack)(int*,char*),int* parms){
+	tl_strsub(dest,str,start,i-signStrLength);
+	pCallBack(parms,str);
+}
+
+#define _SIGN_LEN_ 1//标示的长度
+void str_split(const char* dest,const char sign,void (*pCallBack)(int*,char*),int* parms)
+{
+	int i,start=0;
+	char _ch;
+	int len = (int)strlen(dest);
+	int length = len+1;
+
+	int signLen = _SIGN_LEN_;
+
+	char* str = (char*)MALLOC(length);
+	for(i = 0;i < len;i++){
+		_ch = dest[i];
+		if(_ch==sign){
+			memset(str,0,length);
+			f_splitByStrNode(str,dest,signLen,start,i,pCallBack,parms);
+			start = i+signLen;
+		}
+	}
+	memset(str,0,len+1);
+	f_splitByStrNode(str,dest,signLen,start,i,pCallBack,parms);
+	FREE(str);
+}
+
+static void 
+f_split_string(char* str,int strLength,const char* dest,int* pStart,int i
+			 //int (*_callBack)(struct StrCutSplit*),
+			 //void (*pCallBack)(char*,void*),
+			 //struct StrCutSplit* pCut
+			 )
+{
+	memset(str,0,strLength);
+	tl_strsub(dest,str,*pStart,i-_SIGN_LEN_);
+	//pCut->str = str;
+	//_callBack(pCut);
+	*pStart = i+_SIGN_LEN_;
+}
+//#define _TEMP_SIZE_ G_BUFFER_512_SIZE
+void str_split_cut(const char* dest,const char sign,void (*pCallBack)(char*,void*),void* parms){
+
+	if(strlen(dest)+1>=G_BUFFER_512_SIZE){
+		printf("检测dest长度超过函数处理长度 当前dest的长度为%d\n",(int)strlen(dest));
+		assert(0);
+	}else{
+		int i,start=0;
+		char _ch;
+		int len = (int)strlen(dest);
+		int strLength = len + 1;
+
+		//将堆内存申请修改为栈内存申请,使速度更快
+		char str[G_BUFFER_512_SIZE];
+
+		//struct StrCutSplit _sc;
+
+		//memset(&_sc,0,sizeof(struct StrCutSplit));
+
+		//未参数引用赋值
+		//_sc.parms = parms;
+		for(i = 0;i < len;i++){
+			_ch = dest[i];
+			if(_ch==sign){
+				f_split_string(str,G_BUFFER_512_SIZE,dest,&start,i);
+				pCallBack(str,parms);
+			}
+		}
+		f_split_string(str,G_BUFFER_512_SIZE,dest,&start,i);
+		pCallBack(str,parms);
+	}
 }

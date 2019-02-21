@@ -8,12 +8,13 @@
 #pragma comment(lib,"glut32.lib")
 
 #include "common.h"
-
+#include "str.h"
 #include "tl_malloc.h"
 #include "gettime.h"
 #include "tools.h"
 #include "jgl.h"
 #include "bmp.h"
+
 
 //#define _DEBUG_PRINT_RGB_	//打印rgb
 
@@ -386,7 +387,7 @@ f_loadImgLs(const char *szFileName,int width,int height,GLuint colorType)
 	glBindTexture(GL_TEXTURE_2D,mTextureID);
 	
 	{
-		int index = tl_strpos(szFileName,".",1);
+		int index = str_pos(szFileName,".",1);
 		if(index < 0){
 			log_code(ERROR_SUIFFIX);//路径中没有".",路径有错误
 			printf("f_loadImgLs===>(%s)(%d)\n",szFileName,index);

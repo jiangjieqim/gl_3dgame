@@ -101,7 +101,7 @@ static void f_xml_AddNode(struct XMLSList* sl,int start,int end){
 	node->start = start;
 	node->end = end;
 	//InitNode(sl->data,node);
-	LStack_push((struct LStackNode*)list,(int)node);
+	LStack_push((struct LStackNode*)list,node);
 }
 
 /*xml ½âÎö*/
@@ -188,7 +188,7 @@ findXmlNode(int data,int _inputParam){
 
 		if(row){
 			
-			int len =	strlen(fNode->key)+strlen(fNode->value)+strlen(G_SIGN_COMMA)+1;//(int)strlen(row);
+			int len = (int)(strlen(fNode->key)+strlen(fNode->value)+strlen(G_SIGN_COMMA))+1;//(int)strlen(row);
 			
 			char* _str = (char*)tl_malloc(len);
 			

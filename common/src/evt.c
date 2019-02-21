@@ -73,7 +73,7 @@ evt_on(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
 	data->evtId = evtId;
 	data->ptr = evtCallBack;
 	list =(struct LStackNode*)evtList;
-	LStack_push(list,(int)data);
+	LStack_push(list,data);
 }
 
 //½â°óÊÂ¼ş

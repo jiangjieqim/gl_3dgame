@@ -4,6 +4,7 @@
 #include <string.h>
 #include <assert.h>
 
+#include "str.h"
 #include "tlgl.h"
 #include "md5.h"
 #include "tmat.h"
@@ -718,7 +719,7 @@ static void parseJoints(char* str,struct joint_info_t* pJoint){
 	char _temp[G_BUFFER_256_SIZE];
 	memset(_temp,0,G_BUFFER_256_SIZE);
 	memset(pJoint->name,0,G_BUFFER_64_SIZE);
-	pos = tl_strpos(str,"\"\t",1);
+	pos = str_pos(str,"\"\t",1);
 	if(pos == -1){
 		printf("pos = %d(%s)\n",pos,str);
 		assert(0);
@@ -900,7 +901,7 @@ animRead(const char *filename,char* animName, struct md5_anim_t *anim)
 		else if (sscanf_s (buff, " frame %d", &frame_index) == 1)
 		{
 			
-			int _len = tl_strpos(_animData+_sp.pos,"}",1);//查询结束符"}"的位置
+			int _len = str_pos(_animData+_sp.pos,"}",1);//查询结束符"}"的位置
 
 			parseFrame(_animData,&_sp.pos,_len,animFrameData);
 
@@ -951,11 +952,11 @@ void md5_loadAnim(struct MD5* p, const char* animFile,const char* animName){
 		p->curAnim = pAnim;
 		p->animInfo = animInfo;
 		p->skeleton = skeleton;
-		LStack_push(p->pAnimList,(int)pAnim);
+		LStack_push(p->pAnimList,pAnim);
 	}else{
 		pAnim=(struct md5_anim_t*)tl_malloc(sizeof(struct md5_anim_t));
 		animRead(animFile,(char*)animName,pAnim);
-		LStack_push(p->pAnimList,(int)pAnim);
+		LStack_push(p->pAnimList,pAnim);
 	}
 }
 static void f_md5_parse_mesh(struct MD5* out,const char* meshData){
@@ -1127,7 +1128,7 @@ void md5_render(struct MD5* md5,int fps){
 
 	struct HeadInfo* base = base_get((void*)md5);
 
-	double curtime = (double)gettime_cur();//tlgl_getCurTime();
+	double curtime = (double)get_longTime()*0.001;//tlgl_getCurTime();
 	
 	//printf("c=%.3f,",curtime);
 	
