@@ -25,11 +25,23 @@ function evt_off(obj,id,func)
 	end
 end
 
-function evt_dispatch(id,data)
-	for k, v in pairs(evtlist) do
-		local node = evtlist[k];
-		if(node.id == id) then
-			node.func(data);
+--全局事件
+function evt_dispatch(id,data,obj)
+	--print(id,data,obj);
+	if (obj == nil) then
+		--全局事件
+		for k, v in pairs(evtlist) do
+			local node = evtlist[k];
+			if(node and node.id == id) then
+				node.func(data);
+			end
+		end
+	else
+		for k, v in pairs(evtlist) do
+			local node = evtlist[k];
+			if(node and node.obj == obj and node.id == id) then
+				node.func(data);
+			end
 		end
 	end
 	--print(id);

@@ -675,11 +675,6 @@ end
 function func_anim_push(obj,animname,s,e)
 	change_attr(obj,"animtor_push",animname,string.format('%s,%s',s,e));
 end
---渲染回调
-function func_drawCall(v)
-	
-end
-
 
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件

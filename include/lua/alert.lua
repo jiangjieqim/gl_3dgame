@@ -72,7 +72,5 @@ end
 btn_bindClick(win.closeBtn,f_onCloseHandle);
 evt_on(win,EVENT_ENGINE_RESIZE,f_resize);
 f_hide_pos();
-
-
-evt_off(win,EVENT_ENGINE_RESIZE,f_resize);
+--evt_off(win,EVENT_ENGINE_RESIZE,f_resize);
 

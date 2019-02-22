@@ -843,6 +843,8 @@ _new(){
 	//f_drawline();
 
 	evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
+
+	ex_callIntLuaFun("evt_dispatch",EVENT_ENGINE_RENDER_3D);
 	
 	//ex_renderlistCall(sprite_drawRender);//test
 	if(TRUE)//FALSE

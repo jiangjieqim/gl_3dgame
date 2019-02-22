@@ -169,10 +169,18 @@ setv(_target,FLAGS_DRAW_PLOYGON_LINE)
 --func_set_camera_pos(0,-5,-20)
 local _f = 0;
 --drawCall回调
-function func_drawCall(v)
+
+
+local function f_drawCall(v)
+	---[[
 	_f = _f + func_fps()*0.00001;
 	func_setRotateZ(_target,_f);
+	--]]
 end
+
+evt_on(_target,EVENT_ENGINE_RENDER_3D,f_drawCall);
+
+
 test_unit_01_init();
 
 --xml 接口测试
