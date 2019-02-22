@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdarg.h>
 
 #include "tools.h"
 #include "str.h"
@@ -1682,9 +1683,22 @@ void ex_callParmLuaFun(const char* luaFunName,const char* parm)
 	}
 }
 
-void ex_alert(const char* msg){
-	ex_callParmLuaFun("alert",msg);
+#define __BUFFER_SIZE_ 1024	//缓冲区大小
+
+void ex_alert(const char* format,...){	
+	char str_tmp[__BUFFER_SIZE_];
+	int i;
+	char s[__BUFFER_SIZE_];
+	va_list vArgList;                          
+	va_start (vArgList, format);	
+	i = _vsnprintf_s(str_tmp, __BUFFER_SIZE_,__BUFFER_SIZE_, format, vArgList);
+	//#################################################
+	sprintf_s(s,__BUFFER_SIZE_,"%s",str_tmp);
+	ex_callParmLuaFun("alert",s);
+	va_end(vArgList);
 }
+
+	
 
 void ex_callIntLuaFun(const char* luaFunName,int value)
 {

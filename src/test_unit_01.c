@@ -152,8 +152,8 @@ floor_rayPick(int evtId,void* data){
 		
 		log_color(0x00ff00,"角位移插值:%.3f -> %.3f = %.3f\n",ptrHorse->ry,tangle,tangle - ptrHorse->ry);
 		
-		ex_alert("this is alert Test!");
-
+		ex_alert("##### %.3f -> %.3f = %.3f",ptrHorse->ry,tangle,tangle - ptrHorse->ry);
+		
 		ptrHorse->ry = tangle;
 		base_updateMat4x4(ptrHorse);//更新角色矩阵
 
