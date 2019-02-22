@@ -1692,7 +1692,6 @@ void ex_alert(const char* format,...){
 	va_list vArgList;                          
 	va_start (vArgList, format);	
 	i = _vsnprintf_s(str_tmp, __BUFFER_SIZE_,__BUFFER_SIZE_, format, vArgList);
-	//#################################################
 	sprintf_s(s,__BUFFER_SIZE_,"%s",str_tmp);
 	ex_callParmLuaFun("alert",s);
 	va_end(vArgList);
