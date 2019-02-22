@@ -3,6 +3,7 @@ local win ={
 	bg;
 	closeBtn;
 	label;
+	visible = false;
 }
 
 --print(win,win.bg);
@@ -21,14 +22,14 @@ win.label=tf_create(128,x,y);
 --local t = func_get_type(win.bg)
 
 
-local function f_set_pos()
+local function f_hide_pos()
 	local y = -1024
 	func_setPos(win.bg,0,y)
 	func_setPos(win.label,0,y)
 	btn_pos(win.closeBtn,0,y);
 end
-
-local function f_reset_pos()
+--居中
+local function f_center()
 	local sx,sy = func_screenSize();
 	x = (sx - w)/2;
 	y = (sy - h)/2;--居中
@@ -36,32 +37,42 @@ local function f_reset_pos()
 	func_setPos(win.bg,x,y)
 	func_setPos(win.label,x,y)
 	btn_pos(win.closeBtn,btnx,y);
+	
 end
 
 local function f_hide()
 	btn_visible(win.closeBtn,false);
 	resetv(win.bg,FLAGS_VISIBLE);
 	resetv(win.label,FLAGS_VISIBLE);
-	f_set_pos();
 end
 
 local function f_onCloseHandle(btn)
 	f_hide()
 	--print(btn);
 end
+local function f_resize()
+	if(win.visible) then
+		f_center();
+	end
+end
 
 function alert(str)
+	win.visible = true;
 	--print(string.format("alert_show = %s",str));
 	btn_visible(win.closeBtn,true);
 	setv(win.bg,FLAGS_VISIBLE);
 	setv(win.label,FLAGS_VISIBLE);
 	tf_setText(win.label,str);
-	f_reset_pos()
+	f_center()
 end
 --显示一个弹出框
 --alert_show("");
 --f_hide();
 
 btn_bindClick(win.closeBtn,f_onCloseHandle);
+evt_on(win,EVENT_ENGINE_RESIZE,f_resize);
+f_hide_pos();
 
-f_set_pos();
+
+evt_off(win,EVENT_ENGINE_RESIZE,f_resize);
+
