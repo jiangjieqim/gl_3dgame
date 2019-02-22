@@ -1,7 +1,6 @@
 --调试宏,测试状态下开启
 DEBUG = true
 
-dofile("..\\include\\lua\\xml.lua")	--xml组件
 
 
 CONST_DIRECTION_HORIZONTAL = 0	--水平,横
@@ -37,6 +36,10 @@ TYPE_OBJ_VBO_FILE=	5--//VBO文件数据
 SUFFIX_OBJ ="obj"
 SUFFIX_MD5MESH ="md5mesh"
 SUFFIX_MD2 ="md2"
+
+
+dofile("..\\include\\lua\\xml.lua")	--xml组件
+dofile("..\\include\\lua\\evt.lua")	--事件管理器
 
 local defalutTex = '1.tga'
 local defalutObjModel = 'quad'
@@ -675,23 +678,8 @@ function func_drawCall(v)
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件
 dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
-
-
-
