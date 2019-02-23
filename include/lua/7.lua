@@ -40,6 +40,7 @@ end
 
 fps();
 infowin_show(0,20);
+--***********************************************************************************************
 
 --创建一个角色
 local unit = unit_create();
@@ -60,6 +61,8 @@ local function f_on_click_floor_handle(data)
 	print(string.format("%.3f %.3f %.3f",x,y,z));
 	
 	func_look_at(unit.p,x,y,z);
+	
+	func_move(unit.p,1000,x,y,z);
 end
 
 evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);

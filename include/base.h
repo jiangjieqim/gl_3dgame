@@ -250,5 +250,13 @@ void base_hit_mouse(GLint xMouse, GLint yMouse,float screenWidth,float screenHei
 	让角色朝向坐标x y z
 */
 void base_look_at(HeadInfo* p,float x,float y,float z);
-
+/*
+	位移到x y z坐标
+*/
+void 
+base_move(HeadInfo* ptr,int ms,
+		  float x,float y,float z,
+		  void (*endCallBack)(void*),
+		  void (*updateCallBack)(void*)
+		  );
 #endif

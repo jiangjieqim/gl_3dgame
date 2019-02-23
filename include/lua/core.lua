@@ -696,6 +696,16 @@ function func_look_at(o,x,y,z)
 	change_attr(o,"lookat",string.format("%f,%f,%f",x,y,z));
 end
 
+--让角色朝向某个方向
+function func_move(o,ms,x,y,z)
+	change_attr(o,"move",string.format("%d,%f,%f,%f",ms,x,y,z));
+end
+
+--更新对象矩阵
+function func_update_mat4x4(o)
+	change_attr(o,"base_updateMat4x4");
+end
+
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件

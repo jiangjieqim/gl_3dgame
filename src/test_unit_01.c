@@ -125,12 +125,16 @@ f_get_posList(struct Vec3 p,struct Vec3 t){
 	printf("距离\t%.3f,单位向量\t%.3f,%.3f,%.3f\n",distance,o.x,o.y,o.z);
 	//memcpy(&direction,&o,sizeof(struct Vec3));
 
-	vec3Mult(&o,0.1);
+	vec3Mult(&o,0.1);//0.1 速度因子
 	vec3Set(&direction,o.x,o.y,o.z);
-
+	
 	return 0;
 }
-
+static void
+f_updateCallBack(void* p){
+	printf("%0x ,",(int)p);
+	base_updateMat4x4(p);
+}
 static void
 floor_rayPick(int evtId,void* data){
 	struct HitResultObject* hit = (struct HitResultObject*)data;
@@ -159,6 +163,7 @@ floor_rayPick(int evtId,void* data){
 			//base_updateMat4x4(ptrHorse);//更新角色矩阵
 		
 			base_look_at(ptrHorse,hit->x,hit->y,hit->z);
+			//base_move(ptrHorse,1000,hit->x,hit->y,hit->z,0,f_updateCallBack);
 		}
 		//return;
 

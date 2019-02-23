@@ -1865,3 +1865,6 @@ int ex_get_gap(int type)
 	}
 	return UV_GAP + VERTEX_GAP + NORMAL_GAP;
 }
+
+
+//########################################

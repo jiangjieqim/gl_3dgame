@@ -5,10 +5,12 @@
 #include "gettime.h"
 #include "str.h"
 #include "evt.h"
+#include "tween.h"
 
 #include "tlgl.h"
 #include "base.h"
 #include "node.h"
+
 
 
 //接口实现部分
@@ -632,4 +634,34 @@ void base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
 	vec3Normalize(&pos);
 	p->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);
 	base_updateMat4x4(p);
+}
+
+void 
+base_move(HeadInfo* bp,int ms,
+		float x,float y,float z,
+		void (*endCallBack)(void*),
+		void (*updateCallBack)(void*)
+		)
+{
+	void* _tweenPtr;//可能会内存泄露
+	//HeadInfo* bp = base_get(ptr);
+	Vec3 p;
+	Vec3 t;
+	//Vec3 _dirc;//目标单位向量
+	//float distance;
+	vec3Set(&p,bp->x,bp->y,bp->z);
+	vec3Set(&t,x,y,z);
+
+	//从p -> t
+	/*distance = vec3Distance(&p,&t);
+	vec3Sub(&t,&p,&_dirc);
+	vec3Normalize(&_dirc);*/
+
+	_tweenPtr=tween_to(bp,ms,endCallBack,updateCallBack,
+		6,
+		&bp->x,x,
+		&bp->y,y,
+		&bp->z,z
+		);
+	
 }

@@ -32,4 +32,7 @@ function unit_create()
 	u.p = md2;
 	return u;
 end
-
+--移动到目标
+function unit_move_to(u,x,z,moveEndCallBack)
+	
+end
