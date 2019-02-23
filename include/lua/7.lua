@@ -64,7 +64,10 @@ local function f_on_click_floor_handle(data)
 	
 	func_move(unit.p,1000,x,y,z);
 end
-
+local function f_render()
+	func_update_mat4x4(unit.p)
+end
+evt_on(unit,EVENT_ENGINE_RENDER_3D,f_render);
 evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
 
 func_set_camera_pos(0,-1.5,-5.5);
