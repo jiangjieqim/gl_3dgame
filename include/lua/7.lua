@@ -1,7 +1,5 @@
 dofile("..\\include\\lua\\core.lua");
 
-
-
 --[[
 function f_load_md2()
 	md2=load_VBO_model(func_create_name(),"\\resource\\md2\\horse.md2");
@@ -12,9 +10,6 @@ local btn = btn_create(0,40)
 btn_label(btn,"load md2")
 btn_bindClick(btn,f_load_md2)--切换显示是否要线框渲染
 --]]
-
-
-
 
 --创建一个指定半径的地板
 local function f_create_floor(scale)
@@ -31,7 +26,7 @@ local function f_create_floor(scale)
 	
 	setv(_floor,FLAGS_RAY)
 	setv(_floor,FLAGS_DRAW_RAY_COLLISION)
-	--setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
+	setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
 	setv(_floor,FLAGS_DISABLE_CULL_FACE)
 	func_set_glsl_parms(_floor,'uvScale',scale)--设置diffuse.vs (uniform float _uvScale)uv重复值
 	return _floor;
@@ -58,16 +53,20 @@ local function f_on_click_floor_handle(data)
 	xml_del(xml);
 	--print(xml_get_float(node,"x"),xml_get_float(node,"y"),xml_get_float(node,"z"));
 	
-	print(string.format("%.3f %.3f %.3f",x,y,z));
+	
 	
 	func_look_at(unit.p,x,y,z);
+	local px,py,pz = func_get_xyz(unit.p);
+	--print(px,py,pz);
 	
-	func_move(unit.p,1000,x,y,z);
+	print(string.format("%.3f %.3f %.3f=>%.3f %.3f %.3f",px,py,pz,x,y,z));
+	
+	func_move(unit.p,50,x,py,z);
 end
 local function f_render()
 	func_update_mat4x4(unit.p)
 end
-evt_on(unit,EVENT_ENGINE_RENDER_3D,f_render);
+--evt_on(unit,EVENT_ENGINE_RENDER_3D,f_render);
 evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
 
 func_set_camera_pos(0,-1.5,-5.5);

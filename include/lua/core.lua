@@ -691,6 +691,10 @@ end
 function func_ex_info()
 	get_attr(nil,"ex_info");
 end
+
+function func_get_xyz(o)
+	return get_attr(o,"xyz");
+end
 --让角色朝向某个方向
 function func_look_at(o,x,y,z)
 	change_attr(o,"lookat",string.format("%f,%f,%f",x,y,z));
@@ -706,10 +710,12 @@ function func_update_mat4x4(o)
 	change_attr(o,"base_updateMat4x4");
 end
 
+
+
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
-dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
+dofile("..\\include\\lua\\UScrollBar.lua")	--滑un动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件
 
 

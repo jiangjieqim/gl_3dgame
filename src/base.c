@@ -645,23 +645,23 @@ base_move(HeadInfo* bp,int ms,
 {
 	void* _tweenPtr;//可能会内存泄露
 	//HeadInfo* bp = base_get(ptr);
-	Vec3 p;
-	Vec3 t;
+	//Vec3 p;
+	//Vec3 t;
 	//Vec3 _dirc;//目标单位向量
 	//float distance;
-	vec3Set(&p,bp->x,bp->y,bp->z);
-	vec3Set(&t,x,y,z);
+	//vec3Set(&p,bp->x,bp->y,bp->z);
+	//vec3Set(&t,x,y,z);
 
 	//从p -> t
 	/*distance = vec3Distance(&p,&t);
 	vec3Sub(&t,&p,&_dirc);
 	vec3Normalize(&_dirc);*/
-
+printf("===========\n%d\n%d\n%d\n",&(bp->x),&(bp->y),&(bp->z));
 	_tweenPtr=tween_to(bp,ms,endCallBack,updateCallBack,
 		6,
-		&bp->x,x,
-		&bp->y,y,
-		&bp->z,z
+		&(bp->x),x,
+		&(bp->y),y,
+		&(bp->z),z
 		);
 	
 }

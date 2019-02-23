@@ -110,7 +110,7 @@ tween_to(void* obj,
 static long g_delay = 0;
 static long g_last= 0;
 static void
-f_nodeRun(TweenNode* _node,TNode* _nptr){
+f_nodeRun(TweenNode* _node,TNode* _nptr,int i){
 	double s = _nptr->s;
 	double e = _nptr->t;
 	//int c = 20;//_node->needTime / ex_delay_time();
@@ -127,6 +127,7 @@ f_nodeRun(TweenNode* _node,TNode* _nptr){
 	}else{
 		*_nptr->p+=f;
 	}
+	printf("%d** %d %.3f\n\n",i,_nptr->p,*_nptr->p);
 //	printf("%ld v = %.3f p = %.3f %.3f \t%ld %.3f\n",_node->useTime,v,*_nptr->p,e,g_delay,f);
 }
 //处理一个节点
@@ -140,7 +141,7 @@ f_tween_play(TweenNode* _node,long _longTime){
 	}else{
 		int i;
 		for(i = 0;i < _node->length;i++)	
-			f_nodeRun(_node,(TNode*)&_node->ptr[i]);
+			f_nodeRun(_node,(TNode*)&_node->ptr[i],i);
 
 		if( _node->updateCallBack)	_node->updateCallBack(_node->obj);
 		//printf("%ld\n",_node->useTime);
