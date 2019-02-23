@@ -11,7 +11,7 @@ local function f_split_init(md2)
 	func_play(md2);
 end
 
---创建一个基本单位
+--创建一个基本单位,默认在1个单位区间内
 function unit_create()
 	local u = {
 		p = nil;--资源对象

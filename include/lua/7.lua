@@ -20,7 +20,7 @@ btn_bindClick(btn,f_load_md2)--切换显示是否要线框渲染
 local function f_create_floor(scale)
 	--创建一个可点击的地板
 	--local _floor = func_loadobj('plane','box.tga','_floor',false);
-	local _floor = load_model("_floor","\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
+	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
 	setMaterial(_floor,func_load("//resource//material//floor.mat"));	
 	setv(_floor,FLAGS_VISIBLE);
 	--local _floorRadius = 30--地板半径
@@ -34,15 +34,41 @@ local function f_create_floor(scale)
 	--setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
 	setv(_floor,FLAGS_DISABLE_CULL_FACE)
 	func_set_glsl_parms(_floor,'uvScale',scale)--设置diffuse.vs (uniform float _uvScale)uv重复值
-	return _floor
+	return _floor;
 end
 
 
 fps();
+infowin_show(0,20);
 
 --创建一个角色
-local unit = unit_create();
-func_set_y(unit.p,0.5);
+local unit-- = unit_create();
 
 --创建一个地板
-f_create_floor(1);
+local floor_ptr = f_create_floor(50);
+
+local function f_on_click_floor_handle(data)
+	--print('##',data);
+	local xml = xml_load_str(data);
+	local node = xml_get_node_by_index(xml,0);
+	local x = xml_get_float(node,"x")
+	local y = xml_get_float(node,"y")
+	local z = xml_get_float(node,"z")
+
+	--print(xml_get_float(node,"x"),xml_get_float(node,"y"),xml_get_float(node,"z"));
+	print(x,y,z);
+	
+	xml_del(xml);
+end
+
+evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
+
+--[[
+function aa(...)
+		for index,value in ipairs({...}) do
+			print(index,value);
+		end
+end
+aa(1,"asdsa",0.1,floor_ptr);
+--]]
+alert("a");

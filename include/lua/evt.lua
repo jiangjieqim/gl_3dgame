@@ -26,9 +26,23 @@ function evt_off(obj,id,func)
 end
 
 --全局事件
-function evt_dispatch(id,data,obj)
-	--print(id,data,obj);
-	if (obj == nil) then
+function evt_dispatch(...)
+	 --id,data,obj
+	local id;
+	local data;
+	local obj;
+	for index,value in ipairs({...}) do
+		--print(index,value);
+		if(index == 1) then
+			obj = value;
+		elseif(index == 2) then
+			id = value;
+		elseif(index == 3) then
+			data = value;
+		end
+	end
+	
+	if (obj == 0) then
 		--全局事件
 		for k, v in pairs(evtlist) do
 			local node = evtlist[k];
@@ -37,6 +51,7 @@ function evt_dispatch(id,data,obj)
 			end
 		end
 	else
+		--print(id,data,obj);
 		for k, v in pairs(evtlist) do
 			local node = evtlist[k];
 			if(node and node.obj == obj and node.id == id) then
@@ -46,3 +61,7 @@ function evt_dispatch(id,data,obj)
 	end
 	--print(id);
 end
+
+
+
+

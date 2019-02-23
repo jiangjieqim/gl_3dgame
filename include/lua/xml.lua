@@ -2,6 +2,10 @@ function xml_load(url)
 	return core_xml("load",url);
 end
 
+function xml_load_str(str)
+	return core_xml("loadstr",str)
+end
+
 function xml_get_node_by_index(xml,index)
 	return	core_xml("getNodeByIndex",xml,index);
 end

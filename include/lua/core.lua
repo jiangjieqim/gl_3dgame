@@ -37,6 +37,8 @@ SUFFIX_OBJ ="obj"
 SUFFIX_MD5MESH ="md5mesh"
 SUFFIX_MD2 ="md2"
 
+------------------------------------------------------------
+EVENT_RAY_PICK = 1						--拾取点击回调
 EVENT_ENGINE_RENDER_3D =100				--引擎渲染回调
 EVENT_ENGINE_KEYBOARD  =101				--全局键盘事件
 EVENT_ENGINE_RESIZE	   =102				--resize事件
@@ -685,10 +687,21 @@ function func_anim_push(obj,animname,s,e)
 	change_attr(obj,"animtor_push",animname,string.format('%s,%s',s,e));
 end
 
+--获取引擎信息
+function func_ex_info()
+	get_attr(nil,"ex_info");
+end
+
+
 dofile("..\\include\\lua\\fps.lua")	--fps组件
+
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件
+
+
+dofile("..\\include\\lua\\infowin.lua")	--fps组件
+
 dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
-dofile("..\\include\\lua\\unit.lua")
+dofile("..\\include\\lua\\unit.lua")		--角色单位

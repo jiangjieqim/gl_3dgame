@@ -356,7 +356,7 @@ ex_info(){
 	j+=sprintf_s(buffer+j,buffer_size, "程序已执行:%.3f 秒\n",get_longTime()*0.001);
 	j+=sprintf_s(buffer+j,buffer_size, "内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
 	
-	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d 摄影机坐标:%.3f %.3f %.3f 跟随目标引用:%0x r pi = %.3f %.3f %.3f 相对于偏移角色%.3f %.3f %.3f\n%s\n",LStack_length(ex->renderList),
+	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d \n摄影机坐标:%.3f %.3f %.3f\n 跟随目标引用:%0x r pi = %.3f %.3f %.3f 相对于偏移角色%.3f %.3f %.3f\n%s\n",LStack_length(ex->renderList),
 		cam.x,cam.y,cam.z,0,
 		cam.rx/PI,cam.ry/PI,cam.rz/PI,
 		cam.followOffset.x,cam.followOffset.y,cam.followOffset.z,
@@ -842,8 +842,8 @@ _new(){
 
 	evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
 
-	ex_callIntLuaFun("evt_dispatch",EVENT_ENGINE_RENDER_3D);
-	
+	ex_lua_evt_dispatch(0,EVENT_ENGINE_RENDER_3D,0);
+
 	//ex_renderlistCall(sprite_drawRender);//test
 	if(TRUE)//FALSE
 	{
@@ -1475,6 +1475,7 @@ void mouseMove(int x,int y)
 	//只有当鼠标移动的时候才会更新Sprite
 	f_renderlistCall(sprite_mouseMove);	
 }
+
 /************************************************************************/
 /* 点击回调                                                             */
 /************************************************************************/
@@ -1484,7 +1485,21 @@ f_rayPick(struct HitResultObject* hit){
 	evt_dispatch(ex_getInstance(),EVENT_RAY_PICK,(void*)hit);
 
 	//################HeadInfo拾取点击回调
-	evt_dispatch((void*)base_get(ex_find(hit->name)),EVENT_RAY_PICK,(void*)hit);
+	{
+
+		
+
+		void * ptr = ex_find(hit->name);
+		evt_dispatch((void*)base_get(ptr),EVENT_RAY_PICK,(void*)hit);
+		
+		{
+			char bufferXml[G_BUFFER_128_SIZE];
+			memset(bufferXml,0,G_BUFFER_128_SIZE);
+			//构造xml数据
+			sprintf_s(bufferXml,G_BUFFER_128_SIZE,"<luadata x=\"%.3f\" y=\"%.3f\" z=\"%.3f\"/>",hit->x,hit->y,hit->z);
+			ex_lua_evt_dispatch(ptr,EVENT_RAY_PICK,bufferXml);
+		}
+	}
 }
 
 
@@ -1711,6 +1726,16 @@ void ex_callIntLuaFun(const char* luaFunName,int value)
 			printf("error %s\n", lua_tostring(L,-1));
 		}
 	}
+}
+
+void 
+ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
+	lua_State* L =ex_getInstance()->mylua;
+	lua_getglobal(L,"evt_dispatch");
+	lua_pushinteger(L,(int)obj);
+	lua_pushinteger(L,evtid);
+	lua_pushstring(L,data);
+	lua_pcall(L,3,0,0);
 }
 
 void 
