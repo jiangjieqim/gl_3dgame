@@ -113,7 +113,7 @@ f_playCallBack(void* data){
 //地板点击触发
 static struct Vec3 startPos;
 static struct Vec3 endPos;
-static struct Vec3 direction;
+static struct Vec3 direction;//代表依次循环中移动的向量偏移
 
 static void*
 f_get_posList(struct Vec3 p,struct Vec3 t){
@@ -124,6 +124,8 @@ f_get_posList(struct Vec3 p,struct Vec3 t){
 
 	printf("距离\t%.3f,单位向量\t%.3f,%.3f,%.3f\n",distance,o.x,o.y,o.z);
 	//memcpy(&direction,&o,sizeof(struct Vec3));
+
+	vec3Mult(&o,0.1);
 	vec3Set(&direction,o.x,o.y,o.z);
 
 	return 0;
@@ -137,7 +139,7 @@ floor_rayPick(int evtId,void* data){
 	//vec3Sub()
 	{
 		long time = 2000.0f;//播放的时间
-		double tangle;
+		
 		struct Vec3 pos;
 		float x = hit->x - ptrHorse->x;
 		float y = hit->y - ptrHorse->y;
@@ -147,15 +149,18 @@ floor_rayPick(int evtId,void* data){
 		pos.z = z;
 
 		vec3Normalize(&pos);//求单位向量
-		//printf("************* %s,%.3f,%.3f,%.3f\t,%.3f,%.3f,%.3f\n", hit->name,hit->x,hit->y,hit->z,pos.x,pos.y,pos.z);
-		tangle = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);//设置角色的朝向
+		{
+			//printf("************* %s,%.3f,%.3f,%.3f\t,%.3f,%.3f,%.3f\n", hit->name,hit->x,hit->y,hit->z,pos.x,pos.y,pos.z);
+			//double tangle = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);//设置角色的朝向
+			//
+			//log_color(0x00ff00,"角位移插值:%.3f -> %.3f = %.3f\n",ptrHorse->ry,tangle,tangle - ptrHorse->ry);
+			//
+			//ptrHorse->ry = tangle;
+			//base_updateMat4x4(ptrHorse);//更新角色矩阵
 		
-		log_color(0x00ff00,"角位移插值:%.3f -> %.3f = %.3f\n",ptrHorse->ry,tangle,tangle - ptrHorse->ry);
-		
-		
-		
-		ptrHorse->ry = tangle;
-		base_updateMat4x4(ptrHorse);//更新角色矩阵
+			base_look_at(ptrHorse,hit->x,hit->y,hit->z);
+		}
+		//return;
 
 		base_setPos(_target, hit->x, hit->y, hit->z);//设置拾取小盒子的位置
 
@@ -297,7 +302,7 @@ f_followCamera(){
 		
 		//float offset = -0.0f;//偏移
 		ex_getInstance()->cam.rx = PI * 1.7;
-		ex_cam_set_pos(-role->x,-20.0f,-role->z+cam->y);//-20
+		ex_cam_set_pos(-role->x,-5.0f,-role->z+cam->y);//-20
 
 		vec3Set(&rolePos,role->x,role->y,role->z);
 		vec3Set(&camPos,cam->x,cam->y,cam->z);
@@ -334,7 +339,7 @@ f_move(){
 			}else{
 				if(!animStat){
 					ex_animtor_ptr_setcur(ex_find(ptrHorse->name),"stand",0);
-					ex_alert("ry = %.3f",ptrHorse->ry);
+					//ex_alert("ry = %.3f",ptrHorse->ry);
 				}
 				animStat = 1;
 			}

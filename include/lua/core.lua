@@ -691,7 +691,10 @@ end
 function func_ex_info()
 	get_attr(nil,"ex_info");
 end
-
+--让角色朝向某个方向
+function func_look_at(o,x,y,z)
+	change_attr(o,"lookat",string.format("%f,%f,%f",x,y,z));
+end
 
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 

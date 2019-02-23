@@ -842,7 +842,7 @@ _new(){
 
 	evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
 
-	ex_lua_evt_dispatch(0,EVENT_ENGINE_RENDER_3D,0);
+	ex_lua_global_evt_dispatch(EVENT_ENGINE_RENDER_3D);
 
 	//ex_renderlistCall(sprite_drawRender);//test
 	if(TRUE)//FALSE
@@ -1727,7 +1727,10 @@ void ex_callIntLuaFun(const char* luaFunName,int value)
 		}
 	}
 }
-
+void 
+ex_lua_global_evt_dispatch(int evtid){
+	ex_lua_evt_dispatch(0,evtid,0);
+}
 void 
 ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
 	lua_State* L =ex_getInstance()->mylua;
@@ -1737,6 +1740,7 @@ ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
 	lua_pushstring(L,data);
 	lua_pcall(L,3,0,0);
 }
+
 
 void 
 setLookTarget(void* ptr,float x,float y,float z)

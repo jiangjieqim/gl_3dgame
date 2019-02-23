@@ -383,4 +383,10 @@ void ex_alert(const char* format,...);
 */
 void 
 ex_lua_evt_dispatch(void* obj,int evtid,const char* data);
+
+/*
+	向lua发送一个全局事件
+*/
+void 
+ex_lua_global_evt_dispatch(int evtid);
 #endif

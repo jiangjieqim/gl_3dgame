@@ -42,7 +42,7 @@ fps();
 infowin_show(0,20);
 
 --创建一个角色
-local unit-- = unit_create();
+local unit = unit_create();
 
 --创建一个地板
 local floor_ptr = f_create_floor(50);
@@ -54,21 +54,16 @@ local function f_on_click_floor_handle(data)
 	local x = xml_get_float(node,"x")
 	local y = xml_get_float(node,"y")
 	local z = xml_get_float(node,"z")
-
-	--print(xml_get_float(node,"x"),xml_get_float(node,"y"),xml_get_float(node,"z"));
-	print(x,y,z);
-	
 	xml_del(xml);
+	--print(xml_get_float(node,"x"),xml_get_float(node,"y"),xml_get_float(node,"z"));
+	
+	print(string.format("%.3f %.3f %.3f",x,y,z));
+	
+	func_look_at(unit.p,x,y,z);
 end
 
 evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
 
---[[
-function aa(...)
-		for index,value in ipairs({...}) do
-			print(index,value);
-		end
-end
-aa(1,"asdsa",0.1,floor_ptr);
---]]
-alert("a");
+func_set_camera_pos(0,-1.5,-5.5);
+
+--alert(1);

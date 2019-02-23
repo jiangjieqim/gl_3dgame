@@ -107,7 +107,7 @@ local function f_create_box()
 	setv(box,FLAGS_DRAW_PLOYGON_LINE)
 end
 ------------------------------------------------------------------
-local function f_create_floor()
+local function f_create_floor(scale)
 	--创建一个可点击的地板
 	--local _floor = func_loadobj('plane','box.tga','_floor',false);
 	local _floor = load_model("_floor","\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
@@ -116,12 +116,13 @@ local function f_create_floor()
 	--local _floorRadius = 30--地板半径
 	--func_set_scale(_floor,_floorRadius*2);
 	--func_set_y(_floor,-_floorRadius);
-	func_set_scale(_floor,30);
+	
+	func_set_scale(_floor,scale);
 	setv(_floor,FLAGS_RAY)
 	setv(_floor,FLAGS_DRAW_RAY_COLLISION)
 	setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
 	setv(_floor,FLAGS_DISABLE_CULL_FACE)
-	func_set_glsl_parms(_floor,'uvScale',10)--设置diffuse.vs (uniform float _uvScale)uv重复值
+	func_set_glsl_parms(_floor,'uvScale',scale)--设置diffuse.vs (uniform float _uvScale)uv重复值
 	return _floor
 end
 ------------------------------------------------------------------
@@ -137,7 +138,7 @@ local function f_init_character()
 	
 	func_setRotateX(horse,PI/2)--旋转一个轴向
 		
-	func_set_scale(horse,url == 'bauul' and 0.1 or 1)
+	func_set_scale(horse,url == 'bauul' and 1/50 or 1)
 	
 	--func_set_x(horse,-5)
 	--func_set_z(horse,-5)
@@ -159,10 +160,13 @@ end
 
 ---[
 f_init_ui();
+
+infowin_show(100,0);
+
 f_create_box();
 f_create_cube();
 
-_floorObj = f_create_floor();
+_floorObj = f_create_floor(30);
 f_init_character()
 _target = func_loadobj('box',nil,'_target',false);
 setv(_target,FLAGS_DRAW_PLOYGON_LINE)

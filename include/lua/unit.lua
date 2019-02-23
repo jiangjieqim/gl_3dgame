@@ -23,6 +23,7 @@ function unit_create()
 	local md2=load_VBO_model(func_create_name(),string.format("\\resource\\md2\\%s.md2",url));
 	setMaterial(md2,func_load(string.format("//resource//material//%s.mat",url)));
 	setv(md2,FLAGS_VISIBLE);
+	
 	func_setRotateX(md2,PI/2)--旋转一个轴向
 
 	f_split_init(md2);

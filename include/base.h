@@ -4,7 +4,7 @@
 /*
 	基础结构体,用于ent3d和md2继承
 */
-struct HeadInfo{
+typedef struct HeadInfo{
 	/*事件引用*/
 	void* evtList;
 	/*类型*/
@@ -116,7 +116,7 @@ struct HeadInfo{
 	float boxR,boxG,boxB;
 	/*是否是一个Node*结构*/
 	int isNode;
-};
+}HeadInfo;
 
 
 
@@ -245,5 +245,10 @@ GLboolean base_cullface(struct HeadInfo* base);
 void base_hit_mouse(GLint xMouse, GLint yMouse,float screenWidth,float screenHeight,
 			   struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMatrix,
 			   void (*mRayPickCallBack)(struct HitResultObject*));
+
+/*
+	让角色朝向坐标x y z
+*/
+void base_look_at(HeadInfo* p,float x,float y,float z);
 
 #endif
