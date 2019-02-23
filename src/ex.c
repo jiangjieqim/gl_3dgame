@@ -796,10 +796,6 @@ void ex_updatePerspctiveModelView()
 	//	ex_getInstance()->drawLine_callBack();
 //}
 
-
-
-
-//#include <windows.h>
 static void 
 _new(){
 	struct EX* p = ex_getInstance();

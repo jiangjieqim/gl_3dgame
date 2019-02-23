@@ -470,8 +470,10 @@ fParseFrames(struct MD2_ParseObj* _md2)
 		#ifdef _DEBUG_MODE_
 			//printf("½âÎö¹Ø¼üÖ¡Ë÷Òý%dÏûºÄ %ld ºÁÃë\n",i,(get_longTime() - __time));
 		#endif
-	}
 
+		printf("%d / %d \r",i,_md2->_numFrames);
+	}
+	printf("\n");
 	fDeleteVert(tvertices);
 	tvertices = 0;
 

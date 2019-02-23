@@ -48,4 +48,8 @@ log_color(int color,char* format, ...);
 ************************************************************************/
 DLLIMPORT void
 log_state(int value);
+
+//½ø³ÌË¯ÃßmsºÁÃë
+DLLIMPORT void sleep(long ms);
+
 #endif
