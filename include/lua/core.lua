@@ -603,6 +603,11 @@ end
 function func_play_anim(o,s,e)
 	change_attr(o,"animtor_play_start_end",string.format('%d,%d',s,e))
 end
+
+--播放动画
+function func_play(o)
+	change_attr(o,"animtor_play");--播放
+end
 --获取动作关键帧数(md5)
 function func_get_frame_count(o)
 	return get_attr(o,"frameCount")
@@ -686,3 +691,4 @@ dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件
 dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
+dofile("..\\include\\lua\\unit.lua")

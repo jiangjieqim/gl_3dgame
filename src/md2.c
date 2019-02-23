@@ -584,7 +584,7 @@ void* md2parse_load(const char* str,int len){
 	struct MD2_ParseObj* _md2;
 #ifdef  _DEBUG_MODE_
 	int __time = get_longTime();
-	log_color(0x00ff00,"############################### md2文件开始解析(%d字节)\n",len);
+	log_color(0x00ff00,"############################### md2文件开始解析(%d字节)%.3fkb\n",len,(float)len/1024);
 #endif
 
 	_md2 = (struct MD2_ParseObj*)tl_malloc(sizeof(struct MD2_ParseObj));
