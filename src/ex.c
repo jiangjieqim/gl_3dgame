@@ -381,16 +381,8 @@ f_drawFps(){
 	ex_showLog(_str);
 }
 
-/*
-绘制文本
-*/
-static void 
-drawText(){
-	
-	f_drawFps();
-	return;
-
-	{	
+static void
+f_show_all_info(){
 	struct EX* p = ex_getInstance();
 	struct ECamera cam = p->cam;
 	int vbo = tlgl_getVboSize();
@@ -399,7 +391,7 @@ drawText(){
 	GLint total_mem_kb,cur_avail_mem_kb;
 	int fps = f_get_fps();
 	memset(buffer,0,G_BUFFER_256_SIZE);
-	
+
 	tlgl_getGPU_memery(&total_mem_kb,&cur_avail_mem_kb);
 
 	//if(tl_memGetStat())
@@ -410,9 +402,18 @@ drawText(){
 
 	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d total %d bytes ",fps,size);
 	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb) cam: %f,%f,%f VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0,cam.x,cam.y,cam.z,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,get_longTime()*0.001);
-	
+
 	ex_showLog(buffer);
-	}
+}
+
+/*
+绘制文本
+*/
+static void 
+drawText(){
+	//f_drawFps();	return;
+	//显示大量信息
+	//f_show_all_info();
 }
 
 static void 
@@ -868,7 +869,7 @@ _new(){
 
 		//渲染文本(非常耗费性能,待优化)
 		if(getv(&p->flags,EX_FLAGS_DRAW_DEBUG_TEXT)) {
-			drawText(p);
+			//drawText(p);
 		}
 	}
 

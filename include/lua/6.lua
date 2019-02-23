@@ -130,6 +130,7 @@ end
 local function f_init_character()
 	local url = 'triangle';--bauul
 	url = 'bauul'--角色模型会加载的比较慢,可以用一个三角形替代
+	--url = 'horse'
 	
 	local horse=func_loadmd2(url,'bauul.tga','vbo')--'horse'
 	func_rename(horse,'_horse');

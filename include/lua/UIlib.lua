@@ -89,7 +89,9 @@ function btn_create(x,y,w,h,url)
 	func_setIcon(sprite,url)
 	
 	btn.sprite =  sprite
-
+	
+	btn_scaleStyle(btn);
+	
 	return btn
 end
 

@@ -371,9 +371,7 @@ fParseFrames(struct MD2_ParseObj* _md2)
 	char _tempName[16];
 	memset(_tempName,0,16);
 
-#ifdef _DEBUG_MODE_
-	printf("md2:关键帧数 = %d 顶点总数 = %d\n",_md2->_numFrames,_md2->_numVertices);
-#endif
+
 	
 	//开辟关键帧列表这里开辟了所有的缓存区,那么释放其实只要一次
 	_md2->_pframe = (struct MD2_Frame*)tl_malloc(sizeof(struct MD2_Frame) * _md2->_numFrames);
@@ -466,14 +464,19 @@ fParseFrames(struct MD2_ParseObj* _md2)
 		}
 		fBuildVertices(_md2,tvertices,(const char*)name,i);
 		//}
-
 		#ifdef _DEBUG_MODE_
 			//printf("解析关键帧索引%d消耗 %ld 毫秒\n",i,(get_longTime() - __time));
-		#endif
-
-		printf("%d / %d \r",i,_md2->_numFrames);
+			{
+				int c = i + 1;
+				log_color(0x00ff00,"############################### md2:关键帧数 = %d 顶点总数 = %d  %d/%d %.2f%% \r",_md2->_numFrames,_md2->_numVertices,c,_md2->_numFrames,(float)c/(float)_md2->_numFrames * 100);
+			}
+		#endif	
 	}
-	printf("\n");
+
+	#ifdef _DEBUG_MODE_ 
+		printf("\n");	
+	#endif
+
 	fDeleteVert(tvertices);
 	tvertices = 0;
 

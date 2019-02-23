@@ -638,6 +638,10 @@ end
 function func_fps()
 	return get_attr(nil,"fps");
 end
+--获取delayTime
+function func_delayTime()
+	return get_attr(nil,"delayTime");
+end
 --设置对象的关键帧帧率
 function func_set_ptr_fps(o,v)
 	change_attr(o,"fps",tostring(v))
@@ -676,6 +680,7 @@ function func_anim_push(obj,animname,s,e)
 	change_attr(obj,"animtor_push",animname,string.format('%s,%s',s,e));
 end
 
+dofile("..\\include\\lua\\fps.lua")	--fps组件
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件

@@ -43,3 +43,5 @@ dumpbin /exports C:\gl_3dgame\common\Debug\common.dll
 
 warning C4312: "类型转换" 
 属性->c++->常规->检查64位可移植问题->-"否" 
+
+(14)11:29 2019/2/23 将业务代码剥离到lua模块,集成污染
