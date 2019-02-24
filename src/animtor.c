@@ -110,7 +110,7 @@ animtor_setcur(struct Animtor* p,char* const animKey){
 		return 1;//assert(0);/*动作相同*/
 	}
 	if(f_animtor_get(p,animKey,&s,&e)){
-		
+		//printf("设置动作:%s\n",animKey);
 		memset(p->cur_anim,0,G_BUFFER_64_SIZE);
 		memcpy(p->cur_anim,animKey,strlen(animKey));
 		p->cur_start = s;

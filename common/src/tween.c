@@ -127,7 +127,7 @@ f_nodeRun(TweenNode* _node,TNode* _nptr,int i){
 	}else{
 		*_nptr->p+=f;
 	}
-	printf("%d** %d %.3f\n\n",i,_nptr->p,*_nptr->p);
+//	printf("%d** %d %.3f\n\n",i,_nptr->p,*_nptr->p);
 //	printf("%ld v = %.3f p = %.3f %.3f \t%ld %.3f\n",_node->useTime,v,*_nptr->p,e,g_delay,f);
 }
 //处理一个节点

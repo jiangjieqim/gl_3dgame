@@ -603,12 +603,12 @@ void Quat_slerp (const Quat4_t qa, const Quat4_t qb, float t, Quat4_t out)
 	out[Y] = (k0 * qa[1]) + (k1 * q1y);
 	out[Z] = (k0 * qa[2]) + (k1 * q1z);
 }
-void tl_set_vec(Vec3_t vec,float x,float y,float z)
-{
-	vec[X] = x;
-	vec[Y] = y;
-	vec[Z] = z;
-}
+//void tl_set_vec(Vec3_t vec,float x,float y,float z)
+//{
+//	vec[X] = x;
+//	vec[Y] = y;
+//	vec[Z] = z;
+//}
 void tl_add_vec(Vec3_t a,Vec3_t b,Vec3_t vec)
 {
 	vec[X] = a[X]+b[X];

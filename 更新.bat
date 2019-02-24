@@ -1,2 +1,3 @@
-git pull
+git pull -v --progress "origin"
+
 pause

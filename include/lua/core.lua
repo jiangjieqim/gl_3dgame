@@ -43,7 +43,11 @@ EVENT_ENGINE_RENDER_3D =100				--引擎渲染回调
 EVENT_ENGINE_KEYBOARD  =101				--全局键盘事件
 EVENT_ENGINE_RESIZE	   =102				--resize事件
 
+EVENT_ENGINE_BASE_UPDATE	 =  102		--base更新事件
+EVENT_ENGINE_BASE_END		 =  103		--base结束事件
+
 dofile("..\\include\\lua\\xml.lua")	--xml组件
+dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
 
 local defalutTex = '1.tga'

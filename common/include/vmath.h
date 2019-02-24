@@ -131,8 +131,8 @@ DLLIMPORT void  Quat_slerp (const Quat4_t qa, const Quat4_t qb, float t, Quat4_t
 
 
 
-/*vec…Ë÷√*/
-DLLIMPORT void tl_set_vec(Vec3_t vec,float x,float y,float z);
+///*vec…Ë÷√*/
+//DLLIMPORT void tl_set_vec(Vec3_t vec,float x,float y,float z);
 /*
 	c = a + b
 */

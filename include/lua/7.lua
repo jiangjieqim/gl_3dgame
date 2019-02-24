@@ -26,7 +26,7 @@ local function f_create_floor(scale)
 	
 	setv(_floor,FLAGS_RAY)
 	setv(_floor,FLAGS_DRAW_RAY_COLLISION)
-	setv(_floor,FLAGS_DRAW_PLOYGON_LINE)
+	--setv(_floor,FLAGS_DRAW_PLOYGON_LINE)--线框
 	setv(_floor,FLAGS_DISABLE_CULL_FACE)
 	func_set_glsl_parms(_floor,'uvScale',scale)--设置diffuse.vs (uniform float _uvScale)uv重复值
 	return _floor;
@@ -38,10 +38,7 @@ infowin_show(0,20);
 --***********************************************************************************************
 
 --创建一个角色
-local unit = unit_create();
-
---创建一个地板
-local floor_ptr = f_create_floor(50);
+local unit =  Unit:create()--unit_create();
 
 local function f_on_click_floor_handle(data)
 	--print('##',data);
@@ -52,23 +49,36 @@ local function f_on_click_floor_handle(data)
 	local z = xml_get_float(node,"z")
 	xml_del(xml);
 	--print(xml_get_float(node,"x"),xml_get_float(node,"y"),xml_get_float(node,"z"));
+	local o = unit.p
 	
+	--x = 1;y = 0;z = 5;--测试数据
 	
-	
-	func_look_at(unit.p,x,y,z);
-	local px,py,pz = func_get_xyz(unit.p);
+	local px,py,pz = func_get_xyz(o);
 	--print(px,py,pz);
 	
-	print(string.format("%.3f %.3f %.3f=>%.3f %.3f %.3f",px,py,pz,x,y,z));
+	--print(string.format("%.3f %.3f %.3f=>%.3f %.3f %.3f",px,py,pz,x,y,z));
+--[[	
+	func_set_x(o,x);
+	func_set_y(o,y);
+	func_set_z(o,z);
+	--]]
+	--func_move(o,500,x,py,z);
 	
-	func_move(unit.p,50,x,py,z);
+	--unit_move(unit,x,y,z);
+	unit:move(x,y,z);
 end
+
+
+--[[
 local function f_render()
 	func_update_mat4x4(unit.p)
 end
+--]]
+
 --evt_on(unit,EVENT_ENGINE_RENDER_3D,f_render);
+---[[--创建一个地板
+local floor_ptr = f_create_floor(50);
 evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
 
-func_set_camera_pos(0,-1.5,-5.5);
-
---alert(1);
+--]]
+func_set_camera_pos(0,-10,-10);

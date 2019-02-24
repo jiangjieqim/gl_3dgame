@@ -17,6 +17,7 @@ struct Node* node_create(const char* name)
 
 	ptr->base = base_create(TYPE_OBJ_VBO_FILE,name,0,0,0);
 	ptr->base->isNode = 1;
+	ptr->base->parent = ptr;
 	base_updateMat4x4(ptr->base);
 
 	return ptr;

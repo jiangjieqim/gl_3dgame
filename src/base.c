@@ -58,6 +58,7 @@ f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
 }
 /*
 	当位置，缩放,旋转发生变化的时候更新矩阵
+	所有的数据将合并到base->m矩阵中处理，所以模型发生变化的时候都要执行此方法
 */
 void 
 base_updateMat4x4(struct HeadInfo* base){
@@ -135,7 +136,10 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 	base->curType = curType;
 
 	//设置坐标
-	tl_set_vec(&base->x,x,y,z);
+	//tl_set_vec(&base->x,x,y,z);
+	base->x = x;
+	base->y = y;
+	base->z = z;
 
 	//设置模型名字
 	memset(base->name,0,G_BUFFER_32_SIZE);
@@ -643,7 +647,7 @@ base_move(HeadInfo* bp,int ms,
 		void (*updateCallBack)(void*)
 		)
 {
-	void* _tweenPtr;//可能会内存泄露
+	//void* _tweenPtr;//可能会内存泄露
 	//HeadInfo* bp = base_get(ptr);
 	//Vec3 p;
 	//Vec3 t;
@@ -653,11 +657,19 @@ base_move(HeadInfo* bp,int ms,
 	//vec3Set(&t,x,y,z);
 
 	//从p -> t
-	/*distance = vec3Distance(&p,&t);
+	/*
+	distance = vec3Distance(&p,&t);
 	vec3Sub(&t,&p,&_dirc);
-	vec3Normalize(&_dirc);*/
-printf("===========\n%d\n%d\n%d\n",&(bp->x),&(bp->y),&(bp->z));
-	_tweenPtr=tween_to(bp,ms,endCallBack,updateCallBack,
+	vec3Normalize(&_dirc);
+	*/
+	
+	//printf("===========\n%d\n%d\n%d\n",&(bp->x),&(bp->y),&(bp->z));
+	void* _tweenPtr = bp->_tweenPtr;
+	if(_tweenPtr && tween_is_play(_tweenPtr))
+	{
+		tween_stop(_tweenPtr);
+	}
+	bp->_tweenPtr=tween_to(bp,ms,endCallBack,updateCallBack,
 		6,
 		&(bp->x),x,
 		&(bp->y),y,

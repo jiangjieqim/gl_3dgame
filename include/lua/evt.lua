@@ -3,6 +3,17 @@
 local evtlist = {};
 
 function evt_on(obj,id,func)	
+	
+	for k, v in pairs(evtlist) do
+		local node = evtlist[k];
+		if(node and node.obj == obj and node.id == id and node.func == func) then
+			--node.func(data);
+			--重复的事件
+			return;
+		end
+	end	
+	
+	
 	local evt = 
 	{
 		id = id;

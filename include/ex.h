@@ -48,6 +48,10 @@
 #define EVENT_ENGINE_RENDER_3D 100				//引擎渲染回调
 #define EVENT_ENGINE_KEYBOARD  101				//全局键盘事件
 #define EVENT_ENGINE_RESIZE	   102				//resize事件
+
+#define EVENT_ENGINE_BASE_UPDATE	   102				//base更新事件
+#define EVENT_ENGINE_BASE_END		   103				//base结束事件
+
 //键盘事件状态
 struct E_KeyBoard
 {

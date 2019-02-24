@@ -16,7 +16,7 @@ typedef struct HeadInfo{
 	char suffix[G_BUFFER_16_SIZE];
 
 	/*坐标*/
-	float x,y,z;
+	double x,y,z;
 
 	float rx,ry,rz;
 
@@ -116,9 +116,13 @@ typedef struct HeadInfo{
 	float boxR,boxG,boxB;
 	/*是否是一个Node*结构*/
 	int isNode;
+	
+	/*
+		所属的父对象
+	*/
+	void* parent;
+	void* _tweenPtr;
 }HeadInfo;
-
-
 
 /*
 	渲染一个带材质的模型

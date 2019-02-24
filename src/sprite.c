@@ -451,10 +451,10 @@ sprite_create(char* _spriteName,
 	InitType(pSpr);
 
 	pSpr->base = base_create(TYPE_SPRITE_FLIE,_spriteName,0,0,0);
-
 	sprite_setpos(pSpr,x,y);
 
 	base = pSpr->base;
+	base->parent = pSpr;
 	if(base){
 		setv(&base->flags,FLAGS_VISIBLE);//FLAGS_RAY
 		pSpr->clickCallBack = clickCallBack;

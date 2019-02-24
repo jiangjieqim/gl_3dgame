@@ -30,6 +30,7 @@ tf_create(int bufferSize,int x,int y,
 
 	tf->base = base_create(TYPE_TEXT_FILE,buffer,0,0,0);
 	base = (struct HeadInfo*)tf->base;
+	base->parent = tf;
 	setv(&(base->flags),FLAGS_VISIBLE);
 
 	//构建文本缓冲区
