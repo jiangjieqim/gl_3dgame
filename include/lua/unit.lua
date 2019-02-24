@@ -1,13 +1,13 @@
 local m_name = "triangle"
 m_name = "bauul"
---m_name = "gobin"
+m_name = "gobin"
 
 --初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
 local function f_split_init(md2)
 	
 	if(m_name == "bauul" or m_name == "gobin")  then
 		func_set_scale(md2,1/50);--这里设置一个缩放价值让模型在单位1以内
-		func_set_y(md2,0.5);	 --设置地板y轴向偏移
+		--func_set_y(md2,0.5);	 --设置地板y轴向偏移
 		func_setRotateX(md2,PI/2)--旋转一个轴向
 	end
 	
@@ -20,6 +20,17 @@ local function f_split_init(md2)
 	func_play(md2);
 end
 
+--加载一个box
+local function f_load_box()
+	local obj=load_VBO_model(func_create_name(),"\\resource\\obj\\box.obj");
+	setMaterial(obj,func_load("//resource//material//triangle.mat"));
+	setv(obj,FLAGS_DRAW_PLOYGON_LINE)--线框
+	--setv(obj,FLAGS_DISABLE_CULL_FACE);
+	setv(obj,FLAGS_REVERSE_FACE);
+	setv(obj,FLAGS_VISIBLE);
+	return obj;
+end
+
 Unit = {}
 
 local function f_removeEvt(obj)
@@ -28,13 +39,17 @@ local function f_removeEvt(obj)
 	evt_off(obj.p,EVENT_ENGINE_BASE_END,obj.endCall);
 end;
 
-function Unit:create()
+function Unit:create(_key)
     local new_sharp = { 
 		p = nil;--角色句柄
+		
 		speed = 1000;--移动速度
+		
 		update =function(data)
 					--print(data,self,self.p);
 					func_update_mat4x4(self.p);
+					
+					--func_update_mat4x4(self.box);
 					--print("p = "+ p);
 				end;
 		
@@ -44,35 +59,44 @@ function Unit:create()
 					f_removeEvt(self);
 					
 					func_set_anim(self.p,"stand");
-					print("移动结束!!!");
+					--print("移动结束!!!");
 				end;
 				
 		
 		--创建一个基本单位,默认在1个单位区间内
 		init =  function ()
-				--local u = {
-				--	p = nil;--资源对象
-				--}
-				--drfreak
-				--bauul
-				--triangle
-				
-				---[[
-				local url = m_name;
-				local modelURL = string.format("\\resource\\md2\\%s.md2",url);
-				local md2=load_VBO_model(func_create_name(),modelURL);
-				--local md2 = load_model(func_create_name(),modelURL,0,0,0,1.0);
-				setMaterial(md2,func_load(string.format("//resource//material//%s.mat",url)));
-				setv(md2,FLAGS_VISIBLE);
-				
-				
-				f_split_init(md2);
-				--setv(md2,FLAGS_RAY);
-				--setv(md2,FLAGS_DRAW_RAY_COLLISION);
-				setv(md2,FLAGS_DISABLE_CULL_FACE)--取消双面渲染
-				----------------------------
-				self.p = md2;
-				--]]
+					--local u = {
+					--	p = nil;--资源对象
+					--}
+					--drfreak
+					--bauul
+					--triangle
+					
+					---[[
+					
+					if(_key ~= "box") then
+						local url = m_name;
+						local modelURL = string.format("\\resource\\md2\\%s.md2",url);
+						local md2=load_VBO_model(func_create_name(),modelURL);
+						--local md2 = load_model(func_create_name(),modelURL,0,0,0,1.0);
+						setMaterial(md2,func_load(string.format("//resource//material//%s.mat",url)));
+						setv(md2,FLAGS_VISIBLE);
+						
+						
+						f_split_init(md2);
+						--setv(md2,FLAGS_RAY);
+						--setv(md2,FLAGS_DRAW_RAY_COLLISION);
+						setv(md2,FLAGS_DISABLE_CULL_FACE)--取消双面渲染
+						----------------------------
+						self.p = md2;
+						
+						--self.box = f_load_box();
+						--]]
+					else
+						self.p = f_load_box();
+					end
+					
+					func_set_y(self.p,0.5);--	y轴偏移0.5
 				end;
 	}
     self.__index = self  --②，self == Sharp
@@ -102,6 +126,7 @@ function Unit:move(x,y,z)
 	--print(self,func,o);
 	--self.update("aaaaa");
 	func_look_at(o,x,y,z);--转向目标坐标
+	--func_look_at(self.box,x,y,z)
 	
 --	evt_off(o,EVENT_ENGINE_BASE_UPDATE,self.update);
 --	evt_off(o,EVENT_ENGINE_BASE_END,self.endCall);
@@ -118,6 +143,7 @@ function Unit:move(x,y,z)
 	
 	--func_move(o,distance * 1000,x,y,z);--(一个单位距离用1秒的速度);
 	func_move(o,distance * self.speed,x,y,z);
+	--func_move(self.box,distance * self.speed,x,y,z);
 end
 
 function Unit:set_anim(ani)

@@ -434,20 +434,25 @@ int base_get_ploygonLineMode(struct HeadInfo* base){
 
 GLboolean 
 base_cullface(struct HeadInfo* base){
-	//int mode = base_get_ploygonLineMode(base);
+	int flag = base->flags;
 
-//	if(mode != GL_FILL){
-		if(getv(&base->flags,FLAGS_DISABLE_CULL_FACE)){
-			glDisable(GL_CULL_FACE);
-		}else{
-			//剔除多边形背面
-			glEnable(GL_CULL_FACE);//GL_FRONT	//GL_BACK
-			//前后面处理
-			glCullFace(GL_FRONT);
-			//glCullFace(f_check(base->curType) ? GL_FRONT : GL_BACK);
-			return GL_TRUE;
-		}
-//	}
+	if(getv(&flag,FLAGS_DISABLE_CULL_FACE)){
+		glDisable(GL_CULL_FACE);
+	}else{
+		//剔除多边形背面
+		glEnable(GL_CULL_FACE);//GL_FRONT	//GL_BACK
+		//前后面处理
+
+		glCullFace(getv(&flag,FLAGS_REVERSE_FACE) ? GL_BACK : GL_FRONT);
+
+		//glCullFace(f_check(base->curType) ? GL_FRONT : GL_BACK);
+
+		//glCullFace(GL_BACK);
+
+
+
+		return GL_TRUE;
+	}
 
 	return GL_FALSE;
 }

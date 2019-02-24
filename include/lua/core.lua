@@ -19,6 +19,8 @@ FLAGS_DRAW_NORMAL 		= 	2048	--法线
 FLAGS_DRAG				=	4096	--是否可拖拽
 FLAGS_DRAW_PLOYGON_POINT= 	8192	--点模式
 FLAGS_DISABLE_CULL_FACE	=	16384	--设置显示双面
+FLAGS_REVERSE_FACE		=	32768	--反转渲染面
+
 
 --//文件类型定义
 TYPE_OBJ_FILE = 0--	//obj类型
@@ -654,7 +656,6 @@ function func_set_ptr_fps(o,v)
 end
 --设置动作
 function func_set_anim(o,anim)
-	print("*********",o,anim);
 	change_attr(o,"animtor_setcur",anim);
 end
 

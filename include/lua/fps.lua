@@ -21,7 +21,7 @@ function fps(x,y)
 	x = x or 0
 	y = y or 0
 	if(tf == nil) then
-		tf = tf_create(128,x,y,0,1,0);
+		tf = tf_create(128,x,y,0,0,0);
 		evt_on(tf,EVENT_ENGINE_RENDER_3D,f_render);
 	end
 	tf_setPos(tf,x,y)

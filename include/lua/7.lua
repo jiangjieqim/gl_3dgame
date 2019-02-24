@@ -36,26 +36,33 @@ local unit;
 fps();
 infowin_show(0,20);
 
+
+
+---[[
 local a=0;
 local function f_btnClick()
 	
 	a = a + 1;
 
-	local ani = "stand"
+	--local ani = "stand"
 	if(a % 2 == 1) then
-		ani = "run"
+		--ani = "run"
+		setv(unit.p,FLAGS_REVERSE_FACE);
+	else
+		resetv(unit.p,FLAGS_REVERSE_FACE);
 	end
-	print(a%2,ani);
+--	print(a%2,ani);
 	
-	unit:set_anim(ani);
+	--unit:set_anim(ani);
 end
 
 local btn = btn_create(0,40);
 btn_bindClick(btn,f_btnClick);
+--]]
 --***********************************************************************************************
 
 --创建一个角色
-unit =  Unit:create()--unit_create();
+unit =  Unit:create("box0")--unit_create();
 unit:set_speed(600);
 
 local function f_on_click_floor_handle(data)
@@ -87,6 +94,3 @@ cam:position(0,-10,-10);
 cam:rx(PI * 1.7);
 
 ----------------------------------
-
-
---btn_bindClick(btn,f_click);
