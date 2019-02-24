@@ -701,6 +701,10 @@ function func_look_at(o,x,y,z)
 	change_attr(o,"lookat",string.format("%f,%f,%f",x,y,z));
 end
 
+function func_set_position(o,x,y,z)
+	change_attr(o,"set_position",string.format("%f,%f,%f",x,y,z));
+end
+
 --让角色朝向某个方向
 function func_move(o,ms,x,y,z)
 	change_attr(o,"move",string.format("%d,%f,%f,%f",ms,x,y,z));

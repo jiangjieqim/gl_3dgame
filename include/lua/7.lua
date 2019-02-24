@@ -31,14 +31,27 @@ local function f_create_floor(scale)
 	func_set_glsl_parms(_floor,'uvScale',scale)--设置diffuse.vs (uniform float _uvScale)uv重复值
 	return _floor;
 end
+
+local function f_create_clickBox()
+	local url = "\\resource\\obj\\box.obj";
+	local obj = load_VBO_model(func_create_name(),url);
+	setMaterial(obj,func_load("//resource//material//triangle.mat"));		
+	setv(obj,FLAGS_DRAW_PLOYGON_LINE)--线框
+	--setv(obj,FLAGS_DISABLE_CULL_FACE);
+	setv(obj,FLAGS_REVERSE_FACE);
+	setv(obj,FLAGS_VISIBLE);
+	return obj;
+end
+
 --******************************************************
 local unit;
+local _selectBox;
 fps();
 infowin_show(0,20);
 
 
 
----[[
+--[[
 local a=0;
 local function f_btnClick()
 	
@@ -61,9 +74,14 @@ btn_bindClick(btn,f_btnClick);
 --]]
 --***********************************************************************************************
 
+
+
 --创建一个角色
 unit =  Unit:create("box0")--unit_create();
 unit:set_speed(600);
+
+
+_selectBox = f_create_clickBox();
 
 local function f_on_click_floor_handle(data)
 	--print('##',data);
@@ -73,22 +91,18 @@ local function f_on_click_floor_handle(data)
 	local y = xml_get_float(node,"y")
 	local z = xml_get_float(node,"z")
 	xml_del(xml);
-	--print(xml_get_float(node,"x"),xml_get_float(node,"y"),xml_get_float(node,"z"));
-	local o = unit.p
 	
-	--x = 1;y = 0;z = 5;--测试数据
+	func_set_position(_selectBox,x,y,z);
 	
-	local px,py,pz = func_get_xyz(o);
-	--print(px,py,pz);
-
 	unit:move(x,y,z);
 end
+
+
 
 ---[[--创建一个地板
 local floor_ptr = f_create_floor(50);
 evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
 
---func_set_camera_pos(0,-10,-10);
 
 cam:position(0,-10,-10);
 cam:rx(PI * 1.7);
