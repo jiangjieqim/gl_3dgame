@@ -1,5 +1,5 @@
 local m_name = "triangle"
---m_name = "bauul"
+m_name = "bauul"
 m_name = "gobin"
 
 --初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
@@ -31,6 +31,7 @@ end;
 function Unit:create()
     local new_sharp = { 
 		p = nil;--角色句柄
+		speed = 1000;--移动速度
 		update =function(data)
 					--print(data,self,self.p);
 					func_update_mat4x4(self.p);
@@ -57,8 +58,9 @@ function Unit:create()
 				
 				---[[
 				local url = m_name;
-				
-				local md2=load_VBO_model(func_create_name(),string.format("\\resource\\md2\\%s.md2",url));
+				local modelURL = string.format("\\resource\\md2\\%s.md2",url);
+				local md2=load_VBO_model(func_create_name(),modelURL);
+				--local md2 = load_model(func_create_name(),modelURL,0,0,0,1.0);
 				setMaterial(md2,func_load(string.format("//resource//material//%s.mat",url)));
 				setv(md2,FLAGS_VISIBLE);
 				
@@ -80,6 +82,10 @@ function Unit:create()
 	
     return new_sharp;
 end
+--移动一格需要的毫秒数
+function Unit:set_speed(value)
+	self.speed = value;
+end
 
 function Unit:move(x,y,z)
 	local o = self.p;
@@ -99,6 +105,7 @@ function Unit:move(x,y,z)
 --	evt_off(o,EVENT_ENGINE_BASE_UPDATE,self.update);
 --	evt_off(o,EVENT_ENGINE_BASE_END,self.endCall);
 	
+	
 	func_set_anim(self.p,"run");
 	
 	--self.removeEvt();
@@ -109,5 +116,6 @@ function Unit:move(x,y,z)
 	--print(string.format("需要行走的距离 = %.3f",distance));
 	
 	--func_move(o,distance * 1000,x,y,z);--(一个单位距离用1秒的速度);
-	func_move(o,distance * 1000,x,y,z);
+	func_move(o,distance * self.speed,x,y,z);
 end
+

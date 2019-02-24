@@ -39,6 +39,7 @@ infowin_show(0,20);
 
 --创建一个角色
 local unit =  Unit:create()--unit_create();
+unit:set_speed(500);
 
 local function f_on_click_floor_handle(data)
 	--print('##',data);
