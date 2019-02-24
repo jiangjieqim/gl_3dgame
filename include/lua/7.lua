@@ -31,15 +31,32 @@ local function f_create_floor(scale)
 	func_set_glsl_parms(_floor,'uvScale',scale)--设置diffuse.vs (uniform float _uvScale)uv重复值
 	return _floor;
 end
-
-
+--******************************************************
+local unit;
 fps();
 infowin_show(0,20);
+
+local a=0;
+local function f_btnClick()
+	
+	a = a + 1;
+
+	local ani = "stand"
+	if(a % 2 == 1) then
+		ani = "run"
+	end
+	print(a%2,ani);
+	
+	unit:set_anim(ani);
+end
+
+local btn = btn_create(0,40);
+btn_bindClick(btn,f_btnClick);
 --***********************************************************************************************
 
 --创建一个角色
-local unit =  Unit:create()--unit_create();
-unit:set_speed(500);
+unit =  Unit:create()--unit_create();
+unit:set_speed(600);
 
 local function f_on_click_floor_handle(data)
 	--print('##',data);
@@ -56,30 +73,20 @@ local function f_on_click_floor_handle(data)
 	
 	local px,py,pz = func_get_xyz(o);
 	--print(px,py,pz);
-	
-	--print(string.format("%.3f %.3f %.3f=>%.3f %.3f %.3f",px,py,pz,x,y,z));
---[[	
-	func_set_x(o,x);
-	func_set_y(o,y);
-	func_set_z(o,z);
-	--]]
-	--func_move(o,500,x,py,z);
-	
-	--unit_move(unit,x,y,z);
+
 	unit:move(x,y,z);
 end
 
-
---[[
-local function f_render()
-	func_update_mat4x4(unit.p)
-end
---]]
-
---evt_on(unit,EVENT_ENGINE_RENDER_3D,f_render);
 ---[[--创建一个地板
 local floor_ptr = f_create_floor(50);
 evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
 
---]]
-func_set_camera_pos(0,-10,-10);
+--func_set_camera_pos(0,-10,-10);
+
+cam:position(0,-10,-10);
+cam:rx(PI * 1.7);
+
+----------------------------------
+
+
+--btn_bindClick(btn,f_click);

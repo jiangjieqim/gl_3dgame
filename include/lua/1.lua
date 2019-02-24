@@ -86,5 +86,5 @@ f_anim_control_ui(m)
 	listbox_select(list,0)--Ä¬ÈÏÑ¡0ºÅË÷Òý
 end
 ---------------------------------------------------------------------------
-func_set_camera_pos(0,0,-90)
+cam:position(0,0,-90)
 f_anim_control_ui(f_load())

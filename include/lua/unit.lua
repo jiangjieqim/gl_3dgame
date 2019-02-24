@@ -1,6 +1,6 @@
 local m_name = "triangle"
 m_name = "bauul"
-m_name = "gobin"
+--m_name = "gobin"
 
 --初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
 local function f_split_init(md2)
@@ -39,11 +39,12 @@ function Unit:create()
 				end;
 		
 		endCall=function(data)
-					print("行走结束",self)
+					
+					--print("end %d:%d"..func_get_longTime().."\t"..self)
 					f_removeEvt(self);
 					
 					func_set_anim(self.p,"stand");
-
+					print("移动结束!!!");
 				end;
 				
 		
@@ -119,3 +120,6 @@ function Unit:move(x,y,z)
 	func_move(o,distance * self.speed,x,y,z);
 end
 
+function Unit:set_anim(ani)
+	func_set_anim(self.p,ani);
+end

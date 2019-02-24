@@ -1,8 +1,3 @@
---调试宏,测试状态下开启
-DEBUG = true
-
-
-
 CONST_DIRECTION_HORIZONTAL = 0	--水平,横
 CONST_DIRECTION_VERTICAL   = 1 	--垂直,竖
 
@@ -391,11 +386,11 @@ end
 function func_set_scale(o,v)
 	change_attr(o,"scale",v)
 end
-
+--[[
 function func_set_camera_pos(x,y,z)
 		dofunc("SetCameraPosition",x,y,z);
 end
-
+--]]
 --获取对象名
 function func_get_name(o)
 	return get_attr(o,"get_name")
@@ -491,7 +486,7 @@ function func_loadmd2(objName,tex,type,modelName)
 	end
 	
 	local s = string.format("[加载解析%s耗时 %d 毫秒]",objName,(func_getTime() - time))
-	if(DEBUG) then func_print(s) end
+	--if(DEBUG) then func_print(s) end
 	return o;
 end
 --加载一个obj 使用vbo模式
@@ -659,6 +654,7 @@ function func_set_ptr_fps(o,v)
 end
 --设置动作
 function func_set_anim(o,anim)
+	print("*********",o,anim);
 	change_attr(o,"animtor_setcur",anim);
 end
 
@@ -714,8 +710,9 @@ function func_update_mat4x4(o)
 	change_attr(o,"base_updateMat4x4");
 end
 
+--function func
 
-
+dofile("..\\include\\lua\\cam.lua")	--cam
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件

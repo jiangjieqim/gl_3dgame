@@ -36,6 +36,13 @@ typedef struct{
 	void (*endCallBack)();
 	TNode* ptr;
 }TweenNode;
+//执行结束回调方法
+static void
+f_call_end(void* ptr){
+	TweenNode* _node = (TweenNode*)ptr;
+	if(_node->endCallBack)	_node->endCallBack(_node->obj);//执行结束事件
+}
+
 /*
 	终止tween
 */
@@ -46,7 +53,6 @@ tween_stop(void* ptr){
 	}
 	{
 		TweenNode* _node = (TweenNode*)ptr;
-		if(_node->endCallBack)	_node->endCallBack(_node->obj);
 		tl_free(_node->ptr);
 		LStack_delNode(g_list,(int)_node);
 		tl_free(_node);
@@ -137,6 +143,7 @@ f_tween_play(TweenNode* _node,long _longTime){
 	_node->useTime = _longTime - _node->startTime;
 
 	if( _node->useTime >= _node->needTime){
+		f_call_end(_node);
 		tween_stop(_node);
 	}else{
 		int i;

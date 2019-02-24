@@ -312,7 +312,7 @@ f_followCamera(){
 		vec3Set(&rolePos,role->x,role->y,role->z);
 		vec3Set(&camPos,cam->x,cam->y,cam->z);
 		vec3Reverse(&camPos);
-		vec3Sub(&rolePos,&camPos,&cam->followOffset);
+		//vec3Sub(&rolePos,&camPos,&cam->followOffset);
 		//vec3Normalize(&cam->followOffset);
 		_followTicket = get_longTime();
 	}

@@ -77,7 +77,7 @@ struct ECamera{
 	float rx,ry,rz;
 	//void* ptrFollow;//跟随的引用对象
 	//float followDistance;//距离跟随对象的距离
-	Vec3 followOffset;//相对于跟随角色的偏移值
+	//Vec3 followOffset;//相对于跟随角色的偏移值
 };
 //=============================================================================================================
 struct EX
