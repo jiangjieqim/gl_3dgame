@@ -68,13 +68,13 @@ struct MouseState
 	GLint xMouse,yMouse;//点击下的鼠标状态
 	
 	int moveX,moveY;//当前移动的位置
-};
+}; 
 struct ECamera{
 	/*
 	*	摄影机坐标
 	*/
 	float x,y,z;
-	float rx,ry,rz;
+	double rx,ry,rz;
 	//void* ptrFollow;//跟随的引用对象
 	//float followDistance;//距离跟随对象的距离
 	//Vec3 followOffset;//相对于跟随角色的偏移值

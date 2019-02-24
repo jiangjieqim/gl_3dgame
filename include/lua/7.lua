@@ -28,6 +28,9 @@ local function f_create_floor(scale)
 	setv(_floor,FLAGS_DRAW_RAY_COLLISION)
 	--setv(_floor,FLAGS_DRAW_PLOYGON_LINE)--线框
 	setv(_floor,FLAGS_DISABLE_CULL_FACE)
+
+	--scale = 1.0;
+	
 	func_set_glsl_parms(_floor,'uvScale',scale)--设置diffuse.vs (uniform float _uvScale)uv重复值
 	return _floor;
 end
@@ -51,26 +54,19 @@ infowin_show(0,20);
 
 
 
---[[
-local a=0;
+---[[
 local function f_btnClick()
-	
-	a = a + 1;
-
-	--local ani = "stand"
-	if(a % 2 == 1) then
-		--ani = "run"
-		setv(unit.p,FLAGS_REVERSE_FACE);
-	else
-		resetv(unit.p,FLAGS_REVERSE_FACE);
-	end
---	print(a%2,ani);
-	
-	--unit:set_anim(ani);
+	cam:rotate(5000);
 end
-
+local function f_btnClick1()
+--	cam:rx(0);
+end
 local btn = btn_create(0,40);
 btn_bindClick(btn,f_btnClick);
+
+--local btn1 = btn_create(0,60);
+--btn_bindClick(btn1,f_btnClick1);
+
 --]]
 --***********************************************************************************************
 
@@ -98,13 +94,19 @@ local function f_on_click_floor_handle(data)
 end
 
 
+local function f_resize()
+	cam:rx(PI * 1.8);
+end
 
 ---[[--创建一个地板
 local floor_ptr = f_create_floor(50);
 evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
 
 
+evt_on(cam,EVENT_ENGINE_RESIZE,f_resize);
+
+
 cam:position(0,-10,-10);
-cam:rx(PI * 1.7);
+cam:rx(PI * 1.8);
 
 ----------------------------------

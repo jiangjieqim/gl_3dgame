@@ -16,6 +16,10 @@ function Camera:ry(rz)
 	change_attr(nil,"camRZ",rz);
 end
 
+function Camera:rotate(value)
+	change_attr(nil,"cam_rotate",string.format("%s",value));
+end
+
 function Camera:new()
 	local cam = {
 	}
