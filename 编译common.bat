@@ -23,8 +23,21 @@ link -dll -out:common.dll *.obj
 dumpbin /exports common.dll  
 
 copy common.dll ..\..\dll\common.dll 
+copy common.dll ..\..\Test\Debug\common.dll 
 copy common.lib ..\..\lib\common.lib 
 
+
+::@echo off
+::提取txt、doc、xls文件总大小
+for /f "delims=" %%a in ('dir /b *.dll') do set /a "s+=%%~za/1024"
+echo,%s% kb
+
 del *.obj *.exp *.lib *.dll
+
+
+
+
+
+
 
 pause 

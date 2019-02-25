@@ -23,7 +23,7 @@ end
 --º”‘ÿ“ª∏ˆbox
 local function f_load_box(vbo)
 
-	--vbo = false;
+	vbo = false;
 	
 	local obj
 	local url = "\\resource\\obj\\box.obj";

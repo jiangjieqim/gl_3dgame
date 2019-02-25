@@ -74,7 +74,7 @@ btn_bindClick(btn,f_btnClick);
 
 
 --创建一个角色
-unit =  Unit:create("box6")--unit_create();
+unit =  Unit:create("box")--unit_create();
 unit:set_speed(600);
 
 
