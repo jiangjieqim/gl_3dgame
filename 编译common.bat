@@ -14,7 +14,7 @@ set INCLUDE=%INCLUDE%%cd%\common\include\;
 
 cd common\src\
 
-cl -c *.c /O1
+cl -c *.c /Ox
 ::cl  common.c array.c byte.c evt.c gettime.c list.c psv.c ring.c str.c tl_malloc.c tools.c tween.c vmath.c xml.c /O1
 
 link -dll -out:common.dll *.obj
