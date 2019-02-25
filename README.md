@@ -45,3 +45,12 @@ warning C4312: "类型转换"
 属性->c++->常规->检查64位可移植问题->-"否" 
 
 (14)11:29 2019/2/23 将业务代码剥离到lua模块,集成污染
+
+(15)获取文件大小
+```
+@echo off  
+::提取txt、doc、xls文件总大小 
+for /f "delims=" %%a in ('dir /b *.txt *.doc *.xls') do set /a "s+=%%~za/1024"
+echo,%s%KB
+pause
+```
