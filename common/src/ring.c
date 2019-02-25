@@ -1,4 +1,7 @@
 #include <memory.h>
+
+#define BUILDING_DLL
+
 #include "tl_malloc.h"
 #include "tools.h"
 #include "ring.h"

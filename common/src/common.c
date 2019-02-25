@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <stdarg.h>
 
-
+#define BUILDING_DLL
 
 #include "common.h"
 //#include "gettime.h"

@@ -3,6 +3,8 @@
 #include <assert.h>
 #include <string.h>
 
+#define BUILDING_DLL
+
 #include "tools.h"
 #include "tl_malloc.h"
 #include "psv.h"

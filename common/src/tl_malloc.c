@@ -1,6 +1,8 @@
 //#define BUILDING_DLL
 #include <string.h>
 
+#define BUILDING_DLL
+
 #include "tools.h"
 #include "gettime.h"
 

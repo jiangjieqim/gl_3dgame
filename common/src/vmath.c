@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#define BUILDING_DLL
+
 #include "tools.h"
 #include "vmath.h"
 

@@ -9,8 +9,6 @@
 #define DLLIMPORT __declspec(dllimport)
 #endif
 
-//#define DLLIMPORT extern
-
 //公共宏部分
 
 //*****************************************************************************

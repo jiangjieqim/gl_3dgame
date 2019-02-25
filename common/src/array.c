@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#define BUILDING_DLL
+
 #include "tools.h"
 #include "tl_malloc.h"
 #include "array.h"

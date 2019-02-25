@@ -1,3 +1,5 @@
+#define BUILDING_DLL
+
 #include "tools.h"
 #include "tl_malloc.h"
 #include "list.h"

@@ -2,6 +2,8 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#define BUILDING_DLL
+
 #include "tools.h"
 #include "tween.h"
 #include "tl_malloc.h"
