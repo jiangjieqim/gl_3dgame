@@ -20,7 +20,7 @@ cd src
 
 ::cl test.c tlgl.c ex.c tmat.c md5.c jgl.c sprite.c atlas.c obj_vbo.c anim.c node.c collide.c animtor.c obj.c md2.c test_unit_01.c text.c bmp.c base.c frame.c /O1
 
-cl *.c
+cl *.c /O1
 
 ::pause
 
