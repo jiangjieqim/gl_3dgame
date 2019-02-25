@@ -26,7 +26,7 @@ local function f_create_floor(scale)
 	
 	setv(_floor,FLAGS_RAY)
 	setv(_floor,FLAGS_DRAW_RAY_COLLISION)
-	setv(_floor,FLAGS_DRAW_PLOYGON_LINE)--线框
+	--setv(_floor,FLAGS_DRAW_PLOYGON_LINE)--线框
 	setv(_floor,FLAGS_DISABLE_CULL_FACE)
 
 	--scale = 1.0;
@@ -74,7 +74,7 @@ btn_bindClick(btn,f_btnClick);
 
 
 --创建一个角色
-unit =  Unit:create("box")--unit_create();
+unit =  Unit:create("box6")--unit_create();
 unit:set_speed(600);
 
 
@@ -110,7 +110,7 @@ evt_on(cam,EVENT_ENGINE_RESIZE,f_resize);
 cam:position(0,-10,-10);
 cam:rx(PI * 1.8);
 
-print(unit);
+--print(unit);
 
 --local a1 = Unit:create("box");
 --a1:set_speed(10);

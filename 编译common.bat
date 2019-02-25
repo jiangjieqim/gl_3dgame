@@ -20,7 +20,7 @@ cl -c *.c /O1
 link -dll -out:common.dll *.obj
 
 ::打印导出的函数
-::dumpbin /exports common.dll  
+dumpbin /exports common.dll  
 
 copy common.dll ..\..\dll\common.dll 
 copy common.lib ..\..\lib\common.lib 

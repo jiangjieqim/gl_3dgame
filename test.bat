@@ -18,14 +18,18 @@ if exist "%cd%\dll\test.exe" (del %loaclfile%) else (echo 不存在文件%loaclfile%)
 
 cd src
 
-cl test.c tlgl.c ex.c tmat.c md5.c jgl.c sprite.c atlas.c obj_vbo.c anim.c node.c collide.c animtor.c obj.c md2.c test_unit_01.c text.c bmp.c base.c frame.c /O1
+::cl test.c tlgl.c ex.c tmat.c md5.c jgl.c sprite.c atlas.c obj_vbo.c anim.c node.c collide.c animtor.c obj.c md2.c test_unit_01.c text.c bmp.c base.c frame.c /O1
 
-link *.obj
+cl *.c
+
+::pause
+
+link -out:test.exe *.obj
 echo %time%
 del *.obj
 
 copy test.exe ..\dll\test.exe
-del test.exe 
+del *.exe 
 cd ..\dll\ 
 
 test.exe 
