@@ -23,7 +23,7 @@ end
 --加载一个box
 local function f_load_box(vbo)
 
-	--vbo = true;
+	vbo = false;
 	
 	local obj
 	local url = "\\resource\\obj\\box.obj";
@@ -31,8 +31,8 @@ local function f_load_box(vbo)
 		obj=load_VBO_model(func_create_name(),url);--box	arrow
 		setMaterial(obj,func_load("//resource//material//triangle.mat"));		
 	else
-	--	obj =load_model(func_create_name(),url);
-	--	setMaterial(obj,func_load("//resource//material//diffuse.mat"));
+		obj =load_model(func_create_name(), "\\resource\\obj\\torus.obj");
+		setMaterial(obj,func_load("//resource//material//diffuse.mat"));
 	end
 	
 	setv(obj,FLAGS_DRAW_PLOYGON_LINE)--线框
@@ -43,15 +43,23 @@ local function f_load_box(vbo)
 end
 
 Unit = {}
-
+--print(Unit)
 local function f_removeEvt(obj)
 	--print(obj,obj.p);
 	evt_off(obj.p,EVENT_ENGINE_BASE_UPDATE,obj.update);
 	evt_off(obj.p,EVENT_ENGINE_BASE_END,obj.endCall);
 end;
+
 --	_key = "box"的时候显示一个红色的box
 function Unit:create(_key)
-    local new_sharp = { 
+	
+	--重载tostring方法,输出相关信息
+	
+	self.__tostring = function(t)
+		return string.format("元表 = %s p = %0x speed = %.3f",tostring(self),t.p,t.speed);
+	end;
+	
+	local new_sharp = { 
 		p = nil;--角色句柄
 		
 		speed;--移动速度
@@ -108,6 +116,8 @@ function Unit:create(_key)
 					
 					func_set_y(self.p,0.5);--	y轴偏移0.5
 					--self.offset_y = offset_y;
+					
+					self.speed = 1000;
 				end;
 	}
     self.__index = self  --②，self == Sharp
