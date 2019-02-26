@@ -384,6 +384,7 @@ base_seachPick(struct LStackNode* s,struct Vec3* nearPoint,struct Vec3* farPoint
 		if(tri && base){
 			int rayStat = getv(&base->flags,FLAGS_RAY);
 			if(rayStat){
+
 				float newTri[BOX_SIZE];
 				memcpy(newTri,tri,vd->vertLen * sizeof(float));
 

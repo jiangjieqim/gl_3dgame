@@ -23,15 +23,17 @@ end
 --加载一个box
 local function f_load_box(vbo)
 
-	vbo = false;
+	--vbo = false;--是否使用vbo模式
 	
 	local obj
 	local url = "\\resource\\obj\\box.obj";
 	if(vbo) then
-		obj=load_VBO_model(func_create_name(),url);--box	arrow
+		local name = func_create_name();
+		print("name="..name);
+		obj=load_VBO_model(name,url);--box	arrow
 		setMaterial(obj,func_load("//resource//material//triangle.mat"));		
 	else
-		obj =load_model(func_create_name(), "\\resource\\obj\\torus.obj");
+		obj =load_model(func_create_name(), "\\resource\\obj\\box.obj");
 		setMaterial(obj,func_load("//resource//material//diffuse.mat"));
 	end
 	
@@ -133,7 +135,9 @@ end
 function Unit:set_speed(value)
 	self.speed = value;
 end
-
+function Unit:get_ptr()
+	return self.p;
+end	
 function Unit:move(x,y,z)
 	local o = self.p;
 	

@@ -43,6 +43,17 @@ EVENT_ENGINE_RESIZE	   =102				--resize事件
 EVENT_ENGINE_BASE_UPDATE	 =  102		--base更新事件
 EVENT_ENGINE_BASE_END		 =  103		--base结束事件
 
+--键值枚举
+ KEY_ESC = 27
+ KEY_1 = 49
+ KEY_2 = 50
+ KEY_A = 97
+ KEY_B = 98
+ KEY_C = 99
+ KEY_D = 100
+ KEY_I = 105
+
+
 dofile("..\\include\\lua\\xml.lua")	--xml组件
 dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
 dofile("..\\include\\lua\\evt.lua")	--事件管理器

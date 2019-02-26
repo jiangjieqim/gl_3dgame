@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 #define BUILDING_DLL
 
@@ -890,4 +891,54 @@ vec_rotateAngle(double x1,double y1, double x2,double y2) {
 
 	//return -angle + PI/2;//取负后加1/2的PI
 	return -angle;
+}
+
+
+
+#define _Matrix44_Max_Size_ 16//最大支持的矩阵连乘个数
+/************************************************************************/
+/* 将arr中的矩阵相乘之后存储到o中                                       */
+/************************************************************************/
+static void 
+f_get_mat4x4(int lim,int* arr,Matrix44f o){
+	int i;
+	Matrix44f s,t,r,m;
+	mat4x4_identity(r);
+
+	for(i = 0; i < lim; i++){
+		mat4x4_copy(r,t);
+		memcpy((void*)s,(const void*)arr[i],/*(16 * sizeof(float))*/sizeof(Matrix44f));
+		mat4x4_zero(m);
+		multi2(m,t,s);
+		mat4x4_copy(m,r);
+	}
+
+	mat4x4_copy(r,o);
+}
+void 
+mat4x4_mult(int lim,Matrix44f o,...){
+
+	mat4x4_zero(o);
+
+	if(lim>_Matrix44_Max_Size_){
+		printf("mat4x4_mult长度超出%d\n",_Matrix44_Max_Size_);
+		assert(0);
+	}else{
+
+		//矩阵地址列表
+		int arr[_Matrix44_Max_Size_];
+		int i;
+
+		va_list ap;
+
+		va_start(ap, o);
+
+		for(i = 0; i < lim; i++){
+			int p = va_arg(ap, int);			
+			arr[i] = p;
+		}
+		va_end(ap);
+
+		f_get_mat4x4(lim,arr,o);
+	}
 }

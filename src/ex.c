@@ -1584,6 +1584,14 @@ void onKeyboardCallBack(unsigned char key, int x, int y){
 	ekey.y = y;
 	//printf("key=\t%d %d %d\n",key,x,y);
 	evt_dispatch(ex_getInstance(),EVENT_ENGINE_KEYBOARD,(void*)&ekey);
+
+	{
+		char _str[G_BUFFER_16_SIZE];
+		memset(_str,0,G_BUFFER_16_SIZE);
+		sprintf_s(_str,G_BUFFER_16_SIZE,"%d",key);
+		//printf("key=(%s)\n",_str);
+		ex_lua_evt_dispatch(0,EVENT_ENGINE_KEYBOARD,_str);
+	}
 }
 
 static void 

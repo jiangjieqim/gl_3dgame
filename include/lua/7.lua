@@ -70,13 +70,9 @@ btn_bindClick(btn,f_btnClick);
 
 --]]
 --***********************************************************************************************
-
-
-
 --创建一个角色
 unit =  Unit:create("box")--unit_create();
 unit:set_speed(600);
-
 
 _selectBox = f_create_clickBox();
 
@@ -105,6 +101,29 @@ evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
 
 
 evt_on(cam,EVENT_ENGINE_RESIZE,f_resize);
+
+function f_onkey(data)
+	local key = tonumber(data);
+--	print(key);
+	if(key == KEY_A) then
+		
+		local px,py,pz = func_get_xyz(unit:get_ptr());
+		print("unit:",px,py,pz);
+	
+	elseif(key == KEY_B)then
+	
+		func_changeFlags(floor_ptr,FLAGS_DRAW_PLOYGON_LINE);
+	
+	elseif(key == KEY_C) then
+		print(key);
+		--func_changeFlags(unit:get_ptr(),FLAGS_DISABLE_CULL_FACE);
+		func_changeFlags(unit:get_ptr(),FLAGS_VISIBLE);
+	end
+	
+	
+end
+evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
+
 
 
 cam:position(0,-10,-10);
