@@ -7,6 +7,8 @@ local function f_split_init(md2)
 	
 	if(m_name == "bauul" or m_name == "gobin")  then
 		func_set_scale(md2,1/50);--这里设置一个缩放价值让模型在单位1以内
+		
+		--	1/50
 		--func_set_y(md2,0.5);	 --设置地板y轴向偏移
 		func_setRotateX(md2,PI/2)--旋转一个轴向
 	end
@@ -26,10 +28,10 @@ local function f_load_box(vbo)
 	--vbo = false;--是否使用vbo模式
 	
 	local obj
-	local url = "\\resource\\obj\\box.obj";
+	local url = "\\resource\\obj\\pipe.obj";
 	if(vbo) then
 		local name = func_create_name();
-		print("name="..name);
+		--print("name="..name);
 		obj=load_VBO_model(name,url);--box	arrow
 		setMaterial(obj,func_load("//resource//material//triangle.mat"));		
 	else

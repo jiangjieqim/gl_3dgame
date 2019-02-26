@@ -827,7 +827,6 @@ _new(){
 	
 	_longTime =  get_longTime();
 	
-
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//填充背景为白色
@@ -1158,8 +1157,6 @@ vbo_md2Load(const char* name,const char* url)
 	int dataType = OBJ_UV_VERTEX_NORMAL;//uv,顶点,法线
 	node = node_create(name);
 	base_set_suffix(node->base,url);
-	
-	
 
 	node->ptrVBO = objVBO_create(name,dataType);
 	_objStr=tl_loadfile((char*)url,&fileSize);

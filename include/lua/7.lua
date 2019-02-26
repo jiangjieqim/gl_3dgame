@@ -85,7 +85,7 @@ local function f_on_click_floor_handle(data)
 	local z = xml_get_float(node,"z")
 	xml_del(xml);
 	
-	func_set_position(_selectBox,x,y,z);
+	--func_set_position(_selectBox,x,y,z);
 	
 	unit:move(x,y,z);
 end
@@ -108,7 +108,8 @@ function f_onkey(data)
 	if(key == KEY_A) then
 		
 		local px,py,pz = func_get_xyz(unit:get_ptr());
-		print("unit:",px,py,pz);
+		
+		print(string.format("unit %.3f %.3f %.3f",px,py,pz));
 	
 	elseif(key == KEY_B)then
 	
@@ -117,7 +118,9 @@ function f_onkey(data)
 	elseif(key == KEY_C) then
 		print(key);
 		--func_changeFlags(unit:get_ptr(),FLAGS_DISABLE_CULL_FACE);
-		func_changeFlags(unit:get_ptr(),FLAGS_VISIBLE);
+		--func_changeFlags(unit:get_ptr(),FLAGS_VISIBLE);
+		--func_update_mat4x4(unit:get_ptr());
+		
 	end
 	
 	
