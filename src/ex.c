@@ -350,18 +350,19 @@ ex_info(){
 	int fps = f_get_fps();
 	memory_get_info(&totleByte,&nodeCnt);
 	memset(buffer,0,G_BUFFER_1024_SIZE);
+	
+	//j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
+	log_color(0xffff00,"fps:%ld \n",fps);
+	log_color(0x00ff00,"camera 坐标  :      %.3f %.3f %.3f\n",cam.x,cam.y,cam.z);
+	log_color(0xff0000,"camera 角位移: PI = %.3f %.3f %.3f\n",cam.rx/PI,cam.ry/PI,cam.rz/PI);
+	
 	j+=sprintf_s(buffer+j,buffer_size, "**********************************************\n");
-	j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
+	log_color(0xff00ff,"draw call渲染节点个数:%d\n",LStack_length(ex->renderList));
 	j+=sprintf_s(buffer+j,buffer_size, "屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
 	j+=sprintf_s(buffer+j,buffer_size, "程序已执行:%.3f 秒\n",get_longTime()*0.001);
 	j+=sprintf_s(buffer+j,buffer_size, "内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
 	
-	j+=sprintf_s(buffer+j,buffer_size, "渲染节点个数:%d \n摄影机坐标:%.3f %.3f %.3f\n 跟随目标引用:%0x r pi = %.3f %.3f %.3f\n%s\n",LStack_length(ex->renderList),
-		cam.x,cam.y,cam.z,0,
-		cam.rx/PI,cam.ry/PI,cam.rz/PI,
-		//cam.followOffset.x,cam.followOffset.y,cam.followOffset.z,
-		
-		"F4:静态多边形显示线框 \nF12:包围盒显示");
+	j+=sprintf_s(buffer+j,buffer_size, "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
 	
 	j+=sprintf_s(buffer+j,buffer_size, "vbo使用:%d bytes\n",tlgl_getVboSize());
 	j+=sprintf_s(buffer+j,buffer_size, "当前(射线检测)状态:%d\n",getv(&(ex->flags),EX_FLAGS_RAY));

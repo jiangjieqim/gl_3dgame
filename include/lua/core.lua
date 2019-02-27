@@ -713,6 +713,9 @@ end
 function func_get_xyz(o)
 	return get_attr(o,"xyz");
 end
+function func_get_rotate(o)
+	return get_attr(o,"rotate");
+end
 --让角色朝向某个方向
 function func_look_at(o,x,y,z)
 	change_attr(o,"lookat",string.format("%f,%f,%f",x,y,z));
@@ -732,15 +735,6 @@ function func_update_mat4x4(o)
 	change_attr(o,"base_updateMat4x4");
 end
 
---[[
-function func_split( str,reps )
-    local resultStrList = {}
-    string.gsub(str,'[^'..reps..']+',function ( w )
-        table.insert(resultStrList,w)
-    end)
-    return resultStrList
-end
---]]
 --字符串分割成table
 function func_split(str, delimiter)
     if str==nil or str=='' or delimiter==nil then

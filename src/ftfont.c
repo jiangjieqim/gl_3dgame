@@ -50,13 +50,11 @@ ft_load(int *iWidth, int *iHeight){
 
 	
 
-	//wchar_t* ch = L"我";
-	wchar_t ch[3];
+	wchar_t* ch = L"f";
+	//wchar_t ch[3];
 
-	char str[3];
+	//char str[3];
 	
-
-
 	FT_Library library;
 	FT_Error error;	
 	FT_Face face;
@@ -64,8 +62,8 @@ ft_load(int *iWidth, int *iHeight){
 	unsigned char* rgba = 0;
 
 	int i;
-	sprintf_s(str,3,"%hs","人");
-	mbstowcs(ch,str,3);
+	//sprintf_s(str,3,"%hs","人");
+	//mbstowcs(ch,str,3);
 
 	//wchar_t ch[64];
 	//sprintf_s(ch,64,"%s","我");
