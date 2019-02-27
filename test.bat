@@ -1,4 +1,5 @@
-echo %time%
+echo off
+echo %time%开始编译
 @rem 项目用vs2005编译
 
 call initroot.bat
@@ -25,12 +26,15 @@ cl *.c /Ox
 ::pause
 
 link -out:test.exe *.obj
-echo %time%
+echo %time%结束编译
 del *.obj
 
 copy test.exe ..\dll\test.exe
 del *.exe 
 cd ..\dll\ 
+
+for /f "delims=" %%a in ('dir /b *.exe') do set /a "s+=%%~za/1024"
+echo,%s% kb
 
 test.exe 
  

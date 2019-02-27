@@ -28,7 +28,7 @@ local function f_load_box(vbo)
 	--vbo = false;--是否使用vbo模式
 	
 	local obj
-	local url = "\\resource\\obj\\pipe.obj";
+	local url = "\\resource\\obj\\tri.obj";
 	if(vbo) then
 		local name = func_create_name();
 		--print("name="..name);
@@ -40,7 +40,7 @@ local function f_load_box(vbo)
 	end
 	
 	setv(obj,FLAGS_DRAW_PLOYGON_LINE)--线框
-	--setv(obj,FLAGS_DISABLE_CULL_FACE);
+	setv(obj,FLAGS_DISABLE_CULL_FACE);--设置双面都能渲染
 	setv(obj,FLAGS_REVERSE_FACE);
 	setv(obj,FLAGS_VISIBLE);
 	return obj

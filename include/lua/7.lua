@@ -26,7 +26,7 @@ local function f_create_floor(scale)
 	
 	setv(_floor,FLAGS_RAY)
 	setv(_floor,FLAGS_DRAW_RAY_COLLISION)
-	--setv(_floor,FLAGS_DRAW_PLOYGON_LINE)--Ïß¿ò
+	setv(_floor,FLAGS_DRAW_PLOYGON_LINE)--Ïß¿ò
 	setv(_floor,FLAGS_DISABLE_CULL_FACE)
 
 	--scale = 1.0;
@@ -85,7 +85,7 @@ local function f_on_click_floor_handle(data)
 	local z = xml_get_float(node,"z")
 	xml_del(xml);
 	
-	--func_set_position(_selectBox,x,y,z);
+	func_set_position(_selectBox,x,y,z);
 	
 	unit:move(x,y,z);
 end
@@ -138,5 +138,3 @@ cam:rx(PI * 1.8);
 --a1:set_speed(10);
 --print(a1);
 ----------------------------------
-
-
