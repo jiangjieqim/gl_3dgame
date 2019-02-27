@@ -1,3 +1,4 @@
+EVENT_BUTTON_CLICK = 10000;--点击事件
 
 
 --#######################################################
@@ -46,7 +47,9 @@ function btnCallBackEvt(spriteName)
 	
 	--按钮回调
 	--ex_callParmLuaFun((const char*)sprite->callLuaFunName,b->name);
-	if(btn.clickEvtCallBack)	then	btn.clickEvtCallBack(btn)	end
+	--if(btn.clickEvtCallBack)	then	btn.clickEvtCallBack(btn)	end
+		
+	evt_dispatch(btn,EVENT_BUTTON_CLICK,spriteName);
 end
 
 
@@ -58,7 +61,10 @@ function btnMouseDownEvt(spriteName)
 	end
 end
 
+local function f_click(data)
 
+	print("****"..data);
+end
 --[[
 	创建一个按钮
 	x,y默认值为0,0
@@ -86,6 +92,8 @@ function btn_create(x,y,w,h,url)
 	---------------------------------------
 	local sprite = sprite_create(name,x,y,w,h,"btnCallBackEvt",nil,"btnMouseDownEvt");
 	
+	evt_on(sprite,EVENT_ENGINE_SPRITE_CLICK,f_click);
+	
 	func_setIcon(sprite,url)
 	
 	btn.sprite =  sprite
@@ -101,6 +109,7 @@ end
 --]]
 function btn_bindClick(btn,clickEvt)
 	btn.clickEvtCallBack = clickEvt;
+	evt_on(btn,EVENT_BUTTON_CLICK,clickEvt);
 end
 
 --[[
@@ -122,7 +131,8 @@ function btn_dispose(btn)
 	btn.sprite = nil
 	
 	btn.mouseDownCallBack = nil
-	btn.clickEvtCallBack = nil
+	--btn.clickEvtCallBack = nil
+	evt_off(btn,EVENT_BUTTON_CLICK,clickEvt);
 
 	func_tableDel(btn)
 	

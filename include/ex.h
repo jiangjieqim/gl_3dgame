@@ -52,6 +52,8 @@
 #define EVENT_ENGINE_BASE_UPDATE	   102				//base更新事件
 #define EVENT_ENGINE_BASE_END		   103				//base结束事件
 
+#define EVENT_ENGINE_SPRITE_CLICK		   104//click
+
 //键盘事件状态
 struct E_KeyBoard
 {

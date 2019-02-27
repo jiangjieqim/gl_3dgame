@@ -42,6 +42,8 @@ EVENT_ENGINE_RESIZE	   =102				--resize事件
 
 EVENT_ENGINE_BASE_UPDATE	 =  102		--base更新事件
 EVENT_ENGINE_BASE_END		 =  103		--base结束事件
+EVENT_ENGINE_SPRITE_CLICK = 104
+
 
 --键值枚举
  KEY_ESC = 27

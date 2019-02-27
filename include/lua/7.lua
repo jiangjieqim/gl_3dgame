@@ -56,14 +56,14 @@ infowin_show(0,20);
 
 ---[[
 local function f_btnClick()
-	cam:rotate(5000);
-	--print(tostring(unit))
-end
-local function f_btnClick1()
---	cam:rx(0);
+	--cam:rotate(5000);
+	print(tostring(unit))
 end
 local btn = btn_create(0,40);
 btn_bindClick(btn,f_btnClick);
+--evt_on(btn,EVENT_BUTTON_CLICK,function (b)
+--	print(b);
+--end)
 
 --local btn1 = btn_create(0,60);
 --btn_bindClick(btn1,f_btnClick1);
