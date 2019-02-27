@@ -58,7 +58,7 @@ struct Sprite
 	/*
 		lua中回调的函数名
 	*/
-	int callLuaFunName[G_BUFFER_32_SIZE];
+	//int callLuaFunName[G_BUFFER_32_SIZE];
 
 	/*
 		lua中的sprite移动事件更新
@@ -80,7 +80,7 @@ struct Sprite
 	*/
 	int	dragDirection;
 
-	char* luaTablePtr;
+	//char* luaTablePtr;
 	int parseType;
 	int useVBO;//是否使用VBO模式
 	struct Obj_vbo_model* vbo;
@@ -94,7 +94,7 @@ struct Sprite* sprite_create(
 	char* _spriteName,
 	int x,int y,
 	int width,int height,
-	void (*clickCallBack)(struct Sprite* ,int ,int ),const char* luaFunCallBack);
+	void (*clickCallBack)(struct Sprite* ,int ,int ));
 
 /*
 	设置sprite的UV

@@ -409,8 +409,7 @@ InitType(struct Sprite* pSpr)
 struct Sprite* 
 sprite_create(char* _spriteName,
 			  int x,int y,int width,int height,
-			  void (*clickCallBack)(struct Sprite* ,int ,int ),
-			  const char* luaFunName)
+			  void (*clickCallBack)(struct Sprite* ,int ,int ))
 {
 	//&ex->myButtonPtr;//
 	struct HeadInfo* base = NULL;
@@ -420,7 +419,7 @@ sprite_create(char* _spriteName,
 
 	pSpr->m_bPressed = 0;
 	
-	if(luaFunName)
+	/*if(luaFunName)
 	{
 		if(strlen(luaFunName)>G_BUFFER_32_SIZE){
 			printf("lua回调函数名长度溢出!\n");
@@ -432,15 +431,15 @@ sprite_create(char* _spriteName,
 				memcpy(pSpr->callLuaFunName,luaFunName,(size_t)strlen(luaFunName));
 			}
 		}
-	}
+	}*/
 
-	if(_spriteName)
+	/*if(_spriteName)
 	{
 		int length = strlen(_spriteName)+1;
 		pSpr->luaTablePtr = tl_malloc(length);
 		memset(pSpr->luaTablePtr,0,length);
 		memcpy(pSpr->luaTablePtr,_spriteName,length-1);
-	}
+	}*/
 
 	pSpr->mWidth  = width;
 	pSpr->mHeight = height;
@@ -898,10 +897,10 @@ void sprite_dipose(struct Sprite* spr)
 		tl_free(spr->callLuaMouseDown);
 	}*/
 
-	if(spr->luaTablePtr)
+	/*if(spr->luaTablePtr)
 	{
 		tl_free(spr->luaTablePtr);
-	}
+	}*/
 	
 	if(spr->vbo)
 	{

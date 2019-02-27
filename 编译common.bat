@@ -34,10 +34,4 @@ echo,%s% kb
 
 del *.obj *.exp *.lib *.dll
 
-
-
-
-
-
-
-pause 
+::pause 
