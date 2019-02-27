@@ -52,6 +52,7 @@ listbox_select(list,n)
 	if(n >= 0) then
 		list.index = n
 		--tf_setText(list.tf,listbox_get_label(list));--设置文本
+		
 		if(list.callBack) then list.callBack(list)end
 	end
 end
@@ -61,10 +62,8 @@ listbox_set_label(list,label)
 	tf_setText(list.tf,label);
 end
 
-function 
-f_listBoxCallBack(name)
-	--local sprite = func_find_obj(name)
-	local list = func_getTable(name)
+
+local function f_select_call(list)
 	list.b_drop = not list.b_drop
 	local height = g_gap
 	f_tf_vis(list)
@@ -77,8 +76,8 @@ f_listBoxCallBack(name)
 	func_set_sprite_size(list.bg,g_width,height)--重绘背景宽高
 	
 	if(list.b_drop == false) then listbox_select(list,f_get_index(list))end
-	
 end
+
 --[[
 --是否显示着
 local function 
@@ -95,7 +94,12 @@ end
 function listbox_get_index(list)
 	return list.index
 end
-
+local function f_click(name)
+	--f_listBoxCallBack(b);
+	local list = func_getTable(name);
+	//print(list);
+	f_select_call(list);
+end
 function 
 listbox_new(_x,_y)
 	_x = _x or 0
@@ -107,9 +111,13 @@ listbox_new(_x,_y)
 	list.x = _x
 	list.y = _y
 	
-	local name = func_getTableName(list)--获取btn引用名
+	local name = func_getTableName(list)--获取引用名
 	
-	list.bg = sprite_create(name,_x,_y,g_width,g_gap,"f_listBoxCallBack","","");
+	--list.bg = sprite_create(name,_x,_y,g_width,g_gap,"f_listBoxCallBack","","");
+	list.bg = sprite_create(name,_x,_y,g_width,g_gap);
+	
+	evt_on(list.bg,EVENT_ENGINE_SPRITE_CLICK,f_click);
+
 	func_setIcon(list.bg,"gundi.png")
 
 	list.tf = tf_create(128,list.x,list.y,0.0,1.0,0.0);
@@ -144,6 +152,8 @@ end
 --销毁listbox组件
 function 
 listbox_del(list)
+	evt_off(list.bg,EVENT_ENGINE_SPRITE_CLICK,f_click);
+
 	ptr_remove(list.bg)
 
 	for key, value in pairs(list.tflist) do

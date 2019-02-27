@@ -64,7 +64,7 @@ local function f_btnDown(b)
 	--cam:rotate(5000);
 	print(b)
 end
-local btn = btn_create(0,40);
+local btn = btn_create(100,20);
 btn_bindClick(btn,f_btnClick);
 --btn_bindDown(btn,f_btnDown);
 
