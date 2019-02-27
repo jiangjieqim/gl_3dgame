@@ -158,7 +158,7 @@ local function f_f_LuaDrag_move(data)
 	local arr = func_split(data,",");
 	--print(arr[2])
 	local name = arr[1];
-	local progress = tonumber(arr[2]);
+	local progress = tonumber(arr[4]);
 	arr = nil
 	f_ScDragMove(func_getTable(name),progress)
 end

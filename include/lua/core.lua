@@ -629,7 +629,10 @@ end
 function func_get_frame_count(o)
 	return get_attr(o,"frameCount")
 end
-
+--获取sprite的xy
+function func_get_sprite_xy(o)
+	return get_attr(o,"spritePos")	
+end
 --获取sprite的宽高
 function func_get_sprite_size(o)
 	return get_attr(o,"spriteSize")	

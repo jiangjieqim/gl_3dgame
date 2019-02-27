@@ -472,8 +472,9 @@ sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h)
 
 	if(pSpr->mWidth>w ||pSpr->mHeight>h)
 	{
-		printf("滑动区域设置太小(%d,%d)(%d,%d)\n",(int)pSpr->mWidth,w,(int)pSpr->mHeight,h);
+		printf("滑动区域设置太小sprite所屏幕像素单位(mWidth = %d,拖拽区域w=%d)(mHeight = %d,拖拽区域h=%d)\n",(int)pSpr->mWidth,w,(int)pSpr->mHeight,h);
 		assert(0);
+		//return;
 	}
 
 	setv(&base->flags,FLAGS_DRAG);
@@ -790,7 +791,8 @@ changeDragXY(struct Sprite* p,int* px,int* py){
 			//发送事件给lua
 			char _str[G_BUFFER_64_SIZE];
 			struct HeadInfo* b = base_get(p);
-			sprintf_s(_str, G_BUFFER_64_SIZE,"%s,%.3f",b->name,progress);			
+			sprintf_s(_str, G_BUFFER_64_SIZE,"%s,%d,%d,%.3f",b->name,*px,*py,progress);	
+			//printf("c=%s\n",_str);
 			ex_lua_evt_dispatch(p,EVENT_ENGINE_SPRITE_CLICK_MOVE,_str);
 		}
 	}

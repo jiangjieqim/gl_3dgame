@@ -57,7 +57,8 @@ infowin_show(0,20);
 ---[[
 local function f_btnClick(b)
 	--cam:rotate(5000);
-	print("==========\t"..b)
+	--print("==========\t"..b)
+	alert("==========\t"..b);
 end
 
 local function f_btnDown(b)
