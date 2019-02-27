@@ -1,4 +1,4 @@
-EVENT_BUTTON_CLICK = 10000;--点击事件
+--EVENT_BUTTON_CLICK = 10000;--点击事件
 
 
 --#######################################################
@@ -34,37 +34,8 @@ local function f_delLabel(btn)
 		btn.label = nil
 	end
 end
---[[
-	此接口会在引擎上端调用,所以要作为公共方法
-	按钮回调
-	spriteName是Sprite调用的sprite.name,在C中是Sprite的name在lua中是btn的引用0EA02968
---]]
-function btnCallBackEvt(spriteName)
-	
-	--print('C中的spriteName='..spriteName..',Lua中的btn引用='..spriteName)
-	
-	local btn = func_getTable(spriteName)--btn引用
-	
-	--按钮回调
-	--ex_callParmLuaFun((const char*)sprite->callLuaFunName,b->name);
-	--if(btn.clickEvtCallBack)	then	btn.clickEvtCallBack(btn)	end
-		
-	evt_dispatch(btn,EVENT_BUTTON_CLICK,spriteName);
-end
 
 
-function btnMouseDownEvt(spriteName)
-	local btn = func_getTable(spriteName)--btn引用
-	
-	if(btn.mouseDownCallBack) then
-		btn.mouseDownCallBack(btn);
-	end
-end
-
-local function f_click(data)
-
-	print("****"..data);
-end
 --[[
 	创建一个按钮
 	x,y默认值为0,0
@@ -90,9 +61,8 @@ function btn_create(x,y,w,h,url)
 	if(w == nil) then w = 80	end
 	if(h == nil) then h = 18	end
 	---------------------------------------
-	local sprite = sprite_create(name,x,y,w,h,"btnCallBackEvt",nil,"btnMouseDownEvt");
-	
-	evt_on(sprite,EVENT_ENGINE_SPRITE_CLICK,f_click);
+--	local sprite = sprite_create(name,x,y,w,h,"btnCallBackEvt",nil,"btnMouseDownEvt");
+	local sprite = sprite_create(name,x,y,w,h);
 	
 	func_setIcon(sprite,url)
 	
@@ -109,7 +79,7 @@ end
 --]]
 function btn_bindClick(btn,clickEvt)
 	btn.clickEvtCallBack = clickEvt;
-	evt_on(btn,EVENT_BUTTON_CLICK,clickEvt);
+	evt_on(btn.sprite,EVENT_ENGINE_SPRITE_CLICK,clickEvt);
 end
 
 --[[
@@ -118,8 +88,13 @@ end
 --]]
 function btn_bindDown(btn,c)
 	btn.mouseDownCallBack = c;
+	evt_on(btn.sprite,EVENT_ENGINE_SPRITE_CLICK_DOWN,c);
 end
-
+--移除事件
+local function f_remove_evt()
+	evt_off(btn.sprite,EVENT_ENGINE_SPRITE_CLICK,btn.clickEvtCallBack);
+	evt_off(btn.sprite,EVENT_ENGINE_SPRITE_CLICK_DOWN,btn.mouseDownCallBack);
+end
 --[[
 	销毁按钮对象
 --]]
@@ -132,7 +107,8 @@ function btn_dispose(btn)
 	
 	btn.mouseDownCallBack = nil
 	--btn.clickEvtCallBack = nil
-	evt_off(btn,EVENT_BUTTON_CLICK,clickEvt);
+	f_remove_evt(btn);
+
 
 	func_tableDel(btn)
 	

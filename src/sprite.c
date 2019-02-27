@@ -668,10 +668,11 @@ sprite_drawRender(int data)
 	if(spr->m_bPressed)
 	{
 		//左键鼠标按下的时候,会一直执行这里逻辑
-		if(spr->callLuaMouseDown!=NULL)
+		/*if(spr->callLuaMouseDown!=NULL)
 		{
 			ex_callParmLuaFun((const char*)spr->callLuaMouseDown,base->name);
-		}
+		}*/
+		ex_lua_evt_dispatch(spr,EVENT_ENGINE_SPRITE_CLICK_DOWN,base->name);
 	}
 	else
 	{
@@ -892,10 +893,10 @@ void sprite_dipose(struct Sprite* spr)
 		tl_free(spr->callLuaDragMove);
 	}
 
-	if(spr->callLuaMouseDown)
+	/*if(spr->callLuaMouseDown)
 	{
 		tl_free(spr->callLuaMouseDown);
-	}
+	}*/
 
 	if(spr->luaTablePtr)
 	{

@@ -68,7 +68,7 @@ struct Sprite
 	/*
 	 *鼠标常按事件
 	 */
-	char* callLuaMouseDown;
+	//char* callLuaMouseDown;
 
 	/*
 		以Sprire相对的0,0坐标设置的拖拽范围,如果设置的是0,没有范围限制

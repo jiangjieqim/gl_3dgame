@@ -53,7 +53,7 @@
 #define EVENT_ENGINE_BASE_END		   103				//base结束事件
 
 #define EVENT_ENGINE_SPRITE_CLICK		   104//click
-
+#define EVENT_ENGINE_SPRITE_CLICK_DOWN	   105//click down
 //键盘事件状态
 struct E_KeyBoard
 {
