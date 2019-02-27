@@ -472,9 +472,9 @@ sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h)
 
 	if(pSpr->mWidth>w ||pSpr->mHeight>h)
 	{
-		printf("»¬¶¯ÇøÓòÉèÖÃÌ«Ð¡spriteËùÆÁÄ»ÏñËØµ¥Î»(mWidth = %d,ÍÏ×§ÇøÓòw=%d)(mHeight = %d,ÍÏ×§ÇøÓòh=%d)\n",(int)pSpr->mWidth,w,(int)pSpr->mHeight,h);
-		assert(0);
-		//return;
+		log_color(0xff0000,"»¬¶¯ÇøÓòÉèÖÃÌ«Ð¡spriteËùÆÁÄ»ÏñËØµ¥Î»(mWidth = %d,ÍÏ×§ÇøÓòw=%d)(mHeight = %d,ÍÏ×§ÇøÓòh=%d)\n",(int)pSpr->mWidth,w,(int)pSpr->mHeight,h);
+		//assert(0);
+		return;
 	}
 
 	setv(&base->flags,FLAGS_DRAG);

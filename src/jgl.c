@@ -15,6 +15,8 @@
 #include "jgl.h"
 #include "bmp.h"
 
+#include "ftfont.h"
+
 
 //#define _DEBUG_PRINT_RGB_	//¥Ú”°rgb
 
@@ -151,7 +153,16 @@ jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iC
 	*iHeight = 0;
 	*eFormat = GL_RGB;
 	*iComponents = GL_RGB;
+
+	{
+		//test
+		*eFormat = GL_BGRA;
+		*iComponents = GL_RGBA;
+		return ft_load(iWidth,iHeight);
+	}
 	
+	
+
 	if(tl_convert_path((char *)szFileName,outStr,G_BUFFER_256_SIZE))
 		xfile = outStr;
 	else

@@ -8,10 +8,10 @@ call initroot.bat
 
 
 @rem 增加本地include路径
-set INCLUDE=%INCLUDE%%cd%\include\;%cd%\common\include\;
+set INCLUDE=%INCLUDE%%cd%\include\;%cd%\common\include\;%cd%\lib_freetype2.9.1\include\;
 
 @rem 增加本地lib路径
-set LIB=%LIB%%cd%\lib\;
+set LIB=%LIB%%cd%\lib\;%cd%\lib_freetype2.9.1\;
 
 
 set loaclfile=%cd%\dll\test.exe

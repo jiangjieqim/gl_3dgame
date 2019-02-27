@@ -1670,16 +1670,16 @@ void ex_switch_baseFlags(struct HeadInfo* _node,int flag){
 static void
 getLog(){
 	struct EX* e = ex_getInstance();
-	if(!e->logTf){
+	/*if(!e->logTf){
 		e->logTf = tf_create(G_BUFFER_1024_SIZE,0,0,1.0,0.0,0);
-	}
+	}*/
 }
 
 void 
 ex_showLog(const char* buffer){
 	struct EX* e = ex_getInstance();
 	getLog();
-	tf_setText(e->logTf,buffer);
+	//tf_setText(e->logTf,buffer);
 }
 
 //void

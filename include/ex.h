@@ -136,7 +136,7 @@ struct EX
 	/*
 		日志文本
 	*/
-	struct TextField* logTf;
+	//struct TextField* logTf;
 
 	lua_State* mylua;
 

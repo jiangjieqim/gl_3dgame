@@ -46,7 +46,6 @@ function Alert:create()
 		--print("screenSize = ",sw,sh,self);
 		--print(self.isDrag)
 		if(self.isDrag and sw > bgw and sh > bgh) then
-			
 			sprite_setDragScope(self.bg,-sx,-sy,sw-sx,sh-sy);
 		end
 		
@@ -99,7 +98,7 @@ function Alert:show(str)
 	
 	self.f_resize();
 end
-
+--************************************************************************************
 local alert1;
 
 local function f_drag(data)
@@ -123,7 +122,7 @@ function Alert:set_drag(value)
 	end
 end
 
-function alert(str,x,y)
+function alert(str)
 	if(alert1 == nil) then
 		alert1 = Alert:create();
 		alert1.f_init(300,100);
