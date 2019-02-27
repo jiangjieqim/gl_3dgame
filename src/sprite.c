@@ -792,7 +792,7 @@ changeDragXY(struct Sprite* p,int* px,int* py){
 			char _str[G_BUFFER_64_SIZE];
 			struct HeadInfo* b = base_get(p);
 			sprintf_s(_str, G_BUFFER_64_SIZE,"%s,%d,%d,%.3f",b->name,*px,*py,progress);	
-			//printf("c=%s\n",_str);
+			//printf("c=[%s]\n",_str);
 			ex_lua_evt_dispatch(p,EVENT_ENGINE_SPRITE_CLICK_MOVE,_str);
 		}
 	}

@@ -767,6 +767,8 @@ dofile("..\\include\\lua\\UIlib.lua")		--按钮组件
 
 dofile("..\\include\\lua\\infowin.lua")	--fps组件
 
-dofile("..\\include\\lua\\alert.lua")		--弹出框组件
+--dofile("..\\include\\lua\\alert.lua")		--弹出框组件
+dofile("..\\include\\lua\\CAlert.lua")		--弹出框组件
+
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
 dofile("..\\include\\lua\\unit.lua")		--角色单位
