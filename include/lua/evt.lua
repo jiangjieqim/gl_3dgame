@@ -35,6 +35,16 @@ function evt_off(obj,id,func)
 		end
 	end
 end
+--是否有该事件
+function evt_has(obj,id,func)
+	for k, v in pairs(evtlist) do
+		local node = evtlist[k];
+		if(node and node.id == id and node.func == func and node.obj == obj) then
+			return true
+		end
+	end
+	return false
+end
 
 --全局事件
 function evt_dispatch(...)

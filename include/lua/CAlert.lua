@@ -1,32 +1,32 @@
 Alert = {}
 
-
 --重置子节点坐标
 function Alert:f_resize_window_child()
 	local sx,sy = func_get_sprite_xy(self.bg);
 	local bgw,bgh = func_get_sprite_size(self.bg)
 
 	func_setPos(self.label,sx,sy);
-	
-	--print(self.closeBtn,sx+(bgw-30),sy);
+		
 	btn_pos(self.closeBtn,sx+(bgw-30),sy);
 end;
 
 --居中
 function Alert:f_center()
 	
+	local x,y;
+	
 	local sx,sy = func_screenSize();
 
 	local bgw,bgh = func_get_sprite_size(self.bg)
 	
-	local x = (sx - bgw)/2;
-	local y = (sy - bgh)/2;
-
+	x = (sx - bgw)/2;
+	y = (sy - bgh)/2;
+	
+	
 	func_setPos(self.bg,x,y)
 	
 	self:f_resize_window_child();
 end;
-	--拖拽移动事件
 
 function Alert:create()
 
@@ -34,20 +34,23 @@ function Alert:create()
 			bg;
 			closeBtn;
 			label;
+			isDrag;--是否可以拖拽
 			
 	--###########################################################
 	f_resize	= function ()
 		local sw,sh = func_screenSize();
-		self:f_center();
-		
 		
 		local sx,sy = func_get_sprite_xy(self.bg);
 		local bgw,bgh = func_get_sprite_size(self.bg)
 
 		--print("screenSize = ",sw,sh,self);
-		if(sw > bgw and sh > bgh) then
+		--print(self.isDrag)
+		if(self.isDrag and sw > bgw and sh > bgh) then
+			
 			sprite_setDragScope(self.bg,-sx,-sy,sw-sx,sh-sy);
 		end
+		
+		self:f_center();
 	end;
 	--###########################################################
 	f_init = function(w,h)
@@ -58,7 +61,9 @@ function Alert:create()
 		--print(self.closeBtn)
 		self.closeBtn=btn_create(x,y,30,30);
 		--print(self)
-
+		
+		self:set_drag(true)
+		
 		btn_bindClick(self.closeBtn,
 				function(b)
 				--print(b,self)
@@ -72,29 +77,13 @@ function Alert:create()
 				end
 		);
 		
-		evt_on(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,
-				function(data)
-				
-					local arr = func_split(data,",");
-					--print(arr[2])
-					local name = arr[1];
-					--local progress = tonumber(arr[4]);
-					--print("****^"..arr[2],arr[3]);
-					arr = nil;
-					
-					self:f_resize_window_child();	
-				end
 		
-		);	
 		self.label=tf_create(128,x,y);
 	end;
 	
 	} ;
 	
 	--#################################################
-	
-	
-	
 	self.__index = self;
     setmetatable(new_sharp, self);
 	
@@ -113,12 +102,38 @@ end
 
 local alert1;
 
-function alert(str)
+local function f_drag(data)
+	--拖拽移动事件
+		local arr = func_split(data,",");
+		--print(arr[2])
+		local name = arr[1];
+		--local progress = tonumber(arr[4]);
+		--print("****^"..arr[2],arr[3]);
+		arr = nil;
+		
+		alert1:f_resize_window_child();	
+end
+
+function Alert:set_drag(value)
+	self.isDrag = value
+	if(value) then
+		evt_on(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag);	
+	else
+		evt_off(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag);		
+	end
+end
+
+function alert(str,x,y)
 	if(alert1 == nil) then
 		alert1 = Alert:create();
 		alert1.f_init(300,100);
-		evt_on(alert1,EVENT_ENGINE_RESIZE,alert1.f_resize);		
-	end
+		
+		evt_on(alert1,EVENT_ENGINE_RESIZE,alert1.f_resize);	
 
+		--evt_on(alert1.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag);		
+	end
+	--print(evt_has(alert1.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag));
+	
+	--self:set_drag(false)
 	alert1:show(str);
 end
