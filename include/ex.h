@@ -54,6 +54,7 @@
 
 #define EVENT_ENGINE_SPRITE_CLICK		   104//click
 #define EVENT_ENGINE_SPRITE_CLICK_DOWN	   105//click down
+#define EVENT_ENGINE_SPRITE_CLICK_MOVE	   106//click move
 //¼üÅÌÊÂ¼þ×´Ì¬
 struct E_KeyBoard
 {

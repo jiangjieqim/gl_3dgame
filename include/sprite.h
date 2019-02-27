@@ -63,7 +63,7 @@ struct Sprite
 	/*
 		lua中的sprite移动事件更新
 	*/
-	char* callLuaDragMove;
+	//char* callLuaDragMove;
 	
 	/*
 	 *鼠标常按事件

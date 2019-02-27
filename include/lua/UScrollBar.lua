@@ -34,6 +34,8 @@ local function f_create()
 		
 		--进度值
 		value = nil,
+		
+		click = nil,
 	};
 end
 
@@ -131,8 +133,8 @@ end
 --[[
 	点击滑动条上的小按钮
 --]]
-function 
-f_ScrollBarBG_Click2(name)
+local function 
+f_scrollBarBG_Click2(name)
 	
 	--大背景
 	local sprite = func_find_obj(name)
@@ -152,8 +154,12 @@ f_ScrollBarBG_Click2(name)
 	f_ScDragMove(sc,v)
 end
 
-function 
-f_LuaDragMove2(name,progress) 
+local function f_f_LuaDrag_move(data)
+	local arr = func_split(data,",");
+	--print(arr[2])
+	local name = arr[1];
+	local progress = tonumber(arr[2]);
+	arr = nil
 	f_ScDragMove(func_getTable(name),progress)
 end
 
@@ -168,11 +174,15 @@ scrollBar_new(x,y)
 	local name = func_getTableName(sc)--获取btn引用名
 
 	--背景
-	local bg = sprite_create(string.format("%s%s",name,BgSuffix),x,y,defaultBg_width,defaultBg_height,'f_ScrollBarBG_Click2')
+	local bg = sprite_create(string.format("%s%s",name,BgSuffix),x,y,defaultBg_width,defaultBg_height)
 	func_setIcon(bg,"gundi.png")
 	
+	evt_on(bg,EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2);
+	
+	
 	--创建小按钮
-	local btn=sprite_create(name,x,y,barSize,barSize,"","f_LuaDragMove2","",dragDirection);
+	local btn=sprite_create(name,x,y,barSize,barSize,dragDirection);
+	evt_on(btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move);
 
 	--设置可拖拽范围
 	sprite_setDragScope(btn,0,0,defaultBg_width,defaultBg_height);
@@ -185,6 +195,11 @@ end
 
 --删除
 function scrollBar_del(sc)
+	
+	evt_off(sc.bg,EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2);
+	evt_off(sc.btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move);
+
+	
 	ptr_remove(sc.btn)
 	ptr_remove(sc.bg)
 	func_tableDel(sc)

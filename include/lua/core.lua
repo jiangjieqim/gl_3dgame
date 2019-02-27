@@ -44,6 +44,7 @@ EVENT_ENGINE_BASE_UPDATE	 =  102		--base更新事件
 EVENT_ENGINE_BASE_END		 =  103		--base结束事件
 EVENT_ENGINE_SPRITE_CLICK = 104
 EVENT_ENGINE_SPRITE_CLICK_DOWN = 105
+EVENT_ENGINE_SPRITE_CLICK_MOVE = 106
 
 --键值枚举
  KEY_ESC = 27
@@ -727,6 +728,29 @@ end
 function func_update_mat4x4(o)
 	change_attr(o,"base_updateMat4x4");
 end
+
+--[[
+function func_split( str,reps )
+    local resultStrList = {}
+    string.gsub(str,'[^'..reps..']+',function ( w )
+        table.insert(resultStrList,w)
+    end)
+    return resultStrList
+end
+--]]
+--字符串分割成table
+function func_split(str, delimiter)
+    if str==nil or str=='' or delimiter==nil then
+        return nil
+    end
+ 
+    local result = {}
+    for match in (str..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match)
+    end
+    return result
+end
+
 
 --function func
 

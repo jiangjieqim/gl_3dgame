@@ -68,6 +68,17 @@ local btn = btn_create(100,20);
 btn_bindClick(btn,f_btnClick);
 --btn_bindDown(btn,f_btnDown);
 
+---[[
+local function f_animscHandle(sc)
+	print("###"..sc.value)
+end
+
+local animsc = scrollBar_new(200,20)
+
+scrollBar_setRange(animsc,0,1)
+animscTf = scrollBar_add_text(animsc,'animsc')
+scrollBar_bind(animsc,f_animscHandle)
+--]]
 
 --local btn1 = btn_create(0,60);
 --btn_bindClick(btn1,f_btnClick1);

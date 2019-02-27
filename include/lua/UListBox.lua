@@ -97,7 +97,7 @@ end
 local function f_click(name)
 	--f_listBoxCallBack(b);
 	local list = func_getTable(name);
-	//print(list);
+	--print(list);
 	f_select_call(list);
 end
 function 

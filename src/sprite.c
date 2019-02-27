@@ -702,17 +702,17 @@ haveDragScope(struct Sprite* ptr){
 	}
 	return 0;
 }
-static void 
-fLuaDragMove(const char* luaFunName,const char* name,float progress)
-{
-	lua_State* L =ex_getInstance()->mylua;
-	lua_getglobal(L,luaFunName);
-	lua_pushstring(L,name);
-	lua_pushnumber(L,progress);
-	if(lua_pcall(L,2,0,0)!=0){
-		printf("error %s\n", lua_tostring(L,-1));
-	}
-}
+//static void 
+//fLuaDragMove(const char* luaFunName,const char* name,float progress)
+//{
+//	lua_State* L =ex_getInstance()->mylua;
+//	lua_getglobal(L,luaFunName);
+//	lua_pushstring(L,name);
+//	lua_pushnumber(L,progress);
+//	if(lua_pcall(L,2,0,0)!=0){
+//		printf("error %s\n", lua_tostring(L,-1));
+//	}
+//}
 /*
 	是否是纵向
 */
@@ -780,10 +780,18 @@ changeDragXY(struct Sprite* p,int* px,int* py){
 		
 		//if(p->callLuaDragMove)
 		//	fLuaDragMove(p->callLuaDragMove,progress);//发送更新事件
-		if(p->callLuaDragMove)
+		//if(p->callLuaDragMove)
+		//{
+		//	struct HeadInfo* b = base_get(p);
+		//	fLuaDragMove(p->callLuaDragMove,b->name,progress);
+		//}
+
 		{
+			//发送事件给lua
+			char _str[G_BUFFER_64_SIZE];
 			struct HeadInfo* b = base_get(p);
-			fLuaDragMove(p->callLuaDragMove,b->name,progress);
+			sprintf_s(_str, G_BUFFER_64_SIZE,"%s,%.3f",b->name,progress);			
+			ex_lua_evt_dispatch(p,EVENT_ENGINE_SPRITE_CLICK_MOVE,_str);
 		}
 	}
 }
@@ -887,10 +895,10 @@ void sprite_dipose(struct Sprite* spr)
 		spr->base = NULL;
 	}
 	
-	if(spr->callLuaDragMove)
-	{
-		tl_free(spr->callLuaDragMove);
-	}
+	//if(spr->callLuaDragMove)
+	//{
+	//	tl_free(spr->callLuaDragMove);
+	//}
 
 	/*if(spr->callLuaMouseDown)
 	{
