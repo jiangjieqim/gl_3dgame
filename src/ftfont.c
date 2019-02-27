@@ -32,14 +32,31 @@ red2rgba(unsigned char* red, int size){
 	}
 	return rgba;
 }
+/*
+static const wchar_t*
+getWC(const char* c){
+	const size_t cSize = strlen(c) + 1;
+	wchar_t* wc = new wchar_t[cSize];
+	mbstowcs(wc,c,cSize);
+	return wc;
+}
+
+*/
 
 void* 
 ft_load(int *iWidth, int *iHeight){
 	const char* fileName = "C:\\Windows\\Fonts\\simsun.ttc";
 	int fontSize = 36;//文本的尺寸 12
 
-	wchar_t* ch = L"图";
 	
+
+	//wchar_t* ch = L"我";
+	wchar_t ch[3];
+
+	char str[3];
+	
+
+
 	FT_Library library;
 	FT_Error error;	
 	FT_Face face;
@@ -47,6 +64,14 @@ ft_load(int *iWidth, int *iHeight){
 	unsigned char* rgba = 0;
 
 	int i;
+	sprintf_s(str,3,"%hs","人");
+	mbstowcs(ch,str,3);
+
+	//wchar_t ch[64];
+	//sprintf_s(ch,64,"%s","我");
+	
+	
+	
 	//init=========================================================
 	error = FT_Init_FreeType(&library);
 	if (error)
@@ -63,7 +88,7 @@ ft_load(int *iWidth, int *iHeight){
 		printf("未找到文件(%s)\n",fileName);
 		printf("error:FT_New_Face\n");//if (error == FT_Err_Unknown_File_Format)MsgBox("FT_Err_Unknown_File");	
 		exit(0);
-	}	
+	}
 	//view======================================================
 	printf("编码方式个数: %d \n", face->num_charmaps);
 

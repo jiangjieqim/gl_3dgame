@@ -4,7 +4,7 @@ infowin_show(0,20);
 
 
 local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
-setMaterial(_floor,func_load("//resource//material//floor.mat"));	
+setMaterial(_floor,func_load("//resource//material//font.mat"));	
 setv(_floor,FLAGS_VISIBLE);
 setv(_floor,FLAGS_RAY)
 setv(_floor,FLAGS_DRAW_RAY_COLLISION)
