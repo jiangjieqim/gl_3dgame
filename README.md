@@ -54,3 +54,6 @@ for /f "delims=" %%a in ('dir /b *.txt *.doc *.xls') do set /a "s+=%%~za/1024"
 echo,%s%KB
 pause
 ```
+(16)2019.2.28freetype字体  
+*1.const char* 转化为 wchar_t*  
+*2.cope像素填充到一个texture中*  
