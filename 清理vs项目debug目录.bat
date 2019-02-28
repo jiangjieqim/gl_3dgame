@@ -19,8 +19,10 @@ del *.ncb *.user
 cd..
 cd dll
 del common.dll
+del *.exe
 
 cd..
 cd lib
 del common.lib
 
+pause
