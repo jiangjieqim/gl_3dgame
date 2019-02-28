@@ -22,8 +22,23 @@ ftext_create(){
 	FText* txt = (FText*)tl_malloc(sizeof(FText));
 	memset(txt,0,sizeof(FText));
 	
-	sprite_create("txt0",0,0,128,64,0);
+	txt->spr = sprite_create("txt0",0,0,128,64,0);
+	
 
+	{
+
+		struct Sprite* spr = txt->spr;
+		spr->material = tmat_createTex("font",128,64);
+		
+	}
 
 	return 0;
+}
+
+void
+ftext_dispose(void* p){
+	FText* txt = (FText*)p;
+	sprite_dipose(txt->spr);
+
+	tl_free(p);
 }

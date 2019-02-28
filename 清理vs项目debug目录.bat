@@ -25,4 +25,4 @@ cd..
 cd lib
 del common.lib
 
-pause
+::pause

@@ -78,3 +78,14 @@ f_char2w_char(wchar_t* pwsUnicode,int cnt,char* pze){
 	MultiByteToWideChar(CP_ACP,0,pze,-1,pwsUnicode,iSize);
 }
 ```
+
+
+bug  
+```
+local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
+setMaterial(_floor,func_load("//resource//material//font.mat"));	
+setv(_floor,FLAGS_VISIBLE);
+--setv(_floor,FLAGS_RAY)
+setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
+setv(_floor,FLAGS_DISABLE_CULL_FACE);
+```

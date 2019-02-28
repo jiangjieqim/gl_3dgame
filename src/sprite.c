@@ -262,7 +262,23 @@ load_vbo_6Vertex()
 	objVBO_pushNode(vbo ,(GLfloat*)_lverts,sizeof(_lverts) / sizeof(GLfloat));
 	return vbo;
 }
+static struct Obj_vbo_model* 
+f_objVBO_load4Vertex(){
+	int verts,_bufferSize;
+	char* _objStr;
+	const int dataType = OBJ_UV_VERTEX;
+	struct Obj_vbo_model* vbo;
+	char buffer[G_BUFFER_64_SIZE];
+	_objStr=tl_loadfile("\\resource\\obj\\quad.obj",0);
 
+	tl_newName(buffer,G_BUFFER_64_SIZE);
+	vbo = objVBO_create(buffer,dataType);
+
+	obj_parse((char*)_objStr,&_bufferSize,&verts,dataType);
+	objVBO_pushExportObj(vbo,_objStr);
+	tl_free(_objStr);
+	return vbo;
+}
 /*
  *构造VBO
  * uv normal verter和uv vertex都支持
@@ -276,7 +292,7 @@ load_vbo(int ParseType)
 	}
 	else if(ParseType == Type_4Vertex)
 	{
-		return objVBO_load4Vertex();
+		return f_objVBO_load4Vertex();
 	}
 	return NULL;
 }

@@ -121,7 +121,7 @@ void sprite_updatePos(int data);
 void sprite_dipose(struct Sprite* spr);
 
 /*
-	根据图集中的key设置位图
+	根据图集中的key设置位图,atlas其实是一组配置
 */
 void sprite_texName(struct Sprite* spr,const char* texName,struct AtlasNode* ptr);
 /*
