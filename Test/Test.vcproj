@@ -133,7 +133,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\gl_3dgame\lib_freetype2.9.1\include;..\common\include;..\include"
+				AdditionalIncludeDirectories="..\ftfont;..\common\include;..\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -163,7 +163,7 @@
 				OutputFile=".\Debug/Test.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="C:\gl_3dgame\lib_freetype2.9.1;..\lib"
+				AdditionalLibraryDirectories="..\lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/Test.pdb"
 				SubSystem="1"
@@ -235,10 +235,6 @@
 			</File>
 			<File
 				RelativePath="..\src\frame.c"
-				>
-			</File>
-			<File
-				RelativePath="..\src\ftfont.c"
 				>
 			</File>
 			<File
@@ -324,10 +320,6 @@
 			</File>
 			<File
 				RelativePath="..\include\frame.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\ftfont.h"
 				>
 			</File>
 			<File

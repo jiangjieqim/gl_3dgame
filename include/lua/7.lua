@@ -87,7 +87,7 @@ scrollBar_bind(animsc,f_animscHandle)
 --]]
 --***********************************************************************************************
 --创建一个角色
-unit =  Unit:create("box")--unit_create();
+unit =  Unit:create("box1")--unit_create();
 unit:set_speed(600);
 
 _selectBox = f_create_clickBox();
