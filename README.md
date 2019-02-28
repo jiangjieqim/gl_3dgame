@@ -55,5 +55,5 @@ echo,%s%KB
 pause
 ```
 (16)2019.2.28freetype字体  
-*1.设计一个ftext接口渲染freetype生成的文本数据*
+*1.设计一个ftext接口渲染freetype生成的文本数据*  
 *2.cope像素填充到一个texture中*  
