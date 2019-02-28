@@ -31,6 +31,8 @@
 #define TYPE_SPRITE_FLIE 3//UI界面类型中的sprite
 #define TYPE_TEXT_FILE	4	//文本类型
 #define TYPE_OBJ_VBO_FILE	5//VBO文件数据
+#define TYPE_FONT_TXT  6	//freetype文本
+
 
 //键值枚举
 #define KEY_ESC 27

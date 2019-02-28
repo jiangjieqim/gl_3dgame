@@ -156,12 +156,14 @@ jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iC
 
 	{
 		//test
+		if(0){
 		int fontSize = 32;
 		unsigned char* rgba = tl_malloc(fontSize*fontSize*4);
 		*eFormat = GL_BGRA;
 		*iComponents = GL_RGBA;
 		ft_load(rgba,fontSize,fontSize,iWidth,iHeight,"9");
 		return rgba;
+		}
 	}
 	
 	

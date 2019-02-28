@@ -66,4 +66,10 @@ void objVBO_render(int data,int parms);
  */
 void objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,const char* shader,Matrix44f m,int mode,struct HeadInfo* base,
 					   void (*renderCallBack)(int,struct ObjVBO*));
+
+/************************************************************************/
+/* 加载一个矩形                                                                     */
+/************************************************************************/
+struct Obj_vbo_model* objVBO_load4Vertex();
+
 #endif

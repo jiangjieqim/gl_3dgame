@@ -46,5 +46,5 @@ func_setRotateX(_floor,PI)
 func_setRotateY(_floor,PI/2)
 func_setRotateZ(_floor,PI/2)
 
-
+local btn = btn_create();
 --setv(_floor,FLAGS_DRAW_PLOYGON_LINE)--Ïß¿ò

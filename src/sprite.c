@@ -262,24 +262,7 @@ load_vbo_6Vertex()
 	objVBO_pushNode(vbo ,(GLfloat*)_lverts,sizeof(_lverts) / sizeof(GLfloat));
 	return vbo;
 }
-static struct Obj_vbo_model* 
-load_vbo_4Vertex()
-{
-	int verts,_bufferSize;
-	char* _objStr;
-	const int dataType = OBJ_UV_VERTEX;
-	struct Obj_vbo_model* vbo;
-	char buffer[G_BUFFER_64_SIZE];
-	_objStr=tl_loadfile("\\resource\\obj\\quad.obj",0);
-	
-	tl_newName(buffer,G_BUFFER_64_SIZE);
-	vbo = objVBO_create(buffer,dataType);
 
-	obj_parse((char*)_objStr,&_bufferSize,&verts,dataType);
-	objVBO_pushExportObj(vbo,_objStr);
-	tl_free(_objStr);
-	return vbo;
-}
 /*
  *构造VBO
  * uv normal verter和uv vertex都支持
@@ -293,7 +276,7 @@ load_vbo(int ParseType)
 	}
 	else if(ParseType == Type_4Vertex)
 	{
-		return load_vbo_4Vertex();
+		return objVBO_load4Vertex();
 	}
 	return NULL;
 }
@@ -418,28 +401,6 @@ sprite_create(char* _spriteName,
 	memset(pSpr,0,sizeof(struct Sprite));
 
 	pSpr->m_bPressed = 0;
-	
-	/*if(luaFunName)
-	{
-		if(strlen(luaFunName)>G_BUFFER_32_SIZE){
-			printf("lua回调函数名长度溢出!\n");
-			assert(0);
-		}
-		else
-		{
-			if(strlen(luaFunName)>0){
-				memcpy(pSpr->callLuaFunName,luaFunName,(size_t)strlen(luaFunName));
-			}
-		}
-	}*/
-
-	/*if(_spriteName)
-	{
-		int length = strlen(_spriteName)+1;
-		pSpr->luaTablePtr = tl_malloc(length);
-		memset(pSpr->luaTablePtr,0,length);
-		memcpy(pSpr->luaTablePtr,_spriteName,length-1);
-	}*/
 
 	pSpr->mWidth  = width;
 	pSpr->mHeight = height;
@@ -547,10 +508,10 @@ updateSpriteMat4x4(struct Sprite* p,
 	multi2(p->mat4x4,xyz,result);//位移矩阵
 }
 
-//获取Sprite引用的材质引用
+//获取Sprite引用的材质引用,
+//可以从图集中获取,也可以自定义材质引用
 static void* 
-getMaterial(struct Sprite* p)
-{
+getMaterial(struct Sprite* p){
 	if(p->atals == NULL)
 	{
 		//printf("p->atals == NULL");
@@ -582,9 +543,17 @@ renderSprite(struct Sprite* p)
 		}
 
 		if(p->useVBO){
-			objVBO_renderNode(getvbo(p),material,"spritevbo",p->mat4x4,base_get_ploygonLineMode(base),base,NULL);
+			//渲染管线采用vbo模式
+			objVBO_renderNode(getvbo(p),material,
+				"spritevbo",
+				p->mat4x4,
+				base_get_ploygonLineMode(base),base,NULL);
 		}else
-			tmat_renderSprite(material,"sprite",p->mat4x4,p->vertexs,p->vertLen,GL_T2F_V3F,base_get_ploygonLineMode(base));//非vbo模式
+			//采用固定管线方式s
+			tmat_renderSprite(material,"sprite",
+							p->mat4x4,p->vertexs,p->vertLen,
+							GL_T2F_V3F,
+							base_get_ploygonLineMode(base));//非vbo模式
 	}
 }
 
@@ -668,6 +637,8 @@ sprite_drawRender(int data)
 	if(spr->m_bPressed)
 	{
 		//左键鼠标按下的时候,会一直执行这里逻辑
+		
+
 		/*if(spr->callLuaMouseDown!=NULL)
 		{
 			ex_callParmLuaFun((const char*)spr->callLuaMouseDown,base->name);
@@ -923,7 +894,10 @@ void sprite_dipose(struct Sprite* spr)
 /*
 	为sprite设置图集
 */
-void sprite_texName(struct Sprite* ptr,const char* texName,struct AtlasNode* ptrNode)
+void 
+sprite_texName(struct Sprite* ptr,
+					const char* texName,
+					struct AtlasNode* ptrNode)
 {
 	float width,height;
 	struct AtlasNode n;

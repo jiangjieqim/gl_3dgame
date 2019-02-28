@@ -387,3 +387,20 @@ objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _bufferSize)
 	objData_dispose(ptr);
 	tl_free(ptr);
 }
+struct Obj_vbo_model* 
+objVBO_load4Vertex(){
+	int verts,_bufferSize;
+	char* _objStr;
+	const int dataType = OBJ_UV_VERTEX;
+	struct Obj_vbo_model* vbo;
+	char buffer[G_BUFFER_64_SIZE];
+	_objStr=tl_loadfile("\\resource\\obj\\quad.obj",0);
+
+	tl_newName(buffer,G_BUFFER_64_SIZE);
+	vbo = objVBO_create(buffer,dataType);
+
+	obj_parse((char*)_objStr,&_bufferSize,&verts,dataType);
+	objVBO_pushExportObj(vbo,_objStr);
+	tl_free(_objStr);
+	return vbo;
+}
