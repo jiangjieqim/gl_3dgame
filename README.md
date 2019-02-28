@@ -54,6 +54,20 @@ for /f "delims=" %%a in ('dir /b *.txt *.doc *.xls') do set /a "s+=%%~za/1024"
 echo,%s%KB
 pause
 ```
-(16)2019.2.28freetype字体  
+(16)########################################################################  
+2019.2.28freetype字体  
 *1.设计一个ftext接口渲染freetype生成的文本数据*  
 *2.cope像素填充到一个texture中*  
+char* 转为wchar_t  
+```
+static void
+f_char2w_char(wchar_t* pwsUnicode,int cnt,char* pze){
+	int iSize = MultiByteToWideChar(CP_ACP,0,pze,-1,NULL,0);
+	if(iSize > cnt){
+		printf("缓冲区大小太小!\n");
+		assert(0);
+	}
+	memset(pwsUnicode,0,sizeof(wchar_t) * iSize);
+	MultiByteToWideChar(CP_ACP,0,pze,-1,pwsUnicode,iSize);
+}
+```
