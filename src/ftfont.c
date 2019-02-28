@@ -1,18 +1,23 @@
 #pragma comment (lib, "freetype.lib")
-//#include <ft2build.h>
-//#include <freetype/freetype.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <freetype/freetype.h>
 #include <freetype/ftglyph.h>
 
+
+#include <Windows.h>
 #include "tl_malloc.h"
 
 static unsigned char* 
 red2rgba(unsigned char* red, int size){
-	unsigned char* rgba = tl_malloc(size * 4 * sizeof(unsigned char));//new BYTE[4 * size];
+
 	int i;
+	int buffersize = size * 4 * sizeof(unsigned char);
+	unsigned char* rgba = tl_malloc(buffersize);//new BYTE[4 * size];
+	
+	
+	
 	//printf("****************************\n");
 	for(i = 0 ; i < size; i++){
 		rgba[i * 4 + 0] = red[i];
@@ -43,14 +48,33 @@ getWC(const char* c){
 
 */
 
+
+/*
+ *char* 转为wchat*
+ */
+static void*
+f_c(const char* pze){
+	//char* pze= "sdasdsd";
+
+	int iSize;
+	wchar_t* pwsUnicode;
+
+	iSize = MultiByteToWideChar(CP_ACP,0,pze,-1,NULL,0);
+	
+	pwsUnicode = (wchar_t*)tl_malloc(iSize  * sizeof(wchar_t));
+	printf("********%s,iSize = %d,%d,%d\n",pze,iSize,sizeof(wchar_t),iSize  * sizeof(wchar_t));
+	MultiByteToWideChar(CP_ACP,0,pze,-1,pwsUnicode,iSize);
+	return pwsUnicode;
+}
+
 void* 
 ft_load(int *iWidth, int *iHeight){
 	const char* fileName = "C:\\Windows\\Fonts\\simsun.ttc";
-	int fontSize = 36;//文本的尺寸 12
+	int fontSize = 32;//文本的尺寸 12
 
 	
-
-	wchar_t* ch = L"f";
+	wchar_t* tt = f_c("f");
+	wchar_t* ch = L"R";//字3720 f 1260 F1344
 	//wchar_t ch[3];
 
 	//char str[3];
@@ -160,6 +184,9 @@ ft_load(int *iWidth, int *iHeight){
 			printf("[w = %d h = %d top = %d advancex = %d pitch = %d]\n",width,top,advancex,pitch);
 
 			rgba = red2rgba(buffer, width * height);
+
+			printf("需要的缓冲区%d字节(max:%d)\n",width *  height * 4,fontSize*fontSize*4);
+
 			*iWidth = width;
 			*iHeight= height;
 

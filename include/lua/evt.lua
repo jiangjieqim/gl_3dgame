@@ -23,7 +23,7 @@ function evt_on(obj,id,func)
 	evtlist[evt] = evt;
 end
 
-
+--移除事件 并且释放事件引用
 function evt_off(obj,id,func)
 	for k, v in pairs(evtlist) do
 		local node = evtlist[k];
