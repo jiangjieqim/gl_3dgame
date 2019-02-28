@@ -57,6 +57,13 @@ pause
 (16)########################################################################  
 2019.2.28freetype字体  
 *1.设计一个ftext接口渲染freetype生成的文本数据*  
+```
+	int fontSize = 32;
+	unsigned char* rgba = tl_malloc(fontSize*fontSize*4);//像素数据
+	*eFormat = GL_BGRA;
+	*iComponents = GL_RGBA;
+	ft_load(rgba,fontSize,fontSize,iWidth,iHeight,"9");
+```
 *2.cope像素填充到一个texture中*  
 char* 转为wchar_t  
 ```
