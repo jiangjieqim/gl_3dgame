@@ -25,4 +25,14 @@ cd..
 cd lib
 del common.lib
 
-::pause
+echo %CD%
+cd../dll
+del common.dll ftfont.dll
+
+cd../lib
+del common.lib ftfont.lib
+
+
+
+
+pause

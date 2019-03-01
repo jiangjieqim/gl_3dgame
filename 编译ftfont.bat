@@ -37,5 +37,5 @@ del *.obj *.exp *.lib *.dll
 cd..
 
 copy lib_freetype2.9.1\freetype.dll Test\Debug\freetype.dll
-
+echo %CD%
 ::pause 
