@@ -552,22 +552,30 @@ renderSprite(struct Sprite* p)
 	if(material){
 		//void* material = getMaterial(p);//p->atals->material;
 		struct HeadInfo* base = base_get(p);
-
+		char* shaderName = 0;
 		if(!material){
 			printf("(%s)Sprite没有赋予材质\n",((struct HeadInfo*)p->base)->name);
 			assert(0);
 		}
+		
 
+		{
+			GMaterial* __mat = (GMaterial*)material;
+			//char* type = __mat->glslType;
+			shaderName = __mat->glslType;
+		}
 		if(p->useVBO){
 			//渲染管线采用vbo模式
 			objVBO_renderNode(getvbo(p),material,
-				"spritevbo",
-				//"font",
+				//"spritevbo",
+				shaderName,
 				p->mat4x4,
 				base_get_ploygonLineMode(base),base,NULL);
 		}else
 			//采用固定管线方式s
-			tmat_renderSprite(material,"sprite",
+			tmat_renderSprite(material,
+							//"sprite",
+							shaderName,
 							p->mat4x4,p->vertexs,p->vertLen,
 							GL_T2F_V3F,
 							base_get_ploygonLineMode(base));//非vbo模式

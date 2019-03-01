@@ -1,0 +1,22 @@
+#version 110
+uniform sampler2D texture1;//界面贴图
+varying vec2 out_texcoord;
+void main(void){
+	vec4 finalColor=texture2D(texture1, out_texcoord);
+	
+	
+	if(finalColor.a<=0.0)
+	{
+		discard;
+	}
+	else if(finalColor.r + finalColor.g + finalColor.b < 0.9)
+	{
+		discard;//黑色的扣去
+	}
+	else
+	{
+		vec4 color = vec4(0,0,1,1);//这里可以设置字体的颜色
+		gl_FragColor = finalColor;//取字体的原来颜色
+		//gl_FragColor = color;	  //设置自定义的颜色
+	}
+}

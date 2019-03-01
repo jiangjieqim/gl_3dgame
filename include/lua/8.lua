@@ -4,15 +4,15 @@ dofile("..\\include\\lua\\core.lua");
 
 
 function test()
-	local btn = btn_create(138,84);
+	local btn = btn_create(10,20,64,64);
 
 	---[[
 	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
-	setMaterial(_floor,func_load("//resource//material//font.mat"));	
+	setMaterial(_floor,func_load("//resource//material//floor.mat"));	
 	setv(_floor,FLAGS_VISIBLE);
 	--setv(_floor,FLAGS_RAY)
 	--setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
-	setv(_floor,FLAGS_DISABLE_CULL_FACE);
+	--setv(_floor,FLAGS_DISABLE_CULL_FACE);
 
 	local r = 0;
 	function f_onkey(data)
@@ -55,6 +55,34 @@ function test()
 
 end
 
+
+	function f_onkey(data)
+		local key = tonumber(data);
+		
+	--	print(key);
+
+	--	print(key,r);
+
+		if(key == KEY_A) then
+			func_ex_info();
+		elseif(key == KEY_B)then
+			
+		elseif(key == KEY_C) then
+			
+		elseif(key == KEY_D) then
+			
+		end
+		
+		
+	end
+
+	evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
+	
+	
+--	test();
 change_attr(nil,"ft_test");
 
-test();
+cam:position(0,0,-5);
+local _floor = load_model(func_create_name(),"\\resource\\obj\\torus.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
+setMaterial(_floor,func_load("//resource//material//floor.mat"));
+setv(_floor,FLAGS_VISIBLE);	

@@ -30,7 +30,7 @@ ftext_create(){
 
 	sprite_rotateZ(spr,-PI/2);
 
-	spr->material = tmat_create_rgba("font",64,64);
+	spr->material = tmat_create_rgba("font1",64,64);//"font"
 	{
 		GMaterial* mat = spr->material;
 		int _size = 16;
