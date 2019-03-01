@@ -42,6 +42,15 @@ void
 jgl_subImage(GLuint texName,const char* imgUrl,int offsetX,int offsetY,int subImageWidth,int subImageHeight);
 
 /*
+ *向texName传递字节流数据更新texture
+ **/
+void 
+jsl_sub(GLuint texName,		//贴图句柄
+		GLubyte* pBytes,GLenum eFormat,GLenum type,
+		int offsetX,int offsetY,
+		int subImageWidth,int subImageHeight);
+
+/*
 	创建一块位图内存,并且填充为纯色,这里其实创建的是一块CPU中的缓冲区buffer
 */
 GLbyte*

@@ -155,8 +155,10 @@ jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iC
 	*iComponents = GL_RGB;
 
 	{
-		//test
-		if(0){
+		
+//#define __FTEXT_TEXT_
+#ifdef  __FTEXT_TEXT_
+		{
 		int fontSize = 32;
 		unsigned char* rgba = tl_malloc(fontSize*fontSize*4);
 		*eFormat = GL_BGRA;
@@ -164,6 +166,7 @@ jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iC
 		ft_load(rgba,fontSize,fontSize,iWidth,iHeight,"9");
 		return rgba;
 		}
+#endif
 	}
 	
 	
@@ -485,17 +488,39 @@ f_loadImg(const char* szFileName,GLenum* eFormat,GLenum* pType)
 }
 
 void 
-jgl_subImage(GLuint texName,const char* imgUrl,int offsetX,int offsetY,int subImageWidth,int subImageHeight)
+jgl_subImage(GLuint texName,const char* imgUrl,
+			 int offsetX,int offsetY,int subImageWidth,int subImageHeight)
 {
 	GLenum eFormat,type;
 	GLubyte* pBytes = f_loadImg(imgUrl,&eFormat,&type);
 	if(pBytes){
 		glBindTexture(GL_TEXTURE_2D, texName);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, subImageWidth,subImageHeight, eFormat,type, pBytes);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, 
+			subImageWidth,subImageHeight, eFormat,type, pBytes);
+		
 		glBindTexture(GL_TEXTURE_2D, 0);
 		tl_free(pBytes);
 	}else{
 		printf("纹理(%s)加载失败\n");
+		assert(0);
+	}
+}
+
+void 
+jsl_sub(GLuint texName,		//贴图句柄
+		GLubyte* pBytes,GLenum eFormat,GLenum type,
+		int offsetX,int offsetY,
+		int subImageWidth,int subImageHeight)
+{
+	if(pBytes){
+		glBindTexture(GL_TEXTURE_2D, texName);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, 
+			subImageWidth,subImageHeight, eFormat,type, pBytes);
+		
+		glBindTexture(GL_TEXTURE_2D, 0);
+		tl_free(pBytes);
+	}else{
+		log_code(ERROR_BAD_VALUE);//纹理数据不存在
 		assert(0);
 	}
 }
