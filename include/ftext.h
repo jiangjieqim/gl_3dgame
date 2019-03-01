@@ -10,5 +10,5 @@ ftext_create();
 /* 在指定坐标设置一个字符数据									        */
 /************************************************************************/
 void 
-ftext_set(void* p,char* s,int x,int y);
+ftext_set(void* p,char* s,int x,int y,int* pw,int* ph);
 #endif

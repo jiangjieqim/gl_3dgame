@@ -79,8 +79,12 @@ end
 	evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 	
 	
---	test();
-local btn = btn_create(10,20,65,65);
+test();
+--local btn = btn_create(10,20,65,65);
+--[[
+local bg = sprite_create("aa",10,20,65,65);
+func_setIcon(bg,"gundi.png");
+]]
 change_attr(nil,"ft_test");
 
 

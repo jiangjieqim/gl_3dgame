@@ -589,6 +589,7 @@ static void
 updateMatrix(struct Sprite* p)
 {
 	struct HeadInfo* b = p->base;
+	//p->zScale = 0.5;
 	updateSpriteMat4x4(p,b->x,b->y,b->z,p->mWidth*p->zScale,p->mHeight*p->zScale,p->zScale,b->rx,b->ry,b->rz);
 }
 

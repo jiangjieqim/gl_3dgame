@@ -15,6 +15,7 @@
 typedef struct FText
 {
 	struct Sprite* spr;	
+	int size;
 }FText;
 
 void*
@@ -23,29 +24,35 @@ ftext_create(){
 	struct Sprite* spr;
 	FText* txt = (FText*)tl_malloc(sizeof(FText));
 	memset(txt,0,sizeof(FText));
-	
+	txt->size = 20;//18
 	txt->spr = sprite_create("txt0",10,20,65,65,0);
 
 	spr = txt->spr;
 
 	sprite_rotateZ(spr,-PI/2);
 
+	//spr->zScale = 0.5;
+
 	spr->material = tmat_create_rgba("font1",64,64);//"font"
 	{
-		ftext_set(txt,"国",0,0);
-		ftext_set(txt,"家",15,0);
-		ftext_set(txt,"r",32,0);
+		int cw=0;
+		int w,h;
+		ftext_set(txt,"国",0,0,&w,&h);
+		cw+=w;
+		ftext_set(txt,"家",cw,0,&w,&h);
+		cw+=w;
+		ftext_set(txt,"r",cw,0,&w,&h);
 	}
 	return 0;
 }
 
 void 
-ftext_set(void* p,char* s,int x,int y){
+ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 	FText* txt = (FText*)p;
 	struct Sprite* spr = txt->spr;
 	GMaterial* mat = spr->material;
 	
-	int _size = 18;
+	int _size = txt->size;
 	int iWidth,iHeight;
 	unsigned char* rgba = (unsigned char*)tl_malloc(_size*_size*4);
 	//*eFormat = GL_BGRA;
@@ -53,6 +60,8 @@ ftext_set(void* p,char* s,int x,int y){
 
 	ft_load(rgba,_size,_size,&iWidth,&iHeight,s);
 	printf("%s:%d %d\n",s,iWidth,iHeight);
+	*pw = iWidth;
+	*ph = iHeight;
 	jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
 	tl_free((void*)rgba);
 }
