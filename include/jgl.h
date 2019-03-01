@@ -8,6 +8,12 @@ struct RGB {
 	GLubyte red;
 	//GLubyte alpha;
 };
+typedef struct RGBA { 
+	GLubyte blue;
+	GLubyte green;
+	GLubyte red;
+	//GLubyte alpha;
+}RGBA;
 /*
 	根据路径创建一张贴图
 	根据路径中.tga,.bmp创建不同类型的贴图
@@ -42,10 +48,25 @@ void
 jgl_subImage(GLuint texName,const char* imgUrl,int offsetX,int offsetY,int subImageWidth,int subImageHeight);
 
 /*
+ *向texName传递字节流数据更新texture
+ **/
+void 
+jsl_sub(GLuint texName,		//贴图句柄
+		GLubyte* pBytes,GLenum eFormat,GLenum type,
+		int offsetX,int offsetY,
+		int subImageWidth,int subImageHeight);
+
+/*
 	创建一块位图内存,并且填充为纯色,这里其实创建的是一块CPU中的缓冲区buffer
 */
 GLbyte*
 jgl_createRGB_Bitmap(int imageWidth,int imageHeight);
+
+/*
+	创建一块rgba位图内存,并且填充为透明色
+*/
+GLbyte*
+jgl_createRGBA(int imageWidth,int imageHeight);
 /************************************************************************/
 /* 指定内存块内的像素值                                                                     */
 /************************************************************************/

@@ -481,6 +481,15 @@ tmat_createTex(const char* glslType,GLint width,GLint height){
 	return tmat;
 }
 
+void* 
+tmat_create_rgba(const char* glslType,GLint width,GLint height){
+	struct GMaterial* tmat = (struct GMaterial*)tl_malloc(sizeof(struct GMaterial));
+	memset(tmat,0,sizeof(struct GMaterial));
+
+	return tmat;
+}
+
+
 void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f mat4x4,GLfloat* vertexs,int vertLen,int format,int mode)
 {
 	tmat_render(_material,shader,mat4x4);	

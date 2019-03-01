@@ -238,6 +238,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ftext.c"
+				>
+			</File>
+			<File
 				RelativePath="..\src\jgl.c"
 				>
 			</File>
@@ -320,6 +324,10 @@
 			</File>
 			<File
 				RelativePath="..\include\frame.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ftext.h"
 				>
 			</File>
 			<File

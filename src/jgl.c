@@ -60,7 +60,7 @@ printfRGB(GLbyte * bytes,int count){
 static GLuint
 f_loadImgLs(const char *szFileName,int width,int height,GLuint colorType);
 /*
-	创建一块位图内存,并且填充为纯色
+	创建一块rgb位图内存,并且填充为纯色
 */
 GLbyte*
 jgl_createRGB_Bitmap(int imageWidth,int imageHeight){
@@ -70,6 +70,19 @@ jgl_createRGB_Bitmap(int imageWidth,int imageHeight){
 	//printf("%d\n",sizeof(struct RGB));
 	return bytes;
 }
+
+/*
+	创建一块rgba位图内存,并且填充为透明色
+*/
+GLbyte*
+jgl_createRGBA(int imageWidth,int imageHeight){
+	int length = sizeof(struct RGBA) * imageWidth * imageHeight;
+	GLbyte* bytes = (GLbyte*)tl_malloc(length);
+	memset(bytes,0x00,length);
+	//printf("%d\n",sizeof(struct RGB));
+	return bytes;
+}
+
 /*
 	在指定位置绘制一个像素点
 
@@ -155,13 +168,18 @@ jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iC
 	*iComponents = GL_RGB;
 
 	{
-		//test
+		
+//#define __FTEXT_TEXT_
+#ifdef  __FTEXT_TEXT_
+		{
 		int fontSize = 32;
 		unsigned char* rgba = tl_malloc(fontSize*fontSize*4);
 		*eFormat = GL_BGRA;
 		*iComponents = GL_RGBA;
 		ft_load(rgba,fontSize,fontSize,iWidth,iHeight,"9");
 		return rgba;
+		}
+#endif
 	}
 	
 	
@@ -483,17 +501,39 @@ f_loadImg(const char* szFileName,GLenum* eFormat,GLenum* pType)
 }
 
 void 
-jgl_subImage(GLuint texName,const char* imgUrl,int offsetX,int offsetY,int subImageWidth,int subImageHeight)
+jgl_subImage(GLuint texName,const char* imgUrl,
+			 int offsetX,int offsetY,int subImageWidth,int subImageHeight)
 {
 	GLenum eFormat,type;
 	GLubyte* pBytes = f_loadImg(imgUrl,&eFormat,&type);
 	if(pBytes){
 		glBindTexture(GL_TEXTURE_2D, texName);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, subImageWidth,subImageHeight, eFormat,type, pBytes);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, 
+			subImageWidth,subImageHeight, eFormat,type, pBytes);
+		
 		glBindTexture(GL_TEXTURE_2D, 0);
 		tl_free(pBytes);
 	}else{
 		printf("纹理(%s)加载失败\n");
+		assert(0);
+	}
+}
+
+void 
+jsl_sub(GLuint texName,		//贴图句柄
+		GLubyte* pBytes,GLenum eFormat,GLenum type,
+		int offsetX,int offsetY,
+		int subImageWidth,int subImageHeight)
+{
+	if(pBytes){
+		glBindTexture(GL_TEXTURE_2D, texName);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, 
+			subImageWidth,subImageHeight, eFormat,type, pBytes);
+		
+		glBindTexture(GL_TEXTURE_2D, 0);
+		tl_free(pBytes);
+	}else{
+		log_code(ERROR_BAD_VALUE);//纹理数据不存在
 		assert(0);
 	}
 }

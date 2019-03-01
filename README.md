@@ -1,5 +1,11 @@
 ﻿**说明**  
 基于Opengl的3d引擎,C做的底层接口,Lua封装的组件  
+
+
+0.编译步骤  
+```
+common.bat ftfont.bat test.bat
+```
 1.优化精简tools.h接口  
 2.2019.1.24 **vbo模式的渲染的无法拾取,勿忘修复之.**  
 3.为3d对象添加一个接口targetToVec(x,y);让对象转向一个指向向量.  
@@ -77,4 +83,15 @@ f_char2w_char(wchar_t* pwsUnicode,int cnt,char* pze){
 	memset(pwsUnicode,0,sizeof(wchar_t) * iSize);
 	MultiByteToWideChar(CP_ACP,0,pze,-1,pwsUnicode,iSize);
 }
+```
+
+
+bug  
+```
+local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
+setMaterial(_floor,func_load("//resource//material//font.mat"));	
+setv(_floor,FLAGS_VISIBLE);
+--setv(_floor,FLAGS_RAY)
+setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
+setv(_floor,FLAGS_DISABLE_CULL_FACE);
 ```
