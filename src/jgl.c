@@ -15,7 +15,7 @@
 #include "jgl.h"
 #include "bmp.h"
 
-#include "ftfont.h"
+//#include "ftfont.h"
 
 
 //#define _DEBUG_PRINT_RGB_	//¥Ú”°rgb
@@ -168,7 +168,6 @@ jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iC
 	*iComponents = GL_RGB;
 
 	{
-		
 //#define __FTEXT_TEXT_
 #ifdef  __FTEXT_TEXT_
 		{
@@ -407,6 +406,20 @@ GLuint
 jgl_createRGB_Texture(int width,int height,GLuint colorType){
 	GLuint h = f_loadImgLs((const char*)NULL,width,height,colorType);
 	return h;
+}
+
+GLuint
+jgl_create_opengl_RGBA_Tex(int width,int height){
+	GLuint mTextureID = 0;
+	//∑÷≈‰“ªøÈÃ˘Õºª∫¥Ê
+	GLbyte* image = jgl_createRGBA(width,height);
+	glGenTextures(1,&mTextureID);
+	glBindTexture(GL_TEXTURE_2D,mTextureID);
+	glTexImage2D(GL_TEXTURE_2D,0,3,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,image);
+	f_setTex_parameteri();
+	glBindTexture(GL_TEXTURE_2D,0);//Ω‚≥˝∞Û∂®
+	tl_free((void*)image);
+	return mTextureID;
 }
 
 static GLuint

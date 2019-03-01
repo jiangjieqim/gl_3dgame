@@ -47,7 +47,7 @@ typedef struct GMaterial{
 	float _Alpha;
 
 	int flags;//材质标示符
-};
+}GMaterial;
 
 /*
 	创建一个材质,隐藏返回引用
@@ -96,4 +96,9 @@ void tmat_disposeTextureByIndex(struct GMaterial* ptr,int index);
 	根据索引获取纹理引用
 */
 GLuint tmat_getTextureByIndex(struct GMaterial* pmat,int index);
+
+
+void* 
+tmat_create_rgba(const char* glslType,GLint width,GLint height);
+
 #endif

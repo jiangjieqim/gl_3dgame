@@ -562,6 +562,7 @@ renderSprite(struct Sprite* p)
 			//渲染管线采用vbo模式
 			objVBO_renderNode(getvbo(p),material,
 				"spritevbo",
+				//"font",
 				p->mat4x4,
 				base_get_ploygonLineMode(base),base,NULL);
 		}else

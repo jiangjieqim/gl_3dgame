@@ -31,6 +31,9 @@ jgl_loadTex(const char *szFileName);
 GLuint
 jgl_createRGB_Texture(int width,int height,GLuint colorType);
 
+
+GLuint
+jgl_create_opengl_RGBA_Tex(int width,int height);
 ////////////////////////////////////////////////////////////////////
 // ¶ÁÈ¡tgaÎÄ¼þ
 // Allocate memory and load targa bits. Returns pointer to new buffer,

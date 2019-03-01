@@ -484,8 +484,14 @@ tmat_createTex(const char* glslType,GLint width,GLint height){
 void* 
 tmat_create_rgba(const char* glslType,GLint width,GLint height){
 	struct GMaterial* tmat = (struct GMaterial*)tl_malloc(sizeof(struct GMaterial));
+	GLuint tex;
 	memset(tmat,0,sizeof(struct GMaterial));
-
+	
+	tex=jgl_create_opengl_RGBA_Tex(width,height);
+	tmat->curTexIndex++;
+	f_tmat_createTexFromGPU(tmat,0,tex);
+	f_assignShader(tmat,glslType);
+	f_initMaterial(tmat);
 	return tmat;
 }
 
