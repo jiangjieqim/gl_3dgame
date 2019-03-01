@@ -8,6 +8,12 @@ struct RGB {
 	GLubyte red;
 	//GLubyte alpha;
 };
+typedef struct RGBA { 
+	GLubyte blue;
+	GLubyte green;
+	GLubyte red;
+	//GLubyte alpha;
+}RGBA;
 /*
 	根据路径创建一张贴图
 	根据路径中.tga,.bmp创建不同类型的贴图
@@ -55,6 +61,12 @@ jsl_sub(GLuint texName,		//贴图句柄
 */
 GLbyte*
 jgl_createRGB_Bitmap(int imageWidth,int imageHeight);
+
+/*
+	创建一块rgba位图内存,并且填充为透明色
+*/
+GLbyte*
+jgl_createRGBA(int imageWidth,int imageHeight);
 /************************************************************************/
 /* 指定内存块内的像素值                                                                     */
 /************************************************************************/
