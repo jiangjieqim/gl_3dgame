@@ -80,9 +80,14 @@ end
 	
 	
 --	test();
+local btn = btn_create(10,20,65,65);
 change_attr(nil,"ft_test");
 
+
 cam:position(0,0,-5);
+--[[
 local _floor = load_model(func_create_name(),"\\resource\\obj\\torus.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
 setMaterial(_floor,func_load("//resource//material//floor.mat"));
 setv(_floor,FLAGS_VISIBLE);	
+
+--]]

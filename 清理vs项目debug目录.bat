@@ -32,7 +32,4 @@ del common.dll ftfont.dll
 cd../lib
 del common.lib ftfont.lib
 
-
-
-
-pause
+::pause

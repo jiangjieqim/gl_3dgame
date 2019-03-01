@@ -32,19 +32,29 @@ ftext_create(){
 
 	spr->material = tmat_create_rgba("font1",64,64);//"font"
 	{
-		GMaterial* mat = spr->material;
-		int _size = 16;
-		int iWidth,iHeight;
-		unsigned char* rgba = (unsigned char*)tl_malloc(_size*_size*4);
-		//*eFormat = GL_BGRA;
-		//*iComponents = GL_RGBA;
-	
-		ft_load(rgba,_size,_size,&iWidth,&iHeight,"f");
-		printf("%d %d\n",iWidth,iHeight);
-		jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,0,0,iWidth,iHeight);
-		tl_free((void*)rgba);
+		ftext_set(txt,"¹ú",0,0);
+		ftext_set(txt,"¼Ò",15,0);
+		ftext_set(txt,"r",32,0);
 	}
 	return 0;
+}
+
+void 
+ftext_set(void* p,char* s,int x,int y){
+	FText* txt = (FText*)p;
+	struct Sprite* spr = txt->spr;
+	GMaterial* mat = spr->material;
+	
+	int _size = 18;
+	int iWidth,iHeight;
+	unsigned char* rgba = (unsigned char*)tl_malloc(_size*_size*4);
+	//*eFormat = GL_BGRA;
+	//*iComponents = GL_RGBA;
+
+	ft_load(rgba,_size,_size,&iWidth,&iHeight,s);
+	printf("%s:%d %d\n",s,iWidth,iHeight);
+	jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
+	tl_free((void*)rgba);
 }
 
 void
