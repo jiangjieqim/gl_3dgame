@@ -15,7 +15,7 @@
 #include "jgl.h"
 #include "bmp.h"
 
-//#include "ftfont.h"
+#include "ftfont.h"
 
 
 //#define _DEBUG_PRINT_RGB_	//¥Ú”°rgb
@@ -168,14 +168,16 @@ jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iC
 	*iComponents = GL_RGB;
 
 	{
-//#define __FTEXT_TEXT_//≤‚ ‘∫Í
+#define __FTEXT_TEXT_//≤‚ ‘∫Í
 #ifdef  __FTEXT_TEXT_
 		{
-		int fontSize = 32;
-		unsigned char* rgba = tl_malloc(fontSize*fontSize*4);
+		int w = 32;//32
+		int h = 32;
+		unsigned char* rgba = tl_malloc(w*h*4);
 		*eFormat = GL_BGRA;
 		*iComponents = GL_RGBA;
-		ft_load(rgba,fontSize,fontSize,iWidth,iHeight,"π˙");
+		//memset(rgba,255,fontSize*fontSize*4);
+		ft_load(rgba,w,h,iWidth,iHeight,"∫√");
 		return rgba;
 		}
 #endif

@@ -306,6 +306,7 @@ setHitTriangle(struct Sprite* spr)
 	int i = 0;
 	struct Vec2 a1,a2,a3,a4;
 	if(!spr->hitTriangle){
+		//没有设置可碰撞属性
 		return;
 	}
 
@@ -589,7 +590,7 @@ static void
 updateMatrix(struct Sprite* p)
 {
 	struct HeadInfo* b = p->base;
-	//p->zScale = 0.5;
+	//p->zScale = 1.5;
 	updateSpriteMat4x4(p,b->x,b->y,b->z,p->mWidth*p->zScale,p->mHeight*p->zScale,p->zScale,b->rx,b->ry,b->rz);
 }
 

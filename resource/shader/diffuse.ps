@@ -3,5 +3,11 @@
 uniform sampler2D texture1;
 void main(void){
 	vec4 finalColor=texture2D(texture1, gl_TexCoord[0].st);		
-	gl_FragColor = finalColor;
+
+	if(finalColor.a<=0.0)
+	{
+		discard;
+	}else{
+		gl_FragColor = finalColor;
+	}
 }

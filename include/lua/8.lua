@@ -4,14 +4,14 @@ dofile("..\\include\\lua\\core.lua");
 
 
 function test()
-	local btn = btn_create(10,20,64,64);
+	--local btn = btn_create(100,200,64,64);
 
 	---[[
 	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
 	setMaterial(_floor,func_load("//resource//material//floor.mat"));	
 	setv(_floor,FLAGS_VISIBLE);
 	--setv(_floor,FLAGS_RAY)
-	--setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
+	setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
 	--setv(_floor,FLAGS_DISABLE_CULL_FACE);
 
 	local r = 0;
@@ -51,7 +51,7 @@ function test()
 	func_setRotateZ(_floor,PI/2)
 	--]]
 
-	--setv(_floor,FLAGS_DRAW_PLOYGON_LINE)--线框
+	--scxzxAetv(_floor,FLAGS_DRAW_PLOYGON_LINE)--线框
 
 end
 
@@ -85,6 +85,8 @@ test();
 local bg = sprite_create("aa",10,20,65,65);
 func_setIcon(bg,"gundi.png");
 ]]
+
+
 change_attr(nil,"ft_test");
 
 

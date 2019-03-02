@@ -139,16 +139,16 @@ ft_load(unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,c
 		int platform_id = face->charmaps[i]->platform_id;
 		//printf("[%d]: \n encoding_id: %d \n platform_id: %d \n", i, encoding_id, platform_id);
 	}
-	//printf("固定尺寸个数: %d \n", face->num_fixed_sizes);
+	printf("固定尺寸个数: %d -->%d %d[%s]\n", face->num_fixed_sizes,fontw,fonth,str);
 
 
 	for(i = 0; i < face->num_fixed_sizes; i++)
 	{
 		int width = face->available_sizes[i].width;
 		int height = face->available_sizes[i].height;
-		//printf("[%d]: width: %d  height: %d \n", i, width, height);
+		printf("[%d]: width: %d  height: %d \n", i, width, height);
 	}
-	//printf("字符数: %d \n", face->num_glyphs);
+	printf("字符数: %d \n", face->num_glyphs);
 
 	//set=========================================================
 
@@ -187,7 +187,8 @@ ft_load(unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,c
 		}
 		else
 		{
-			printf("FT_GLYPH_FORMAT_BITMAP\n");//fon文件属于bitmap,不能render
+			printf("FT_GLYPH_FORMAT_BITMAP (可选的列表中找不到宽高符合要求的文本像素)fw=%d fh=%d\n",fontw,fonth);//fon文件属于bitmap,不能render
+			assert(0);
 		}
 
 		//提取数据
@@ -201,7 +202,7 @@ ft_load(unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,c
 			int advancex			= slot->advance.x>>6;	//字间水平跨距
 			int pitch				= slot->bitmap.pitch;	//宽 byte
 
-			//printf("[w = %d h = %d top = %d advancex = %d pitch = %d]\n",width,top,advancex,pitch);
+			printf("[w = %d h = %d top = %d advancex = %d pitch = %d]\n",width,height,top,advancex,pitch);
 
 			rgba = red2rgba(outBuffer,buffer, width * height);
 

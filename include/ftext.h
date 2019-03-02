@@ -11,4 +11,10 @@ ftext_create();
 /************************************************************************/
 void 
 ftext_set(void* p,char* s,int x,int y,int* pw,int* ph);
+
+/*
+ *	设置文本的屏幕坐标
+ */
+void 
+ftext_setpos(void* p,int x,int y);
 #endif
