@@ -12,6 +12,22 @@
 #include "sprite.h"
 #include "jgl.h"
 #include "ftfont.h"
+
+/*
+ *字体渲染识别不到alpha通道!
+ */
+
+
+
+/*
+*[0]: width: 6  height: 12
+[1]: width: 7  height: 13
+[2]: width: 7  height: 14
+[3]: width: 8  height: 15
+[4]: width: 8  height: 16
+[5]: width: 9  height: 17
+ *
+ **/
 typedef struct FText
 {
 	struct Sprite* spr;	
@@ -35,6 +51,7 @@ ftext_create(){
 	memset(txt,0,sizeof(FText));
 	//txt->size = 20;//18
 //6 12
+//中文使用12,11,字母可以使用任何尺寸的字体
 	txt->fw = 12*n;
 	txt->fh = 11*n;
 	txt->spr = sprite_create("txt0",0,0,txtWidth,txtHeight,0);
@@ -49,11 +66,11 @@ ftext_create(){
 
 	//spr->zScale = 0.5;
 
-	spr->material = tmat_create_rgba("font1",64,64);//"font"
+	spr->material = tmat_create_rgba("font1",64,64,GL_BGRA);//"font"
 	{
 		int cw=0;
 		int w,h;
-		ftext_set(txt,"文",0,0,&w,&h);
+		ftext_set(txt,"f",0,0,&w,&h);
 		cw+=w;
 	//	ftext_set(txt,"A",cw,0,&w,&h);
 		cw+=w;
@@ -85,7 +102,7 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 	memset(txt->_buffer,0,txt->_bufferLength);
 
 	ft_load(rgba,txt->fw,txt->fh,&iWidth,&iHeight,s);
-	printf("%s:%d %d\n",s,iWidth,iHeight);
+	printf("ft_load:%s:%d %d\n",s,iWidth,iHeight);
 	*pw = iWidth;
 	*ph = iHeight;
 	jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);

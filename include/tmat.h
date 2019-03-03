@@ -99,6 +99,6 @@ GLuint tmat_getTextureByIndex(struct GMaterial* pmat,int index);
 
 
 void* 
-tmat_create_rgba(const char* glslType,GLint width,GLint height);
+tmat_create_rgba(const char* glslType,GLint width,GLint height,GLenum rgbaType);
 
 #endif

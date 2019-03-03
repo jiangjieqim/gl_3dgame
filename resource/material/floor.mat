@@ -1,1 +1,1 @@
-<mat shader="diffuse" tex0="\resource\texture\box.tga"/>
+<mat shader="diffuse" tex0="\resource\texture\box.tga" texdesc="bauul,wolf"/>

@@ -13,6 +13,9 @@
 
 #include "ftfont.h"
 
+#define _DEBUG_DRAW_PIXEL_//是否打印日志
+
+
 static unsigned char* 
 red2rgba(unsigned char* rgba,unsigned char* red, int size){
 
@@ -21,14 +24,17 @@ red2rgba(unsigned char* rgba,unsigned char* red, int size){
 	//unsigned char* rgba = tl_malloc(buffersize);//new BYTE[4 * size];
 	
 	
-	
-	//printf("****************************\n");
+#ifdef _DEBUG_DRAW_PIXEL_
+	printf("****************************\n");
+#endif
 	for(i = 0 ; i < size; i++){
 		rgba[i * 4 + 0] = red[i];
 		rgba[i * 4 + 1] = red[i];
 		rgba[i * 4 + 2] = red[i];
 		rgba[i * 4 + 3] = red[i];
-		/*
+
+#ifdef _DEBUG_DRAW_PIXEL_
+		
 		printf("i = %d==>\t",i);
 		{
 			int k;
@@ -37,7 +43,7 @@ red2rgba(unsigned char* rgba,unsigned char* red, int size){
 			}
 		}
 		printf("\n");
-		*/
+#endif
 	}
 	return rgba;
 }
@@ -201,9 +207,9 @@ ft_load(unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,c
 			int top					= slot->bitmap_top;		//相对横基准线偏移
 			int advancex			= slot->advance.x>>6;	//字间水平跨距
 			int pitch				= slot->bitmap.pitch;	//宽 byte
-
+#ifdef _DEBUG_DRAW_PIXEL_
 			printf("[w = %d h = %d top = %d advancex = %d pitch = %d]\n",width,height,top,advancex,pitch);
-
+#endif
 			rgba = red2rgba(outBuffer,buffer, width * height);
 
 			//printf("需要的缓冲区%d字节(max:%d)\n",width *  height * 4,fontSize*fontSize*4);

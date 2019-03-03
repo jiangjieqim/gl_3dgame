@@ -11,7 +11,7 @@ function test()
 	setMaterial(_floor,func_load("//resource//material//floor.mat"));	
 	setv(_floor,FLAGS_VISIBLE);
 	--setv(_floor,FLAGS_RAY)
-	setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
+	--setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
 	--setv(_floor,FLAGS_DISABLE_CULL_FACE);
 
 	local r = 0;
@@ -88,9 +88,9 @@ func_setIcon(bg,"gundi.png");
 
 
 change_attr(nil,"ft_test");
+--cam:position(0,0,-5);
 
 
-cam:position(0,0,-5);
 --[[
 local _floor = load_model(func_create_name(),"\\resource\\obj\\torus.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
 setMaterial(_floor,func_load("//resource//material//floor.mat"));

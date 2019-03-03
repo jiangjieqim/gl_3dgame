@@ -17,6 +17,7 @@
 
 #include "ftfont.h"
 
+//#define __FTEXT_TEXT_//≤‚ ‘∫Í
 
 //#define _DEBUG_PRINT_RGB_	//¥Ú”°rgb
 
@@ -168,16 +169,17 @@ jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iC
 	*iComponents = GL_RGB;
 
 	{
-#define __FTEXT_TEXT_//≤‚ ‘∫Í
+
 #ifdef  __FTEXT_TEXT_
 		{
-		int w = 32;//32
-		int h = 32;
+		//6,12
+		int w = 18;//32
+		int h = 18;
 		unsigned char* rgba = tl_malloc(w*h*4);
 		*eFormat = GL_BGRA;
 		*iComponents = GL_RGBA;
 		//memset(rgba,255,fontSize*fontSize*4);
-		ft_load(rgba,w,h,iWidth,iHeight,"∫√");
+		ft_load(rgba,w,h,iWidth,iHeight,"A");
 		return rgba;
 		}
 #endif
@@ -411,13 +413,15 @@ jgl_createRGB_Texture(int width,int height,GLuint colorType){
 }
 
 GLuint
-jgl_create_opengl_RGBA_Tex(int width,int height){
+jgl_create_opengl_RGBA_Tex(int width,int height,GLenum rgbaType){
 	GLuint mTextureID = 0;
 	//∑÷≈‰“ªøÈÃ˘Õºª∫¥Ê
 	GLbyte* image = jgl_createRGBA(width,height);
 	glGenTextures(1,&mTextureID);
 	glBindTexture(GL_TEXTURE_2D,mTextureID);
-	glTexImage2D(GL_TEXTURE_2D,0,3,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,image);
+	
+//	GL_RGBA,GL_BGRA
+	glTexImage2D(GL_TEXTURE_2D,0,4,width,height,0,GL_BGRA,GL_UNSIGNED_BYTE,image);
 	f_setTex_parameteri();
 	glBindTexture(GL_TEXTURE_2D,0);//Ω‚≥˝∞Û∂®
 	tl_free((void*)image);
