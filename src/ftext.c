@@ -59,6 +59,7 @@ ftext_create(){
 	txt->_buffer = tl_malloc(txt->_bufferLength);
 
 	spr = txt->spr;
+	//ex_setv(spr,FLAGS_SPRITE_RENDER_LINE);
 
 	//printf("临时缓冲区的大小 %d bytes\n",txt->_bufferLength);
 

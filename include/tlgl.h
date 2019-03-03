@@ -29,6 +29,8 @@
 #define FLAGS_DRAW_PLOYGON_POINT	8192	//点模式
 #define FLAGS_DISABLE_CULL_FACE		16384	//设置显示双面
 #define FLAGS_REVERSE_FACE			32768	//反转渲染面
+//#define FLAGS_SPRITE_RENDER_LINE	65536	//为Sprite增加一次line选人
+
 
 #define SHADER_FLAG_FLAT_COLOR			0x01	//设置平滑着色器
 

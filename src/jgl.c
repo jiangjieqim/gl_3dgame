@@ -76,7 +76,7 @@ jgl_createRGB_Bitmap(int imageWidth,int imageHeight){
 	创建一块rgba位图内存,并且填充为透明色
 */
 GLbyte*
-jgl_createRGBA(int imageWidth,int imageHeight){
+jgl_createRGBA_buffer(int imageWidth,int imageHeight){
 	int length = sizeof(struct RGBA) * imageWidth * imageHeight;
 	GLbyte* bytes = (GLbyte*)tl_malloc(length);
 	memset(bytes,0x00,length);
@@ -416,7 +416,7 @@ GLuint
 jgl_create_opengl_RGBA_Tex(int width,int height,GLenum rgbaType){
 	GLuint mTextureID = 0;
 	//分配一块贴图缓存
-	GLbyte* image = jgl_createRGBA(width,height);
+	GLbyte* image = jgl_createRGBA_buffer(width,height);
 	glGenTextures(1,&mTextureID);
 	glBindTexture(GL_TEXTURE_2D,mTextureID);
 	

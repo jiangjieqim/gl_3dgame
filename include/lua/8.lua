@@ -4,7 +4,7 @@ dofile("..\\include\\lua\\core.lua");
 
 
 function test()
-	--local btn = btn_create(100,200,64,64);
+	local btn = btn_create(0,0,64,64);
 
 	---[[
 	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad

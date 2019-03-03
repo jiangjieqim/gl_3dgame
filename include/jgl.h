@@ -69,7 +69,7 @@ jgl_createRGB_Bitmap(int imageWidth,int imageHeight);
 	创建一块rgba位图内存,并且填充为透明色
 */
 GLbyte*
-jgl_createRGBA(int imageWidth,int imageHeight);
+jgl_createRGBA_buffer(int imageWidth,int imageHeight);
 /************************************************************************/
 /* 指定内存块内的像素值                                                                     */
 /************************************************************************/
