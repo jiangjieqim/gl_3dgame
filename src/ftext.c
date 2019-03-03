@@ -17,8 +17,6 @@
  *字体渲染识别不到alpha通道!
  */
 
-
-
 /*
 *[0]: width: 6  height: 12
 [1]: width: 7  height: 13
@@ -50,6 +48,7 @@ ftext_create(){
 	FText* txt = (FText*)tl_malloc(sizeof(FText));
 	memset(txt,0,sizeof(FText));
 	//txt->size = 20;//18
+
 //6 12
 //中文使用12,11,字母可以使用任何尺寸的字体
 	txt->fw = 12*n;
@@ -71,7 +70,7 @@ ftext_create(){
 	{
 		int cw=0;
 		int w,h;
-		ftext_set(txt,"f",0,0,&w,&h);
+		ftext_set(txt,"R",0,0,&w,&h);
 		cw+=w;
 	//	ftext_set(txt,"A",cw,0,&w,&h);
 		cw+=w;
@@ -103,7 +102,7 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 	memset(txt->_buffer,0,txt->_bufferLength);
 
 	ft_load(rgba,txt->fw,txt->fh,&iWidth,&iHeight,s);
-	printf("ft_load:%s:%d %d\n",s,iWidth,iHeight);
+	//printf("ft_load:%s:%d %d\n",s,iWidth,iHeight);
 	*pw = iWidth;
 	*ph = iHeight;
 	jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);

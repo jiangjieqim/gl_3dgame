@@ -148,6 +148,9 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 cam:position(0,-10,-10);
 cam:rx(PI * 1.8);
 
+
+
+
 --print(unit);
 
 --local a1 = Unit:create("box");

@@ -4,7 +4,7 @@ dofile("..\\include\\lua\\core.lua");
 
 
 function test()
-	local btn = btn_create(0,0,64,64);
+	local btn = btn_create(0,0);
 
 	---[[
 	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
@@ -79,7 +79,7 @@ end
 	evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 	
 	
-test();
+--test();
 --local btn = btn_create(10,20,65,65);
 --[[
 local bg = sprite_create("aa",10,20,65,65);
@@ -87,7 +87,7 @@ func_setIcon(bg,"gundi.png");
 ]]
 
 
-change_attr(nil,"ft_test");
+--change_attr(nil,"ft_test");
 --cam:position(0,0,-5);
 
 

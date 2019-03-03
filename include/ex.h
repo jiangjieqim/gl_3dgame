@@ -176,7 +176,7 @@ struct EX
 	/*
 		默认材质
 	*/
-	void* defaultMaterial;
+	//void* defaultMaterial;
 	
 	
 	
@@ -349,7 +349,7 @@ void setLookTarget(void* ptr,float x,float y,float z);
 /*
 	获取引擎的一个默认材质,共享使用,在处理没有材质的时候后调用
 */
-void* ex_get_defaultMaterial();
+//void* ex_get_defaultMaterial();
 
 
 /************************************************************************/

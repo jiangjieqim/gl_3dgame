@@ -14,7 +14,7 @@
 #include "tl_malloc.h"
 #include "base.h"
 
-#define SET_FLAGS_SPRITE_RENDER_LINE//渲染线框,用于调试
+#define _SPRITE_RENDER_LINE_//渲染线框,用于调试
 
 
 //构造两个三角形所需要的数据大小(Glfloat数据的个数)
@@ -540,8 +540,16 @@ getMaterial(struct Sprite* p){
 			return p->material;
 		}
 
+		{
+			HeadInfo* head = (HeadInfo*)p->base;
+			printf("getMaterial %s ,没有设置图集也没有默认材质\n",head->name);
+			assert(0);//这里需要对没有设置材质的对象进行修复!!!
+		}
+		
+		return 0;
+
 		//使用引擎中的一个默认的材质
-		return ex_get_defaultMaterial();
+		//return ex_get_defaultMaterial();
 	}
 	return p->atals->material;
 }
@@ -574,7 +582,9 @@ renderSprite(struct Sprite* p)
 				shaderName,
 				p->mat4x4,
 				base_get_ploygonLineMode(base),base,NULL);
-#ifdef SET_FLAGS_SPRITE_RENDER_LINE
+
+
+#ifdef _SPRITE_RENDER_LINE_
 
 			//if(getv(&base->flags,FLAGS_SPRITE_RENDER_LINE)){
 				//添加线框渲染

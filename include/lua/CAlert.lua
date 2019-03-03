@@ -57,7 +57,10 @@ function Alert:create()
 		local y = 0;
 		
 		self.bg = sprite_create("alert",x,y,w,h);
+		func_setIcon(self.bg,"gundi.png");
 		--print(self.closeBtn)
+		
+		
 		self.closeBtn=btn_create(x,y,30,30);
 		--print(self)
 		

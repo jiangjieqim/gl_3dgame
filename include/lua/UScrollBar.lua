@@ -182,7 +182,9 @@ scrollBar_new(x,y)
 	
 	--创建小按钮
 	local btn=sprite_create(name,x,y,barSize,barSize,dragDirection);
+	func_setIcon(btn,"smallbtn.png")
 	evt_on(btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move);
+	
 
 	--设置可拖拽范围
 	sprite_setDragScope(btn,0,0,defaultBg_width,defaultBg_height);
