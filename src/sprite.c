@@ -545,11 +545,7 @@ getMaterial(struct Sprite* p){
 			printf("getMaterial %s ,没有设置图集也没有默认材质\n",head->name);
 			assert(0);//这里需要对没有设置材质的对象进行修复!!!
 		}
-		
 		return 0;
-
-		//使用引擎中的一个默认的材质
-		//return ex_get_defaultMaterial();
 	}
 	return p->atals->material;
 }

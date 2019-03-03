@@ -168,18 +168,7 @@ struct EX
 
 	Matrix44f ui_perspectiveMatrix;
 	Matrix44f ui_modelViewMatrix;
-
-	
-
 	//struct Atals* myAtals;//废弃
-
-	/*
-		默认材质
-	*/
-	//void* defaultMaterial;
-	
-	
-	
 };
 
 //接口定义
@@ -346,10 +335,6 @@ void ex_ptrRemove(void* ptr);
  *设置对象的朝向目标
  */
 void setLookTarget(void* ptr,float x,float y,float z);
-/*
-	获取引擎的一个默认材质,共享使用,在处理没有材质的时候后调用
-*/
-//void* ex_get_defaultMaterial();
 
 
 /************************************************************************/

@@ -68,18 +68,6 @@ struct EX* ex_getInstance(){
 }//引擎实例引用
 
 /*
-"//resource//texture//1.tga"
-*/
-//void*
-//ex_get_defaultMaterial(){
-//	if(!ex_getInstance()->defaultMaterial){
-//		ex_getInstance()->defaultMaterial =	tmat_create("spritevbo",0);//没有传递贴图
-//	}
-//
-//	return ex_getInstance()->defaultMaterial;
-//}
-
-/*
 	计算fps
 */
 static void 
