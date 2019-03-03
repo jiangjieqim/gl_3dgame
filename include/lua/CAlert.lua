@@ -153,5 +153,5 @@ function alert(str)
 end
 
 --初始化一下界面
-local _alert = alert();
-_alert:hide();
+--local _alert = alert();
+--_alert:hide();

@@ -88,7 +88,7 @@ func_setIcon(bg,"gundi.png");
 
 
 --change_attr(nil,"ft_test");
---cam:position(0,0,-5);
+cam:position(0,0,-5);
 
 
 --[[
@@ -97,3 +97,11 @@ setMaterial(_floor,func_load("//resource//material//floor.mat"));
 setv(_floor,FLAGS_VISIBLE);	
 
 --]]
+
+
+--unit =  Unit:create("box1")--unit_create();
+
+
+
+
+

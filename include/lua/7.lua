@@ -1,7 +1,7 @@
 dofile("..\\include\\lua\\core.lua");
 
 
-
+--FLAGS_DRAW_RAY_COLLISION
 --[[
 function f_load_md2()
 	md2=load_VBO_model(func_create_name(),"\\resource\\md2\\horse.md2");
@@ -39,6 +39,7 @@ end
 
 local function f_create_clickBox()
 	local url = "\\resource\\obj\\box.obj";
+	--	func_create_name()
 	local obj = load_VBO_model(func_create_name(),url);
 	setMaterial(obj,func_load("//resource//material//triangle.mat"));		
 	setv(obj,FLAGS_DRAW_PLOYGON_LINE)--线框
@@ -94,11 +95,16 @@ scrollBar_bind(animsc,f_animscHandle)
 --创建一个角色
 unit =  Unit:create("box1")--unit_create();
 unit:set_speed(600);
-
 _selectBox = f_create_clickBox();
+--alert("AAbb");
 
 local function f_on_click_floor_handle(data)
 	--print('##',data);
+	
+	if(func_fps()<=-1)then
+		return;
+	end
+	
 	local xml = xml_load_str(data);
 	local node = xml_get_node_by_index(xml,0);
 	local x = xml_get_float(node,"x")

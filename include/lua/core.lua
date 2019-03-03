@@ -472,7 +472,10 @@ end
 
 --´´½¨Ãû×Ö
 function 
-func_create_name()
+func_create_name(name)
+	if(name) then
+		return name;
+	end
 	return getName()
 end
 
