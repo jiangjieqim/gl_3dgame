@@ -28,6 +28,12 @@ function Alert:f_center()
 	self:f_resize_window_child();
 end;
 
+function Alert:hide()
+	resetv(self.bg,FLAGS_VISIBLE);
+	resetv(self.label,FLAGS_VISIBLE);
+	btn_visible(self.closeBtn,false);
+end
+
 function Alert:create()
 
 	local new_sharp = { 
@@ -52,6 +58,8 @@ function Alert:create()
 		self:f_center();
 	end;
 	--###########################################################
+	
+	
 	f_init = function(w,h)
 		local x = 0;
 		local y = 0;
@@ -72,10 +80,12 @@ function Alert:create()
 					--self.f_hides();
 					--print(1);
 					--print(self,self.bg,self.label,self.closeBtn);
-					
+					--[[
 					resetv(self.bg,FLAGS_VISIBLE);
 					resetv(self.label,FLAGS_VISIBLE);
 					btn_visible(self.closeBtn,false);
+					--]]
+					self:hide();
 				end
 		);
 		
@@ -126,6 +136,7 @@ function Alert:set_drag(value)
 end
 
 function alert(str)
+	str = str or "";
 	if(alert1 == nil) then
 		alert1 = Alert:create();
 		alert1.f_init(300,100);
@@ -138,4 +149,9 @@ function alert(str)
 	
 	--self:set_drag(false)
 	alert1:show(str);
+	return alert1;
 end
+
+--初始化一下界面
+local _alert = alert();
+_alert:hide();

@@ -1,5 +1,7 @@
 dofile("..\\include\\lua\\core.lua");
 
+
+
 --[[
 function f_load_md2()
 	md2=load_VBO_model(func_create_name(),"\\resource\\md2\\horse.md2");
@@ -53,12 +55,12 @@ fps();
 infowin_show(0,20);
 
 
-
 ---[[
 local function f_btnClick(b)
 	--cam:rotate(5000);
 	--print("==========\t"..b)
-	alert("==========\t"..b);
+	--print(b);
+	alert("AAbb");
 end
 
 local function f_btnDown(b)
@@ -68,6 +70,9 @@ end
 local btn = btn_create(100,20);
 btn_bindClick(btn,f_btnClick);
 --btn_bindDown(btn,f_btnDown);
+
+
+
 
 ---[[
 local function f_animscHandle(sc)
@@ -113,6 +118,9 @@ end
 
 ---[[--创建一个地板
 local floor_ptr = f_create_floor(50);
+
+
+
 evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
 
 
@@ -150,10 +158,12 @@ cam:rx(PI * 1.8);
 
 
 
-
 --print(unit);
 
 --local a1 = Unit:create("box");
 --a1:set_speed(10);
 --print(a1);
 ----------------------------------
+
+--alert("AAbb");
+
