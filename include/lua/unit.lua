@@ -170,6 +170,9 @@ function Unit:move(x,y,z)
 	--print(string.format("需要行走的距离 = %.3f",distance));
 	
 	--func_move(o,distance * 1000,x,y,z);--(一个单位距离用1秒的速度);
+	
+	--print("需要的时间:"..(distance * self.speed));
+	
 	func_move(o,distance * self.speed,x,y,z);
 	--func_move(self.box,distance * self.speed,x,y,z);
 end

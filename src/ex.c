@@ -67,20 +67,41 @@ struct EX* ex_getInstance(){
 	return &g_ex;
 }//引擎实例引用
 
+#define _FPS_FACTOR_ 16.66	//1000/60 fps因子	16.66毫秒计算一次
 /*
 	计算fps
 */
 static void 
 f_calculate_fps(){
+/*
+	//此方法会有1秒的计算延迟
 	static float _fps = 0;        
 	static float lastTime = 0.0f; 
 	float currentTime = get_longTime()*0.001;//(float)clock()*0.001f;
+
 	++_fps;
 	if( currentTime - lastTime > 1.0f ){
+		
 		lastTime = currentTime;
 		g_fps = (int)_fps;
 		_fps = 0;
 	}
+*/
+
+
+	static float _fps = 0;        
+	static float lastTime = 0.0f; 
+	float currentTime = get_longTime();//(float)clock()*0.001f;
+
+	++_fps;
+
+	//printf("_fps = %.3f g_fps = %d\n",_fps,g_fps);
+	if( currentTime - lastTime > _FPS_FACTOR_ ){
+		lastTime = currentTime;
+		g_fps = (int)(_fps*1000/_FPS_FACTOR_);//(int)(_fps/1000);
+		_fps = 0;
+	}
+
 }
 static int 
 f_get_fps(){
@@ -793,16 +814,19 @@ void ex_updatePerspctiveModelView()
 static void 
 _new(){
 	struct EX* p = ex_getInstance();
-	
-	//if(!p->_isinit){
+	//计算fps
+	f_calculate_fps();
+
+	if(!p->_isinit){
 		if(g_fps == -1){
-			printf("fps = %d\n",g_fps);
+			printf("fps = %d\t%ld\n",get_longTime(),g_fps);
 		}else{
 			
 			evt_dispatch(p,EVENT_ENGING_INIT,0);
 			p->_isinit = 1;
 		}
-	//}
+	}
+
 	//long _time;
 	if(p->_screenWidth <= 0 || p->_screenHeight<=0)
 	{
@@ -877,8 +901,7 @@ _new(){
 
 	glutSwapBuffers ();
 	glutPostRedisplay ();
-	//计算fps
-	f_calculate_fps();
+	
 
 	//渐变管理器回调
 	//ramp_callBack();
@@ -889,7 +912,7 @@ _new(){
 		p->loopCallBack();
 	}
 
-	tween_run(_longTime);
+	tween_run(_longTime,g_delayTime);
 
 	
 
@@ -1750,13 +1773,14 @@ ex_lua_global_evt_dispatch(int evtid){
 void 
 ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
 	lua_State* L =ex_getInstance()->mylua;
-	lua_getglobal(L,"evt_dispatch");
-	lua_pushinteger(L,(int)obj);
-	lua_pushinteger(L,evtid);
-	lua_pushstring(L,data);
-	lua_pcall(L,3,0,0);
+	if(L){
+		lua_getglobal(L,"evt_dispatch");
+		lua_pushinteger(L,(int)obj);
+		lua_pushinteger(L,evtid);
+		lua_pushstring(L,data);
+		lua_pcall(L,3,0,0);
+	}
 }
-
 
 void 
 setLookTarget(void* ptr,float x,float y,float z)

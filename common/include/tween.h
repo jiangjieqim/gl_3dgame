@@ -22,5 +22,5 @@ DLLIMPORT void
 tween_stop(void* ptr);
 //将此方法放在渲染循环里
 DLLIMPORT void
-tween_run(long _longTime);
+tween_run(long _longTime,long delayTime);
 #endif

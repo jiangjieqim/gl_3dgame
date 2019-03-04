@@ -129,7 +129,7 @@ evt_off(void* ptr,int event,void (*evtCallBack)(int,void*)){
 			LStack_delNode(s,data);
 			tl_free((void*)node);
 
-			printf("len= %d\n",LStack_length(s));
+			//printf("len= %d\n",LStack_length(s));
 		}
 	}
 
@@ -155,8 +155,10 @@ evt_dispatch(void* ptr,int evtID,void* sendData){
 			node->ptr(evtID,sendData);
 			if(node->removed)
 			{
-				//printf("É¾³ý id = %d\n",evtID);
-				evt_off(node->ptr,evtID,sendData);
+				//printf("%d\n",LStack_length(s));
+				evt_off(ptr,node->evtId,node->ptr);
+				//printf("%d\n",LStack_length(s));
+				break;
 			}
 		}
 	}

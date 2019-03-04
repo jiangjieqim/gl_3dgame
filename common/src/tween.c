@@ -1,6 +1,7 @@
 #include <memory.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <assert.h>
 
 #define BUILDING_DLL
 
@@ -126,10 +127,15 @@ f_nodeRun(TweenNode* _node,TNode* _nptr,int i){
 	double f = (e-s)/v;
 	if(v <= 0) return;
 	
+	//printf("ֵ�仯:%d f = %.3f,e = %.3f,s = %.3f,v = %.3f \t g_delay = %ld\n",_nptr,f,e,s,v,g_delay);
+
+	//assert(0);
 	/*double* ptr = (double*)_nptr->p;
 	*ptr += v;*/
 	//printf("%.3f\t%.3f\n",s,(double*)_nptr->p);
 	//printf("delay_time = %ld\n",ex_delay_time());
+
+
 	if(f > 0 && *_nptr->p+f > e||f<0 && *_nptr->p+f < e){
 		*_nptr->p = e;
 	}else{
@@ -173,13 +179,13 @@ tween_is_play(void* ptr){
 	return 0;
 }
 void
-tween_run(long _longTime){
+tween_run(long _longTime,long delayTime){
 	struct LStackNode* s = (struct LStackNode* )g_list;
 	void* top,*p;
 
 	if(!g_list)	return;
 
-	g_delay = _longTime - g_last;
+	g_delay = delayTime;//_longTime - g_last;
 	
 	if(g_delay < 1 )	return;
 

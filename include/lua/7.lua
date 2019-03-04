@@ -101,9 +101,9 @@ _selectBox = f_create_clickBox();
 local function f_on_click_floor_handle(data)
 	--print('##',data);
 	
-	if(func_fps()<=-1)then
-		return;
-	end
+--	if(func_fps()<=-1)then
+--		return;
+--	end
 	
 	local xml = xml_load_str(data);
 	local node = xml_get_node_by_index(xml,0);
