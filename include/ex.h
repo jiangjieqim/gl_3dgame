@@ -172,7 +172,7 @@ struct EX
 	Matrix44f ui_modelViewMatrix;
 	//struct Atals* myAtals;//废弃
 	
-	int _isinit;//引擎是否已经初始化
+	//int _isinit;//引擎是否已经初始化
 };
 
 //接口定义

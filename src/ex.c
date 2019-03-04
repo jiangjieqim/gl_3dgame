@@ -67,7 +67,10 @@ struct EX* ex_getInstance(){
 	return &g_ex;
 }//引擎实例引用
 
-#define _FPS_FACTOR_ 16.66	//1000/60 fps因子	16.66毫秒计算一次
+/*
+	/1000/60 fps因子	代表16.66毫秒(即1/60秒)计算一次fps	
+*/
+#define _FPS_FACTOR_ 16.66
 /*
 	计算fps
 */
@@ -814,18 +817,19 @@ void ex_updatePerspctiveModelView()
 static void 
 _new(){
 	struct EX* p = ex_getInstance();
+	
+
+	//if(!p->_isinit){
+	//	if(g_fps == -1){//
+	//		printf("fps = %d\t%ld\n",get_longTime(),g_fps);
+	//	}else{
+	//		
+	//		evt_dispatch(p,EVENT_ENGING_INIT,0);
+	//		p->_isinit = 1;
+	//	}
+	//}
 	//计算fps
 	f_calculate_fps();
-
-	if(!p->_isinit){
-		if(g_fps == -1){
-			printf("fps = %d\t%ld\n",get_longTime(),g_fps);
-		}else{
-			
-			evt_dispatch(p,EVENT_ENGING_INIT,0);
-			p->_isinit = 1;
-		}
-	}
 
 	//long _time;
 	if(p->_screenWidth <= 0 || p->_screenHeight<=0)
