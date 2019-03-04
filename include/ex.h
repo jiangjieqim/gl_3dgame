@@ -57,6 +57,8 @@
 #define EVENT_ENGINE_SPRITE_CLICK		   104//click
 #define EVENT_ENGINE_SPRITE_CLICK_DOWN	   105//click down
 #define EVENT_ENGINE_SPRITE_CLICK_MOVE	   106//click move
+
+#define EVENT_ENGING_INIT 107	//引擎初始化完成
 //键盘事件状态
 struct E_KeyBoard
 {
@@ -169,6 +171,8 @@ struct EX
 	Matrix44f ui_perspectiveMatrix;
 	Matrix44f ui_modelViewMatrix;
 	//struct Atals* myAtals;//废弃
+	
+	int _isinit;//引擎是否已经初始化
 };
 
 //接口定义

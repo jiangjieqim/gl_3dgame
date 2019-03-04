@@ -9,7 +9,9 @@
 //绑定事件
 DLLIMPORT void
 evt_on(void* ptr,int id,void (*evtCallBack)(int,void*));
-
+//监听一次释放掉事件
+DLLIMPORT void
+evt_once(void* ptr,int id,void (*evtCallBack)(int,void*));
 //解绑事件
 DLLIMPORT void
 evt_off(void* ptr,int id,void (*evtCallBack)(int,void*));

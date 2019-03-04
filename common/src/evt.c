@@ -13,6 +13,11 @@ struct EvtInfo{
 	 *	回调函数引用
 	 */
 	void (*ptr)(int evtId,void* data);
+	
+	/************************************************************************/
+	/* 用完事件直接删除                                                                     */
+	/************************************************************************/
+	int removed;
 };
 
 
@@ -78,6 +83,26 @@ evt_on(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
 	LStack_push(list,data);
 }
 
+void
+evt_once(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
+	void* evtList = f_get(ptr);
+
+	struct EvtInfo* data;
+	struct LStackNode* list;
+
+	if(!f_check_evt(evtList,evtId,evtCallBack)){
+		return;
+	}
+	data = (struct EvtInfo*)tl_malloc(sizeof(struct EvtInfo));
+	data->removed = 1;
+	data->evtId = evtId;
+	data->ptr = evtCallBack;
+	list =(struct LStackNode*)evtList;
+	LStack_push(list,data);
+
+}
+
+
 //解绑事件
 void
 evt_off(void* ptr,int event,void (*evtCallBack)(int,void*)){
@@ -87,6 +112,8 @@ evt_off(void* ptr,int event,void (*evtCallBack)(int,void*)){
 	void* top,*p;
 	top = s;
 	p=top;
+
+	
 	while((int)LStack_next(p)){
 		int data;
 
@@ -101,6 +128,8 @@ evt_off(void* ptr,int event,void (*evtCallBack)(int,void*)){
 			node->ptr = 0;
 			LStack_delNode(s,data);
 			tl_free((void*)node);
+
+			printf("len= %d\n",LStack_length(s));
 		}
 	}
 
@@ -124,6 +153,11 @@ evt_dispatch(void* ptr,int evtID,void* sendData){
 
 		if(node->evtId == evtID){
 			node->ptr(evtID,sendData);
+			if(node->removed)
+			{
+				//printf("删除 id = %d\n",evtID);
+				evt_off(node->ptr,evtID,sendData);
+			}
 		}
 	}
 

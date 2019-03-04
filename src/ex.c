@@ -793,6 +793,16 @@ void ex_updatePerspctiveModelView()
 static void 
 _new(){
 	struct EX* p = ex_getInstance();
+	
+	//if(!p->_isinit){
+		if(g_fps == -1){
+			printf("fps = %d\n",g_fps);
+		}else{
+			
+			evt_dispatch(p,EVENT_ENGING_INIT,0);
+			p->_isinit = 1;
+		}
+	//}
 	//long _time;
 	if(p->_screenWidth <= 0 || p->_screenHeight<=0)
 	{
@@ -880,6 +890,9 @@ _new(){
 	}
 
 	tween_run(_longTime);
+
+	
+
 	//printf("**** %d\n",p->fps);
 }
 void ex_render(void)

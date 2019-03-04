@@ -16,7 +16,6 @@
 
 #define _SPRITE_RENDER_LINE_//渲染线框,用于调试
 
-
 //构造两个三角形所需要的数据大小(Glfloat数据的个数)
 enum {
 	//uv vertex
