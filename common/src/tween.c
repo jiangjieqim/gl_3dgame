@@ -10,6 +10,9 @@
 #include "tl_malloc.h"
 #include "gettime.h"
 //#include "ex.h"
+
+#define _DEBUG_
+
 static struct LStackNode* g_list;
 
 
@@ -123,12 +126,11 @@ f_nodeRun(TweenNode* _node,TNode* _nptr,int i){
 	double s = _nptr->s;
 	double e = _nptr->t;
 	//int c = 20;//_node->needTime / ex_delay_time();
-	double v = _node->needTime/g_delay;
-	double f = (e-s)/v;
+	double v = _node->needTime/g_delay;//v代表需要执行此循环的次数
+	double f = (e-s)/v;//f代表每次移动的变化值
 	if(v <= 0) return;
 	
-	//printf("值变化:%d f = %.3f,e = %.3f,s = %.3f,v = %.3f \t g_delay = %ld\n",_nptr,f,e,s,v,g_delay);
-
+	
 	//assert(0);
 	/*double* ptr = (double*)_nptr->p;
 	*ptr += v;*/
@@ -143,6 +145,13 @@ f_nodeRun(TweenNode* _node,TNode* _nptr,int i){
 	}
 //	printf("%d** %d %.3f\n\n",i,_nptr->p,*_nptr->p);
 //	printf("%ld v = %.3f p = %.3f %.3f \t%ld %.3f\n",_node->useTime,v,*_nptr->p,e,g_delay,f);
+//	
+#ifdef _DEBUG_
+	printf("值变化:%d f = %.3f,e = %.3f,s = %.3f,v = %.3f \t needtime = %d\t g_delay = %ld r = %.3f\n",
+		_nptr,f,e,s,v,
+		_node->needTime,
+		g_delay,*_nptr->p);
+#endif
 }
 //处理一个节点
 static void

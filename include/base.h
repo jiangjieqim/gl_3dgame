@@ -121,7 +121,8 @@ typedef struct HeadInfo{
 		所属的父对象
 	*/
 	void* parent;
-	void* _tweenPtr;
+	void* _move_tp;
+	void* _ry_tp;
 }HeadInfo;
 
 /*
@@ -240,6 +241,12 @@ void base_set_suffix(struct HeadInfo* base,const char* str);
 */
 GLboolean base_cullface(struct HeadInfo* base);
 //==========================================================================
+
+/*
+ *ms毫秒y轴旋转至ry
+ **/
+void 
+base_rotate_to(HeadInfo* bp,float ms,float ry);
 
 /*
 	开始检测

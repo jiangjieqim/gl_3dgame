@@ -177,6 +177,13 @@ function Unit:move(x,y,z)
 	--func_move(self.box,distance * self.speed,x,y,z);
 end
 
+--以一定速度转向目标
+function Unit:rotateTo(x,y,z,time)
+    --local s = string.format("%.3f\t%.3f\t%.3f\ttime=%.3f\n",x,y,z,time);
+    --print(s);
+    func_look_at(self.p,x,y,z,time);
+end
+
 function Unit:set_anim(ani)
 	func_set_anim(self.p,ani);
 end

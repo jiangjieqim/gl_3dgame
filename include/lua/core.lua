@@ -719,9 +719,10 @@ end
 function func_get_rotate(o)
 	return get_attr(o,"rotate");
 end
---让角色朝向某个方向
-function func_look_at(o,x,y,z)
-	change_attr(o,"lookat",string.format("%f,%f,%f",x,y,z));
+--让角色按照time毫秒转向某个方向
+function func_look_at(o,x,y,z,time)
+    time = time or 0;
+	change_attr(o,"lookat",string.format("%f,%f,%f,%f",x,y,z,time));
 end
 
 function func_set_position(o,x,y,z)

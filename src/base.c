@@ -645,6 +645,19 @@ void base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
 	p->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);
 	base_updateMat4x4(p);
 }
+static void
+f_ry_tpUpdate(void* p){
+	HeadInfo* ptr = (HeadInfo*)p;
+	base_updateMat4x4(ptr);
+}
+void 
+base_rotate_to(HeadInfo* bp,float ms,float ry){
+	void* _tweenPtr = bp->_ry_tp;
+	if(_tweenPtr && tween_is_play(_tweenPtr)){
+		tween_stop(_tweenPtr);
+	}
+	bp->_ry_tp=tween_to(bp,ms,0,f_ry_tpUpdate,2,&(bp->ry),ry);
+}
 
 void 
 base_move(HeadInfo* bp,int ms,
@@ -653,29 +666,13 @@ base_move(HeadInfo* bp,int ms,
 		void (*updateCallBack)(void*)
 		)
 {
-	//void* _tweenPtr;//可能会内存泄露
-	//HeadInfo* bp = base_get(ptr);
-	//Vec3 p;
-	//Vec3 t;
-	//Vec3 _dirc;//目标单位向量
-	//float distance;
-	//vec3Set(&p,bp->x,bp->y,bp->z);
-	//vec3Set(&t,x,y,z);
-
-	//从p -> t
-	/*
-	distance = vec3Distance(&p,&t);
-	vec3Sub(&t,&p,&_dirc);
-	vec3Normalize(&_dirc);
-	*/
-	
 	//printf("===========\n%d\n%d\n%d\n",&(bp->x),&(bp->y),&(bp->z));
-	void* _tweenPtr = bp->_tweenPtr;
+	void* _tweenPtr = bp->_move_tp;
 	if(_tweenPtr && tween_is_play(_tweenPtr))
 	{
 		tween_stop(_tweenPtr);
 	}
-	bp->_tweenPtr=tween_to(bp,ms,endCallBack,updateCallBack,
+	bp->_move_tp=tween_to(bp,ms,endCallBack,updateCallBack,
 		6,
 		&(bp->x),x,
 		&(bp->y),y,

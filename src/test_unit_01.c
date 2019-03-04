@@ -154,16 +154,7 @@ floor_rayPick(int evtId,void* data){
 
 		vec3Normalize(&pos);//求单位向量
 		{
-			//printf("************* %s,%.3f,%.3f,%.3f\t,%.3f,%.3f,%.3f\n", hit->name,hit->x,hit->y,hit->z,pos.x,pos.y,pos.z);
-			//double tangle = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);//设置角色的朝向
-			//
-			//log_color(0x00ff00,"角位移插值:%.3f -> %.3f = %.3f\n",ptrHorse->ry,tangle,tangle - ptrHorse->ry);
-			//
-			//ptrHorse->ry = tangle;
-			//base_updateMat4x4(ptrHorse);//更新角色矩阵
-		
-			base_look_at(ptrHorse,hit->x,hit->y,hit->z);
-			//base_move(ptrHorse,1000,hit->x,hit->y,hit->z,0,f_updateCallBack);
+			//base_look_at(ptrHorse,hit->x,hit->y,hit->z);s
 		}
 		//return;
 

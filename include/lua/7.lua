@@ -77,7 +77,9 @@ btn_bindClick(btn,f_btnClick);
 
 ---[[
 local function f_animscHandle(sc)
-	print("###"..sc.value)
+    local v = sc.value * PI * 2;
+	print("### "..tostring(v));
+    func_setRotateY(unit:get_ptr(),v);
 end
 
 local animsc = scrollBar_new(200,20)
@@ -114,7 +116,8 @@ local function f_on_click_floor_handle(data)
 	
 	func_set_position(_selectBox,x,y,z);
 	
-	unit:move(x,y,z);
+	--unit:move(x,y,z);
+    unit:rotateTo(x,y,z,100);
 end
 
 

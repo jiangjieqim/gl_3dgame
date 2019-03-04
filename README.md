@@ -95,3 +95,5 @@ setv(_floor,FLAGS_VISIBLE);
 setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
 setv(_floor,FLAGS_DISABLE_CULL_FACE);
 ```
+(17)  
+实现一个旋转渐变(在指定的毫秒内完成角位移)
