@@ -96,4 +96,4 @@ setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异�
 setv(_floor,FLAGS_DISABLE_CULL_FACE);
 ```
 (17)  
-实现一个旋转渐变(在指定的毫秒内完成角位移)
+实现一个旋转渐变(主要利用思想是四元数的线性插值实现)  
