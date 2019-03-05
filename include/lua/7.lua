@@ -3,20 +3,6 @@ dofile("..\\include\\lua\\core.lua");
 --func_set_sprite_line(1);
 
 
-
-
---FLAGS_DRAW_RAY_COLLISION
---[[
-function f_load_md2()
-	md2=load_VBO_model(func_create_name(),"\\resource\\md2\\horse.md2");
-	setMaterial(md2,func_load("//resource//material//horse.mat"));
-	setv(md2,FLAGS_VISIBLE);
-end
-local btn = btn_create(0,40)
-btn_label(btn,"load md2")
-btn_bindClick(btn,f_load_md2)--切换显示是否要线框渲染
---]]
-
 --创建一个指定半径的地板
 local function f_create_floor(scale)
 	--创建一个可点击的地板
@@ -43,7 +29,7 @@ local function f_create_floor(scale)
 	func_set_glsl_parms(_floor,'uvScale',scale)--设置diffuse.vs (uniform float _uvScale)uv重复值
 	return _floor;
 end
-
+--[[
 local function f_create_clickBox()
 	local url = "\\resource\\obj\\box.obj";
 	--	func_create_name()
@@ -55,10 +41,10 @@ local function f_create_clickBox()
 	setv(obj,FLAGS_VISIBLE);
 	return obj;
 end
-
+--]]
 --******************************************************
 local unit;
-local _selectBox;
+
 fps();
 infowin_show(0,20);
 
@@ -99,10 +85,22 @@ scrollBar_bind(animsc,f_animscHandle)
 --]]
 --***********************************************************************************************
 --创建一个角色
-unit =  Unit:create("DEBUG")--unit_create();
-unit:set_speed(600);
-_selectBox = f_create_clickBox();
---alert("AAbb");
+unit =  Unit:create();
+unit.loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");unit:scale(1/50);
+--unit.loadbox();
+
+unit:rx(PI/2);
+unit:y(0.5);
+
+unit.set_speed(600);
+
+--[[
+local _selectBox =  Unit:create();--f_create_clickBox();
+_selectBox.loadvbo("\\resource\\md2\\gobin.md2","//resource//material//gobin.mat");unit:scale(1/50);
+_selectBox:rx(PI/2);
+_selectBox:y(0.5);
+--]]
+--_selectBox.loadbox(true,"\\resource\\obj\\box.obj");
 
 local function f_on_click_floor_handle(data)
 	local xml = xml_load_str(data);
@@ -112,9 +110,10 @@ local function f_on_click_floor_handle(data)
 	local z = xml_get_float(node,"z")
 	xml_del(xml);
 	
-	func_set_position(_selectBox,x,y,z);
+	--func_set_position(_selectBox.p,x,y,z);
+    --_selectBox.position(x,y,z);
 	
-	unit:move(x,y,z);
+	unit.move(x,y,z);
     --unit:rotateTo(x,y,z,100);
 end
 

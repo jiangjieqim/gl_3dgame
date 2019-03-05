@@ -410,7 +410,7 @@ end
 ---[[
 --设置缩放比率
 function func_set_scale(o,v)
-    func_error("***");
+   -- func_error("***");
 	change_attr(o,"scale",v)
 end
 --]]

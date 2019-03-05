@@ -63,6 +63,9 @@ function evt_dispatch(...)
 		end
 	end
 	
+    if(id == 107)then
+        print("************");
+    end
 	if (obj == 0) then
 		--全局事件
 		for k, v in pairs(evtlist) do
