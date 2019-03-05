@@ -1,5 +1,9 @@
 dofile("..\\include\\lua\\core.lua");
 
+--func_set_sprite_line(1);
+
+
+
 
 --FLAGS_DRAW_RAY_COLLISION
 --[[
@@ -63,7 +67,8 @@ local function f_btnClick(b)
 	--cam:rotate(5000);
 	--print("==========\t"..b)
 	--print(b);
-	alert("AAbb");
+	--alert("AAbb");
+    ex:set_spriteline(ex:get_spriteline() == 1 and 0 or 1);
 end
 
 local function f_btnDown(b)

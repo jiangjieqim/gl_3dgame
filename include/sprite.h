@@ -155,4 +155,5 @@ void sprite_rotateZ(struct Sprite* ptr,float rz);
 	ÖØÖÃspriteµÄ³ß´ç
 */
 void sprite_resize(struct Sprite* spr,int w,int h);
+
 #endif

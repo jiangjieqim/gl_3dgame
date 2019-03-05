@@ -26,7 +26,7 @@
 #include "base.h"
 #include "frame.h"
 //static long _delayTime=0;
-
+int g_sprite_line;
 long g_delayTime;
 int  g_fps=-1;
 

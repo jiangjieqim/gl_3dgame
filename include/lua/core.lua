@@ -358,6 +358,8 @@ function func_gc()
 	--print('gc')
 end
 
+
+
 --绑定拾取回调
 function func_set_pick(o,func)
 	change_attr(o,"set_pickBind",func);
@@ -762,7 +764,7 @@ end
 
 
 --function func
-
+dofile("..\\include\\lua\\ex.lua")	--cam
 dofile("..\\include\\lua\\cam.lua")	--cam
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 
