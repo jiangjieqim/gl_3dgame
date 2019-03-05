@@ -1,3 +1,8 @@
+
+
+
+
+
 --初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
 local function f_split_init(md2)
 	func_anim_push(md2,"stand",0,39);
@@ -47,21 +52,23 @@ end
 
 local function f_createName(t)
     local name = func_create_name();
+    --print("===============================",t);
     allUnits[name] =  t;
     t.name = name;
     return name;
 end;
 
+
 function Unit:create(_key)
 	
 	--重载tostring方法,输出相关信息
-	
+	--[[
 	self.__tostring = function(t)
-		return string.format("元表 = %s p = %0x speed = %.3f",tostring(self),t.p,t.speed);
+		return string.format("p = %0x speed = %.3f",t.p,t.speed);
 	end;
-	
+	--]]
 	local new_sharp = { 
-		p = nil;--角色句柄
+		p;--角色句柄
 		name;
 		speed;--移动速度
 		
@@ -85,6 +92,8 @@ function Unit:create(_key)
 	        setv(md2,FLAGS_VISIBLE);
             f_split_init(md2);
             setv(md2,FLAGS_DISABLE_CULL_FACE)--取消双面渲染
+            --local ss =new_sharp;
+
             self.p = md2;
         end;
 
@@ -123,7 +132,8 @@ function Unit:create(_key)
         end;
         move=function(x,y,z)
 	        local o = self.p;
-            print("==============>name=",func_get_name(o));
+            --
+            --print("==============>name=",func_get_name(o));
 
 	        if(o==nil) then
                 func_error("unit.p = nil");
@@ -139,31 +149,14 @@ function Unit:create(_key)
 	        --print(self.offset_y);
 	        local distance = vec_distance(px,py,pz,x,y,z);--求其水平距离
 	
-	        --print(string.format("@@@ %.3f %.3f %.3f=>%.3f %.3f %.3f",px,py,pz,x,y,z));
-	        --local func = self.update;
-	        --print(self,func,o);
-	        --self.update("aaaaa");
 	        func_look_at(o,x,y,z);--转向目标坐标
-	        --func_look_at(self.box,x,y,z)
-	
-        --	evt_off(o,EVENT_ENGINE_BASE_UPDATE,self.update);
-        --	evt_off(o,EVENT_ENGINE_BASE_END,self.endCall);
 	
 	        func_set_anim(self.p,"run");
 	
-	        --self.removeEvt();
-	        --evt_on(o,EVENT_ENGINE_BASE_UPDATE,self.update);
             evt_off(o,EVENT_ENGINE_BASE_END,f_endCall);
 	        evt_on(o,EVENT_ENGINE_BASE_END,f_endCall);
 
-	        --print(string.format("需要行走的距离 = %.3f",distance));
-	
-	        --func_move(o,distance * 1000,x,y,z);--(一个单位距离用1秒的速度);
-	
-	        --print("需要的时间:"..(distance * self.speed));
-	       
 	        func_move(o,distance * self.speed,x,y,z);
-	        --func_move(self.box,distance * self.speed,x,y,z);
         end
 	}
     self.__index = self  --②，self == Sharp
@@ -172,9 +165,14 @@ function Unit:create(_key)
 	--初始化
 	--local f = new_sharp.endCall;
 	--new_sharp.init();
-	
+	--print(new_sharp);
+    print("###",self,tostring(new_sharp));
     return new_sharp;
 end
+
+
+
+
 
 function Unit:scale(value)
     func_set_scale(self.p,value);
@@ -196,6 +194,9 @@ function Unit:get_ptr()
 	return self.p;
 end	
 
+function Unit:getname()
+    return self.name;
+end
 
 --以一定速度转向目标
 function Unit:rotateTo(x,y,z,time)
@@ -207,4 +208,7 @@ end
 function Unit:set_anim(ani)
 	func_set_anim(self.p,ani);
 end
+
+
+
 

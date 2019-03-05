@@ -1,5 +1,14 @@
 dofile("..\\include\\lua\\core.lua");
 
+
+
+
+
+
+
+
+
+
 --func_set_sprite_line(1);
 
 
@@ -86,6 +95,7 @@ scrollBar_bind(animsc,f_animscHandle)
 --***********************************************************************************************
 --创建一个角色
 unit =  Unit:create();
+
 unit.loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");unit:scale(1/50);
 --unit.loadbox();
 
@@ -96,6 +106,7 @@ unit.set_speed(600);
 
 ---[[
 local _selectBox =  Unit:create();--f_create_clickBox();
+
 _selectBox.loadvbo("\\resource\\md2\\gobin.md2","//resource//material//gobin.mat");_selectBox:scale(1/50);
 _selectBox:rx(PI/2);
 _selectBox:y(0.5);
@@ -115,6 +126,8 @@ local function f_on_click_floor_handle(data)
 	
 	unit.move(x,y,z);
     --unit:rotateTo(x,y,z,100);
+
+    
 end
 
 
