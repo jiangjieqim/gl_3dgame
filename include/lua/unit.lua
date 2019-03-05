@@ -48,6 +48,7 @@ end
 local function f_createName(t)
     local name = func_create_name();
     allUnits[name] =  t;
+    t.name = name;
     return name;
 end;
 
@@ -61,7 +62,7 @@ function Unit:create(_key)
 	
 	local new_sharp = { 
 		p = nil;--角色句柄
-		
+		name;
 		speed;--移动速度
 		
 		update =function(data)
@@ -76,6 +77,9 @@ function Unit:create(_key)
         --加载一个vbo模型
         loadvbo = function(modelURL,maturl)
             local name = f_createName(self);
+            
+            print("创建角色",modelURL,name);
+
             local md2=load_VBO_model(name,modelURL);
             setMaterial(md2,func_load(maturl));
 	        setv(md2,FLAGS_VISIBLE);
@@ -119,6 +123,8 @@ function Unit:create(_key)
         end;
         move=function(x,y,z)
 	        local o = self.p;
+            print("==============>name=",func_get_name(o));
+
 	        if(o==nil) then
                 func_error("unit.p = nil");
                 return;

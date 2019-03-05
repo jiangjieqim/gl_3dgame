@@ -94,9 +94,9 @@ unit:y(0.5);
 
 unit.set_speed(600);
 
---[[
+---[[
 local _selectBox =  Unit:create();--f_create_clickBox();
-_selectBox.loadvbo("\\resource\\md2\\gobin.md2","//resource//material//gobin.mat");unit:scale(1/50);
+_selectBox.loadvbo("\\resource\\md2\\gobin.md2","//resource//material//gobin.mat");_selectBox:scale(1/50);
 _selectBox:rx(PI/2);
 _selectBox:y(0.5);
 --]]
