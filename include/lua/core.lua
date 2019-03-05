@@ -112,7 +112,8 @@ function func_load(url)
             local _lineColor =    xml_get_str(node,"_lineColor");
             --print(_lineColor);
             --local arr=func_split(_lineColor,",");
-            func_set_glsl_parms(result,"_lineColor",_lineColor);
+
+            glsl_set(result,string.format("_lineColor,%s",_lineColor));
         end
 		
 	elseif(suffix == "obj") then

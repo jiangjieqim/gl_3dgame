@@ -24,19 +24,20 @@ local function f_load_box(vbo)
 	--vbo = false;--是否使用vbo模式
 	
 	local obj
-	local url = "\\resource\\obj\\arrow.obj";--tri
+	local url = "\\resource\\obj\\o1.obj";--tri
 	if(vbo) then
 		local name = func_create_name();
 		--print("name="..name);
 		obj=load_VBO_model(name,url);--box	arrow
-		setMaterial(obj,func_load("//resource//material//triangle.mat"));		
+        local mat = func_load("//resource//material//triangle.mat");
+		setMaterial(obj,mat);		
 	else
 		obj =load_model(func_create_name(), "\\resource\\obj\\box.obj");
 		setMaterial(obj,func_load("//resource//material//diffuse.mat"));
 	end
 	
 	setv(obj,FLAGS_DRAW_PLOYGON_LINE)--线框
-	--setv(obj,FLAGS_DISABLE_CULL_FACE);--设置双面都能渲染
+	setv(obj,FLAGS_DISABLE_CULL_FACE);--设置双面都能渲染
 	setv(obj,FLAGS_REVERSE_FACE);
 	setv(obj,FLAGS_VISIBLE);
 	return obj

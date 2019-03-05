@@ -14,7 +14,7 @@
 #include "tl_malloc.h"
 #include "base.h"
 
-#define _SPRITE_RENDER_LINE_//渲染线框,用于调试
+#define _SPRITE_RENDER_LINE_//渲染线框,用于调试,此方式可以在低配置电脑上执行,因为使用的是功耗最小的模式
 
 //构造两个三角形所需要的数据大小(Glfloat数据的个数)
 enum {
@@ -572,11 +572,7 @@ renderSprite(struct Sprite* p)
 		}
 		if(p->useVBO){
 			//渲染管线采用vbo模式
-			objVBO_renderNode(getvbo(p),material,
-				//"spritevbo",
-				shaderName,
-				p->mat4x4,
-				base_get_ploygonLineMode(base),base,NULL);
+			
 
 
 #ifdef _SPRITE_RENDER_LINE_
@@ -588,6 +584,14 @@ renderSprite(struct Sprite* p)
 					p->mat4x4,
 					GL_LINE,base,NULL);
 			//}
+
+#else
+			objVBO_renderNode(getvbo(p),material,
+				//"spritevbo",
+				shaderName,
+				p->mat4x4,
+				base_get_ploygonLineMode(base),base,NULL);
+
 
 #endif
 		}else

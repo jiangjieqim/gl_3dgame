@@ -18,7 +18,10 @@ local function f_create_floor(scale)
 	--创建一个可点击的地板
 	--local _floor = func_loadobj('plane','box.tga','_floor',false);
 	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
-	setMaterial(_floor,func_load("//resource//material//floor.mat"));	
+	local mat = func_load("//resource//material//triangle.mat");
+    setMaterial(_floor,mat);
+    glsl_set(mat,string.format("_lineColor,%s","0,1,0"));
+	
 	setv(_floor,FLAGS_VISIBLE);
 	--local _floorRadius = 30--地板半径
 	--func_set_scale(_floor,_floorRadius*2);
@@ -27,7 +30,7 @@ local function f_create_floor(scale)
 	func_set_scale(_floor,scale);
 	
 	setv(_floor,FLAGS_RAY)
-	setv(_floor,FLAGS_DRAW_RAY_COLLISION)
+	--setv(_floor,FLAGS_DRAW_RAY_COLLISION)
 	setv(_floor,FLAGS_DRAW_PLOYGON_LINE)--线框
 	setv(_floor,FLAGS_DISABLE_CULL_FACE)
 
