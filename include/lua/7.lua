@@ -109,7 +109,7 @@ local function f_on_click_floor_handle(data)
 	local y = xml_get_float(node,"y")
 	local z = xml_get_float(node,"z")
 	xml_del(xml);
-	
+	 
 	--func_set_position(_selectBox.p,x,y,z);
     --_selectBox.position(x,y,z);
 	

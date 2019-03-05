@@ -1,9 +1,11 @@
-
-
 local evtlist = {};
 
 function evt_on(obj,id,func)	
 	
+    if(func == nil) then
+        func_error("func = nil");
+    end
+
 	for k, v in pairs(evtlist) do
 		local node = evtlist[k];
 		if(node and node.obj == obj and node.id == id and node.func == func) then
@@ -12,8 +14,7 @@ function evt_on(obj,id,func)
 			return;
 		end
 	end	
-	
-	
+		
 	local evt = 
 	{
 		id = id;
@@ -63,9 +64,10 @@ function evt_dispatch(...)
 		end
 	end
 	
-    if(id == 107)then
-        print("************");
-    end
+--    if(id == 103)then
+--        print("************");
+--    end
+
 	if (obj == 0) then
 		--全局事件
 		for k, v in pairs(evtlist) do

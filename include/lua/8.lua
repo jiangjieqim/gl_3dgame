@@ -56,26 +56,21 @@ function test()
 end
 
 
-	function f_onkey(data)
-		local key = tonumber(data);
-		
-	--	print(key);
+function f_onkey(data)
+	local key = tonumber(data);
+--	print(key);
+--	print(key,r);
 
-	--	print(key,r);
-
-		if(key == KEY_A) then
-			func_ex_info();
-            	
-		elseif(key == KEY_B)then
+	if(key == KEY_A) then
+		func_ex_info();
+	elseif(key == KEY_B)then
 			
-		elseif(key == KEY_C) then
+	elseif(key == KEY_C) then
 			
-		elseif(key == KEY_D) then
+	elseif(key == KEY_D) then
 	        
-		end
-		
-		
-	end
+	end	
+end
 
 	evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 	

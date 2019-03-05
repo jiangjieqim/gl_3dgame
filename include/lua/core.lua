@@ -374,15 +374,10 @@ function func_setRotateX(o,value)
 	change_attr(o,"rx",tostring(value));
 end
 
-
-
-
 --改变对象的Rotate y的值
 function func_setRotateY(o,value)
 	change_attr(o,"ry",tostring(value));
 end
-
-
 --改变对象的Rotate z的值
 function func_setRotateZ(o,value)
 	change_attr(o,"rz",tostring(value));

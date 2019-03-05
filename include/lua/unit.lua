@@ -33,14 +33,24 @@ local function f_load_box(vbo)
 end
 --]]
 Unit = {}
---print(Unit)
-local function f_removeEvt(obj)
-	--print(obj,obj.p);
-	evt_off(obj.p,EVENT_ENGINE_BASE_UPDATE,obj.update);
-	evt_off(obj.p,EVENT_ENGINE_BASE_END,obj.endCall);
-end;
+
+--所有的单位对象集合
+local allUnits = {};
 
 --	_key = "DEBUG"的时候显示一个测试模型
+
+local function f_endCall(data)
+    local u = allUnits[data];
+    func_set_anim(u.p,"stand");
+    evt_off(u.p,EVENT_ENGINE_BASE_END,f_endCall);
+end
+
+local function f_createName(t)
+    local name = func_create_name();
+    allUnits[name] =  t;
+    return name;
+end;
+
 function Unit:create(_key)
 	
 	--重载tostring方法,输出相关信息
@@ -62,20 +72,11 @@ function Unit:create(_key)
 					--print("p = "+ p);
 				end;
 		
-		endCall=function(data)
-					
-					--print("end %d:%d"..func_get_longTime().."\t"..self)
-					f_removeEvt(self);
-					
-					func_set_anim(self.p,"stand");
-					--print("移动结束!!!");
-				end;
-
-		
         --创建一个基本单位,默认在1个单位区间内
         --加载一个vbo模型
         loadvbo = function(modelURL,maturl)
-            local md2=load_VBO_model(func_create_name(),modelURL);
+            local name = f_createName(self);
+            local md2=load_VBO_model(name,modelURL);
             setMaterial(md2,func_load(maturl));
 	        setv(md2,FLAGS_VISIBLE);
             f_split_init(md2);
@@ -87,15 +88,16 @@ function Unit:create(_key)
         loadbox = function(vbo,url)
             vbo = vbo or true;
             local obj
+            local name = f_createName(self);
 	        url = url or "\\resource\\obj\\o1.obj";--tri
 	        if(vbo) then
-		        local name = func_create_name();
+		        --local name = func_create_name();
 		        --print("name="..name);
 		        obj=load_VBO_model(name,url);--box	arrow
                 local mat = func_load("//resource//material//triangle.mat");
 		        setMaterial(obj,mat);		
 	        else
-		        obj =load_model(func_create_name(), "\\resource\\obj\\box.obj");
+		        obj =load_model(name, "\\resource\\obj\\box.obj");
 		        setMaterial(obj,func_load("//resource//material//diffuse.mat"));
 	        end
 	
@@ -144,10 +146,10 @@ function Unit:create(_key)
 	        func_set_anim(self.p,"run");
 	
 	        --self.removeEvt();
-	        f_removeEvt(self);
 	        --evt_on(o,EVENT_ENGINE_BASE_UPDATE,self.update);
-	        evt_on(o,EVENT_ENGINE_BASE_END,self.endCall);
-	
+            evt_off(o,EVENT_ENGINE_BASE_END,f_endCall);
+	        evt_on(o,EVENT_ENGINE_BASE_END,f_endCall);
+
 	        --print(string.format("需要行走的距离 = %.3f",distance));
 	
 	        --func_move(o,distance * 1000,x,y,z);--(一个单位距离用1秒的速度);
@@ -162,12 +164,11 @@ function Unit:create(_key)
     setmetatable(new_sharp, self)  --③
 	
 	--初始化
-	
+	--local f = new_sharp.endCall;
 	--new_sharp.init();
 	
     return new_sharp;
 end
-
 
 function Unit:scale(value)
     func_set_scale(self.p,value);
