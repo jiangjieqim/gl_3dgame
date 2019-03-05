@@ -11,10 +11,9 @@
 #include "gettime.h"
 //#include "ex.h"
 
-#define _DEBUG_
+//#define _DEBUG_
 
 static struct LStackNode* g_list;
-
 
 typedef struct {
 	/*当前引用*/

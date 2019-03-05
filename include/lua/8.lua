@@ -10,9 +10,9 @@ function test()
 	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
 	setMaterial(_floor,func_load("//resource//material//floor.mat"));	
 	setv(_floor,FLAGS_VISIBLE);
-	--setv(_floor,FLAGS_RAY)
-	--setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
-	--setv(_floor,FLAGS_DISABLE_CULL_FACE);
+	setv(_floor,FLAGS_RAY)
+	setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
+	setv(_floor,FLAGS_DISABLE_CULL_FACE);
 
 	local r = 0;
 	function f_onkey(data)
@@ -65,12 +65,13 @@ end
 
 		if(key == KEY_A) then
 			func_ex_info();
+            	
 		elseif(key == KEY_B)then
 			
 		elseif(key == KEY_C) then
 			
 		elseif(key == KEY_D) then
-			
+	        
 		end
 		
 		
@@ -79,7 +80,7 @@ end
 	evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 	
 	
---test();
+test();
 --local btn = btn_create(10,20,65,65);
 --[[
 local bg = sprite_create("aa",10,20,65,65);
@@ -87,7 +88,7 @@ func_setIcon(bg,"gundi.png");
 ]]
 
 
---change_attr(nil,"ft_test");
+change_attr(nil,"ft_test");
 cam:position(0,0,-5);
 
 
@@ -101,7 +102,4 @@ setv(_floor,FLAGS_VISIBLE);
 
 --unit =  Unit:create("box1")--unit_create();
 
-
-
-
-
+alert("sssss");

@@ -4,16 +4,12 @@ m_name = "bauul"
 
 --初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
 local function f_split_init(md2)
-	
 	if(m_name == "bauul" or m_name == "gobin")  then
 		func_set_scale(md2,1/50);--这里设置一个缩放价值让模型在单位1以内
-		
 		--	1/50
 		--func_set_y(md2,0.5);	 --设置地板y轴向偏移
 		func_setRotateX(md2,PI/2)--旋转一个轴向
 	end
-	
-	
 	--print(md2);
 	func_anim_push(md2,"stand",0,39);
 	func_anim_push(md2,"run",40,45);
@@ -28,7 +24,7 @@ local function f_load_box(vbo)
 	--vbo = false;--是否使用vbo模式
 	
 	local obj
-	local url = "\\resource\\obj\\tri.obj";
+	local url = "\\resource\\obj\\arrow.obj";--tri
 	if(vbo) then
 		local name = func_create_name();
 		--print("name="..name);
@@ -40,7 +36,7 @@ local function f_load_box(vbo)
 	end
 	
 	setv(obj,FLAGS_DRAW_PLOYGON_LINE)--线框
-	setv(obj,FLAGS_DISABLE_CULL_FACE);--设置双面都能渲染
+	--setv(obj,FLAGS_DISABLE_CULL_FACE);--设置双面都能渲染
 	setv(obj,FLAGS_REVERSE_FACE);
 	setv(obj,FLAGS_VISIBLE);
 	return obj
@@ -54,7 +50,7 @@ local function f_removeEvt(obj)
 	evt_off(obj.p,EVENT_ENGINE_BASE_END,obj.endCall);
 end;
 
---	_key = "box"的时候显示一个红色的box
+--	_key = "DEBUG"的时候显示一个测试模型
 function Unit:create(_key)
 	
 	--重载tostring方法,输出相关信息
@@ -84,8 +80,7 @@ function Unit:create(_key)
 					func_set_anim(self.p,"stand");
 					--print("移动结束!!!");
 				end;
-				
-		
+
 		--创建一个基本单位,默认在1个单位区间内
 		init =  function ()
 					--local u = {
@@ -97,7 +92,7 @@ function Unit:create(_key)
 					
 					---[[
 					
-					if(_key ~= "box") then
+					if(_key ~= "DEBUG") then
 						local url = m_name;
 						local modelURL = string.format("\\resource\\md2\\%s.md2",url);
 						local md2=load_VBO_model(func_create_name(),modelURL);
@@ -112,8 +107,6 @@ function Unit:create(_key)
 						setv(md2,FLAGS_DISABLE_CULL_FACE)--取消双面渲染
 						----------------------------
 						self.p = md2;
-						
-						
 					else
 						self.p = f_load_box(true);
 					end

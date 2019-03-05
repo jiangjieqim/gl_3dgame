@@ -55,7 +55,6 @@ local _selectBox;
 fps();
 infowin_show(0,20);
 
-
 ---[[
 local function f_btnClick(b)
 	--cam:rotate(5000);
@@ -71,9 +70,6 @@ end
 local btn = btn_create(100,20);
 btn_bindClick(btn,f_btnClick);
 --btn_bindDown(btn,f_btnDown);
-
-
-
 
 ---[[
 local function f_animscHandle(sc)
@@ -95,18 +91,12 @@ scrollBar_bind(animsc,f_animscHandle)
 --]]
 --***********************************************************************************************
 --创建一个角色
-unit =  Unit:create("box1")--unit_create();
+unit =  Unit:create("DEBUG")--unit_create();
 unit:set_speed(600);
 _selectBox = f_create_clickBox();
 --alert("AAbb");
 
 local function f_on_click_floor_handle(data)
-	--print('##',data);
-	
---	if(func_fps()<=-1)then
---		return;
---	end
-	
 	local xml = xml_load_str(data);
 	local node = xml_get_node_by_index(xml,0);
 	local x = xml_get_float(node,"x")
@@ -116,8 +106,8 @@ local function f_on_click_floor_handle(data)
 	
 	func_set_position(_selectBox,x,y,z);
 	
-	--unit:move(x,y,z);
-    unit:rotateTo(x,y,z,100);
+	unit:move(x,y,z);
+    --unit:rotateTo(x,y,z,100);
 end
 
 
@@ -128,10 +118,7 @@ end
 ---[[--创建一个地板
 local floor_ptr = f_create_floor(50);
 
-
-
 evt_on(floor_ptr,EVENT_RAY_PICK,f_on_click_floor_handle);
-
 
 evt_on(cam,EVENT_ENGINE_RESIZE,f_resize);
 
@@ -141,9 +128,8 @@ function f_onkey(data)
 	if(key == KEY_A) then
 		
 		local px,py,pz = func_get_xyz(unit:get_ptr());
-		
 		print(string.format("unit %.3f %.3f %.3f",px,py,pz));
-	
+	    alert(tostring(math.random(0,100)));	
 	elseif(key == KEY_B)then
 	
 		func_changeFlags(floor_ptr,FLAGS_DRAW_PLOYGON_LINE);
@@ -153,26 +139,8 @@ function f_onkey(data)
 		--func_changeFlags(unit:get_ptr(),FLAGS_DISABLE_CULL_FACE);
 		--func_changeFlags(unit:get_ptr(),FLAGS_VISIBLE);
 		--func_update_mat4x4(unit:get_ptr());
-		
 	end
-	
-	
 end
 evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
-
-
-
 cam:position(0,-10,-10);
 cam:rx(PI * 1.8);
-
-
-
---print(unit);
-
---local a1 = Unit:create("box");
---a1:set_speed(10);
---print(a1);
-----------------------------------
-
---alert("AAbb");
-

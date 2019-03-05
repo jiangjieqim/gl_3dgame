@@ -107,6 +107,13 @@ function func_load(url)
 			xml_get_str(node,"tex6"),
 			xml_get_str(node,"tex7")
 		);
+
+        if(shader == "diffuseStateBox") then
+            local _lineColor =    xml_get_str(node,"_lineColor");
+            --print(_lineColor);
+            --local arr=func_split(_lineColor,",");
+            func_set_glsl_parms(result,"_lineColor",_lineColor);
+        end
 		
 	elseif(suffix == "obj") then
 	

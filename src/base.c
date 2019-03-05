@@ -650,6 +650,7 @@ f_ry_tpUpdate(void* p){
 	HeadInfo* ptr = (HeadInfo*)p;
 	base_updateMat4x4(ptr);
 }
+/*
 void 
 base_rotate_to(HeadInfo* bp,float ms,float ry){
 	void* _tweenPtr = bp->_ry_tp;
@@ -658,7 +659,7 @@ base_rotate_to(HeadInfo* bp,float ms,float ry){
 	}
 	bp->_ry_tp=tween_to(bp,ms,0,f_ry_tpUpdate,2,&(bp->ry),ry);
 }
-
+*/
 void 
 base_move(HeadInfo* bp,int ms,
 		float x,float y,float z,

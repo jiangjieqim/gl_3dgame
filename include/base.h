@@ -245,8 +245,7 @@ GLboolean base_cullface(struct HeadInfo* base);
 /*
  *ms毫秒y轴旋转至ry
  **/
-void 
-base_rotate_to(HeadInfo* bp,float ms,float ry);
+//void base_rotate_to(HeadInfo* bp,float ms,float ry);
 
 /*
 	开始检测
