@@ -11,7 +11,7 @@ local function f_render()
 	
 	ticket = _time
 	if(tf) then
-		local s = string.format("fps %d %d",func_fps(),func_delayTime())
+		local s = string.format("fps %d %d",ex:fps(),ex:delayTime())
 		tf_setText(tf,s);
 	end
 end

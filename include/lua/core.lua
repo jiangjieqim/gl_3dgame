@@ -407,11 +407,13 @@ end
 function func_set_z(o,z)
 	change_attr(o,"z",z)
 end
-
+---[[
 --设置缩放比率
 function func_set_scale(o,v)
+    func_error("***");
 	change_attr(o,"scale",v)
 end
+--]]
 --[[
 function func_set_camera_pos(x,y,z)
 		dofunc("SetCameraPosition",x,y,z);
@@ -672,14 +674,8 @@ function func_screenSize()
 	return w,h
 end
 
---获取fps
-function func_fps()
-	return get_attr(nil,"fps");
-end
---获取delayTime
-function func_delayTime()
-	return get_attr(nil,"delayTime");
-end
+
+
 --设置对象的关键帧帧率
 function func_set_ptr_fps(o,v)
 	change_attr(o,"fps",tostring(v))

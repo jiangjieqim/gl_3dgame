@@ -62,9 +62,12 @@ struct Ent3D{
 */
 //static int isLeftDown = 0;
 
-static struct EX g_ex;
+static struct EX* g_ex;
 struct EX* ex_getInstance(){
-	return &g_ex;
+	if(!g_ex){
+		g_ex = (struct EX*)tl_malloc(sizeof(struct EX));
+	}
+	return g_ex;
 }//引擎实例引用
 
 /*
