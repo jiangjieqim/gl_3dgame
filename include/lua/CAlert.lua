@@ -90,7 +90,7 @@ function Alert:create()
 		);
 		
 		
-		self.label=tf_create(128,x,y);
+		self.label=tf_create(128,x,y,1.0,0.0,0.0);
 	end;
 	
 	} ;

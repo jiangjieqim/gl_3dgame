@@ -1,6 +1,10 @@
 local g_gap = 15--(一行的高度间隔)
 local g_width = 60 --(一行的宽度)
 
+local r = 1.0;
+local g = 0.0;
+local b = 0.0;
+
 local function
 f_create()
 local listBox=
@@ -120,7 +124,7 @@ listbox_new(_x,_y)
 
 	func_setIcon(list.bg,"gundi.png")
 
-	list.tf = tf_create(128,list.x,list.y,0.0,1.0,0.0);
+	list.tf = tf_create(128,list.x,list.y,r,g,b);
 	return list
 end
 
@@ -141,7 +145,7 @@ end
 function 
 listbox_add(list,str)
 	local count =	func_get_table_count(list.tflist) + 1
-	local tf=tf_create(128,list.x,list.y + g_gap*(count),1.0,1.0,1.0);
+	local tf=tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
 	list.tflist[count - 1] = tf;
 	tf_setText(tf,str);
 	resetv(tf,FLAGS_VISIBLE);

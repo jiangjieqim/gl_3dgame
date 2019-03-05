@@ -9,15 +9,15 @@ local function f_select(_l)
 	
 	if(label == "ex_info") then
 		func_ex_info();
-	elseif(label == "00") then
-		
+	elseif(label == "gc") then
+		func_gc();
 	end
 end
 
 function infowin_show(x,y)
 	local list =  listbox_new(x or 0,y or 0)
 	listbox_add(list,"ex_info")
-	listbox_add(list,"run")
+	listbox_add(list,"gc")
 	
 	listbox_bind(list,f_select)
 	--listbox_select(list,0)--Ä¬ÈÏÑ¡0ºÅË÷Òý

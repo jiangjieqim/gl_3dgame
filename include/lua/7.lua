@@ -20,7 +20,7 @@ local function f_create_floor(scale)
 	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
 	local mat = func_load("//resource//material//triangle.mat");
     setMaterial(_floor,mat);
-    glsl_set(mat,string.format("_lineColor,%s","0,1,0"));
+    glsl_set(mat,string.format("_lineColor,%s","0.5,0.5,0.5"));
 	
 	setv(_floor,FLAGS_VISIBLE);
 	--local _floorRadius = 30--µØ°å°ë¾¶
