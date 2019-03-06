@@ -88,9 +88,18 @@ end
 function UnitBase:scale(value)
     func_set_scale(self.p,value);
 end
+function UnitBase:get_scale()
+    return func_get_scale(self.p);
+end
 
 function UnitBase:rx(v)
     func_setRotateX(self.p,v)
+end
+function UnitBase:ry(v)
+    func_setRotateY(self.p,v)
+end
+function UnitBase:rz(v)
+    func_setRotateZ(self.p,v)
 end
 function UnitBase:x(v)
     func_set_x(self.p,v);

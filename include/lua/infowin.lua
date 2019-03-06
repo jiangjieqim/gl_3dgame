@@ -1,4 +1,4 @@
---信息面板
+--信息调试面板
 
 local function f_select(_l)
 	local label = listbox_get_label(_l)

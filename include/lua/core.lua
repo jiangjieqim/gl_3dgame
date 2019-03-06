@@ -717,6 +717,9 @@ end
 function func_get_xyz(o)
 	return get_attr(o,"xyz");
 end
+function func_get_scale(o)
+	return get_attr(o,"scale");
+end
 function func_get_rotate(o)
 	return get_attr(o,"rotate");
 end
