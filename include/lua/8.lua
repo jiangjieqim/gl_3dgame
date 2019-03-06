@@ -67,8 +67,8 @@ func_setIcon(bg,"gundi.png");
 
 -------------------------------------------------------------
 
-local btn = btn_create(50,50);
-local ft = func_ftext_create(func_create_name());
+local btn = btn_create(50,50,80,18,"gundi.png");
+local ft = func_ftext_create(func_create_name(),18,16);
 func_ftext_setpos(ft,50,50);
 --local x,y;
 --x = 0;
@@ -81,4 +81,4 @@ func_ftext_setpos(ft,50,50);
 
 
 --print(ft,w,h);
-func_ftext_set_much_chars(ft,"Äã,0,@,ÊÂ,J,U");
+func_ftext_set_much_chars(ft,"ÎÒ,a,H,À´");

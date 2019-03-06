@@ -13,6 +13,8 @@
 
 #include "ftfont.h"
 
+static int debug;
+
 //#define _DEBUG_DRAW_PIXEL_//是否打印日志
 
 
@@ -145,16 +147,19 @@ ft_load(unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,c
 		int platform_id = face->charmaps[i]->platform_id;
 		//printf("[%d]: \n encoding_id: %d \n platform_id: %d \n", i, encoding_id, platform_id);
 	}
-	printf("固定尺寸个数: %d -->%d %d[%s]\n", face->num_fixed_sizes,fontw,fonth,str);
+	if(debug)
+		printf("固定尺寸个数: %d -->%d %d[%s]\n", face->num_fixed_sizes,fontw,fonth,str);
 
 
 	for(i = 0; i < face->num_fixed_sizes; i++)
 	{
 		int width = face->available_sizes[i].width;
 		int height = face->available_sizes[i].height;
-		printf("[%d]: width: %d  height: %d \n", i, width, height);
+		if(debug)
+			printf("[%d]: width: %d  height: %d \n", i, width, height);
 	}
-	printf("字符数: %d \n", face->num_glyphs);
+	if(debug)
+		printf("字符数: %d \n", face->num_glyphs);
 
 	//set=========================================================
 
