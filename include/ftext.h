@@ -19,7 +19,7 @@ void
 ftext_setpos(void* p,int x,int y);
 
 /*
- *	将str字符转换成中文文或者英文的数组
+ *	将str字符串转换成贴图数据展示出来
  */
 void
 ftext_parse(void* p,const char* str);

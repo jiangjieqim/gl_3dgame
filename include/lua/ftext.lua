@@ -35,34 +35,34 @@ end
 
 --显示单行连续的文本
 --a,b   ==> a和b
-function func_ftext_set_much_chars(ft,s,x,y,hGap)
-    hGap = hGap or 16
-    x = x or 0;
-    y = y or 0;
-    local arr =   func_split(s,",");
---    local i = 0;
-    local w,h;
-    for key, value in pairs(arr) do		
---		i = i + 1
-		
-        w,h = func_ftext_setchar(ft,value,x,y);
---        print(w,h);
-        x=x+w;
-	end
+--function func_ftext_set_much_chars(ft,s,x,y,hGap)
+--    hGap = hGap or 16
+--    x = x or 0;
+--    y = y or 0;
+--    local arr =   func_split(s,",");
+----    local i = 0;
+--    local w,h;
+--    for key, value in pairs(arr) do		
+----		i = i + 1
+
+--        w,h = func_ftext_setchar(ft,value,x,y);
+----        print(w,h);
+--        x=x+w;
+--	end
 
 
---    local len = string.len(s);
---    print(len);
---    for i=1,len,1 do
---        print( string.sub(s,i-1,i))
---    end
+----    local len = string.len(s);
+----    print(len);
+----    for i=1,len,1 do
+----        print( string.sub(s,i-1,i))
+----    end
 
---    "[\\0-\127\194-\244][\128-\191]*"
---      "[\0-\x7F\xC2-\xF4][\x80-\xBF]*"
---    for ch in string.gmatch(s, "[\\0-\127\194-\244][\128-\191]*") do
---	    print(ch,#ch~=1)
---    end
-end
+----    "[\\0-\127\194-\244][\128-\191]*"
+----      "[\0-\x7F\xC2-\xF4][\x80-\xBF]*"
+----    for ch in string.gmatch(s, "[\\0-\127\194-\244][\128-\191]*") do
+----	    print(ch,#ch~=1)
+----    end
+--end
 
 
 FText = {

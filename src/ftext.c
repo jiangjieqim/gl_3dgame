@@ -38,6 +38,7 @@ typedef struct FText
 	//缓冲区大小
 	int _bufferLength;
 	float n;//比率因子
+	int _cx,_cy;
 }FText;
 
 //汉字第一个字节的范围
@@ -53,15 +54,21 @@ f_is_second_code(unsigned char c){
 static void 
 f_pCallBack(void* inParam,char* str){
 	FText* txt = (FText*)inParam;
-
-	printf("***%s\n",str);
-
+	int w,h;
+	//printf("***%s\n",str);
+	ftext_set(inParam,str,txt->_cx,txt->_cy,&w,&h);
+	txt->_cx+=w;
 }
 void
 ftext_parse(void* p,const char* str){
 	//void 
 	//	str_parse_eg_cn(const char* str,void* inParam,
 	//	void(pCallBack)(void*,char*))
+	//	
+	FText* txt = (FText*)p;
+	txt->_cx = 0;
+	txt->_cy = 0;
+
 	str_parse_eg_cn(str,p,f_pCallBack);
 }
 

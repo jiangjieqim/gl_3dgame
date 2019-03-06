@@ -76,4 +76,4 @@ func_ftext_setpos(ft,50,50);
 
 
 --print(ft,w,h);
-func_ftext_set_much_chars(ft,"Œ“,a,B");
+func_ftext_parse(ft,"Œ“,a,B");
