@@ -98,3 +98,6 @@ setv(_floor,FLAGS_DISABLE_CULL_FACE);
 (17)  
 实现一个旋转渐变(主要利用思想是四元数的线性插值实现)  
 0<=angle<=PI 所以两个四元数角位移叠加后即得到最终结果  
+
+(18)  
+FText相当于继承自Sprite基础上扩展出来的组件  
