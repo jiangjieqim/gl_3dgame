@@ -64,7 +64,7 @@ function f_onkey(data)
 	if(key == KEY_A) then
 		func_ex_info();
 	elseif(key == KEY_B)then
-			
+		
 	elseif(key == KEY_C) then
 			
 	elseif(key == KEY_D) then

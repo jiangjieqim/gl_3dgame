@@ -26,6 +26,10 @@ end
 function  EX:get_spriteline()
     return self.spriteline;
 end
+--退出引擎
+function EX:exit()
+    change_attr(nil,"exit");
+end
 
 --[[
 --获取fps

@@ -144,7 +144,7 @@ evt_on(cam,EVENT_ENGINE_RESIZE,f_resize);
 
 function f_onkey(data)
 	local key = tonumber(data);
---	print(key);
+	print(key);
 	if(key == KEY_A) then
 		
 		local px,py,pz = func_get_xyz(unit:get_ptr());
@@ -154,11 +154,12 @@ function f_onkey(data)
 	
 		func_changeFlags(floor_ptr,FLAGS_DRAW_PLOYGON_LINE);
 	
-	elseif(key == KEY_C) then
-		print(key);
+	elseif(key == KEY_ESC) then
+--		print(key);
 		--func_changeFlags(unit:get_ptr(),FLAGS_DISABLE_CULL_FACE);
 		--func_changeFlags(unit:get_ptr(),FLAGS_VISIBLE);
 		--func_update_mat4x4(unit:get_ptr());
+        ex:exit();	
 	end
 end
 evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
