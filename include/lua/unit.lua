@@ -1,8 +1,3 @@
-
-
-
-
-
 --初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
 local function f_split_init(md2)
 	func_anim_push(md2,"stand",0,39);
