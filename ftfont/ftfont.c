@@ -13,7 +13,7 @@
 
 #include "ftfont.h"
 
-#define _DEBUG_DRAW_PIXEL_//是否打印日志
+//#define _DEBUG_DRAW_PIXEL_//是否打印日志
 
 
 static unsigned char* 

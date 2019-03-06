@@ -40,9 +40,9 @@ typedef struct FText
 }FText;
 
 void*
-ftext_create(char* txtName){
-	int txtWidth = 129;
-	int txtHeight= 129;
+ftext_create(char* txtName,int fw,int fh){
+	int txtWidth = 64;
+	int txtHeight= 64;
 	//struct Sprite* sp = sprite_create("text",0,0,32,32,0);
 	struct Sprite* spr;
 	float n;
@@ -54,8 +54,10 @@ ftext_create(char* txtName){
 	n = txt->n;
 //6 12
 //中文使用12,11,字母可以使用任何尺寸的字体
-	txt->fw = 12*n;
-	txt->fh = 11*n;
+	txt->fw = fw*n;
+	txt->fh = fh*n;
+	//txt->fw = 18*n;
+	//txt->fh = 18*n;
 	
 	txt->spr = sprite_create(txtName,0,0,txtWidth,txtHeight,0);
 	txt->_bufferLength = txt->fw * txt->fh*4;//计算需要的缓冲区的大小
@@ -71,7 +73,12 @@ ftext_create(char* txtName){
 	
 	sprite_set_scale_z(spr,1/n);
 
-	spr->material = tmat_create_rgba("font1",64,64,GL_BGRA);//"font"
+	//spr->material = tmat_create_rgba("font1",64,64,GL_BGRA);//"font"
+	{
+
+		int size = 64;
+		spr->material = tmat_create_rgba("font1",size,size,GL_BGRA);//"font"
+	}
 	/*
 	{
 		int cw=0;

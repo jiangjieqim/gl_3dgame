@@ -3,14 +3,14 @@
 
 
 function test()
-	local btn = btn_create(100,200);
+	
 
 	---[[
 	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
 	setMaterial(_floor,func_load("//resource//material//floor.mat"));	
-	setv(_floor,FLAGS_VISIBLE);
+	--setv(_floor,FLAGS_VISIBLE);
 	setv(_floor,FLAGS_RAY)
-	setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
+	--setv(_floor,FLAGS_DRAW_RAY_COLLISION)		--BUG 启动的时候会有空指针异常
 	setv(_floor,FLAGS_DISABLE_CULL_FACE);
 
 	local r = 0;
@@ -67,9 +67,18 @@ func_setIcon(bg,"gundi.png");
 
 -------------------------------------------------------------
 
-
+local btn = btn_create(50,50);
 local ft = func_ftext_create(func_create_name());
-func_ftext_setpos(ft,100,200);
-local w,h = func_ftext_setchar(ft,"我");
-print(ft,w,h);
+func_ftext_setpos(ft,50,50);
+--local x,y;
+--x = 0;
+--y=0;
+--local w,h = func_ftext_setchar(ft,"字");
+--x=x+w;
+--w,h = func_ftext_setchar(ft,",",x,y);
+--x=x+w;
+--w,h = func_ftext_setchar(ft,"R",x,y);
 
+
+--print(ft,w,h);
+func_ftext_set_much_chars(ft,"你,0,@,事,J,U");
