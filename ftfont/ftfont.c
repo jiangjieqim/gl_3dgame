@@ -13,7 +13,7 @@
 
 #include "ftfont.h"
 
-static int debug;
+//#define  DEBUG
 
 //#define _DEBUG_DRAW_PIXEL_//是否打印日志
 
@@ -147,20 +147,21 @@ ft_load(unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,c
 		int platform_id = face->charmaps[i]->platform_id;
 		//printf("[%d]: \n encoding_id: %d \n platform_id: %d \n", i, encoding_id, platform_id);
 	}
-	if(debug)
-		printf("固定尺寸个数: %d -->%d %d[%s]\n", face->num_fixed_sizes,fontw,fonth,str);
-
+	#ifdef DEBUG
+			printf("固定尺寸个数: %d -->%d %d[%s]\n", face->num_fixed_sizes,fontw,fonth,str);
+	#endif
 
 	for(i = 0; i < face->num_fixed_sizes; i++)
 	{
 		int width = face->available_sizes[i].width;
 		int height = face->available_sizes[i].height;
-		if(debug)
+		#ifdef DEBUG
 			printf("[%d]: width: %d  height: %d \n", i, width, height);
+		#endif
 	}
-	if(debug)
+	#ifdef DEBUG
 		printf("字符数: %d \n", face->num_glyphs);
-
+	#endif
 	//set=========================================================
 
 	//字体大小, 有些有fixsize的.fon字体会在这里报错
@@ -212,9 +213,10 @@ ft_load(unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,c
 			int top					= slot->bitmap_top;		//相对横基准线偏移
 			int advancex			= slot->advance.x>>6;	//字间水平跨距
 			int pitch				= slot->bitmap.pitch;	//宽 byte
-#ifdef _DEBUG_DRAW_PIXEL_
-			printf("[w = %d h = %d top = %d advancex = %d pitch = %d]\n",width,height,top,advancex,pitch);
-#endif
+
+			#ifdef DEBUG
+				printf("[w = %d h = %d top = %d advancex = %d pitch = %d]\n",width,height,top,advancex,pitch);
+			#endif
 			rgba = red2rgba(outBuffer,buffer, width * height);
 
 			//printf("需要的缓冲区%d字节(max:%d)\n",width *  height * 4,fontSize*fontSize*4);

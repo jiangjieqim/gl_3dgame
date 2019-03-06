@@ -126,6 +126,9 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 	//printf("ft_load:%s:%d %d\n",s,iWidth,iHeight);
 	*pw = iWidth;
 	*ph = iHeight;
+	
+	y = txt->fh - iHeight;//µ×¶ÔÆë
+
 	jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
 	
 	//tl_free((void*)rgba);
