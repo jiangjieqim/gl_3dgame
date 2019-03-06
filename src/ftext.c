@@ -39,7 +39,7 @@ typedef struct FText
 }FText;
 
 void*
-ftext_create(){
+ftext_create(char* txtName){
 	int txtWidth = 129;
 	int txtHeight= 129;
 	//struct Sprite* sp = sprite_create("text",0,0,32,32,0);
@@ -53,7 +53,8 @@ ftext_create(){
 //中文使用12,11,字母可以使用任何尺寸的字体
 	txt->fw = 12*n;
 	txt->fh = 11*n;
-	txt->spr = sprite_create("txt0",0,0,txtWidth,txtHeight,0);
+	
+	txt->spr = sprite_create(txtName,0,0,txtWidth,txtHeight,0);
 	txt->_bufferLength = txt->fw * txt->fh*4;//计算需要的缓冲区的大小
 	txt->_buffer = tl_malloc(txt->_bufferLength);
 

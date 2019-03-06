@@ -60,6 +60,7 @@ EVENT_ENGINE_SPRITE_CLICK_MOVE = 106
 dofile("..\\include\\lua\\xml.lua")	--xml组件
 dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
+dofile("..\\include\\lua\\ftext.lua");
 
 local defalutTex = '1.tga'
 local defalutObjModel = 'quad'
@@ -771,12 +772,14 @@ function func_xml_to_tb(data)
 end
 --function func
 dofile("..\\include\\lua\\ex.lua")	--cam
+
 dofile("..\\include\\lua\\cam.lua")	--cam
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑un动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件
+
 
 
 dofile("..\\include\\lua\\infowin.lua")	--fps组件

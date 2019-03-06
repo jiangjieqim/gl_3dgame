@@ -1,10 +1,9 @@
-dofile("..\\include\\lua\\core.lua");
 --print("**************dasds ********");
 --infowin_show(0,20);
 
 
 function test()
-	local btn = btn_create(0,0);
+	local btn = btn_create(80,0);
 
 	---[[
 	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
@@ -34,8 +33,9 @@ function test()
 			local rx,ry,rz = func_get_rotate(_floor)
 			print(string.format("%.3f %.3f %.3f",rx%PI,ry%PI,rz%PI));
 			func_ex_info();
-			
+		elseif(key == KEY_I) then
 			--func_changeFlags(_floor,FLAGS_DISABLE_CULL_FACE);
+        	ex:switch_spriteline();
 		end
 		
 		
@@ -55,26 +55,6 @@ function test()
 
 end
 
-
-function f_onkey(data)
-	local key = tonumber(data);
---	print(key);
---	print(key,r);
-
-	if(key == KEY_A) then
-		func_ex_info();
-	elseif(key == KEY_B)then
-		
-	elseif(key == KEY_C) then
-			
-	elseif(key == KEY_D) then
-	        
-	end	
-end
-
-	evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
-	
-	
 test();
 --local btn = btn_create(10,20,65,65);
 --[[
@@ -83,18 +63,11 @@ func_setIcon(bg,"gundi.png");
 ]]
 
 
-change_attr(nil,"ft_test");
+--change_attr(nil,"ft_test");
 cam:position(0,0,-5);
+-------------------------------------------------------------
 
 
---[[
-local _floor = load_model(func_create_name(),"\\resource\\obj\\torus.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
-setMaterial(_floor,func_load("//resource//material//floor.mat"));
-setv(_floor,FLAGS_VISIBLE);	
+local ft = func_ftext_create(func_create_name());
+print(ft);
 
---]]
-
-
---unit =  Unit:create("box1")--unit_create();
-
-alert("sssss");

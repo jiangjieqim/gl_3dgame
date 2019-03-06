@@ -20,7 +20,9 @@ end
 function EX:set_spriteline(v)
     self.spriteline = change_attr(nil,"g_sprite_line",tostring(v));
 end
-
+function EX:switch_spriteline()
+    self:set_spriteline(self:get_spriteline() == 1 and 0 or 1);
+end
 function  EX:get_spriteline()
     return self.spriteline;
 end

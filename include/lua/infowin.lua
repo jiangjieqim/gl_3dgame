@@ -12,7 +12,8 @@ local function f_select(_l)
 	elseif(label == "gc") then
 		func_gc();
     elseif(label == "line") then
-		ex:set_spriteline(ex:get_spriteline() == 1 and 0 or 1);
+		ex:switch_spriteline()
+        print("ÇÐ»»ÎªSpriteÏß¿ò×´Ì¬:"..ex:get_spriteline());
 	end
 end
 
