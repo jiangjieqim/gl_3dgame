@@ -260,3 +260,53 @@ void str_split_cut(const char* dest,const char sign,void (*pCallBack)(char*,void
 		pCallBack(str,parms);
 	}
 }
+
+//汉字第一个字节的范围
+static int
+f_is_first_code(unsigned char c){
+	return (0x80 <= c) && (0xF7 >= c);
+}
+//汉字第二个字节的范围
+static int
+f_is_second_code(unsigned char c){
+	return (0xA1 <= c) && (0xFE > c);
+}
+
+void 
+str_parse_eg_cn(const char* str,void* inParam,
+				void(pCallBack)(void*,char*))
+{
+
+	int i,len;
+
+#ifdef DEBUG
+		//printf("s = [%s]占用的字节大小%d字节\n",str,strlen(str));
+#endif
+	len = strlen(str);
+	for(i = 0;i <len;i++){
+		unsigned char c = str[i];
+		char t[3];
+		memset(t,0,3);
+		t[0] = c;
+
+		if(f_is_first_code(c)){
+			if(i+1<len && f_is_second_code(str[i+1])){
+				//验证到当前字节和后续的一个字节组成的是一个汉字
+				
+				
+				/*t[0]=str[i];
+				t[1]=str[i+1];*/
+				memcpy(t,str+i,2);
+
+//				printf("当前的汉字=[%s]\n",t);
+
+				i++;
+			}
+		}
+		#ifdef DEBUG
+			printf("[%s]\n",t);
+		#endif
+
+		pCallBack(inParam,t);
+	}
+}

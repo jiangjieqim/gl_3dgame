@@ -13,11 +13,10 @@
 #include "jgl.h"
 #include "ftfont.h"
 
-#define DEBUG
+#include "str.h"
 
-/*
- *字体渲染识别不到alpha通道!
- */
+//#define DEBUG
+
 
 /*
 *[0]: width: 6  height: 12
@@ -51,52 +50,19 @@ static int
 f_is_second_code(unsigned char c){
 	return (0xA1 <= c) && (0xFE > c);
 }
+static void 
+f_pCallBack(void* inParam,char* str){
+	FText* txt = (FText*)inParam;
 
+	printf("***%s\n",str);
+
+}
 void
 ftext_parse(void* p,const char* str){
-	
-	int i,len;
-#ifdef DEBUG
-	printf("s = [%s]占用的字节大小%d字节\n",str,strlen(str));
-#endif
-	len = strlen(str);
-	for(i = 0;i <len;i++){
-		unsigned char c = str[i];
-		char t[3];
-		memset(t,0,3);
-		t[0] = c;
-#ifdef DEBUG
-		//printf("%d\n",c);
-#endif
-		if(f_is_first_code(c)){
-			if(i+1<len && f_is_second_code(str[i+1])){
-				//验证到当前字节和后续的一个字节组成的是一个汉字
-				
-				
-				/*t[0]=str[i];
-				t[1]=str[i+1];*/
-				memcpy(t,str+i,2);
-#ifdef DEBUG
-				printf("当前的汉字=[%s]\n",t);
-#endif
-				i++;
-			}
-		}
-		else{
-#ifdef DEBUG
-			printf("当前的英文字符=[%s]\n",t);
-#endif
-		}
-
-#ifdef DEBUG
-		//printf("一个字符处理完成\n");
-#endif
-	}
-	
-#ifdef DEBUG
-	printf("处理结束\n");
-#endif
-	
+	//void 
+	//	str_parse_eg_cn(const char* str,void* inParam,
+	//	void(pCallBack)(void*,char*))
+	str_parse_eg_cn(str,p,f_pCallBack);
 }
 
 void*

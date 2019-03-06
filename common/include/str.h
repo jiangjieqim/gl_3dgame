@@ -101,5 +101,10 @@ void str_split_cut(
 				  const char* dest,const char sign,
 				  void (*pCallBack)(char*,void*),
 				  void* parms);
+/*
+ *将字符串str分割成单个中文字符和英文字符,pCallBack回调一个方法出去
+ */
+DLLIMPORT
+void str_parse_eg_cn(const char* str,void* inParam,void(pCallBack)(void*,char*));
 
 #endif
