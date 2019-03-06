@@ -752,8 +752,20 @@ function func_split(str, delimiter)
     end
     return result
 end
-
-
+--xml转化为table结构体数据
+function func_xml_to_tb(data)
+    local xml = xml_load_str(data);
+	local node = xml_get_node_by_index(xml,0);
+	local x = xml_get_float(node,"x")
+	local y = xml_get_float(node,"y")
+	local z = xml_get_float(node,"z")
+	xml_del(xml);
+    local tb = {};
+    tb.x = x;
+    tb.y = y;
+    tb.z = z;
+    return tb;
+end
 --function func
 dofile("..\\include\\lua\\ex.lua")	--cam
 dofile("..\\include\\lua\\cam.lua")	--cam
@@ -770,4 +782,4 @@ dofile("..\\include\\lua\\infowin.lua")	--fps组件
 dofile("..\\include\\lua\\CAlert.lua")		--弹出框组件
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
-dofile("..\\include\\lua\\unit.lua")		--角色单位
+dofile("..\\include\\lua\\UnitBase.lua")		--角色单位

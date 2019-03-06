@@ -55,7 +55,7 @@ end
 local unit;
 
 fps();
-infowin_show(0,20);
+infowin(0,20);
 
 ---[[
 local function f_btnClick(b)
@@ -66,13 +66,9 @@ local function f_btnClick(b)
     ex:set_spriteline(ex:get_spriteline() == 1 and 0 or 1);
 end
 
-local function f_btnDown(b)
-	--cam:rotate(5000);
-	print(b)
-end
+
 local btn = btn_create(100,20);
 btn_bindClick(btn,f_btnClick);
---btn_bindDown(btn,f_btnDown);
 
 ---[[
 local function f_animscHandle(sc)
@@ -120,7 +116,7 @@ local function f_on_click_floor_handle(data)
 	local y = xml_get_float(node,"y")
 	local z = xml_get_float(node,"z")
 	xml_del(xml);
-	 
+	
 	--func_set_position(_selectBox.p,x,y,z);
     --_selectBox.position(x,y,z);
 	

@@ -6,51 +6,46 @@ function f_onkey(data)
 	end
 end
 evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
-
+fps();
+infowin(0,20);
 --dofile("..\\include\\lua\\7.lua");
 
+cam:position(0,-5,-5);
+cam:rx(PI * 1.8);
+----------------------------------------------------------------------------
+local obj = UnitBase:new();
+obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
+obj:scale(1/50);
+obj:rx(PI/2);
+obj:y(0.5);
 
---[[
+local obj2 = UnitBase:new();
+obj2:loadvbo("\\resource\\md2\\gobin.md2","//resource//material//gobin.mat");
+obj2:scale(1/50);
+obj2:rx(PI/2);
+obj2:y(0.5);
 
-A = {x = 0,y = 1};
-A.__index = A
+local select = UnitBase:new();
+select:loadbox();
 
-function A:new(x)
-    local s = {};
-    setmetatable(s,A);
-    s.x = x or 0;
-    return s;
+--地板
+local plane = UnitBase:new();
+plane:load_model();
+plane:setv(FLAGS_REVERSE_FACE);
+plane:setv(FLAGS_DRAW_PLOYGON_LINE);
+plane:scale(10);
+
+local function f_on_click_floor_handle(data)
+    local pos = func_xml_to_tb(data);
+    obj2:move(pos.x,pos.y,pos.z);
+end
+local function f_endCall(msg)
+    
+    if(msg == UnitBaseEndMsg) then
+        print(obj2:get_name().."移动结束");
+    end
 end
 
-function A:test()
-    print(self.x);
-end
+plane:bindRayPick(f_on_click_floor_handle);
 
-
-local obj = A:new();
-obj:test();
-
-local obj1 = A:new(2);
-obj1:test();
-
-
-obj:test();
---]]
-
-
-
---单位基础类
-UnitBase  = {
-    p,--角色句柄
-    speed = 1000,--角色移动的速度
-    name,--角色的名字
-};
-
-function UnitBase:new()
-    local s = {};
-    setmetatable(s,UnitBase);
-    --s.x = x or 0;
-    return s;
-end
-
-
+evt_on(obj2:get_p(),UnitBaseEvent,f_endCall);

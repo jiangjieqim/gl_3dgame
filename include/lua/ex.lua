@@ -18,9 +18,7 @@ end
 
 --ÉèÖÃspriteÏß¿òäÖÈ¾
 function EX:set_spriteline(v)
-   
     self.spriteline = change_attr(nil,"g_sprite_line",tostring(v));
-     print(self.spriteline);
 end
 
 function  EX:get_spriteline()

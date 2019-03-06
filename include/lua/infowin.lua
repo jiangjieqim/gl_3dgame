@@ -11,13 +11,17 @@ local function f_select(_l)
 		func_ex_info();
 	elseif(label == "gc") then
 		func_gc();
+    elseif(label == "line") then
+		ex:set_spriteline(ex:get_spriteline() == 1 and 0 or 1);
 	end
 end
 
-function infowin_show(x,y)
+function infowin(x,y)
 	local list =  listbox_new(x or 0,y or 0)
 	listbox_add(list,"ex_info")
 	listbox_add(list,"gc")
+    listbox_add(list,"line")--ÇÐ»»Ïß¿òäÖÈ¾sprite
+
 	
 	listbox_bind(list,f_select)
 	--listbox_select(list,0)--Ä¬ÈÏÑ¡0ºÅË÷Òý
