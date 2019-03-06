@@ -3,7 +3,7 @@
 
 
 function test()
-	local btn = btn_create(80,0);
+	local btn = btn_create(100,200);
 
 	---[[
 	local _floor = load_model(func_create_name(),"\\resource\\obj\\plane.obj")		-- func_loadobj('quad',nil,'myObj1',false)--quad
@@ -14,34 +14,7 @@ function test()
 	setv(_floor,FLAGS_DISABLE_CULL_FACE);
 
 	local r = 0;
-	function f_onkey(data)
-		local key = tonumber(data);
-		
-	--	print(key);
-
-	--	print(key,r);
-
-		r = r + PI/8;
-		
-		if(key == KEY_A) then
-			func_setRotateX(_floor,r)
-		elseif(key == KEY_B)then
-			func_setRotateY(_floor,r)
-		elseif(key == KEY_C) then
-			func_setRotateZ(_floor,r)
-		elseif(key == KEY_D) then
-			local rx,ry,rz = func_get_rotate(_floor)
-			print(string.format("%.3f %.3f %.3f",rx%PI,ry%PI,rz%PI));
-			func_ex_info();
-		elseif(key == KEY_I) then
-			--func_changeFlags(_floor,FLAGS_DISABLE_CULL_FACE);
-        	ex:switch_spriteline();
-		end
-		
-		
-	end
-
-	evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
+	
 
 
 	cam:position(0,0,-5);
@@ -52,8 +25,35 @@ function test()
 	--]]
 
 	--scxzxAetv(_floor,FLAGS_DRAW_PLOYGON_LINE)--Ïß¿ò
-
+    cam:position(0,0,-5);
 end
+function f_onkey(data)
+	local key = tonumber(data);
+	print(key);
+	
+
+--		r = r + PI/8;
+
+--		if(key == KEY_A) then
+--			func_setRotateX(_floor,r)
+--		elseif(key == KEY_B)then
+--			func_setRotateY(_floor,r)
+--		elseif(key == KEY_C) then
+--			func_setRotateZ(_floor,r)
+--		elseif(key == KEY_D) then
+--			local rx,ry,rz = func_get_rotate(_floor)
+--			print(string.format("%.3f %.3f %.3f",rx%PI,ry%PI,rz%PI));
+--			func_ex_info();
+--		elseif(key == KEY_I) then
+--			--func_changeFlags(_floor,FLAGS_DISABLE_CULL_FACE);
+--        	ex:switch_spriteline();
+--		end
+	if(key == KEY_I) then
+		ex:switch_spriteline();
+    end
+end
+
+evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 test();
 --local btn = btn_create(10,20,65,65);
@@ -64,10 +64,12 @@ func_setIcon(bg,"gundi.png");
 
 
 --change_attr(nil,"ft_test");
-cam:position(0,0,-5);
+
 -------------------------------------------------------------
 
 
 local ft = func_ftext_create(func_create_name());
-print(ft);
+func_ftext_setpos(ft,100,200);
+local w,h = func_ftext_setchar(ft,"ÎÒ");
+print(ft,w,h);
 

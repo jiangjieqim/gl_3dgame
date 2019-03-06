@@ -36,6 +36,7 @@ typedef struct FText
 	void* _buffer;
 	//缓冲区大小
 	int _bufferLength;
+	float n;//比率因子
 }FText;
 
 void*
@@ -44,11 +45,13 @@ ftext_create(char* txtName){
 	int txtHeight= 129;
 	//struct Sprite* sp = sprite_create("text",0,0,32,32,0);
 	struct Sprite* spr;
-	float n = 1;
+	float n;
+
 	FText* txt = (FText*)tl_malloc(sizeof(FText));
 	memset(txt,0,sizeof(FText));
 	//txt->size = 20;//18
-
+	txt->n = 1;
+	n = txt->n;
 //6 12
 //中文使用12,11,字母可以使用任何尺寸的字体
 	txt->fw = 12*n;
@@ -59,15 +62,17 @@ ftext_create(char* txtName){
 	txt->_buffer = tl_malloc(txt->_bufferLength);
 
 	spr = txt->spr;
+	
 	//ex_setv(spr,FLAGS_SPRITE_RENDER_LINE);
 
 	//printf("临时缓冲区的大小 %d bytes\n",txt->_bufferLength);
 
 	sprite_rotateZ(spr,-PI/2);
-
-	//spr->zScale = 0.5;
+	
+	sprite_set_scale_z(spr,1/n);
 
 	spr->material = tmat_create_rgba("font1",64,64,GL_BGRA);//"font"
+	/*
 	{
 		int cw=0;
 		int w,h;
@@ -79,6 +84,7 @@ ftext_create(char* txtName){
 		
 		ftext_setpos(txt,100,100);
 	}
+	*/
 	return txt;
 }
 
@@ -86,6 +92,13 @@ void
 ftext_setpos(void* p,int x,int y){
 	FText* txt = (FText*)p;
 	struct Sprite* spr = txt->spr;
+	float n = txt->n;
+	/*x = (float)x/txt->n;
+	y = (float)y/txt->n;*/
+	/*if(n!=1){
+		x = x - spr->mWidth*(spr->zScale);
+		y = y - spr->mHeight*(spr->zScale);
+	}*/
 	sprite_setpos(spr,x,y);
 }
 

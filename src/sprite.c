@@ -439,7 +439,7 @@ sprite_create(char* _spriteName,
 	}
 
 	pSpr->pos_z = ex_zBuffer();
-	
+	pSpr->zScale = 1.0;
 	return pSpr;
 }
 
@@ -612,9 +612,40 @@ updateMatrix(struct Sprite* p)
 {
 	struct HeadInfo* b = p->base;
 	//p->zScale = 1.5;
-	updateSpriteMat4x4(p,b->x,b->y,b->z,p->mWidth*p->zScale,p->mHeight*p->zScale,p->zScale,b->rx,b->ry,b->rz);
+	float sc = p->zScale;
+	updateSpriteMat4x4(p,b->x,b->y,b->z,p->mWidth*sc,p->mHeight*sc,sc,b->rx,b->ry,b->rz);
 }
+#define  _Time_Delay_  10//点击的延迟时间(毫秒)		10毫秒恢复状态
+//按钮特效
+static void
+f_btn_push(struct Sprite* spr,int* pChange){
+	struct HeadInfo* base = spr->base;
+	if(spr->m_bPressed )
+	{
+		float targetScale = 0.95;
 
+		if(spr->zScale!=targetScale)
+		{
+			//这里点击了一次
+
+			spr->zScale = targetScale;//点击时,按钮宽高比变化
+			//printf("鼠标一直点着按钮Sprite %f,%f\n",pBtn->m_fWidth,pBtn->m_fHeight);
+			base->time=get_longTime()+_Time_Delay_;
+			*pChange = 1;
+		}
+	}
+	else
+	{
+		spr->zScale = 1.0;
+
+		if(base->time!=0 && base->time - get_longTime()<=0)
+		{
+			//_Time_Delay_毫秒之后会处理
+			*pChange = 1;
+			base->time = 0;
+		}
+	}
+}
 /*
 	绘制一个sprite 
 */
@@ -633,11 +664,7 @@ sprite_drawRender(int data)
 	int isChange = 0;
 
 	struct HeadInfo* base = spr->base;
-
-	const int _Time_Delay_ = 10;//点击的延迟时间(毫秒)		10毫秒恢复状态
 	
-	int btneffect = getv(&base->flags,FLAGS_BUTTON_EFFECT);
-
 	if(!sprite_isEnable((int)spr))
 	{
 		return;
@@ -654,54 +681,17 @@ sprite_drawRender(int data)
 	base->y = y;
 	base->z = z;
 	
-	if(btneffect && spr->m_bPressed )
-	{
-		float targetScale = 0.95;
-
-		if(spr->zScale!=targetScale)
-		{
-			//这里点击了一次
-
-			spr->zScale = targetScale;//点击时,按钮宽高比变化
-			//printf("鼠标一直点着按钮Sprite %f,%f\n",pBtn->m_fWidth,pBtn->m_fHeight);
-			base->time=get_longTime()+_Time_Delay_;
-			isChange = 1;
-		}
+	if(getv(&base->flags,FLAGS_BUTTON_EFFECT)){
+		f_btn_push(spr,&isChange);//按钮特效代码,需要移到业务组件层!!!
 	}
-	else
-	{
-		spr->zScale = 1.0;
-
-		if(btneffect &&	base->time!=0 && base->time - get_longTime()<=0)
-		{
-			//_Time_Delay_毫秒之后会处理
-			isChange = 1;
-			base->time = 0;
-			//printf("playRun!!!!");
-		}
-		
-	}
-
 	if(spr->m_bPressed)
 	{
 		//左键鼠标按下的时候,会一直执行这里逻辑
-		
-
-		/*if(spr->callLuaMouseDown!=NULL)
-		{
-			ex_callParmLuaFun((const char*)spr->callLuaMouseDown,base->name);
-		}*/
 		ex_lua_evt_dispatch(spr,EVENT_ENGINE_SPRITE_CLICK_DOWN,base->name);
 	}
 	else
 	{
 	}
-
-	/*if(spr->screenX==0 && spr->screenY == 20)
-	{
-		ex_showLogFloat(spr->zScale);
-	}*/
-
 	if(isChange)
 	{
 		updateMatrix(spr);
@@ -988,4 +978,13 @@ sprite_rotateZ(struct Sprite* ptr,float rz)
 	struct HeadInfo* b = (struct HeadInfo*)ptr->base;
 	b->rz = rz;
 	updateMatrix(ptr);
+}
+void 
+sprite_set_scale_z(struct Sprite* spr,float v){
+	struct HeadInfo* base = spr->base;
+	if(getv(&base->flags,FLAGS_BUTTON_EFFECT)){
+		printf("设置了按钮点击缩放特效,无法使用该接口\n");
+		assert(0);
+	}
+	spr->zScale = v;
 }

@@ -155,5 +155,6 @@ void sprite_rotateZ(struct Sprite* ptr,float rz);
 	重置sprite的尺寸
 */
 void sprite_resize(struct Sprite* spr,int w,int h);
-
+/*设置Z缩放  */
+void sprite_set_scale_z(struct Sprite* spr,float v);
 #endif
