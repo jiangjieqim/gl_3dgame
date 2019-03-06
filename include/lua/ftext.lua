@@ -1,5 +1,6 @@
 --创建文本对象
-function func_ftext_create(name,fw,fh)
+function func_ftext_create(fw,fh)
+    local name = func_create_name();
     fw = fw or 12;
     fh = fh or 11;
     return ftext(nil,"create",name,string.format("%s,%s",fw,fh));
@@ -14,19 +15,38 @@ function func_ftext_setchar(txt,s,x,y)
     y = y or 0;
     return ftext(txt,"setchar",s,string.format("%s,%s",x,y));
 end
+--解析多个字符
+function func_ftext_parse(txt,s)
+    ftext(txt,"parse",s);
+end
+
+----分割成中文和英文存储在table中
+--function func_split_cn(s)
+----    local b = string.byte(s);
+--    local len = string.len(s);
+--    print("len=",len);
+--    for i=1,len,1 do
+--        print( "["..string.sub(s,i-1,1).."]")
+--    end
+--end
+
+
+
+
 --显示单行连续的文本
+--a,b   ==> a和b
 function func_ftext_set_much_chars(ft,s,x,y,hGap)
     hGap = hGap or 16
     x = x or 0;
     y = y or 0;
     local arr =   func_split(s,",");
-    local i = 0;
+--    local i = 0;
     local w,h;
     for key, value in pairs(arr) do		
-		i = i + 1
+--		i = i + 1
 		
         w,h = func_ftext_setchar(ft,value,x,y);
-        --print(w,h);
+--        print(w,h);
         x=x+w;
 	end
 
@@ -47,4 +67,6 @@ end
 
 FText = {
     str,--文本数据
+    txtWidth,--文本对象的宽度
 };
+FText.__index = FText;

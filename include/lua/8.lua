@@ -50,25 +50,20 @@ function f_onkey(data)
 --		end
 	if(key == KEY_I) then
 		ex:switch_spriteline();
-    end
+    elseif(key == KEY_ESC) then
+        ex:exit();	
+	end
 end
+
+
 
 evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 test();
---local btn = btn_create(10,20,65,65);
---[[
-local bg = sprite_create("aa",10,20,65,65);
-func_setIcon(bg,"gundi.png");
-]]
-
-
---change_attr(nil,"ft_test");
-
 -------------------------------------------------------------
 
 local btn = btn_create(50,50,80,18,"gundi.png");
-local ft = func_ftext_create(func_create_name(),18,16);
+local ft = func_ftext_create(16,15);--18,16
 func_ftext_setpos(ft,50,50);
 --local x,y;
 --x = 0;
@@ -81,4 +76,4 @@ func_ftext_setpos(ft,50,50);
 
 
 --print(ft,w,h);
-func_ftext_set_much_chars(ft,"Œ“,a,H,A");
+func_ftext_set_much_chars(ft,"Œ“,a,B");
