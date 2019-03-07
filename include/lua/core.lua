@@ -663,6 +663,10 @@ end
 function func_get_longTime()
 	return get_attr(nil,"get_longTime");
 end
+--加载文件返回一个字符串
+function func_loadfile(url)
+    return change_attr(nil,"loadfile",url);
+end
 
 --获取屏幕的尺寸
 function func_screenSize()

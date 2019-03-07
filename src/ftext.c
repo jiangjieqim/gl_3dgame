@@ -40,18 +40,26 @@ typedef struct FText
 	float n;//比率因子
 	
 	int _cx,_cy;//临时变量
+	
+
+	int _px,_py;//当前文本对象的坐标文本对象需要满足 _px + fw <= spr.w ,py + fh <= spr.h
+	
+	int _stop;//无法绘制的部分将丢弃掉
+	
 //#ifdef DEBUG
 //	struct Sprite* debugbg;
 //#endif
 
 }FText;
 
-static void 
+static int 
 f_pCallBack(void* inParam,char* str){
 	FText* txt = (FText*)inParam;
 	int w,h;
 	ftext_set(inParam,str,txt->_cx,txt->_cy,&w,&h);
 	txt->_cx+=w;
+
+	return txt->_stop == 0 ? 1 : 0;
 }
 void
 ftext_parse(void* p,const char* str){
@@ -149,33 +157,66 @@ ftext_setpos(void* p,int x,int y){
 //#endif
 }
 
+/************************************************************************/
+/* 计算文本是不是需要换行处理                                                                     */
+/************************************************************************/
+static void
+f_reset_xy(FText* txt,int *px,int *py,int cw,int ch){
+	int maxWidth = txt->spr->mWidth;//最大的宽度
+	int tw = cw;//txt->fw;
+	if(txt->_px+ tw<=maxWidth){
+		txt->_px+=tw;
+	}
+	else{
+		//换行
+		txt->_px=tw;
+		txt->_py+=txt->fh;
+	}
+	
+	*px = txt->_px-tw;
+	*py = txt->_py + (txt->fh - ch);
+	if(*py > txt->spr->mHeight){
+		txt->_stop = 1;//结束处理文本像素获取请求
+	}
+	//y = txt->fh - ch;//底对齐
+
+}
+
 void 
 ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 	FText* txt = (FText*)p;
-	struct Sprite* spr = txt->spr;
-	GMaterial* mat = spr->material;
-	
-	//int _size = txt->size;
-	int iWidth,iHeight;
-	unsigned char* rgba = txt->_buffer;//(unsigned char*)tl_malloc(_size*_size*4);
-	//*eFormat = GL_BGRA;
-	//*iComponents = GL_RGBA;
-	memset(txt->_buffer,0,txt->_bufferLength);
+	if(txt->_stop)
+	{
+		//终止处理
+		//printf("%s\n",s);
+	}
+	else{
+		struct Sprite* spr = txt->spr;
+		GMaterial* mat = spr->material;
 
-	//ft_load(rgba,txt->fw,txt->fh,&iWidth,&iHeight,s);
-	ft_parse(ex_getInstance()->ft,rgba,txt->fw,txt->fh,&iWidth,&iHeight,s);
+		//int _size = txt->size;
+		int iWidth,iHeight;
+		unsigned char* rgba = txt->_buffer;//(unsigned char*)tl_malloc(_size*_size*4);
+		//*eFormat = GL_BGRA;
+		//*iComponents = GL_RGBA;
+		memset(txt->_buffer,0,txt->_bufferLength);
+
+		//ft_load(rgba,txt->fw,txt->fh,&iWidth,&iHeight,s);
+		ft_parse(ex_getInstance()->ft,rgba,txt->fw,txt->fh,&iWidth,&iHeight,s);
 #ifdef DEBUG
-//	printf("ft_load:%s:%d %d\n",s,iWidth,iHeight);
+		//	printf("ft_load:%s:%d %d\n",s,iWidth,iHeight);
 #endif
-	
-	*pw = iWidth;
-	*ph = iHeight;
-	
-	y = txt->fh - iHeight;//底对齐
 
-	jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
-	
-	//tl_free((void*)rgba);
+		*pw = iWidth;
+		*ph = iHeight;
+
+		//y = txt->fh - iHeight;//底对齐
+
+		f_reset_xy(txt,&x,&y,iWidth,iHeight);
+
+		jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
+
+	}
 }
 
 void
