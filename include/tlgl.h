@@ -15,7 +15,7 @@
 */
 #define FLAGS_RENDER_BOUND_BOX		0x01	//渲染显示碰撞盒子,是否渲染场景中3d对象的包围盒,包围盒用来处理射线,碰撞等等
 #define FLAGS_DRAW_RAY_COLLISION	0x02	//绘制射线盒子	(是否绘制射线静态包围盒,用于测试 查看射线包围盒),即使没有设置FLAGS_RAY,那么也是可以绘制射线盒子的,这样可以用来查看
-#define FLAGS_LINE_RENDER			0x04	//是否显示渲染线框
+#define FLAGS_LINE_RENDER			0x04	//渲染方式线框
 #define FLAGS_OUTLINE				0x08	//是否显示边缘轮廓(固定管线实现)
 #define FLAGS_RAY					0x10	//16是否具有射线拾取功能(此只用于3d拾取,2d拾取不用这个标记)
 #define FLAGS_VISIBLE				0x20	//32显示或者隐藏模型,(是否加入渲染队列中)

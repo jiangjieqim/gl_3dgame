@@ -62,7 +62,7 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 test();
 -------------------------------------------------------------
 
-local btn = btn_create(50,50,80,18,"gundi.png");
+--local btn = btn_create(50,50,64,64,"gundi.png");
 local ft = func_ftext_create(16,15);--18,16
 func_ftext_setpos(ft,50,50);
 --local x,y;

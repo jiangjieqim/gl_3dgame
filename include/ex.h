@@ -33,7 +33,6 @@
 #define TYPE_OBJ_VBO_FILE	5//VBO文件数据
 #define TYPE_FONT_TXT  6	//freetype文本
 
-
 //键值枚举
 #define KEY_ESC 27
 #define KEY_1 49

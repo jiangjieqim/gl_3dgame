@@ -5,7 +5,7 @@
 #include "common.h"
 #include "tools.h"
 #include "tl_malloc.h"
-#include "ex.h"
+//#include "ex.h"
 #include "tmat.h"
 #include "obj_vbo.h"
 #include "ftext.h"
@@ -15,8 +15,7 @@
 
 #include "str.h"
 
-//#define DEBUG
-
+#define DEBUG
 
 /*
 *[0]: width: 6  height: 12
@@ -37,25 +36,20 @@ typedef struct FText
 	void* _buffer;
 	//缓冲区大小
 	int _bufferLength;
+
 	float n;//比率因子
-	int _cx,_cy;
+	
+	int _cx,_cy;//临时变量
+#ifdef DEBUG
+	struct Sprite* debugbg;
+#endif
+
 }FText;
 
-//汉字第一个字节的范围
-static int
-f_is_first_code(unsigned char c){
-	return (0x80 <= c) && (0xF7 >= c);
-}
-//汉字第二个字节的范围
-static int
-f_is_second_code(unsigned char c){
-	return (0xA1 <= c) && (0xFE > c);
-}
 static void 
 f_pCallBack(void* inParam,char* str){
 	FText* txt = (FText*)inParam;
 	int w,h;
-	//printf("***%s\n",str);
 	ftext_set(inParam,str,txt->_cx,txt->_cy,&w,&h);
 	txt->_cx+=w;
 }
@@ -93,6 +87,10 @@ ftext_create(char* txtName,int fw,int fh){
 	//txt->fh = 18*n;
 	
 	txt->spr = sprite_create(txtName,0,0,txtWidth,txtHeight,0);
+	
+
+	
+	
 	txt->_bufferLength = txt->fw * txt->fh*4;//计算需要的缓冲区的大小
 	txt->_buffer = tl_malloc(txt->_bufferLength);
 
@@ -111,6 +109,21 @@ ftext_create(char* txtName,int fw,int fh){
 
 		int size = 64;
 		spr->material = tmat_create_rgba("font1",size,size,GL_BGRA);//"font"
+	
+	
+#ifdef DEBUG
+		{
+			char _name[G_BUFFER_64_SIZE];
+			tl_newName(_name,G_BUFFER_64_SIZE);
+			
+			txt->debugbg = sprite_create(_name,0,0,spr->mWidth,spr->mHeight,0);
+			txt->debugbg->material = tmat_create("spritevbo",1,"\\resource\\texture\\1.tga");//spr->material;
+			ex_setv(txt->debugbg,FLAGS_DRAW_PLOYGON_LINE);
+			ex_setv(txt->debugbg,FLAGS_VISIBLE);
+			sprite_rotateZ(txt->debugbg,-PI/2);
+			sprite_set_scale_z(txt->debugbg,1/n);
+		}
+#endif
 	}
 	/*
 	{
@@ -140,6 +153,9 @@ ftext_setpos(void* p,int x,int y){
 		y = y - spr->mHeight*(spr->zScale);
 	}*/
 	sprite_setpos(spr,x,y);
+#ifdef DEBUG
+	sprite_setpos(txt->debugbg,x+50,y+50);
+#endif
 }
 
 void 
@@ -160,16 +176,6 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 	*pw = iWidth;
 	*ph = iHeight;
 	
-#ifdef DEBUG
-	printf("%s:%d字节\tcn = %d",s,strlen(s),f_is_first_code(s[0]));
-	if(strlen(s)>1){
-		if(f_is_second_code(s[1])){
-			printf("\t第二个字节是中文");
-		}
-	}
-	printf("\n");
-#endif
-
 	y = txt->fh - iHeight;//底对齐
 
 	jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
