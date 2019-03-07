@@ -106,7 +106,8 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M)
 
 	//高光开关
 	int bSpecular = glGetUniformLocation(program3D,"bSpecular");
-
+	//剔除alpha的开关
+	int _DiscardAlpha = glGetUniformLocation(program3D,"_DiscardAlpha");
 	//时间线
 	int iGlobalTime = glGetUniformLocation(program3D,"_iGlobalTime");
 
@@ -230,7 +231,9 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M)
 		GLfloat _openSpecular = 1.0f;
 		glUniform1f(bSpecular,_openSpecular);
 	}
-	
+	if(_DiscardAlpha!=-1){
+		glUniform1i(_DiscardAlpha,_material->_DiscardAlpha);
+	}
 	if(_Alpha!=-1)
 	{
 		glUniform1f(_Alpha,_material->_Alpha);
@@ -495,6 +498,11 @@ tmat_create_rgba(const char* glslType,GLint width,GLint height,GLenum rgbaType){
 	return tmat;
 }
 
+void
+tmat_set_discardAlpha(void* p,int value){
+	struct GMaterial* tmat = (struct GMaterial*)p;
+	tmat->_DiscardAlpha = value;
+}
 
 void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f mat4x4,GLfloat* vertexs,int vertLen,int format,int mode)
 {

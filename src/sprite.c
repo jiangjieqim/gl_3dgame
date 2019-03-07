@@ -540,7 +540,7 @@ getMaterial(struct Sprite* p){
 
 		{
 			HeadInfo* head = (HeadInfo*)p->base;
-			printf("getMaterial %s ,没有设置图集也没有默认材质\n",head->name);
+			printf("getMaterial %s ,没有设置图集,也没有默认材质\n",head->name);
 			assert(0);//这里需要对没有设置材质的对象进行修复!!!
 		}
 		return 0;

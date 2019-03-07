@@ -7,6 +7,7 @@
 
 #include "tools.h"
 #include "str.h"
+#include "ftfont.h"
 #include "tlgl.h"
 #include "tmat.h"
 #include "ex.h"
@@ -1004,6 +1005,7 @@ void ex_dispose(struct EX* p){
 	printf("销毁引擎设备!\n");
 	//getch();
 	LStack_delete((struct LStackNode*)p->renderList);
+	ft_free(p->ft);
 	evt_dispose(p);
 	memory_gc();
 	

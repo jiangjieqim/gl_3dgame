@@ -664,7 +664,7 @@ function func_get_longTime()
 	return get_attr(nil,"get_longTime");
 end
 
---获取进程运行时间
+--获取屏幕的尺寸
 function func_screenSize()
 	local w,h=get_attr(nil,"screenSize");
 	return w,h

@@ -31,7 +31,11 @@ end
 
 -------------------------------------------------------------
 
-local btn = btn_create(50,50,64,64,"gundi.png");
-local ft = func_ftext_create();--18,16,16,15
+
+local w = 128;
+local h = 128;
+local btn = btn_create(50,50,w,h,"gundi.png");
+
+local ft = func_ftext_create(w,h,14,13);--18,16,16,15
 func_ftext_setpos(ft,50,50);
-func_ftext_parse(ft,"按钮说明大");
+func_ftext_parse(ft,"按时吃药哟!");

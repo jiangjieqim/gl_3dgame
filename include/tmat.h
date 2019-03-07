@@ -45,6 +45,7 @@ typedef struct GMaterial{
 	
 	//设置alpha
 	float _Alpha;
+	int _DiscardAlpha;//丢弃alpha是0的片段
 
 	int flags;//材质标示符
 }GMaterial;
@@ -100,5 +101,9 @@ GLuint tmat_getTextureByIndex(struct GMaterial* pmat,int index);
 
 void* 
 tmat_create_rgba(const char* glslType,GLint width,GLint height,GLenum rgbaType);
+
+//设置是否丢弃alpha片段
+void
+tmat_set_discardAlpha(void* p,int value);
 
 #endif

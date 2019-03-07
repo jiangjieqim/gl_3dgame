@@ -31,6 +31,7 @@ function EX:exit()
     change_attr(nil,"exit");
 end
 
+
 --[[
 --ªÒ»°fps
 function func_fps()

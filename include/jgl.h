@@ -12,7 +12,7 @@ typedef struct RGBA {
 	GLubyte blue;
 	GLubyte green;
 	GLubyte red;
-	//GLubyte alpha;
+	GLubyte alpha;
 }RGBA;
 /*
 	根据路径创建一张贴图

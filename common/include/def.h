@@ -1,6 +1,7 @@
 #ifndef _DEF_H_
 #define _DEF_H_
-//#define DEBUG//启用debug模式
+//启用debug模式
+//#define DEBUG
 
 #ifdef BUILDING_DLL
 #define DLLIMPORT __declspec(dllexport)

@@ -1,6 +1,8 @@
 #version 110
 uniform sampler2D texture1;//界面贴图
 varying vec2 out_texcoord;
+uniform int _DiscardAlpha;//是否销毁alpha = 0的像素片段
+
 void main(void){
 	vec4 finalColor=texture2D(texture1, out_texcoord);
 	/*
@@ -16,12 +18,14 @@ void main(void){
 	}
 	*/
 	
-
-	if(finalColor.a<=0.0){
-		discard;
-	}else{
-		gl_FragColor = finalColor;//取字体的原来颜色
+	if(_DiscardAlpha != 1){
+		if(finalColor.a<=0.0){
+			discard;
+		}else{
+			gl_FragColor = finalColor;//取字体的原来颜色
+		}
 	}
-
-//	gl_FragColor = finalColor;
+	else{
+		gl_FragColor = finalColor;
+	}
 }
