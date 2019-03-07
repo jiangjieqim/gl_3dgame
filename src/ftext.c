@@ -118,17 +118,7 @@ ftext_create(char* txtName,int fw,int fh){
 
 	//spr->material = tmat_create_rgba("font1",64,64,GL_BGRA);//"font"
 	{
-
-
-		int size = 64;
-
-		
-
-		
-		spr->material = tmat_create_rgba("font1",size,size,GL_BGRA);//"font"
-	
-		
-
+		spr->material = tmat_create_rgba("font1",txtWidth,txtHeight,GL_BGRA);//"font"
 	}
 	/*
 	{

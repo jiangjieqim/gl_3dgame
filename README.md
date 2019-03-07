@@ -101,3 +101,4 @@ setv(_floor,FLAGS_DISABLE_CULL_FACE);
 
 (18)  
 FText相当于继承自Sprite基础上扩展出来的组件  
+how to创建一块非2次幂尺寸的贴图,并且用自定义填充像素数据?  

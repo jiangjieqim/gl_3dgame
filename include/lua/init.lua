@@ -4,7 +4,7 @@ dofile("..\\include\\lua\\core.lua");
 --infowin(0,20);
 
 
-dofile("..\\include\\lua\\7.lua");
+dofile("..\\include\\lua\\8.lua");
 
 
 --local function f_onkey(data)
