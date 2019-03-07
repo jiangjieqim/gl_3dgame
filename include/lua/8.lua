@@ -27,53 +27,11 @@ function test()
 	--scxzxAetv(_floor,FLAGS_DRAW_PLOYGON_LINE)--线框
     cam:position(0,0,-5);
 end
-function f_onkey(data)
-	local key = tonumber(data);
-	print(key);
-	
-
---		r = r + PI/8;
-
---		if(key == KEY_A) then
---			func_setRotateX(_floor,r)
---		elseif(key == KEY_B)then
---			func_setRotateY(_floor,r)
---		elseif(key == KEY_C) then
---			func_setRotateZ(_floor,r)
---		elseif(key == KEY_D) then
---			local rx,ry,rz = func_get_rotate(_floor)
---			print(string.format("%.3f %.3f %.3f",rx%PI,ry%PI,rz%PI));
---			func_ex_info();
---		elseif(key == KEY_I) then
---			--func_changeFlags(_floor,FLAGS_DISABLE_CULL_FACE);
---        	ex:switch_spriteline();
---		end
-	if(key == KEY_I) then
-		ex:switch_spriteline();
-    elseif(key == KEY_ESC) then
-        ex:exit();	
-	end
-end
 
 
-
-evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
-
-test();
 -------------------------------------------------------------
 
---local btn = btn_create(50,50,64,64,"gundi.png");
-local ft = func_ftext_create(16,15);--18,16  16,15
+local btn = btn_create(50,50,64,64,"gundi.png");
+local ft = func_ftext_create();--18,16,16,15
 func_ftext_setpos(ft,50,50);
---local x,y;
---x = 0;
---y=0;
---local w,h = func_ftext_setchar(ft,"字");
---x=x+w;
---w,h = func_ftext_setchar(ft,",",x,y);
---x=x+w;
---w,h = func_ftext_setchar(ft,"R",x,y);
-
-
---print(ft,w,h);
-func_ftext_parse(ft,"按钮Ab大");
+func_ftext_parse(ft,"按钮说明大");

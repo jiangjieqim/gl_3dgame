@@ -15,7 +15,7 @@
 
 #include "str.h"
 
-#define DEBUG
+//#define DEBUG
 
 /*
 *[0]: width: 6  height: 12
@@ -67,9 +67,9 @@ ftext_parse(void* p,const char* str){
 }
 
 void*
-ftext_create(char* txtName,int fw,int fh){
-	int txtWidth = 64;
-	int txtHeight= 64;
+ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
+	//int txtWidth = 64;
+	//int txtHeight= 64;
 	//struct Sprite* sp = sprite_create("text",0,0,32,32,0);
 	struct Sprite* spr;
 	float n;
@@ -100,9 +100,6 @@ ftext_create(char* txtName,int fw,int fh){
 #endif
 	txt->spr = sprite_create(txtName,0,0,txtWidth,txtHeight,0);
 	
-
-	
-	
 	txt->_bufferLength = txt->fw * txt->fh*4;//计算需要的缓冲区的大小
 	txt->_buffer = tl_malloc(txt->_bufferLength);
 
@@ -117,9 +114,9 @@ ftext_create(char* txtName,int fw,int fh){
 	sprite_set_scale_z(spr,1/n);
 
 	//spr->material = tmat_create_rgba("font1",64,64,GL_BGRA);//"font"
-	{
-		spr->material = tmat_create_rgba("font1",txtWidth,txtHeight,GL_BGRA);//"font"
-	}
+	
+	spr->material = tmat_create_rgba("font1",txtWidth,txtHeight,GL_BGRA);//"font"
+	
 	/*
 	{
 		int cw=0;

@@ -1,9 +1,11 @@
 --创建文本对象
-function func_ftext_create(fw,fh)
+function func_ftext_create(w,h,fw,fh)
     local name = func_create_name();
+    w = w or 64;
+    h = h or 64;
     fw = fw or 12;
     fh = fh or 11;
-    return ftext(nil,"create",name,string.format("%s,%s",fw,fh));
+    return ftext(nil,"create",name,string.format("%s,%s,%s,%s",w,h,fw,fh));
 end
 --设置文本对象坐标
 function func_ftext_setpos(txt,x,y)

@@ -58,5 +58,8 @@ end
 function EX:delayTime()
     return get_attr(nil,"delayTime");
 end
-
+--…Ë÷√±≥æ∞…´
+function EX:bgColor(r,g,b)
+    change_attr(nil,"setBgColor",string.format("%s,%s,%s",r,g,b));
+end
 ex = EX:new();
