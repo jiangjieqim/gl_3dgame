@@ -1,7 +1,6 @@
 #ifndef _DEF_H_
 #define _DEF_H_
-
-//#define BUILDING_DLL
+//#define DEBUG//∆Ù”√debugƒ£ Ω
 
 #ifdef BUILDING_DLL
 #define DLLIMPORT __declspec(dllexport)

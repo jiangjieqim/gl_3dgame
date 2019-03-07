@@ -1275,9 +1275,9 @@ static int
 f_load_vbo(char* name,const char* url)
 {
 	char suffix[G_BUFFER_16_SIZE];
-	
+#ifdef DEBUG
 	log_color(0x00ff00,"VBO模式创建模型对象:(%s)\n",name);
-
+#endif
 	tl_getSuffixByPath((char*)url,suffix,G_BUFFER_16_SIZE);
 	if(!strcmp(suffix,"obj"))
 	{
@@ -1661,7 +1661,9 @@ void setBgColor(float r,float g,float b){
 	ex->bg_r = r;
 	ex->bg_g = g;
 	ex->bg_b = b;
+#ifdef DEBUG
 	printf("设置窗口背景填充色:%f,%f,%f\n",r,g,b);
+#endif
 }
 
 //int getState(int t){

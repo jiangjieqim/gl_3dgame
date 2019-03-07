@@ -149,7 +149,7 @@ GLbyte *
 jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iComponents, GLenum *eFormat)
 {
 
-	#ifdef _DEBUG_MODE_
+	#ifdef DEBUG
 		int _t = get_longTime();
 	#endif
 
@@ -290,7 +290,7 @@ jgl_readTGABits(const char *szFileName, GLint *iWidth, GLint *iHeight, GLint *iC
 	//绘制像素点的测试代码
 	//pBits=drawPixelTest(*iWidth,*iHeight);
 	//========================================
-#ifdef _DEBUG_MODE_
+#ifdef DEBUG
 	log_color(0xffffff,"构建纹理 [URL %s]宽高 %d %d,消耗 %ld 毫秒\n",szFileName,*iWidth,*iHeight,(get_longTime()-_t));
 #endif
 
@@ -365,7 +365,7 @@ static int f_loadTGATextureRect(const char *szFileName)
 void
 f_loadPicByPath(const char *szFileName){
 
-	#ifdef _DEBUG_MODE_
+	#ifdef DEBUG
 		int _t = get_longTime();
 	#endif
 
@@ -391,7 +391,7 @@ f_loadPicByPath(const char *szFileName){
 		glTexImage2D(GL_TEXTURE_2D,0,3,_bmpWidth,_bmpHeight,0,GL_RGB,GL_UNSIGNED_BYTE,image);
 		tl_free((void*)image);
 
-		#ifdef _DEBUG_MODE_
+		#ifdef DEBUG
 				printf("构建纹理 [URL %s]宽高 %d %d,消耗 %ld 毫秒\n",szFileName,_bmpWidth,_bmpHeight,(get_longTime()-_t));
 		#endif
 	}

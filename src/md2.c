@@ -380,7 +380,7 @@ fParseFrames(struct MD2_ParseObj* _md2)
 	
 	for(i = 0;i < _md2->_numFrames;i++)
 	{
-		#ifdef _DEBUG_MODE_
+		#ifdef DEBUG
 			int __time = get_longTime();
 		#endif
 
@@ -464,7 +464,7 @@ fParseFrames(struct MD2_ParseObj* _md2)
 		}
 		fBuildVertices(_md2,tvertices,(const char*)name,i);
 		//}
-		#ifdef _DEBUG_MODE_
+		#ifdef DEBUG
 			//printf("解析关键帧索引%d消耗 %ld 毫秒\n",i,(get_longTime() - __time));
 			{
 				int c = i + 1;
@@ -473,7 +473,7 @@ fParseFrames(struct MD2_ParseObj* _md2)
 		#endif	
 	}
 
-	#ifdef _DEBUG_MODE_ 
+	#ifdef DEBUG 
 		printf("\n");	
 	#endif
 
@@ -582,7 +582,7 @@ fParseFaces(struct MD2_ParseObj* _md2)
 
 void* md2parse_load(const char* str,int len){
 	struct MD2_ParseObj* _md2;
-#ifdef  _DEBUG_MODE_
+#ifdef  DEBUG
 	int __time = get_longTime();
 	log_color(0x00ff00,"############################### md2文件开始解析(%d字节)%.3fkb\n",len,(float)len/1024);
 #endif
@@ -661,7 +661,7 @@ void* md2parse_load(const char* str,int len){
 	bs_dispose(_md2->b);
 	tl_free(_md2->b);
 
-#ifdef  _DEBUG_MODE_
+#ifdef  DEBUG
 	log_color(0x00ff00,"############################### md2文件解析结束,耗时 %ld 毫秒\n",(get_longTime()-__time));
 #endif
 	

@@ -5,7 +5,7 @@
 #include "common.h"
 #include "tools.h"
 #include "tl_malloc.h"
-//#include "ex.h"
+#include "ex.h"
 #include "tmat.h"
 #include "obj_vbo.h"
 #include "ftext.h"
@@ -85,7 +85,19 @@ ftext_create(char* txtName,int fw,int fh){
 	txt->fh = fh*n;
 	//txt->fw = 18*n;
 	//txt->fh = 18*n;
-	
+#ifdef DEBUG
+	{
+		char _name[G_BUFFER_64_SIZE];
+		tl_newName(_name,G_BUFFER_64_SIZE);
+
+		txt->debugbg = sprite_create(_name,0,0,txtWidth,txtHeight,0);
+		txt->debugbg->material = tmat_create("spritevbo",1,"\\resource\\texture\\b.bmp");//spr->material;
+		//ex_setv(txt->debugbg,FLAGS_DRAW_PLOYGON_LINE);
+		ex_setv(txt->debugbg,FLAGS_VISIBLE);
+		sprite_rotateZ(txt->debugbg,-PI/2);
+		sprite_set_scale_z(txt->debugbg,1/n);
+	}
+#endif
 	txt->spr = sprite_create(txtName,0,0,txtWidth,txtHeight,0);
 	
 
@@ -107,23 +119,16 @@ ftext_create(char* txtName,int fw,int fh){
 	//spr->material = tmat_create_rgba("font1",64,64,GL_BGRA);//"font"
 	{
 
+
 		int size = 64;
+
+		
+
+		
 		spr->material = tmat_create_rgba("font1",size,size,GL_BGRA);//"font"
 	
-	
-#ifdef DEBUG
-		{
-			char _name[G_BUFFER_64_SIZE];
-			tl_newName(_name,G_BUFFER_64_SIZE);
-			
-			txt->debugbg = sprite_create(_name,0,0,spr->mWidth,spr->mHeight,0);
-			txt->debugbg->material = tmat_create("spritevbo",1,"\\resource\\texture\\1.tga");//spr->material;
-			ex_setv(txt->debugbg,FLAGS_DRAW_PLOYGON_LINE);
-			ex_setv(txt->debugbg,FLAGS_VISIBLE);
-			sprite_rotateZ(txt->debugbg,-PI/2);
-			sprite_set_scale_z(txt->debugbg,1/n);
-		}
-#endif
+		
+
 	}
 	/*
 	{
@@ -154,7 +159,7 @@ ftext_setpos(void* p,int x,int y){
 	}*/
 	sprite_setpos(spr,x,y);
 #ifdef DEBUG
-	sprite_setpos(txt->debugbg,x+50,y+50);
+	sprite_setpos(txt->debugbg,x,y);
 #endif
 }
 

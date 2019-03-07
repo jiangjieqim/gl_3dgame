@@ -906,21 +906,6 @@ void sprite_dipose(struct Sprite* spr)
 		spr->base = NULL;
 	}
 	
-	//if(spr->callLuaDragMove)
-	//{
-	//	tl_free(spr->callLuaDragMove);
-	//}
-
-	/*if(spr->callLuaMouseDown)
-	{
-		tl_free(spr->callLuaMouseDown);
-	}*/
-
-	/*if(spr->luaTablePtr)
-	{
-		tl_free(spr->luaTablePtr);
-	}*/
-	
 	if(spr->vbo)
 	{
 		objVBO_dispose(spr->vbo);
