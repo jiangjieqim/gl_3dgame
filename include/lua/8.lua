@@ -38,17 +38,13 @@ local h = 151;
 
 --local btn = btn_create(50,50,w,h,"gundi.png");`
 
-local ft = func_ftext_create(w,h,14,13);--18,16,16,15
+local ft = func_ftext_create(w,h);--18,16,16,15
 func_ftext_setpos(ft,50,50);
 print(func_get_longTime());
 
 
---    for i=1,20,1 do
---        print( string.sub(s,i-1,i))
-      func_ftext_parse(ft,func_loadfile("\\resource\\obj\\sphere.obj"));  --teapot
 
- --   end
-
-
+--      func_ftext_parse(ft,func_loadfile("\\resource\\obj\\sphere.obj"));  --teapot
+func_ftext_parse(ft,'输出引擎信息');
 
 print(func_get_longTime());

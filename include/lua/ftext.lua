@@ -3,8 +3,10 @@ function func_ftext_create(w,h,fw,fh)
     local name = func_create_name();
     w = w or 64;
     h = h or 64;
-    fw = fw or 12;
-    fh = fh or 11;
+
+    --12,11
+    fw = fw or 14;
+    fh = fh or 13;
     return ftext(nil,"create",name,string.format("%s,%s,%s,%s",w,h,fw,fh));
 end
 --设置文本对象坐标
@@ -67,8 +69,8 @@ end
 --end
 
 
-FText = {
-    str,--文本数据
-    txtWidth,--文本对象的宽度
-};
-FText.__index = FText;
+--FText = {
+--    str,--文本数据
+--    txtWidth,--文本对象的宽度
+--};
+--FText.__index = FText;
