@@ -23,6 +23,10 @@ end
 function func_ftext_parse(txt,s)
     return ftext(txt,"parse",s);
 end
+--销毁
+function func_fext_dispose(txt)
+    ftext(txt,"dispose");
+end
 
 ----分割成中文和英文存储在table中
 --function func_split_cn(s)
