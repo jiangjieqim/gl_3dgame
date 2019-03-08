@@ -79,7 +79,7 @@ ftext_parse(void* p,const char* str,int *w,int *h){
 void
 ftext_clear(void* p){
 	FText* txt = (FText*)p;
-	int length;
+	//int length;
 	struct Sprite* spr = txt->spr;
 	GMaterial* mat = spr->material;
 	txt->_cx = 0;
@@ -95,7 +95,7 @@ ftext_clear(void* p){
 	///*GLbyte* image = jgl_createRGBA_buffer(txt->w,txt->h);
 
 	jsl_sub(tmat_getTextureByIndex(mat,0),txt->_buffer,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);
-
+	
 	txt->w = 0;
 	txt->h = 0;
 }
