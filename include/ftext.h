@@ -22,5 +22,5 @@ ftext_setpos(void* p,int x,int y);
  *	将str字符串转换成贴图数据展示出来
  */
 void
-ftext_parse(void* p,const char* str);
+ftext_parse(void* p,const char* str,int *w,int *h);
 #endif

@@ -21,7 +21,7 @@ function func_ftext_setchar(txt,s,x,y)
 end
 --解析多个字符
 function func_ftext_parse(txt,s)
-    ftext(txt,"parse",s);
+    return ftext(txt,"parse",s);
 end
 
 ----分割成中文和英文存储在table中

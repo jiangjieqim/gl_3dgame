@@ -32,9 +32,8 @@ end
 -------------------------------------------------------------
 
 
-local w = 151;
-local h = 151;
-
+local w = 20;--42,20
+local h = w;
 
 --local btn = btn_create(50,50,w,h,"gundi.png");`
 
@@ -45,6 +44,6 @@ print(func_get_longTime());
 
 
 --      func_ftext_parse(ft,func_loadfile("\\resource\\obj\\sphere.obj"));  --teapot
-func_ftext_parse(ft,'输出引擎信息');
-
+local tw,th=func_ftext_parse(ft,'输出引擎信息看看');
+print(tw,th);
 print(func_get_longTime());

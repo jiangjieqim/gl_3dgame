@@ -31,7 +31,7 @@ typedef struct FText
 	struct Sprite* spr;	
 	int size;
 	int fw,fh;
-
+	//===========================================================
 	//字体预制缓冲区,用于存储临时的像素字节流数据
 	void* _buffer;
 	//缓冲区大小
@@ -41,7 +41,6 @@ typedef struct FText
 	
 	int _cx,_cy;//临时变量
 	
-
 	int _px,_py;//当前文本对象的坐标文本对象需要满足 _px + fw <= spr.w ,py + fh <= spr.h
 	
 	int _stop;//无法绘制的部分将丢弃掉
@@ -49,6 +48,7 @@ typedef struct FText
 //#ifdef DEBUG
 //	struct Sprite* debugbg;
 //#endif
+	int w,h;//文本渲染的宽高
 
 }FText;
 
@@ -58,11 +58,11 @@ f_pCallBack(void* inParam,char* str){
 	int w,h;
 	ftext_set(inParam,str,txt->_cx,txt->_cy,&w,&h);
 	txt->_cx+=w;
-
+	//printf("%s\n",str);
 	return txt->_stop == 0 ? 1 : 0;
 }
 void
-ftext_parse(void* p,const char* str){
+ftext_parse(void* p,const char* str,int *w,int *h){
 	//void 
 	//	str_parse_eg_cn(const char* str,void* inParam,
 	//	void(pCallBack)(void*,char*))
@@ -72,6 +72,9 @@ ftext_parse(void* p,const char* str){
 	txt->_cy = 0;
 
 	str_parse_eg_cn(str,p,f_pCallBack);
+	//printf("%d %d\n",txt->w,txt->_py);
+	*w = txt->w;// + txt->fw;
+	*h = txt->h;// + txt->fh;
 }
 
 void*
@@ -122,7 +125,7 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 	spr->material = tmat_create_rgba("font1",txtWidth,txtHeight,GL_BGRA);//"font"
 	
 	//设置背景不透明
-	//tmat_set_discardAlpha(spr->material,1);
+	tmat_set_discardAlpha(spr->material,1);
 
 	/*
 	{
@@ -160,8 +163,10 @@ ftext_setpos(void* p,int x,int y){
 /************************************************************************/
 /* 计算文本是不是需要换行处理                                                                     */
 /************************************************************************/
-static void
+static int
 f_reset_xy(FText* txt,int *px,int *py,int cw,int ch){
+	//当前cw文本渲染的宽度,ch 文本渲染的高度
+
 	int maxWidth = txt->spr->mWidth;//最大的宽度
 	int tw = cw;//txt->fw;
 	if(txt->_px+ tw<=maxWidth){
@@ -174,12 +179,21 @@ f_reset_xy(FText* txt,int *px,int *py,int cw,int ch){
 	}
 	
 	*px = txt->_px-tw;
-	*py = txt->_py + (txt->fh - ch);
-	if(*py > txt->spr->mHeight){
+	*py = txt->_py + (txt->fh - ch);	//y = txt->fh - ch;//底对齐
+	//if(*py > txt->spr->mHeight-txt->fh){
+	if(*py + ch > txt->spr->mHeight){
 		txt->_stop = 1;//结束处理文本像素获取请求
+		return 0;
+	}else{
+		//计算文本对象的宽高
+	//	printf("py=%d\n",txt->_py);
 	}
-	//y = txt->fh - ch;//底对齐
-
+	if (txt->w<txt->_px){
+		txt->w=txt->_px;
+	}
+	txt->h = *py + ch;
+	
+	return 1;
 }
 
 void 
@@ -212,10 +226,10 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 
 		//y = txt->fh - iHeight;//底对齐
 
-		f_reset_xy(txt,&x,&y,iWidth,iHeight);
-
-		jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
-
+		if(f_reset_xy(txt,&x,&y,iWidth,iHeight)){
+			//printf("==>%s\n",s);
+			jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
+		}
 	}
 }
 
