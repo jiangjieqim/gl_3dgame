@@ -76,6 +76,29 @@ ftext_parse(void* p,const char* str,int *w,int *h){
 	*w = txt->w;// + txt->fw;
 	*h = txt->h;// + txt->fh;
 }
+void
+ftext_clear(void* p){
+	FText* txt = (FText*)p;
+	int length;
+	struct Sprite* spr = txt->spr;
+	GMaterial* mat = spr->material;
+	txt->_cx = 0;
+	txt->_cy = 0;
+	txt->_px = 0;
+	txt->_py = 0;
+	txt->_stop = 0;
+	//jgl_create_opengl_RGBA_Tex(txt->w,txt->h,GL_BGRA);
+	
+	//填充像素数据的alpha值 = 0
+	//length = sizeof(struct RGBA) * txt->w * txt->h;
+	memset(txt->_buffer,0x00,txt->_bufferLength);
+	///*GLbyte* image = jgl_createRGBA_buffer(txt->w,txt->h);
+
+	jsl_sub(tmat_getTextureByIndex(mat,0),txt->_buffer,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);
+
+	txt->w = 0;
+	txt->h = 0;
+}
 
 void*
 ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){

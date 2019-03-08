@@ -23,6 +23,10 @@ end
 function func_ftext_parse(txt,s)
     return ftext(txt,"parse",s);
 end
+--²Á³ý
+function func_fext_clear(txt)
+    ftext(txt,"clear");
+end
 --Ïú»Ù
 function func_fext_dispose(txt)
     ftext(txt,"dispose");

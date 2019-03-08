@@ -550,7 +550,7 @@ jsl_sub(GLuint texName,		//贴图句柄
 			subImageWidth,subImageHeight, eFormat,type, pBytes);
 		
 		glBindTexture(GL_TEXTURE_2D, 0);
-		tl_free(pBytes);
+		//tl_free(pBytes);
 	}else{
 		log_code(ERROR_BAD_VALUE);//纹理数据不存在
 		assert(0);

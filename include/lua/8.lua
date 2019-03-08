@@ -44,9 +44,13 @@ print(func_get_longTime());
 
 
 --      func_ftext_parse(ft,func_loadfile("\\resource\\obj\\sphere.obj"));  --teapot
-local tw,th=func_ftext_parse(ft,'输出引擎信息看看');
-print(tw,th);
+
 --func_ftext_setchar(ft,"A",0,0);
 print(func_get_longTime());
 
-func_fext_dispose(ft);
+func_fext_clear(ft);
+local tw,th=func_ftext_parse(ft,'输出引擎信息看看');
+print(tw,th);
+--func_fext_clear(ft);
+--func_fext_dispose(ft);
+
