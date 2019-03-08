@@ -42,20 +42,19 @@ local function ftextTest()
 
     local ft = func_ftext_create(w,h);--18,16,16,15
     func_ftext_setpos(ft,50,50);
-    print(func_get_longTime());
-
+    local _time = func_get_longTime();
 
 
     --      func_ftext_parse(ft,func_loadfile("\\resource\\obj\\sphere.obj"));  --teapot
 
-    print(func_get_longTime());
+   
 
     func_fext_clear(ft);
     local tw,th=func_ftext_parse(ft,'输出引擎信息看看');
-    print(tw,th);
+    print("文本宽高",tw,th);
     --func_fext_clear(ft);
     --func_fext_dispose(ft);
-
+    print('耗时\t'..(func_get_longTime()-_time));
 end
 
 
