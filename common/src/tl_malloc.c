@@ -6,6 +6,9 @@
 
 #define BUILDING_DLL
 
+//是否使用自定义的内存管理
+//#define CUST_MEMORY
+
 #include "tools.h"
 #include "gettime.h"
 
@@ -181,8 +184,12 @@ int memory_get_total(){
 void memory_gc(){
 	int n = g_total;
 	int m = get_longTime();
-	LStack_ergodic(memList,f_gc,0);
-	log_color(0xffff00,"gc之前%d字节(%.3fkb),消耗%d毫秒,gc之后%d字节(%.3fkb),回收了%d字节(%.3fkb)\n",n,n/1024.0f,(get_longTime() - m), g_total,g_total / 1024.0f , (n - g_total), (float)(n - g_total) / 1024.0f);
+	if(memList){
+		LStack_ergodic(memList,f_gc,0);
+		log_color(0xffff00,"gc之前%d字节(%.3fkb),消耗%d毫秒,gc之后%d字节(%.3fkb),回收了%d字节(%.3fkb)\n",n,n/1024.0f,(get_longTime() - m), g_total,g_total / 1024.0f , (n - g_total), (float)(n - g_total) / 1024.0f);
+	}else{
+		printf("未使用自定义的内存管理\n");
+	}
 }
 
 static void 
@@ -210,12 +217,15 @@ memory_free(void* p){
 	f_free(p,0);
 }
 
-static int m;
+//static int m;
 void* tl_malloc(int size){
-	//void* p = memory_new(size);
+#ifdef CUST_MEMORY
+	void* p = memory_new(size);
+#else
 	void*p =malloc(size);
-	m++;
-	printf("+ %d \t%0x\n",m,p);
+#endif
+	//m++;
+	//printf("+ %d \t%0x\n",m,p);
 	return p;
 /*
 
@@ -275,12 +285,15 @@ void* tl_malloc(int size){
 	return MALLOC(size);
 */
 }
-static int c;
+//static int c;
 void tl_free(void* p){
-	//memory_free(p);
+	#ifdef CUST_MEMORY
+	memory_free(p);
+#else
 	free(p);
-	printf("%d \tfree %0x\n",c,p); 
-	c++;
+#endif
+	//printf("%d \tfree %0x\n",c,p); 
+	//c++;
 	return;
 /*
 	struct MemHandle* t = GetInstance();

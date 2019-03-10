@@ -10,7 +10,7 @@
 #include "gettime.h"
 #include "vmath.h"
 
-//#define DEBUG
+#define DEBUG
 
 //====================================================================================
 //MD2接口实现
@@ -471,13 +471,13 @@ fParseFrames(struct MD2_ParseObj* _md2)
 			//printf("解析关键帧索引%d消耗 %ld 毫秒\n",i,(get_longTime() - __time));
 			{
 				int c = i + 1;
-				log_color(0x00ff00,"############################### md2:关键帧数 = %d 顶点总数 = %d  %d/%d %.2f%% \r",_md2->_numFrames,_md2->_numVertices,c,_md2->_numFrames,(float)c/(float)_md2->_numFrames * 100);
+				//log_color(0x00ff00,"############################### md2:关键帧数 = %d 顶点总数 = %d  %d/%d %.2f%% \r",_md2->_numFrames,_md2->_numVertices,c,_md2->_numFrames,(float)c/(float)_md2->_numFrames * 100);
 			}
 		#endif	
 	}
 
 	#ifdef DEBUG 
-		printf("\n");	
+	//	printf("\n");	
 	#endif
 
 	fDeleteVert(tvertices);

@@ -57,6 +57,7 @@ local function ftextTest()
     print('ºÄÊ±\t'..(func_get_longTime()-_time));
 end
 
+cam:position(0,0,-3.5);
 
 --ftextTest();
 
@@ -65,8 +66,18 @@ end
 --local obj = UnitBase:new();
 --obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
 
+--local sprite = sprite_create('name',0,0,100,20);
+--func_setIcon(sprite,'smallbtn');
 
-local sprite = sprite_create('name',0,0,100,20);
-func_setIcon(sprite,'smallbtn');
 
+local obj = UnitBase:new();
+obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
+obj:scale(1/50);
+obj:rx(PI/2);
+obj:y(0.5);
 
+local obj2 = UnitBase:new();
+obj2:loadvbo("\\resource\\md2\\gobin.md2","//resource//material//gobin.mat");
+obj2:scale(1/50);
+obj2:rx(PI/2);
+obj2:y(0.5);

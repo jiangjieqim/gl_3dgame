@@ -62,8 +62,6 @@ struct Ent3D{
 	鼠标左键是否常按着
 */
 //static int isLeftDown = 0;
-
-
 struct EX* ex_getInstance(){
 	if(!g_ex){
 		g_ex = (struct EX*)tl_malloc(sizeof(struct EX));
@@ -361,31 +359,24 @@ ex_info(){
 	//EngineX* p = this;
 	struct ECamera cam = ex->cam;
 	int totleByte,nodeCnt;
-	char buffer[G_BUFFER_1024_SIZE];
 	int j=0;
-	int buffer_size = G_BUFFER_1024_SIZE;
 	int fps = f_get_fps();
 	memory_get_info(&totleByte,&nodeCnt);
-	memset(buffer,0,G_BUFFER_1024_SIZE);
-	
+	printf("**********************************************\n");
 	//j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
 	log_color(0xffff00,"fps:%ld \n",fps);
 	log_color(0x00ff00,"camera 坐标  :      %.3f %.3f %.3f\n",cam.x,cam.y,cam.z);
 	log_color(0xff0000,"camera 角位移: PI = %.3f %.3f %.3f\n",cam.rx/PI,cam.ry/PI,cam.rz/PI);
-	
-	j+=sprintf_s(buffer+j,buffer_size, "**********************************************\n");
 	log_color(0xff00ff,"draw call渲染节点个数:%d\n",LStack_length(ex->renderList));
-	j+=sprintf_s(buffer+j,buffer_size, "屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
-	j+=sprintf_s(buffer+j,buffer_size, "程序已执行:%.3f 秒\n",get_longTime()*0.001);
-	j+=sprintf_s(buffer+j,buffer_size, "内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
 	
-	j+=sprintf_s(buffer+j,buffer_size, "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
+	printf("屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
+	printf("程序已执行:%.3f 秒\n",get_longTime()*0.001);
+	printf("内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
 	
-	j+=sprintf_s(buffer+j,buffer_size, "vbo使用:%d bytes\n",tlgl_getVboSize());
-	j+=sprintf_s(buffer+j,buffer_size, "当前(射线检测)状态:%d\n",getv(&(ex->flags),EX_FLAGS_RAY));
-	//printf("%s\n",buffer);
-	log_color(0x00ff00,"%s\n",buffer);
-	//printf("当前(射线检测)状态:%d\n",getv(&(ex->flags),EX_FLAGS_RAY));
+	printf( "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
+	
+	printf( "vbo使用:%d bytes\n",tlgl_getVboSize());
+	printf( "当前(射线检测)状态:%d\n",getv(&(ex_getInstance()->flags),EX_FLAGS_RAY));
 }
 
 /*
