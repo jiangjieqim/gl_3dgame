@@ -78,13 +78,14 @@ struct VertexData
 	//VBO数据
 	//struct VBO_Obj* vbo;
 };
-
+/*
 struct TLGLinfo{
-	/*景色深*/
+	//景色深
 	GLdouble zfar;
 	int* pScreenWidth;
 	int* pScreenHeight;
 };
+*/
 
 /*屏幕尺寸*/
 //void tlgl_screenSize(float* w,float* h);

@@ -9,6 +9,9 @@
 #include "list.h"
 #include "gettime.h"
 #include "vmath.h"
+
+//#define DEBUG
+
 //====================================================================================
 //MD2接口实现
 struct MD2_ParseObj{

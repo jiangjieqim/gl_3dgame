@@ -23,11 +23,13 @@ void list_add(struct List* _l,float value){
 	if(_l->list!=0)
 	{
 		tl_free(_l->list);
+		_l->list = 0;
 	}
 	_l->list = newList;
 }
 void list_dispose(struct List* _l){
 	_l->length = 0;
 	tl_free(_l->list);
+	_l->list = 0;
 }
 //====================================================================================================

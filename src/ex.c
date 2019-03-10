@@ -30,7 +30,7 @@
 int g_sprite_line;
 long g_delayTime;
 int  g_fps=-1;
-
+static struct EX* g_ex;
 static long _longTime=0;
 struct MD2_Object
 {
@@ -63,10 +63,11 @@ struct Ent3D{
 */
 //static int isLeftDown = 0;
 
-static struct EX* g_ex;
+
 struct EX* ex_getInstance(){
 	if(!g_ex){
 		g_ex = (struct EX*)tl_malloc(sizeof(struct EX));
+		memset(g_ex,0,sizeof(struct EX));
 	}
 	return g_ex;
 }//引擎实例引用
@@ -386,7 +387,6 @@ ex_info(){
 	log_color(0x00ff00,"%s\n",buffer);
 	//printf("当前(射线检测)状态:%d\n",getv(&(ex->flags),EX_FLAGS_RAY));
 }
-static char buffer[G_BUFFER_256_SIZE];
 
 /*
  *显示fps
@@ -403,6 +403,7 @@ static void
 f_show_all_info(){
 	struct EX* p = ex_getInstance();
 	struct ECamera cam = p->cam;
+	char buffer[G_BUFFER_256_SIZE];
 	int vbo = tlgl_getVboSize();
 	int j;
 	int size=-1;
@@ -1783,6 +1784,7 @@ ex_lua_global_evt_dispatch(int evtid){
 }
 void 
 ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
+	
 	lua_State* L =ex_getInstance()->mylua;
 	if(L){
 		lua_getglobal(L,"evt_dispatch");
@@ -1790,6 +1792,11 @@ ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
 		lua_pushinteger(L,evtid);
 		lua_pushstring(L,data);
 		lua_pcall(L,3,0,0);
+	}
+	else{
+#ifdef DEBUG
+	//	printf("evtId : %d,lua script is not init!\n",evtid);
+#endif
 	}
 }
 

@@ -13,6 +13,9 @@
 #include "tl_malloc.h"
 #include "base.h"
 //=========================================================================
+
+
+ 
 struct MD5_model{
 	char version[G_CHAR_SIZE_];/*	版本信息*/
 	char commandline[G_CHAR_SIZE_];/*	命令行*/

@@ -59,6 +59,7 @@ tween_stop(void* ptr){
 	{
 		TweenNode* _node = (TweenNode*)ptr;
 		tl_free(_node->ptr);
+		_node->ptr = 0;
 		LStack_delNode(g_list,(int)_node);
 		tl_free(_node);
 	}

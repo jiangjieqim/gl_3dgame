@@ -220,6 +220,7 @@ void pcsv_dispose(struct PCsvVO* ptr){
 	//===============================================================
 	
 	tl_free(ptr);
+	ptr = 0;
 }
 
 struct Array* pcsv_getValue(struct PCsvVO* ptr,

@@ -4,8 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#pragma comment(lib,"glew32.lib")
-#pragma comment(lib,"glut32.lib")
+
 
 #include "common.h"
 #include "str.h"
@@ -21,7 +20,7 @@
 
 //#define _DEBUG_PRINT_RGB_	//打印rgb
 
-#define  RGB_LENGTH 3
+//#define  RGB_LENGTH 3
 
 typedef struct
 {
@@ -47,7 +46,7 @@ static void
 printfRGB(GLbyte * bytes,int count){
 	int i;
 	GLbyte* b = bytes;
-	int c = RGB_LENGTH;//r g b 3个字节
+	int c = 3;//r g b 3个字节
 	struct RGB rgb;
 	for(i = 0;i < count;i++){
 		memcpy(&rgb,b,c * sizeof(GLubyte));

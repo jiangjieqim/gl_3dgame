@@ -85,6 +85,7 @@ static char* getNodeRow(struct XmlNode* node){
 	memset(rowChars,0,strlen(rowChars));
 	tl_replace(ch,rowChars,G_SIGN_EQUAL,G_SIGN_COMMA);
 	tl_free(ch);
+	ch =0;
 	return rowChars;
 }
 
@@ -166,6 +167,7 @@ static int freeXmlDelNode(int data,int parm){
 }
 void xml_del(struct XMLSList* xml){
 	tl_free(xml->buffer);
+	xml->buffer=0;
 	LStack_ergodic(xml->list,freeXmlDelNode,0);
 	LStack_delete((struct LStackNode*)xml->list);
 	xml->list = 0;
@@ -207,6 +209,8 @@ findXmlNode(int data,int _inputParam){
 				pos = row - _position;*/
 			
 			tl_free(_str);
+
+			_str = 0;
 		}
 
 		if(row!=0){
@@ -298,6 +302,7 @@ char* xml_getCopystr(const struct XmlNode* node,const char* key){
 			printf("did find G_SIGN_COMMA!\n");
 		}
 		tl_free(chs);
+		chs = 0;
 	}
 	tl_free(str);
 	str = 0;
@@ -361,7 +366,7 @@ xml_getstr(const struct XmlNode* node,const char* key,char* buffer,int bufferSiz
 			printf("did find G_SIGN_COMMA!\n");
 		}
 		tl_free(chs);
-
+		chs = 0;
 		stat=1;
 	}
 	tl_free(str);

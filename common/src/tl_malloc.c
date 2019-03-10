@@ -1,5 +1,8 @@
 //#define BUILDING_DLL
 #include <string.h>
+#include <stdio.h>
+#include <memory.h>    
+#include <stdlib.h>
 
 #define BUILDING_DLL
 
@@ -139,8 +142,9 @@ memory_new(int size)
 static void
 f_freeNode(struct MemoryNode* node){
 	g_total-=node->length;
-	FREE(node->p);
+	
 	LStack_delNode(memList,(int)node);
+	FREE(node->p);
 }
 
 //±éÀúÉ¾³ý
@@ -206,9 +210,13 @@ memory_free(void* p){
 	f_free(p,0);
 }
 
-
+static int m;
 void* tl_malloc(int size){
-	return memory_new(size);
+	//void* p = memory_new(size);
+	void*p =malloc(size);
+	m++;
+	printf("+ %d \t%0x\n",m,p);
+	return p;
 /*
 
 	struct MemHandle* instance = GetInstance();
@@ -267,9 +275,12 @@ void* tl_malloc(int size){
 	return MALLOC(size);
 */
 }
-
+static int c;
 void tl_free(void* p){
-	memory_free(p);
+	//memory_free(p);
+	free(p);
+	printf("%d \tfree %0x\n",c,p); 
+	c++;
 	return;
 /*
 	struct MemHandle* t = GetInstance();

@@ -122,12 +122,12 @@ evt_off(void* ptr,int event,void (*evtCallBack)(int,void*)){
 
 		node = (struct EvtInfo*)data;
 
-		
 		if(node->evtId == event && node->ptr == evtCallBack){
 			node->evtId = 0;
 			node->ptr = 0;
-			LStack_delNode(s,data);
-			tl_free((void*)node);
+			LStack_delNode(s,data); 
+			break;
+			//tl_free((void*)node);
 
 			//printf("len= %d\n",LStack_length(s));
 		}

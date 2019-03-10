@@ -58,4 +58,15 @@ local function ftextTest()
 end
 
 
-ftextTest();
+--ftextTest();
+
+--btn_create();
+
+--local obj = UnitBase:new();
+--obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
+
+
+local sprite = sprite_create('name',0,0,100,20);
+func_setIcon(sprite,'smallbtn');
+
+
