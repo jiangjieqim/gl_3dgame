@@ -57,7 +57,7 @@ local function ftextTest()
     print('耗时\t'..(func_get_longTime()-_time));
 end
 
-cam:position(0,0,-3.5);
+--cam:position(0,0,-3.5);
 
 --ftextTest();
 
@@ -69,6 +69,8 @@ cam:position(0,0,-3.5);
 --local sprite = sprite_create('name',0,0,100,20);
 --func_setIcon(sprite,'smallbtn');
 
+cam:position(0,-5,-5);
+cam:rx(PI * 1.8);
 
 local obj = UnitBase:new();
 obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
@@ -76,8 +78,17 @@ obj:scale(1/50);
 obj:rx(PI/2);
 obj:y(0.5);
 
-local obj2 = UnitBase:new();
-obj2:loadvbo("\\resource\\md2\\gobin.md2","//resource//material//gobin.mat");
-obj2:scale(1/50);
-obj2:rx(PI/2);
-obj2:y(0.5);
+
+
+--地板
+local plane = UnitBase:new();
+--plane:load_model(nil,"//resource//material//floor.mat");
+plane:load_model();
+plane:setv(FLAGS_REVERSE_FACE);
+plane:setv(FLAGS_DRAW_PLOYGON_LINE);
+plane:scale(10);
+glsl_set(plane.material,string.format("_lineColor,%s","0.5,0.5,0.5"));
+glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())));--设置diffuse.vs (uniform float _uvScale)uv重复值
+
+
+--local animsc = scrollBar_new(100,20)

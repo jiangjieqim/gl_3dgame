@@ -39,23 +39,23 @@ local function f_endCall(msg)
         print(obj2:get_name().."ÒÆ¶¯½áÊø");
     end
 end
-
-plane:bindRayPick(f_on_click_floor_handle);
-
+if(plane) then
+   plane:bindRayPick(f_on_click_floor_handle);
+end
 evt_on(obj2:get_p(),UnitBaseEvent,f_endCall);
 
 
 
-local animsc = scrollBar_new(100,20)
-local function f_animscHandle(sc)
-    local v = sc.value * PI * 2;
-	--print("### "..tostring(v));
-    --func_setRotateY(unit:get_ptr(),v);
-    obj:ry(v);
-end
-scrollBar_setRange(animsc,0,1)
---animscTf = scrollBar_add_text(animsc,'animsc')
-scrollBar_bind(animsc,f_animscHandle)
+--local animsc = scrollBar_new(100,20)
+--local function f_animscHandle(sc)
+--    local v = sc.value * PI * 2;
+--	--print("### "..tostring(v));
+--    --func_setRotateY(unit:get_ptr(),v);
+--    obj:ry(v);
+--end
+--scrollBar_setRange(animsc,0,1)
+----animscTf = scrollBar_add_text(animsc,'animsc')
+--scrollBar_bind(animsc,f_animscHandle)
 
 
 local function f_onkey(data)
@@ -64,7 +64,9 @@ local function f_onkey(data)
 	if(key == KEY_A) then
 	    alert(tostring(math.random(0,100)));	
 	elseif(key == KEY_B)then
-		func_changeFlags(plane:get_p(),FLAGS_DRAW_PLOYGON_LINE);
+        if(plane) then
+		    func_changeFlags(plane:get_p(),FLAGS_DRAW_PLOYGON_LINE);
+        end
     elseif(key == KEY_ESC) then
         ex:exit();	
 	end

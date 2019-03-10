@@ -13,9 +13,9 @@ ex:bgColor(0,0,0.5);
 infowin(0,20);
 
 
-dofile("..\\include\\lua\\7.lua");
+dofile("..\\include\\lua\\8.lua");
 
-print("lua script is already init finished !");
+--print("lua script is already init finished !");
 
 --local function f_onkey(data)
 --	local key = tonumber(data);
