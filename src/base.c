@@ -672,6 +672,7 @@ base_move(HeadInfo* bp,int ms,
 	if(_tweenPtr && tween_is_play(_tweenPtr))
 	{
 		tween_stop(_tweenPtr);
+		bp->_move_tp = 0;
 	}
 	bp->_move_tp=tween_to(bp,ms,endCallBack,updateCallBack,
 		6,

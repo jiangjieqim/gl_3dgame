@@ -7,7 +7,7 @@ function f_onkey(data)
 end
 
 evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
-ex:bgColor(0,0,0.5);
+ex:bgColor(0.7,0.7,0.7);
 
 --fps();
 infowin(0,20);

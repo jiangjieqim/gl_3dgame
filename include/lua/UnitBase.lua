@@ -132,6 +132,9 @@ local function f_endCall(data)
     --print(data);
 end
 function UnitBase:move(x,y,z)
+    x = tonumber(x);
+    y = tonumber(y);
+    z = tonumber(z);
     local o = self.p;
     
     --print("==============>name=",func_get_name(o));

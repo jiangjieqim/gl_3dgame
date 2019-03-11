@@ -153,8 +153,8 @@ f_nodeRun(TweenNode* _node,TNode* _nptr,int i){
 		g_delay,*_nptr->p);
 #endif
 }
-//处理一个节点
-static void
+//处理一个节点,删除节点成功返回1,反之返回0
+static int
 f_tween_play(TweenNode* _node,long _longTime){
 
 	_node->useTime = _longTime - _node->startTime;
@@ -162,6 +162,7 @@ f_tween_play(TweenNode* _node,long _longTime){
 	if( _node->useTime >= _node->needTime){
 		f_call_end(_node);
 		tween_stop(_node);
+		return 1;
 	}else{
 		int i;
 		for(i = 0;i < _node->length;i++)	
@@ -170,6 +171,7 @@ f_tween_play(TweenNode* _node,long _longTime){
 		if( _node->updateCallBack)	_node->updateCallBack(_node->obj);
 		//printf("%ld\n",_node->useTime);
 	}
+	return 0;
 }
 
 int 
@@ -207,6 +209,15 @@ tween_run(long _longTime,long delayTime){
 		p=(void*)LStack_next(p);
 		data = LStack_data(p);
 		//callBack(data,parm);
-		f_tween_play((TweenNode*)data,_longTime);
+		if(f_tween_play((TweenNode*)data,_longTime)){
+			//删除节点
+			//struct LStackNode* n = (struct LStackNode*)p;
+			//memset(n,0,sizeof(struct LStackNode));//这样会造成野指针,使堆内存块破坏掉
+			//printf("%0x %0x %0x删除成功!\n",n->next,n->pre,n->data);
+
+			//跳转到top位置避免while((int)LStack_next(p))取到的是释放堆内存块数据
+			p = top;
+		}
 	}
+	
 }

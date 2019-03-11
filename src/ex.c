@@ -1528,8 +1528,9 @@ f_rayPick(struct HitResultObject* hit){
 			char bufferXml[G_BUFFER_128_SIZE];
 			memset(bufferXml,0,G_BUFFER_128_SIZE);
 			//构造xml数据
-			sprintf_s(bufferXml,G_BUFFER_128_SIZE,"<luadata x=\"%.3f\" y=\"%.3f\" z=\"%.3f\"/>",hit->x,hit->y,hit->z);
-			printf("bufferXML %0x\n",bufferXml);
+			//sprintf_s(bufferXml,G_BUFFER_128_SIZE,"<luadata x=\"%.3f\" y=\"%.3f\" z=\"%.3f\"/>",hit->x,hit->y,hit->z);
+			sprintf_s(bufferXml,G_BUFFER_128_SIZE,"%.3f,%.3f,%.3f",hit->x,hit->y,hit->z);
+			//printf("bufferXML %0x\n",bufferXml);
 			ex_lua_evt_dispatch(ptr,EVENT_RAY_PICK,bufferXml);
 		}
 	}

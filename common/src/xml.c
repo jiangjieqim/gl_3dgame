@@ -32,11 +32,6 @@ struct FindXmlNode{
 */
 static char* getNodeRow(struct XmlNode* node){
 
-	//if(node->row==NULL){
-	//	InitNode(node->parentXml->data,node);
-	//	return node->row;
-	//}
-
 	char* rowChars = 0;
 	char* _allStr = (char*)node->parentXml->data;
 	
@@ -174,10 +169,9 @@ void xml_del(struct XMLSList* xml){
 	xml->buffer=0;
 	LStack_ergodic(xml->list,freeXmlDelNode,0);
 	
-	//if(xml->data!=0){
-		tl_free(xml->data);
-		xml->data = 0;
-	//}
+	tl_free(xml->data);
+	xml->data = 0;
+
 	LStack_delete((struct LStackNode*)xml->list);
 	xml->list = 0;
 
