@@ -75,9 +75,13 @@ cam:rx(PI * 1.8);
 local obj = UnitBase:new();
 obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
 obj:scale(1/50);
+obj:setv(FLAGS_DRAW_PLOYGON_LINE);
+--obj:setv(FLAGS_RAY);
+--obj:load_collide("\\resource\\md2\\bauul.md2");
+--obj:setv(FLAGS_DRAW_RAY_COLLISION);
 obj:rx(PI/2);
 obj:y(0.5);
-
+--print("obj.name = ",obj:get_name());
 
 
 --地板
@@ -90,5 +94,9 @@ plane:scale(10);
 glsl_set(plane.material,string.format("_lineColor,%s","0.5,0.5,0.5"));
 glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())));--设置diffuse.vs (uniform float _uvScale)uv重复值
 
+local function f_on_click_floor_handle(data)
+    local pos = func_split(data,",");--func_xml_to_tb(data);
+    obj:move(pos[1],pos[2],pos[3]);
+end
 
-local animsc = scrollBar_new(100,20)
+plane:bindRayPick(f_on_click_floor_handle);

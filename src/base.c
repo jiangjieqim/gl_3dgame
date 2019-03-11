@@ -11,7 +11,7 @@
 #include "base.h"
 #include "node.h"
 
-
+//#define DEBUG
 
 //接口实现部分
 //====================================================================================================
@@ -633,17 +633,28 @@ struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMat
 	}
 }
 
-void base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
+void 
+base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
 	Vec3 pos;
 
 	float x = _hitx - p->x;
 	float y = _hity - p->y;
 	float z = _hitz - p->z;
 	vec3Set(&pos,x,y,z);
+	if(vec3Length(&pos)>0){
 
-	vec3Normalize(&pos);
-	p->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);
-	base_updateMat4x4(p);
+		vec3Normalize(&pos);
+
+		
+
+		p->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);
+
+		base_updateMat4x4(p);
+	}else{
+#ifdef DEBUG
+		printf("向量pos长度=0,导致计算朝向会有除0的情况,base_look_at%.3f %.3f\n",pos.x,pos.z);
+#endif
+	}
 }
 static void
 f_ry_tpUpdate(void* p){

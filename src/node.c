@@ -156,9 +156,13 @@ node_render(struct Node* p){
 
 	//////////////////////////////////////////////////////////////////////////
 	//»æÖÆÅö×²ºÐ
-	if(getv(&(base->flags),FLAGS_RAY) && p->ptrCollide && getv(&(base->flags),FLAGS_DRAW_RAY_COLLISION))
+	if(getv(&(base->flags),FLAGS_RAY) && getv(&(base->flags),FLAGS_DRAW_RAY_COLLISION))
 	{
-		drawCollion(p);	
+		if(p->ptrCollide){
+			drawCollion(p);
+		}else{
+			printf("ptrCollide = null!\n");
+		}
 	}
 }
 

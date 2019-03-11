@@ -13,6 +13,7 @@ cam:rx(PI * 1.8);
 local obj2 = UnitBase:new();
 obj2:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");--gobin
 obj2:scale(1/50);
+--obj2:setv(FLAGS_DRAW_PLOYGON_LINE);
 obj2:rx(PI/2);
 obj2:y(0.5);
 

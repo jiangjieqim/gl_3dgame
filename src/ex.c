@@ -632,7 +632,7 @@ render_3dNode(int data)
 	else if(objType == TYPE_OBJ_VBO_FILE)
 	{
 		node_render((struct Node*)data);
-		e->allVertexTotal+=getAllVertex(data);
+		//e->allVertexTotal+=getAllVertex(data);
 	}
 }
 /*

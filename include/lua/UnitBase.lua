@@ -131,6 +131,11 @@ local function f_endCall(data)
     evt_dispatch(p,UnitBaseEvent,UnitBaseEndMsg);
     --print(data);
 end
+--º”‘ÿ≈ˆ◊≤∫–
+function UnitBase:load_collide(model)
+    func_bind_collide(self.p,model or "\\resource\\obj\\box.obj",frame);
+end
+
 function UnitBase:move(x,y,z)
     x = tonumber(x);
     y = tonumber(y);

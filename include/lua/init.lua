@@ -10,10 +10,10 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 ex:bgColor(0.7,0.7,0.7);
 
 --fps();
-infowin(0,20);
+--infowin(0,20);
 
 
-dofile("..\\include\\lua\\7.lua");
+dofile("..\\include\\lua\\8.lua");
 
 --print("lua script is already init finished !");
 

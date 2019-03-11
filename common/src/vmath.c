@@ -691,6 +691,9 @@ vec3IsZero(struct Vec3* v){
 void 
 vec3Normalize(struct Vec3* v){
 	float length = vec3Length(v);
+	if(length <=0){
+		printf("length:%.3f\n",length);
+	}
 	v->x = v->x / length;
 	v->y = v->y / length;
 	v->z = v->z / length;
@@ -887,9 +890,12 @@ vec_rotateAngle(double x1,double y1, double x2,double y2) {
 		}
 	}
 	
+
 	//degree = angle*180.0f/nyPI;
 
 	//return -angle + PI/2;//取负后加1/2的PI
+	//printf("%.3f %.3f %.3f %.3f angle:%.3f\n",x1,y1,x2,y2,angle);
+	//-1.#IO ;
 	return -angle;
 }
 
