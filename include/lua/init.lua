@@ -7,10 +7,13 @@ function f_onkey(data)
 end
 
 evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
-ex:bgColor(0.7,0.7,0.7);
+--ex:bgColor(0.7,0.7,0.7);
+--ex:bgColor(1,1,1);
+--ex:bgColor(0.5,0.5,0.5);
 
---fps();
---infowin(0,20);
+
+fps();
+infowin(0,20);
 
 
 dofile("..\\include\\lua\\8.lua");

@@ -7,7 +7,7 @@ local function f_select(_l)
 	--listbox_set_label(_l,label)
 	listbox_set_label(_l,label)
 	
-	if(label == "ex_info") then
+	if(label == "引擎信息") then
 		func_ex_info();
 	elseif(label == "gc") then
 		func_gc();
@@ -19,11 +19,12 @@ end
 
 function infowin(x,y)
 	local list =  listbox_new(x or 0,y or 0)
-	listbox_add(list,"ex_info")
+	listbox_add(list,"引擎信息")
 	listbox_add(list,"gc")
     listbox_add(list,"line")--切换线框渲染sprite
 
 	
 	listbox_bind(list,f_select)
 	--listbox_select(list,0)--默认选0号索引
+--    listbox_refresh(list);
 end

@@ -50,6 +50,8 @@ typedef struct FText
 //#endif
 	int w,h;//文本渲染的宽高
 
+	char* cur;
+
 }FText;
 
 static int 
@@ -60,6 +62,12 @@ f_pCallBack(void* inParam,char* str){
 	txt->_cx+=w;
 	//printf("%s\n",str);
 	return txt->_stop == 0 ? 1 : 0;
+}
+
+void
+ftext_vis(void* p,int vis){
+	FText* txt = (FText*)p;
+	vis ? ex_setv(txt->spr,FLAGS_VISIBLE) : ex_resetv(txt->spr,FLAGS_VISIBLE);
 }
 void
 ftext_parse(void* p,const char* str,int *w,int *h){
@@ -75,6 +83,20 @@ ftext_parse(void* p,const char* str,int *w,int *h){
 	//printf("%d %d\n",txt->w,txt->_py);
 	*w = txt->w;// + txt->fw;
 	*h = txt->h;// + txt->fh;
+	
+
+	if(txt->cur){
+		tl_free(txt->cur);
+		txt->cur = 0;
+	}
+	txt->cur = tl_malloc(strlen(str)+1);
+	memset(txt->cur,0,strlen(str)+1);
+	memcpy(txt->cur,str,strlen(str));
+}
+char* 
+ftext_get_str(void* p){
+	FText* txt = (FText*)p;
+	return txt->cur;
 }
 void
 ftext_clear(void* p){
@@ -87,6 +109,10 @@ ftext_clear(void* p){
 	txt->_px = 0;
 	txt->_py = 0;
 	txt->_stop = 0;
+	if(txt->cur){
+		tl_free(txt->cur);
+		txt->cur = 0;
+	}
 	//jgl_create_opengl_RGBA_Tex(txt->w,txt->h,GL_BGRA);
 	
 	//填充像素数据的alpha值 = 0
@@ -148,7 +174,7 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 	spr->material = tmat_create_rgba("font1",txtWidth,txtHeight,GL_BGRA);//"font"
 	
 	//设置背景不透明
-	tmat_set_discardAlpha(spr->material,1);
+	//tmat_set_discardAlpha(spr->material,1);
 
 	/*
 	{
@@ -260,6 +286,6 @@ void
 ftext_dispose(void* p){
 	FText* txt = (FText*)p;
 	sprite_dipose(txt->spr);
-	
+	tl_free(txt->cur);
 	tl_free(p);
 }

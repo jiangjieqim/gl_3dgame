@@ -32,11 +32,12 @@ f_tf_vis(list)
 	local v = list.b_drop
 	for key, value in pairs(list.tflist) do      
 		local tf =  value
-		if(v) then
-			setv(tf,FLAGS_VISIBLE)
-		else
-			resetv(tf,FLAGS_VISIBLE);
-		end
+--		if(v) then
+--			setv(tf,FLAGS_VISIBLE)
+--		else
+--			resetv(tf,FLAGS_VISIBLE);
+--		end
+        func_ftext_vis(tf,v == true and 1 or 0)
 	end 
 end
 --获取索引(-1开始)
@@ -49,7 +50,9 @@ f_get_index(list)
 	--return tonumber( string.format('%#.0f',f)) - 1
 	return math.floor(f) - 1
 end
-
+--function listbox_refresh(list)
+--    f_tf_vis(list);
+--end
 --选择一个节点,索引从0开始
 function
 listbox_select(list,n)
@@ -63,7 +66,8 @@ end
 
 function 
 listbox_set_label(list,label)
-	tf_setText(list.tf,label);
+--	tf_setText(list.tf,label);
+    func_ftext_reset(list.tf,label);
 end
 
 
@@ -124,7 +128,8 @@ listbox_new(_x,_y)
 
 	func_setIcon(list.bg,"gundi.png")
 
-	list.tf = tf_create(128,list.x,list.y,r,g,b);
+	list.tf =func_ftext_create(); --tf_create(128,list.x,list.y,r,g,b);
+    func_ftext_setpos(list.tf,list.x,list.y);
 	return list
 end
 
@@ -138,17 +143,21 @@ end
 function 
 listbox_get_label(list)
 	local n = listbox_get_index(list)
-	return func_get_tf_text(list.tflist[n])
+--	return func_get_tf_text(list.tflist[n])
+    return func_ftext_str(list.tflist[n]);
 end
 
 --增加一个节点
 function 
 listbox_add(list,str)
 	local count =	func_get_table_count(list.tflist) + 1
-	local tf=tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
+	local tf=func_ftext_create();--tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
+    func_ftext_setpos(tf,list.x + g_width,list.y + g_gap*(count));
 	list.tflist[count - 1] = tf;
-	tf_setText(tf,str);
-	resetv(tf,FLAGS_VISIBLE);
+	--tf_setText(tf,str);
+    func_ftext_reset(tf,str);
+	--resetv(tf,FLAGS_VISIBLE);
+    --func_ftext_vis(tf,0);
 end
 
 
@@ -163,7 +172,8 @@ listbox_del(list)
 	for key, value in pairs(list.tflist) do
 		ptr_remove(value)
 	end
-	ptr_remove(list.tf)
+	--ptr_remove(list.tf)
+    func_fext_dispose(list.tf);
 	func_clearTableItem(list.tflist)
 	func_clearTableItem(list)
 end
