@@ -18,8 +18,7 @@
 #define DEBUG
 
 #define _Font_Size_ 512
-static GLbyte* g_bytes;//预制缓冲区
-
+static GLbyte* g_bytes;//预制缓冲区(预制1mb缓冲区)
 
 /*
 *[0]: width: 6  height: 12
@@ -58,6 +57,22 @@ typedef struct FText
 	//int _pixelSize;//像素字节
 
 }FText;
+
+/************************************************************************/
+/* 初始化临时缓冲区                                                                     */
+/************************************************************************/
+static void
+f_init_buffer(int w,int h){
+	int length =sizeof(struct RGBA) *w * h;
+	int _maxSize = _Font_Size_*_Font_Size_*sizeof(struct RGBA);
+	if(length > _maxSize){
+		printf("缓冲区太小\n");
+		assert(0);
+	}
+	if(!g_bytes){
+		g_bytes = (GLbyte*)tl_malloc(_maxSize);
+	}
+}
 
 static int 
 f_pCallBack(void* inParam,char* str){
@@ -122,17 +137,11 @@ ftext_clear(void* p){
 	if(txt->w > 0 && txt->h > 0){
 		int length;
 		GLbyte* bytes;
-		int _maxSize = _Font_Size_*_Font_Size_*sizeof(struct RGBA);
-		if(!g_bytes){
-			g_bytes = (GLbyte*)tl_malloc(_maxSize);
-		}
+		
 		//memset(txt->_buffer,0x00,txt->_bufferLength);
 		//jsl_sub(tmat_getTextureByIndex(mat,0),txt->_buffer,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);//txt->w,txt->h	txt->spr->mWidth,txt->spr->mHeight
 		length =sizeof(struct RGBA) *txt->w * txt->h;	//txt->_pixelSize;
-		if(length > _maxSize){
-			printf("缓冲区太小\n");
-			assert(0);
-		}
+		
 		bytes = g_bytes;//(GLbyte*)tl_malloc(length);
 		memset(bytes,0x00,length);
 		jsl_sub(tmat_getTextureByIndex(mat,0),bytes,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);
@@ -171,7 +180,9 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 //中文使用12,11,字母可以使用任何尺寸的字体
 	txt->fw = fw*n;
 	txt->fh = fh*n;
-	
+
+	f_init_buffer(txtWidth,txtHeight);
+
 	txt->spr = sprite_create(txtName,0,0,txtWidth,txtHeight,0);
 	
 	txt->_bufferLength = txt->fw * txt->fh*4;//计算一个文本数据需要的缓冲区的大小

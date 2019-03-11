@@ -130,7 +130,7 @@ local  function f_alert(b)
     if(a) then
       alert("cn你");
     else
-      alert("cn你asdas搭讪撒大声地阿萨德阿萨斯大所多大人的事情你要知道的!");
+      alert("abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz!");
     end
 end
 local btn = btn_create();
