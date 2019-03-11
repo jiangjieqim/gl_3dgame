@@ -124,17 +124,18 @@ cam:rx(PI * 1.8);
 
 
 
---local a = false;
---local  function f_alert(b)
---    --    print(b);
+local a = false;
+local  function f_alert(b)
+    --    print(b);
 
---    a = not a;
---    print(a);
---    if(a) then
---      alert("cnÄã");
---    else
---      alert("abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz!");
---    end
---end
---local btn = btn_create();
---btn_bindClick(btn,f_alert);
+    a = not a;
+    print(a);
+    if(a) then
+      alert("Ò»Èý,*g");
+    else
+      --alert("abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz!");
+      alert("");
+    end
+end
+local btn = btn_create(0,20);
+btn_bindClick(btn,f_alert);

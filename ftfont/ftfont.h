@@ -18,7 +18,7 @@ void* ft_create(const char* fileName);
 /* 解析输出像素数据                                                                     */
 /************************************************************************/
 DLLIMPORT
-void ft_parse(void* pt,unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,char* str);
+void ft_parse(void* pt,unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,int* iTop,char* str);
 
 /*销毁字体绘制设备*/
 DLLIMPORT

@@ -76,7 +76,7 @@ f_char2w_char(wchar_t* pwsUnicode,int cnt,char* pze){
 	MultiByteToWideChar(CP_ACP,0,pze,-1,pwsUnicode,iSize);
 }
 
-void ft_parse(void* pt,unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,char* str){
+void ft_parse(void* pt,unsigned char* outBuffer,int fontw,int fonth,int *iWidth,int *iHeight,int* iTop,char* str){
 	wchar_t ch[2];
 	//unsigned char* rgba = 0;
 	FtFont* ftext = (FtFont*)pt;
@@ -142,7 +142,7 @@ void ft_parse(void* pt,unsigned char* outBuffer,int fontw,int fonth,int *iWidth,
 
 			*iWidth = width;
 			*iHeight= height;
-
+			*iTop   = top;
 			/*
 			m_tex = gen_image(rgba, width, height);
 			m_tex_w = width;

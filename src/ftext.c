@@ -226,7 +226,7 @@ ftext_setpos(void* p,int x,int y){
 /* 计算文本是不是需要换行处理                                                                     */
 /************************************************************************/
 static int
-f_reset_xy(FText* txt,int *px,int *py,int cw,int ch){
+f_reset_xy(FText* txt,int *px,int *py,int cw,int ch,int top){
 	//当前cw文本渲染的宽度,ch 文本渲染的高度
 
 	int maxWidth = txt->spr->mWidth;//最大的宽度
@@ -269,7 +269,7 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 	else{
 		struct Sprite* spr = txt->spr;
 		GMaterial* mat = spr->material;
-
+		int top;
 		//int _size = txt->size;
 		int iWidth,iHeight;
 		unsigned char* rgba = txt->_buffer;//(unsigned char*)tl_malloc(_size*_size*4);
@@ -278,7 +278,7 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 		memset(txt->_buffer,0,txt->_bufferLength);
 
 		//ft_load(rgba,txt->fw,txt->fh,&iWidth,&iHeight,s);
-		ft_parse(ex_getInstance()->ft,rgba,txt->fw,txt->fh,&iWidth,&iHeight,s);
+		ft_parse(ex_getInstance()->ft,rgba,txt->fw,txt->fh,&iWidth,&iHeight,&top,s);
 #ifdef DEBUG
 		//	printf("ft_load:%s:%d %d\n",s,iWidth,iHeight);
 #endif
@@ -288,9 +288,10 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 
 		//y = txt->fh - iHeight;//底对齐
 
-		if(f_reset_xy(txt,&x,&y,iWidth,iHeight)){
+		if(f_reset_xy(txt,&x,&y,iWidth,iHeight,top)){
 			//printf("==>%s\n",s);
 			//txt->_pixelSize+=iWidth*iHeight*sizeof(struct RGBA);
+			printf("%s->top = %d iHeight = %d fh = %d\n",s,top,iHeight,txt->fh);
 			jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
 		}
 	}
