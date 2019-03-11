@@ -4,6 +4,8 @@
 #include <memory.h>    
 #include <stdlib.h>
 
+//#define DEBUG
+
 #define BUILDING_DLL
 
 //是否使用自定义的内存管理,此方式没有原生的malloc 和 free的性能更加好
@@ -224,7 +226,9 @@ void* tl_malloc(int size){
 	void*p =malloc(size);
 #endif
 	//m++;
-	//printf("+ %d \t%0x\n",m,p);
+#ifdef DEBUG
+	printf("+ \t%0x\n",p);
+#endif
 	return p;
 /*
 
@@ -291,8 +295,10 @@ void tl_free(void* p){
 #else
 	free(p);
 #endif
-	//printf("%d \tfree %0x\n",c,p); 
+#ifdef DEBUG
+	printf("\tfree %0x\n",p); 
 	//c++;
+#endif
 	return;
 /*
 	struct MemHandle* t = GetInstance();
