@@ -108,8 +108,8 @@ static void f_xml_AddNode(struct XMLSList* sl,int start,int end){
 }
 
 /*xml 解析*/
-struct XMLSList* xml_parse(const char* str)
-{
+struct XMLSList* 
+xml_parse(const char* str,int length){
 	struct XMLSList* xml;
 	int i, dataByteLength,_nodeLen,bufferSize;
 	bufferSize = NUM_STR_LENGTH;
@@ -123,7 +123,11 @@ struct XMLSList* xml_parse(const char* str)
 	//printf("初始化xml 活动缓冲区 (%d) bytes\n%s\n",bufferSize,str);
 
 	//直接取引用
-	xml->data = (char*)str;
+	//xml->data = (char*)str;
+	xml->data = tl_malloc(length);
+	memset(xml->data,0,length);
+	memcpy(xml->data,str,strlen(str));
+
 
 	xml->list = LStack_create();
 	//拆分节点
@@ -169,12 +173,14 @@ void xml_del(struct XMLSList* xml){
 	tl_free(xml->buffer);
 	xml->buffer=0;
 	LStack_ergodic(xml->list,freeXmlDelNode,0);
-	LStack_delete((struct LStackNode*)xml->list);
-	xml->list = 0;
-	if(xml->data!=0){
+	
+	//if(xml->data!=0){
 		tl_free(xml->data);
 		xml->data = 0;
-	}
+	//}
+	LStack_delete((struct LStackNode*)xml->list);
+	xml->list = 0;
+
 	tl_free(xml);
 	xml = 0;
 

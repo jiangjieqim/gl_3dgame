@@ -64,9 +64,13 @@ atals_load(const char* path,const char* name){
 		assert(0);
 	}
 	memcpy(ptr->name,name,strlen(name));
+	{
 
-	ptr->xml =  xml_parse(tl_loadfile(bufferXmlURL,0));
-
+		int len;
+		char* _s = tl_loadfile(bufferXmlURL,&len);
+		ptr->xml =  xml_parse(_s,len);
+		tl_free(_s);
+	}
 	getTextureInfo(ptr->xml,name,&ptr->width,&ptr->height);
 	
 	//创建一个材质

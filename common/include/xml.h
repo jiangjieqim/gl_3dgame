@@ -83,7 +83,7 @@ Type:XmlNode
 	getchar();
 	--------------------------------------
 */
-DLLIMPORT struct XMLSList* xml_parse(const char* str);
+DLLIMPORT struct XMLSList* xml_parse(const char* str,int length);
 
 /*
 Function:	xml_getRow

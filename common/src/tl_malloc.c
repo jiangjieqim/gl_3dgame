@@ -6,7 +6,7 @@
 
 #define BUILDING_DLL
 
-//是否使用自定义的内存管理
+//是否使用自定义的内存管理,此方式没有原生的malloc 和 free的性能更加好
 //#define CUST_MEMORY
 
 #include "tools.h"

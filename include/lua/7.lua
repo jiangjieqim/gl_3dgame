@@ -4,14 +4,14 @@
 cam:position(0,-5,-5);
 cam:rx(PI * 1.8);
 ----------------------------------------------------------------------------
-local obj = UnitBase:new();
-obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
-obj:scale(1/50);
-obj:rx(PI/2);
-obj:y(0.5);
+--local obj = UnitBase:new();
+--obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
+--obj:scale(1/50);
+--obj:rx(PI/2);
+--obj:y(0.5);
 
 local obj2 = UnitBase:new();
-obj2:loadvbo("\\resource\\md2\\gobin.md2","//resource//material//gobin.mat");
+obj2:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");--gobin
 obj2:scale(1/50);
 obj2:rx(PI/2);
 obj2:y(0.5);
@@ -34,7 +34,6 @@ local function f_on_click_floor_handle(data)
     obj2:move(pos.x,pos.y,pos.z);
 end
 local function f_endCall(msg)
-    
     if(msg == UnitBaseEndMsg) then
         print(obj2:get_name().."ÒÆ¶¯½áÊø");
     end
@@ -46,16 +45,16 @@ evt_on(obj2:get_p(),UnitBaseEvent,f_endCall);
 
 
 
---local animsc = scrollBar_new(100,20)
---local function f_animscHandle(sc)
---    local v = sc.value * PI * 2;
---	--print("### "..tostring(v));
---    --func_setRotateY(unit:get_ptr(),v);
---    obj:ry(v);
---end
---scrollBar_setRange(animsc,0,1)
-----animscTf = scrollBar_add_text(animsc,'animsc')
---scrollBar_bind(animsc,f_animscHandle)
+local animsc = scrollBar_new(100,20)
+local function f_animscHandle(sc)
+    local v = sc.value * PI * 2;
+	--print("### "..tostring(v));
+    --func_setRotateY(unit:get_ptr(),v);
+    obj2:ry(v);
+end
+scrollBar_setRange(animsc,0,1)
+--animscTf = scrollBar_add_text(animsc,'animsc')
+scrollBar_bind(animsc,f_animscHandle)
 
 
 local function f_onkey(data)
