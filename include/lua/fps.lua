@@ -2,6 +2,8 @@ local tf;
 local DELAT_TIME = 1000;--刷新延迟
 local ticket = 0;
 
+local _default = false;--是否使用旧的字体渲染
+
 local function f_render()
 	--if(tf)then		tf_setText(tf,string.format(%.3f),func_fps());end
 	local _time = func_get_longTime()
@@ -11,8 +13,12 @@ local function f_render()
 	
 	ticket = _time
 	if(tf) then
-		local s = string.format("fps %d %d",ex:fps(),ex:delayTime())
-		tf_setText(tf,s);
+		local s = string.format("fps_%d_%d",ex:fps(),ex:delayTime())
+        if(_default) then
+		    tf_setText(tf,s);
+        else
+            func_ftext_reset(tf,s);
+        end
 	end
 end
 
@@ -20,9 +26,18 @@ end
 function fps(x,y)
 	x = x or 0
 	y = y or 0
-	if(tf == nil) then
-		tf = tf_create(128,x,y,0,0,0);
-		evt_on(tf,EVENT_ENGINE_RENDER_3D,f_render);
-	end
-	tf_setPos(tf,x,y)
+    if(_default) then
+	    if(tf == nil) then
+		    tf = tf_create(128,x,y,0,0,0);
+		    evt_on(tf,EVENT_ENGINE_RENDER_3D,f_render);
+	    end
+	    tf_setPos(tf,x,y)
+    else
+        if(tf == nil) then
+		    tf = func_ftext_create(128,128);
+            func_ftext_set_buffer(tf,128);
+		    evt_on(tf,EVENT_ENGINE_RENDER_3D,f_render);
+	    end
+	    func_ftext_setpos(tf,x,y)
+    end
 end

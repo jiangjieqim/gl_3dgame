@@ -121,17 +121,20 @@ cam:rx(PI * 1.8);
 --func_ftext_setpos(tf);
 --func_ftext_reset(tf,"∞¥≈•");
 --func_ftext_reset(tf,"Œ“");
-local a = false;
-local  function f_alert(b)
-    --    print(b);
-  
-    a = not a;
-    print(a);
-    if(a) then
-      alert("cnƒ„");
-    else
-      alert("abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz!");
-    end
-end
-local btn = btn_create();
-btn_bindClick(btn,f_alert);
+
+
+
+--local a = false;
+--local  function f_alert(b)
+--    --    print(b);
+
+--    a = not a;
+--    print(a);
+--    if(a) then
+--      alert("cnƒ„");
+--    else
+--      alert("abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz!");
+--    end
+--end
+--local btn = btn_create();
+--btn_bindClick(btn,f_alert);
