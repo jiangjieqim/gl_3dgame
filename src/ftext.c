@@ -17,6 +17,10 @@
 
 #define DEBUG
 
+#define _Font_Size_ 512
+static GLbyte* g_bytes;//预制缓冲区
+
+
 /*
 *[0]: width: 6  height: 12
 [1]: width: 7  height: 13
@@ -29,7 +33,6 @@
 typedef struct FText
 {
 	struct Sprite* spr;	
-	int size;
 	int fw,fh;
 	//===========================================================
 	//字体预制缓冲区,用于存储临时的像素字节流数据
@@ -45,16 +48,14 @@ typedef struct FText
 	
 	int _stop;//无法绘制的部分将丢弃掉
 	
-//#ifdef DEBUG
-//	struct Sprite* debugbg;
-//#endif
 	int w,h;//文本渲染的宽高
 	
 	/************************************************************************/
 	/* 当前文本数据缓冲区                                                                     */
 	/************************************************************************/
-	char* cur;
-	int curLength;
+	char* _cur;
+	int _curLength;
+	//int _pixelSize;//像素字节
 
 }FText;
 
@@ -88,13 +89,13 @@ ftext_parse(void* p,const char* str,int *w,int *h){
 	*w = txt->w;// + txt->fw;
 	*h = txt->h;// + txt->fh;
 	
-	memset(txt->cur,0,txt->curLength);
-	memcpy(txt->cur,str,strlen(str));
+	memset(txt->_cur,0,txt->_curLength);
+	memcpy(txt->_cur,str,strlen(str));
 }
 char* 
 ftext_get_str(void* p){
 	FText* txt = (FText*)p;
-	return txt->cur;
+	return txt->_cur;
 }
 void
 ftext_clear(void* p){
@@ -110,31 +111,47 @@ ftext_clear(void* p){
 	//if(txt->cur){
 		//tl_free(txt->cur);
 		//txt->cur = 0;
-		memset(txt->cur,0,txt->curLength);
+		memset(txt->_cur,0,txt->_curLength);
 	//}
 	//jgl_create_opengl_RGBA_Tex(txt->w,txt->h,GL_BGRA);
 	
 	//填充像素数据的alpha值 = 0
 	//length = sizeof(struct RGBA) * txt->w * txt->h;
-	memset(txt->_buffer,0x00,txt->_bufferLength);
-	///*GLbyte* image = jgl_createRGBA_buffer(txt->w,txt->h);
-
-	jsl_sub(tmat_getTextureByIndex(mat,0),txt->_buffer,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);
 	
+	///*GLbyte* image = jgl_createRGBA_buffer(txt->w,txt->h);
+	if(txt->w > 0 && txt->h > 0){
+		int length;
+		GLbyte* bytes;
+		int _maxSize = _Font_Size_*_Font_Size_*sizeof(struct RGBA);
+		if(!g_bytes){
+			g_bytes = (GLbyte*)tl_malloc(_maxSize);
+		}
+		//memset(txt->_buffer,0x00,txt->_bufferLength);
+		//jsl_sub(tmat_getTextureByIndex(mat,0),txt->_buffer,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);//txt->w,txt->h	txt->spr->mWidth,txt->spr->mHeight
+		length =sizeof(struct RGBA) *txt->w * txt->h;	//txt->_pixelSize;
+		if(length > _maxSize){
+			printf("缓冲区太小\n");
+			assert(0);
+		}
+		bytes = g_bytes;//(GLbyte*)tl_malloc(length);
+		memset(bytes,0x00,length);
+		jsl_sub(tmat_getTextureByIndex(mat,0),bytes,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);
+	}
 	txt->w = 0;
 	txt->h = 0;
+	//txt->_pixelSize = 0;
 }
 
 void
 ftext_set_buffer(void* p,int bufferSize){
 	FText* txt = (FText*)p;
-	if(txt->cur){
-		tl_free(txt->cur);
-		txt->cur = 0;
+	if(txt->_cur){
+		tl_free(txt->_cur);
+		txt->_cur = 0;
 	}
-	txt->cur = tl_malloc(bufferSize);
-	memset(txt->cur,0,bufferSize);
-	txt->curLength = bufferSize;
+	txt->_cur = tl_malloc(bufferSize);
+	memset(txt->_cur,0,bufferSize);
+	txt->_curLength = bufferSize;
 }
 
 void*
@@ -154,24 +171,10 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 //中文使用12,11,字母可以使用任何尺寸的字体
 	txt->fw = fw*n;
 	txt->fh = fh*n;
-	//txt->fw = 18*n;
-	//txt->fh = 18*n;
-//#ifdef DEBUG
-//	{
-//		char _name[G_BUFFER_64_SIZE];
-//		tl_newName(_name,G_BUFFER_64_SIZE);
-//
-//		txt->debugbg = sprite_create(_name,0,0,txtWidth,txtHeight,0);
-//		txt->debugbg->material = tmat_create("spritevbo",1,"\\resource\\texture\\b.bmp");//spr->material;
-//		//ex_setv(txt->debugbg,FLAGS_DRAW_PLOYGON_LINE);
-//		ex_setv(txt->debugbg,FLAGS_VISIBLE);
-//		sprite_rotateZ(txt->debugbg,-PI/2);
-//		sprite_set_scale_z(txt->debugbg,1/n);
-//	}
-//#endif
+	
 	txt->spr = sprite_create(txtName,0,0,txtWidth,txtHeight,0);
 	
-	txt->_bufferLength = txt->fw * txt->fh*4;//计算需要的缓冲区的大小
+	txt->_bufferLength = txt->fw * txt->fh*4;//计算一个文本数据需要的缓冲区的大小
 	txt->_buffer = tl_malloc(txt->_bufferLength);
 
 	spr = txt->spr;
@@ -187,19 +190,6 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 	//设置背景不透明
 	//tmat_set_discardAlpha(spr->material,1);
 
-	/*
-	{
-		int cw=0;
-		int w,h;
-		ftext_set(txt,"R",0,0,&w,&h);
-		cw+=w;
-	//	ftext_set(txt,"A",cw,0,&w,&h);
-		cw+=w;
-	//	ftext_set(txt,"r",cw,0,&w,&h);
-		
-		ftext_setpos(txt,100,100);
-	}
-	*/
 	ftext_set_buffer(txt,G_BUFFER_8_SIZE);//设置默认的文本缓冲区大小
 	return txt;
 }
@@ -289,6 +279,7 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 
 		if(f_reset_xy(txt,&x,&y,iWidth,iHeight)){
 			//printf("==>%s\n",s);
+			//txt->_pixelSize+=iWidth*iHeight*sizeof(struct RGBA);
 			jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
 		}
 	}
@@ -298,6 +289,6 @@ void
 ftext_dispose(void* p){
 	FText* txt = (FText*)p;
 	sprite_dipose(txt->spr);
-	tl_free(txt->cur);
+	tl_free(txt->_cur);
 	tl_free(p);
 }

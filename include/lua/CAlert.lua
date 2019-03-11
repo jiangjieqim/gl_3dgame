@@ -5,8 +5,9 @@ function Alert:f_resize_window_child()
 	local sx,sy = func_get_sprite_xy(self.bg);
 	local bgw,bgh = func_get_sprite_size(self.bg)
 
-	func_setPos(self.label,sx,sy);
-		
+	--func_setPos(self.label,sx,sy);
+	func_ftext_setpos(self.label,sx,sy);
+
 	btn_pos(self.closeBtn,sx+(bgw-30),sy);
 end;
 
@@ -30,7 +31,9 @@ end;
 
 function Alert:hide()
 	resetv(self.bg,FLAGS_VISIBLE);
-	resetv(self.label,FLAGS_VISIBLE);
+--	resetv(self.label,FLAGS_VISIBLE);
+    func_ftext_vis(self.label,0);
+
 	btn_visible(self.closeBtn,false);
 end
 
@@ -68,8 +71,9 @@ function Alert:create()
 		func_setIcon(self.bg,"gundi.png");
 		--print(self.closeBtn)
 		
+        local closeSize = 30;
 		
-		self.closeBtn=btn_create(x,y,30,30);
+		self.closeBtn=btn_create(x,y,closeSize,closeSize);
 		--print(self)
 		
 		self:set_drag(true)
@@ -90,7 +94,8 @@ function Alert:create()
 		);
 		
 		
-		self.label=tf_create(128,x,y,1.0,0.0,0.0);
+		self.label=func_ftext_create(w-closeSize,w-closeSize);--tf_create(128,x,y,1.0,0.0,0.0);
+        func_ftext_set_buffer(self.label,256);
 	end;
 	
 	} ;
@@ -106,9 +111,12 @@ function Alert:show(str)
 	--self.visible = true;
 	btn_visible(self.closeBtn,true);
 	setv(self.bg,FLAGS_VISIBLE);
-	setv(self.label,FLAGS_VISIBLE);
-	tf_setText(self.label,str);
-	
+
+--	setv(self.label,FLAGS_VISIBLE);
+--	tf_setText(self.label,str);
+    func_ftext_vis(self.label,1);
+
+	func_ftext_reset(self.label,str);
 	self.f_resize();
 end
 --************************************************************************************

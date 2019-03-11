@@ -111,3 +111,27 @@ end
 
 cam:position(0,-5,-5);
 cam:rx(PI * 1.8);
+
+
+
+--local spr = sprite_create("a",0,0,100,30);
+--func_setIcon(spr,"gundi.png");
+
+--local tf =func_ftext_create(); --tf_create(128,list.x,list.y,r,g,b);
+--func_ftext_setpos(tf);
+--func_ftext_reset(tf,"按钮");
+--func_ftext_reset(tf,"我");
+local a = false;
+local  function f_alert(b)
+    --    print(b);
+  
+    a = not a;
+    print(a);
+    if(a) then
+      alert("cn你");
+    else
+      alert("cn你asdas搭讪撒大声地阿萨德阿萨斯大所多大人的事情你要知道的!");
+    end
+end
+local btn = btn_create();
+btn_bindClick(btn,f_alert);

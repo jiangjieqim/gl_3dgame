@@ -1,6 +1,6 @@
 --设置缓冲区大小
 function func_ftext_set_buffer(txt, v)
-    return ftext(txt, "set_buffer", tonumber(v));
+    return ftext(txt, "set_buffer",v);
 end
 -- 创建文本对象
 function func_ftext_create(w, h, fw, fh)
@@ -17,7 +17,7 @@ function func_ftext_create(w, h, fw, fh)
 end
 -- 设置文本对象坐标
 function func_ftext_setpos(txt, x, y)
-    ftext(txt, "setpos", string.format("%s,%s", x, y));
+    ftext(txt, "setpos", string.format("%s,%s", x or 0, y or 0));
 end
 ----设置文本对象中的文本坐标
 -- function func_ftext_setchar(txt,s,x,y)
@@ -38,11 +38,13 @@ end
 function func_fext_clear(txt)
     ftext(txt, "clear");
 end
+--获取文本
 function func_ftext_str(txt)
     return ftext(txt, "str");
 end
 -- 重新设置文本对象
 function func_ftext_reset(txt, s)
+--    print(string.len(s));
     func_fext_clear(txt);
     func_ftext_parse(txt, s);
 end

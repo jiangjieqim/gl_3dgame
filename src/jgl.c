@@ -545,8 +545,7 @@ jsl_sub(GLuint texName,		//ÌùÍ¼¾ä±ú
 {
 	if(pBytes){
 		glBindTexture(GL_TEXTURE_2D, texName);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, 
-			subImageWidth,subImageHeight, eFormat,type, pBytes);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, subImageWidth,subImageHeight, eFormat,type, pBytes);
 		
 		glBindTexture(GL_TEXTURE_2D, 0);
 		//tl_free(pBytes);
