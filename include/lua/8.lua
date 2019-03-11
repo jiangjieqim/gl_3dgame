@@ -86,17 +86,18 @@ function loadmd2()
     --print("obj.name = ",obj:get_name());
     return obj;
 end
-
+function createFloor()
 --地板
-local plane = UnitBase:new();
---plane:load_model(nil,"//resource//material//floor.mat");
-plane:load_model();
-plane:setv(FLAGS_REVERSE_FACE);
-plane:setv(FLAGS_DRAW_PLOYGON_LINE);
-plane:scale(10);
-glsl_set(plane.material,string.format("_lineColor,%s","0.5,0.5,0.5"));
-glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())));--设置diffuse.vs (uniform float _uvScale)uv重复值
-
+    local plane = UnitBase:new();
+    --plane:load_model(nil,"//resource//material//floor.mat");
+    plane:load_model();
+    plane:setv(FLAGS_REVERSE_FACE);
+    plane:setv(FLAGS_DRAW_PLOYGON_LINE);
+    plane:scale(10);
+    glsl_set(plane.material,string.format("_lineColor,%s","0.5,0.5,0.5"));
+    glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())));--设置diffuse.vs (uniform float _uvScale)uv重复值
+    return plane;
+end
 
 --local obj = loadmd2();
 local function f_on_click_floor_handle(data)
@@ -106,6 +107,7 @@ local function f_on_click_floor_handle(data)
     end
 end
 
-plane:bindRayPick(f_on_click_floor_handle);
+--createFloor():bindRayPick(f_on_click_floor_handle);
+
 cam:position(0,-5,-5);
 cam:rx(PI * 1.8);

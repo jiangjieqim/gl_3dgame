@@ -49,8 +49,12 @@ typedef struct FText
 //	struct Sprite* debugbg;
 //#endif
 	int w,h;//文本渲染的宽高
-
+	
+	/************************************************************************/
+	/* 当前文本数据缓冲区                                                                     */
+	/************************************************************************/
 	char* cur;
+	int curLength;
 
 }FText;
 
@@ -84,13 +88,7 @@ ftext_parse(void* p,const char* str,int *w,int *h){
 	*w = txt->w;// + txt->fw;
 	*h = txt->h;// + txt->fh;
 	
-
-	if(txt->cur){
-		tl_free(txt->cur);
-		txt->cur = 0;
-	}
-	txt->cur = tl_malloc(strlen(str)+1);
-	memset(txt->cur,0,strlen(str)+1);
+	memset(txt->cur,0,txt->curLength);
 	memcpy(txt->cur,str,strlen(str));
 }
 char* 
@@ -109,10 +107,11 @@ ftext_clear(void* p){
 	txt->_px = 0;
 	txt->_py = 0;
 	txt->_stop = 0;
-	if(txt->cur){
-		tl_free(txt->cur);
-		txt->cur = 0;
-	}
+	//if(txt->cur){
+		//tl_free(txt->cur);
+		//txt->cur = 0;
+		memset(txt->cur,0,txt->curLength);
+	//}
 	//jgl_create_opengl_RGBA_Tex(txt->w,txt->h,GL_BGRA);
 	
 	//填充像素数据的alpha值 = 0
@@ -124,6 +123,18 @@ ftext_clear(void* p){
 	
 	txt->w = 0;
 	txt->h = 0;
+}
+
+void
+ftext_set_buffer(void* p,int bufferSize){
+	FText* txt = (FText*)p;
+	if(txt->cur){
+		tl_free(txt->cur);
+		txt->cur = 0;
+	}
+	txt->cur = tl_malloc(bufferSize);
+	memset(txt->cur,0,bufferSize);
+	txt->curLength = bufferSize;
 }
 
 void*
@@ -189,6 +200,7 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 		ftext_setpos(txt,100,100);
 	}
 	*/
+	ftext_set_buffer(txt,G_BUFFER_8_SIZE);//设置默认的文本缓冲区大小
 	return txt;
 }
 

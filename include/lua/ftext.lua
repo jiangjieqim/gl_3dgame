@@ -1,3 +1,7 @@
+--设置缓冲区大小
+function func_ftext_set_buffer(txt, v)
+    return ftext(txt, "set_buffer", tonumber(v));
+end
 -- 创建文本对象
 function func_ftext_create(w, h, fw, fh)
     local name = func_create_name();
@@ -7,7 +11,9 @@ function func_ftext_create(w, h, fw, fh)
     -- 12,11
     fw = fw or 14;
     fh = fh or 13;
-    return ftext(nil, "create", name, string.format("%s,%s,%s,%s", w, h, fw, fh));
+    local p = ftext(nil, "create", name, string.format("%s,%s,%s,%s", w, h, fw, fh));
+    func_ftext_set_buffer(p,64);--设置预制缓冲区
+    return p;
 end
 -- 设置文本对象坐标
 function func_ftext_setpos(txt, x, y)
@@ -27,6 +33,7 @@ end
 function func_ftext_vis(txt, v)
     return ftext(txt, "vis", tostring(v));
 end
+
 -- 擦除
 function func_fext_clear(txt)
     ftext(txt, "clear");

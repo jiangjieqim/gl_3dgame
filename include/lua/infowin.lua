@@ -20,8 +20,8 @@ end
 function infowin(x,y)
 	local list =  listbox_new(x or 0,y or 0)
 	listbox_add(list,"ÒıÇæĞÅÏ¢")
-	listbox_add(list,"gc")
-    listbox_add(list,"line")--ÇĞ»»Ïß¿òäÖÈ¾sprite
+--	listbox_add(list,"gc")
+--    listbox_add(list,"line")--ÇĞ»»Ïß¿òäÖÈ¾sprite
 
 	
 	listbox_bind(list,f_select)

@@ -152,7 +152,7 @@ function
 listbox_add(list,str)
 	local count =	func_get_table_count(list.tflist) + 1
 	local tf=func_ftext_create();--tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
-    func_ftext_setpos(tf,list.x + g_width,list.y + g_gap*(count));
+    func_ftext_setpos(tf,list.x + g_width/2,list.y + g_gap*(count));
 	list.tflist[count - 1] = tf;
 	--tf_setText(tf,str);
     func_ftext_reset(tf,str);
