@@ -91,4 +91,4 @@ glsl_set(plane.material,string.format("_lineColor,%s","0.5,0.5,0.5"));
 glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())));--…Ë÷√diffuse.vs (uniform float _uvScale)uv÷ÿ∏¥÷µ
 
 
---local animsc = scrollBar_new(100,20)
+local animsc = scrollBar_new(100,20)

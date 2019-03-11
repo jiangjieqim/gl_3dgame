@@ -13,7 +13,7 @@ ex:bgColor(0,0,0.5);
 infowin(0,20);
 
 
-dofile("..\\include\\lua\\8.lua");
+dofile("..\\include\\lua\\7.lua");
 
 --print("lua script is already init finished !");
 

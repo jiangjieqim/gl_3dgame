@@ -184,7 +184,7 @@ evt_dispose(void* ptr){
 		node->evtId = 0;
 		node->ptr = 0;
 		LStack_delNode(s,data);
-		tl_free(node);
+		//tl_free(node);
 	}
 	LStack_delete(s);
 }

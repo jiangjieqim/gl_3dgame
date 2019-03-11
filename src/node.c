@@ -30,7 +30,7 @@ void node_dispose(struct Node* p)
 
 	base_dispose(p->base);
 	objVBO_dispose(p->ptrVBO);
-	LStack_delNode(ex_getInstance()->renderList,(int)p);//从渲染节点列表中移除
+	
 	if(p->anim)
 	{
 		anim_dispose(p->anim);
@@ -47,8 +47,8 @@ void node_dispose(struct Node* p)
 		collide_dispose(p->ptrCollide);
 		p->ptrCollide = 0;
 	}
-
-	tl_free(p);
+	LStack_delNode(ex_getInstance()->renderList,(int)p);//从渲染节点列表中移除
+//	tl_free(p);
 
 	//log_color(0xff0000,"node_dispose删除%s消耗%ld毫秒\n",name,get_longTime() - time);
 }

@@ -883,9 +883,6 @@ void sprite_updatePos(int data)
 void sprite_dipose(struct Sprite* spr)
 {
 	//spr->ptr_luaCallBack = 0;
-
-	LStack_delNode(ex_getInstance()->renderList,(int)spr);//从渲染节点列表中移除
-
 	if(spr->hitTriangle)
 		tl_free(spr->hitTriangle);
 
@@ -910,8 +907,9 @@ void sprite_dipose(struct Sprite* spr)
 	{
 		objVBO_dispose(spr->vbo);
 	}
+	LStack_delNode(ex_getInstance()->renderList,(int)spr);//从渲染节点列表中移除
 
-	tl_free(spr);
+//	tl_free(spr);
 }
 
 /*

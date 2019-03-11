@@ -88,12 +88,12 @@ void tf_setText(struct TextField* tf,const char* text)
 	memcpy(tf->textPtr,text,strlen(text));
 }
 
-void tf_dispose(struct TextField* tf)
-{
-	LStack_delNode(ex_getInstance()->renderList,(int)tf);
+void 
+tf_dispose(struct TextField* tf){
 	base_dispose(tf->base);
 	tl_free(tf->textPtr);
-	tl_free(tf);
+    LStack_delNode(ex_getInstance()->renderList,(int)tf);
+	//tl_free(tf);
 }
 
 void tf_render(int data)

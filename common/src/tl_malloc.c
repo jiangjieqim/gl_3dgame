@@ -145,9 +145,8 @@ memory_new(int size)
 static void
 f_freeNode(struct MemoryNode* node){
 	g_total-=node->length;
-	
-	LStack_delNode(memList,(int)node);
 	FREE(node->p);
+	LStack_delNode(memList,(int)node);
 }
 
 //±éÀúÉ¾³ı
