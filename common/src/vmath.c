@@ -698,6 +698,12 @@ vec3Normalize(struct Vec3* v){
 	v->y = v->y / length;
 	v->z = v->z / length;
 }
+float 
+vecDot( struct Vec3* a,struct Vec3* b )
+{
+	return a->x * b->x + a->y * b->y + a->z * a->z;
+}
+
 void 
 vec3CalculateNormal(struct Vec3* a,struct Vec3* b,struct Vec3* c,struct Vec3* res)
 {

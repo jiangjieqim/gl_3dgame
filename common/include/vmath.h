@@ -213,7 +213,7 @@ DLLIMPORT void vec3Div(struct Vec3* o,float v);
 /*
 	求两向量的夹角0~180之间
 */
-DLLIMPORT float vecToAngle(struct Vec3* a,struct Vec3* b);
+//DLLIMPORT float vecToAngle(struct Vec3* a,struct Vec3* b);
 
 /*
 *	2d向量转化为角度

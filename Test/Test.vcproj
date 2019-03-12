@@ -45,6 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="..\ftfont;..\include;..\common\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -72,6 +73,7 @@
 				OutputFile=".\Release/Test.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="..\lib"
 				ProgramDatabaseFile=".\Release/Test.pdb"
 				SubSystem="1"
 				TargetMachine="1"
@@ -101,6 +103,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="build_end.bat"
 			/>
 		</Configuration>
 		<Configuration
@@ -194,7 +197,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="build_end.bat"
+				CommandLine="debug_build_end.bat"
 			/>
 		</Configuration>
 	</Configurations>
