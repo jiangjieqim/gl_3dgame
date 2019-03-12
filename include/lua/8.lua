@@ -129,9 +129,9 @@ local  function f_alert(b)
     --    print(b);
 
     a = not a;
---    print(a);
+    print(a);
     if(a) then
-      alert("一三,*g.");
+      alert("一三,*gB");
     else
       --alert("abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz!");
       alert("");
@@ -139,5 +139,3 @@ local  function f_alert(b)
 end
 local btn = btn_create(0,20);
 btn_bindClick(btn,f_alert);
-
-

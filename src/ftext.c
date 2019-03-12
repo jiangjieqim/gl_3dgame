@@ -2,12 +2,12 @@
 #include <string.h>
 #include <assert.h>
 
-//#include "common.h"
-//#include "tools.h"
+#include "common.h"
+#include "tools.h"
 #include "tl_malloc.h"
 #include "ex.h"
 #include "tmat.h"
-//#include "obj_vbo.h"
+#include "obj_vbo.h"
 #include "ftext.h"
 #include "sprite.h"
 #include "jgl.h"
@@ -241,9 +241,14 @@ f_reset_xy(FText* txt,int *px,int *py,int cw,int ch,int top){
 	}
 	
 	*px = txt->_px-tw;
-	*py = txt->_py + (txt->fh - ch);	//y = txt->fh - ch;//底对齐
+	
+	//*py = txt->_py + (txt->fh - ch);	//y = txt->fh - ch;//底对齐
+	*py = txt->_py - top;
+	 
 	//if(*py > txt->spr->mHeight-txt->fh){
 	if(*py + ch > txt->spr->mHeight){
+		//文本渲染y轴坐标 + 单位字体高度 > 画布高度
+
 		txt->_stop = 1;//结束处理文本像素获取请求
 		return 0;
 	}else{
@@ -291,7 +296,9 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 		if(f_reset_xy(txt,&x,&y,iWidth,iHeight,top)){
 			//printf("==>%s\n",s);
 			//txt->_pixelSize+=iWidth*iHeight*sizeof(struct RGBA);
-			printf("%s->top = %d iHeight = %d fh = %d\n",s,top,iHeight,txt->fh);
+#ifdef DEBUG
+//			printf("%s\t->top = %d iHeight = %d fh = %d\n",s,top,iHeight,txt->fh);
+#endif
 			jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
 		}
 	}

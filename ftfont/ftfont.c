@@ -100,6 +100,8 @@ void ft_parse(void* pt,unsigned char* outBuffer,int fontw,int fonth,int *iWidth,
 		FT_GlyphSlot slot = face->glyph;		
 		//从字符码检索字形索引
 		FT_UInt glyph_index = FT_Get_Char_Index(face, *ch);
+		//基准线到字符轮廓最高点的距离
+		long ascender= face->size->metrics.ascender>>6;
 		
 		//加载到插槽中的字形图像（擦除前一个）
 		error = FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
@@ -129,20 +131,24 @@ void ft_parse(void* pt,unsigned char* outBuffer,int fontw,int fonth,int *iWidth,
 			unsigned char* buffer	= slot->bitmap.buffer;	//数据
 			int width				= slot->bitmap.width;	//宽 像素
 			int height				= slot->bitmap.rows;	//高 像素
-			int top					= slot->bitmap_top;		//相对横基准线偏移
+			int bottom_top			= slot->bitmap_top;		//相对横基准线偏移
 			int advancex			= slot->advance.x>>6;	//字间水平跨距
 			int pitch				= slot->bitmap.pitch;	//宽 byte
+			
 
-			#ifdef DEBUG
-				printf("[w = %d h = %d top = %d advancex = %d pitch = %d]\n",width,height,top,advancex,pitch);
-			#endif
+			
 			f_red2rgba(outBuffer,buffer, width * height);
 
 			//printf("需要的缓冲区%d字节(max:%d)\n",width *  height * 4,fontSize*fontSize*4);
 
 			*iWidth = width;
 			*iHeight= height;
-			*iTop   = top;
+			*iTop   = face->glyph->bitmap_top-ascender;
+
+#ifdef DEBUG
+			//	printf("[w = %d h = %d top = %d advancex = %d pitch = %d]\n",width,height,top,advancex,pitch);
+			//printf("offset top = %d\n",face->glyph->bitmap_top-ascender);
+#endif
 			/*
 			m_tex = gen_image(rgba, width, height);
 			m_tex_w = width;
@@ -196,16 +202,16 @@ void* ft_create(const char* fileName){
 			//printf("[%d]: \n encoding_id: %d \n platform_id: %d \n", i, encoding_id, platform_id);
 		}
 		
-		printf("固定尺寸个数: %d -->%d %d[%s]\n", face->num_fixed_sizes,fontw,fonth,str);
+		//printf("固定尺寸个数: %d -->%d %d[%s]\n", face->num_fixed_sizes,fontw,fonth,str);
 		
 		for(i = 0; i < face->num_fixed_sizes; i++)
 		{
 			int width = face->available_sizes[i].width;
 			int height = face->available_sizes[i].height;
 			
-			printf("[%d]: width: %d  height: %d \n", i, width, height);
+			//printf("[%d]: width: %d  height: %d \n", i, width, height);
 		}
-		printf("字符数: %d \n", face->num_glyphs);
+		//printf("字符数: %d \n", face->num_glyphs);
 	}
 	//set=========================================================
 	#endif
@@ -269,11 +275,11 @@ ft_load(unsigned char* outBuffer,int fontw,int fonth,int *iWidth, int *iHeight,c
 		int width = face->available_sizes[i].width;
 		int height = face->available_sizes[i].height;
 		#ifdef DEBUG
-			printf("[%d]: width: %d  height: %d \n", i, width, height);
+		//	printf("[%d]: width: %d  height: %d \n", i, width, height);
 		#endif
 	}
 	#ifdef DEBUG
-		printf("字符数: %d \n", face->num_glyphs);
+	//	printf("字符数: %d \n", face->num_glyphs);
 	#endif
 	//set=========================================================
 
