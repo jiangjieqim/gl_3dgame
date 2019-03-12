@@ -2,12 +2,12 @@
 #include <string.h>
 #include <assert.h>
 
-#include "common.h"
-#include "tools.h"
+//#include "common.h"
+//#include "tools.h"
 #include "tl_malloc.h"
 #include "ex.h"
 #include "tmat.h"
-#include "obj_vbo.h"
+//#include "obj_vbo.h"
 #include "ftext.h"
 #include "sprite.h"
 #include "jgl.h"
