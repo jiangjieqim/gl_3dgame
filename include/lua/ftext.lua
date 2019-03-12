@@ -42,6 +42,9 @@ end
 function func_ftext_str(txt)
     return ftext(txt, "str");
 end
+function func_ftext_getsize(txt)
+    return ftext(txt, "size");
+end
 -- 重新设置文本对象
 function func_ftext_reset(txt, s)
 --    print(string.len(s));

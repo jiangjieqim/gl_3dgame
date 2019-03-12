@@ -113,6 +113,12 @@ ftext_get_str(void* p){
 	return txt->_cur;
 }
 void
+ftext_get_size(void* p,int* w,int *h){
+	FText* txt = (FText*)p;
+	*w = txt->w;
+	*h = txt->h;
+}
+void
 ftext_clear(void* p){
 	FText* txt = (FText*)p;
 	//int length;
@@ -250,7 +256,7 @@ f_reset_xy(FText* txt,int *px,int *py,int cw,int ch,int top){
 		//文本渲染y轴坐标 + 单位字体高度 > 画布高度
 
 		txt->_stop = 1;//结束处理文本像素获取请求
-		return 0;
+		return 0; 
 	}else{
 		//计算文本对象的宽高
 	//	printf("py=%d\n",txt->_py);
@@ -258,7 +264,15 @@ f_reset_xy(FText* txt,int *px,int *py,int cw,int ch,int top){
 	if (txt->w<txt->_px){
 		txt->w=txt->_px;
 	}
-	txt->h = *py + ch;
+	{
+		//====================================================================
+		//设置文本高度
+		int real_h = *py + ch;
+		if(real_h> txt->h){
+			txt->h = real_h;
+		}
+		txt->h = real_h> txt->h ? real_h : txt->h;
+	}
 	
 	return 1;
 }

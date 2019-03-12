@@ -129,13 +129,15 @@ local  function f_alert(b)
     --    print(b);
 
     a = not a;
-    print(a);
+--    print(a);
     if(a) then
-      alert("一三,*gB");
+      alert("一三,*gBdasdlajslkdjalkdjalksdjlkasjdklajdklasjdlkajslkdjalksdjlaksdjlka");
     else
       --alert("abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz!");
       alert("");
     end
 end
 local btn = btn_create(0,20);
+btn_label(btn,"测试");
+btn_pos(btn,100,50);
 btn_bindClick(btn,f_alert);

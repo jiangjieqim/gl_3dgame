@@ -20,7 +20,7 @@ cl -c *.c /Ox
 link -dll -out:common.dll *.obj
 
 ::打印导出的函数
-dumpbin /exports common.dll  
+::dumpbin /exports common.dll  
 
 copy common.dll ..\..\dll\common.dll 
 copy common.dll ..\..\Test\Debug\common.dll 
@@ -38,3 +38,5 @@ del *.obj *.exp *.lib *.dll
 cd..\..\
 echo %CD%
 ::pause 
+
+test.bat
