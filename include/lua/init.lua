@@ -12,8 +12,8 @@ ex:bgColor(0.3,0.3,0.3);
 --ex:bgColor(0.5,0.5,0.5);
 
 
-fps();
---infowin(0,20);
+--fps();
+infowin(0,20);
 
 
 dofile("..\\include\\lua\\8.lua");

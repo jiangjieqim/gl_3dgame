@@ -75,8 +75,10 @@ end
 
 function loadmd2()
     local obj = UnitBase:new();
-    obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
-    obj:scale(1/50);
+--    obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
+--    obj:scale(1/50);
+    obj:loadbox();
+    
     --obj:setv(FLAGS_DRAW_PLOYGON_LINE);
     --obj:setv(FLAGS_RAY);
     --obj:load_collide("\\resource\\md2\\bauul.md2");
@@ -107,8 +109,8 @@ local function f_on_click_floor_handle(data)
         print('obj is nil');
     end
 end
-obj = loadmd2();
-createFloor():bindRayPick(f_on_click_floor_handle);
+--obj = loadmd2();
+--createFloor():bindRayPick(f_on_click_floor_handle);
 
 cam:position(0,-5,-5);
 cam:rx(PI * 1.8);
