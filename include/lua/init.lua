@@ -12,7 +12,7 @@ ex:bgColor(0.3,0.3,0.3);
 --ex:bgColor(0.5,0.5,0.5);
 
 
---fps();
+fps();
 --infowin(0,20);
 
 
