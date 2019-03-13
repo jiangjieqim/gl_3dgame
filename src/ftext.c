@@ -183,8 +183,8 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 	//txt->size = 20;//18
 	txt->n = 1;
 	n = txt->n;
-//6 12
-//中文使用12,11,字母可以使用任何尺寸的字体
+	//6 12
+	//中文使用12,11,字母可以使用任何尺寸的字体
 	txt->fw = fw*n;
 	txt->fh = fh*n;
 

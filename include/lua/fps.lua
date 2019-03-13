@@ -1,4 +1,5 @@
 local tf;
+local isShow = false;
 local DELAT_TIME = 1000;--Ë¢ÐÂÑÓ³Ù
 local ticket = 0;
 
@@ -26,6 +27,7 @@ end
 function fps(x,y)
 	x = x or 0
 	y = y or 0
+   
     if(_default) then
 	    if(tf == nil) then
 		    tf = tf_create(128,x,y,0,0,0);
@@ -38,6 +40,9 @@ function fps(x,y)
             func_ftext_set_buffer(tf,128);
 		    evt_on(tf,EVENT_ENGINE_RENDER_3D,f_render);
 	    end
-	    func_ftext_setpos(tf,x,y)
+        local _stat = isShow == false and 1 or 0;
+        func_ftext_vis(tf,_stat);
+	    func_ftext_setpos(tf,x,y);
+        isShow = not isShow;
     end
 end
