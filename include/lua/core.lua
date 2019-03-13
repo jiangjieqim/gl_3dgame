@@ -59,7 +59,7 @@ EVENT_ENGINE_SPRITE_CLICK_MOVE = 106
 
 dofile("..\\include\\lua\\xml.lua")	--xml组件
 dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
-dofile("..\\include\\lua\\sprite.lua");
+--dofile("..\\include\\lua\\sprite.lua");
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
 dofile("..\\include\\lua\\ftext.lua");
 
@@ -140,7 +140,9 @@ function func_tableSave(point)
 	
 	--print(tostring(point)..','..getDddress(point))
 	--getDddress
-	tableInstance[tostring(point)]=point
+    local s = tostring(point);
+	tableInstance[s]=point
+    return s;
 end
 --[[
 	point:删除一个表引用
@@ -238,7 +240,7 @@ end
 
 --[[
 	获取到table名(其实是table的lua空间地址)
-	0EA02968
+	table:0EA02968
 --]]
 function func_getTableName(point)
 --	return tableToInt(point)
@@ -781,6 +783,7 @@ dofile("..\\include\\lua\\ex.lua")	--cam
 dofile("..\\include\\lua\\cam.lua")	--cam
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 
+dofile("..\\include\\lua\\listbox.lua")
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑un动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件

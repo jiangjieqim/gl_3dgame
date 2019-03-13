@@ -13,8 +13,12 @@ ex:bgColor(0.3,0.3,0.3);
 
 
 --fps();
-infowin(0,20);
+--infowin(0,20);
 
+local list = ListBox:new();
+list:add("a");
+
+local list1 = ListBox:new(100);list1:add("a1");
 
 dofile("..\\include\\lua\\8.lua");
 
