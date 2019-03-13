@@ -1,5 +1,5 @@
 Alert = {}
-
+local closeSize = 30;
 --重置子节点坐标
 function Alert:f_resize_window_child()
 	local sx,sy = func_get_sprite_xy(self.bg);
@@ -8,7 +8,7 @@ function Alert:f_resize_window_child()
 	--func_setPos(self.label,sx,sy);
 	func_ftext_setpos(self.label,sx,sy);
 
-	btn_pos(self.closeBtn,sx+(bgw-30),sy);
+	btn_pos(self.closeBtn,sx+(bgw-closeSize / 2),sy);
 end;
 
 --居中
@@ -22,7 +22,6 @@ function Alert:f_center()
 	
 	x = (sx - bgw)/2;
 	y = (sy - bgh)/2;
-	
 	
 	func_setPos(self.bg,x,y)
 	
@@ -71,7 +70,7 @@ function Alert:create()
 		func_setIcon(self.bg,"gundi.png");
 		--print(self.closeBtn)
 		
-        local closeSize = 30;
+        
 		
 		self.closeBtn=btn_create(x,y,closeSize,closeSize);
 		--print(self)

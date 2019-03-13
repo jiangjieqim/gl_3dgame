@@ -75,9 +75,11 @@ end
 
 function loadmd2()
     local obj = UnitBase:new();
-    obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
-    obj:scale(1/50);
-    obj:setv(FLAGS_DRAW_PLOYGON_LINE);
+--    obj:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");
+--    obj:scale(1/50);
+    obj:loadbox();
+    
+    --obj:setv(FLAGS_DRAW_PLOYGON_LINE);
     --obj:setv(FLAGS_RAY);
     --obj:load_collide("\\resource\\md2\\bauul.md2");
     --obj:setv(FLAGS_DRAW_RAY_COLLISION);
@@ -98,15 +100,16 @@ function createFloor()
     glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())));--设置diffuse.vs (uniform float _uvScale)uv重复值
     return plane;
 end
-
---local obj = loadmd2();
+local obj;
 local function f_on_click_floor_handle(data)
     local pos = func_split(data,",");--func_xml_to_tb(data);
     if(obj) then
         obj:move(pos[1],pos[2],pos[3]);
+    else
+        print('obj is nil');
     end
 end
-
+--obj = loadmd2();
 --createFloor():bindRayPick(f_on_click_floor_handle);
 
 cam:position(0,-5,-5);
@@ -124,20 +127,24 @@ cam:rx(PI * 1.8);
 
 
 
-local a = false;
-local  function f_alert(b)
-    --    print(b);
+--local a = false;
+--local  function f_alert(b)
+--    --    print(b);
 
-    a = not a;
---    print(a);
-    if(a) then
-      alert("一三,*g.");
-    else
-      --alert("abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz!");
-      alert("");
-    end
-end
-local btn = btn_create(0,20);
-btn_bindClick(btn,f_alert);
+--    a = not a;
 
+--    local t = func_get_longTime()
+----    print(func_get_longTime());
+--    if(a) then
+--      alert("一三,*gBdasdlajslkdjalkdjalksdjlkasjdklajdklasjdlkajslkdjalksdjlaksdjlka");
+--    else
+--      --alert("abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz*abcdefghijklmnopqrstuvwxyz!");
+--      alert("");
+--    end
+--    print(func_get_longTime()-t);
+--end
+--local btn = btn_create(0,20);
+--btn_label(btn,"测试");
+--btn_pos(btn,100,50);
+--btn_bindClick(btn,f_alert);
 

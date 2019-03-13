@@ -30,7 +30,8 @@ local function f_createBtn()
 end
 local function f_delLabel(btn)
 	if(btn.label) then
-		ptr_remove(btn.label);
+		--ptr_remove(btn.label);
+        func_fext_dispose(btn.label);
 		btn.label = nil
 	end
 end
@@ -119,6 +120,14 @@ end
 function btn_scaleStyle(btn)
 	setv(btn.sprite,FLAGS_BUTTON_EFFECT);
 end
+--重置label的坐标
+local function f_reset_label_pos(btn)
+    local w,h = func_ftext_getsize(btn.label);
+    local x,y = func_get_sprite_xy(btn.sprite);--get_attr(btn.sprite,"spritePos")
+    local sw,sh=func_get_sprite_size(btn.sprite);
+    func_ftext_setpos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
+
+end
 --[[
 	设置按钮label
 --]]
@@ -134,11 +143,16 @@ function btn_label(btn,str,r,g,b)
 			if(g == nil) then g = 1.0	end
 			if(b == nil) then b = 1.0	end
 			
-			local x,y = get_attr(btn.sprite,"spritePos")
+--			local x,y = get_attr(btn.sprite,"spritePos")
 
-			btn.label=tf_create(128,x,y,r,g,b);
+--			btn.label=tf_create(128,x,y,r,g,b);
+            btn.label = func_ftext_create();
+--            func_ftext_setpos(btn.label,x,y);
 		end
-		tf_setText(btn.label,str);
+--		tf_setText(btn.label,str);
+        func_ftext_reset(btn.label,str);
+        
+        f_reset_label_pos(btn);
 	end
 end
 --设置btn的name
@@ -157,12 +171,14 @@ function btn_visible(btn,vis)
 	local f = FLAGS_VISIBLE
 	if(vis) then
 		if(btn.label) then
-			setv(btn.label,f);
+--			setv(btn.label,f);
+            func_ftext_vis(btn.label,1);
 		end
 		setv(btn.sprite,f);
 	else
 		if(btn.label) then
-			resetv(btn.label,f);
+--			resetv(btn.label,f);
+            func_ftext_vis(btn.label,0);
 		end
 		resetv(btn.sprite,f);
 	end
@@ -175,7 +191,9 @@ function btn_pos(btn,x,y)
 	func_setPos(btn.sprite,x,y)
 	
 	if(btn.label) then
-		func_setPos(btn.label,x,y)
+--		func_setPos(btn.label,x,y)
+--        func_ftext_setpos(btn.label,x,y);
+         f_reset_label_pos(btn);
 	end
 end
 ---------------------------------------------------

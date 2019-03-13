@@ -373,7 +373,7 @@ ex_info(){
 	printf("程序已执行:%.3f 秒\n",get_longTime()*0.001);
 	printf("内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
 	
-	printf( "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
+	//printf( "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
 	
 	printf( "vbo使用:%d bytes\n",tlgl_getVboSize());
 	printf( "当前(射线检测)状态:%d\n",getv(&(ex_getInstance()->flags),EX_FLAGS_RAY));

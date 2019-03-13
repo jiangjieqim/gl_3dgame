@@ -11,7 +11,7 @@ local function f_select(_l)
 		func_ex_info();
 	elseif(label == "gc") then
 		func_gc();
-    elseif(label == "line") then
+    elseif(label == "线框ui") then
 		ex:switch_spriteline()
         print("切换为Sprite线框状态:"..ex:get_spriteline());
 	end
@@ -21,7 +21,7 @@ function infowin(x,y)
 	local list =  listbox_new(x or 0,y or 0)
 	listbox_add(list,"引擎信息")
 --	listbox_add(list,"gc")
---    listbox_add(list,"line")--切换线框渲染sprite
+--    listbox_add(list,"线框ui")--切换线框渲染sprite
 
 	
 	listbox_bind(list,f_select)
