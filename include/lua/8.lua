@@ -148,3 +148,16 @@ cam:rx(PI * 1.8);
 --btn_pos(btn,100,50);
 --btn_bindClick(btn,f_alert);
 
+
+--local a = false;
+--local tf=func_ftext_create();
+--local  function f_alert(b)
+--    a = not a;
+--    func_ftext_vis(tf,a == true and 1 or 0);
+--end
+--func_ftext_setpos(tf,100);
+--func_ftext_vis(tf,0);
+--func_ftext_reset(tf,"B");
+--func_ftext_vis(tf,1);
+--local btn = btn_create(100,20);
+--btn_bindClick(btn,f_alert);

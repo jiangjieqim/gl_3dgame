@@ -59,6 +59,7 @@ EVENT_ENGINE_SPRITE_CLICK_MOVE = 106
 
 dofile("..\\include\\lua\\xml.lua")	--xml组件
 dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
+dofile("..\\include\\lua\\sprite.lua");
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
 dofile("..\\include\\lua\\ftext.lua");
 

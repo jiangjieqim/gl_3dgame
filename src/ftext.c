@@ -12,7 +12,7 @@
 #include "sprite.h"
 #include "jgl.h"
 #include "ftfont.h"
-
+#include "gettime.h"
 #include "str.h"
 
 #define DEBUG
@@ -66,7 +66,8 @@ f_init_buffer(int w,int h){
 	int length =sizeof(struct RGBA) *w * h;
 	int _maxSize = _Font_Size_*_Font_Size_*sizeof(struct RGBA);
 	if(length > _maxSize){
-		printf("缓冲区太小\n");
+		//printf("缓冲区太小\n");
+		log_code(ERROR_BUFFER_NOT_ENOUGH);
 		assert(0);
 	}
 	if(!g_bytes){

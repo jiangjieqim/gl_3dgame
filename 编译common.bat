@@ -38,5 +38,3 @@ del *.obj *.exp *.lib *.dll
 cd..\..\
 echo %CD%
 ::pause 
-
-test.bat

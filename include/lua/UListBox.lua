@@ -67,7 +67,9 @@ end
 function 
 listbox_set_label(list,label)
 --	tf_setText(list.tf,label);
-    func_ftext_reset(list.tf,label);
+    if(list.tf) then
+        func_ftext_reset(list.tf,label);
+    end
 end
 
 
@@ -128,9 +130,10 @@ listbox_new(_x,_y)
 
 	func_setIcon(list.bg,"gundi.png")
 
-	list.tf =func_ftext_create(); --tf_create(128,list.x,list.y,r,g,b);
-    func_ftext_setpos(list.tf,list.x,list.y);
-	return list
+--	list.tf =func_ftext_create(); --tf_create(128,list.x,list.y,r,g,b);
+--  func_ftext_setpos(list.tf,list.x,list.y);
+	
+    return list
 end
 
 --绑定一个回调函数
@@ -152,7 +155,7 @@ function
 listbox_add(list,str)
 	local count =	func_get_table_count(list.tflist) + 1
 	local tf=func_ftext_create();--tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
-    func_ftext_setpos(tf,list.x ,list.y + g_gap*(count));--+ g_width/2
+    func_ftext_setpos(tf,list.x,list.y + g_gap*(count));--+ g_width/2
 	list.tflist[count - 1] = tf;
 	--tf_setText(tf,str);
 
@@ -171,7 +174,7 @@ listbox_del(list)
 	ptr_remove(list.bg)
 
 	for key, value in pairs(list.tflist) do
-		ptr_remove(value)
+		func_fext_dispose(value)
 	end
 	--ptr_remove(list.tf)
     func_fext_dispose(list.tf);
