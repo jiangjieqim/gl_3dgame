@@ -37,6 +37,7 @@ local function f_create()
 		
 		click = nil,
 
+        --描述文本
         tf = nil,
 	};
 end
@@ -165,11 +166,15 @@ local function f_f_LuaDrag_move(data)
 	f_ScDragMove(func_getTable(name),progress)
 end
 
-
-function scrollBar_label(sc)
+--设置滑动条的文本
+function scrollBar_label(sc,label)
     if(sc.tf ==nil) then
         sc.tf = func_ftext_create();
     end
+    func_ftext_reset(sc.tf,label);
+    local x,y = get_attr(sc.bg,"spritePos");
+    local w,h = get_attr(sc.bg,"spriteSize")
+    func_ftext_setpos(sc.tf,x+w,y);
 end
 
 function 
@@ -204,12 +209,20 @@ scrollBar_new(x,y)
 	return sc
 end
 
+function scrollBar_get_rect(sc)
+    local x,y = get_attr(sc.bg,"spritePos");
+	local w,h = get_attr(sc.bg,"spriteSize");
+    return x,y,w,h;
+end
+
 --删除
 function scrollBar_del(sc)
 	
 	evt_off(sc.bg,EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2);
 	evt_off(sc.btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move);
-
+    if(sc.tf) then
+        func_fext_dispose(sc.tf);
+    end
 	
 	ptr_remove(sc.btn)
 	ptr_remove(sc.bg)

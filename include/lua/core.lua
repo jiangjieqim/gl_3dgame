@@ -372,7 +372,9 @@ end
 function func_set_box_color(o,r,g,b)
 	change_attr(o,"set_box_color",string.format("%f,%f,%f",r,g,b))
 end
-
+function func_rotate(o,key,value)
+    change_attr(o,key,tostring(value));
+end
 --改变对象的Rotate x的值
 function func_setRotateX(o,value)
 	change_attr(o,"rx",tostring(value));

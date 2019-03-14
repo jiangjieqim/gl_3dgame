@@ -73,6 +73,12 @@ function btn_create(x,y,w,h,url)
 	
 	return btn
 end
+--获取btn的位置及其尺寸
+function btn_get_rect(btn)
+    local x,y = get_attr(btn.sprite,"spritePos");
+	local w,h = get_attr(btn.sprite,"spriteSize");
+    return x,y,w,h;
+end
 
 --[[
 	为按钮绑定一个点击回调

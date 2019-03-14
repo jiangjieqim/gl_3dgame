@@ -136,5 +136,5 @@ func_set_x(_md2,2)
 --]]
 
 
-local crl = CrlUI:new();
+local crl = CrlUI:new(0,50);
 crl:bind(_md2);
