@@ -137,6 +137,7 @@ function UnitBase:load_collide(model)
 end
 
 function UnitBase:move(x,y,z)
+    --print(x,y,z);
     x = tonumber(x);
     y = tonumber(y);
     z = tonumber(z);
@@ -158,7 +159,7 @@ function UnitBase:move(x,y,z)
 	
 	y = py;
 	--print(self.offset_y);
-	local distance = vec_distance(px,py,pz,x,y,z);--求其水平距离
+	local distance = vec_distance(px,py,pz,x,y,z);--求其平面距离
 	
 	func_look_at(o,x,y,z);--转向目标坐标
 	

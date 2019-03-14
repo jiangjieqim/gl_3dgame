@@ -69,7 +69,21 @@ struct EX* ex_getInstance(){
 	}
 	return g_ex;
 }//引擎实例引用
-
+/************************************************************************/
+/* 是否鼠标左键按着  
+/************************************************************************/
+static int
+f_is_mouse_leftDown(){
+	struct EX* ex = ex_getInstance();
+	struct MouseState* s = &ex->mouseState;
+	return s->button == GLUT_LEFT_BUTTON && s->action == GLUT_DOWN;
+}
+static void f_rayPick(struct HitResultObject* hit);
+//static void
+//f_3d_pick(){
+//	struct EX* p = ex_getInstance();
+//	base_hit_mouse(p->mouseState.xMouse,p->mouseState.yMouse,p->_screenWidth,p->_screenHeight,p->renderList,p->perspectiveMatrix,p->modelViewMatrix,f_rayPick);
+//}
 /*
 	/1000/60 fps因子	代表16.66毫秒(即1/60秒)计算一次fps	
 */
@@ -867,6 +881,8 @@ _new(){
 	//f_drawline();
 
 	evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
+	
+	
 
 	ex_lua_global_evt_dispatch(EVENT_ENGINE_RENDER_3D);
 
@@ -991,6 +1007,7 @@ ex_init(struct EX* p,GLdouble zfar){
 	//==========================================
 	//loadSpriteVert(p);
 	p->evtList = (void*)LStack_create();
+	p->mouseState.action = GLUT_UP;
 }
 
 void ex_dispose(struct EX* p){
@@ -1496,6 +1513,14 @@ void mouseMove(int x,int y)
 	e->mouseState.moveX = x;
 	e->mouseState.moveY = y;
 	
+	//printf("x = %d y = %d\n",x,y);
+
+	if(f_is_mouse_leftDown()  && !getv(&(e->flags),EX_FLAGS_RAY_TO_UI)){
+		//鼠标常按了点击了非UI元素
+		//printf("1");
+		base_hit_mouse(x,y,e->_screenWidth,e->_screenHeight,e->renderList,e->perspectiveMatrix,e->modelViewMatrix,f_rayPick);
+		//f_3d_pick();
+	}
 
 
 	/*{
@@ -1518,9 +1543,6 @@ f_rayPick(struct HitResultObject* hit){
 
 	//################HeadInfo拾取点击回调
 	{
-
-		
-
 		void * ptr = ex_find(hit->name);
 		evt_dispatch((void*)base_get(ptr),EVENT_RAY_PICK,(void*)hit);
 		
@@ -1536,7 +1558,6 @@ f_rayPick(struct HitResultObject* hit){
 	}
 }
 
-
 void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	struct EX* ex = ex_getInstance();
 
@@ -1545,15 +1566,15 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	ex->mouseState.xMouse = xMouse;
 	ex->mouseState.yMouse = yMouse;
 	
-	//printf("%d\n",button);
+	//printf("%d %d\n",button,action);
 
 	//ex->isHitRaySprite = 0;
 	resetv(&(ex->flags),EX_FLAGS_RAY_TO_UI);
 
 	//左键+鼠标按下
-	if(button == GLUT_LEFT_BUTTON && action == GLUT_DOWN)
+	//if(button == GLUT_LEFT_BUTTON && action == GLUT_DOWN)
+	if(f_is_mouse_leftDown())
 	{
-		
 
 		//鼠标点击了屏幕交互操作(开启了射线拾取状态)
 
@@ -1569,7 +1590,9 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 			//3D世界拾取
 			if(getv(&(ex->flags),EX_FLAGS_RAY)){
 				base_hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,ex->perspectiveMatrix,ex->modelViewMatrix,f_rayPick);
+				//f_3d_pick();
 			}
+			
 		}
 	}
 

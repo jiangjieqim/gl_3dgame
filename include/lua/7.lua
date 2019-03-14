@@ -16,10 +16,11 @@ obj2:scale(1/50);
 --obj2:setv(FLAGS_DRAW_PLOYGON_LINE);
 obj2:rx(PI/2);
 obj2:y(0.5);
-
+--选择box
 local select = UnitBase:new();
 select:loadbox();
 
+--##########################################################
 --地板
 local plane = UnitBase:new();
 --plane:load_model(nil,"//resource//material//floor.mat");
@@ -36,7 +37,7 @@ local function f_on_click_floor_handle(data)
 end
 local function f_endCall(msg)
     if(msg == UnitBaseEndMsg) then
-        print(obj2:get_name().."移动结束");
+--        print(obj2:get_name().."移动结束");
     end
 end
 if(plane) then
