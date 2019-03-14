@@ -5,15 +5,15 @@ local crl = CrlUI:new(0,50);
 
 local modelList={}
 
-local function f_selectPick(p)
-	for key, value in pairs(modelList) do      
-		if( tonumber(value) == p) then
-			func_set_box_color(value,1,1,0)			
-		else
-			func_set_box_color(value,1,0,0)
-		end
-	end 
-end
+--local function f_selectPick(p)
+--	for key, value in pairs(modelList) do      
+--		if( tonumber(value) == p) then
+--			func_set_box_color(value,1,1,0)			
+--		else
+--			func_set_box_color(value,1,0,0)
+--		end
+--	end 
+--end
 
 function f_pick(p)
 	--moduleUI_bind(p)
