@@ -13,7 +13,7 @@ ex:bgColor(0.3,0.3,0.3);
 
 
 --fps();
-infowin(0,20);
+infowin(200,0);
 
 --local list = ListBox:new();list:add("a");
 --local list1;
@@ -27,7 +27,7 @@ infowin(0,20);
 --list1:add("a1");
 --list1:add("a2");
 
---dofile("..\\include\\lua\\8.lua");
+dofile("..\\include\\lua\\3.lua");
 
 --print("lua script is already init finished !");
 

@@ -790,7 +790,7 @@ dofile("..\\include\\lua\\UScrollBar.lua")	--滑un动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件
 
 
-
+dofile("..\\include\\lua\\crlui.lua")
 dofile("..\\include\\lua\\infowin.lua")	--fps组件
 
 --dofile("..\\include\\lua\\alert.lua")		--弹出框组件

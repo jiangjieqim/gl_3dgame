@@ -42,6 +42,7 @@ end
 function func_ftext_str(txt)
     return ftext(txt, "str");
 end
+--获取文本的w,h
 function func_ftext_getsize(txt)
     return ftext(txt, "size");
 end

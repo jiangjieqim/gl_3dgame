@@ -36,6 +36,8 @@ local function f_create()
 		value = nil,
 		
 		click = nil,
+
+        tf = nil,
 	};
 end
 
@@ -161,6 +163,13 @@ local function f_f_LuaDrag_move(data)
 	local progress = tonumber(arr[4]);
 	arr = nil
 	f_ScDragMove(func_getTable(name),progress)
+end
+
+
+function scrollBar_label(sc)
+    if(sc.tf ==nil) then
+        sc.tf = func_ftext_create();
+    end
 end
 
 function 

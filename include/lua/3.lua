@@ -1,6 +1,6 @@
 --模型控制器
 
-dofile("..\\include\\lua\\core.lua")
+--dofile("..\\include\\lua\\core.lua")
 
 local modelList={}
 
@@ -112,12 +112,16 @@ local function loadMd2(x)
 end 
 
 ---[[
-dofile("..\\include\\lua\\modelUI.lua")
+--dofile("..\\include\\lua\\modelUI.lua")
 
-func_set_camera_pos(0,0,-5)-- -10
-
+--func_set_camera_pos(0,0,-5)-- -10
+cam:position(0,0,-5);
 --初始化界面控制器
-modelUI_init()
+--modelUI_init()
+
+
+
+
 ---[[
 local _md5 = loadMD5('wolf')
 func_set_scale(_md5,0.02)
@@ -125,10 +129,12 @@ func_set_rayRadius(_md5,30)--设置静态碰撞检测盒
 
 local obj1 = loadObj()
 func_set_x(obj1,1)
---]]
+
 local _md2 = loadMd2()
 func_set_scale(_md2,0.02)
 func_set_x(_md2,2)
+--]]
 
 
-
+local crl = CrlUI:new();
+crl:bind(_md2);
