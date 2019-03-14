@@ -753,7 +753,8 @@ end
 
 --×Ö·û´®·Ö¸î³Étable
 function func_split(str, delimiter)
-    if str==nil or str=='' or delimiter==nil then
+    delimiter = delimiter or ","
+    if str==nil or string.len(str)==0 or delimiter==nil then
         return nil
     end
  

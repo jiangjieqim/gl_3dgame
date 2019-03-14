@@ -1,5 +1,5 @@
 --md2动作控制器管理
-dofile("..\\include\\lua\\core.lua")
+--dofile("..\\include\\lua\\core.lua")
 
 print('md2动作控制')
 
@@ -65,25 +65,16 @@ f_anim_control_ui(m)
 			tf_setText(animTF,'anim '..v)
 		end
 	)
-	
-	local list =  listbox_new(0,15)
-	listbox_add(list,"stand")
-	listbox_add(list,"run")
-	listbox_add(list,"attack")
-	listbox_add(list,"jump")
-	listbox_add(list,"crwalk")
-
-	listbox_bind(list,
-		function(_l)
-			
-			local label = listbox_get_label(_l)
-			func_set_anim(m,label)
-			--string.format('%s vbo=%s',label,tostring(func_is_vbo(obj)) )
-			listbox_set_label(_l,label)
-
-		end
-	)
-	listbox_select(list,0)--默认选0号索引
+	local anim = "stand,run,attack,jump,crwalk";
+	local listbox =  ListBox:new(0,15,
+        function (index)
+            local arr = func_split(anim);
+            local label = arr[index+1];
+            func_set_anim(m,label);
+            --print(anim,arr);
+        end    
+    )
+	listbox:add(anim);
 end
 ---------------------------------------------------------------------------
 cam:position(0,0,-90)
