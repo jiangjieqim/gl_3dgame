@@ -1,6 +1,7 @@
 --模型控制器
 
 --dofile("..\\include\\lua\\core.lua")
+local crl = CrlUI:new(0,50);
 
 local modelList={}
 
@@ -15,8 +16,10 @@ local function f_selectPick(p)
 end
 
 function f_pick(p)
-	moduleUI_bind(p)
-	f_selectPick(p)
+	--moduleUI_bind(p)
+	--f_selectPick(p)
+    --print(p);
+    crl:bind(p);
 end
 
 --添加到列表,并且选择其模型碰撞体
@@ -131,10 +134,10 @@ local obj1 = loadObj()
 func_set_x(obj1,1)
 
 local _md2 = loadMd2()
-func_set_scale(_md2,0.02)
+func_set_scale(_md2,1/50)
 func_set_x(_md2,2)
 --]]
 
 
-local crl = CrlUI:new(0,50);
+
 crl:bind(_md2);
