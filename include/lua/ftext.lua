@@ -9,8 +9,10 @@ function func_ftext_create(w, h, fw, fh)
     h = h or 64;
 
     -- 12,11
-    fw = fw or 14;
-    fh = fh or 13;
+--    fw = fw or 14;
+--    fh = fh or 13;
+    fw = fw or 16;
+    fh = fh or 15;
     local p = ftext(nil, "create", name, string.format("%s,%s,%s,%s", w, h, fw, fh));
     func_ftext_set_buffer(p,64);--…Ë÷√‘§÷∆ª∫≥Â«¯
     return p;

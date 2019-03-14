@@ -98,7 +98,7 @@ function btn_bindDown(btn,c)
 	evt_on(btn.sprite,EVENT_ENGINE_SPRITE_CLICK_DOWN,c);
 end
 --ÒÆ³ýÊÂ¼þ
-local function f_remove_evt()
+local function f_remove_evt(btn)
 	evt_off(btn.sprite,EVENT_ENGINE_SPRITE_CLICK,btn.clickEvtCallBack);
 	evt_off(btn.sprite,EVENT_ENGINE_SPRITE_CLICK_DOWN,btn.mouseDownCallBack);
 end
