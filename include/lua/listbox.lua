@@ -293,6 +293,8 @@ function ListBox:dispose()
         func_fext_dispose(value);
     end
     list.tflist = { };
-    func_fext_dispose(self.tf);
+    if(self.tf) then
+        func_fext_dispose(self.tf);
+    end
     ptr_remove(list.bg);
 end

@@ -57,7 +57,11 @@ end
 
 -- 销毁
 function func_fext_dispose(txt)
-    ftext(txt, "dispose");
+    if(txt) then
+        ftext(txt, "dispose");
+    else
+        func_error("txt = nil");
+    end
 end
 
 ----分割成中文和英文存储在table中

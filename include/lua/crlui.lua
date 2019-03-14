@@ -91,6 +91,23 @@ local function f_init_set_frame(crl, sc)
     end );
     crl.sclist["setframe"] = sc;
 end
+
+local function f_init_lineWidth(crl, sc)
+    scrollBar_label(sc, '描边渲染');
+    scrollBar_bind(sc,
+    function(sc)
+
+        local v = sc.value
+        local o = crl.o;
+        -- func_set_scale(o,v)
+        func_changeFlags(o, FLAGS_GLSL_OUTLINE)
+        -- 支持边缘渲染
+        func_set_glsl_parms(o, 'lineWidth', v)
+--        tf_setText(lineTF, 'line ' .. string.format('%.2f', v))
+    end
+    )
+    crl.sclist["lineWidth"] = sc;
+end
 local function init(crl)
     crl.nameTf = func_ftext_create(150, 150);
     func_ftext_setpos(crl.nameTf, crl.x, crl.y);
@@ -139,22 +156,33 @@ local function init(crl)
     f_init_set_frame(crl, sc);
     x, y, w, h = scrollBar_get_rect(sc);
     oy = oy + h;
-     -- ########################################################
-     --模式切换
+    -- ########################################################
+    -- 设置描边渲染
+    local sc = scrollBar_new(crl.x, crl.y + oy)
+    f_init_lineWidth(crl, sc);
+    x, y, w, h = scrollBar_get_rect(sc);
+    oy = oy + h;
+    -- ########################################################
+    -- 模式切换
     local list = ListBox:new(crl.x, crl.y + oy, function(index)
-        
-    end)
-    list:add("线框渲染");
+        if (index == 0) then
+            func_changeFlags(crl.o, FLAGS_DRAW_PLOYGON_LINE);
+        elseif (index == 1) then
+            func_changeFlags(crl.o,FLAGS_DISABLE_CULL_FACE)
+        end
+    end )
+    list:add("线框渲染,背面剔除");
     oy = oy + h;
 
-    -- ########################################################   
+    -- ########################################################
 
-    local btn = btn_create(crl.x, crl.y + oy);
+    local btn = btn_create(crl.x + 100, 0);
 
     btn_bindClick(btn, function(b)
         crl:dispose();
         btn_dispose(func_getTable(b));
         btn_dispose(btn_skeleon);
+        list:dispose();
     end
     )
     btn_label(btn, "销毁");
@@ -172,7 +200,7 @@ function CrlUI:new(x, y)
     setmetatable(s, CrlUI);
     s.x = x or 0;
     s.y = y or 0;
-    --s.stat = false;
+    -- s.stat = false;
     s.sclist = { };
     init(s);
     return s;
@@ -180,16 +208,17 @@ end
 
 function CrlUI:bind(o)
     --    self.nameTf
-    if(self.o) then
-        func_set_box_color(self.o,1,0,0)
+    if (self.o) then
+        func_set_box_color(self.o, 1, 0, 0)
     end
 
     self.o = o;
-    local str = string.format( "%#x,%s,%s",tonumber(o),func_get_name(o),func_get_suffix(o))
+    local str = string.format("%#x,%s,%s", tonumber(o), func_get_name(o), func_get_suffix(o))
     func_ftext_reset(self.nameTf, str);
---    self.stat = not self.stat;
---    print(self.stat);
-    func_set_box_color(o,1,1,0)--设置选择的模型黄色框显示
+    --    self.stat = not self.stat;
+    --    print(self.stat);
+    func_set_box_color(o, 1, 1, 0)
+    -- 设置选择的模型黄色框显示
 end
 
 function CrlUI:dispose()
