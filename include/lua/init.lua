@@ -16,3 +16,4 @@ ex:bgColor(0.3,0.3,0.3);
 infowin(200,0);
 
 dofile("..\\include\\lua\\quaternion.lua");
+--dofile("..\\include\\lua\\7.lua");
