@@ -108,7 +108,12 @@ end
 function UnitBase:y(v)
     func_set_y(self.p,v);
 end
-
+function UnitBase:z(v)
+    func_set_z(self.p,v);
+end
+function UnitBase:set_position(x,y,z)
+    func_set_position(self.p,x,y,z);
+end
 function UnitBase:get_name()
     return func_get_name(self.p);
 end
