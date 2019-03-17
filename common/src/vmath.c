@@ -717,7 +717,8 @@ vec3CalculateNormal(struct Vec3* a,struct Vec3* b,struct Vec3* c,struct Vec3* re
 	射线检测三角形角点
 	triangle:	三个顶点,表示一个三角形
 */
-int f_testHit(struct Vec3* base,struct Vec3* nearPoint,struct Vec3* farPoint,float* t,float* out){
+static int 
+f_testHit(struct Vec3* base,struct Vec3* nearPoint,struct Vec3* farPoint,float* t,float* out){
 	//struct HeadInfo* base =(struct HeadInfo*)_md2->head;
 	float orig[3]= {nearPoint->x,nearPoint->y,nearPoint->z};//射线坐标
 	float target[3] = {farPoint->x,farPoint->y,farPoint->z};//目标点
