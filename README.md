@@ -126,3 +126,23 @@ tl_malloc.c
 ![image](https://github.com/jiangjieqim/gl_3dgame/blob/master/resource/texture/horse.bmp)
 
 
+(22)1000000次随机,c使用14毫秒,lua47毫秒,所以lua是存在性能损耗的  
+
+```
+int i = 0;
+		int t = get_longTime();
+		for(i = 0;i < 1000000;i++){
+			rand();
+		}
+		printf("%ld ms\n",get_longTime()-t);//14 ms
+```
+
+```
+local t = func_get_longTime();
+
+for i=1,1000000,1 do
+   
+    math.random();
+end
+print(func_get_longTime()-t); --47 ms
+```
