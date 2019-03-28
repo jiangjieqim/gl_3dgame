@@ -6,8 +6,3 @@ MD格式教程[https://blog.csdn.net/zuggs_/article/details/82381269]
 ```
 原理:只要对要添加辉光效果的物体进行一次模糊操作，然后将模糊过后的图片与原先的图片进行Alpha Blend
 ```
-
->这里是一个引用  
-a文本
-***
-### 实现过程
