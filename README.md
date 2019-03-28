@@ -131,11 +131,11 @@ tl_malloc.c
 
 ```
 int i = 0;
-		int t = get_longTime();
-		for(i = 0;i < 1000000;i++){
-			rand();
-		}
-		printf("%ld ms\n",get_longTime()-t);//14 ms
+int t = get_longTime();
+for(i = 0;i < 1000000;i++){
+	rand();
+}
+printf("%ld ms\n",get_longTime()-t);//14 ms
 ```
 
 ```
