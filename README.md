@@ -123,6 +123,7 @@ tl_malloc.c
 需要实现四元数角位移渐变  
 ~~重构UlistBox接口~~  
 (21)FBO,PBO实现  
+在texture上渲染一个视图
 ![image](https://github.com/jiangjieqim/gl_3dgame/blob/master/resource/texture/horse.bmp)
 
 
