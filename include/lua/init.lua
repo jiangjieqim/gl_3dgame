@@ -17,3 +17,11 @@ infowin(200,0);
 
 dofile("..\\include\\lua\\quaternion.lua");
 --dofile("..\\include\\lua\\7.lua");
+
+
+--local t = func_get_longTime();
+--for i=1,1000000,1 do
+
+--    math.random();
+--end
+--print(func_get_longTime()-t);

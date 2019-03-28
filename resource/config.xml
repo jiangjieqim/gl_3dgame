@@ -1,6 +1,6 @@
 <res id="0" 
       initLuaName="init.lua" 
-      winpos="1" 
+      winpos="7" 
       setLogColor="0" 
       memory="0" rate="1"  
       w="400" h="300" 
