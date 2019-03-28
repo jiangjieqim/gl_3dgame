@@ -140,9 +140,7 @@ printf("%ld ms\n",get_longTime()-t);//14 ms
 
 ```
 local t = func_get_longTime();
-
 for i=1,1000000,1 do
-   
     math.random();
 end
 print(func_get_longTime()-t); --47 ms
