@@ -124,7 +124,7 @@ tl_malloc.c
 ~~重构UlistBox接口~~  
 (21)FBO,PBO实现  
 在texture上渲染一个视图
-![image](https://github.com/jiangjieqim/gl_3dgame/blob/master/resource/texture/horse.bmp)
+![image](https://github.com/jiangjieqim/gl_3dgame/blob/master/resource/texture/tri.png)
 
 
 (22)1000000次随机,c使用14毫秒,lua47毫秒,所以lua是存在性能损耗的  
