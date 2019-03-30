@@ -15,6 +15,20 @@ ex:bgColor(0.3,0.3,0.3);
 --fps();
 infowin(200,0);
 
+
+
+
+--func_fixed_load("\\resource\\obj\\torus.obj");
+
+
+
+
+
+
+
+
+
+
 dofile("..\\include\\lua\\quaternion.lua");
 --dofile("..\\include\\lua\\7.lua");
 

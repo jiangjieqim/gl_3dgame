@@ -1,7 +1,7 @@
 cam:position(0, 0, -5);
 -- cam:rx(PI * 1.7);
 
---ex:bgColor(0.1,0.1,0.1);
+-- ex:bgColor(0.1,0.1,0.1);
 -- 地板
 
 
@@ -30,11 +30,11 @@ local function f_load_c()
     box1:loadbox();
     box1:scale(0.25);
 
-    --信息文本
-    local tf = func_ftext_create(128,128);
+    -- 信息文本
+    local tf = func_ftext_create(128, 128);
     -- tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
-    func_ftext_setpos(tf,0,12);
-    
+    func_ftext_setpos(tf, 0, 12);
+
 
 
     local sc = scrollBar_new(0, 100)
@@ -55,6 +55,17 @@ local function f_load_c()
     end )
     scrollBar_setRange(sc, 0, 1)
 end
+
+--local function loadObj()
+--    local name = func_create_name();
+--    -- model = model or 'tri'--'box'--'torus'
+--    -- local obj = func_loadobj(model)--box	'torus'
+--    local obj = load_model(name, string.format("\\resource\\obj\\torus.obj", model));
+--    setMaterial(obj, func_load("//resource//material//wolf.mat"));
+--    setv(obj, FLAGS_VISIBLE);
+--    setv(obj, FLAGS_DRAW_PLOYGON_LINE);
+--end
+
 --[[
                              (1)y
                             ^
@@ -76,10 +87,9 @@ end
 
 
 local x, y, z = vec3_cross(0.72, -0.69, 0, 0, 0, 1);
+--loadObj();
 
-print(x, y, z);--求+90之后的向量
+-- print(x, y, z);--求+90之后的向量
 f_load_c();
 
-print(vec3_dot(0.72,-0.69, 0,       0,-1,0));
-
-
+-- print(vec3_dot(0.72,-0.69, 0,       0,-1,0));
