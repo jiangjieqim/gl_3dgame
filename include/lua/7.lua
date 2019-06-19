@@ -10,12 +10,35 @@ cam:rx(PI * 1.8);
 --obj:rx(PI/2);
 --obj:y(0.5);
 
+
+
+
+
+
 local obj2 = UnitBase:new();
 obj2:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");--gobin
 obj2:scale(1/50);
 --obj2:setv(FLAGS_DRAW_PLOYGON_LINE);
 obj2:rx(PI/2);
 obj2:y(0.5);
+
+
+
+
+local animsc = scrollBar_new(100,20);
+local function f_animscHandle(sc)
+    local v = sc.value * PI * 2;
+	--print("### "..tostring(v));
+    --func_setRotateY(unit:get_ptr(),v);
+    obj2:ry(v);
+end
+scrollBar_setRange(animsc,0,1)
+----animscTf = scrollBar_add_text(animsc,'animsc')
+scrollBar_bind(animsc,f_animscHandle)
+
+
+
+
 --Ñ¡Ôñbox
 local select = UnitBase:new();
 select:loadbox();
@@ -46,19 +69,6 @@ end
 evt_on(obj2:get_p(),UnitBaseEvent,f_endCall);
 
 
-
-local animsc = scrollBar_new(100,20)
-local function f_animscHandle(sc)
-    local v = sc.value * PI * 2;
-	--print("### "..tostring(v));
-    --func_setRotateY(unit:get_ptr(),v);
-    obj2:ry(v);
-end
-scrollBar_setRange(animsc,0,1)
---animscTf = scrollBar_add_text(animsc,'animsc')
-scrollBar_bind(animsc,f_animscHandle)
-
-
 local function f_onkey(data)
 	local key = tonumber(data);
 	print(key);
@@ -69,7 +79,7 @@ local function f_onkey(data)
 		    func_changeFlags(plane:get_p(),FLAGS_DRAW_PLOYGON_LINE);
         end
     elseif(key == KEY_ESC) then
-        ex:exit();	
+        ex:exit();
 	end
 end
 evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
