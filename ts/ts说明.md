@@ -32,3 +32,9 @@ export class ZhongLiMediator  extends Mediator {
     }
 }
 ```
+
+## 设置不可滚动的列表
+```
+petPageTurning: PageTurning<ChongWuBiaoCfg, PetHeadRender>;
+this.petPageTurning = getSizedPageTurning<ChongWuBiaoCfg, PetHeadRender>(PetHeadRender, { showCount: 4, type: ScrollDirection.Horizon, con: listSize, prevBtn: leftBtn, nextBtn: rightBtn, hgap: -4, vgap: 1 });
+```
