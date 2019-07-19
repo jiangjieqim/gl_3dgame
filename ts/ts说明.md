@@ -18,6 +18,11 @@ export class BossZJRender extends ListItemRenderer<BossZhiJiaCfg , BossZJRenderV
     }
     bindComponent() {}
     handleView() {}
+    
+    $setSelected(value: boolean) {
+        super.$setSelected(value);
+        this.skin.selectMC.visible = value;//设置选择状态
+    }
 }
 renderlist: PageList<LianXuChongZhiCfg, LxczViewRender>
 this.renderlist = new PageList(LxczViewRender, { vgap: 0, staticSize: true, type: ScrollDirection.Vertical, con: list });
