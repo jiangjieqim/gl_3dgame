@@ -42,15 +42,15 @@ this.petPageTurning = getSizedPageTurning<ChongWuBiaoCfg, PetHeadRender>(PetHead
 ## 根据缩放比设置坐标
 代码片段  
 ```
-    let stage = egret.sys.$TempStage;
-    let {txtInputContext} = this;
-    let sw = stage.stageWidth, sh = stage.stageHeight;
-    let base: BasefaceMediator = (facade.getMediator(ModuleId.BaseFace) as BasefaceMediator)
-    let view = base.$view;
-    let {bg} = this.$view;
-    let percent: number = view.$getConcatenatedMatrix().a;
-    realSW = sw / percent;
-    realSH = sh / percent;
-    bg.width = realSW - CHAT_GAP;
-    this.refreshWidth();
+let stage = egret.sys.$TempStage;
+let {txtInputContext} = this;
+let sw = stage.stageWidth, sh = stage.stageHeight;
+let base: BasefaceMediator = (facade.getMediator(ModuleId.BaseFace) as BasefaceMediator)
+let view = base.$view;
+let {bg} = this.$view;
+let percent: number = view.$getConcatenatedMatrix().a;
+realSW = sw / percent;
+realSH = sh / percent;
+bg.width = realSW - CHAT_GAP;
+this.refreshWidth();
 ```
