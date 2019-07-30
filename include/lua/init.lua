@@ -15,7 +15,7 @@ ex:bgColor(0.3,0.3,0.3);
 --fps();
 infowin(200,0);
 
-
+alert("нд╠╬");
 
 
 --func_fixed_load("\\resource\\obj\\torus.obj");
