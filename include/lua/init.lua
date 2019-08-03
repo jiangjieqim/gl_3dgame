@@ -12,8 +12,8 @@ ex:bgColor(0.3,0.3,0.3);
 --ex:bgColor(0.5,0.5,0.5);
 
 
---fps();
-infowin(200,0);
+fps(0,15);
+infowin(0,0);
 
 alert("нд╠╬");
 

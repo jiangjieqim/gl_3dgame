@@ -91,7 +91,6 @@ local function loadObj(model)
 	func_set_pick(obj,"f_pick")
 	--]]
 	
-	
 	return obj
 end
 

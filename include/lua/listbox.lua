@@ -125,7 +125,7 @@ ListBox = {
 };
 
 ListBox.__index = ListBox;
-
+--callBack	index
 function ListBox:new(x, y, callBack)
     local s = {
         --    bg,--背景
@@ -155,7 +155,8 @@ function ListBox:new(x, y, callBack)
         g_gap,-- (一行的高度间隔)
 
         g_width,-- (一行的宽度)
-
+		
+		isSetTitle=nil,	--是否自动设置标题栏文本
     }
     setmetatable(s, ListBox);
     s.callBack = callBack;
@@ -171,6 +172,8 @@ local function f_get_index(list)
     -- return tonumber( string.format('%#.0f',f)) - 1
     return math.floor(y / list.g_gap) -1;
 end
+
+--设置文本
 local function f_set_label(list, label)
     if (list.tf == nil) then
         local tf = func_ftext_create();
@@ -179,6 +182,15 @@ local function f_set_label(list, label)
         list.tf = tf;
     end
     func_ftext_reset(list.tf, label);
+end
+--设置标题
+function ListBox:setTitle(str)
+    local list = self;
+	f_set_label(self, str);--设置标题文本
+end
+
+function ListBox:isSetTitle(v)
+	self.isSetTitle = v;
 end
 -- 根据b_drop的值显示隐藏文本
 function ListBox:tf_vis_switch()
@@ -219,8 +231,11 @@ function ListBox:tf_vis_switch()
     if (self.b_drop == false and self.callBack) then
         local i = f_get_index(self);
         if (i >= 0) then
-            f_set_label(self, arr[i + 1]);
-            self.callBack(i);
+            --f_set_label(self, arr[i + 1]);--设置标题文本
+			if(self.isSetTitle == true) then
+				self:setTitle(arr[i+1]);
+			end
+			self.callBack(i);
         end
     end
 end

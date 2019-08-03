@@ -8,7 +8,7 @@ function Alert:f_resize_window_child()
 	--func_setPos(self.label,sx,sy);
 	func_ftext_setpos(self.label,sx,sy);
 
-	btn_pos(self.closeBtn,sx+(bgw-closeSize / 2),sy);
+	btn_pos(self.closeBtn,sx+(bgw-closeSize),sy);
 end;
 
 --æ”÷–
