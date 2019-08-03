@@ -145,3 +145,5 @@ for i=1,1000000,1 do
 end
 print(func_get_longTime()-t); --47 ms
 ```
+(23)
+lua继承的实现,resize之后的碰撞盒的的修正
