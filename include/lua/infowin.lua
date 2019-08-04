@@ -1,25 +1,9 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function f_pick(p)
 	--moduleUI_bind(p)
 	--f_selectPick(p)
     --print("f_pick:"..p);
     --crl:bind(p);
-	print(p);--拾取的对象
+	print("pick now!");--拾取的对象
 end
 --加载一个obj模型
 local function f_loadObj(model)
@@ -42,7 +26,7 @@ local function f_loadObj(model)
 	--f_add_model(obj)
 
 	func_set_pick(obj,"f_pick");
-	--func_set_x(obj,1);
+	func_set_x(obj,1);
 	--]]
 	return obj
 end

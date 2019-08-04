@@ -1537,9 +1537,28 @@ void mouseMove(int x,int y)
 /* 点击回调                                                             */
 /************************************************************************/
 static void
+f_raySome(struct HitResultObject* hit){
+	struct EX* ex = ex_getInstance();
+	struct HitResultObject* last = hit;
+	struct HeadInfo* _node = ex_find_headinfo(ex,last->name);
+
+	if(_node){		
+		if(_node->luaPickCallBack){
+			int n = (int)ex_find_ptr(ex,(const char*)_node->name);
+			ex_callIntLuaFun(_node->luaPickCallBack,n);//lua拾取回调	
+		}
+		printf("-->%s,%0x\n",_node->name,_node->luaPickCallBack);
+		//printf("(%s)射线拾取到的3D坐标:\t%.3f\t%.3f\t%.3f\t%s\tcurType=%d\n",last->name,last->x,last->y,last->z,_node->suffix,_node->curType);
+	}else{
+		printf("can`t find f_rayPickCallBack\n");
+	}
+}
+
+static void
 f_rayPick(struct HitResultObject* hit){
 	//引擎点击回调	
-	evt_dispatch(ex_getInstance(),EVENT_RAY_PICK,(void*)hit);
+	//evt_dispatch(ex_getInstance(),EVENT_RAY_PICK,(void*)hit);
+	f_raySome(hit);
 
 	//################HeadInfo拾取点击回调
 	{
