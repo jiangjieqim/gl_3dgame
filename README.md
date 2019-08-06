@@ -1,7 +1,8 @@
 ﻿**说明**  
 基于Opengl的3d引擎,C做的底层接口,Lua封装的组件  
 
-![image](https://github.com/jiangjieqim/gl_3dgame/blob/master/%E7%A0%94%E5%8F%91%E6%96%87%E6%A1%A3/%E9%A2%84%E8%A7%88%E5%9B%BE0.png)
+![image](https://github.com/jiangjieqim/gl_3dgame/blob/master/%E7%A0%94%E5%8F%91%E6%96%87%E6%A1%A3/%E9%A2%84%E8%A7%88%E5%9B%BE0.png)  
+
 0.编译步骤  
 ```
 common.bat ftfont.bat test.bat
