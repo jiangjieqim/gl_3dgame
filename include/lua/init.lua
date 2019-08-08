@@ -17,19 +17,10 @@ infowin(0,0);
 
 alert("нд╠╬");
 
-
 --func_fixed_load("\\resource\\obj\\torus.obj");
 
-
-
-
-
-
-
-
-
-
 --dofile("..\\include\\lua\\quaternion.lua");--
+
 dofile("..\\include\\lua\\7.lua");
 
 

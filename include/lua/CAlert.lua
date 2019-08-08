@@ -123,14 +123,14 @@ local alert1;
 
 local function f_drag(data)
 	--ÍÏ×§ÒÆ¶¯ÊÂ¼þ
-		local arr = func_split(data,",");
-		--print(arr[2])
-		local name = arr[1];
-		--local progress = tonumber(arr[4]);
-		--print("****^"..arr[2],arr[3]);
-		arr = nil;
+	local arr = func_split(data,",");
+	--print(arr[2])
+	local name = arr[1];
+	--local progress = tonumber(arr[4]);
+	--print("****^"..arr[2],arr[3]);
+	arr = nil;
 		
-		alert1:f_resize_window_child();	
+	alert1:f_resize_window_child();	
 end
 
 function Alert:set_drag(value)

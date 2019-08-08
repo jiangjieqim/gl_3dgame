@@ -148,3 +148,26 @@ print(func_get_longTime()-t); --47 ms
 ```
 (23)
 lua继承的实现,resize之后的碰撞盒的的修正
+
+```
+Account = {}
+function Account:add1()
+    if(self.value == nil) then
+    else
+        self.value = self.value + 2;
+    end
+    return self.value;
+end
+function Account:new(o)
+    o = o or {}   -- create object if user does not provide one
+    setmetatable(o, self)
+    self.__index = self
+    o:add1();--这里不用self
+    return o
+end
+local a = Account:new({value = 1});--
+local b = Account:new({value = 2});
+a:add1();
+print(a.value);
+print(b.value);
+```
