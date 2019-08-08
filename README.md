@@ -149,6 +149,7 @@ print(func_get_longTime()-t); --47 ms
 (23)
 lua继承的实现,resize之后的碰撞盒的的修正
 
+### (24)lua的类实现
 ```
 Account = {}
 function Account:add1()
@@ -165,9 +166,10 @@ function Account:new(o)
     o:add1();--这里不用self
     return o
 end
-local a = Account:new({value = 1});--
+local a = Account:new({value = 1});
 local b = Account:new({value = 2});
 a:add1();
 print(a.value);
 print(b.value);
+--输出5,4
 ```
