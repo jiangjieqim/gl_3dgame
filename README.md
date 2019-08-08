@@ -149,7 +149,7 @@ print(func_get_longTime()-t); --47 ms
 (23)
 lua继承的实现,resize之后的碰撞盒的的修正
 
-### (24)lua的类实现
+## (24)lua的类实现
 ```
 Account = {}
 function Account:add1()
