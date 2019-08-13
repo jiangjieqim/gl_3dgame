@@ -391,6 +391,9 @@ void sprite_resize(struct Sprite* spr,int w,int h)
 
 void sprite_setpos(struct Sprite* spr,int x,int y)
 {
+	//evt_once(NextFrame)到下一个关键帧的时候更新数据,这样不会抖屏
+	
+
 	setSpriteScreenPos(ex_getInstance(),spr,x,y);//更新屏幕坐标
 	setHitTriangle(spr);//更新点击区域
 }

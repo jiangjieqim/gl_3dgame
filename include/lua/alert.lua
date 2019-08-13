@@ -1,6 +1,6 @@
-local alert1;
 
-local closeSize = 30;
+
+--local closeSize = 30;
 
 --重置子节点坐标
 local function f_resize_window_child(self)
@@ -12,7 +12,7 @@ local function f_resize_window_child(self)
 	func_ftext_setpos(self.label,sx,sy);
 
     --设置关闭按钮的坐标
-	btn_pos(self.closeBtn,sx+(bgw-closeSize),sy);
+	btn_pos(self.closeBtn,sx+(bgw-self.closeSize),sy);
 end;
 local function f_drag(evtData,self)
 	--拖拽移动事件
@@ -24,7 +24,7 @@ local function f_drag(evtData,self)
 --	arr = nil;
 
 --    print(self);
-	f_resize_window_child(self);	
+	f_resize_window_child(self);
 end
 
 --居中
@@ -75,7 +75,7 @@ local function f_init(self,w,h)
 	self.bg = sprite_create("alert",x,y,w,h);
 	func_setIcon(self.bg,"gundi.png");
 	--print(self.closeBtn)
-		
+	local closeSize = self.closeSize;
 	self.closeBtn=btn_create(x,y,closeSize,closeSize);
 	--print(self)
 		
@@ -119,10 +119,12 @@ local function create()
 	    closeBtn;
 	    label;
 	    isDrag;--是否可以拖拽
+        closeSize = 30;
     };
     return new_sharp;
 end
 
+local alert1;
 function alert(str)
 	str = str or "";
 	if(alert1 == nil) then
