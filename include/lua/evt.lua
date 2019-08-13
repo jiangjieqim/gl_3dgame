@@ -1,6 +1,6 @@
 local evtlist = {};
 
-function evt_on(obj,id,func)	
+function evt_on(obj,id,func,params)	
 	
     if(func == nil) then
         func_error("func = nil");
@@ -20,6 +20,7 @@ function evt_on(obj,id,func)
 		id = id;
 		func = func;
 		obj = obj;
+        params = params;
 	}
 	evtlist[evt] = evt;
 end
@@ -32,6 +33,7 @@ function evt_off(obj,id,func)
 			node.id = nil
 			node.func = nil;
 			node.obj = nil;
+            node.params = nil;
 			evtlist[node]=nil;
 		end
 	end
@@ -73,7 +75,7 @@ function evt_dispatch(...)
 		for k, v in pairs(evtlist) do
 			local node = evtlist[k];
 			if(node and node.id == id) then
-				node.func(data);
+				node.func(data,node.params);
 			end
 		end
 	else
@@ -81,7 +83,7 @@ function evt_dispatch(...)
 		for k, v in pairs(evtlist) do
 			local node = evtlist[k];
 			if(node and node.obj == obj and node.id == id) then
-				node.func(data);
+				node.func(data,node.params);
 			end
 		end
 	end

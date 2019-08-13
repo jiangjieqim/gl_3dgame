@@ -60,8 +60,7 @@ function Alert:create()
 		self:f_center();
 	end;
 	--###########################################################
-	
-	
+
 	f_init = function(w,h)
 		local x = 0;
 		local y = 0;
@@ -129,7 +128,6 @@ local function f_drag(data)
 	--local progress = tonumber(arr[4]);
 	--print("****^"..arr[2],arr[3]);
 	arr = nil;
-		
 	alert1:f_resize_window_child();	
 end
 

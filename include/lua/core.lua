@@ -791,12 +791,12 @@ dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑un动条组件
 dofile("..\\include\\lua\\UIlib.lua")		--按钮组件
 
-
 dofile("..\\include\\lua\\crlui.lua")
 dofile("..\\include\\lua\\infowin.lua")	--fps组件
 
 --dofile("..\\include\\lua\\alert.lua")		--弹出框组件
-dofile("..\\include\\lua\\CAlert.lua")		--弹出框组件
+--dofile("..\\include\\lua\\CAlert.lua")		--弹出框组件
+dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位
