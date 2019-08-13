@@ -1,5 +1,13 @@
 local evtlist = {};
 
+--[[
+    params:默认不传递参数
+
+    local function f_resize(evtData,self)
+        print(c_data);--来自evt_dispatch中的	local data;--数据
+    end
+]]--
+
 function evt_on(obj,id,func,params)	
 	
     if(func == nil) then
@@ -53,7 +61,7 @@ end
 function evt_dispatch(...)
 	 --id,data,obj
 	local id;
-	local data;
+	local data;--数据
 	local obj;
 	for index,value in ipairs({...}) do
 		--print(index,value);

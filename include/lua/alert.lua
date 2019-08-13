@@ -7,19 +7,26 @@ local function f_resize_window_child(self)
 	local sx,sy = func_get_sprite_xy(self.bg);
 	local bgw,bgh = func_get_sprite_size(self.bg);
 	--func_setPos(self.label,sx,sy);
+
+    --设置文本的坐标
 	func_ftext_setpos(self.label,sx,sy);
+
+    --设置关闭按钮的坐标
 	btn_pos(self.closeBtn,sx+(bgw-closeSize),sy);
 end;
-local function f_drag(self,data)
+local function f_drag(evtData,self)
 	--拖拽移动事件
-	local arr = func_split(data,",");
+--	local arr = func_split(data,",");
 	--print(arr[2])
-	local name = arr[1];
+--	local name = arr[1];
 	--local progress = tonumber(arr[4]);
 	--print("****^"..arr[2],arr[3]);
-	arr = nil;
+--	arr = nil;
+
+--    print(self);
 	f_resize_window_child(self);	
 end
+
 --居中
 local function f_center(self)
 	local x,y;
@@ -27,11 +34,11 @@ local function f_center(self)
 	local bgw,bgh = func_get_sprite_size(self.bg);
 	x = (sx - bgw)/2;
 	y = (sy - bgh)/2;
-	func_setPos(self.bg,x,y);
+	func_setPos(self.bg,x,y);--设置关闭按钮的坐标
 	f_resize_window_child(self);
-    print("x y = ",x,y);
+--    print("x y = ",x,y);
 end
-local function f_resize(data,self)
+local function f_resize(evtData,self)
 	local sw,sh = func_screenSize();
 	
 	local sx,sy = func_get_sprite_xy(self.bg);
@@ -55,7 +62,7 @@ end
 local function set_drag(self,value)
 	self.isDrag = value
 	if(value) then
-		evt_on(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag,self.bg);	
+		evt_on(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag,self);	
 	else
 		evt_off(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag);		
 	end
