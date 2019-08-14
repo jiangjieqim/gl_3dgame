@@ -3,11 +3,14 @@
 //启用debug模式
 //#define DEBUG
 
-#ifdef BUILDING_DLL
-#define DLLIMPORT __declspec(dllexport)
-#else
-#define DLLIMPORT __declspec(dllimport)
-#endif
+//#ifdef BUILDING_DLL
+//#define DLLIMPORT __declspec(dllexport)
+//#else
+//#define DLLIMPORT __declspec(dllimport)
+//#endif
+
+#define DLLIMPORT extern
+
 
 //公共宏部分
 

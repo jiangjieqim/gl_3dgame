@@ -1,4 +1,4 @@
-echo off
+::echo off
 echo %time%开始编译
 @rem 项目用vs2005编译
 
@@ -10,6 +10,8 @@ call initroot.bat
 @rem 增加本地include路径
 set INCLUDE=%INCLUDE%%cd%\include\;%cd%\common\include\;%cd%\ftfont\;
 
+set commonpath=%cd%\common\src
+
 @rem 增加本地lib路径
 set LIB=%LIB%%cd%\lib\;
 
@@ -19,10 +21,11 @@ if exist "%cd%\dll\test.exe" (del %loaclfile%) else (echo 不存在文件%loaclfile%)
 
 cd src
 
-::cl test.c tlgl.c ex.c tmat.c md5.c jgl.c sprite.c atlas.c obj_vbo.c anim.c node.c collide.c animtor.c obj.c md2.c test_unit_01.c text.c bmp.c base.c frame.c /O1
+echo _________ 编译%CD%\.*obj,编译%commonpath%\*.c _________
 
-cl *.c /Ox
+cl *.c %commonpath%\*.c /Ox
 
+echo _________ 进行link.*obj _________
 ::pause
 
 link -out:test.exe *.obj
