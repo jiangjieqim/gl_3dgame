@@ -1,7 +1,13 @@
-
-
---local closeSize = 30;
-
+local function create()
+    local new_sharp = { 
+	    bg;
+	    closeBtn;
+	    label;
+	    isDrag;--是否可以拖拽
+        closeSize = 30;
+    };
+    return new_sharp;
+end
 --重置子节点坐标
 local function f_resize_window_child(self)
 	local sx,sy = func_get_sprite_xy(self.bg);
@@ -58,9 +64,9 @@ local function f_hide(self)
     func_ftext_vis(self.label,0);
 	btn_visible(self.closeBtn,false);
 end
-
-local function set_drag(self,value)
-	self.isDrag = value
+--设置可拖拽
+function alert_set_drag(self,value)
+	self.isDrag = value;
 	if(value) then
 		evt_on(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag,self);	
 	else
@@ -68,18 +74,20 @@ local function set_drag(self,value)
 	end
 end
 
-local function f_init(self,w,h)
+function alert_create(w,h)
 	local x = 0;
 	local y = 0;
 	
+    local self = create();
+
 	self.bg = sprite_create("alert",x,y,w,h);
 	func_setIcon(self.bg,"gundi.png");
 	--print(self.closeBtn)
 	local closeSize = self.closeSize;
 	self.closeBtn=btn_create(x,y,closeSize,closeSize);
 	--print(self)
-		
-	set_drag(self,true);
+	
+	alert_set_drag(self,true);
 		
 	btn_bindClick(self.closeBtn,
 			function(b)
@@ -95,9 +103,11 @@ local function f_init(self,w,h)
 				f_hide(self);
 			end
 	);
-		
+	
 	self.label=func_ftext_create(w-closeSize,w-closeSize);--tf_create(128,x,y,1.0,0.0,0.0);
     func_ftext_set_buffer(self.label,256);
+    evt_on(self,EVENT_ENGINE_RESIZE,f_resize,self);	
+    return self;
 end;
 
 local function show(self,str)
@@ -113,28 +123,11 @@ local function show(self,str)
 	f_resize(nil,self);
 end
 
-local function create()
-    local new_sharp = { 
-	    bg;
-	    closeBtn;
-	    label;
-	    isDrag;--是否可以拖拽
-        closeSize = 30;
-    };
-    return new_sharp;
-end
-
 local alert1;
 function alert(str)
 	str = str or "";
 	if(alert1 == nil) then
-		alert1 = create();
-		f_init(alert1,300,100);
-		evt_on(alert1,EVENT_ENGINE_RESIZE,f_resize,alert1);	
-		--evt_on(alert1.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag);		
+		alert1 = alert_create(300,100);
 	end
-	--print(evt_has(alert1.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag));
-	
-	--self:set_drag(false)
 	show(alert1,str);
 end

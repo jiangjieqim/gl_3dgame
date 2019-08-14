@@ -22,9 +22,6 @@ obj2:scale(1/50);
 obj2:rx(PI/2);
 obj2:y(0.5);
 
-
-
-
 local animsc = scrollBar_new(100,20);
 local function f_animscHandle(sc)
     local v = sc.value * PI * 2;

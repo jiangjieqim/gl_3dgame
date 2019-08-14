@@ -21,7 +21,7 @@ alert("нд╠╬");
 
 --dofile("..\\include\\lua\\quaternion.lua");--
 
-dofile("..\\include\\lua\\7.lua");
+--dofile("..\\include\\lua\\7.lua");
 
 --local t = func_get_longTime();
 --for i=1,1000000,1 do
