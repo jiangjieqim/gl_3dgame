@@ -90,6 +90,12 @@ ftext_vis(void* p,int vis){
 	FText* txt = (FText*)p;
 	vis ? ex_setv(txt->spr,FLAGS_VISIBLE) : ex_resetv(txt->spr,FLAGS_VISIBLE);
 }
+
+void* 
+ftext_get_container(void* p){
+	FText* txt = (FText*)p;
+	return txt->spr;
+}
 void
 ftext_parse(void* p,const char* str,int *w,int *h){
 	//void 
@@ -196,6 +202,8 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 	txt->_buffer = tl_malloc(txt->_bufferLength);
 
 	spr = txt->spr;
+
+	//printf("%d\n%d\n",txt,txt->spr);
 	
 	sprite_rotateZ(spr,-PI/2);
 	

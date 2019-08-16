@@ -8,31 +8,9 @@ local function create()
     };
     return new_sharp;
 end
---重置子节点坐标
-local function f_resize_window_child(self)
-	local sx,sy = func_get_sprite_xy(self.bg);
-	local bgw,bgh = func_get_sprite_size(self.bg);
-	--func_setPos(self.label,sx,sy);
 
-    --设置文本的坐标
-	func_ftext_setpos(self.label,sx,sy);
-
-    --设置关闭按钮的坐标
-	--btn_pos(self.closeBtn,sx+(bgw-self.closeSize),sy);
-	
-	
-end;
 local function f_drag(evtData,self)
 	--拖拽移动事件
---	local arr = func_split(data,",");
-	--print(arr[2])
---	local name = arr[1];
-	--local progress = tonumber(arr[4]);
-	--print("****^"..arr[2],arr[3]);
---	arr = nil;
-
---    print(self);
-	f_resize_window_child(self);
 end
 
 --居中
@@ -43,8 +21,6 @@ local function f_center(self)
 	x = (sx - bgw)/2;
 	y = (sy - bgh)/2;
 	func_setPos(self.bg,x,y);--设置关闭按钮的坐标
-	f_resize_window_child(self);
---    print("x y = ",x,y);
 end
 local function f_resize(evtData,self)
 	local sw,sh = func_screenSize();
@@ -52,8 +28,6 @@ local function f_resize(evtData,self)
 	local sx,sy = func_get_sprite_xy(self.bg);
 	local bgw,bgh = func_get_sprite_size(self.bg)
 
-	--print("screenSize = ",sw,sh,self);
-	--print(self.isDrag)
 	if(self.isDrag and sw > bgw and sh > bgh) then
 		sprite_setDragScope(self.bg,-sx,-sy,sw-sx,sh-sy);
 	end
@@ -87,10 +61,7 @@ function alert_create(w,h)
 	--print(self.closeBtn)
 	local closeSize = self.closeSize;
 	self.closeBtn=btn_create(x,y,closeSize,closeSize);
-	--print(self)
-	
-	func_sprite_addchild(self.bg,self.closeBtn.sprite,10,100);
-	--func_sprite_addchild(self.bg,self.closeBtn.sprite,10,10);
+	--func_sprite_removechild(self.bg,self.closeBtn.sprite);
 	
 	alert_set_drag(self,true);
 		
@@ -102,7 +73,15 @@ function alert_create(w,h)
 	
 	self.label=func_ftext_create(w-closeSize,w-closeSize);--tf_create(128,x,y,1.0,0.0,0.0);
     func_ftext_set_buffer(self.label,256);
+
+	func_sprite_addchild(self.bg,btn_get_container(self.closeBtn),w-self.closeSize,0);
+	func_sprite_addchild(self.bg,func_ftext_get_container(self.label));
+
+--    func_sprite_removechild(self.bg,func_ftext_get_container(self.label));
+
     evt_on(self,EVENT_ENGINE_RESIZE,f_resize,self);	
+	
+	
     return self;
 end;
 

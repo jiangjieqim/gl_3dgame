@@ -47,6 +47,10 @@ end
 function func_ftext_getsize(txt)
     return ftext(txt, "size");
 end
+--获取ftext的容器,此容器是sprite
+function func_ftext_get_container(txt)
+	return ftext(txt, "get_container");
+end
 -- 重新设置文本对象
 function func_ftext_reset(txt, s)
 --    print(string.len(s));

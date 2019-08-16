@@ -30,10 +30,8 @@ f_isHasChild(struct Sprite* pp,int child){
 		//struct Sprite* tpp=0;
 		p=(void*)LStack_next(p);
 		data = LStack_data(p);
-		//tpp=(struct Sprite* )data;
-		//sprite_setLocalPos((void*)data,pp->screenX+tpp->localx,pp->screenY+tpp->localy);
-		//sprite_setpos(tpp,pp->screenX + tpp->localx,pp->screenY+tpp->localy);
-		if(data == child)	return 1;
+		if(data == child)	
+			return 1;
 	}
 	return 0;
 }
@@ -1037,6 +1035,15 @@ void sprite_addChild(void* p,void* child){
 	//设置相对坐标
 	LStack_push(spr->childs,child);
 }
+/*移除子对象*/
+void sprite_removeChild(void* spr,void* child){
+	struct Sprite* childspr = (struct Sprite* )child;
+	struct Sprite* parent = (struct Sprite* )spr;
+	childspr->parent = 0;
+	if(LStack_delNode(parent->childs,(int)child)){
+		//printf("del succeed!\n");
+	}
+}
 /*
  *刷新子对象列表的sprite
  */
@@ -1081,10 +1088,7 @@ void sprite_setLocalPos(void* ptr,int x,int y){
 	//f_refreshChildPos(ptr);
 	sprite_setpos(ptr,x,y);
 }
-/*移除子对象*/
-void sprite_removeChild(void* spr,void* child){
 
-}
 void
 sprite_rotateZ(struct Sprite* ptr,float rz)
 {

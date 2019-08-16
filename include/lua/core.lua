@@ -366,10 +366,10 @@ function func_sprite_addchild(parent,child,x,y)
 	sprite_addChild(parent,child);
 	f_set_sprite_local_pos(child,x,y);
 end
-
-
-
-
+--从parent(Sprite)移除掉child(Sprite)对象
+function func_sprite_removechild(parent,child)
+	sprite_removeChild(parent,child);
+end
 
 --内存回收
 function func_gc()

@@ -49,4 +49,10 @@ ftext_dispose(void* p);
 /************************************************************************/
 void
 ftext_set_buffer(void* p,int bufferSize);
+
+/*
+ *获取文本对象的显示容器(Sprite)
+ */
+void* 
+ftext_get_container(void* p);
 #endif

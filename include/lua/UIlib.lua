@@ -79,6 +79,10 @@ function btn_get_rect(btn)
 	local w,h = get_attr(btn.sprite,"spriteSize");
     return x,y,w,h;
 end
+--获取按钮的容器(Sprite)
+function btn_get_container(btn)
+	return btn.sprite;
+end
 
 --[[
 	为按钮绑定一个点击回调
