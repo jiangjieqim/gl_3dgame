@@ -319,7 +319,7 @@ int ex_zBuffer();
 void ex_updatePerspctiveModelView();
 
 /*
-	寻找节点
+	寻找md2,md5,obj,sprite节点
 */
 void* 
 ex_find_ptr(struct EX* ptr,const char* name);

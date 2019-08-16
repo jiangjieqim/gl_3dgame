@@ -14,6 +14,29 @@
 #include "tl_malloc.h"
 #include "base.h"
 
+static void f_refreshChildPos(void* ptr);
+/* chiid是否在parent中*/
+static int 
+f_isHasChild(struct Sprite* pp,int child){
+	struct LStackNode* s = (struct LStackNode* )pp->childs;
+	void* top,*p;
+	int data;
+	if(!pp->childs)	return 0;
+
+	top = s;
+	p=top;
+
+	while((int)LStack_next(p)){
+		//struct Sprite* tpp=0;
+		p=(void*)LStack_next(p);
+		data = LStack_data(p);
+		//tpp=(struct Sprite* )data;
+		//sprite_setLocalPos((void*)data,pp->screenX+tpp->localx,pp->screenY+tpp->localy);
+		//sprite_setpos(tpp,pp->screenX + tpp->localx,pp->screenY+tpp->localy);
+		if(data == child)	return 1;
+	}
+	return 0;
+}
 
 //构造两个三角形所需要的数据大小(Glfloat数据的个数)
 enum {
@@ -388,14 +411,33 @@ void sprite_resize(struct Sprite* spr,int w,int h)
 	//setHitTriangle(spr);//更新点击区域
 	sprite_setpos(spr,spr->screenX,spr->screenY);
 }
+/*
+ *如果此sprite是其他的sprite的子对象的时候,使用该接口设置其相对于父对象的坐标
+ */
+void sprite_set_self_pos(void* p,int x,int y){
+	struct Sprite* spr = (struct Sprite*)p;	
+	if(spr->parent){
+		struct Sprite* parent = (struct Sprite*)spr->parent;
+		int realx = x + parent->screenX;
+		int realy = y + parent->screenY;
+		
+		spr->localx = x;
+		spr->localy = y;
 
-void sprite_setpos(struct Sprite* spr,int x,int y)
-{
+		x = realx;
+		y = realy;
+	}
+	sprite_setpos(spr,x,y);
+}
+
+//设置绝对坐标
+void sprite_setpos(struct Sprite* spr,int x,int y){
+		
 	//evt_once(NextFrame)到下一个关键帧的时候更新数据,这样不会抖屏
-	
-
 	setSpriteScreenPos(ex_getInstance(),spr,x,y);//更新屏幕坐标
 	setHitTriangle(spr);//更新点击区域
+
+	f_refreshChildPos(spr);
 }
 
 static void 
@@ -421,6 +463,8 @@ sprite_create(char* _spriteName,
 	memset(pSpr,0,sizeof(struct Sprite));
 
 	pSpr->m_bPressed = 0;
+
+	pSpr->parent = 0;
 
 	pSpr->mWidth  = width;
 	pSpr->mHeight = height;
@@ -885,6 +929,11 @@ void sprite_updatePos(int data)
 */
 void sprite_dipose(struct Sprite* spr)
 {
+	if (spr->childs){
+		LStack_delete(spr->childs);
+		spr->childs = 0;
+	}
+
 	//spr->ptr_luaCallBack = 0;
 	if(spr->hitTriangle)
 		tl_free(spr->hitTriangle);
@@ -958,7 +1007,85 @@ sprite_texName(struct Sprite* ptr,
 		); 
 }
 
-void 
+//创建->childs栈
+static void
+f_init_childsContner(void* p){
+	struct Sprite* spr = (struct Sprite* )p;
+	if(!spr->childs){
+		spr->childs = LStack_create();
+	}
+}
+
+/*
+ *为spr添加一个子对象
+ **/
+void sprite_addChild(void* p,void* child){
+	struct Sprite* spr = (struct Sprite* )p;
+	struct Sprite* childspr = (struct Sprite* )child;
+	childspr->parent = child;
+	if(!spr->parent){
+		f_init_childsContner(p);
+	}
+	sprite_setpos(childspr,spr->screenX,spr->screenY);
+	childspr->localx = 0;
+	childspr->localy = 0;
+	
+	if(f_isHasChild(spr,(int)child)){
+		//printf("is exist!!!\n");
+		return;
+	}
+	//设置相对坐标
+	LStack_push(spr->childs,child);
+}
+/*
+ *刷新子对象列表的sprite
+ */
+static void f_refreshChildPos(void* ptr){
+	struct Sprite* pp = (struct Sprite* )ptr;
+	struct LStackNode* s = (struct LStackNode* )pp->childs;
+	
+	void* top,*p;
+	if(!pp->childs)	
+		return;
+
+	top = s;
+	p=top;
+
+	while((int)LStack_next(p)){
+		int data=0;
+		struct Sprite* tpp=0;
+		p=(void*)LStack_next(p);
+		data = LStack_data(p);
+		tpp=(struct Sprite* )data;
+		//sprite_setLocalPos((void*)data,pp->screenX+tpp->localx,pp->screenY+tpp->localy);
+		sprite_setpos(tpp,pp->screenX + tpp->localx,pp->screenY+tpp->localy);
+	}
+}
+
+
+//设置坐标，相对于局部坐标
+void sprite_setLocalPos(void* ptr,int x,int y){
+	//struct Sprite* p = (struct Sprite* )ptr;
+	//
+	//if(p->parent){
+	//	struct Sprite* par = (struct Sprite* )p->parent;
+	//	//p->localx = x;
+	//	//p->localy = y;
+	//	//sprite_setpos(p,par->screenX+x,par->screenX+y);
+	//	sprite_setpos(p,x,y);
+	//}else{
+	//	//p->localx = x;
+	//	//p->localy = y;
+	//	sprite_setpos(p,x,y);
+	//}
+	//f_refreshChildPos(ptr);
+	sprite_setpos(ptr,x,y);
+}
+/*移除子对象*/
+void sprite_removeChild(void* spr,void* child){
+
+}
+void
 sprite_rotateZ(struct Sprite* ptr,float rz)
 {
 	struct HeadInfo* b = (struct HeadInfo*)ptr->base;

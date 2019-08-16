@@ -13,7 +13,7 @@ struct Sprite
 	
 	//z轴的缩放
 	float zScale;
-
+	//鼠标相对于面板的点击局部坐标
 	int mouseLocalX,mouseLocalY;
 
 	//float scaleWH;
@@ -86,8 +86,36 @@ struct Sprite
 	struct Obj_vbo_model* vbo;
 
 
+	//子对象列表
+	struct LStackNode *childs;
+	//父对象
+	void* parent;
+	//局部坐标,相对于父对象,如果是在stage上就为0,0
+	int localx,localy;
+
 };
+
 /*
+ *为spr添加一个子对象
+ **/
+void sprite_addChild(void* spr,void* child);
+/*移除子对象*/
+void sprite_removeChild(void* spr,void* child);
+
+//设置坐标，相对于局部坐标
+void sprite_setLocalPos(void* ptr,int x,int y);
+
+/*
+ *获取全局坐标
+ */
+void sprite_getGlobalPos(void* spr,int* px,int *py);
+
+/*
+ *如果此sprite是其他的sprite的子对象的时候,使用该接口设置其相对于父对象的坐标
+ */
+void sprite_set_self_pos(void* p,int x,int y);
+
+/* 
 	初始化按钮
 */
 struct Sprite* sprite_create(

@@ -127,8 +127,6 @@ function func_load(url)
 	return result;
 end
 
-
-
 --[[
 	point:tabel引用保存在一个全局tabel中
 --]]
@@ -352,6 +350,23 @@ function func_setPos(p,x,y)
 	end
 	
 end
+--[[
+	设置sprite对象的相对于父对象的坐标
+--]]
+local function f_set_sprite_local_pos(p,x,y)
+	local pos = x..","..y;
+	change_attr(p,"sprite_set_self_pos",pos);
+end
+--[[
+	将child添加到parent中
+--]]
+function func_sprite_addchild(parent,child,x,y)
+	x = x or 0;
+	y = y or 0;
+	sprite_addChild(parent,child);
+	f_set_sprite_local_pos(child,x,y);
+end
+
 
 
 

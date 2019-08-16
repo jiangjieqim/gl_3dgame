@@ -223,7 +223,7 @@ ftext_setpos(void* p,int x,int y){
 		x = x - spr->mWidth*(spr->zScale);
 		y = y - spr->mHeight*(spr->zScale);
 	}*/
-	sprite_setpos(spr,x,y);
+	sprite_setLocalPos(spr,x,y);
 //#ifdef DEBUG
 //	sprite_setpos(txt->debugbg,x,y);
 //#endif

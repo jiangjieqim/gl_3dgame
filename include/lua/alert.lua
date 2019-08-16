@@ -18,7 +18,9 @@ local function f_resize_window_child(self)
 	func_ftext_setpos(self.label,sx,sy);
 
     --设置关闭按钮的坐标
-	btn_pos(self.closeBtn,sx+(bgw-self.closeSize),sy);
+	--btn_pos(self.closeBtn,sx+(bgw-self.closeSize),sy);
+	
+	
 end;
 local function f_drag(evtData,self)
 	--拖拽移动事件
@@ -68,7 +70,7 @@ end
 function alert_set_drag(self,value)
 	self.isDrag = value;
 	if(value) then
-		evt_on(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag,self);	
+		evt_on(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag,self);--增加拖拽事件
 	else
 		evt_off(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag);		
 	end
@@ -87,19 +89,13 @@ function alert_create(w,h)
 	self.closeBtn=btn_create(x,y,closeSize,closeSize);
 	--print(self)
 	
+	func_sprite_addchild(self.bg,self.closeBtn.sprite,10,100);
+	--func_sprite_addchild(self.bg,self.closeBtn.sprite,10,10);
+	
 	alert_set_drag(self,true);
 		
 	btn_bindClick(self.closeBtn,
 			function(b)
-			--print(b,self)
-				--self.f_hides();
-				--print(1);
-				--print(self,self.bg,self.label,self.closeBtn);
-				--[[
-				resetv(self.bg,FLAGS_VISIBLE);
-				resetv(self.label,FLAGS_VISIBLE);
-				btn_visible(self.closeBtn,false);
-				--]]
 				f_hide(self);
 			end
 	);
