@@ -4,5 +4,9 @@
  *初始化输入组件
  */
 void* input_create();
+/*
+ *销毁input组件
+ */
+void input_dispose(void* p);
 
 #endif

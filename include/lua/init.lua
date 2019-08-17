@@ -12,10 +12,12 @@ ex:bgColor(0.3,0.3,0.3);
 --ex:bgColor(0.5,0.5,0.5);
 
 
-fps(0,15);
-infowin(0,0);
+--fps(0,15);
+--infowin(0,0);
+--local sprite =sprite_create("as",0,0,64,64);
+--func_setIcon(sprite,"smallbtn.png");
 
-alert("文本");
+--alert("文本");
 
 --func_fixed_load("\\resource\\obj\\torus.obj");
 

@@ -50,14 +50,26 @@ typedef struct FText
 	int w,h;//文本渲染的宽高
 	
 	/************************************************************************/
-	/* 当前文本数据缓冲区                                                                     */
+	/* 当前文本数据缓冲区
 	/************************************************************************/
 	char* _cur;
 	int _curLength;
 	//int _pixelSize;//像素字节
-
+	
+	//*******************************************************
+	
+	//字符缓冲链表
+	void* wordList;
 }FText;
-
+/************************************************************************/
+/* 填充像素数据到贴图
+/************************************************************************/
+static void
+f_draw_word(FText* txt,unsigned char* rgba,int x,int y,int w,int h){
+	struct Sprite* spr = txt->spr;
+	GMaterial* mat = spr->material;
+	jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,w,h);
+}
 /************************************************************************/
 /* 初始化临时缓冲区                                                                     */
 /************************************************************************/
@@ -90,6 +102,13 @@ ftext_vis(void* p,int vis){
 	FText* txt = (FText*)p;
 	vis ? ex_setv(txt->spr,FLAGS_VISIBLE) : ex_resetv(txt->spr,FLAGS_VISIBLE);
 }
+void
+ftext_open_wordlist(void* p){
+	FText* txt = (FText*)p;
+	if (!txt->wordList){
+		txt->wordList = LStack_create();
+	}
+}
 
 void* 
 ftext_get_container(void* p){
@@ -108,8 +127,8 @@ ftext_parse(void* p,const char* str,int *w,int *h){
 
 	str_parse_eg_cn(str,p,f_pCallBack);
 	//printf("%d %d\n",txt->w,txt->_py);
-	*w = txt->w;// + txt->fw;
-	*h = txt->h;// + txt->fh;
+	if(w!=0)	*w = txt->w;// + txt->fw;
+	if(h!=0)	*h = txt->h;// + txt->fh;
 	
 	memset(txt->_cur,0,txt->_curLength);
 	memcpy(txt->_cur,str,strlen(str));
@@ -157,7 +176,10 @@ ftext_clear(void* p){
 		
 		bytes = g_bytes;//(GLbyte*)tl_malloc(length);
 		memset(bytes,0x00,length);
-		jsl_sub(tmat_getTextureByIndex(mat,0),bytes,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);
+
+		//jsl_sub(tmat_getTextureByIndex(mat,0),bytes,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);
+		f_draw_word(txt,bytes,0,0,txt->w,txt->h);
+
 	}
 	txt->w = 0;
 	txt->h = 0;
@@ -238,21 +260,26 @@ ftext_setpos(void* p,int x,int y){
 }
 
 /************************************************************************/
-/* 计算文本是不是需要换行处理                                                                     */
+/* 计算文本是不是需要换行处理   top是单个文本字符的y轴偏移 
 /************************************************************************/
 static int
 f_reset_xy(FText* txt,int *px,int *py,int cw,int ch,int top){
 	//当前cw文本渲染的宽度,ch 文本渲染的高度
 
 	int maxWidth = txt->spr->mWidth;//最大的宽度
-	int tw = cw;//txt->fw;
+	int tw = cw;//txt->fw
+
+	int _st = 0;
 	if(txt->_px+ tw<=maxWidth){
 		txt->_px+=tw;
 	}
 	else{
 		//换行
 		txt->_px=tw;
-		txt->_py+=txt->fh;
+		if(txt->_py+txt->fh < txt->spr->mHeight){
+			txt->_py+=txt->fh;
+			_st = 1;
+		}
 	}
 	
 	*px = txt->_px-tw;
@@ -261,9 +288,12 @@ f_reset_xy(FText* txt,int *px,int *py,int cw,int ch,int top){
 	*py = txt->_py - top;
 	 
 	//if(*py > txt->spr->mHeight-txt->fh){
-	if(*py + ch > txt->spr->mHeight){
-		//文本渲染y轴坐标 + 单位字体高度 > 画布高度
+	
 
+	//if(*py + ch > txt->spr->mHeight){
+	if(txt->_py + txt->fh >  txt->spr->mHeight){
+		//文本渲染y轴坐标 + 单位字体高度 > 画布高度
+		if(_st)	txt->_py-=txt->fh;
 		txt->_stop = 1;//结束处理文本像素获取请求
 		return 0; 
 	}else{
@@ -285,7 +315,25 @@ f_reset_xy(FText* txt,int *px,int *py,int cw,int ch,int top){
 	
 	return 1;
 }
+static void
+f_del_wordlist(FText* txt){
+	//释放每一个节点
 
+	struct LStackNode* s = (struct LStackNode* )txt->wordList;
+	struct Rect* data;
+	void* top,*p;
+
+	top = s;
+	p=top;
+
+	while((int)LStack_next(p)){
+		p=(void*)LStack_next(p);
+		data = (struct Rect*)LStack_data(p);
+		tl_free((void*)data);
+	}
+	LStack_delete(txt->wordList);
+	txt->wordList = 0;
+}
 void 
 ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 	FText* txt = (FText*)p;
@@ -322,15 +370,68 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 #ifdef DEBUG
 //			printf("%s\t->top = %d iHeight = %d fh = %d\n",s,top,iHeight,txt->fh);
 #endif
-			jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,iWidth,iHeight);
+			
+			f_draw_word(txt,rgba,x,y,iWidth,iHeight);
+
+			if(txt->wordList){
+				struct Rect* rect = (struct Rect*)tl_malloc(sizeof(struct Rect));
+				rect->x = x;	rect->y = y;	rect->w = iWidth;	rect->h = iHeight;
+				LStack_push(txt->wordList,(void*)rect);
+			}
+
+			//printf("在位置%d,%d,绘制一个块宽高为%d,%d的矩形像素区域\n",x,y,iWidth,iHeight);
 		}
 	}
+}
+
+/*删除掉一个字符*/
+static void
+f_clear_word(FText* txt,struct Rect* r){
+
+	unsigned char* rgba = txt->_buffer;
+	memset(txt->_buffer,0,txt->_bufferLength);
+
+	if(txt->_px == 0){
+		txt->_py -= txt->fh;
+	}
+	txt->_px = r->x;
+
+	//if(txt->_py <= txt->spr->mHeight){// + txt->fh
+	//	txt->_stop = 0;
+	//}
+	if(txt->_py+txt->fh <= txt->spr->mHeight)	txt->_stop = 0;
+
+	printf("========> %d,%d,%.3f		--> %d\n",txt->_py,txt->fh, txt->spr->mHeight,txt->_py+txt->fh);
+
+	f_draw_word(txt,rgba,r->x,r->y,r->w,r->h);
+}
+
+void
+ftext_pop_word(void* p){
+	FText* txt = (FText*)p;
+	int e;
+	struct Rect* rect;
+	struct LStackNode* _l = (struct LStackNode*)txt->wordList;
+	if (!txt->wordList){
+		printf("ftext_pop_word txt->wordList=0\n");
+		assert(0);
+	}
+
+	if(LStack_length(_l) == 0){
+		return;
+	}
+	LStack_top(_l,&e);
+	rect = (struct Rect*)e;
+	f_clear_word(txt,rect);
+
+	LStack_pop(_l,0);
 }
 
 void
 ftext_dispose(void* p){
 	FText* txt = (FText*)p;
+	f_del_wordlist(txt);
 	sprite_dipose(txt->spr);
 	tl_free(txt->_cur);
 	tl_free(p);
-}
+}									
