@@ -31,9 +31,9 @@ local function f_load_c()
     box1:scale(0.25);
 
     -- 信息文本
-    local tf = func_ftext_create(128, 128);
+    local tf = ftext_create(128, 128);
     -- tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
-    func_ftext_setpos(tf, 0, 12);
+    ftext_setpos(tf, 0, 12);
 
 
 
@@ -50,7 +50,7 @@ local function f_load_c()
 
         --    local x, y, w = func_quat(1, 0, 0, -1, v);
         local x, y, w = func_quat(1, 0, 0, -1, v);
-        func_ftext_reset(tf, string.format("%.2f,%.2f,w=%.2f", x, y, w));
+        ftext_reset(tf, string.format("%.2f,%.2f,w=%.2f", x, y, w));
         box1:set_position(x, y, 0);
     end )
     scrollBar_setRange(sc, 0, 1)

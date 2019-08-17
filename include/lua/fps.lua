@@ -18,7 +18,7 @@ local function f_render()
         if(_default) then
 		    tf_setText(tf,s);
         else
-            func_ftext_reset(tf,s);
+            ftext_reset(tf,s);
         end
 	end
 end
@@ -36,13 +36,13 @@ function fps(x,y)
 	    tf_setPos(tf,x,y)
     else
         if(tf == nil) then
-		    tf = func_ftext_create(128,128);
-            func_ftext_set_buffer(tf,128);
+		    tf = ftext_create(128,128);
+            ftext_set_buffer(tf,128);
 		    evt_on(tf,EVENT_ENGINE_RENDER_3D,f_render);
 	    end
         local _stat = isShow == false and 1 or 0;
-        func_ftext_vis(tf,_stat);
-	    func_ftext_setpos(tf,x,y);
+        ftext_vis(tf,_stat);
+	    ftext_setpos(tf,x,y);
         isShow = not isShow;
     end
 end

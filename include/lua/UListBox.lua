@@ -37,7 +37,7 @@ f_tf_vis(list)
 --		else
 --			resetv(tf,FLAGS_VISIBLE);
 --		end
-        func_ftext_vis(tf,v == true and 1 or 0)
+        ftext_vis(tf,v == true and 1 or 0)
 	end 
 end
 --获取索引(-1开始)
@@ -68,7 +68,7 @@ function
 listbox_set_label(list,label)
 --	tf_setText(list.tf,label);
     if(list.tf) then
-        func_ftext_reset(list.tf,label);
+        ftext_reset(list.tf,label);
     end
 end
 
@@ -130,8 +130,8 @@ listbox_new(_x,_y)
 
 	func_setIcon(list.bg,"gundi.png")
 
---	list.tf =func_ftext_create(); --tf_create(128,list.x,list.y,r,g,b);
---  func_ftext_setpos(list.tf,list.x,list.y);
+--	list.tf =ftext_create(); --tf_create(128,list.x,list.y,r,g,b);
+--  ftext_setpos(list.tf,list.x,list.y);
 	
     return list
 end
@@ -147,21 +147,21 @@ function
 listbox_get_label(list)
 	local n = listbox_get_index(list)
 --	return func_get_tf_text(list.tflist[n])
-    return func_ftext_str(list.tflist[n]);
+    return ftext_str(list.tflist[n]);
 end
 
 --增加一个节点
 function 
 listbox_add(list,str)
 	local count =	func_get_table_count(list.tflist) + 1
-	local tf=func_ftext_create();--tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
-    func_ftext_setpos(tf,list.x,list.y + g_gap*(count));--+ g_width/2
+	local tf=ftext_create();--tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
+    ftext_setpos(tf,list.x,list.y + g_gap*(count));--+ g_width/2
 	list.tflist[count - 1] = tf;
 	--tf_setText(tf,str);
 
 
-    func_ftext_vis(tf,0);
-    func_ftext_reset(tf,str);
+    ftext_vis(tf,0);
+    ftext_reset(tf,str);
 end
 
 
@@ -174,10 +174,10 @@ listbox_del(list)
 	ptr_remove(list.bg)
 
 	for key, value in pairs(list.tflist) do
-		func_fext_dispose(value)
+		fext_dispose(value)
 	end
 	--ptr_remove(list.tf)
-    func_fext_dispose(list.tf);
+    fext_dispose(list.tf);
 	func_clearTableItem(list.tflist)
 	func_clearTableItem(list)
 end

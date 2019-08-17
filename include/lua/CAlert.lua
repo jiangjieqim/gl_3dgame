@@ -6,7 +6,7 @@ function Alert:f_resize_window_child()
 	local bgw,bgh = func_get_sprite_size(self.bg)
 
 	--func_setPos(self.label,sx,sy);
-	func_ftext_setpos(self.label,sx,sy);
+	ftext_setpos(self.label,sx,sy);
 
 	btn_pos(self.closeBtn,sx+(bgw-closeSize),sy);
 end;
@@ -31,7 +31,7 @@ end;
 function Alert:hide()
 	resetv(self.bg,FLAGS_VISIBLE);
 --	resetv(self.label,FLAGS_VISIBLE);
-    func_ftext_vis(self.label,0);
+    ftext_vis(self.label,0);
 
 	btn_visible(self.closeBtn,false);
 end
@@ -92,8 +92,8 @@ function Alert:create()
 		);
 		
 		
-		self.label=func_ftext_create(w-closeSize,w-closeSize);--tf_create(128,x,y,1.0,0.0,0.0);
-        func_ftext_set_buffer(self.label,256);
+		self.label=ftext_create(w-closeSize,w-closeSize);--tf_create(128,x,y,1.0,0.0,0.0);
+        ftext_set_buffer(self.label,256);
 	end;
 	
 	} ;
@@ -112,9 +112,9 @@ function Alert:show(str)
 
 --	setv(self.label,FLAGS_VISIBLE);
 --	tf_setText(self.label,str);
-    func_ftext_vis(self.label,1);
+    ftext_vis(self.label,1);
 
-	func_ftext_reset(self.label,str);
+	ftext_reset(self.label,str);
 	self.f_resize();
 end
 --************************************************************************************

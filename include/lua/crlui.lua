@@ -5,8 +5,8 @@ CrlUI.__index = CrlUI;
 
 ---- 显示一个文本
 -- local function f_showTF(x, y, label)
---    local tf = func_ftext_create(x, y);
---    func_ftext_reset(tf, label);
+--    local tf = ftext_create(x, y);
+--    ftext_reset(tf, label);
 --    return tf
 -- end
 
@@ -109,12 +109,12 @@ local function f_init_lineWidth(crl, sc)
     crl.sclist["lineWidth"] = sc;
 end
 local function init(crl)
-    crl.nameTf = func_ftext_create(150, 150);
-    func_ftext_setpos(crl.nameTf, crl.x, crl.y);
-    func_ftext_reset(crl.nameTf, "信息");
+    crl.nameTf = ftext_create(150, 150);
+    ftext_setpos(crl.nameTf, crl.x, crl.y);
+    ftext_reset(crl.nameTf, "信息");
     local x, y, w, h;
     local oy = 0;
-    w, h = func_ftext_getsize(crl.nameTf);
+    w, h = ftext_getsize(crl.nameTf);
     oy = oy + h;
 
     x, y, w, h = f_add_rotate(crl, "rx", crl.x, crl.y + oy);
@@ -214,7 +214,7 @@ function CrlUI:bind(o)
 
     self.o = o;
     local str = string.format("%#x,%s,%s", tonumber(o), func_get_name(o), func_get_suffix(o))
-    func_ftext_reset(self.nameTf, str);
+    ftext_reset(self.nameTf, str);
     --    self.stat = not self.stat;
     --    print(self.stat);
     func_set_box_color(o, 1, 1, 0)
@@ -227,6 +227,6 @@ function CrlUI:dispose()
             scrollBar_del(value);
         end
     end
-    func_fext_dispose(self.nameTf);
+    fext_dispose(self.nameTf);
     self.sclist = nil;
 end

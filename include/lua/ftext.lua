@@ -1,9 +1,9 @@
 --设置缓冲区大小
-function func_ftext_set_buffer(txt, v)
+function ftext_set_buffer(txt, v)
     return ftext(txt, "set_buffer",v);
 end
 -- 创建文本对象
-function func_ftext_create(w, h, fw, fh)
+function ftext_create(w, h, fw, fh)
     local name = func_create_name();
     w = w or 64;
     h = h or 64;
@@ -13,11 +13,11 @@ function func_ftext_create(w, h, fw, fh)
 --    fw = fw or 16;fh = fh or 15;
 
     local p = ftext(nil, "create", name, string.format("%s,%s,%s,%s", w, h, fw, fh));
-    func_ftext_set_buffer(p,64);--设置预制缓冲区
+    ftext_set_buffer(p,64);--设置预制缓冲区
     return p;
 end
 -- 设置文本对象坐标
-function func_ftext_setpos(txt, x, y)
+function ftext_setpos(txt, x, y)
     ftext(txt, "setpos", string.format("%s,%s", x or 0, y or 0));
 end
 ----设置文本对象中的文本坐标
@@ -27,39 +27,39 @@ end
 --    return ftext(txt,"setchar",s,string.format("%s,%s",x,y));
 -- end
 -- 解析多个字符
-function func_ftext_parse(txt, s)
+function ftext_parse(txt, s)
     return ftext(txt, "parse", s);
 end
 -- 显示隐藏
-function func_ftext_vis(txt, v)
+function ftext_vis(txt, v)
     return ftext(txt, "vis", tostring(v));
-end
+end     
 
 -- 擦除
-function func_fext_clear(txt)
+function fext_clear(txt)
     ftext(txt, "clear");
 end
 --获取文本
-function func_ftext_str(txt)
+function ftext_str(txt)
     return ftext(txt, "str");
 end
 --获取文本的w,h
-function func_ftext_getsize(txt)
+function ftext_getsize(txt)
     return ftext(txt, "size");
 end
 --获取ftext的容器,此容器是sprite
-function func_ftext_get_container(txt)
+function ftext_get_container(txt)
 	return ftext(txt, "get_container");
 end
 -- 重新设置文本对象
-function func_ftext_reset(txt, s)
+function ftext_reset(txt, s)
 --    print(string.len(s));
-    func_fext_clear(txt);
-    func_ftext_parse(txt, s);
+    fext_clear(txt);
+    ftext_parse(txt, s);
 end
 
 -- 销毁
-function func_fext_dispose(txt)
+function fext_dispose(txt)
     if(txt) then
         ftext(txt, "dispose");
     else

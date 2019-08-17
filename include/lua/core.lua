@@ -360,7 +360,7 @@ end
 --[[
 	将child添加到parent中
 --]]
-function func_sprite_addchild(parent,child,x,y)
+function func_addchild(parent,child,x,y)
 	x = x or 0;
 	y = y or 0;
 	sprite_addChild(parent,child);

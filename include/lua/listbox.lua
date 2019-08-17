@@ -176,12 +176,12 @@ end
 --设置文本
 local function f_set_label(list, label)
     if (list.tf == nil) then
-        local tf = func_ftext_create();
+        local tf = ftext_create();
         -- tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
-        func_ftext_setpos(tf, list.x, list.y);
+        ftext_setpos(tf, list.x, list.y);
         list.tf = tf;
     end
-    func_ftext_reset(list.tf, label);
+    ftext_reset(list.tf, label);
 end
 --设置标题
 function ListBox:setTitle(str)
@@ -202,17 +202,17 @@ function ListBox:tf_vis_switch()
 
     local _stat = v == true and 1 or 0;
     --    for key, value in pairs(list.tflist) do
-    --        func_ftext_vis(value, _stat);
+    --        ftext_vis(value, _stat);
     --    end
     for key, value in pairs(list.tflist) do
-        func_fext_dispose(value);
+        fext_dispose(value);
     end
     list.tflist = { };
 
     local c = 0;
     if (_stat == 1) then
         for key, value in pairs(arr) do
-            --            func_fext_dispose(value);
+            --            fext_dispose(value);
             if (string.len(value) > 0) then
                 -- print(value, string.len(value));
                 self:build(value);
@@ -278,22 +278,22 @@ end
 function ListBox:build(str)
     local c = func_get_table_count(self.tflist);
     --    print(c,self.tflist,self);
-    local tf = func_ftext_create();
+    local tf = ftext_create();
     -- tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
-    func_ftext_setpos(tf, self.x, self.y + self.g_gap *(c + 1));
-    -- func_ftext_vis(tf,0);
-    func_ftext_reset(tf, str);
+    ftext_setpos(tf, self.x, self.y + self.g_gap *(c + 1));
+    -- ftext_vis(tf,0);
+    ftext_reset(tf, str);
     self.tflist[c] = tf;
 end
 
 function ListBox:add(str)
     --    local c = func_get_table_count(self.tflist) + 1;
     --    --    print(c,self.tflist,self);
-    --    local tf = func_ftext_create();
+    --    local tf = ftext_create();
     --    -- tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
-    --    func_ftext_setpos(tf, self.x, self.y + self.g_gap * c);
-    --    -- func_ftext_vis(tf,0);
-    --    func_ftext_reset(tf, str);
+    --    ftext_setpos(tf, self.x, self.y + self.g_gap * c);
+    --    -- ftext_vis(tf,0);
+    --    ftext_reset(tf, str);
     --    self.tflist[c - 1] = tf;
     if (string.len(self.str) > 0) then
         self.str = string.format("%s,%s", self.str, str);
@@ -305,11 +305,11 @@ end
 function ListBox:dispose()
     local list = self;
     for key, value in pairs(list.tflist) do
-        func_fext_dispose(value);
+        fext_dispose(value);
     end
     list.tflist = { };
     if(self.tf) then
-        func_fext_dispose(self.tf);
+        fext_dispose(self.tf);
     end
     ptr_remove(list.bg);
 end

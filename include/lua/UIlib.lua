@@ -31,7 +31,7 @@ end
 local function f_delLabel(btn)
 	if(btn.label) then
 		--ptr_remove(btn.label);
-        func_fext_dispose(btn.label);
+        fext_dispose(btn.label);
 		btn.label = nil
 	end
 end
@@ -132,10 +132,10 @@ function btn_scaleStyle(btn)
 end
 --ÖØÖÃlabelµÄ×ø±ê
 local function f_reset_label_pos(btn)
-    local w,h = func_ftext_getsize(btn.label);
+    local w,h = ftext_getsize(btn.label);
     local x,y = func_get_sprite_xy(btn.sprite);--get_attr(btn.sprite,"spritePos")
     local sw,sh=func_get_sprite_size(btn.sprite);
-    func_ftext_setpos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
+    ftext_setpos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
 
 end
 --[[
@@ -156,11 +156,11 @@ function btn_label(btn,str,r,g,b)
 --			local x,y = get_attr(btn.sprite,"spritePos")
 
 --			btn.label=tf_create(128,x,y,r,g,b);
-            btn.label = func_ftext_create();
---            func_ftext_setpos(btn.label,x,y);
+            btn.label = ftext_create();
+--            ftext_setpos(btn.label,x,y);
 		end
 --		tf_setText(btn.label,str);
-        func_ftext_reset(btn.label,str);
+        ftext_reset(btn.label,str);
         
         f_reset_label_pos(btn);
 	end
@@ -182,13 +182,13 @@ function btn_visible(btn,vis)
 	if(vis) then
 		if(btn.label) then
 --			setv(btn.label,f);
-            func_ftext_vis(btn.label,1);
+            ftext_vis(btn.label,1);
 		end
 		setv(btn.sprite,f);
 	else
 		if(btn.label) then
 --			resetv(btn.label,f);
-            func_ftext_vis(btn.label,0);
+            ftext_vis(btn.label,0);
 		end
 		resetv(btn.sprite,f);
 	end
@@ -202,7 +202,7 @@ function btn_pos(btn,x,y)
 	
 	if(btn.label) then
 --		func_setPos(btn.label,x,y)
---        func_ftext_setpos(btn.label,x,y);
+--        ftext_setpos(btn.label,x,y);
          f_reset_label_pos(btn);
 	end
 end

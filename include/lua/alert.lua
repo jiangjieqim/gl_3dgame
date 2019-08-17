@@ -37,7 +37,7 @@ end;
 local function f_hide(self)
 	resetv(self.bg,FLAGS_VISIBLE);
 --	resetv(self.label,FLAGS_VISIBLE);
-    func_ftext_vis(self.label,0);
+    ftext_vis(self.label,0);
 	btn_visible(self.closeBtn,false);
 end
 --…Ë÷√ø…Õœ◊ß
@@ -71,13 +71,13 @@ function alert_create(w,h)
 			end
 	);
 	
-	self.label=func_ftext_create(w-closeSize,w-closeSize);--tf_create(128,x,y,1.0,0.0,0.0);
-    func_ftext_set_buffer(self.label,256);
+	self.label=ftext_create(w-closeSize,w-closeSize);--tf_create(128,x,y,1.0,0.0,0.0);
+    ftext_set_buffer(self.label,256);
 
-	func_sprite_addchild(self.bg,btn_get_container(self.closeBtn),w-self.closeSize,0);
-	func_sprite_addchild(self.bg,func_ftext_get_container(self.label));
+	func_addchild(self.bg,btn_get_container(self.closeBtn),w-self.closeSize,0);
+	func_addchild(self.bg,ftext_get_container(self.label));
 
---    func_sprite_removechild(self.bg,func_ftext_get_container(self.label));
+--    func_sprite_removechild(self.bg,ftext_get_container(self.label));
 
     evt_on(self,EVENT_ENGINE_RESIZE,f_resize,self);	
 	
@@ -92,9 +92,9 @@ local function show(self,str)
 
 --	setv(self.label,FLAGS_VISIBLE);
 --	tf_setText(self.label,str);
-    func_ftext_vis(self.label,1);
+    ftext_vis(self.label,1);
 
-	func_ftext_reset(self.label,str);
+	ftext_reset(self.label,str);
 	f_resize(nil,self);
 end
 
