@@ -1650,6 +1650,7 @@ void onKeyboardCallBack(unsigned char key, int x, int y){
 	ekey.x = x;
 	ekey.y = y;
 	//printf("key=\t%d %d %d\n",key,x,y);
+	
 	evt_dispatch(ex_getInstance(),EVENT_ENGINE_KEYBOARD,(void*)&ekey);
 
 	{

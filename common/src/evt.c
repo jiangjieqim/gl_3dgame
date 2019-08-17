@@ -29,6 +29,8 @@ static void*
 f_get(void* ptr){
 	if(ptr){
 		struct EvtParent* p = (struct EvtParent*)ptr;
+		
+		
 		return p->evtList;
 	}
 	return 0;
@@ -77,6 +79,7 @@ evt_on(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
 		return;
 	}
 	data = (struct EvtInfo*)tl_malloc(sizeof(struct EvtInfo));
+	data->removed = 0;
 	data->evtId = evtId;
 	data->ptr = evtCallBack;
 	list =(struct LStackNode*)evtList;
@@ -99,7 +102,6 @@ evt_once(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
 	data->ptr = evtCallBack;
 	list =(struct LStackNode*)evtList;
 	LStack_push(list,data);
-
 }
 
 

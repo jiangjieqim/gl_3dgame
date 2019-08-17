@@ -258,7 +258,6 @@ function func_get_type(p)--func_getGameObjectType
 	return	get_attr(p,"type")
 end
 
-
 function func_get_type_str(p)
 	local t = func_get_type(p)
 	if(t == 0) then
