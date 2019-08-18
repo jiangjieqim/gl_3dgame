@@ -46,6 +46,12 @@ struct MD2_Object
 	void* parseHandle;
 };
 
+struct ClickInfo{
+	struct Sprite* sprite;				//当前点击的sprite
+	int local_click_x,local_click_y;	//临时点击相对于sprite的坐标
+	float pos_z;
+};
+
 struct Ent3D{
 	struct HeadInfo* base;
 
@@ -964,12 +970,13 @@ ex_update_uiPos()
 //
 //	tl_free(_objStr);
 //}
-
-int ex_zBuffer()
+//static float _g_pos_z;
+float ex_newPosZ()
 {
 	struct EX* p = ex_getInstance();
 	//return p->zBuffer++;//这里存疑,UI正交zbuffer叠加的影响
-	return -1;
+	 p->ui_pos_z+=0.01;
+	return p->ui_pos_z;
 }
 
 static void
@@ -992,14 +999,28 @@ initPerspective(Matrix44f mat,float r,float t,float b,float n,float f,float l)
 	mat[14] = 0;
 	mat[15] = 1;
 }
-
+static void
+f_stage_click_callback(struct Sprite* self,int x,int y){
+	//printf("f_stage_click_callback %d,%d\n",x,y);
+}
+void 
+ex_resize_stage2d(){
+	struct EX* p = ex_getInstance();
+	sprite_resize(p->stage2d,p->_screenWidth,p->_screenHeight);
+}
 void 
 ex_init(struct EX* p,GLdouble zfar){	
 	//p->allzBuffer在-90000初始化的时候会被模型挡在后面
 	//计算出所有的透视模型最小深度
-	p->allzBuffer = -90000;//初始化一个Z深度
-	p->zBuffer = p->allzBuffer+1;
-
+	p->allzBuffer = -90000;	//初始化一个Z深度,此深度标识3d层的
+	p->ui_pos_z =  -1000;	//此深度如果小于3d层,那么界面将在3d界面后面
+	
+	//p->zBuffer = p->allzBuffer+1;
+	p->clickInfo = tl_malloc(sizeof(struct ClickInfo));
+	{
+		struct ClickInfo* _click = (struct ClickInfo*)p->clickInfo;
+		_click->sprite = 0;
+	}
 	p->zFar = zfar;
 	p->renderList = LStack_create();
 	/*p->hit=hit_create(p->renderList,p->viewport,p->hitModelView,p->hitPerspectProjection);*/
@@ -1008,11 +1029,30 @@ ex_init(struct EX* p,GLdouble zfar){
 	//loadSpriteVert(p);
 	p->evtList = (void*)LStack_create();
 	p->mouseState.action = GLUT_UP;
+
+	//构造stage舞台
+	{
+		struct Sprite* stage2d = 0;
+		
+		//初始化2d stage
+		p->stage2d = sprite_create("stage2d",0,0,32,32,f_stage_click_callback);//
+		stage2d = (struct Sprite*)p->stage2d;
+		//sprite_set_default_tex(p->stage2d);
+		p->curFocus = stage2d;
+	}
+
 }
 
 void ex_dispose(struct EX* p){
 	printf("销毁引擎设备!\n");
 	//getch();
+	
+	tl_free(p->clickInfo);
+	p->clickInfo = 0;
+
+	atals_dispose(p->atals);
+	p->atals = 0;
+
 	LStack_delete((struct LStackNode*)p->renderList);
 	ft_free(p->ft);
 	evt_dispose(p);
@@ -1461,13 +1501,7 @@ hitUiTest(struct Sprite* spr,float x,float y,struct HitUiInfo* outptInfo)
 	}
 	return 0;
 }
-/*
-	是否有鼠标事件
-*/
-static int hasMouseClick(struct Sprite* n)
-{
-	return (int)n->clickCallBack;
-}
+
 
 static void 
 render_hitUiNode(int data)
@@ -1476,11 +1510,13 @@ render_hitUiNode(int data)
 	{
 		struct EX* p = ex_getInstance();
 
+		struct ClickInfo* _clickInfo = p->clickInfo;
+
 		struct HeadInfo* base = base_get((void*)data);
 		//renderSprite(data);
 		struct Sprite* spr = (struct Sprite*)data;
 		struct HitUiInfo info;
-		if(hasMouseClick(spr) && hitUiTest(spr,p->mouseState.xMouse,p->mouseState.yMouse,&info)){
+		if(sprite_isCanClick((void*)spr) && hitUiTest(spr,p->mouseState.xMouse,p->mouseState.yMouse,&info)){
 
 			//p->isHitRaySprite = 1;//设置拾取状态
 
@@ -1494,11 +1530,26 @@ render_hitUiNode(int data)
 				spr->mouseDownX = info.localX;
 				spr->mouseDownY = info.localY;
 			}
-
+			
 			//是否射线拾取到了
-			//printf("点击了%s界面 局部坐标 %d,%d\n",base->name,info.localX,info.localY);
-			if(spr->clickCallBack!=NULL){
-				spr->clickCallBack(spr,info.localX,info.localY);
+			//printf("点击了%s界面 局部坐标 %d,%d z=%.2f\n",base->name,info.localX,info.localY,spr->pos_z);
+			
+			if(spr->clickCallBack!=0){
+				if(_clickInfo->sprite == 0){
+					_clickInfo->sprite = spr;
+					_clickInfo->local_click_x = info.localX;
+					_clickInfo->local_click_y = info.localY;
+					
+				}else{
+					if(_clickInfo->sprite->pos_z < spr->pos_z){
+						_clickInfo->sprite = spr;
+						_clickInfo->local_click_x = info.localX;
+						_clickInfo->local_click_y = info.localY;
+					}
+				}
+
+				//调用点击回调
+				//spr->clickCallBack(spr,info.localX,info.localY);
 			}
 		}
 	}
@@ -1547,7 +1598,7 @@ f_raySome(struct HitResultObject* hit){
 			int n = (int)ex_find_ptr(ex,(const char*)_node->name);
 			ex_callIntLuaFun(_node->luaPickCallBack,n);//lua拾取回调	
 		}
-		printf("-->%s,%0x\n",_node->name,_node->luaPickCallBack);
+		//printf("-->%s,%0x\n",_node->name,_node->luaPickCallBack);
 		//printf("(%s)射线拾取到的3D坐标:\t%.3f\t%.3f\t%.3f\t%s\tcurType=%d\n",last->name,last->x,last->y,last->z,_node->suffix,_node->curType);
 	}else{
 		printf("can`t find f_rayPickCallBack\n");
@@ -1579,6 +1630,7 @@ f_rayPick(struct HitResultObject* hit){
 
 void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	struct EX* ex = ex_getInstance();
+	struct ClickInfo* _clickInfo = (struct ClickInfo*)ex->clickInfo;
 
 	ex->mouseState.button = button;
 	ex->mouseState.action = action;
@@ -1589,6 +1641,9 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 
 	//ex->isHitRaySprite = 0;
 	resetv(&(ex->flags),EX_FLAGS_RAY_TO_UI);
+	
+	//ex->_oldSprite = _clickInfo->sprite;
+	_clickInfo->sprite = 0;
 
 	//左键+鼠标按下
 	//if(button == GLUT_LEFT_BUTTON && action == GLUT_DOWN)
@@ -1597,13 +1652,37 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 
 		//鼠标点击了屏幕交互操作(开启了射线拾取状态)
 
-
-		//界面射线拾取检测
-		f_renderlistCall(render_hitUiNode);
 		
+		//界面射线拾取检测,执行一个可以处理的点击回调
+		f_renderlistCall(render_hitUiNode);
+		if(_clickInfo->sprite){
+			struct HeadInfo* base = base_get((void*)_clickInfo->sprite);
+
+			if(ex->curFocus!=_clickInfo->sprite){
+				void* _old = ex->curFocus;
+				//ex_lua_evt_dispatch(ex->curFocus,EVENT_ENGINE_SPRITE_FOCUS_OUT,0);
+				ex->curFocus = _clickInfo->sprite;
+				//ex_lua_evt_dispatch(ex->curFocus,EVENT_ENGINE_SPRITE_FOCUS_IN,0);
+				//printf("focus change\t 0x%0x\n",ex->curFocus);
+				evt_dispatch(ex_getInstance(),EVENT_ENGINE_SPRITE_FOCUS_CHANGE,_old);
+			}
+
+			_clickInfo->sprite->clickCallBack(
+											_clickInfo->sprite,
+											_clickInfo->local_click_x,
+											_clickInfo->local_click_y);
+
+			
+			//focus
+			//printf("************%s,%d,%d\n",base->name,_clickInfo->local_click_x,_clickInfo->local_click_y);
+		}
+
+
 		setv(&(ex->flags),EX_FLAGS_LEFT_DOWN);//isLeftDown = 1;
 
-		if(getv(&(ex->flags),EX_FLAGS_RAY_TO_UI)){
+		if(_clickInfo->sprite!=ex->stage2d && getv(&(ex->flags),EX_FLAGS_RAY_TO_UI)){
+			//点击到了不是舞台,并且是界面层
+
 			//printf("点击了界面就忽略掉3d场景中的模型\n");
 		}else{
 			//3D世界拾取
@@ -1959,6 +2038,12 @@ int ex_get_gap(int type)
 	}
 	return UV_GAP + VERTEX_GAP + NORMAL_GAP;
 }
-
+void* ex_get_ui_atals(){
+	if(!ex_getInstance()->atals){
+		struct Atals* ptr = atals_load("//resource//texture//","1");
+		ex_getInstance()->atals = (void*)ptr;
+	}
+	return ex_getInstance()->atals;
+}
 
 //########################################

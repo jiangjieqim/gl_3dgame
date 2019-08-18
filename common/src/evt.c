@@ -12,12 +12,14 @@ struct EvtInfo{
 	/*
 	 *	回调函数引用
 	 */
-	void (*ptr)(int evtId,void* data);
+	void (*ptr)(int evtId,void* data,void* dataPtr);
 	
 	/************************************************************************/
 	/* 用完事件直接删除                                                                     */
 	/************************************************************************/
 	int removed;
+
+	void* thisObj;
 };
 
 
@@ -39,7 +41,7 @@ f_get(void* ptr){
 /* 检测是否已经绑定了函数                                               */
 /************************************************************************/
 static int 
-f_check_evt(void* evtList,int event,void (*evtCallBack)(int,void*)){
+f_check_evt(void* evtList,int event,void (*evtCallBack)(int,void*,void*)){
 
 	struct LStackNode* s = (struct LStackNode* )evtList;
 	struct EvtInfo* node;
@@ -69,7 +71,7 @@ f_check_evt(void* evtList,int event,void (*evtCallBack)(int,void*)){
 }
 //绑定事件
 void
-evt_on(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
+evt_on(void* ptr,int evtId,void (*evtCallBack)(int,void*,void*),void* thisObj){
 	void* evtList = f_get(ptr);
 	
 	struct EvtInfo* data;
@@ -82,12 +84,13 @@ evt_on(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
 	data->removed = 0;
 	data->evtId = evtId;
 	data->ptr = evtCallBack;
+	data->thisObj = thisObj;
 	list =(struct LStackNode*)evtList;
 	LStack_push(list,data);
 }
 
 void
-evt_once(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
+evt_once(void* ptr,int evtId,void (*evtCallBack)(int,void*,void*),void* thisObj){
 	void* evtList = f_get(ptr);
 
 	struct EvtInfo* data;
@@ -100,6 +103,7 @@ evt_once(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
 	data->removed = 1;
 	data->evtId = evtId;
 	data->ptr = evtCallBack;
+	data->thisObj = thisObj;
 	list =(struct LStackNode*)evtList;
 	LStack_push(list,data);
 }
@@ -107,7 +111,7 @@ evt_once(void* ptr,int evtId,void (*evtCallBack)(int,void*)){
 
 //解绑事件
 void
-evt_off(void* ptr,int event,void (*evtCallBack)(int,void*)){
+evt_off(void* ptr,int event,void (*evtCallBack)(int,void*,void*)){
 	void* evtList = f_get(ptr);
 	struct LStackNode* s = (struct LStackNode* )evtList;
 	struct EvtInfo* node;
@@ -154,7 +158,7 @@ evt_dispatch(void* ptr,int evtID,void* sendData){
 		node = (struct EvtInfo*)data;
 
 		if(node->evtId == evtID){
-			node->ptr(evtID,sendData);
+			node->ptr(evtID,sendData,node->thisObj);
 			if(node->removed)
 			{
 				//printf("%d\n",LStack_length(s));

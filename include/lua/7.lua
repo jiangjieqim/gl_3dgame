@@ -68,9 +68,9 @@ evt_on(obj2:get_p(),UnitBaseEvent,f_endCall);
 
 local function f_onkey(data)
 	local key = tonumber(data);
-	print(key);
+	--print(key);
 	if(key == KEY_A) then
-	    alert(tostring(math.random(0,100)));	
+	    --alert(tostring(math.random(0,100)));	
 	elseif(key == KEY_B)then
         if(plane) then
 		    func_changeFlags(plane:get_p(),FLAGS_DRAW_PLOYGON_LINE);

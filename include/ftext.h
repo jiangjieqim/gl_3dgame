@@ -53,7 +53,6 @@ ftext_dispose(void* p);
 /************************************************************************/
 void
 ftext_set_buffer(void* p,int bufferSize);
-
 /*
  *获取文本对象的显示容器(Sprite)
  */
@@ -65,5 +64,10 @@ ftext_open_wordlist(void* p);
 //弹出一个字符,即删掉一个字符
 void
 ftext_pop_word(void* p);
+//设置文本是否换行
+void 
+ftext_set_wordWrap(void* p,int v);
+
+
 
 #endif

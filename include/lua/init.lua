@@ -14,16 +14,19 @@ ex:bgColor(0.3,0.3,0.3);
 
 --fps(0,15);
 --infowin(0,0);
---local sprite =sprite_create("as",0,0,64,64);
---func_setIcon(sprite,"smallbtn.png");
 
---alert("文本");
+--local sprite =sprite_create("bg11",100,50,128,14);
+--func_setIcon(sprite,"gundi.png");
+--setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
+
+
+alert("文本");
 
 --func_fixed_load("\\resource\\obj\\torus.obj");
 
 --dofile("..\\include\\lua\\quaternion.lua");--
 
---dofile("..\\include\\lua\\7.lua");
+dofile("..\\include\\lua\\7.lua");
 
 --local t = func_get_longTime();
 --for i=1,1000000,1 do

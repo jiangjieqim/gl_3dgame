@@ -19,7 +19,10 @@
 
 #define _Font_Size_ 512
 static GLbyte* g_bytes;//预制缓冲区(预制1mb缓冲区)
-
+typedef struct Rect{
+	unsigned short x,y,w,h;
+	char word;
+}Rect;
 /*
 *[0]: width: 6  height: 12
 [1]: width: 7  height: 13
@@ -60,6 +63,11 @@ typedef struct FText
 	
 	//字符缓冲链表
 	void* wordList;
+	char* words;
+	//int wordSize;
+
+	//文本是否换行
+	int wordWrap;
 }FText;
 /************************************************************************/
 /* 填充像素数据到贴图
@@ -86,7 +94,34 @@ f_init_buffer(int w,int h){
 		g_bytes = (GLbyte*)tl_malloc(_maxSize);
 	}
 }
-
+//将wordlist转化为一个str数据
+char* 
+get_wordlist_str(void *ptr){
+	struct	FText* txt = (struct FText*)ptr;
+	struct LStackNode* s = (struct LStackNode* )txt->wordList;
+	int length = LStack_length(s);
+	int index = length;
+	if(txt->words){
+		tl_free(txt->words);
+	}
+	txt->words = (char*)tl_malloc(length + 1);
+	memset(txt->words,0,length + 1);
+	{
+		struct Rect* data;
+		void* top,*p;
+		top = s;
+		p=top;
+		while((int)LStack_next(p)){
+			char _s[1];
+			p=(void*)LStack_next(p);
+			data = (struct Rect*)LStack_data(p);
+			_s[0]=data->word;
+			memcpy(txt->words+(index-1),_s,1);
+			index--;
+		}
+	}
+	return txt->words;
+}
 static int 
 f_pCallBack(void* inParam,char* str){
 	FText* txt = (FText*)inParam;
@@ -101,6 +136,11 @@ void
 ftext_vis(void* p,int vis){
 	FText* txt = (FText*)p;
 	vis ? ex_setv(txt->spr,FLAGS_VISIBLE) : ex_resetv(txt->spr,FLAGS_VISIBLE);
+}
+void 
+ftext_set_wordWrap(void* p,int v){
+	FText* txt = (FText*)p;
+	txt->wordWrap = v;
 }
 void
 ftext_open_wordlist(void* p){
@@ -136,6 +176,9 @@ ftext_parse(void* p,const char* str,int *w,int *h){
 char* 
 ftext_get_str(void* p){
 	FText* txt = (FText*)p;
+	if(txt->wordList){
+		return get_wordlist_str(txt);
+	}
 	return txt->_cur;
 }
 void
@@ -155,12 +198,8 @@ ftext_clear(void* p){
 	txt->_px = 0;
 	txt->_py = 0;
 	txt->_stop = 0;
-	//if(txt->cur){
-		//tl_free(txt->cur);
-		//txt->cur = 0;
-		memset(txt->_cur,0,txt->_curLength);
-	//}
-	//jgl_create_opengl_RGBA_Tex(txt->w,txt->h,GL_BGRA);
+	
+	memset(txt->_cur,0,txt->_curLength);
 	
 	//填充像素数据的alpha值 = 0
 	//length = sizeof(struct RGBA) * txt->w * txt->h;
@@ -170,11 +209,10 @@ ftext_clear(void* p){
 		int length;
 		GLbyte* bytes;
 		
-		//memset(txt->_buffer,0x00,txt->_bufferLength);
 		//jsl_sub(tmat_getTextureByIndex(mat,0),txt->_buffer,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);//txt->w,txt->h	txt->spr->mWidth,txt->spr->mHeight
-		length =sizeof(struct RGBA) *txt->w * txt->h;	//txt->_pixelSize;
+		length =sizeof(struct RGBA) *txt->w * txt->h;
 		
-		bytes = g_bytes;//(GLbyte*)tl_malloc(length);
+		bytes = g_bytes;
 		memset(bytes,0x00,length);
 
 		//jsl_sub(tmat_getTextureByIndex(mat,0),bytes,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);
@@ -183,7 +221,6 @@ ftext_clear(void* p){
 	}
 	txt->w = 0;
 	txt->h = 0;
-	//txt->_pixelSize = 0;
 }
 
 void
@@ -237,8 +274,12 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 	
 	//设置背景不透明
 	//tmat_set_discardAlpha(spr->material,1);
+	
+	txt->wordWrap = 1;
 
 	ftext_set_buffer(txt,G_BUFFER_8_SIZE);//设置默认的文本缓冲区大小
+	
+
 	return txt;
 }
 
@@ -247,16 +288,7 @@ ftext_setpos(void* p,int x,int y){
 	FText* txt = (FText*)p;
 	struct Sprite* spr = txt->spr;
 	float n = txt->n;
-	/*x = (float)x/txt->n;
-	y = (float)y/txt->n;*/
-	/*if(n!=1){
-		x = x - spr->mWidth*(spr->zScale);
-		y = y - spr->mHeight*(spr->zScale);
-	}*/
-	sprite_setLocalPos(spr,x,y);
-//#ifdef DEBUG
-//	sprite_setpos(txt->debugbg,x,y);
-//#endif
+	sprite_setpos(spr,x,y);
 }
 
 /************************************************************************/
@@ -274,23 +306,22 @@ f_reset_xy(FText* txt,int *px,int *py,int cw,int ch,int top){
 		txt->_px+=tw;
 	}
 	else{
-		//换行
-		txt->_px=tw;
-		if(txt->_py+txt->fh < txt->spr->mHeight){
-			txt->_py+=txt->fh;
-			_st = 1;
+		if(txt->wordWrap){
+			//换行
+			txt->_px=tw;
+			if(txt->_py+txt->fh < txt->spr->mHeight){
+				txt->_py+=txt->fh;
+				_st = 1;
+			}
+		}else{
+			txt->_stop = 1;
+			return 0;
 		}
 	}
 	
-	*px = txt->_px-tw;
-	
-	//*py = txt->_py + (txt->fh - ch);	//y = txt->fh - ch;//底对齐
+	*px = txt->_px-tw;	
 	*py = txt->_py - top;
 	 
-	//if(*py > txt->spr->mHeight-txt->fh){
-	
-
-	//if(*py + ch > txt->spr->mHeight){
 	if(txt->_py + txt->fh >  txt->spr->mHeight){
 		//文本渲染y轴坐标 + 单位字体高度 > 画布高度
 		if(_st)	txt->_py-=txt->fh;
@@ -334,6 +365,7 @@ f_del_wordlist(FText* txt){
 	LStack_delete(txt->wordList);
 	txt->wordList = 0;
 }
+
 void 
 ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 	FText* txt = (FText*)p;
@@ -376,6 +408,7 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 			if(txt->wordList){
 				struct Rect* rect = (struct Rect*)tl_malloc(sizeof(struct Rect));
 				rect->x = x;	rect->y = y;	rect->w = iWidth;	rect->h = iHeight;
+				rect->word = s[0];
 				LStack_push(txt->wordList,(void*)rect);
 			}
 
@@ -387,22 +420,13 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 /*删除掉一个字符*/
 static void
 f_clear_word(FText* txt,struct Rect* r){
-
 	unsigned char* rgba = txt->_buffer;
 	memset(txt->_buffer,0,txt->_bufferLength);
-
 	if(txt->_px == 0){
 		txt->_py -= txt->fh;
 	}
 	txt->_px = r->x;
-
-	//if(txt->_py <= txt->spr->mHeight){// + txt->fh
-	//	txt->_stop = 0;
-	//}
 	if(txt->_py+txt->fh <= txt->spr->mHeight)	txt->_stop = 0;
-
-	printf("========> %d,%d,%.3f		--> %d\n",txt->_py,txt->fh, txt->spr->mHeight,txt->_py+txt->fh);
-
 	f_draw_word(txt,rgba,r->x,r->y,r->w,r->h);
 }
 
@@ -431,6 +455,10 @@ void
 ftext_dispose(void* p){
 	FText* txt = (FText*)p;
 	f_del_wordlist(txt);
+	if(txt->words){
+		tl_free(txt->words);
+		txt->words = 0;
+	}
 	sprite_dipose(txt->spr);
 	tl_free(txt->_cur);
 	tl_free(p);

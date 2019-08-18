@@ -375,15 +375,15 @@ setHitTriangle(struct Sprite* spr)
 	spr->hitTriangle[16] =  a3.y;
 	spr->hitTriangle[17] = 0;
 }
-
-/*
-	设置层级
-*/
-static void
-setLayer(struct Sprite* sprite,int layer)
-{
-	sprite->pos_z = layer;
-}
+//
+///*
+//	设置层级
+//*/
+//static void
+//setLayer(struct Sprite* sprite,int layer)
+//{
+//	sprite->pos_z = layer;
+//}
 
 /*
 	设置sprite的屏幕坐标,(屏幕以左上角为0,0起始点)
@@ -448,7 +448,14 @@ InitType(struct Sprite* pSpr)
 	}else
 		pSpr->vertexs = LoadQuadObj(&pSpr->vertLen);//加载顶点数据(非VBO实现)
 }
-
+/*
+	是否有鼠标事件
+*/
+int 
+sprite_isCanClick(void* n){
+	struct Sprite* pSpr = (struct Sprite*)n;
+	return (int)pSpr->clickCallBack;
+}
 struct Sprite* 
 sprite_create(char* _spriteName,
 			  int x,int y,int width,int height,
@@ -459,8 +466,9 @@ sprite_create(char* _spriteName,
 	//初始化按钮
 	struct Sprite* pSpr =	(struct Sprite*)tl_malloc(sizeof(struct Sprite));//new Button;
 	memset(pSpr,0,sizeof(struct Sprite));
-
+	
 	pSpr->m_bPressed = 0;
+	//pSpr->_renderState = 1;
 
 	pSpr->parent = 0;
 
@@ -482,8 +490,7 @@ sprite_create(char* _spriteName,
 		pSpr->clickCallBack = clickCallBack;
 		ex_add(pSpr);
 	}
-
-	pSpr->pos_z = ex_zBuffer();
+	pSpr->pos_z = ex_newPosZ();
 	pSpr->zScale = 1.0;
 	return pSpr;
 }
@@ -569,12 +576,18 @@ updateSpriteMat4x4(struct Sprite* p,
 	
 	multi2(p->mat4x4,xyz,result);//位移矩阵
 }
-
+void
+sprite_set_default_tex(void* ptr){
+	struct Sprite* p = (struct Sprite*)ptr;
+	//ex_setv(p,FLAGS_DRAW_PLOYGON_LINE);
+	p->atals = ex_get_ui_atals();
+	sprite_texName(p,"gundi.png",0);
+}
 //获取Sprite引用的材质引用,
 //可以从图集中获取,也可以自定义材质引用
 static void* 
 getMaterial(struct Sprite* p){
-	if(p->atals == NULL)
+	if(p->atals == 0)
 	{
 		//printf("p->atals == NULL");
 		//assert(0);
@@ -584,9 +597,10 @@ getMaterial(struct Sprite* p){
 		}
 
 		{
-			HeadInfo* head = (HeadInfo*)p->base;
-			printf("getMaterial %s ,没有设置图集,也没有默认材质\n",head->name);
-			assert(0);//这里需要对没有设置材质的对象进行修复!!!
+			//HeadInfo* head = (HeadInfo*)p->base;
+			//printf("getMaterial %s ,没有设置图集,也没有默认材质\n",head->name);
+			//assert(0);//这里需要对没有设置材质的对象进行修复!!!
+			//sprite_set_default_tex(p);
 		}
 		return 0;
 	}
@@ -710,8 +724,16 @@ sprite_drawRender(int data)
 
 	struct HeadInfo* base = spr->base;
 	
+	/*if(!spr->_renderState){
+		return;
+	}*/
+	
+
 	if(!sprite_isEnable((int)spr))
 	{
+		return;
+	}
+	if(!getMaterial(spr)){
 		return;
 	}
 
@@ -862,12 +884,14 @@ sprite_mouseMove(int data)
 		if(getv(&base->flags,FLAGS_DRAG))
 		{
 			struct Sprite* ptr = (struct Sprite*)data;
-			if(ptr->m_bPressed){
-				//鼠标按下,只有在鼠标坐标发生变化的时候				
-				int x = e->mouseState.moveX - ptr->mouseDownX;
-				int y = e->mouseState.moveY - ptr->mouseDownY;
-				changeDragXY(ptr,&x,&y);
-				sprite_setpos(ptr,x,y);
+			if(ex_getInstance()->curFocus == ptr){
+				if(ptr->m_bPressed){
+					//鼠标按下,只有在鼠标坐标发生变化的时候				
+					int x = e->mouseState.moveX - ptr->mouseDownX;
+					int y = e->mouseState.moveY - ptr->mouseDownY;
+					changeDragXY(ptr,&x,&y);
+					sprite_setpos(ptr,x,y);
+				}
 			}
 		}
 	}
@@ -968,11 +992,11 @@ void sprite_dipose(struct Sprite* spr)
 void 
 sprite_texName(struct Sprite* ptr,
 					const char* texName,
-					struct AtlasNode* ptrNode)
-{
+					struct AtlasNode* _pNode){
 	float width,height;
 	struct AtlasNode n;
-
+	struct AtlasNode __Node;
+	struct AtlasNode* ptrNode = &__Node;
 	if(ptr->atals){
 	//获取图集数据,填充到ptrNode引用中
 		atals_tex(ptr->atals,texName,ptrNode);
@@ -1003,6 +1027,10 @@ sprite_texName(struct Sprite* ptr,
 		n.height/height,
 		n.width/width
 		); 
+
+	if (_pNode!=0){
+		memcpy(_pNode,ptrNode,sizeof(struct AtlasNode));
+	}
 }
 
 //创建->childs栈
@@ -1063,31 +1091,29 @@ static void f_refreshChildPos(void* ptr){
 		struct Sprite* tpp=0;
 		p=(void*)LStack_next(p);
 		data = LStack_data(p);
-		tpp=(struct Sprite* )data;
-		//sprite_setLocalPos((void*)data,pp->screenX+tpp->localx,pp->screenY+tpp->localy);
+		tpp=(struct Sprite*)data;
 		sprite_setpos(tpp,pp->screenX + tpp->localx,pp->screenY+tpp->localy);
 	}
 }
 
-
-//设置坐标，相对于局部坐标
-void sprite_setLocalPos(void* ptr,int x,int y){
-	//struct Sprite* p = (struct Sprite* )ptr;
-	//
-	//if(p->parent){
-	//	struct Sprite* par = (struct Sprite* )p->parent;
-	//	//p->localx = x;
-	//	//p->localy = y;
-	//	//sprite_setpos(p,par->screenX+x,par->screenX+y);
-	//	sprite_setpos(p,x,y);
-	//}else{
-	//	//p->localx = x;
-	//	//p->localy = y;
-	//	sprite_setpos(p,x,y);
-	//}
-	//f_refreshChildPos(ptr);
-	sprite_setpos(ptr,x,y);
-}
+////设置坐标，相对于局部坐标
+//void sprite_setLocalPos(void* ptr,int x,int y){
+//	//struct Sprite* p = (struct Sprite* )ptr;
+//	//
+//	//if(p->parent){
+//	//	struct Sprite* par = (struct Sprite* )p->parent;
+//	//	//p->localx = x;
+//	//	//p->localy = y;
+//	//	//sprite_setpos(p,par->screenX+x,par->screenX+y);
+//	//	sprite_setpos(p,x,y);
+//	//}else{
+//	//	//p->localx = x;
+//	//	//p->localy = y;
+//	//	sprite_setpos(p,x,y);
+//	//}
+//	//f_refreshChildPos(ptr);
+//	sprite_setpos(ptr,x,y);
+//}
 
 void
 sprite_rotateZ(struct Sprite* ptr,float rz)
@@ -1105,3 +1131,13 @@ sprite_set_scale_z(struct Sprite* spr,float v){
 	}
 	spr->zScale = v;
 }
+//void
+//sprite_open_through(void* p){
+//	struct Sprite* spr = (struct Sprite*)p;
+//	spr->open_through = 1;
+//}
+//void 
+//sprite_set_render(void* p,int v){
+//	struct Sprite* spr = (struct Sprite* )p;
+//	//spr->_renderState = v;
+//}

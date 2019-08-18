@@ -7,14 +7,17 @@
 */
 
 //绑定事件
+// thisObj绑定的数据
 DLLIMPORT void
-evt_on(void* ptr,int id,void (*evtCallBack)(int,void*));
+evt_on(void* ptr,int id,void (*evtCallBack)(int,void*,void*),void* thisObj);
+
 //监听一次释放掉事件
 DLLIMPORT void
-evt_once(void* ptr,int id,void (*evtCallBack)(int,void*));
+evt_once(void* ptr,int id,void (*evtCallBack)(int,void*,void*),void* thisObj);
+
 //解绑事件
 DLLIMPORT void
-evt_off(void* ptr,int id,void (*evtCallBack)(int,void*));
+evt_off(void* ptr,int id,void (*evtCallBack)(int,void*,void*));
 
 //派发事件
 DLLIMPORT void

@@ -56,8 +56,17 @@
 #define EVENT_ENGINE_SPRITE_CLICK		   104//click
 #define EVENT_ENGINE_SPRITE_CLICK_DOWN	   105//click down
 #define EVENT_ENGINE_SPRITE_CLICK_MOVE	   106//click move
+#define EVENT_ENGINE_SPRITE_FOCUS_CHANGE   107//焦点发生变化
 
-#define EVENT_ENGING_INIT 107	//引擎初始化完成
+//#define EVENT_ENGINE_SPRITE_FOCUS_OUT   108	//2d焦点离开的时候触发
+//#define EVENT_ENGINE_SPRITE_FOCUS_IN    109	//2d焦点进入的时候触发
+
+
+
+#define EVENT_ENGING_INIT 200	//引擎初始化完成
+
+
+
 //键盘事件状态
 struct E_KeyBoard
 {
@@ -151,7 +160,10 @@ struct EX
 	/*
 		UI 视角的z深度
 	*/
-	int zBuffer;
+	//int zBuffer;
+
+	//当前的界面层的ui z轴的坐标
+	float ui_pos_z;
 
 	/*
 		总共的Z深度
@@ -177,6 +189,17 @@ struct EX
 	//struct Atals* myAtals;//废弃
 	
 	//int _isinit;//引擎是否已经初始化
+	// 
+	void* atals;
+	
+	//2d舞台
+	void* stage2d;
+	
+	//临时点击sprite获取的信息
+	void* clickInfo;
+
+	//当前鼠标的焦点(struct Sprite*)
+	void* curFocus;
 };
 
 //接口定义
@@ -309,10 +332,12 @@ void ex_callParmLuaFun(const char* luaFunName,const char* parm);
 	调用lua方法luaFunName(lua函数必须是lua全局函数),传递一个int型的参数
 */
 void ex_callIntLuaFun(const char* luaFunName,int value);
+//获取一个默认的ui图集
+void* ex_get_ui_atals();
 /*
 	获取zBuffer
 */
-int ex_zBuffer();
+float ex_newPosZ();
 
 
 //void updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar);
@@ -395,4 +420,7 @@ ex_lua_evt_dispatch(void* obj,int evtid,const char* data);
 */
 void 
 ex_lua_global_evt_dispatch(int evtid);
+//重置2d舞台尺寸
+void 
+ex_resize_stage2d();
 #endif

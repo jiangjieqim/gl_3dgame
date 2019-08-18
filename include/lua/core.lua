@@ -223,7 +223,7 @@ end
 --创建一个Sprite
 function func_sprite_create(name,x,y,w,h)
 	local sprite = sprite_create(name,x,y,w,h);
-	return sprite
+	return sprite;
 end
 
 --[[
@@ -623,21 +623,22 @@ end
 local uiAtals
 
 --获取一个界面图集(没有就创建,在调用的时候创建)
-function func_getUI_Atals()
+local function get_ui_atals()
 	--print(uiAtals)
 	
-	if(uiAtals == nil) then		
-		uiAtals=atals_load("//resource//texture//","1")--构造界面图集	
-	end
-	return uiAtals
+--	if(uiAtals == nil) then		
+--		uiAtals=atals_load("//resource//texture//","1")--构造界面图集	
+--	end
+--	return uiAtals;
+    return get_attr(nil,"ex_get_ui_atals");
 end
 --为sprite设置贴图
 --sprite_texName(listBox.sprite,"gundi.png");废弃
 function func_setIcon(sprite,url)
 	--获取一个atals图集,没有图集的界面是黑色的
-	local atals = func_getUI_Atals()
+	local atals = get_ui_atals();
 	if(atals) then
-		sprite_bindAtals(sprite,atals)
+		sprite_bindAtals(sprite,atals);
 
 		sprite_texName(sprite,url);
 	end
@@ -803,13 +804,12 @@ dofile("..\\include\\lua\\fps.lua")	--fps组件
 dofile("..\\include\\lua\\listbox.lua")
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑un动条组件
-dofile("..\\include\\lua\\UIlib.lua")		--按钮组件
+dofile("..\\include\\lua\\btn.lua")		--按钮组件
 
 dofile("..\\include\\lua\\crlui.lua")
 dofile("..\\include\\lua\\infowin.lua")	--fps组件
 
---dofile("..\\include\\lua\\alert.lua")		--弹出框组件
---dofile("..\\include\\lua\\CAlert.lua")		--弹出框组件
+--dofile("..\\include\\lua\\CAlert.lua")	--弹出框组件
 dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件

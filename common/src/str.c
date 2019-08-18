@@ -273,10 +273,7 @@ f_is_second_code(unsigned char c){
 }
 
 void 
-str_parse_eg_cn(const char* str,void* inParam,
-				int(pCallBack)(void*,char*))
-{
-
+str_parse_eg_cn(const char* str,void* inParam,int(pCallBack)(void*,char*)){
 	int i,len;
 
 #ifdef DEBUG

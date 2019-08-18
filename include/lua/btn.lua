@@ -206,4 +206,8 @@ function btn_pos(btn,x,y)
          f_reset_label_pos(btn);
 	end
 end
+--按钮设置为线框渲染模式
+--function btn_set_line(btn)
+--    setv( btn.sprite,FLAGS_DRAW_PLOYGON_LINE);
+--end
 ---------------------------------------------------

@@ -93,7 +93,7 @@ f_call(){
 }
 //拾取坐标
 static void
-box_rayPick(int evtId,void* data){
+box_rayPick(int evtId,void* data,void* thisObj){
 	struct HitResultObject* hit = (struct HitResultObject*)data;
 	//printf("%s\n",hit->name);
 
@@ -136,7 +136,7 @@ f_updateCallBack(void* p){
 	base_updateMat4x4(p);
 }
 static void
-floor_rayPick(int evtId,void* data){
+floor_rayPick(int evtId,void* data,void* thisObj){
 	struct HitResultObject* hit = (struct HitResultObject*)data;
 	struct HeadInfo* ptrHorse = (struct HeadInfo*)_horse;
 	//horse->x
@@ -209,7 +209,7 @@ static void* _tweenPtr;
 
 //键盘事件
 static void
-f_key(int evtId,void* data){
+f_key(int evtId,void* data,void* thisObj){
 	struct E_KeyBoard* pkey = (struct E_KeyBoard*)data;
 
 	//printf("key = %d\n",pkey->key);
@@ -344,7 +344,7 @@ f_move(){
 }
 
 static void 
-f_drawLine(int evtId,void* data){
+f_drawLine(int evtId,void* data,void* thisObj){
 
 	camType = (int)ring_cur(_camRing);
 
@@ -388,17 +388,17 @@ REG_test_unit_01_init(lua_State *L){
 	//_ptr = MALLOC(10);
 
 	//添加一个3D渲染回调
-	evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLine);
+	evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLine,0);
 
 	obj1Base =  base_get(ex_find("myObj1"));
 	//添加对象拾取监听事件
-	evt_on(obj1Base,EVENT_RAY_PICK,box_rayPick);
+	evt_on(obj1Base,EVENT_RAY_PICK,box_rayPick,0);
 	
 	//_floor = ex_load_model("floor","\\resource\\obj\\teapot.obj",E_RenderModeVBO);
 	//base_set_scale(_floor,1.0f);
 	//setv(_floor,FLAGS_VISIBLE);
 	_floor = base_get(ex_find("_floor"));
-	evt_on(_floor,EVENT_RAY_PICK,floor_rayPick);
+	evt_on(_floor,EVENT_RAY_PICK,floor_rayPick,0);
 	_ptr = ex_find("_horse");
 	_horse =  base_get(_ptr);
 
@@ -407,7 +407,7 @@ REG_test_unit_01_init(lua_State *L){
 	// x,z		基于y轴旋转
 	_target = base_get(ex_find("_target"));
 
-	evt_on(ex_getInstance(),EVENT_ENGINE_KEYBOARD,f_key);
+	evt_on(ex_getInstance(),EVENT_ENGINE_KEYBOARD,f_key,0);
 	//ex_cam_bind(f_getHorse());
 
 	//ex_cam_set_pos(0,-20,0);
