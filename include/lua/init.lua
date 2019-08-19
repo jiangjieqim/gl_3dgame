@@ -22,6 +22,10 @@ ex:bgColor(0.3,0.3,0.3);
 
 alert("нд╠╬");
 
+local _in = input_create();
+input_set_pos(_in,10,20);
+--input_dispose(_in);
+
 --func_fixed_load("\\resource\\obj\\torus.obj");
 
 --dofile("..\\include\\lua\\quaternion.lua");--

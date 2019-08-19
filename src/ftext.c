@@ -221,6 +221,9 @@ ftext_clear(void* p){
 	}
 	txt->w = 0;
 	txt->h = 0;
+	if(txt->wordList){
+		LStack_clear(txt->wordList);
+	}
 }
 
 void

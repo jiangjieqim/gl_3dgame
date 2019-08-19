@@ -62,6 +62,7 @@ dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
 --dofile("..\\include\\lua\\sprite.lua");
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
 dofile("..\\include\\lua\\ftext.lua");
+dofile("..\\include\\lua\\input.lua");
 
 local defalutTex = '1.tga'
 local defalutObjModel = 'quad'
@@ -632,6 +633,11 @@ local function get_ui_atals()
 --	return uiAtals;
     return get_attr(nil,"ex_get_ui_atals");
 end
+--获取当前的焦点
+function func_get_curFocus()
+    return get_attr(nil,"curFocus");
+end
+
 --为sprite设置贴图
 --sprite_texName(listBox.sprite,"gundi.png");废弃
 function func_setIcon(sprite,url)

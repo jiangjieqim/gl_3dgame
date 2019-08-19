@@ -10,7 +10,7 @@ void* input_create(int width);
 void input_dispose(void* p);
 /*
  *设置坐标
- **/
+ */
 void intput_set_pos(void *p,int x,int y);
 
 /*设置其图集,未设置的时候,会设置一个默认的贴图作为输入框的背景*/
@@ -18,4 +18,7 @@ void intput_set_pos(void *p,int x,int y);
 
 /*获取输入框中的当前文本数据,当前的字符缓存区存储在堆内存上*/
 char* input_get_heap_str(void* p);
+
+//获取输入框的容器
+void* input_get_container(void* p);
 #endif

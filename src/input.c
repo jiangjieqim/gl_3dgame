@@ -10,7 +10,7 @@
 #include "sprite.h"
 #include "ex.h"
 
-#define SET_BG//是否设置一个背景
+#define SET_BG//是否默认设置一个背景
 //****************************************************************//
 
 typedef struct Input
@@ -20,14 +20,14 @@ typedef struct Input
 	//void* evtList;
 
 	//是否在焦点中
-	int force;
+	//int force;
 
 	//ftext句柄
 	void* t;
 
 	//字符缓存区列表,用于存储需要删除的文本信息
 	
-	struct Sprite* bg;
+	struct Sprite* bg;//拾取点击的容器
 }Input;
 
 //键盘事件
@@ -39,16 +39,20 @@ f_key2(int evtId,void* data,void* thisObj){
 	void* txt = ptr->t;
 	char _word[_WORD_SIZE_];
 	if(ex_getInstance()->curFocus!=ptr->bg){
+		//不在input焦点上,知己诶返回
 		return;
 	}
 	
 	if(pkey->key == 8){
 		//退格
 		ftext_pop_word(txt);
-		return;		
+		return;
 	}else if(pkey->key == 13){
 		//回车
 		printf("input key = %d,(%s)\n",pkey->key,input_get_heap_str(ptr));
+		
+		//是否清空输入框中的数据
+		//ftext_clear(txt);
 		return;
 	}
 	
@@ -85,6 +89,11 @@ void intput_set_pos(void *p,int x,int y){
 char* input_get_heap_str(void* p){
 	struct Input* ptr=(struct Input*)p;
 	return ftext_get_str(ptr->t);
+}
+
+void* input_get_container(void* p){
+	struct Input* ptr=(struct Input*)p;
+	return ptr->bg;
 }
 void* input_create(int w){
 	#define _NAME_SIZE_ 64
