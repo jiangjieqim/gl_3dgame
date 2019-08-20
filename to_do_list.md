@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+﻿<<<<<<< HEAD
 ﻿### 需求文档  
 MD格式教程[https://blog.csdn.net/zuggs_/article/details/82381269] 
 1.GLSL实现GLOW辉光[https://blog.csdn.net/jaccen2012/article/details/78215066]  
@@ -29,3 +29,5 @@ MD格式教程[https://blog.csdn.net/zuggs_/article/details/82381269]
 ```
 ### 实现阴影
 >>>>>>> a2d55efecb2427fcc39898a91bb2f5b40ebc2e29
+
+localToGlobal
