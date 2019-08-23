@@ -173,7 +173,7 @@ print(b.value);
 ## (25)UI 拖动抖动问题解决2019/8/17
 因为拖动会有enterframe的事件回调所以在lua部分会卡顿的,所以将render loop放在C部分,如果在lua里循环逻辑，会出现掉帧的问题.
 
-## (26)引擎初始化的设置UI和3d层通过pos_z值来处理,z越大越在上层
+## (26)引擎初始化的设置UI和3d层通过pos_z值来处理,z越大越在上层,其实界面层和3d层是在一个渲染循环里面的
 ```
 void 
 ex_init(struct EX* p,GLdouble zfar){
