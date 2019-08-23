@@ -92,7 +92,7 @@ void
 tf_dispose(struct TextField* tf){
 	base_dispose(tf->base);
 	tl_free(tf->textPtr);
-    LStack_delNode(ex_getInstance()->renderList,(int)tf);
+    LStack_delNode(ex_getIns()->renderList,(int)tf);
 	//tl_free(tf);
 }
 
@@ -101,7 +101,7 @@ void tf_render(int data)
 	struct HeadInfo* base = base_get((void*)data);
 	if(getv(&base->flags,FLAGS_VISIBLE) && base->curType == TYPE_TEXT_FILE)
 	{
-		struct EX* e = ex_getInstance();
+		struct EX* e = ex_getIns();
 		struct TextField* tf = (struct TextField*)data;
 		
 		int strLength = (int)strlen(tf->textPtr);

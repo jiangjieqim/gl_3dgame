@@ -24,7 +24,7 @@ f_key2(int evtId,void* data,void* thisObj){
 	struct E_KeyBoard* pkey = (struct E_KeyBoard*)data;
 	void* txt = ptr->t;
 	char _word[_WORD_SIZE_];
-	if(ex_getInstance()->curFocus!=ftext_get_container(ptr->t)/*ptr->bg*/){
+	if(ex_getIns()->curFocus!=ftext_get_container(ptr->t)/*ptr->bg*/){
 		//不在input焦点上,知己诶返回
 		return;
 	}
@@ -94,8 +94,8 @@ void* input_create(int w){
 	
 	h = w;
 
-	evt_on(ex_getInstance(),EVENT_ENGINE_KEYBOARD,f_key2,ptr);
-	evt_on(ex_getInstance(),EVENT_ENGINE_SPRITE_FOCUS_CHANGE,focusChangeHandle,ptr);
+	evt_on(ex_getIns(),EVENT_ENGINE_KEYBOARD,f_key2,ptr);
+	evt_on(ex_getIns(),EVENT_ENGINE_SPRITE_FOCUS_CHANGE,focusChangeHandle,ptr);
 	
 	//#########################################
 	//memset(name,0,_NAME_SIZE_);

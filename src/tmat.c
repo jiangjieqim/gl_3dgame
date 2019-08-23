@@ -198,22 +198,22 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M)
 	//Í¸ÊÓ±ä»»¾ØÕó
 	if(_perspectivePtr!=-1)
 	{
-		f_uploadMat4x4(_perspectivePtr,ex_getInstance()->perspectiveMatrix);
+		f_uploadMat4x4(_perspectivePtr,ex_getIns()->perspectiveMatrix);
 	}
 
 	if(_modelViewPtr!=-1)
 	{
 		//mat4x4_transpose(ex_getInstance()->modelViewMatrix);//×ªÖÃ¾ØÕó
-		f_uploadMat4x4(_modelViewPtr,ex_getInstance()->modelViewMatrix);
+		f_uploadMat4x4(_modelViewPtr,ex_getIns()->modelViewMatrix);
 	}
 
 	if(ui_perspectivePtr!=-1)
 	{
-		f_uploadMat4x4(ui_perspectivePtr,ex_getInstance()->ui_perspectiveMatrix);
+		f_uploadMat4x4(ui_perspectivePtr,ex_getIns()->ui_perspectiveMatrix);
 	}
 	if(ui_modelViewPtr!=-1)
 	{
-		f_uploadMat4x4(ui_modelViewPtr,ex_getInstance()->ui_modelViewMatrix);
+		f_uploadMat4x4(ui_modelViewPtr,ex_getIns()->ui_modelViewMatrix);
 	}
 
 	if(mat2!=-1){

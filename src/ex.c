@@ -68,7 +68,7 @@ struct Ent3D{
 	鼠标左键是否常按着
 */
 //static int isLeftDown = 0;
-struct EX* ex_getInstance(){
+struct EX* ex_getIns(){
 	if(!g_ex){
 		g_ex = (struct EX*)tl_malloc(sizeof(struct EX));
 		memset(g_ex,0,sizeof(struct EX));
@@ -80,7 +80,7 @@ struct EX* ex_getInstance(){
 /************************************************************************/
 static int
 f_is_mouse_leftDown(){
-	struct EX* ex = ex_getInstance();
+	struct EX* ex = ex_getIns();
 	struct MouseState* s = &ex->mouseState;
 	return s->button == GLUT_LEFT_BUTTON && s->action == GLUT_DOWN;
 }
@@ -199,7 +199,7 @@ void* ex_find_ptr(struct EX* ptr,const char* name){
 }
 
 void* ex_find(const char* name){
-	return ex_find_ptr((void*)ex_getInstance(),name);
+	return ex_find_ptr((void*)ex_getIns(),name);
 }
 
 /*
@@ -222,7 +222,7 @@ f_addNode(struct EX* p, void* _node){
 	}
 }
 void ex_add(void* ptr){
-	f_addNode(ex_getInstance(),ptr);
+	f_addNode(ex_getIns(),ptr);
 }
 ///*
 //获取模型类型
@@ -375,7 +375,7 @@ void renderUI(GLenum mode){
 */
 void 
 ex_info(){
-	struct EX* ex = ex_getInstance();
+	struct EX* ex = ex_getIns();
 	//EngineX* p = this;
 	struct ECamera cam = ex->cam;
 	int totleByte,nodeCnt;
@@ -396,7 +396,7 @@ ex_info(){
 	//printf( "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
 	
 	printf( "vbo使用:%d bytes\n",tlgl_getVboSize());
-	printf( "当前(射线检测)状态:%d\n",getv(&(ex_getInstance()->flags),EX_FLAGS_RAY));
+	printf( "当前(射线检测)状态:%d\n",getv(&(ex_getIns()->flags),EX_FLAGS_RAY));
 }
 
 /*
@@ -412,7 +412,7 @@ f_drawFps(){
 
 static void
 f_show_all_info(){
-	struct EX* p = ex_getInstance();
+	struct EX* p = ex_getIns();
 	struct ECamera cam = p->cam;
 	char buffer[G_BUFFER_256_SIZE];
 	int vbo = tlgl_getVboSize();
@@ -495,7 +495,7 @@ drawLine(float h){
 static struct MD2_Object* 
 load_md2(const char* name,const char* model,float x,float y,float z,float scale)
 {	
-	struct EX* p = ex_getInstance();
+	struct EX* p = ex_getIns();
 
 	int len;
 
@@ -547,7 +547,7 @@ f_ent_dispose(struct Ent3D* p){
 	base_dispose(p->base);
 	p->base = NULL;
 
-	LStack_delNode(ex_getInstance()->renderList,(int)p);
+	LStack_delNode(ex_getIns()->renderList,(int)p);
 	//tl_free((void*)p);
 }
 /*
@@ -562,7 +562,7 @@ md2_dispose(struct MD2_Object* _md2)
 	base_dispose(_md2->base);
 	_md2->base = NULL;
 
-	LStack_delNode(ex_getInstance()->renderList,(int)_md2);
+	LStack_delNode(ex_getIns()->renderList,(int)_md2);
 
 	//tl_free((void*)_md2);
 }
@@ -574,7 +574,7 @@ void md5Model_dispose(struct MD5* _md5)
 	base_dispose(_md5->base);
 	_md5->base = NULL;
 
-	LStack_delNode(ex_getInstance()->renderList,(int)_md5);
+	LStack_delNode(ex_getIns()->renderList,(int)_md5);
 
 	//tl_free((void*)_md5);
 }
@@ -626,7 +626,7 @@ getAllVertex(int data)
 static void 
 render_3dNode(int data)
 {
-	struct EX*e = ex_getInstance();	
+	struct EX*e = ex_getIns();	
 	struct HeadInfo* base = base_get((void*)data);
 	int objType = base->curType;
 
@@ -636,7 +636,7 @@ render_3dNode(int data)
 	}
 	else if(objType == TYPE_MD5_FILE)
 	{
-		struct EX*ex = ex_getInstance();
+		struct EX*ex = ex_getIns();
 		float f = base->fpsInterval <= 0 ? 0.0f : (1000.0f/base->fpsInterval);//f代表 f毫秒播放一个关键帧,f = 0的时候停止在当前关键帧
 		md5_render((struct MD5*)data,f);//ex->fps	
 
@@ -661,7 +661,7 @@ render_3dNode(int data)
 static void 
 f_renderlistCall(void _callBack(int))
 {
-	struct EX* ex = ex_getInstance();
+	struct EX* ex = ex_getIns();
 	struct LStackNode* s = (struct LStackNode* )ex->renderList;
 	void* top,*p;
 	top = s;
@@ -770,7 +770,7 @@ changeCam()
 */
 static void 
 updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar){
-	struct EX* p = ex_getInstance();
+	struct EX* p = ex_getIns();
 
 	struct ECamera cam = p->cam;
 	//只是处理鼠标拾取操作用来获取坐标使用gluUnProject,3d物体 不使用该方式(使用用户自定义的透视矩阵,视图矩阵,模型矩阵)
@@ -805,7 +805,7 @@ updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLd
 */
 void ex_updatePerspctiveModelView()
 {
-	struct EX* p = ex_getInstance();
+	struct EX* p = ex_getIns();
 	updatePerspectiveMatrix(45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
 }
 
@@ -832,7 +832,7 @@ void ex_updatePerspctiveModelView()
 
 static void 
 _new(){
-	struct EX* p = ex_getInstance();
+	struct EX* p = ex_getIns();
 	
 
 	//if(!p->_isinit){
@@ -973,7 +973,7 @@ ex_update_uiPos()
 //static float _g_pos_z;
 float ex_newPosZ()
 {
-	struct EX* p = ex_getInstance();
+	struct EX* p = ex_getIns();
 	//return p->zBuffer++;//这里存疑,UI正交zbuffer叠加的影响
 	 p->ui_pos_z+=0.01;
 	return p->ui_pos_z;
@@ -1005,7 +1005,7 @@ f_stage_click_callback(struct Sprite* self,int x,int y){
 }
 void 
 ex_resize_stage2d(){
-	struct EX* p = ex_getInstance();
+	struct EX* p = ex_getIns();
 	sprite_resize(p->stage2d,p->_screenWidth,p->_screenHeight);
 }
 void 
@@ -1069,7 +1069,7 @@ void ex_dispose(struct EX* p){
 static void* 
 load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
 {
-	struct EX* engine = ex_getInstance();
+	struct EX* engine = ex_getIns();
 	struct MD5* md5 = NULL;
 	struct HeadInfo* _base = NULL;
 	
@@ -1135,7 +1135,7 @@ static struct Ent3D*
 load_obj(const char* name,const char* mesh_s,
 	float x,float y,float z,float scale)
 {
-	struct EX* engine = ex_getInstance();
+	struct EX* engine = ex_getIns();
 
 	//EngineX* engine = this;
 	struct HeadInfo* base;
@@ -1260,7 +1260,7 @@ vbo_md2Load(const char* name,const char* url)
 	md2parse_dispose(_parse);
 	tl_free(_objStr);
 	
-	f_addNode(ex_getInstance(),node);
+	f_addNode(ex_getIns(),node);
 
 	//printf("[%s]动作总数:%d\n",url,node->anim->allLength);
 	return (int)node;
@@ -1318,7 +1318,7 @@ vbo_loadObj3d(char* name,const char* url)
 	tl_free(_objStr);
 
 	//node->base = node->ptrVBO->base;
-	f_addNode(ex_getInstance(),node);
+	f_addNode(ex_getIns(),node);
 	return (int)node;
 }
 //加载VBO模式的模型
@@ -1508,7 +1508,7 @@ render_hitUiNode(int data)
 {
 	if(sprite_isEnable(data))
 	{
-		struct EX* p = ex_getInstance();
+		struct EX* p = ex_getIns();
 
 		struct ClickInfo* _clickInfo = p->clickInfo;
 
@@ -1560,7 +1560,7 @@ render_hitUiNode(int data)
 */
 void mouseMove(int x,int y)
 {
-	struct EX* e=ex_getInstance();
+	struct EX* e=ex_getIns();
 	e->mouseState.moveX = x;
 	e->mouseState.moveY = y;
 	
@@ -1589,7 +1589,7 @@ void mouseMove(int x,int y)
 /************************************************************************/
 static void
 f_raySome(struct HitResultObject* hit){
-	struct EX* ex = ex_getInstance();
+	struct EX* ex = ex_getIns();
 	struct HitResultObject* last = hit;
 	struct HeadInfo* _node = ex_find_headinfo(ex,last->name);
 
@@ -1629,7 +1629,7 @@ f_rayPick(struct HitResultObject* hit){
 }
 
 void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
-	struct EX* ex = ex_getInstance();
+	struct EX* ex = ex_getIns();
 	struct ClickInfo* _clickInfo = (struct ClickInfo*)ex->clickInfo;
 
 	ex->mouseState.button = button;
@@ -1664,7 +1664,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 				ex->curFocus = _clickInfo->sprite;
 				//ex_lua_evt_dispatch(ex->curFocus,EVENT_ENGINE_SPRITE_FOCUS_IN,0);
 				//printf("focus change\t 0x%0x\n",ex->curFocus);
-				evt_dispatch(ex_getInstance(),EVENT_ENGINE_SPRITE_FOCUS_CHANGE,_old);
+				evt_dispatch(ex_getIns(),EVENT_ENGINE_SPRITE_FOCUS_CHANGE,_old);
 			}
 
 			_clickInfo->sprite->clickCallBack(
@@ -1730,7 +1730,7 @@ void onKeyboardCallBack(unsigned char key, int x, int y){
 	ekey.y = y;
 	//printf("key=\t%d %d %d\n",key,x,y);
 	
-	evt_dispatch(ex_getInstance(),EVENT_ENGINE_KEYBOARD,(void*)&ekey);
+	evt_dispatch(ex_getIns(),EVENT_ENGINE_KEYBOARD,(void*)&ekey);
 
 	{
 		char _str[G_BUFFER_16_SIZE];
@@ -1748,7 +1748,7 @@ update3DNode(int data){
 
 void 
 ex_cam_set_pos(float x,float y,float z){
-	struct EX* ex = ex_getInstance();	
+	struct EX* ex = ex_getIns();	
 	struct ECamera* cam = &ex->cam;
 /*
 	if(cam->ptrFollow){
@@ -1771,11 +1771,11 @@ ex_cam_set_pos(float x,float y,float z){
 //}
 struct EX* ex_create()
 {
-	return ex_getInstance();
+	return ex_getIns();
 }
 
 void setBgColor(float r,float g,float b){
-	struct EX* ex = ex_getInstance();
+	struct EX* ex = ex_getIns();
 	ex->bg_r = r;
 	ex->bg_g = g;
 	ex->bg_b = b;
@@ -1821,7 +1821,7 @@ void ex_switch_baseFlags(struct HeadInfo* _node,int flag){
  */
 static void
 getLog(){
-	struct EX* e = ex_getInstance();
+	struct EX* e = ex_getIns();
 	/*if(!e->logTf){
 		e->logTf = tf_create(G_BUFFER_1024_SIZE,0,0,1.0,0.0,0);
 	}*/
@@ -1829,7 +1829,7 @@ getLog(){
 
 void 
 ex_showLog(const char* buffer){
-	struct EX* e = ex_getInstance();
+	struct EX* e = ex_getIns();
 	getLog();
 	//tf_setText(e->logTf,buffer);
 }
@@ -1848,7 +1848,7 @@ void ex_callParmLuaFun(const char* luaFunName,const char* parm)
 {
 	if((size_t)strlen(luaFunName))
 	{
-		lua_State* L =ex_getInstance()->mylua;
+		lua_State* L =ex_getIns()->mylua;
 		lua_getglobal(L,luaFunName);
 		lua_pushstring(L,parm);
 		//lua_pushinteger(L,parm);
@@ -1881,7 +1881,7 @@ void ex_callIntLuaFun(const char* luaFunName,int value)
 {
 	if((size_t)strlen(luaFunName))
 	{
-		lua_State* L =ex_getInstance()->mylua;
+		lua_State* L =ex_getIns()->mylua;
 		lua_getglobal(L,luaFunName);
 		//lua_pushstring(L,parm);
 		lua_pushinteger(L,value);
@@ -1900,7 +1900,7 @@ ex_lua_global_evt_dispatch(int evtid){
 void 
 ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
 	
-	lua_State* L =ex_getInstance()->mylua;
+	lua_State* L =ex_getIns()->mylua;
 	if(L){
 		lua_getglobal(L,"evt_dispatch");
 		lua_pushinteger(L,(int)obj);
@@ -2039,11 +2039,11 @@ int ex_get_gap(int type)
 	return UV_GAP + VERTEX_GAP + NORMAL_GAP;
 }
 void* ex_get_ui_atals(){
-	if(!ex_getInstance()->atals){
+	if(!ex_getIns()->atals){
 		struct Atals* ptr = atals_load("//resource//texture//","1");
-		ex_getInstance()->atals = (void*)ptr;
+		ex_getIns()->atals = (void*)ptr;
 	}
-	return ex_getInstance()->atals;
+	return ex_getIns()->atals;
 }
 
 //########################################

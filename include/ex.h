@@ -283,7 +283,7 @@ void ex_add(void* ptr);
 /*
 	获取引擎句柄
 */
-struct EX* ex_getInstance();
+struct EX* ex_getIns();
 /*
 	加载一个模型
 	E_RenderMode mode:	管线使用的渲染模式

@@ -423,7 +423,7 @@ void sprite_set_self_pos(void* p,int x,int y){
 //设置绝对坐标
 void sprite_setpos(struct Sprite* spr,int x,int y){
 	//evt_once(NextFrame)到下一个关键帧的时候更新数据,这样不会抖屏
-	setSpriteScreenPos(ex_getInstance(),spr,x,y);//更新屏幕坐标
+	setSpriteScreenPos(ex_getIns(),spr,x,y);//更新屏幕坐标
 	setHitTriangle(spr);//更新点击区域
 	f_refreshChildPos(spr);//更新sprite的子对象的坐标
 }
@@ -709,7 +709,7 @@ f_btn_push(struct Sprite* spr,int* pChange){
 void 
 sprite_drawRender(int data)
 {
-	struct EX* e = ex_getInstance();
+	struct EX* e = ex_getIns();
 
 	struct Sprite* spr = (struct Sprite*)data;
 	float x = spr->pos_x+spr->mWidth/2;
@@ -875,14 +875,14 @@ changeDragXY(struct Sprite* p,int* px,int* py){
 void 
 sprite_mouseMove(int data)
 {
-	struct EX* e = ex_getInstance();	
+	struct EX* e = ex_getIns();	
 	if(sprite_isEnable(data))
 	{
 		struct HeadInfo* base = base_get((void*)data);
 		if(getv(&base->flags,FLAGS_DRAG))
 		{
 			struct Sprite* ptr = (struct Sprite*)data;
-			if(ex_getInstance()->curFocus == ptr){
+			if(ex_getIns()->curFocus == ptr){
 				if(ptr->m_bPressed){
 					//鼠标按下,只有在鼠标坐标发生变化的时候				
 					int x = e->mouseState.moveX - ptr->mouseDownX;
@@ -901,7 +901,7 @@ void sprite_action(const int data)
 {
 	if(sprite_isEnable(data))
 	{
-		struct EX* ex = ex_getInstance();
+		struct EX* ex = ex_getIns();
 
 		struct Sprite* btn = (struct Sprite*)data;
 		struct HeadInfo* base;
@@ -979,7 +979,7 @@ void sprite_dipose(struct Sprite* spr)
 	{
 		objVBO_dispose(spr->vbo);
 	}
-	LStack_delNode(ex_getInstance()->renderList,(int)spr);//从渲染节点列表中移除
+	LStack_delNode(ex_getIns()->renderList,(int)spr);//从渲染节点列表中移除
 
 //	tl_free(spr);
 }
@@ -1143,5 +1143,4 @@ void
 sprite_set_hit_rect(void*p,int x,int y,int w,int h){
 	struct Sprite* ptr = (struct Sprite* )p;
 	ptr->hitX = x,	ptr->hitY = y, ptr->hitWidth = w,ptr->hitHeight = h;
-	//setHitTriangle(ptr);
-}																				 																				
+}

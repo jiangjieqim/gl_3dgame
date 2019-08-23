@@ -218,11 +218,11 @@ f_key(int evtId,void* data,void* thisObj){
 			ex_animtor_ptr_setcur(f_getHorse(),"jump",playend);//设置一次跳跃动作
 			break;
 		case KEY_B:
-			ex_getInstance()->cam.rx += PI * 0.1;
+			ex_getIns()->cam.rx += PI * 0.1;
 			ex_updatePerspctiveModelView();
 			break;
 		case KEY_C:
-			ex_getInstance()->cam.rx -= PI * 0.1;
+			ex_getIns()->cam.rx -= PI * 0.1;
 			ex_updatePerspctiveModelView();
 			break;
 		case KEY_D:
@@ -255,7 +255,7 @@ f_key(int evtId,void* data,void* thisObj){
 			}
 			break;
 		case KEY_ESC:
-			ex_dispose(ex_getInstance());
+			ex_dispose(ex_getIns());
 			exit(0);
 			break;
 	}
@@ -291,13 +291,13 @@ f_followCamera(){
 
 		//设置camera距离角色一定偏移
 		
-		struct ECamera* cam = &ex_getInstance()->cam;
+		struct ECamera* cam = &ex_getIns()->cam;
 		//Vec3* offset = &cam.followOffset;
 		Vec3 rolePos,camPos;
 		struct HeadInfo* role = (struct HeadInfo*)_horse;
 		
 		//float offset = -0.0f;//偏移
-		ex_getInstance()->cam.rx = PI * 1.7;
+		ex_getIns()->cam.rx = PI * 1.7;
 		ex_cam_set_pos(-role->x,-5.0f,-role->z+cam->y);//-20
 
 		vec3Set(&rolePos,role->x,role->y,role->z);
@@ -356,7 +356,7 @@ f_drawLine(int evtId,void* data,void* thisObj){
 			f_followCamera();
 			break;
 		case CAM_2:
-			ex_getInstance()->cam.rx = 0;
+			ex_getIns()->cam.rx = 0;
 			ex_cam_set_pos(0,0,-5);
 			
 			break;
@@ -388,7 +388,7 @@ REG_test_unit_01_init(lua_State *L){
 	//_ptr = MALLOC(10);
 
 	//添加一个3D渲染回调
-	evt_on(ex_getInstance(),EVENT_ENGINE_RENDER_3D,f_drawLine,0);
+	evt_on(ex_getIns(),EVENT_ENGINE_RENDER_3D,f_drawLine,0);
 
 	obj1Base =  base_get(ex_find("myObj1"));
 	//添加对象拾取监听事件
@@ -407,7 +407,7 @@ REG_test_unit_01_init(lua_State *L){
 	// x,z		基于y轴旋转
 	_target = base_get(ex_find("_target"));
 
-	evt_on(ex_getInstance(),EVENT_ENGINE_KEYBOARD,f_key,0);
+	evt_on(ex_getIns(),EVENT_ENGINE_KEYBOARD,f_key,0);
 	//ex_cam_bind(f_getHorse());
 
 	//ex_cam_set_pos(0,-20,0);

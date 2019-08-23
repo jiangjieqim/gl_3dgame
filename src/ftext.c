@@ -389,7 +389,7 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 		memset(txt->_buffer,0,txt->_bufferLength);
 
 		//ft_load(rgba,txt->fw,txt->fh,&iWidth,&iHeight,s);
-		ft_parse(ex_getInstance()->ft,rgba,txt->fw,txt->fh,&iWidth,&iHeight,&top,s);
+		ft_parse(ex_getIns()->ft,rgba,txt->fw,txt->fh,&iWidth,&iHeight,&top,s);
 #ifdef DEBUG
 		//	printf("ft_load:%s:%d %d\n",s,iWidth,iHeight);
 #endif
