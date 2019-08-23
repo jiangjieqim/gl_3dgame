@@ -300,48 +300,46 @@ f_objVBO_load4Vertex(){
 	tl_free(_objStr);
 	return vbo;
 }
+
 /*
  *构造VBO
  * uv normal verter和uv vertex都支持
  */
 static struct Obj_vbo_model* 
-load_vbo(int ParseType)
-{
-	if(ParseType == Type_6Vertex)
-	{
+load_vbo(int ParseType){
+	if(ParseType == Type_6Vertex){
 		return load_vbo_6Vertex();
 	}
-	else if(ParseType == Type_4Vertex)
-	{
+	else if(ParseType == Type_4Vertex){
 		return f_objVBO_load4Vertex();
 	}
 	return NULL;
 }
 
 /*
-	构建2个点击三角形
+	构建2个点击三角形,这两个三角形构成一个矩形的点击区域,用来检测是否点击到该区域
 */
 static void
-setHitTriangle(struct Sprite* spr)
-{
+setHitTriangle(struct Sprite* spr){
 	int i = 0;
 	struct Vec2 a1,a2,a3,a4;
+	
 	if(!spr->hitTriangle){
 		//没有设置可碰撞属性
 		return;
 	}
 
-	a1.x =  spr->screenX;
-	a1.y =	spr->screenY;
+	a1.x =  spr->screenX + spr->hitX;
+	a1.y =	spr->screenY + spr->hitY;
 	
-	a2.x = spr->screenX + spr->mWidth;
+	a2.x = spr->screenX +  spr->hitWidth;//+spr->mWidth;
 	a2.y = spr->screenY;
 
-	a3.x = spr->screenX+ spr->mWidth;
-	a3.y = spr->screenY+ spr->mHeight;
+	a3.x = spr->screenX+ spr->hitWidth;//spr->mWidth;
+	a3.y = spr->screenY+ spr->hitHeight;//spr->mHeight;
 
 	a4.x = spr->screenX;
-	a4.y =  spr->screenY+spr->mHeight;
+	a4.y =  spr->screenY + spr->hitHeight;//spr->mHeight;
 
 	//a1
 	spr->hitTriangle[0] = a1.x ;
@@ -389,24 +387,18 @@ setHitTriangle(struct Sprite* spr)
 	设置sprite的屏幕坐标,(屏幕以左上角为0,0起始点)
 */
 static void
-setSpriteScreenPos(struct EX* ex,struct Sprite* sprite,float x,float y)
-{
+setSpriteScreenPos(struct EX* ex,struct Sprite* sprite,float x,float y){
 	sprite->screenX = x;
 	sprite->screenY = y;
-
 	sprite->pos_x = x;
 	sprite->pos_y = ex->_screenHeight-y-sprite->mHeight;	
 }
 /*
 	重置sprite的尺寸
 */
-void sprite_resize(struct Sprite* spr,int w,int h)
-{
+void sprite_resize(struct Sprite* spr,int w,int h){
 	spr->mWidth = w;
 	spr->mHeight = h;
-
-	//spr->screenY = spr->screenY-h;
-	//setHitTriangle(spr);//更新点击区域
 	sprite_setpos(spr,spr->screenX,spr->screenY);
 }
 /*
@@ -430,12 +422,10 @@ void sprite_set_self_pos(void* p,int x,int y){
 
 //设置绝对坐标
 void sprite_setpos(struct Sprite* spr,int x,int y){
-		
 	//evt_once(NextFrame)到下一个关键帧的时候更新数据,这样不会抖屏
 	setSpriteScreenPos(ex_getInstance(),spr,x,y);//更新屏幕坐标
 	setHitTriangle(spr);//更新点击区域
-
-	f_refreshChildPos(spr);
+	f_refreshChildPos(spr);//更新sprite的子对象的坐标
 }
 
 static void 
@@ -456,6 +446,13 @@ sprite_isCanClick(void* n){
 	struct Sprite* pSpr = (struct Sprite*)n;
 	return (int)pSpr->clickCallBack;
 }
+
+void
+sprite_set_clickHandle(void* p,void (*clickCallBack)(void* ,int ,int )){
+	struct Sprite* pSpr = (struct Sprite*)p;
+	pSpr->clickCallBack = clickCallBack;
+}
+
 struct Sprite* 
 sprite_create(char* _spriteName,
 			  int x,int y,int width,int height,
@@ -474,7 +471,8 @@ sprite_create(char* _spriteName,
 
 	pSpr->mWidth  = width;
 	pSpr->mHeight = height;
-
+	pSpr->hitWidth = width;
+	pSpr->hitHeight = height;
 	pSpr->hitTriangle = tl_malloc(sizeof(float)*SPRITE_TRIANGLE_COUNT);
 
 	//设置顶点组织方式
@@ -1116,8 +1114,7 @@ static void f_refreshChildPos(void* ptr){
 //}
 
 void
-sprite_rotateZ(struct Sprite* ptr,float rz)
-{
+sprite_rotateZ(struct Sprite* ptr,float rz){
 	struct HeadInfo* b = (struct HeadInfo*)ptr->base;
 	b->rz = rz;
 	updateMatrix(ptr);
@@ -1139,5 +1136,12 @@ sprite_set_scale_z(struct Sprite* spr,float v){
 //void 
 //sprite_set_render(void* p,int v){
 //	struct Sprite* spr = (struct Sprite* )p;
-//	//spr->_renderState = v;
+//	//spr->_renderState = v; 
 //}
+
+void
+sprite_set_hit_rect(void*p,int x,int y,int w,int h){
+	struct Sprite* ptr = (struct Sprite* )p;
+	ptr->hitX = x,	ptr->hitY = y, ptr->hitWidth = w,ptr->hitHeight = h;
+	//setHitTriangle(ptr);
+}																				 																				

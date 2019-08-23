@@ -1,6 +1,12 @@
 #ifndef _INPUT_H_
 #define _INPUT_H_
 /*
+ *input组件是基于ftext组件做的扩展,渲染节点就一个Sprite用于渲染,点击等交互.
+ *如果要设置背景,可以基于input组件进行扩展,input组件本身不负责这种背景的渲染
+ *input本身只渲染文本和处理键盘交互
+ */
+
+/*
  *初始化输入组件,设置一个宽度为width的输入组件
  */
 void* input_create(int width);

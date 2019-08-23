@@ -68,6 +68,10 @@ ftext_pop_word(void* p);
 void 
 ftext_set_wordWrap(void* p,int v);
 
-
+//设置文本的点击区域和回调函数
+void
+ftext_set_hit(void* p,
+			  void (*clickCallBack)(void* ,int ,int ),
+			  int x,int y,int w,int h);
 
 #endif

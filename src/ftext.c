@@ -453,6 +453,15 @@ ftext_pop_word(void* p){
 
 	LStack_pop(_l,0);
 }
+//设置点击区域和回调
+void
+ftext_set_hit(void* p,
+			  void (*clickCallBack)(void* ,int ,int ),
+			  int x,int y,int w,int h){
+	FText* txt = (FText*)p;
+	sprite_set_hit_rect(txt->spr,x,y,w,h);
+	sprite_set_clickHandle(txt->spr,clickCallBack);
+}
 
 void
 ftext_dispose(void* p){

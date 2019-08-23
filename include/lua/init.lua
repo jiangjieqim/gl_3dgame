@@ -15,15 +15,15 @@ ex:bgColor(0.3,0.3,0.3);
 --fps(0,15);
 --infowin(0,0);
 
---local sprite =sprite_create("bg11",100,50,128,14);
---func_setIcon(sprite,"gundi.png");
---setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
+local sprite =sprite_create("bg11",100,50,128,14);
+func_setIcon(sprite,"gundi.png");
+setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
 
 
 alert("ÎÄ±¾");
 
 local _in = input_create();
-input_set_pos(_in,10,50);
+input_set_pos(_in,100,50);
 --input_dispose(_in);
 
 --func_fixed_load("\\resource\\obj\\torus.obj");

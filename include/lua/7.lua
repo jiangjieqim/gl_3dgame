@@ -71,7 +71,7 @@ local function f_onkey(data)
 	--print(key);
 	if(key == KEY_A) then
 	    --alert(tostring(math.random(0,100)));
-        print(func_get_curFocus());	
+        print("get curFocus point = "..func_get_curFocus());	
 	elseif(key == KEY_B)then
         if(plane) then
 		    func_changeFlags(plane:get_p(),FLAGS_DRAW_PLOYGON_LINE);

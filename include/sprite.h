@@ -4,8 +4,8 @@
 //#define USE_VBO_SPRITE	//是否使用VBO模式的Sprite
 
 //2d触发界面
-struct Sprite
-{
+struct Sprite{
+
 	void* base;
 	float pos_x;		//表示在正交投影坐标系(左下角为坐标原点)的坐标，
 	float pos_y;
@@ -25,6 +25,8 @@ struct Sprite
 	int m_bPressed;
 
 	int mouseDownX,mouseDownY;//鼠标左键点击下的坐标
+
+	int hitX,hitY,hitWidth,hitHeight;//点击的区域范围矩形
 
 	void* vertexs;//GLfloat*顶点缓存数据,使用完之后要删除tl_free
 	int	vertLen;
@@ -82,6 +84,7 @@ struct Sprite
 	
 	//是否使其可以被渲染
 	//int _renderState;
+	
 };
 
 /*
@@ -98,6 +101,10 @@ void sprite_removeChild(void* spr,void* child);
  *获取全局坐标
  */
 void sprite_getGlobalPos(void* spr,int* px,int *py);
+
+//设置点击回调
+void
+sprite_set_clickHandle(void* p,void (*clickCallBack)(void* ,int ,int ));
 
 /*
  *在addChild之后设置其相对最表
@@ -192,4 +199,10 @@ sprite_isCanClick(void* p);
 //为Sprite设置一个默认的图集
 void
 sprite_set_default_tex(void* p);
+
+/*
+ *设置一个点击区域的范围
+ */
+void
+sprite_set_hit_rect(void*p,int x,int y,int width,int height);
 #endif
