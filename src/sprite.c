@@ -585,24 +585,18 @@ sprite_set_default_tex(void* ptr){
 //可以从图集中获取,也可以自定义材质引用
 static void* 
 getMaterial(struct Sprite* p){
-	if(p->atals == 0)
-	{
-		//printf("p->atals == NULL");
-		//assert(0);
-		
-		if(p->material){
-			return p->material;
-		}
-
-		{
-			//HeadInfo* head = (HeadInfo*)p->base;
-			//printf("getMaterial %s ,没有设置图集,也没有默认材质\n",head->name);
-			//assert(0);//这里需要对没有设置材质的对象进行修复!!!
-			//sprite_set_default_tex(p);
-		}
-		return 0;
+	if(p->atals){
+		return p->atals->material;
 	}
-	return p->atals->material;
+	
+	if(p->material){
+		return p->material;
+	}
+	//HeadInfo* head = (HeadInfo*)p->base;
+	//printf("getMaterial %s ,没有设置图集,也没有默认材质\n",head->name);
+	//assert(0);//这里需要对没有设置材质的对象进行修复!!!
+	//sprite_set_default_tex(p);
+	return 0;
 }
 
 //渲染一个四边形
@@ -1143,4 +1137,5 @@ void
 sprite_set_hit_rect(void*p,int x,int y,int w,int h){
 	struct Sprite* ptr = (struct Sprite* )p;
 	ptr->hitX = x,	ptr->hitY = y, ptr->hitWidth = w,ptr->hitHeight = h;
+	setHitTriangle(ptr);
 }

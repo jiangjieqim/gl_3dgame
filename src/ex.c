@@ -26,7 +26,9 @@
 #include "tween.h"
 #include "base.h"
 #include "frame.h"
-//static long _delayTime=0;
+
+//#define DEBUG_PRINT_HIT
+
 int g_sprite_line;
 long g_delayTime;
 int  g_fps=-1;
@@ -1007,6 +1009,7 @@ void
 ex_resize_stage2d(){
 	struct EX* p = ex_getIns();
 	sprite_resize(p->stage2d,p->_screenWidth,p->_screenHeight);
+	sprite_set_hit_rect(p->stage2d,0,0,p->_screenWidth,p->_screenHeight);
 }
 void 
 ex_init(struct EX* p,GLdouble zfar){	
@@ -1035,7 +1038,7 @@ ex_init(struct EX* p,GLdouble zfar){
 		struct Sprite* stage2d = 0;
 		
 		//初始化2d stage
-		p->stage2d = sprite_create("stage2d",0,0,32,32,f_stage_click_callback);//
+		p->stage2d = sprite_create("stage2d",0,0,32,32,f_stage_click_callback);
 		stage2d = (struct Sprite*)p->stage2d;
 		//sprite_set_default_tex(p->stage2d);
 		p->curFocus = stage2d;
@@ -1530,10 +1533,10 @@ render_hitUiNode(int data)
 				spr->mouseDownX = info.localX;
 				spr->mouseDownY = info.localY;
 			}
-			
+#ifdef DEBUG_PRINT_HIT
 			//是否射线拾取到了
-			//printf("点击了%s界面 局部坐标 %d,%d z=%.2f\n",base->name,info.localX,info.localY,spr->pos_z);
-			
+			printf("点击了%s界面 局部坐标 %d,%d z=%.2f\n",base->name,info.localX,info.localY,spr->pos_z);
+#endif
 			if(spr->clickCallBack!=0){
 				if(_clickInfo->sprite == 0){
 					_clickInfo->sprite = spr;

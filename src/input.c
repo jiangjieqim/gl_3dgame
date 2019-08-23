@@ -35,8 +35,8 @@ f_key2(int evtId,void* data,void* thisObj){
 		return;
 	}else if(pkey->key == 13){
 		//回车
-		printf("input key = %d,(%s)\n",pkey->key,input_get_heap_str(ptr));
-		
+		//printf("input key = %d,(%s)\n",pkey->key,input_get_heap_str(ptr));
+		//evt_dispatch(ptr);
 		//是否清空输入框中的数据
 		//ftext_clear(txt);
 		return;
@@ -75,6 +75,11 @@ void intput_set_pos(void *p,int x,int y){
 char* input_get_heap_str(void* p){
 	struct Input* ptr=(struct Input*)p;
 	return ftext_get_str(ptr->t);
+}
+
+void input_clear(void* p){
+	struct Input* ptr=(struct Input*)p;
+	ftext_clear(ptr->t);
 }
 
 void* input_get_container(void* p){

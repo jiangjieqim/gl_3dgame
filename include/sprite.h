@@ -31,14 +31,14 @@ struct Sprite{
 	void* vertexs;//GLfloat*顶点缓存数据,使用完之后要删除tl_free
 	int	vertLen;
 
-	//void* material;//按钮材质
+	void* material;//按钮材质
 
 	struct Atals* atals;//图集
 	
 	/************************************************************************/
 	/* 材质引用                                                    */
 	/************************************************************************/
-	void* material;
+	//void* material;
 	
 	Matrix44f mat4x4;
 	

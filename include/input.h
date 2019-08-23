@@ -27,4 +27,7 @@ char* input_get_heap_str(void* p);
 
 //获取输入框的容器
 void* input_get_container(void* p);
+
+//清空数据
+void input_clear(void* p);
 #endif
