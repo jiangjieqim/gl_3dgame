@@ -47,7 +47,23 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 --dofile("..\\include\\lua\\quaternion.lua");--
 
+
+local function loadFloor()
+	cam:position(0,-5,-5);
+	cam:rx(PI * 1.8);
+	--µØ°å
+	local plane = UnitBase:new();
+	--plane:load_model(nil,"//resource//material//floor.mat");
+	plane:load_model();
+	plane:setv(FLAGS_REVERSE_FACE);
+	plane:setv(FLAGS_DRAW_PLOYGON_LINE);
+plane:scale(10);
+end
+
+--loadFloor();
 dofile("..\\include\\lua\\7.lua");
+
+
 
 --local t = func_get_longTime();
 --for i=1,1000000,1 do

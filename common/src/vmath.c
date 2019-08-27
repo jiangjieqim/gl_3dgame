@@ -366,13 +366,27 @@ void perspectiveFrustum(Matrix44f M, float left, float right, float top, float b
     M[6]  =(top +bottom)/(top -bottom);
     M[10] =(near +far)/(near -far);
 
-    M[11] =2*near*far/(near -far);
-    M[14] =-1.0;
+	M[11] =-1.0;
+    M[14] =2*near*far/(near -far);
+    
 
 	/*M[11] =-1.0;
 	M[14] =2*near*far/(near -far);*/
 }
- 
+void 
+mat4x4_perspective(Matrix44f M,float fov, float aspectRatio, float zNear, float zFar ){
+	// 应用glu库函数，要需添加glu.h头文件
+	//gluPerspective( fov, aspectRatio, zNear, zFar );
+
+	// 应用OpenGL函数，但是要需添加math.h头文件
+	float rFov = fov * PI / 180.0f;
+	perspectiveFrustum(M, 
+		-zNear * tanf( rFov / 2.0 ) * aspectRatio,
+		zNear * tanf( rFov / 2.0 ) * aspectRatio,
+		-zNear * tanf( rFov / 2.0 ),
+		zNear * tanf( rFov / 2.0 ),
+		zNear, zFar );
+}
 void orthoPerspect(Matrix44f M,  float left, float right, float top, float bottom, float near, float far)
 {
 	//clearMat(M);

@@ -65,6 +65,66 @@ struct Ent3D{
 
 };
 
+//=============================================
+//frame buffer tex结构体
+struct FBOTex
+{
+	GLuint              fboName;
+	//GLuint				textures[1];//大理石贴图
+	GLuint				mirrorTexture;//镜像贴图
+	GLuint              depthBufferName; //深度缓冲区
+};
+static const GLenum windowBuff[] = { GL_BACK_LEFT };
+static const GLenum fboBuffs[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+void* 
+fbo_init(){
+	struct FBOTex* fbo = (struct FBOTex*)tl_malloc(sizeof(struct FBOTex));
+
+	GLint mirrorTexWidth  = 512;
+	GLint mirrorTexHeight = 512;
+	GLuint              fboName;
+	//GLuint				textures[1];//大理石贴图
+	GLuint				mirrorTexture;//镜像贴图
+	GLuint              depthBufferName; //深度缓冲区
+
+	// Create and bind an FBO(创建,绑定帧缓存对象fbo)
+	glGenFramebuffers(1,&fboName);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboName);
+
+	// Create depth renderbuffer(创建深度缓存)
+	glGenRenderbuffers(1, &depthBufferName);
+	glBindRenderbuffer(GL_RENDERBUFFER, depthBufferName);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, mirrorTexWidth, mirrorTexHeight);
+
+	// Create the reflection texture(创建映射贴图)
+	glGenTextures(1, &mirrorTexture);
+	glBindTexture(GL_TEXTURE_2D, mirrorTexture);
+	//作者的bug
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, mirrorTexWidth, mirrorTexHeight, 0, GL_RGBA, GL_FLOAT, NULL);
+
+	fbo->depthBufferName = depthBufferName;
+	fbo->fboName = fboName;
+	fbo->mirrorTexture = mirrorTexture;
+
+	return fbo;
+}
+
+//销毁fbo对象
+void
+fbo_dispose(void* p){
+	struct FBOTex* fbo = (struct FBOTex*)p;
+	glDeleteTextures(1, &fbo->mirrorTexture);
+	//glDeleteTextures(1, textures);
+
+	// Cleanup RBOs
+	glDeleteRenderbuffers(1, &fbo->depthBufferName);
+
+	// Cleanup FBOs
+	glDeleteFramebuffers(1, &fbo->fboName);
+}
 
 /*
 	鼠标左键是否常按着
@@ -770,36 +830,92 @@ changeCam()
 	multi2(p->modelViewMatrix,pos,temp2);
 }
 */
-static void 
-updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar){
-	struct EX* p = ex_getIns();
+//构造模型矩阵,将cam矩阵左乘到模型矩阵
+static void
+f_build_modelMatrix(Matrix44f m,struct ECamera* pcam){
+	//struct EX* p = ex_getIns();
+	struct ECamera cam = *pcam;//p->cam;
+	//Matrix44f m = p->modelViewMatrix;
+	float tmp;
+	Matrix44f xyz,rx,ry,rz;
+	//x,y,z坐标
+	mat4x4_identity(xyz);
+	mat4x4_translate(xyz,cam.x,cam.y,cam.z);
 
+	//旋转===================================================
+	//rx
+	mat4x4_identity(rx);
+	mat4x4_rotateX(rx,-cam.rx);
+
+	//ry
+	mat4x4_identity(ry);
+	mat4x4_rotateY(ry,-cam.ry);
+
+	//rz
+	mat4x4_identity(rz);
+	mat4x4_rotateZ(rz,-cam.rz);
+
+	mat4x4_zero(m);
+	
+	mat4x4_mult(4,m,rz,ry,rx,xyz);
+
+	//################################
+	tmp = m[7];
+	m[7] = m[14];
+	m[14] = tmp;
+
+	tmp = m[11];
+	m[11] = m[13];
+	m[13] = tmp;
+}
+
+//用固定管线计算的透视矩阵和模型矩阵
+static void
+f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
+					   GLdouble zNear, GLdouble zFar){
+	struct EX* p = ex_getIns();
 	struct ECamera cam = p->cam;
 	//只是处理鼠标拾取操作用来获取坐标使用gluUnProject,3d物体 不使用该方式(使用用户自定义的透视矩阵,视图矩阵,模型矩阵)
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
 	gluPerspective (fov,aspectRatio,zNear,zFar);
-	
+
 	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity ();
-
+	
 	glRotatef(-180/PI*p->cam.rx,1,0,0);
 	glRotatef(-180/PI*p->cam.ry,0,1,0);
 	glRotatef(-180/PI*p->cam.rz,0,0,1);
 	glTranslatef(cam.x,cam.y,cam.z);
-
+	//
 	mat4x4_zero(p->modelViewMatrix);
 	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
+
 	mat4x4_transpose(p->modelViewMatrix);
 
 	mat4x4_zero(p->perspectiveMatrix);
 	glGetFloatv(GL_PROJECTION_MATRIX,p->perspectiveMatrix);
-	mat4x4_transpose(p->perspectiveMatrix);
-	//{
-	//	GLdouble rFov = fov * PI / 180.0;
-	//	mat4x4_zero(p->perspectiveMatrix);
-	//	perspectiveFrustum(p->perspectiveMatrix, -zNear * tan( rFov / 2.0 ) * aspectRatio,zNear * tan( rFov / 2.0 ) * aspectRatio,-zNear * tan( rFov / 2.0 ),zNear * tan( rFov / 2.0 ),zNear, zFar);
-	//}	
+
+	mat4x4_transpose(p->perspectiveMatrix);	
+}
+
+static void 
+updatePerspectiveMatrix( 
+						GLdouble fov, GLdouble aspectRatio,
+						GLdouble zNear, GLdouble zFar){
+	struct EX* p = ex_getIns();
+
+	struct ECamera cam = p->cam;
+	
+	//f_used_normal_perctive(fov,aspectRatio,zNear,zFar);return;//使用固定管线计算出透视矩阵和模型矩阵
+	
+	f_build_modelMatrix(p->modelViewMatrix,&p->cam);
+	mat4x4_transpose(p->modelViewMatrix);
+
+	mat4x4_zero(p->perspectiveMatrix);
+	mat4x4_perspective(p->perspectiveMatrix,fov,aspectRatio,zNear,zFar);
+
+	mat4x4_transpose(p->perspectiveMatrix);	
 }
 
 /*
@@ -808,7 +924,8 @@ updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLd
 void ex_updatePerspctiveModelView()
 {
 	struct EX* p = ex_getIns();
-	updatePerspectiveMatrix(45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
+	if(p->_screenWidth!=0 && p->_screenHeight!=0)
+		updatePerspectiveMatrix(45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
 }
 
 /*
@@ -876,6 +993,14 @@ _new(){
 
 	//填充背景为白色
 	glClearColor(p->bg_r,p->bg_g,p->bg_b,1);
+	
+	// Reset FBO. Draw world again from the real cameras perspective
+	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	
+	//切换到前台帧缓冲
+	glDrawBuffers(1, windowBuff);
+
+
 
 	//深度测试
 	glEnable(GL_DEPTH_TEST);
@@ -918,6 +1043,7 @@ _new(){
 		f_renderlistCall(tf_render);
 
 		//渲染文本(非常耗费性能,待优化)
+		// 2019.8.26 此处已经优化成Sprite模式的字体渲染
 		if(getv(&p->flags,EX_FLAGS_DRAW_DEBUG_TEXT)) {
 			//drawText(p);
 		}

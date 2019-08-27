@@ -128,7 +128,9 @@ DLLIMPORT void Quat_rotatePoint (const Quat4_t q, const Vec3_t in, Vec3_t out);
 DLLIMPORT float Quat_dotProduct (const Quat4_t qa, const Quat4_t qb);
 
 DLLIMPORT void  Quat_slerp (const Quat4_t qa, const Quat4_t qb, float t, Quat4_t out);
-
+//构造透视矩阵
+DLLIMPORT void 
+mat4x4_perspective(Matrix44f M,float fov, float aspectRatio, float zNear, float zFar );
 
 
 ///*vec设置*/
