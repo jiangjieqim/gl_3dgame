@@ -466,7 +466,8 @@ ftext_set_hit(void* p,
 void
 ftext_dispose(void* p){
 	FText* txt = (FText*)p;
-	f_del_wordlist(txt);
+	if(txt->wordList)
+		f_del_wordlist(txt);
 	if(txt->words){
 		tl_free(txt->words);
 		txt->words = 0;

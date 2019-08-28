@@ -1,26 +1,27 @@
 dofile("..\\include\\lua\\core.lua");
+--[[
 function f_onkey(data)
 	local key = tonumber(data);
 	if(key == KEY_ESC) then
         ex:exit();	
 	end
 end
-
-evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
-ex:bgColor(0.3,0.3,0.3);
---ex:bgColor(1,1,1);
---ex:bgColor(0.5,0.5,0.5);
+--]]
+--evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
+--ex:bgColor(0.3,0.3,0.3);--灰色
+ex:bgColor(1,1,1);--白色
+--ex:bgColor(0.9,0.9,0.9);
 
 
 --fps(0,15);
---infowin(0,0);
+infowin(0,0);
 
 local sprite =sprite_create("bg11",100,50,128,14);
 func_setIcon(sprite,"gundi.png");
-setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
+--setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
 
 
-alert("文本");
+--alert("文本");
 
 local _in = input_create();
 input_set_pos(_in,100,50);
@@ -39,7 +40,7 @@ local function f_onkey(data)
         
 	end
 end
-evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
+evt_on(_in,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 --input_dispose(_in);
 
@@ -49,8 +50,8 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 
 local function loadFloor()
-	cam:position(0,-5,-5);
-	cam:rx(PI * 1.8);
+	--cam:position(1.5,-5,-6.5);
+	--cam:rx(PI * 1.8);
 	--地板
 	local plane = UnitBase:new();
 	--plane:load_model(nil,"//resource//material//floor.mat");

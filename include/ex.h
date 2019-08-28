@@ -16,7 +16,7 @@
 	设置静态碰撞盒子,设置成TRUE就可以射线检测,不检测射线拾取,这是一个整体开关,单个模型可以单独设置
 */
 #define EX_FLAGS_RAY 0x01
-#define EX_FLAGS_DRAW_DEBUG_TEXT 0x02	/*是否显示调试信息的文本在标题处*/
+//#define EX_FLAGS_DRAW_DEBUG_TEXT 0x02	/*是否显示调试信息的文本在标题处*/
 #define EX_FLAGS_RAY_TO_UI 0x04			/*是否点击到了界面元素*/
 #define EX_FLAGS_LEFT_DOWN 0x08			/*鼠标是否左键常按着*/
 
@@ -269,7 +269,7 @@ void setBgColor(float r,float g,float b);
 /*
 	打印引擎当前信息
 */
-void ex_info();
+void ex_get_info();
 
 /*
 	更新场景中的界面坐标
@@ -423,4 +423,9 @@ ex_lua_global_evt_dispatch(int evtid);
 //重置2d舞台尺寸
 void 
 ex_resize_stage2d();
+
+/*
+ *计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
+ */
+void ex_calculat_ortho();
 #endif

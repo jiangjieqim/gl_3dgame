@@ -360,18 +360,19 @@ void perspectiveFrustum(Matrix44f M, float left, float right, float top, float b
 	M[0]  =2*near/(right -left);
     M[2]  =(right +left)/(right -left);
     
-	M[5]  = 2*near/(top -bottom);
+	//M[5]  = 2*near/(top -bottom);
 	M[5]  = -2*near/(top -bottom);//这里翻转一下
 
     M[6]  =(top +bottom)/(top -bottom);
     M[10] =(near +far)/(near -far);
 
-	M[11] =-1.0;
-    M[14] =2*near*far/(near -far);
-    
+	//M[14] =-1.0;
+    //M[11] =2*near*far/(near -far);
 
-	/*M[11] =-1.0;
-	M[14] =2*near*far/(near -far);*/
+	M[11] =-1.0;
+	M[14] =2*near*far/(near -far);
+
+	M[15] = 0;
 }
 void 
 mat4x4_perspective(Matrix44f M,float fov, float aspectRatio, float zNear, float zFar ){
@@ -387,16 +388,26 @@ mat4x4_perspective(Matrix44f M,float fov, float aspectRatio, float zNear, float 
 		zNear * tanf( rFov / 2.0 ),
 		zNear, zFar );
 }
-void orthoPerspect(Matrix44f M,  float left, float right, float top, float bottom, float near, float far)
-{
-	//clearMat(M);
+void mat4x4_orthoPerspect(Matrix44f M,  float left, float right, float top, float bottom,
+				   float near, float far){
     M[0]  =2/(right -left);
+    M[3]  =(left +right)/(left -right);
+    M[5]  =2/(top -bottom)*-1;
+    M[7]  =(bottom +top)/(bottom -top)*-1;
+    M[10] =2/(near -far);
+    M[11] =(near +far)/(far -near)*-1;
+    M[15] =1.0;
+
+
+/*
+	M[0]  =2/(right -left);
     M[3]  =(left +right)/(left -right);
     M[5]  =2/(top -bottom);
     M[7]  =(bottom +top)/(bottom -top);
     M[10] =2/(near -far);
     M[11] =(near +far)/(far -near);
     M[15] =1.0;
+	*/
 }
 //
 //void matrix_m(float **a_matrix, const float **b_matrix, const float **c_matrix,

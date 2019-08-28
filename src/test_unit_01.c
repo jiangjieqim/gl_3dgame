@@ -241,7 +241,7 @@ f_key(int evtId,void* data,void* thisObj){
 			}
 			break;
 		case KEY_1:
-			ex_info();
+			//ex_info();
 			break;
 		case KEY_I:
 			

@@ -42,9 +42,12 @@ local function f_select(index)
     -- listbox_set_label(_l,label)
     -- listbox_set_label(_l,label)
 
+	--print(index);
+	
+	---[[
     if (index == 0) then
         func_ex_info();
-	alert("窗口测试:引擎信息");
+	    --alert("窗口测试:引擎信息");
     elseif (index == 1) then
         func_gc();
 --    elseif (index == 2) then
@@ -64,14 +67,17 @@ local function f_select(index)
 	elseif (index == 4) then
 		--创建一个mesh
 		f_loadObj();
+    elseif(index == 5) then
+        cam_reset();
     end
+	--]]
 end
 
 function infowin(x, y)
     if (list == nil) then
         list = ListBox:new(x or 0, y or 0, f_select);
 		list:isSetTitle(true);
-        list:add("引擎信息,gc,fps,背景颜色,创建mesh");
+        list:add("引擎信息,gc,fps,背景颜色,创建mesh,重置cam");
         
         -- list:add("线框ui");--切换线框渲染sprite
     end

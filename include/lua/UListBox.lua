@@ -84,6 +84,10 @@ local function f_select_call(list)
 	end
 	
 	func_set_sprite_size(list.bg,g_width,height)--重绘背景宽高
+	--设置点击区域范围
+	sprite_set_hit_rect(list.bg,0,0,g_width,height);
+	
+	--print(height);
 	
 	if(list.b_drop == false) then listbox_select(list,f_get_index(list))end
 end

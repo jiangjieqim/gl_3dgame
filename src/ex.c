@@ -432,11 +432,12 @@ void renderUI(GLenum mode){
 //	memcpy(name,targetName,strlen(targetName));
 //}
 
+Matrix44f ortho;
 /*
 打印引擎当前信息
 */
 void 
-ex_info(){
+ex_get_info(){
 	struct EX* ex = ex_getIns();
 	//EngineX* p = this;
 	struct ECamera cam = ex->cam;
@@ -459,6 +460,13 @@ ex_info(){
 	
 	printf( "vbo使用:%d bytes\n",tlgl_getVboSize());
 	printf( "当前(射线检测)状态:%d\n",getv(&(ex_getIns()->flags),EX_FLAGS_RAY));
+
+	//mat4x4_printf("perspectiveMatrix",ex->perspectiveMatrix);
+	//mat4x4_printf("modelViewMatrix",ex->modelViewMatrix);
+
+	mat4x4_printf("ui_perspectiveMatrix",ex->ui_perspectiveMatrix);
+	//mat4x4_printf("ui_modelViewMatrix",ex->ui_modelViewMatrix);
+	mat4x4_printf("ortho",ortho);
 }
 
 /*
@@ -832,7 +840,7 @@ changeCam()
 */
 //构造模型矩阵,将cam矩阵左乘到模型矩阵
 static void
-f_build_modelMatrix(Matrix44f m,struct ECamera* pcam){
+f_get_custom_modelMatrix(Matrix44f m,struct ECamera* pcam){
 	//struct EX* p = ex_getIns();
 	struct ECamera cam = *pcam;//p->cam;
 	//Matrix44f m = p->modelViewMatrix;
@@ -855,18 +863,39 @@ f_build_modelMatrix(Matrix44f m,struct ECamera* pcam){
 	mat4x4_identity(rz);
 	mat4x4_rotateZ(rz,-cam.rz);
 
-	mat4x4_zero(m);
+	mat4x4_identity(m);
 	
-	mat4x4_mult(4,m,rz,ry,rx,xyz);
+	mat4x4_mult(4,m,rx,ry,rz,xyz);
 
 	//################################
-	tmp = m[7];
+	/*tmp = m[7];
 	m[7] = m[14];
 	m[14] = tmp;
 
 	tmp = m[11];
 	m[11] = m[13];
-	m[13] = tmp;
+	m[13] = tmp;*/
+
+	mat4x4_transpose(m);
+}
+
+static void
+f_getModelMat4x4(){
+	struct EX* p = ex_getIns();
+	struct ECamera cam = p->cam;
+
+	glMatrixMode (GL_MODELVIEW);
+	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
+	glLoadIdentity ();
+	
+	glRotatef(-180/PI*p->cam.rx,1,0,0);
+	glRotatef(-180/PI*p->cam.ry,0,1,0);
+	glRotatef(-180/PI*p->cam.rz,0,0,1);
+	glTranslatef(cam.x,cam.y,cam.z);
+	//
+	mat4x4_zero(p->modelViewMatrix);
+	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
+	mat4x4_transpose(p->modelViewMatrix);
 }
 
 //用固定管线计算的透视矩阵和模型矩阵
@@ -880,49 +909,38 @@ f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
 	glLoadIdentity ();
 	gluPerspective (fov,aspectRatio,zNear,zFar);
 
-	glMatrixMode (GL_MODELVIEW);
-	glLoadIdentity ();
-	
-	glRotatef(-180/PI*p->cam.rx,1,0,0);
-	glRotatef(-180/PI*p->cam.ry,0,1,0);
-	glRotatef(-180/PI*p->cam.rz,0,0,1);
-	glTranslatef(cam.x,cam.y,cam.z);
-	//
-	mat4x4_zero(p->modelViewMatrix);
-	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
-
-	mat4x4_transpose(p->modelViewMatrix);
-
-	mat4x4_zero(p->perspectiveMatrix);
+	mat4x4_identity(p->perspectiveMatrix);
 	glGetFloatv(GL_PROJECTION_MATRIX,p->perspectiveMatrix);
-
 	mat4x4_transpose(p->perspectiveMatrix);	
+
+	f_getModelMat4x4();
 }
 
-static void 
+static void
 updatePerspectiveMatrix( 
 						GLdouble fov, GLdouble aspectRatio,
 						GLdouble zNear, GLdouble zFar){
 	struct EX* p = ex_getIns();
 
-	struct ECamera cam = p->cam;
+	//struct ECamera cam = p->cam;
 	
 	//f_used_normal_perctive(fov,aspectRatio,zNear,zFar);return;//使用固定管线计算出透视矩阵和模型矩阵
-	
-	f_build_modelMatrix(p->modelViewMatrix,&p->cam);
-	mat4x4_transpose(p->modelViewMatrix);
 
-	mat4x4_zero(p->perspectiveMatrix);
+	//模型矩阵
+	//f_get_custom_modelMatrix(p->modelViewMatrix,&p->cam);//使用自定义计算出模型矩阵	
+	f_getModelMat4x4();
+
+	//透视矩阵
+	mat4x4_identity(p->perspectiveMatrix);
 	mat4x4_perspective(p->perspectiveMatrix,fov,aspectRatio,zNear,zFar);
-
 	mat4x4_transpose(p->perspectiveMatrix);	
+	
 }
 
 /*
 	计算透视和矩阵索引
 */
-void ex_updatePerspctiveModelView()
-{
+void ex_updatePerspctiveModelView(){
 	struct EX* p = ex_getIns();
 	if(p->_screenWidth!=0 && p->_screenHeight!=0)
 		updatePerspectiveMatrix(45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
@@ -946,23 +964,51 @@ void ex_updatePerspctiveModelView()
 	//} 
 	*/
 	//if(ex_getInstance()->drawLine_callBack)
-	//	ex_getInstance()->drawLine_callBack();
+	//	ex_getInstance()->drawLinhe_callBack();
 //}
+
+/*
+ *计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
+ */
+void ex_calculat_ortho(){
+	struct EX* p = ex_getIns();
+	mat4x4_identity(p->ui_perspectiveMatrix);
+	mat4x4_orthoPerspect(p->ui_perspectiveMatrix,0,p->_screenWidth,0,p->_screenHeight,0,-p->allzBuffer);
+	//mat4x4_transpose(p->ui_perspectiveMatrix);
+
+	mat4x4_identity(p->ui_modelViewMatrix);
+	mat4x4_transpose(p->ui_modelViewMatrix);
+
+	//printf("ex_calculat_ortho===>\n");
+}
+
+//固定管线计算正交矩阵
+static void
+f_static_calculat(){
+	struct EX* p = ex_getIns();
+			
+	//计算正交矩阵
+
+	//界面渲染,切换为正交视图
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, p->_screenWidth, 0, p->_screenHeight, 0, -p->allzBuffer);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	
+	mat4x4_identity(p->ui_modelViewMatrix);
+	glGetFloatv(GL_MODELVIEW_MATRIX,p->ui_modelViewMatrix);
+	mat4x4_transpose(p->ui_modelViewMatrix);
+
+	mat4x4_identity(p->ui_perspectiveMatrix);
+	glGetFloatv(GL_PROJECTION_MATRIX,p->ui_perspectiveMatrix);
+	mat4x4_transpose(p->ui_perspectiveMatrix);
+}
 
 static void 
 _new(){
 	struct EX* p = ex_getIns();
 	
-
-	//if(!p->_isinit){
-	//	if(g_fps == -1){//
-	//		printf("fps = %d\t%ld\n",get_longTime(),g_fps);
-	//	}else{
-	//		
-	//		evt_dispatch(p,EVENT_ENGING_INIT,0);
-	//		p->_isinit = 1;
-	//	}
-	//}
 	//计算fps
 	f_calculate_fps();
 
@@ -972,19 +1018,7 @@ _new(){
 		//屏幕尺寸0的时候不进行渲染
 		return;
 	}
-	
-	/*if(ex_fps()>60){
-		f_calculate_fps();
-		printf("fps = %d\n",ex_fps());
-		Sleep(1000);
-		return;
-	}*/
-	//printf("fps = %d\n",ex_fps());
-	/*_time =  get_longTime();
-	_delayTime = _time - _longTime;
-	_longTime = _time;*/
-	//_time =  get_longTime();
-	//_delayTime = _time - _longTime;
+
 	g_delayTime = get_longTime() - _longTime;
 	
 	_longTime =  get_longTime();
@@ -1000,8 +1034,6 @@ _new(){
 	//切换到前台帧缓冲
 	glDrawBuffers(1, windowBuff);
 
-
-
 	//深度测试
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
@@ -1012,46 +1044,24 @@ _new(){
 
 	//drawLine(2000);
 	//f_drawline();
-
 	evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
-	
-	
-
 	ex_lua_global_evt_dispatch(EVENT_ENGINE_RENDER_3D);
 
-	//ex_renderlistCall(sprite_drawRender);//test
-	if(TRUE)//FALSE
-	{
+	//f_static_calculat();	// fps 900 - 1300
+	//ex_calculat_ortho();//fps 900 - 1600
+	
+	f_renderlistCall(sprite_drawRender);
 
-		//界面渲染,切换为正交视图
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0, p->_screenWidth, 0, p->_screenHeight, 0, -p->allzBuffer);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+	//废弃此字体的渲染,一律采用将文本数据copy到Sprite渲染出来
+	//f_renderlistCall(tf_render);
 
-		mat4x4_zero(p->ui_modelViewMatrix);
-		glGetFloatv(GL_MODELVIEW_MATRIX,p->ui_modelViewMatrix);
-		mat4x4_transpose(p->ui_modelViewMatrix);
-
-		mat4x4_zero(p->ui_perspectiveMatrix);
-		glGetFloatv(GL_PROJECTION_MATRIX,p->ui_perspectiveMatrix);
-		mat4x4_transpose(p->ui_perspectiveMatrix);
-
-		
-		f_renderlistCall(sprite_drawRender);
-		f_renderlistCall(tf_render);
-
-		//渲染文本(非常耗费性能,待优化)
-		// 2019.8.26 此处已经优化成Sprite模式的字体渲染
-		if(getv(&p->flags,EX_FLAGS_DRAW_DEBUG_TEXT)) {
-			//drawText(p);
-		}
-	}
+	//渲染文本(非常耗费性能,待优化)
+	// 2019.8.26 此处已经优化成Sprite模式的字体渲染
+	//if(getv(&p->flags,EX_FLAGS_DRAW_DEBUG_TEXT)) {drawText(p);}
 
 	glutSwapBuffers ();
 	glutPostRedisplay ();
-	
+
 
 	//渐变管理器回调
 	//ramp_callBack();
@@ -1063,8 +1073,6 @@ _new(){
 	}
 
 	tween_run(_longTime,g_delayTime);
-
-	
 
 	//printf("**** %d\n",p->fps);
 }
@@ -1892,12 +1900,6 @@ ex_cam_set_pos(float x,float y,float z){
 	//printf("setCamPos	%f,%f,%f\n",x,y,z);
 	ex_updatePerspctiveModelView();
 }
-//void 
-//ex_cam_bind(void* ptr){
-//	struct EX* ex = ex_getInstance();	
-//	struct ECamera* cam = &ex->cam;
-//	cam->ptrFollow = ptr;
-//}
 struct EX* ex_create()
 {
 	return ex_getIns();
