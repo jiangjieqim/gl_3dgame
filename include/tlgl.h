@@ -244,4 +244,9 @@ void tlgl_drawColorLine(
 				   GLfloat* vertex,int vertLen,
 				   float r,float g,float b
 				   );
+
+//坐标和旋转轴转化成一个矩阵
+void
+tlgl_get_matrix(Matrix44f m,float x,float y,float z,
+					float rx,float ry,float rz);
 #endif

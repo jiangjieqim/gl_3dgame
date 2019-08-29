@@ -883,9 +883,9 @@ static void
 f_getModelMat4x4(){
 	struct EX* p = ex_getIns();
 	struct ECamera cam = p->cam;
-
+/*
 	glMatrixMode (GL_MODELVIEW);
-	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
+	//glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
 	glLoadIdentity ();
 	
 	glRotatef(-180/PI*p->cam.rx,1,0,0);
@@ -896,6 +896,10 @@ f_getModelMat4x4(){
 	mat4x4_zero(p->modelViewMatrix);
 	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
 	mat4x4_transpose(p->modelViewMatrix);
+*/
+	tlgl_get_matrix(p->modelViewMatrix,
+		cam.x,cam.y,cam.z,
+		cam.rx,cam.ry,cam.rz);
 }
 
 //用固定管线计算的透视矩阵和模型矩阵
@@ -931,7 +935,7 @@ updatePerspectiveMatrix(
 	f_getModelMat4x4();
 
 	//透视矩阵
-	mat4x4_identity(p->perspectiveMatrix);
+	//mat4x4_identity(p->perspectiveMatrix);
 	mat4x4_perspective(p->perspectiveMatrix,fov,aspectRatio,zNear,zFar);
 	mat4x4_transpose(p->perspectiveMatrix);	
 	
