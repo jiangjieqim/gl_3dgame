@@ -219,11 +219,11 @@ f_key(int evtId,void* data,void* thisObj){
 			break;
 		case KEY_B:
 			ex_getIns()->cam.rx += PI * 0.1;
-			ex_updatePerspctiveModelView();
+			//ex_updatePerspctiveModelView();
 			break;
 		case KEY_C:
 			ex_getIns()->cam.rx -= PI * 0.1;
-			ex_updatePerspctiveModelView();
+			//ex_updatePerspctiveModelView();
 			break;
 		case KEY_D:
 			{
@@ -388,7 +388,7 @@ REG_test_unit_01_init(lua_State *L){
 	//_ptr = MALLOC(10);
 
 	//添加一个3D渲染回调
-	evt_on(ex_getIns(),EVENT_ENGINE_RENDER_3D,f_drawLine,0);
+	//evt_on(ex_getIns(),EVENT_ENGINE_RENDER_3D,f_drawLine,0);
 
 	obj1Base =  base_get(ex_find("myObj1"));
 	//添加对象拾取监听事件

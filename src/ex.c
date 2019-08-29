@@ -432,7 +432,7 @@ void renderUI(GLenum mode){
 //	memcpy(name,targetName,strlen(targetName));
 //}
 
-Matrix44f ortho;
+//Matrix44f ortho;
 /*
 打印引擎当前信息
 */
@@ -464,9 +464,9 @@ ex_get_info(){
 	//mat4x4_printf("perspectiveMatrix",ex->perspectiveMatrix);
 	//mat4x4_printf("modelViewMatrix",ex->modelViewMatrix);
 
-	mat4x4_printf("ui_perspectiveMatrix",ex->ui_perspectiveMatrix);
+	//mat4x4_printf("ui_perspectiveMatrix",ex->ui_perspectiveMatrix);
 	//mat4x4_printf("ui_modelViewMatrix",ex->ui_modelViewMatrix);
-	mat4x4_printf("ortho",ortho);
+	//mat4x4_printf("ortho",ortho);
 }
 
 /*
@@ -892,7 +892,7 @@ f_getModelMat4x4(){
 	glRotatef(-180/PI*p->cam.ry,0,1,0);
 	glRotatef(-180/PI*p->cam.rz,0,0,1);
 	glTranslatef(cam.x,cam.y,cam.z);
-	//
+	
 	mat4x4_zero(p->modelViewMatrix);
 	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
 	mat4x4_transpose(p->modelViewMatrix);
@@ -940,7 +940,8 @@ updatePerspectiveMatrix(
 /*
 	计算透视和矩阵索引
 */
-void ex_updatePerspctiveModelView(){
+void 
+ex_updatePerspctiveModelView(){
 	struct EX* p = ex_getIns();
 	if(p->_screenWidth!=0 && p->_screenHeight!=0)
 		updatePerspectiveMatrix(45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
@@ -1009,15 +1010,15 @@ static void
 _new(){
 	struct EX* p = ex_getIns();
 	
-	//计算fps
-	f_calculate_fps();
+	
 
 	//long _time;
-	if(p->_screenWidth <= 0 || p->_screenHeight<=0)
-	{
+	if(p->_screenWidth <= 0 || p->_screenHeight<=0){
 		//屏幕尺寸0的时候不进行渲染
 		return;
 	}
+	//计算fps
+	f_calculate_fps();
 
 	g_delayTime = get_longTime() - _longTime;
 	
@@ -1044,8 +1045,10 @@ _new(){
 
 	//drawLine(2000);
 	//f_drawline();
-	evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
+	
+	//evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
 	ex_lua_global_evt_dispatch(EVENT_ENGINE_RENDER_3D);
+
 
 	//f_static_calculat();	// fps 900 - 1300
 	//ex_calculat_ortho();//fps 900 - 1600
