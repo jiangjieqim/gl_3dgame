@@ -1,9 +1,9 @@
 --加载两个角色模型,点击地面实现移动行走
 
 --设置cam
-cam_setPosition(0,0,0);
---cam_setRotateX(PI * 1.8);
 
+cam_setRotateX(PI * 1.8);
+cam_setPosition(0,0,-6);
 --cam:rx(PI * 1.8);
 ----------------------------------------------------------------------------
 --local obj = UnitBase:new();
@@ -15,7 +15,7 @@ cam_setPosition(0,0,0);
 
 
 
---[[
+---[[
 local obj2 = UnitBase:new();
 obj2:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");--gobin,bauul
 obj2:scale(1/50);
@@ -33,7 +33,7 @@ obj2:setv(FLAGS_DISABLE_CULL_FACE);
 --选择box
 local select = UnitBase:new();
 select:loadbox();
-select:set_position(0,-2,-6);
+--select:set_position(0,-2,-6);
 
 local animsc = scrollBar_new(100,20);
 local function f_animscHandle(sc)
@@ -41,7 +41,7 @@ local function f_animscHandle(sc)
 	print("### n * PI, n = "..tostring(v/PI));
     --func_setRotateY(unit:get_ptr(),v);
     if(obj2) then
-        obj2:ry(v);
+		obj2:ry(v);
     end
     if(select)then
     --    select:ry(v);
@@ -69,7 +69,7 @@ plane:setv(FLAGS_DRAW_PLOYGON_LINE);
 plane:scale(20);
 glsl_set(plane.material,string.format("_lineColor,%s","0.5,0.5,0.5"));
 glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())));--设置diffuse.vs (uniform float _uvScale)uv重复值
-plane:set_position(0,-2,0);
+--plane:set_position(0,-2,0);
 local function f_on_click_floor_handle(data)
     local pos = func_split(data,",");--func_xml_to_tb(data);
     if(obj2) then

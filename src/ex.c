@@ -441,7 +441,9 @@ void
 ex_get_info(){
 	struct EX* ex = ex_getIns();
 	//EngineX* p = this;
-	struct ECamera cam = ex->cam;
+	//struct ECamera cam = ex->cam;
+
+	void* _cam = ex->_3dcam;
 	int totleByte,nodeCnt;
 	int j=0;
 	int fps = f_get_fps();
@@ -449,8 +451,15 @@ ex_get_info(){
 	printf("**********************************************\n");
 	//j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
 	log_color(0xffff00,"fps:%ld \n",fps);
-	log_color(0x00ff00,"camera 坐标  :      %.3f %.3f %.3f\n",cam.x,cam.y,cam.z);
-	log_color(0xff0000,"camera 角位移: PI = %.3f %.3f %.3f\n",cam.rx/PI,cam.ry/PI,cam.rz/PI);
+	log_color(0x00ff00,"camera 坐标  :      %.3f %.3f %.3f\n",
+		cam_getX(_cam),
+		cam_getY(_cam),
+		cam_getZ(_cam));
+	log_color(0xff0000,"camera 角位移: PI = %.3f %.3f %.3f\n",
+		cam_getRX(_cam)/PI,
+		cam_getRY(_cam)/PI,
+		cam_getRZ(_cam)/PI);
+	
 	log_color(0xff00ff,"draw call渲染节点个数:%d\n",LStack_length(ex->renderList));
 	
 	printf("屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
@@ -484,7 +493,7 @@ f_drawFps(){
 static void
 f_show_all_info(){
 	struct EX* p = ex_getIns();
-	struct ECamera cam = p->cam;
+	//struct ECamera cam = p->cam;
 	char buffer[G_BUFFER_256_SIZE];
 	int vbo = tlgl_getVboSize();
 	int j;
@@ -502,7 +511,7 @@ f_show_all_info(){
 	}
 
 	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d total %d bytes ",fps,size);
-	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb) cam: %f,%f,%f VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0,cam.x,cam.y,cam.z,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,get_longTime()*0.001);
+	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb) VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0/*,cam.x,cam.y,cam.z*/,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,get_longTime()*0.001);
 
 	ex_showLog(buffer);
 }
@@ -839,51 +848,58 @@ changeCam()
 	multi2(p->modelViewMatrix,pos,temp2);
 }
 */
+
+/*
 //构造模型矩阵,将cam矩阵左乘到模型矩阵
 static void
 f_get_custom_modelMatrix(Matrix44f m,struct ECamera* pcam){
 	//struct EX* p = ex_getIns();
-	struct ECamera cam = *pcam;//p->cam;
-	//Matrix44f m = p->modelViewMatrix;
-//	float tmp;
+	//struct ECamera cam = *pcam;//p->cam;
+	void* _cam = ex_getIns()->_3dcam;
+
+
 	Matrix44f xyz,rx,ry,rz;
 	//x,y,z坐标
 	mat4x4_identity(xyz);
-	mat4x4_translate(xyz,cam.x,cam.y,cam.z);
+	mat4x4_translate(
+		xyz,
+		cam_getX(_cam),
+		cam_getY(_cam),
+		cam_getY(_cam));
 
 	//旋转===================================================
 	//rx
 	mat4x4_identity(rx);
-	mat4x4_rotateX(rx,-cam.rx);
+	mat4x4_rotateX(rx,-cam_getRX(_cam));
 
 	//ry
 	mat4x4_identity(ry);
-	mat4x4_rotateY(ry,-cam.ry);
+	mat4x4_rotateY(ry,-cam_getRY(_cam));
 
 	//rz
 	mat4x4_identity(rz);
-	mat4x4_rotateZ(rz,-cam.rz);
+	mat4x4_rotateZ(rz,-cam_getRZ(_cam));
 
 	mat4x4_identity(m);
 	
 	mat4x4_mult(4,m,rx,ry,rz,xyz);
 
 	//################################
-	/*tmp = m[7];
-	m[7] = m[14];
-	m[14] = tmp;
+	//tmp = m[7];
+	//m[7] = m[14];
+	//m[14] = tmp;
 
-	tmp = m[11];
-	m[11] = m[13];
-	m[13] = tmp;*/
+	//tmp = m[11];
+	//m[11] = m[13];
+	//m[13] = tmp;
 
 	mat4x4_transpose(m);
 }
-
+*/
 static void
 f_getModelMat4x4(){
 	struct EX* p = ex_getIns();
-	struct ECamera cam = p->cam;
+	//struct ECamera cam = p->cam;
 /*
 	glMatrixMode (GL_MODELVIEW);
 	//glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
@@ -898,9 +914,11 @@ f_getModelMat4x4(){
 	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
 	mat4x4_transpose(p->modelViewMatrix);
 */
-	tlgl_get_matrix(p->modelViewMatrix,
-		cam.x,cam.y,cam.z,
-		cam.rx,cam.ry,cam.rz);
+	//tlgl_get_matrix(p->modelViewMatrix,
+		//cam.x,cam.y,cam.z,
+		//cam.rx,cam.ry,cam.rz);
+
+	cam_refreshModdel(p->_3dcam);
 }
 
 //用固定管线计算的透视矩阵和模型矩阵
@@ -1727,7 +1745,7 @@ void mouseMove(int x,int y)
 		//鼠标常按了点击了非UI元素
 		//printf("1");
 		
-		base_hit_mouse(x,y,e->_screenWidth,e->_screenHeight,e->renderList,cam_getPerctive(e->_3dcam)/*e->perspectiveMatrix*/,e->modelViewMatrix,f_rayPick);
+		base_hit_mouse(x,y,e->_screenWidth,e->_screenHeight,e->renderList,cam_getPerctive(e->_3dcam)/*e->perspectiveMatrix*/,cam_getModel(e->_3dcam)/*/*e->modelViewMatrix*/,f_rayPick);
 		//f_3d_pick();
 	}
 
@@ -1849,7 +1867,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 					
 					//ex->perspectiveMatrix
 					cam_getPerctive(ex->_3dcam)
-					,ex->modelViewMatrix,f_rayPick);
+					,cam_getModel(ex->_3dcam)/*ex->modelViewMatrix*/,f_rayPick);
 				//f_3d_pick();
 			}
 			
@@ -1911,14 +1929,23 @@ update3DNode(int data){
 void 
 ex_cam_set_pos(float x,float y,float z){
 	struct EX* ex = ex_getIns();	
-	struct ECamera* cam = &ex->cam;
-/*
+	//struct ECamera* cam = &ex->cam;
+	void* _c = ex->_3dcam;
+	
+	/*
 	if(cam->ptrFollow){
 		return;
 	}
 */
 	//ex->camx = x;	ex->camy = y;	ex->camz = z;
-	cam->x = x; cam->y = y; cam->z = z;
+
+
+	//cam->x = x; cam->y = y; cam->z = z;
+	cam_setX(_c,x);
+	cam_setY(_c,y);
+	cam_setZ(_c,z);
+
+
 
 	//更新渲染列表中的矩阵
 	f_renderlistCall(update3DNode);

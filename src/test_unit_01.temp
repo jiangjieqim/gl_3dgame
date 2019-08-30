@@ -218,11 +218,11 @@ f_key(int evtId,void* data,void* thisObj){
 			ex_animtor_ptr_setcur(f_getHorse(),"jump",playend);//设置一次跳跃动作
 			break;
 		case KEY_B:
-			ex_getIns()->cam.rx += PI * 0.1;
+			//ex_getIns()->cam.rx += PI * 0.1;
 			//ex_updatePerspctiveModelView();
 			break;
 		case KEY_C:
-			ex_getIns()->cam.rx -= PI * 0.1;
+			//ex_getIns()->cam.rx -= PI * 0.1;
 			//ex_updatePerspctiveModelView();
 			break;
 		case KEY_D:
@@ -291,21 +291,23 @@ f_followCamera(){
 
 		//设置camera距离角色一定偏移
 		
-		struct ECamera* cam = &ex_getIns()->cam;
-		//Vec3* offset = &cam.followOffset;
-		Vec3 rolePos,camPos;
-		struct HeadInfo* role = (struct HeadInfo*)_horse;
-		
-		//float offset = -0.0f;//偏移
-		ex_getIns()->cam.rx = PI * 1.7;
-		ex_cam_set_pos(-role->x,-5.0f,-role->z+cam->y);//-20
 
-		vec3Set(&rolePos,role->x,role->y,role->z);
-		vec3Set(&camPos,cam->x,cam->y,cam->z);
-		vec3Reverse(&camPos);
-		//vec3Sub(&rolePos,&camPos,&cam->followOffset);
-		//vec3Normalize(&cam->followOffset);
-		_followTicket = get_longTime();
+
+		//struct ECamera* cam = &ex_getIns()->cam;
+		////Vec3* offset = &cam.followOffset;
+		//Vec3 rolePos,camPos;
+		//struct HeadInfo* role = (struct HeadInfo*)_horse;
+		//
+		////float offset = -0.0f;//偏移
+		//ex_getIns()->cam.rx = PI * 1.7;
+		//ex_cam_set_pos(-role->x,-5.0f,-role->z+cam->y);//-20
+
+		//vec3Set(&rolePos,role->x,role->y,role->z);
+		////vec3Set(&camPos,cam->x,cam->y,cam->z);
+		//vec3Reverse(&camPos);
+		////vec3Sub(&rolePos,&camPos,&cam->followOffset);
+		////vec3Normalize(&cam->followOffset);
+		//_followTicket = get_longTime();
 	}
 }
 
@@ -356,8 +358,8 @@ f_drawLine(int evtId,void* data,void* thisObj){
 			f_followCamera();
 			break;
 		case CAM_2:
-			ex_getIns()->cam.rx = 0;
-			ex_cam_set_pos(0,0,-5);
+			//ex_getIns()->cam.rx = 0;
+			//ex_cam_set_pos(0,0,-5);
 			
 			break;
 	}

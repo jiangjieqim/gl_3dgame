@@ -110,7 +110,7 @@ struct EX
 	*/
 	//float camx,camy,camz;
 	//float camRotateX,camRotateY,camRotateZ;
-	struct ECamera cam;//camera
+	//struct ECamera cam;//camera
 	/*
 		各种枚举定义,二进制位存储
 	*/
@@ -185,7 +185,7 @@ struct EX
 	/*
 		模型视图矩阵
 	*/
-	Matrix44f modelViewMatrix;
+	//Matrix44f modelViewMatrix;
 
 	Matrix44f ui_perspectiveMatrix;
 	Matrix44f ui_modelViewMatrix;
@@ -203,7 +203,8 @@ struct EX
 
 	//当前鼠标的焦点(struct Sprite*)
 	void* curFocus;
-
+	
+	//3d Camera引用
 	void* _3dcam;
 };
 
