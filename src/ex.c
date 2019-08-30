@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdarg.h>
 
+#include "camera.h"
 #include "tools.h"
 #include "str.h"
 #include "ftfont.h"
@@ -844,7 +845,7 @@ f_get_custom_modelMatrix(Matrix44f m,struct ECamera* pcam){
 	//struct EX* p = ex_getIns();
 	struct ECamera cam = *pcam;//p->cam;
 	//Matrix44f m = p->modelViewMatrix;
-	float tmp;
+//	float tmp;
 	Matrix44f xyz,rx,ry,rz;
 	//x,y,z坐标
 	mat4x4_identity(xyz);
@@ -907,15 +908,20 @@ static void
 f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
 					   GLdouble zNear, GLdouble zFar){
 	struct EX* p = ex_getIns();
-	struct ECamera cam = p->cam;
+	Matrix44f _out;
+
+
+	//struct ECamera cam = p->cam;
 	//只是处理鼠标拾取操作用来获取坐标使用gluUnProject,3d物体 不使用该方式(使用用户自定义的透视矩阵,视图矩阵,模型矩阵)
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
 	gluPerspective (fov,aspectRatio,zNear,zFar);
 
-	mat4x4_identity(p->perspectiveMatrix);
-	glGetFloatv(GL_PROJECTION_MATRIX,p->perspectiveMatrix);
-	mat4x4_transpose(p->perspectiveMatrix);	
+	mat4x4_identity(_out);
+	glGetFloatv(GL_PROJECTION_MATRIX,_out);
+	mat4x4_transpose(_out);	
+	
+	//mat4x4_copy(_out,p->perspectiveMatrix);
 
 	f_getModelMat4x4();
 }
@@ -934,11 +940,14 @@ updatePerspectiveMatrix(
 	//f_get_custom_modelMatrix(p->modelViewMatrix,&p->cam);//使用自定义计算出模型矩阵	
 	f_getModelMat4x4();
 
+
 	//透视矩阵
-	//mat4x4_identity(p->perspectiveMatrix);
+	/*
+	mat4x4_identity(p->perspectiveMatrix);
 	mat4x4_perspective(p->perspectiveMatrix,fov,aspectRatio,zNear,zFar);
 	mat4x4_transpose(p->perspectiveMatrix);	
-	
+	*/
+	cam_setPerspect(p->_3dcam,fov,aspectRatio,zNear,zFar);
 }
 
 /*
@@ -1159,6 +1168,8 @@ ex_init(struct EX* p,GLdouble zfar){
 	p->allzBuffer = -90000;	//初始化一个Z深度,此深度标识3d层的
 	p->ui_pos_z =  -1000;	//此深度如果小于3d层,那么界面将在3d界面后面
 	
+	p->_3dcam = cam_create();
+
 	//p->zBuffer = p->allzBuffer+1;
 	p->clickInfo = tl_malloc(sizeof(struct ClickInfo));
 	{
@@ -1191,6 +1202,8 @@ void ex_dispose(struct EX* p){
 	printf("销毁引擎设备!\n");
 	//getch();
 	
+	cam_dispose(p->_3dcam);
+
 	tl_free(p->clickInfo);
 	p->clickInfo = 0;
 
@@ -1713,7 +1726,8 @@ void mouseMove(int x,int y)
 	if(f_is_mouse_leftDown()  && !getv(&(e->flags),EX_FLAGS_RAY_TO_UI)){
 		//鼠标常按了点击了非UI元素
 		//printf("1");
-		base_hit_mouse(x,y,e->_screenWidth,e->_screenHeight,e->renderList,e->perspectiveMatrix,e->modelViewMatrix,f_rayPick);
+		
+		base_hit_mouse(x,y,e->_screenWidth,e->_screenHeight,e->renderList,cam_getPerctive(e->_3dcam)/*e->perspectiveMatrix*/,e->modelViewMatrix,f_rayPick);
 		//f_3d_pick();
 	}
 
@@ -1831,7 +1845,11 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 		}else{
 			//3D世界拾取
 			if(getv(&(ex->flags),EX_FLAGS_RAY)){
-				base_hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,ex->perspectiveMatrix,ex->modelViewMatrix,f_rayPick);
+				base_hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,
+					
+					//ex->perspectiveMatrix
+					cam_getPerctive(ex->_3dcam)
+					,ex->modelViewMatrix,f_rayPick);
 				//f_3d_pick();
 			}
 			

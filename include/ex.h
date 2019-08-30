@@ -1,6 +1,9 @@
 #ifndef _EX_H_
 #define _EX_H_
 #include "tlgl.h"
+
+
+
 #include "lua.h"
 //#include "lualib.h"
 //#include "lauxlib.h"
@@ -178,7 +181,7 @@ struct EX
 	/*
 		透视矩阵
 	*/
-	Matrix44f perspectiveMatrix;
+	//Matrix44f perspectiveMatrix;
 	/*
 		模型视图矩阵
 	*/
@@ -200,6 +203,8 @@ struct EX
 
 	//当前鼠标的焦点(struct Sprite*)
 	void* curFocus;
+
+	void* _3dcam;
 };
 
 //接口定义

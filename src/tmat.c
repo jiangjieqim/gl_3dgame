@@ -10,6 +10,7 @@
 #include "jgl.h"
 #include "ex.h"
 #include "gettime.h"
+#include "camera.h"
 //#define _DEBUG_
 
 
@@ -198,7 +199,8 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M)
 	//Í¸ÊÓ±ä»»¾ØÕó
 	if(_perspectivePtr!=-1)
 	{
-		f_uploadMat4x4(_perspectivePtr,ex_getIns()->perspectiveMatrix);
+		void* perspect = cam_getPerctive(ex_getIns()->_3dcam);
+		f_uploadMat4x4(_perspectivePtr,perspect/*ex_getIns()->perspectiveMatrix*/);
 	}
 
 	if(_modelViewPtr!=-1)
