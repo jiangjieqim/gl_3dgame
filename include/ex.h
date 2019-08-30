@@ -187,8 +187,8 @@ struct EX
 	*/
 	//Matrix44f modelViewMatrix;
 
-	Matrix44f ui_perspectiveMatrix;
-	Matrix44f ui_modelViewMatrix;
+	//Matrix44f ui_perspectiveMatrix;
+	//Matrix44f ui_modelViewMatrix;
 	//struct Atals* myAtals;//废弃
 	
 	//int _isinit;//引擎是否已经初始化
@@ -206,6 +206,9 @@ struct EX
 	
 	//3d Camera引用
 	void* _3dcam;
+
+	//2d Camera引用
+	void* _2dcam;
 };
 
 //接口定义
@@ -433,5 +436,5 @@ ex_resize_stage2d();
 /*
  *计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
  */
-void ex_calculat_ortho();
+//void ex_calculat_ortho();
 #endif

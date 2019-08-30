@@ -999,20 +999,21 @@ ex_updatePerspctiveModelView(){
 	//	ex_getInstance()->drawLinhe_callBack();
 //}
 
-/*
- *计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
- */
-void ex_calculat_ortho(){
-	struct EX* p = ex_getIns();
-	mat4x4_identity(p->ui_perspectiveMatrix);
-	mat4x4_orthoPerspect(p->ui_perspectiveMatrix,0,p->_screenWidth,0,p->_screenHeight,0,-p->allzBuffer);
-	//mat4x4_transpose(p->ui_perspectiveMatrix);
-
-	mat4x4_identity(p->ui_modelViewMatrix);
-	mat4x4_transpose(p->ui_modelViewMatrix);
-
-	//printf("ex_calculat_ortho===>\n");
-}
+///*
+// *计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
+// */
+//void ex_calculat_ortho(){
+//	struct EX* p = ex_getIns();
+//	//mat4x4_identity(p->ui_perspectiveMatrix);
+//	//mat4x4_orthoPerspect(p->ui_perspectiveMatrix,0,p->_screenWidth,0,p->_screenHeight,0,-p->allzBuffer);
+//	void* _2dCam = p->_2dcam;
+//	cam_setOrtho(_2dcam,0,p->_screenWidth,0,p->_screenHeight,0,-p->allzBuffer);
+//
+//
+//	//mat4x4_identity(p->ui_modelViewMatrix);
+//	//mat4x4_transpose(p->ui_modelViewMatrix);
+//	//printf("ex_calculat_ortho===>\n");
+//}
 
 //固定管线计算正交矩阵
 static void
@@ -1027,7 +1028,7 @@ f_static_calculat(){
 	glOrtho(0, p->_screenWidth, 0, p->_screenHeight, 0, -p->allzBuffer);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	
+	/*
 	mat4x4_identity(p->ui_modelViewMatrix);
 	glGetFloatv(GL_MODELVIEW_MATRIX,p->ui_modelViewMatrix);
 	mat4x4_transpose(p->ui_modelViewMatrix);
@@ -1035,6 +1036,7 @@ f_static_calculat(){
 	mat4x4_identity(p->ui_perspectiveMatrix);
 	glGetFloatv(GL_PROJECTION_MATRIX,p->ui_perspectiveMatrix);
 	mat4x4_transpose(p->ui_perspectiveMatrix);
+	*/
 }
 
 static void 
@@ -1187,7 +1189,7 @@ ex_init(struct EX* p,GLdouble zfar){
 	p->ui_pos_z =  -1000;	//此深度如果小于3d层,那么界面将在3d界面后面
 	
 	p->_3dcam = cam_create();
-
+	p->_2dcam = cam_create();
 	//p->zBuffer = p->allzBuffer+1;
 	p->clickInfo = tl_malloc(sizeof(struct ClickInfo));
 	{
@@ -1221,6 +1223,7 @@ void ex_dispose(struct EX* p){
 	//getch();
 	
 	cam_dispose(p->_3dcam);
+	cam_dispose(p->_2dcam);
 
 	tl_free(p->clickInfo);
 	p->clickInfo = 0;

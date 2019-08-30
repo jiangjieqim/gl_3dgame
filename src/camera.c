@@ -17,6 +17,7 @@ void* cam_create(){
 	struct Camera* c = (struct Camera*)p;
 	memset(p,0,sizeof(struct Camera));
 	
+	//初始化模型矩阵
 	mat4x4_identity(c->model);
 	mat4x4_transpose(c->model);
 	return p;
@@ -44,7 +45,7 @@ void cam_setModePosition(void* p,float x,float y,float z,
 void cam_setOrtho(void* p,float sw,float sh,float zbuffer){
 	struct Camera* c = (struct Camera*)p;
 	mat4x4_identity(c->perctive);
-	mat4x4_orthoPerspect(c->perctive,0,sw,0,sh,0,-zbuffer);	
+	mat4x4_orthoPerspect(c->perctive,0,sw,0,sh,0,zbuffer);	
 }
 
 //获取camera的齐次坐标矩阵

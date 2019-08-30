@@ -211,11 +211,11 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M)
 
 	if(ui_perspectivePtr!=-1)
 	{
-		f_uploadMat4x4(ui_perspectivePtr,ex_getIns()->ui_perspectiveMatrix);
+		f_uploadMat4x4(ui_perspectivePtr,cam_getPerctive(ex_getIns()->_2dcam)/*ex_getIns()->ui_perspectiveMatrix*/);
 	}
 	if(ui_modelViewPtr!=-1)
 	{
-		f_uploadMat4x4(ui_modelViewPtr,ex_getIns()->ui_modelViewMatrix);
+		f_uploadMat4x4(ui_modelViewPtr,cam_getModel(ex_getIns()->_2dcam)/*ex_getIns()->ui_modelViewMatrix*/);
 	}
 
 	if(mat2!=-1){
