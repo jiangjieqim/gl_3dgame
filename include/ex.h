@@ -87,16 +87,16 @@ struct MouseState
 	
 	int moveX,moveY;//当前移动的位置
 }; 
-struct ECamera{
-	/*
-	*	摄影机坐标
-	*/
-	float x,y,z;
-	double rx,ry,rz;
-	//void* ptrFollow;//跟随的引用对象
-	//float followDistance;//距离跟随对象的距离
-	//Vec3 followOffset;//相对于跟随角色的偏移值
-};
+//struct ECamera{
+//	/*
+//	*	摄影机坐标
+//	*/
+//	float x,y,z;
+//	double rx,ry,rz;
+//	//void* ptrFollow;//跟随的引用对象
+//	//float followDistance;//距离跟随对象的距离
+//	//Vec3 followOffset;//相对于跟随角色的偏移值
+//};
 //=============================================================================================================
 struct EX
 {	 
@@ -350,7 +350,11 @@ float ex_newPosZ();
 
 
 //void updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar);
-void ex_updatePerspctiveModelView();
+void ex_refresh3dModelView();
+
+//刷新3d齐次坐标矩阵,只会在渲染帧缓冲区尺寸发生变化的时候会调用该接口
+void
+ex_3dPerspctRefresh();
 
 /*
 	寻找md2,md5,obj,sprite节点

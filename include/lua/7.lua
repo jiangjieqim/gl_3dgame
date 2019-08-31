@@ -38,16 +38,18 @@ select:loadbox();
 local animsc = scrollBar_new(100,20);
 local function f_animscHandle(sc)
     local v = sc.value * PI * 2;
-	print("### n * PI, n = "..tostring(v/PI));
+	--print("### n * PI, n = "..tostring(v/PI));
     --func_setRotateY(unit:get_ptr(),v);
-    if(obj2) then
+    
+	scrollBar_label(animsc,v);
+	if(obj2) then
 		obj2:ry(v);
     end
     if(select)then
     --    select:ry(v);
     end
 
-    cam_setRotateX(v);
+ --  cam_setRotateX(v);
 end
 scrollBar_setRange(animsc,0,1)
 ----animscTf = scrollBar_add_text(animsc,'animsc')

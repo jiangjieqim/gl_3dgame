@@ -7,9 +7,9 @@
 #include "vmath.h"
 
 struct Camera{
-	float x,y,z,rx,ry,rz;
-	Matrix44f perctive;
-	Matrix44f model;
+	float x,y,z,rx,ry,rz;	//坐标,欧拉角
+	Matrix44f perctive;		//齐次空间矩阵
+	Matrix44f model;		//模型视图矩阵
 };
 
 void* cam_create(){

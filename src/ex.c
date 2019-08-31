@@ -943,40 +943,47 @@ f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
 
 	f_getModelMat4x4();
 }
+//
+//static void
+//updatePerspectiveMatrix( 
+//						GLdouble fov, GLdouble aspectRatio,
+//						GLdouble zNear, GLdouble zFar){
+//	struct EX* p = ex_getIns();
+//
+//	//struct ECamera cam = p->cam;
+//	
+//	//f_used_normal_perctive(fov,aspectRatio,zNear,zFar);return;//使用固定管线计算出透视矩阵和模型矩阵
+//
+//	//模型矩阵
+//	//f_get_custom_modelMatrix(p->modelViewMatrix,&p->cam);//使用自定义计算出模型矩阵	
+//	f_getModelMat4x4();
+//
+//
+//	//透视矩阵
+//	/*
+//	mat4x4_identity(p->perspectiveMatrix);
+//	mat4x4_perspective(p->perspectiveMatrix,fov,aspectRatio,zNear,zFar);
+//	mat4x4_transpose(p->perspectiveMatrix);	
+//	*/
+//	//cam_setPerspect(p->_3dcam,fov,aspectRatio,zNear,zFar);
+//}
 
-static void
-updatePerspectiveMatrix( 
-						GLdouble fov, GLdouble aspectRatio,
-						GLdouble zNear, GLdouble zFar){
-	struct EX* p = ex_getIns();
 
-	//struct ECamera cam = p->cam;
-	
-	//f_used_normal_perctive(fov,aspectRatio,zNear,zFar);return;//使用固定管线计算出透视矩阵和模型矩阵
-
-	//模型矩阵
-	//f_get_custom_modelMatrix(p->modelViewMatrix,&p->cam);//使用自定义计算出模型矩阵	
-	f_getModelMat4x4();
-
-
-	//透视矩阵
-	/*
-	mat4x4_identity(p->perspectiveMatrix);
-	mat4x4_perspective(p->perspectiveMatrix,fov,aspectRatio,zNear,zFar);
-	mat4x4_transpose(p->perspectiveMatrix);	
-	*/
-	cam_setPerspect(p->_3dcam,fov,aspectRatio,zNear,zFar);
-}
-
+ 
 /*
 	计算透视和矩阵索引
 */
 void 
-ex_updatePerspctiveModelView(){
-	struct EX* p = ex_getIns();
-	if(p->_screenWidth!=0 && p->_screenHeight!=0)
-		updatePerspectiveMatrix(45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
+ex_refresh3dModelView(){
+	f_getModelMat4x4();
 }
+
+void
+ex_3dPerspctRefresh(){
+	struct EX* p = ex_getIns();
+	cam_setPerspect(p->_3dcam,45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
+}
+
 
 /*
 	绘制线段
@@ -1953,7 +1960,7 @@ ex_cam_set_pos(float x,float y,float z){
 	//更新渲染列表中的矩阵
 	f_renderlistCall(update3DNode);
 	//printf("setCamPos	%f,%f,%f\n",x,y,z);
-	ex_updatePerspctiveModelView();
+	ex_refresh3dModelView();
 }
 struct EX* ex_create()
 {
