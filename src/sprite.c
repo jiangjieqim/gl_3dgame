@@ -716,11 +716,6 @@ sprite_drawRender(int data)
 
 	struct HeadInfo* base = spr->base;
 	
-	/*if(!spr->_renderState){
-		return;
-	}*/
-	
-
 	if(!sprite_isEnable((int)spr))
 	{
 		return;

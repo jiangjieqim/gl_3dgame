@@ -896,30 +896,30 @@ f_get_custom_modelMatrix(Matrix44f m,struct ECamera* pcam){
 	mat4x4_transpose(m);
 }
 */
-static void
-f_getModelMat4x4(){
-	struct EX* p = ex_getIns();
-	//struct ECamera cam = p->cam;
-/*
-	glMatrixMode (GL_MODELVIEW);
-	//glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
-	glLoadIdentity ();
-	
-	glRotatef(-180/PI*p->cam.rx,1,0,0);
-	glRotatef(-180/PI*p->cam.ry,0,1,0);
-	glRotatef(-180/PI*p->cam.rz,0,0,1);
-	glTranslatef(cam.x,cam.y,cam.z);
-	
-	mat4x4_zero(p->modelViewMatrix);
-	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
-	mat4x4_transpose(p->modelViewMatrix);
-*/
-	//tlgl_get_matrix(p->modelViewMatrix,
-		//cam.x,cam.y,cam.z,
-		//cam.rx,cam.ry,cam.rz);
-
-	cam_refreshModdel(p->_3dcam);
-}
+//static void
+//f_getModelMat4x4(){
+//	struct EX* p = ex_getIns();
+//	//struct ECamera cam = p->cam;
+///*
+//	glMatrixMode (GL_MODELVIEW);
+//	//glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
+//	glLoadIdentity ();
+//	
+//	glRotatef(-180/PI*p->cam.rx,1,0,0);
+//	glRotatef(-180/PI*p->cam.ry,0,1,0);
+//	glRotatef(-180/PI*p->cam.rz,0,0,1);
+//	glTranslatef(cam.x,cam.y,cam.z);
+//	
+//	mat4x4_zero(p->modelViewMatrix);
+//	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
+//	mat4x4_transpose(p->modelViewMatrix);
+//*/
+//	//tlgl_get_matrix(p->modelViewMatrix,
+//		//cam.x,cam.y,cam.z,
+//		//cam.rx,cam.ry,cam.rz);
+//
+//	cam_refreshModdel(p->_3dcam);
+//}
 
 //用固定管线计算的透视矩阵和模型矩阵
 static void
@@ -941,7 +941,8 @@ f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
 	
 	//mat4x4_copy(_out,p->perspectiveMatrix);
 
-	f_getModelMat4x4();
+	//f_getModelMat4x4();
+	ex_refresh3dModelView();
 }
 //
 //static void
@@ -958,7 +959,6 @@ f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
 //	//f_get_custom_modelMatrix(p->modelViewMatrix,&p->cam);//使用自定义计算出模型矩阵	
 //	f_getModelMat4x4();
 //
-//
 //	//透视矩阵
 //	/*
 //	mat4x4_identity(p->perspectiveMatrix);
@@ -968,22 +968,13 @@ f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
 //	//cam_setPerspect(p->_3dcam,fov,aspectRatio,zNear,zFar);
 //}
 
-
- 
 /*
 	计算透视和矩阵索引
 */
 void 
 ex_refresh3dModelView(){
-	f_getModelMat4x4();
+	cam_refreshModdel(ex_getIns()->_3dcam);
 }
-
-void
-ex_3dPerspctRefresh(){
-	struct EX* p = ex_getIns();
-	cam_setPerspect(p->_3dcam,45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
-}
-
 
 /*
 	绘制线段
@@ -1049,8 +1040,6 @@ f_static_calculat(){
 static void 
 _new(){
 	struct EX* p = ex_getIns();
-	
-	
 
 	//long _time;
 	if(p->_screenWidth <= 0 || p->_screenHeight<=0){
@@ -1089,7 +1078,6 @@ _new(){
 	//evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
 	ex_lua_global_evt_dispatch(EVENT_ENGINE_RENDER_3D);
 
-
 	//f_static_calculat();	// fps 900 - 1300
 	//ex_calculat_ortho();//fps 900 - 1600
 	
@@ -1108,12 +1096,6 @@ _new(){
 
 	//渐变管理器回调
 	//ramp_callBack();
-
-	//外部循环回调
-	if(p->loopCallBack!=NULL)
-	{
-		p->loopCallBack();
-	}
 
 	tween_run(_longTime,g_delayTime);
 
@@ -1195,8 +1177,8 @@ ex_init(struct EX* p,GLdouble zfar){
 	p->allzBuffer = -90000;	//初始化一个Z深度,此深度标识3d层的
 	p->ui_pos_z =  -1000;	//此深度如果小于3d层,那么界面将在3d界面后面
 	
-	p->_3dcam = cam_create();
-	p->_2dcam = cam_create();
+	p->_3dcam = cam_create();//初始化3d透视camera
+	p->_2dcam = cam_create();//初始化2d正交camera
 	//p->zBuffer = p->allzBuffer+1;
 	p->clickInfo = tl_malloc(sizeof(struct ClickInfo));
 	{
@@ -1230,7 +1212,9 @@ void ex_dispose(struct EX* p){
 	//getch();
 	
 	cam_dispose(p->_3dcam);
+	p->_3dcam = 0;
 	cam_dispose(p->_2dcam);
+	p->_2dcam = 0;
 
 	tl_free(p->clickInfo);
 	p->clickInfo = 0;

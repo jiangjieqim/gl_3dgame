@@ -144,11 +144,6 @@ struct EX
 	float _screenWidth,_screenHeight;
 
 	/*
-		渲染循环回调
-	*/
-	void (*loopCallBack)(void);
-
-	/*
 		当前鼠标状态
 	*/
 	struct MouseState mouseState;
@@ -352,9 +347,7 @@ float ex_newPosZ();
 //void updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar);
 void ex_refresh3dModelView();
 
-//刷新3d齐次坐标矩阵,只会在渲染帧缓冲区尺寸发生变化的时候会调用该接口
-void
-ex_3dPerspctRefresh();
+
 
 /*
 	寻找md2,md5,obj,sprite节点
