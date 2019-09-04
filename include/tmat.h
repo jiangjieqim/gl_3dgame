@@ -14,7 +14,7 @@
 	和着色器相关,配合各种参数,调用GLSL
 */
 typedef struct GMaterial{
-
+	int id;
 	/*
 	*	默认的着色器类型
 	*/
@@ -57,6 +57,14 @@ typedef struct GMaterial{
 void*  
 tmat_create(const char* glslName,int texCount,...);
 
+//设置id
+void tmat_setID(void* m,int id);
+
+//获取材质id
+int tmat_getID(void* m);
+void 
+tmat_pushTex(void* mat,GLuint tex);
+
 /*
 	创建一个空贴图的材质
 */
@@ -98,12 +106,23 @@ void tmat_disposeTextureByIndex(struct GMaterial* ptr,int index);
 */
 GLuint tmat_getTextureByIndex(struct GMaterial* pmat,int index);
 
-
 void* 
 tmat_create_rgba(const char* glslType,GLint width,GLint height,GLenum rgbaType);
 
 //设置是否丢弃alpha片段
 void
 tmat_set_discardAlpha(void* p,int value);
+
+/*
+*	存储在到GPU显存中一张贴图,指定texIndex索引位置存储一张贴图
+*	int texIndex		:		纹理索引
+*	GLuint tex			:		纹理句柄引用
+*/
+void 
+tmat_setTexFromGPU(struct GMaterial* mat,int texIndex,GLuint tex);
+
+//创建一个空材质对象,此材质对象贴图属性
+void* 
+tmat_create_empty(const char* glslType);
 
 #endif

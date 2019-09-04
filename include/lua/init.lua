@@ -14,11 +14,19 @@ ex:bgColor(1,1,1);--白色
 
 
 --fps(0,15);
+
 infowin(0,0);
 
+
+--作为输入框的背景
 local sprite =sprite_create("bg11",100,50,128,14);
 func_setIcon(sprite,"gundi.png");
 --setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
+
+
+local sprite1 =func_sprite_createNoHit(100,100,256,256);
+func_setIcon(sprite1,"gundi.png");
+setv(sprite1,FLAGS_DRAW_PLOYGON_LINE);
 
 
 --alert("文本");
@@ -60,6 +68,8 @@ local function loadFloor()
 	plane:setv(FLAGS_DRAW_PLOYGON_LINE);
 plane:scale(10);
 end
+
+--btn_create(0,0,128,128);
 
 --loadFloor();
 dofile("..\\include\\lua\\7.lua");

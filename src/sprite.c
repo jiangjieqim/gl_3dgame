@@ -13,8 +13,17 @@
 #include "obj_vbo.h"
 #include "tl_malloc.h"
 #include "base.h"
+#include "fbotex.h"
 
 static void f_refreshChildPos(void* ptr);
+
+static char*
+f_getName(struct Sprite* p){
+	struct HeadInfo* b =(struct HeadInfo*)p->base;
+	return b->name;
+}
+
+
 /* chiid是否在parent中*/
 static int 
 f_isHasChild(struct Sprite* pp,int child){
@@ -168,10 +177,19 @@ void sprite_setUV(struct Sprite* sprite,float x,float y,float w,float h)
 	//交换a,b可旋转UV
 	/*int a = 1;
 	int b = 0;*/
-
+	
 
 	struct Vec2 a1,a2,a3,a4;
 	float* v;
+
+	//if(!strcmp(f_getName(sprite),"table: 04BBEBA0")){
+	//if(sprite->screenX == 0 && sprite->screenY == 0){
+	//if(sprite->material!=0 && tmat_getID(sprite->material)==1){
+	//	return;
+	//}
+	
+	//if(strcmp(sprite->base->))
+	//return;//仅仅做测试用的
 
 	a1.x = x;
 	a1.y = y;
@@ -585,6 +603,15 @@ sprite_set_default_tex(void* ptr){
 //可以从图集中获取,也可以自定义材质引用
 static void* 
 getMaterial(struct Sprite* p){
+	/*
+	//测试fbo
+	if(p->material!=0 && tmat_getID(p->material)==1){
+		struct FBOTex* fbo = (struct FBOTex*)ex_getIns()->fbo;
+		//printf("name:%s  %d\n",f_getName(p),strcmp(f_getName(p),"stage2d"));
+		//printf("%s\n",f_getName(p));
+		return fbo->mat;
+	}
+	*/
 	if(p->atals){
 		return p->atals->material;
 	}
@@ -1102,6 +1129,18 @@ static void f_refreshChildPos(void* ptr){
 //	sprite_setpos(ptr,x,y);
 //}
 
+void
+sprite_rotateX(struct Sprite* ptr,float rx){
+	struct HeadInfo* b = (struct HeadInfo*)ptr->base;
+	b->rx = rx;
+	updateMatrix(ptr);
+}
+void
+sprite_rotateY(struct Sprite* ptr,float ry){
+	struct HeadInfo* b = (struct HeadInfo*)ptr->base;
+	b->ry = ry;
+	updateMatrix(ptr);
+}
 void
 sprite_rotateZ(struct Sprite* ptr,float rz){
 	struct HeadInfo* b = (struct HeadInfo*)ptr->base;

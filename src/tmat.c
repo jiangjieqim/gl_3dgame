@@ -42,12 +42,14 @@ enum{_TEXTURE_NUM_=2};
 	检查有无纹理引用
 */
 static void 
-f_updateTexture(GLuint program3D,struct GMaterial* mat)
-{
-	
+f_updateTexture(GLuint program3D,struct GMaterial* mat){
 	const char *_textureKeyArray[_TEXTURE_NUM_] = {"texture1","texture2"};
 	const int _textureIndexArray[_TEXTURE_NUM_] = {GL_TEXTURE0,GL_TEXTURE1};
 	int _texIndex;
+
+	//if(mat->id==1){
+	//	int a;
+	//}
 	for(_texIndex = 0;_texIndex < _TEXTURE_NUM_;_texIndex++)
 	{
 		int _texture1 = glGetUniformLocation(program3D,_textureKeyArray[_texIndex]);
@@ -58,6 +60,9 @@ f_updateTexture(GLuint program3D,struct GMaterial* mat)
 			glActiveTexture(_textureIndexArray[_texIndex]);
 
 			glBindTexture(GL_TEXTURE_2D,mat->texs[_texIndex]);
+			////作者的bug
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
 		}
 	}
 }
@@ -272,29 +277,36 @@ f_tmat_pushTex(struct GMaterial* p,const char* path){
 	}
 }
 
+void 
+tmat_pushTex(void* mat,GLuint tex){
+	struct GMaterial* m = (struct GMaterial*)mat;
+	if(m->curTexIndex+1>=MATERIAL_TEXTURE_COUNT){
+		printf("贴图索引溢出\n");
+		assert(0);
+	}
+	m->texs[m->curTexIndex] = tex;
+	m->curTexIndex++;
+}
+
 /*
-*	存储在GPU内存中一张贴图
+*	存储在到GPU显存中一张贴图
 *	int texIndex		:		纹理索引
 *	GLuint tex			:		纹理句柄引用
 */
-static void 
-f_tmat_createTexFromGPU(struct GMaterial* mat,int texIndex,GLuint tex){
+void 
+tmat_setTexFromGPU(struct GMaterial* mat,int texIndex,GLuint tex){
 	//创建纹理数据
-	if(texIndex>=mat->curTexIndex)
-	{
+	if(texIndex >= mat->curTexIndex){
 		printf("纹理索引不能溢出!\n");
 		assert(0);
 		return;
 	}
-
-	if(mat->texs[texIndex])
-	{
+	if(mat->texs[texIndex]){
 		//需要删除该纹理数据后再创建
 		printf("创建异常,该索引上已经有了纹理\n");
 		assert(0);
 		return;
 	}
-
 	mat->texs[texIndex] = tex;
 	//mat->texs[texIndex]=jgl_loadTex("//resource//texture//2x2.tga");//测试图像
 }
@@ -406,7 +418,7 @@ static void f_createMaterialTexture(struct GMaterial *p)
 	for(i = 0;i< p->curTexIndex;i++)
 	{
 		GLuint tex = jgl_loadTex((const char*)p->texArray[i]);
-		f_tmat_createTexFromGPU(p,i,tex);
+		tmat_setTexFromGPU(p,i,tex);
 	}
 }
 /*
@@ -418,6 +430,17 @@ f_assignShader(struct GMaterial* tmat,const char* glslType)
 	memset(tmat->glslType,0,G_BUFFER_32_SIZE);
 	memcpy(tmat->glslType,glslType,strlen(glslType));
 }
+
+void tmat_setID(void* m,int id){
+	struct GMaterial* tmat = (struct GMaterial*)m;
+	tmat->id = id;
+}
+
+int tmat_getID(void* m){
+	struct GMaterial* tmat = (struct GMaterial*)m;
+	return tmat->id;
+}
+
 static void
 f_initMaterial(struct GMaterial* tmat){
 	//设置了alpha的值 = 1.0
@@ -480,11 +503,20 @@ tmat_createTex(const char* glslType,GLint width,GLint height){
 		
 		//指定0号索引位置的位图
 		tmat->curTexIndex++;
-		f_tmat_createTexFromGPU(tmat,0,tex);
+		tmat_setTexFromGPU(tmat,0,tex);
 	}
 	f_assignShader(tmat,glslType);
 	f_initMaterial(tmat);
 	
+	return tmat;
+}
+
+void* 
+tmat_create_empty(const char* glslType){
+	struct GMaterial* tmat = (struct GMaterial*)tl_malloc(sizeof(struct GMaterial));
+	memset(tmat,0,sizeof(struct GMaterial));
+	f_assignShader(tmat,glslType);
+	f_initMaterial(tmat);
 	return tmat;
 }
 
@@ -496,7 +528,7 @@ tmat_create_rgba(const char* glslType,GLint width,GLint height,GLenum rgbaType){
 	
 	tex=jgl_create_opengl_RGBA_Tex(width,height,rgbaType);
 	tmat->curTexIndex++;
-	f_tmat_createTexFromGPU(tmat,0,tex);
+	tmat_setTexFromGPU(tmat,0,tex);
 	f_assignShader(tmat,glslType);
 	f_initMaterial(tmat);
 	return tmat;

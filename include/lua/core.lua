@@ -83,7 +83,13 @@ end
 function func_get_default_tex()
 	return defalutTex
 end
-
+local nameKey = -1;
+--生成一个名字
+local function getName(suffix)
+	nameKey=nameKey+1;
+    local str = suffix or "";
+	return "instance_"..str..tostring(nameKey);
+end
 --[[
 	根据一个配置加载生成一个数据对象
 
@@ -225,6 +231,12 @@ end
 function func_sprite_create(name,x,y,w,h)
 	local sprite = sprite_create(name,x,y,w,h);
 	return sprite;
+end
+--创建一个没有点击sprite
+function func_sprite_createNoHit(x,y,w,h)
+    local name = getName("sprite");
+    local s = sprite_createNoHit(name,x,y,w,h)
+    return s;
 end
 
 --[[
@@ -491,12 +503,7 @@ function func_loadmd5(name,scale,texpath,meshName,animName)
 	--assert(nil,"my Error!")
 end
 
-local nameKey = -1;
---生成一个名字
-local function getName()
-	nameKey=nameKey+1;
-	return "instance_"..tostring(nameKey);
-end
+
 
 --创建名字
 function 

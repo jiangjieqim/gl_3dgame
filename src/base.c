@@ -693,3 +693,21 @@ base_move(HeadInfo* bp,int ms,
 		);
 	
 }
+
+void 
+base_setv(void* ptr,int flag){
+	struct HeadInfo* base=base_get((void*)ptr);
+	setv(&base->flags,flag);
+}
+
+void
+base_resetv(void* ptr,int flag){
+	struct HeadInfo* base=base_get((void*)ptr);
+	resetv(&base->flags,flag);
+}
+
+int 
+base_getv(void* ptr,int flag){
+	struct HeadInfo* base=base_get((void*)ptr);
+	return getv(&base->flags,flag);
+}

@@ -53,7 +53,7 @@ function btn_create(x,y,w,h,url)
 	--func_printTable(btn)
 	
 	local name = func_getTableName(btn)--获取btn引用名
-
+	
 	---------------------------------------
 	--默认参数设置
 	if(url == nil ) then url = "smallbtn.png" end
@@ -63,6 +63,8 @@ function btn_create(x,y,w,h,url)
 	if(h == nil) then h = 18	end
 	---------------------------------------
 --	local sprite = sprite_create(name,x,y,w,h,"btnCallBackEvt",nil,"btnMouseDownEvt");
+
+	--print(name);
 	local sprite = sprite_create(name,x,y,w,h);
 	
 	func_setIcon(sprite,url)

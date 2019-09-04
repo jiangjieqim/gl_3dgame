@@ -174,10 +174,13 @@ int sprite_isEnable(int data);
 */
 void sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h);
 
+void sprite_rotateX(struct Sprite* ptr,float rx);
+void sprite_rotateY(struct Sprite* ptr,float ry);
 /*
  *旋转rz轴 PI的n倍数,只变换渲染轴向
  */
 void sprite_rotateZ(struct Sprite* ptr,float rz);
+
 /*
 	重置sprite的尺寸
 */

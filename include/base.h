@@ -269,4 +269,9 @@ base_move(HeadInfo* ptr,int ms,
 		  void (*endCallBack)(void*),
 		  void (*updateCallBack)(void*)
 		  );
+
+
+void base_setv(void* ptr,int flag);
+void base_resetv(void* ptr,int flag);
+int base_getv(void* ptr,int flag);
 #endif

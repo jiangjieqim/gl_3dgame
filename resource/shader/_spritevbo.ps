@@ -1,0 +1,34 @@
+#version 110
+uniform sampler2D texture1;//界面贴图
+uniform sampler2D texture2;//alpha通道
+varying vec2 out_texcoord;
+void main(void){
+	
+	
+	/*
+	vec4 finalColor=texture2D(texture1, out_texcoord);
+	vec4 f2=texture2D(texture2, out_texcoord);
+	
+	//if(f2.r + f2.g + f2.b == 0.0f)
+	//	discard;//丢弃黑色像素的片段,实现透明界面
+	//else
+	//	gl_FragColor = finalColor;
+
+	if(finalColor.a<=0.0)
+	{
+		discard;
+	}
+	else if(finalColor.r + finalColor.g + finalColor.b == 3.0)
+	{
+		discard;//白色的扣去
+	}
+	else
+	{
+		gl_FragColor = finalColor;
+	}
+	*/
+
+	vec4 finalColor=texture2D(texture1, out_texcoord);
+	gl_FragColor = finalColor;
+	
+}

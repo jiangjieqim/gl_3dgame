@@ -14,6 +14,7 @@
 #include "ftfont.h"
 #include "gettime.h"
 #include "str.h"
+#include "base.h"
 
 #define DEBUG
 
@@ -135,7 +136,7 @@ f_pCallBack(void* inParam,char* str){
 void
 ftext_vis(void* p,int vis){
 	FText* txt = (FText*)p;
-	vis ? ex_setv(txt->spr,FLAGS_VISIBLE) : ex_resetv(txt->spr,FLAGS_VISIBLE);
+	vis ? base_setv(txt->spr,FLAGS_VISIBLE) : base_resetv(txt->spr,FLAGS_VISIBLE);
 }
 void 
 ftext_set_wordWrap(void* p,int v){

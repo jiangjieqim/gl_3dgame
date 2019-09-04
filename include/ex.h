@@ -86,7 +86,7 @@ struct MouseState
 	GLint xMouse,yMouse;//点击下的鼠标状态
 	
 	int moveX,moveY;//当前移动的位置
-}; 
+};
 //struct ECamera{
 //	/*
 //	*	摄影机坐标
@@ -171,7 +171,7 @@ struct EX
 	/*
 		顶点总数
 	*/
-	int allVertexTotal;
+	//int allVertexTotal;
 
 	/*
 		透视矩阵
@@ -204,6 +204,9 @@ struct EX
 
 	//2d Camera引用
 	void* _2dcam;
+	
+	//fbo引用
+	void* fbo;
 };
 
 //接口定义
@@ -388,9 +391,9 @@ void
 ex_set_material(void* ptr,void* material);
 
 //获取引擎对象的标识位
-void ex_setv(void* p,int flag);
-void ex_resetv(void* ptr,int flag);
-int ex_getv(void* ptr,int flag);
+//void ex_setv(void* p,int flag);
+//void ex_resetv(void* ptr,int flag);
+//int ex_getv(void* ptr,int flag);
 /************************************************************************
 	当前的FPS                                                                  
 	frame per second 每一关键帧需要的毫秒

@@ -27,7 +27,7 @@
 #include "tween.h"
 #include "base.h"
 #include "frame.h"
-
+#include "fbotex.h"
 //#define DEBUG_PRINT_HIT
 
 int g_sprite_line;
@@ -67,65 +67,11 @@ struct Ent3D{
 };
 
 //=============================================
-//frame buffer tex结构体
-struct FBOTex
-{
-	GLuint              fboName;
-	//GLuint				textures[1];//大理石贴图
-	GLuint				mirrorTexture;//镜像贴图
-	GLuint              depthBufferName; //深度缓冲区
-};
+//frame buffer Object tex(FBO)结构体
+
 static const GLenum windowBuff[] = { GL_BACK_LEFT };
-static const GLenum fboBuffs[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
-void* 
-fbo_init(){
-	struct FBOTex* fbo = (struct FBOTex*)tl_malloc(sizeof(struct FBOTex));
 
-	GLint mirrorTexWidth  = 512;
-	GLint mirrorTexHeight = 512;
-	GLuint              fboName;
-	//GLuint				textures[1];//大理石贴图
-	GLuint				mirrorTexture;//镜像贴图
-	GLuint              depthBufferName; //深度缓冲区
 
-	// Create and bind an FBO(创建,绑定帧缓存对象fbo)
-	glGenFramebuffers(1,&fboName);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboName);
-
-	// Create depth renderbuffer(创建深度缓存)
-	glGenRenderbuffers(1, &depthBufferName);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthBufferName);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, mirrorTexWidth, mirrorTexHeight);
-
-	// Create the reflection texture(创建映射贴图)
-	glGenTextures(1, &mirrorTexture);
-	glBindTexture(GL_TEXTURE_2D, mirrorTexture);
-	//作者的bug
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, mirrorTexWidth, mirrorTexHeight, 0, GL_RGBA, GL_FLOAT, NULL);
-
-	fbo->depthBufferName = depthBufferName;
-	fbo->fboName = fboName;
-	fbo->mirrorTexture = mirrorTexture;
-
-	return fbo;
-}
-
-//销毁fbo对象
-void
-fbo_dispose(void* p){
-	struct FBOTex* fbo = (struct FBOTex*)p;
-	glDeleteTextures(1, &fbo->mirrorTexture);
-	//glDeleteTextures(1, textures);
-
-	// Cleanup RBOs
-	glDeleteRenderbuffers(1, &fbo->depthBufferName);
-
-	// Cleanup FBOs
-	glDeleteFramebuffers(1, &fbo->fboName);
-}
 
 /*
 	鼠标左键是否常按着
@@ -511,7 +457,13 @@ f_show_all_info(){
 	}
 
 	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d total %d bytes ",fps,size);
-	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb) VertexCount=%d TriangleCount=%d  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",vbo,(float)vbo/1024.0/*,cam.x,cam.y,cam.z*/,p->allVertexTotal,p->allVertexTotal/3,cur_avail_mem_kb,total_mem_kb,get_longTime()*0.001);
+	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb)  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",
+		vbo,
+		(float)vbo/1024.0
+		/*,cam.x,cam.y,cam.z*/   
+		/*,p->allVertexTotal*/
+		/*,p->allVertexTotal/3*/
+		,cur_avail_mem_kb,total_mem_kb,get_longTime()*0.001);
 
 	ex_showLog(buffer);
 }
@@ -1037,6 +989,45 @@ f_static_calculat(){
 	*/
 }
 
+//默认的帧缓冲区
+static void
+f_defaultRenderFrame(){
+	struct EX* p = ex_getIns();
+
+	// Reset FBO. Draw world again from the real cameras perspective
+	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+	//切换到前台帧缓冲,默认的窗口帧缓冲
+	glDrawBuffers(1, windowBuff);
+	glViewport (0, 0, p->_screenWidth, p->_screenHeight);
+
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//清空颜色缓冲区和深度缓冲区
+	glClearColor(p->bg_r,p->bg_g,p->bg_b,1);				//清除背景并填充背景为白色
+
+	//深度测试
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
+
+	//ex_updatePerspctiveModelView();
+	//p->allVertexTotal = 0;
+	f_renderlistCall(render_3dNode);//渲染3d节点
+
+	//drawLine(2000);
+	//f_drawline();
+
+	//evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
+	ex_lua_global_evt_dispatch(EVENT_ENGINE_RENDER_3D);
+
+	f_renderlistCall(sprite_drawRender);//渲染2d节点
+
+	//废弃此字体的渲染,一律采用将文本数据copy到Sprite渲染出来
+	//f_renderlistCall(tf_render);
+
+	//渲染文本(非常耗费性能,待优化)
+	// 2019.8.26 此处已经优化成Sprite模式的字体渲染
+	//if(getv(&p->flags,EX_FLAGS_DRAW_DEBUG_TEXT)) {drawText(p);}
+}
+
 static void 
 _new(){
 	struct EX* p = ex_getIns();
@@ -1048,51 +1039,18 @@ _new(){
 	}
 	//计算fps
 	f_calculate_fps();
-
 	g_delayTime = get_longTime() - _longTime;
-	
 	_longTime =  get_longTime();
 	
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	fbo_render(p->fbo);
+	f_defaultRenderFrame();
 
-	//填充背景为白色
-	glClearColor(p->bg_r,p->bg_g,p->bg_b,1);
 	
-	// Reset FBO. Draw world again from the real cameras perspective
-	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	
-	//切换到前台帧缓冲
-	glDrawBuffers(1, windowBuff);
 
-	//深度测试
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_MULTISAMPLE);
-	
-	//ex_updatePerspctiveModelView();
-	p->allVertexTotal = 0;
-	f_renderlistCall(render_3dNode);
-
-	//drawLine(2000);
-	//f_drawline();
-	
-	//evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
-	ex_lua_global_evt_dispatch(EVENT_ENGINE_RENDER_3D);
-
-	//f_static_calculat();	// fps 900 - 1300
-	//ex_calculat_ortho();//fps 900 - 1600
-	
-	f_renderlistCall(sprite_drawRender);
-
-	//废弃此字体的渲染,一律采用将文本数据copy到Sprite渲染出来
-	//f_renderlistCall(tf_render);
-
-	//渲染文本(非常耗费性能,待优化)
-	// 2019.8.26 此处已经优化成Sprite模式的字体渲染
-	//if(getv(&p->flags,EX_FLAGS_DRAW_DEBUG_TEXT)) {drawText(p);}
-
+	//Do the buffer Swap
 	glutSwapBuffers ();
+	// Do it again
 	glutPostRedisplay ();
-
 
 	//渐变管理器回调
 	//ramp_callBack();
@@ -1170,6 +1128,9 @@ ex_resize_stage2d(){
 	sprite_resize(p->stage2d,p->_screenWidth,p->_screenHeight);
 	sprite_set_hit_rect(p->stage2d,0,0,p->_screenWidth,p->_screenHeight);
 }
+static void f_callback(){
+	f_renderlistCall(render_3dNode);//渲染3d节点
+}
 void 
 ex_init(struct EX* p,GLdouble zfar){	
 	//p->allzBuffer在-90000初始化的时候会被模型挡在后面
@@ -1204,7 +1165,9 @@ ex_init(struct EX* p,GLdouble zfar){
 		//sprite_set_default_tex(p->stage2d);
 		p->curFocus = stage2d;
 	}
-
+	
+	p->fbo = fbo_init();
+	fbo_bind(p->fbo,f_callback);
 }
 
 void ex_dispose(struct EX* p){
@@ -2188,23 +2151,23 @@ void ex_ptrRemove(void* ptr){
 	}
 }
 
-void 
-ex_setv(void* ptr,int flag){
-	struct HeadInfo* base=base_get((void*)ptr);
-	setv(&base->flags,flag);
-}
+//void 
+//ex_setv(void* ptr,int flag){
+//	struct HeadInfo* base=base_get((void*)ptr);
+//	setv(&base->flags,flag);
+//}
 
-void
-ex_resetv(void* ptr,int flag){
-	struct HeadInfo* base=base_get((void*)ptr);
-	resetv(&base->flags,flag);
-}
+//void
+//ex_resetv(void* ptr,int flag){
+//	struct HeadInfo* base=base_get((void*)ptr);
+//	resetv(&base->flags,flag);
+//}
 
-int 
-ex_getv(void* ptr,int flag){
-	struct HeadInfo* base=base_get((void*)ptr);
-	return getv(&base->flags,flag);
-}
+//int 
+//ex_getv(void* ptr,int flag){
+//	struct HeadInfo* base=base_get((void*)ptr);
+//	return getv(&base->flags,flag);
+//}
 
 
 int ex_get_gap(int type)
@@ -2224,3 +2187,19 @@ void* ex_get_ui_atals(){
 }
 
 //########################################
+
+//void
+//fbo_render(void* ptr){
+//	struct FBOTex* fbo = (struct FBOTex*)ptr;
+//
+//	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo->fboName);
+//	glDrawBuffers(1, fboBuffs);
+//
+//	glViewport(0, 0, fbo->texw, fbo->texh);
+//
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//清除当前的缓冲区
+//
+//	f_renderlistCall(render_3dNode);//渲染3d节点
+//
+//	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+//}
