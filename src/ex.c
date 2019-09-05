@@ -401,7 +401,7 @@ ex_get_info(){
 		cam_getX(_cam),
 		cam_getY(_cam),
 		cam_getZ(_cam));
-	log_color(0xff0000,"camera 角位移: PI = %.3f %.3f %.3f\n",
+	log_color(0xff0000,"camera 角位移: PI * %.3f PI * %.3f PI * %.3f\n",
 		cam_getRX(_cam)/PI,
 		cam_getRY(_cam)/PI,
 		cam_getRZ(_cam)/PI);
@@ -993,7 +993,7 @@ f_static_calculat(){
 static void
 f_defaultRenderFrame(){
 	struct EX* p = ex_getIns();
-
+	ex_switch3dCam(p->_3dcam);
 	// Reset FBO. Draw world again from the real cameras perspective
 	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
@@ -1031,6 +1031,7 @@ f_defaultRenderFrame(){
 static void 
 _new(){
 	struct EX* p = ex_getIns();
+
 
 	//long _time;
 	if(p->_screenWidth <= 0 || p->_screenHeight<=0){
@@ -1131,6 +1132,20 @@ ex_resize_stage2d(){
 static void f_callback(){
 	f_renderlistCall(render_3dNode);//渲染3d节点
 }
+//初始化一个设置坐标和cam角度的fbo
+static void
+f_init_fbo(void* fbo){
+	fbo_bind(fbo,f_callback);
+	{
+		void* cam = fbo_get_cam(fbo);
+		void* spr = fbo_get_spr(fbo);
+		sprite_setpos((struct Sprite*)spr,100,100);
+
+		cam_setZ(cam,-3);
+		cam_setRX(cam,PI*1.8);
+		cam_refreshModdel(cam);
+	}
+}
 void 
 ex_init(struct EX* p,GLdouble zfar){	
 	//p->allzBuffer在-90000初始化的时候会被模型挡在后面
@@ -1139,6 +1154,7 @@ ex_init(struct EX* p,GLdouble zfar){
 	p->ui_pos_z =  -1000;	//此深度如果小于3d层,那么界面将在3d界面后面
 	
 	p->_3dcam = cam_create();//初始化3d透视camera
+	ex_switch3dCam(p->_3dcam);
 	p->_2dcam = cam_create();//初始化2d正交camera
 	//p->zBuffer = p->allzBuffer+1;
 	p->clickInfo = tl_malloc(sizeof(struct ClickInfo));
@@ -1165,10 +1181,13 @@ ex_init(struct EX* p,GLdouble zfar){
 		//sprite_set_default_tex(p->stage2d);
 		p->curFocus = stage2d;
 	}
-	
-	p->fbo = fbo_init();
-	fbo_bind(p->fbo,f_callback);
+
+	//**************************************************
+	//初始化一个fbo texture对象
+	p->fbo = fbo_init(256,256);
+	f_init_fbo(p->fbo);
 }
+
 
 void ex_dispose(struct EX* p){
 	printf("销毁引擎设备!\n");
@@ -2184,6 +2203,10 @@ void* ex_get_ui_atals(){
 		ex_getIns()->atals = (void*)ptr;
 	}
 	return ex_getIns()->atals;
+}
+
+void ex_switch3dCam(void* cam){
+	ex_getIns()->_3dCurCam=cam;
 }
 
 //########################################

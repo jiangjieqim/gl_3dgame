@@ -8,12 +8,28 @@
 #include "tmat.h"
 #include "base.h"
 #include "sprite.h"
+#include "camera.h"
+#include "ex.h"
+struct FBOTexNode
+{
+	struct Sprite*		_2dspr;				//2dSprite,绑定fbo的2dSprite
+	void* _3dcam;
 
-static const GLenum fboBuffs[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+
+	GLuint              fboName;			//FBO命名对象	
+	GLuint				mirrorTexture;		//镜像贴图
+	GLuint              depthBufferName;	//深度缓冲区
+	int					texw,texh;			//贴图的宽高
+	
+
+	// 渲染节点的回调
+	void (*callBack)();
+};
 
 void
 fbo_render(void* ptr){
-	struct FBOTex* fbo = (struct FBOTex*)ptr;
+	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
+	const GLenum fboBuffs[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo->fboName);
 	glDrawBuffers(1, fboBuffs);
@@ -22,7 +38,7 @@ fbo_render(void* ptr){
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//清除当前的缓冲区
 
-	
+	ex_switch3dCam(fbo->_3dcam);
 	if(fbo->callBack){
 		fbo->callBack();
 	}
@@ -30,16 +46,16 @@ fbo_render(void* ptr){
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 void fbo_bind(void* ptr,void (*callBack)()){
-	struct FBOTex* fbo = (struct FBOTex*)ptr;
+	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
 	fbo->callBack = callBack;
 }
 //#define _TestTex_
 void* 
-fbo_init(){
-	struct FBOTex* fbo = (struct FBOTex*)tl_malloc(sizeof(struct FBOTex));
+fbo_init(int texW,int texH){
+	struct FBOTexNode* fbo = (struct FBOTexNode*)tl_malloc(sizeof(struct FBOTexNode));
 
-	GLint mirrorTexWidth  = 256;
-	GLint mirrorTexHeight = 256;
+	GLint mirrorTexWidth  = texW;
+	GLint mirrorTexHeight = texH;
 
 	GLuint              fboName;
 	//GLuint				textures[1];//大理石贴图
@@ -88,6 +104,9 @@ fbo_init(){
 		GLuint tex =jgl_loadTex("//resource//texture//1.tga");
 #endif
 		void* mat= tmat_create_empty("_spritevbo");
+		
+		char buffer[64];
+		tl_newName(buffer,64);
 		//tmat_setTexFromGPU(mat,0,mirrorTexture);
 		tmat_setID(mat,1);
 		
@@ -97,32 +116,51 @@ fbo_init(){
 		tmat_pushTex(mat,mirrorTexture);//mirrorTexture
 #endif
 		//printf("mirrorTexture:%d\n",mirrorTexture);
-		fbo->mat = mat;
+		//fbo->mat = mat;
 		
-		spr = sprite_create("sprite0",100,100,256,256,0);
+		spr = sprite_create(buffer,0,0,texW,texH,0);
 		sprite_rotateZ(spr,-PI/2);//sprite旋转90度
 		sprite_rotateX(spr,PI);
 		base_setv(spr,FLAGS_REVERSE_FACE);
 
 		spr->material = mat;
+		fbo->_2dspr=spr;
+
 	}
 	
 	// Reset framebuffer binding
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
+
+	//###################################
+	fbo->_3dcam = cam_create();
+	cam_setPerspect(fbo->_3dcam,45.0,fbo->texw / fbo->texh , 0.1, 10000);
 	return fbo;
 }
 
 //销毁fbo对象
 void
 fbo_dispose(void* p){
-	struct FBOTex* fbo = (struct FBOTex*)p;
+	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 	glDeleteTextures(1, &fbo->mirrorTexture);
+
+	sprite_dipose(fbo->_2dspr);
 	//glDeleteTextures(1, textures);
+	cam_dispose(fbo->_3dcam);
 
 	// Cleanup RBOs
 	glDeleteRenderbuffers(1, &fbo->depthBufferName);
 
 	// Cleanup FBOs
 	glDeleteFramebuffers(1, &fbo->fboName);
+}
+
+
+void* fbo_get_spr(void* p){
+	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+	return fbo->_2dspr;
+}
+void* fbo_get_cam(void* p){
+	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+	return fbo->_3dcam;
 }

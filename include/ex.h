@@ -186,8 +186,7 @@ struct EX
 	//Matrix44f ui_modelViewMatrix;
 	//struct Atals* myAtals;//废弃
 	
-	//int _isinit;//引擎是否已经初始化
-	// 
+	//int _isinit;//引擎是否已经初始化 
 	void* atals;
 	
 	//2d舞台
@@ -204,6 +203,9 @@ struct EX
 
 	//2d Camera引用
 	void* _2dcam;
+
+	//当前的camera
+	void* _3dCurCam;
 	
 	//fbo引用
 	void* fbo;
@@ -437,4 +439,8 @@ ex_resize_stage2d();
  *计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
  */
 //void ex_calculat_ortho();
+
+//切换到当前camera,场景中可能会有多个camera,我们可以用用这个函数进行切换到当前的cam
+//比如从默认的cam切换到fbo的cam,其实cam就是一个齐次透视矩阵和一个模型矩阵
+void ex_switch3dCam(void* cam);
 #endif
