@@ -14,4 +14,7 @@ void fbo_dispose(void* p);
 void* fbo_get_spr(void* p);
 void* fbo_get_cam(void* p);
 
+//添加一个可渲染的节点
+void fbo_pushNode(void* p,void* node);
+
 #endif

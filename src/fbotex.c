@@ -1,6 +1,9 @@
 #include <gl/glew.h>
 #include <gl/glut.h>
+#include <assert.h>
+#include <stdio.h>
 
+#include "common.h"
 #include "tl_malloc.h"
 #include "jgl.h"
 
@@ -24,8 +27,14 @@ struct FBOTexNode
 
 	// 渲染节点的回调
 	void (*callBack)();
-};
 
+	//渲染的节点列表
+	void* nodelist;
+};
+static void
+f_renderList(int data,int parms){
+	ex_render3dNode(data);
+}
 void
 fbo_render(void* ptr){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
@@ -42,9 +51,26 @@ fbo_render(void* ptr){
 	if(fbo->callBack){
 		fbo->callBack();
 	}
+	LStack_ergodic_t(fbo->nodelist,f_renderList,0);
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
+
+void fbo_pushNode(void* p,void* _node){
+	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+	if(_node){
+		struct HeadInfo* b;
+		b = base_get(_node);
+		if( base_findByName(fbo->nodelist,b->name) != NULL){
+			printf("fbo_pushNode,error! 重名的对象_engine :%s\n",b->name);
+			assert(0);
+		}else{
+			LStack_push(fbo->nodelist,_node);
+		}
+	}
+
+}
+
 void fbo_bind(void* ptr,void (*callBack)()){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
 	fbo->callBack = callBack;
@@ -53,7 +79,7 @@ void fbo_bind(void* ptr,void (*callBack)()){
 void* 
 fbo_init(int texW,int texH){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)tl_malloc(sizeof(struct FBOTexNode));
-
+	
 	GLint mirrorTexWidth  = texW;
 	GLint mirrorTexHeight = texH;
 
@@ -61,6 +87,10 @@ fbo_init(int texW,int texH){
 	//GLuint				textures[1];//大理石贴图
 	GLuint				mirrorTexture;//镜像贴图
 	GLuint              depthBufferName; //深度缓冲区
+	
+	memset(fbo,0,sizeof(struct FBOTexNode));
+
+	fbo->nodelist = LStack_create();
 
 	fbo->texw = mirrorTexWidth;
 	fbo->texh = mirrorTexHeight;
@@ -131,7 +161,6 @@ fbo_init(int texW,int texH){
 	// Reset framebuffer binding
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-
 	//###################################
 	fbo->_3dcam = cam_create();
 	cam_setPerspect(fbo->_3dcam,45.0,fbo->texw / fbo->texh , 0.1, 10000);
@@ -142,6 +171,11 @@ fbo_init(int texW,int texH){
 void
 fbo_dispose(void* p){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+
+	//释放之前要销毁那些push进去的3d节点
+	LStack_delete(fbo->nodelist);
+	fbo->nodelist = 0;
+	
 	glDeleteTextures(1, &fbo->mirrorTexture);
 
 	sprite_dipose(fbo->_2dspr);

@@ -711,3 +711,26 @@ base_getv(void* ptr,int flag){
 	struct HeadInfo* base=base_get((void*)ptr);
 	return getv(&base->flags,flag);
 }
+
+void* base_findByName(void* list,const char* name){
+	struct LStackNode* s = (struct LStackNode* )list;
+	void* top,*p;
+	top = s;
+	p=top;
+	while((int)LStack_next(p)){
+		int data;
+		struct HeadInfo* base = 0;
+		void* n;
+
+		p=(void*)LStack_next(p);
+		data = LStack_data(p);
+
+		n = (void*)data;
+		//base_get(n,&base);
+		base = base_get(n);
+		if(base!= 0 && !strcmp((const char*)base->name,name)){
+			return n;
+		}
+	}
+	return 0;
+}

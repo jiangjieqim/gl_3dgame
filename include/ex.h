@@ -443,4 +443,8 @@ ex_resize_stage2d();
 //切换到当前camera,场景中可能会有多个camera,我们可以用用这个函数进行切换到当前的cam
 //比如从默认的cam切换到fbo的cam,其实cam就是一个齐次透视矩阵和一个模型矩阵
 void ex_switch3dCam(void* cam);
+
+//渲染一个3D节点
+void 
+ex_render3dNode(int data);
 #endif

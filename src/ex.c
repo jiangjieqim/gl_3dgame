@@ -172,7 +172,7 @@ md2_render(struct MD2_Object* _md2){
 static int 
 f_load_vbo(char* name,const char* url);
 
-static void render_3dNode(int data);
+//static void ex_render3dNode(int data);
 //static void render_uiNode(int data);
 //int ex_mouseIsLeftDown()
 //{
@@ -185,26 +185,27 @@ static void render_3dNode(int data);
 根据name寻找对象(name为一个字符串)
 */
 void* ex_find_ptr(struct EX* ptr,const char* name){
-	struct LStackNode* s = (struct LStackNode* )ptr->renderList;
-	void* top,*p;
-	top = s;
-	p=top;
-	while((int)LStack_next(p)){
-		int data;
-		struct HeadInfo* base = NULL;
-		void* n;
+	//struct LStackNode* s = (struct LStackNode* )ptr->renderList;
+	//void* top,*p;
+	//top = s;
+	//p=top;
+	//while((int)LStack_next(p)){
+	//	int data;
+	//	struct HeadInfo* base = NULL;
+	//	void* n;
 
-		p=(void*)LStack_next(p);
-		data = LStack_data(p);
+	//	p=(void*)LStack_next(p);
+	//	data = LStack_data(p);
 
-		n = (void*)data;
-		//base_get(n,&base);
-		base = base_get(n);
-		if(base!= NULL && !strcmp((const char*)base->name,name)){
-			return n;
-		}
-	}
-	return NULL;
+	//	n = (void*)data;
+	//	//base_get(n,&base);
+	//	base = base_get(n);
+	//	if(base!= NULL && !strcmp((const char*)base->name,name)){
+	//		return n;
+	//	}
+	//}
+	//return NULL;
+	return base_findByName(ptr->renderList,name);
 }
 
 void* ex_find(const char* name){
@@ -655,10 +656,10 @@ getAllVertex(int data)
 /*
 渲染一个节点
 */
-static void 
-render_3dNode(int data)
+void 
+ex_render3dNode(int data)
 {
-	struct EX*e = ex_getIns();	
+	//struct EX*e = ex_getIns();	
 	struct HeadInfo* base = base_get((void*)data);
 	int objType = base->curType;
 
@@ -1010,7 +1011,7 @@ f_defaultRenderFrame(){
 
 	//ex_updatePerspctiveModelView();
 	//p->allVertexTotal = 0;
-	f_renderlistCall(render_3dNode);//渲染3d节点
+	f_renderlistCall(ex_render3dNode);//渲染3d节点
 
 	//drawLine(2000);
 	//f_drawline();
@@ -1031,7 +1032,6 @@ f_defaultRenderFrame(){
 static void 
 _new(){
 	struct EX* p = ex_getIns();
-
 
 	//long _time;
 	if(p->_screenWidth <= 0 || p->_screenHeight<=0){
@@ -1130,7 +1130,7 @@ ex_resize_stage2d(){
 	sprite_set_hit_rect(p->stage2d,0,0,p->_screenWidth,p->_screenHeight);
 }
 static void f_callback(){
-	f_renderlistCall(render_3dNode);//渲染3d节点
+	f_renderlistCall(ex_render3dNode);//渲染3d节点
 }
 //初始化一个设置坐标和cam角度的fbo
 static void

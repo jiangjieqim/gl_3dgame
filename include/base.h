@@ -274,4 +274,7 @@ base_move(HeadInfo* ptr,int ms,
 void base_setv(void* ptr,int flag);
 void base_resetv(void* ptr,int flag);
 int base_getv(void* ptr,int flag);
+
+//在链表中搜索渲染节点
+void* base_findByName(void* list,const char* name);
 #endif
