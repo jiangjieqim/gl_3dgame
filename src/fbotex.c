@@ -2,8 +2,7 @@
 #include <gl/glut.h>
 #include <assert.h>
 #include <stdio.h>
-
-#include "common.h"
+#include <string.h>
 #include "tl_malloc.h"
 #include "jgl.h"
 
@@ -15,15 +14,14 @@
 #include "ex.h"
 struct FBOTexNode
 {
-	struct Sprite*		_2dspr;				//2dSprite,绑定fbo的2dSprite
 	void* _3dcam;
-
 
 	GLuint              fboName;			//FBO命名对象	
 	GLuint				mirrorTexture;		//镜像贴图
 	GLuint              depthBufferName;	//深度缓冲区
 	int					texw,texh;			//贴图的宽高
 	
+	GLuint				tex;
 
 	// 渲染节点的回调
 	void (*callBack)();
@@ -33,6 +31,7 @@ struct FBOTexNode
 };
 static void
 f_renderList(int data,int parms){
+	//printf("%d\n",data);
 	ex_render3dNode(data);
 }
 void
@@ -61,21 +60,20 @@ void fbo_pushNode(void* p,void* _node){
 	if(_node){
 		struct HeadInfo* b;
 		b = base_get(_node);
-		if( base_findByName(fbo->nodelist,b->name) != NULL){
+		if( base_findByName(fbo->nodelist,b->name)){
 			printf("fbo_pushNode,error! 重名的对象_engine :%s\n",b->name);
 			assert(0);
 		}else{
 			LStack_push(fbo->nodelist,_node);
 		}
 	}
-
 }
 
 void fbo_bind(void* ptr,void (*callBack)()){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
 	fbo->callBack = callBack;
 }
-//#define _TestTex_
+
 void* 
 fbo_init(int texW,int texH){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)tl_malloc(sizeof(struct FBOTexNode));
@@ -84,7 +82,6 @@ fbo_init(int texW,int texH){
 	GLint mirrorTexHeight = texH;
 
 	GLuint              fboName;
-	//GLuint				textures[1];//大理石贴图
 	GLuint				mirrorTexture;//镜像贴图
 	GLuint              depthBufferName; //深度缓冲区
 	
@@ -123,41 +120,9 @@ fbo_init(int texW,int texH){
 
 	// Make sure all went well
 	//gltCheckErrors();
-
 	
-	//创建2dSprite
-	/*fbo->_2dspr = sprite_create("fbo1",0,0,256,256,0);
-	*/
-	{
-		struct Sprite* spr = 0;
-#ifdef _TestTex_
-		GLuint tex =jgl_loadTex("//resource//texture//1.tga");
-#endif
-		void* mat= tmat_create_empty("_spritevbo");
-		
-		char buffer[64];
-		tl_newName(buffer,64);
-		//tmat_setTexFromGPU(mat,0,mirrorTexture);
-		tmat_setID(mat,1);
-		
-#ifdef _TestTex_
-		tmat_pushTex(mat,tex);//mirrorTexture
-#else
-		tmat_pushTex(mat,mirrorTexture);//mirrorTexture
-#endif
-		//printf("mirrorTexture:%d\n",mirrorTexture);
-		//fbo->mat = mat;
-		
-		spr = sprite_create(buffer,0,0,texW,texH,0);
-		sprite_rotateZ(spr,-PI/2);//sprite旋转90度
-		sprite_rotateX(spr,PI);
-		base_setv(spr,FLAGS_REVERSE_FACE);
-
-		spr->material = mat;
-		fbo->_2dspr=spr;
-
-	}
-	
+	//fbo->_2dspr=f_createSprite(mirrorTexture,texW,texH);
+	fbo->tex = mirrorTexture;
 	// Reset framebuffer binding
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
@@ -178,7 +143,7 @@ fbo_dispose(void* p){
 	
 	glDeleteTextures(1, &fbo->mirrorTexture);
 
-	sprite_dipose(fbo->_2dspr);
+	//sprite_dipose(fbo->_2dspr);
 	//glDeleteTextures(1, textures);
 	cam_dispose(fbo->_3dcam);
 
@@ -189,12 +154,16 @@ fbo_dispose(void* p){
 	glDeleteFramebuffers(1, &fbo->fboName);
 }
 
-
-void* fbo_get_spr(void* p){
-	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-	return fbo->_2dspr;
-}
-void* fbo_get_cam(void* p){
+//void* fbo_get_spr(void* p){
+//	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+//	return fbo->_2dspr;
+//}
+void* fbo_getCam(void* p){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 	return fbo->_3dcam;
+}
+
+void* fbo_getTex(void* p){
+	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+	return (void*)fbo->tex;
 }

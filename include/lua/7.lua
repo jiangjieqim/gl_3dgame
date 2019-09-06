@@ -14,8 +14,8 @@ cam_setPosition(0,0,-6);
 
 
 
-
----[[
+--加载一个角色模型
+--[[
 local obj2 = UnitBase:new();
 obj2:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");--gobin,bauul
 obj2:scale(1/50);
@@ -23,6 +23,9 @@ obj2:scale(1/50);
 obj2:rx(PI/2);
 obj2:y(0.5);
 --]]
+local node =  node_test();
+
+
 
 --[[
 obj2:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//wolf.mat");
@@ -45,6 +48,11 @@ local function f_animscHandle(sc)
 	if(obj2) then
 		obj2:ry(v);
     end
+	
+	if(node) then
+		node_setRY(node,v);
+	end
+	
     if(select)then
     --    select:ry(v);
     end

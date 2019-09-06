@@ -511,7 +511,7 @@ func_create_name(name)
 	if(name) then
 		return name;
 	end
-	return getName()
+	return getName();
 end
 
 
@@ -701,6 +701,11 @@ function func_loadfile(url)
     return change_attr(nil,"loadfile",url);
 end
 
+--只是加载,并不会加载到渲染列表
+function func_ex_loadVBO(name,url)
+	return change_attr(nil,"ex_loadVBO",name,url);
+end
+
 --获取屏幕的尺寸
 function func_screenSize()
 	local w,h=get_attr(nil,"screenSize");
@@ -794,6 +799,11 @@ function func_split(str, delimiter)
     end
     return result
 end
+--将一个渲染节点加入到一个fbo对象中
+function func_fbo_pushNode(node,fbo)
+	fbo = fbo or 0;
+	change_attr(nil,"fbo_pushNode",tonumber(fbo)..","..tonumber(node));
+end
 --xml转化为table结构体数据
 function func_xml_to_tb(data)
     local xml = xml_load_str(data);
@@ -827,3 +837,6 @@ dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位
+dofile("..\\include\\lua\\node.lua")		--角色单位2
+
+

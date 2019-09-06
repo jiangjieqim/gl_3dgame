@@ -28,6 +28,7 @@
 #include "base.h"
 #include "frame.h"
 #include "fbotex.h"
+#include "fbospr.h"
 //#define DEBUG_PRINT_HIT
 
 int g_sprite_line;
@@ -168,9 +169,7 @@ md2_render(struct MD2_Object* _md2){
 	//实体绘制
 	base_renderFill(base);
 }
-//加载VBO模式的模型
-static int 
-f_load_vbo(char* name,const char* url);
+
 
 //static void ex_render3dNode(int data);
 //static void render_uiNode(int data);
@@ -662,7 +661,7 @@ ex_render3dNode(int data)
 	//struct EX*e = ex_getIns();	
 	struct HeadInfo* base = base_get((void*)data);
 	int objType = base->curType;
-
+	base_realUpdateMat4x4(base);
 	if(objType== TYPE_OBJ_FILE)
 	{
 		f_ent_render((struct Ent3D*)data);
@@ -1135,11 +1134,33 @@ static void f_callback(){
 //初始化一个设置坐标和cam角度的fbo
 static void
 f_init_fbo(void* fbo){
-	fbo_bind(fbo,f_callback);
+	//fbo_bind(fbo,f_callback);
 	{
-		void* cam = fbo_get_cam(fbo);
-		void* spr = fbo_get_spr(fbo);
+		void* cam = fbo_getCam(fbo);
+		void* material;
+		
+		void* spr = fbospr_create(fbo_getTex(fbo),256,256);
+		struct HeadInfo* base;
 		sprite_setpos((struct Sprite*)spr,100,100);
+		
+/*
+		{
+			void* node;
+			node = ex_loadVBO("fbo0","\\resource\\md2\\bauul.md2");//"\\resource\\md2\\bauul.md2"
+			//	"\\resource\\obj\\box.obj"
+			fbo_pushNode(fbo,node);
+			//base_set_scale((void*)base_get(node),1/50);
+			base = base_get(node);
+			base->rx = PI/2;
+			base_set_scale(base,0.02);
+			base_updateMat4x4(base);
+
+			//设置材质
+			material = tmat_create("vboDiffuse",1,"\\resource\\texture\\bauul.tga");
+			ex_set_material(node,(void*)material);
+			base_setv(node,FLAGS_VISIBLE);
+		}
+*/            
 
 		cam_setZ(cam,-3);
 		cam_setRX(cam,PI*1.8);
@@ -1349,7 +1370,11 @@ ex_load_model(char* name,const char* url,int mode){
 				return 0;
 			}
 		case E_RenderModeVBO:
-			return (void*)f_load_vbo(name,url);
+			{
+				void* n = ex_loadVBO(name,url);
+				f_addNode(ex_getIns(),n);
+				return n;
+			}
 	}
 	return 0;
 }
@@ -1411,7 +1436,7 @@ vbo_md2Load(const char* name,const char* url)
 	md2parse_dispose(_parse);
 	tl_free(_objStr);
 	
-	f_addNode(ex_getIns(),node);
+	//f_addNode(ex_getIns(),node);
 
 	//printf("[%s]动作总数:%d\n",url,node->anim->allLength);
 	return (int)node;
@@ -1469,33 +1494,32 @@ vbo_loadObj3d(char* name,const char* url)
 	tl_free(_objStr);
 
 	//node->base = node->ptrVBO->base;
-	f_addNode(ex_getIns(),node);
+	//f_addNode(ex_getIns(),node);
 	return (int)node;
 }
 //加载VBO模式的模型
-static int 
-f_load_vbo(char* name,const char* url)
-{
+void* 
+ex_loadVBO(char* name,const char* url){
 	char suffix[G_BUFFER_16_SIZE];
-#ifdef DEBUG
-	log_color(0x00ff00,"VBO模式创建模型对象:(%s)\n",name);
-#endif
+//#ifdef DEBUG
+//	log_color(0x00ff00,"VBO模式创建模型对象:(%s)[%s]\n",name,url);
+//#endif
 	tl_getSuffixByPath((char*)url,suffix,G_BUFFER_16_SIZE);
 	if(!strcmp(suffix,"obj"))
 	{
-		return vbo_loadObj3d(name,url);
+		return (void*)vbo_loadObj3d(name,url);
 	}
 	else if(!strcmp(suffix,"md2"))
 	{
 		//return (int)load_md2(name,url,x,y,z,scale);
-		return vbo_md2Load(name,url);
+		return (void*)vbo_md2Load(name,url);
 	}
 	else if(!strcmp(suffix,"md5mesh"))
 	{
 		//return (int)load_md5(name,url,x,y,z,scale);
 	}
-	assert(0);
 	printf("模型加载方式未实现...\n");
+	assert(0);
 	return 0;
 }
 

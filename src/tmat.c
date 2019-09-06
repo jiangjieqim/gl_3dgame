@@ -69,14 +69,17 @@ f_updateTexture(GLuint program3D,struct GMaterial* mat){
 
 //static float testValue = 1.0;
 /*
+ *
+ *	上传模型变换矩阵到顶点着色器
+ ****
 	变换
 	自缩放,旋转
 	缩放==> 平移到(0,0,0) ==>缩放 ==>恢复到原来坐标
 	旋转==> 平移到(0,0,0) ==>旋转 ==>恢复到原来坐标
 
 */
-static void f_uploadMat4x4(GLint location_mat4x4,Matrix44f _out_mat4x4)
-{
+static void 
+f_uploadMat4x4(GLint location_mat4x4,Matrix44f _out_mat4x4){
 	glUniformMatrix4fv(location_mat4x4,1,GL_TRUE,_out_mat4x4);
 }
 
@@ -86,8 +89,7 @@ static void f_uploadMat4x4(GLint location_mat4x4,Matrix44f _out_mat4x4)
 ******************************************************************/
 
 static void 
-f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M)
-{
+f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 
 	//轮廓线颜色
 	int _outlineColor = glGetUniformLocation(program3D,"_outlineColor");

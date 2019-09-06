@@ -447,4 +447,9 @@ void ex_switch3dCam(void* cam);
 //渲染一个3D节点
 void 
 ex_render3dNode(int data);
+
+//加载VBO模式的模型
+void* 
+ex_loadVBO(char* name,const char* url);
+
 #endif

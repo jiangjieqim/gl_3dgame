@@ -672,7 +672,7 @@ renderSprite(struct Sprite* p)
 
 //#endif
 		}else
-			//采用固定管线方式s
+			//采用固定管线方式
 			tmat_renderSprite(material,
 							//"sprite",
 							shaderName,

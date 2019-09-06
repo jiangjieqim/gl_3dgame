@@ -56,16 +56,19 @@ f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
 
 	tlgl_drawColorLine(base->m,base->tmat,base->boxVertPtr,dataLength,base->boxR,base->boxG,base->boxB);
 }
-/*
-	当位置，缩放,旋转发生变化的时候更新矩阵
-	所有的数据将合并到base->m矩阵中处理，所以模型发生变化的时候都要执行此方法
-*/
-void 
-base_updateMat4x4(struct HeadInfo* base){
+
+void
+base_realUpdateMat4x4(void* p){
+
+	struct HeadInfo* base = (struct HeadInfo*)p;
 	Matrix44f xyz,scale,rx,ry,rz;
-	
+	if(!base->changed){
+		return;
+	}
+	base->changed = 0;
+
 	mat4x4_zero(base->m);
-	
+
 	//x,y,z坐标
 	mat4x4_identity(xyz);
 	mat4x4_translate(xyz,base->x,base->y,base->z);
@@ -87,8 +90,16 @@ base_updateMat4x4(struct HeadInfo* base){
 	//rz
 	mat4x4_identity(rz);
 	mat4x4_rotateZ(rz,base->rz);
-	
+
 	mat4x4_mult(5,base->m,xyz,ry,rx,rz,scale);	//矩阵base->m = xyz * ry * rx * rz * scale
+}
+/*
+	当位置，缩放,旋转发生变化的时候更新矩阵
+	所有的数据将合并到base->m矩阵中处理，所以模型发生变化的时候都要执行此方法
+*/
+void 
+base_updateMat4x4(struct HeadInfo* base){
+	base->changed = 1;	
 }
 
 /*

@@ -123,6 +123,9 @@ typedef struct HeadInfo{
 	void* parent;
 	void* _move_tp;
 	void* _ry_tp;
+
+	//矩阵发生变化的时候设置为1
+	int changed;
 }HeadInfo;
 
 /*
@@ -277,4 +280,9 @@ int base_getv(void* ptr,int flag);
 
 //在链表中搜索渲染节点
 void* base_findByName(void* list,const char* name);
+
+
+//真正的更新矩阵的接口,优化性能,保证每一个frame只计算一次矩阵
+void
+base_realUpdateMat4x4(void* p);
 #endif
