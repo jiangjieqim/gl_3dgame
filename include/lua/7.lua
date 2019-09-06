@@ -15,7 +15,7 @@ cam_setPosition(0,0,-6);
 
 
 --加载一个角色模型
---[[
+---[[
 local obj2 = UnitBase:new();
 obj2:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");--gobin,bauul
 obj2:scale(1/50);
@@ -83,7 +83,7 @@ glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())))
 local function f_on_click_floor_handle(data)
     local pos = func_split(data,",");--func_xml_to_tb(data);
     if(obj2) then
-    --    obj2:move(pos[1],pos[2],pos[3]);
+		obj2:move(pos[1],pos[2],pos[3]);
     end
 --	print("请求移动");
 end

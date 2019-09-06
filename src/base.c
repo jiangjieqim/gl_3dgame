@@ -139,6 +139,8 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 	struct HeadInfo* base = (struct HeadInfo*)tl_malloc(sizeof(struct HeadInfo));
 	memset(base,0,sizeof(struct HeadInfo));
 	memset(&base->rData,0,sizeof(struct VertexData));
+	
+	//base->changed = 1;//强制计算第一帧的矩阵
 
 	//创建事件监听句柄
 	base->evtList = (void*)LStack_create();

@@ -121,6 +121,11 @@ end
 function UnitBase:set_speed(v)
     self.speed = v;
 end
+--[[
+function UnitBase:refresh()
+	func_update_mat4x4(self.p);
+end
+--]]
 --绑定一个点击事件
 function UnitBase:bindRayPick(func)
     --print(self:getv(FLAGS_RAY));
