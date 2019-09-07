@@ -9,7 +9,7 @@
 void*
 fbospr_create(void* mirrorTexture,int texW,int texH){
 	struct Sprite* spr = 0;
-	void* mat= tmat_create_empty("_spritevbo");
+	void* mat= tmat_create_empty("fbotex");
 
 	char buffer[64];
 	tl_newName(buffer,64);

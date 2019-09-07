@@ -5,6 +5,8 @@ local function create()
 	    label;
 	    isDrag;--是否可以拖拽
         closeSize = 30;
+
+        img;
     };
     return new_sharp;
 end
@@ -36,7 +38,7 @@ end;
 
 local function f_hide(self)
 	resetv(self.bg,FLAGS_VISIBLE);
---	resetv(self.label,FLAGS_VISIBLE);
+    resetv(self.img,FLAGS_VISIBLE);
     ftext_vis(self.label,0);
 	btn_visible(self.closeBtn,false);
 end
@@ -59,6 +61,17 @@ function alert_create(w,h)
 	self.bg = sprite_create("alert",x,y,w,h);
 	func_setIcon(self.bg,"gundi.png");
 	--print(self.closeBtn)
+
+    --##############################################
+    --FBO渲染的Sprite
+    local spr = engine_getFBO_sprite();
+    func_addchild(self.bg,spr);
+    engine_addNode(spr);
+    self.img = spr;
+    --##############################################
+
+
+
 	local closeSize = self.closeSize;
 	self.closeBtn=btn_create(x,y,closeSize,closeSize);
 	--func_sprite_removechild(self.bg,self.closeBtn.sprite);
@@ -76,6 +89,8 @@ function alert_create(w,h)
 
 	func_addchild(self.bg,btn_get_container(self.closeBtn),w-self.closeSize,0);
 	func_addchild(self.bg,ftext_get_container(self.label));
+    
+    
 
 --    func_sprite_removechild(self.bg,ftext_get_container(self.label));
 
@@ -86,12 +101,10 @@ function alert_create(w,h)
 end;
 
 local function show(self,str)
-	--self.visible = true;
 	btn_visible(self.closeBtn,true);
 	setv(self.bg,FLAGS_VISIBLE);
+    setv(self.img,FLAGS_VISIBLE);
 
---	setv(self.label,FLAGS_VISIBLE);
---	tf_setText(self.label,str);
     ftext_vis(self.label,1);
 
 	ftext_reset(self.label,str);
@@ -102,7 +115,7 @@ local alert1;
 function alert(str)
 	str = str or "";
 	if(alert1 == nil) then
-		alert1 = alert_create(300,100);
+		alert1 = alert_create(256,256);
 	end
 	show(alert1,str);
 end

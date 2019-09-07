@@ -43,9 +43,9 @@ fbo_render(void* ptr){
 	glDrawBuffers(1, fboBuffs);
 
 	glViewport(0, 0, fbo->texw, fbo->texh);
-
+	glClearColor(1,0,1,1);//绘制成紫红色
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//清除当前的缓冲区
-
+	
 	ex_switch3dCam(fbo->_3dcam);
 	if(fbo->callBack){
 		fbo->callBack();

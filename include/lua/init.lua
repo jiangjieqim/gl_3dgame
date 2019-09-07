@@ -8,10 +8,9 @@ function f_onkey(data)
 end
 --]]
 --evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
---ex:bgColor(0.3,0.3,0.3);--灰色
-ex:bgColor(1,1,1);--白色
---ex:bgColor(0.9,0.9,0.9);
 
+
+engine_setBg(0.3,0.3,0.3);
 
 --fps(0,15);
 
@@ -24,12 +23,9 @@ func_setIcon(sprite,"gundi.png");
 --setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
 
 
-local sprite1 =func_sprite_createNoHit(100,100,256,256);
-func_setIcon(sprite1,"gundi.png");
-setv(sprite1,FLAGS_DRAW_PLOYGON_LINE);
-
-
---alert("文本");
+--local sprite1 =func_sprite_createNoHit(100,100,256,256);
+--func_setIcon(sprite1,"gundi.png");
+--setv(sprite1,FLAGS_DRAW_PLOYGON_LINE);
 
 local _in = input_create();
 input_set_pos(_in,100,50);
@@ -69,12 +65,26 @@ local function loadFloor()
 plane:scale(10);
 end
 
+
+
 --btn_create(0,0,128,128);
 
 --loadFloor();
 dofile("..\\include\\lua\\7.lua");
 
+--//汉字第一个字节的范围
+--static int
+--f_is_first_code(unsigned char c){
+--	return (0x80 <= c) && (0xF7 >= c);
+--}
+--//汉字第二个字节的范围
+--static int
+--f_is_second_code(unsigned char c){
+--	return (0xA1 <= c) && (0xFE > c);
+--}
 
+
+print(0x80,0xF7,0xA1,0xFE);
 
 
 --local t = func_get_longTime();
@@ -83,3 +93,7 @@ dofile("..\\include\\lua\\7.lua");
 --    math.random();
 --end
 --print(func_get_longTime()-t);
+
+			
+
+engine_refreshCam3d();

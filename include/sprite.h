@@ -87,6 +87,9 @@ struct Sprite{
 	
 };
 
+//设置sprite的z轴的值
+void
+sprite_set_z(void* p,float v);
 /*
  *为spr添加一个子对象
  **/

@@ -123,7 +123,7 @@ void cam_offsetZ(void* p,float v){
 //	struct Camera* c = (struct Camera*)p;
 //}
 
-void cam_refreshModdel(void *p){
+void cam_refreshModel(void *p){
 	struct Camera* c = (struct Camera*)p;
 	cam_setModePosition(p,c->x,c->y,c->z,c->rx,c->ry,c->rz);
 }

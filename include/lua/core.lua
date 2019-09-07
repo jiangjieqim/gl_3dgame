@@ -692,10 +692,16 @@ function func_get_sprite_mouse_xy(o)
 	local x , y=get_attr(o,"spriteLocalXY");
 	return x,y
 end
+
+function func_sprite_set_z(s,n)
+    sprite_set_z(s,n);
+end
+
 --获取进程运行时间
 function func_get_longTime()
 	return get_attr(nil,"get_longTime");
 end
+
 --加载文件返回一个字符串
 function func_loadfile(url)
     return change_attr(nil,"loadfile",url);
@@ -711,8 +717,6 @@ function func_screenSize()
 	local w,h=get_attr(nil,"screenSize");
 	return w,h
 end
-
-
 
 --设置对象的关键帧帧率
 function func_set_ptr_fps(o,v)
@@ -819,7 +823,8 @@ function func_xml_to_tb(data)
     return tb;
 end
 --function func
-dofile("..\\include\\lua\\ex.lua")	--cam
+dofile("..\\include\\lua\\ex.lua")	--引擎
+dofile("..\\include\\lua\\engine.lua")	--引擎1
 
 dofile("..\\include\\lua\\cam.lua")	--cam
 dofile("..\\include\\lua\\fps.lua")	--fps组件
@@ -832,7 +837,6 @@ dofile("..\\include\\lua\\btn.lua")		--按钮组件
 dofile("..\\include\\lua\\crlui.lua")
 dofile("..\\include\\lua\\infowin.lua")	--fps组件
 
---dofile("..\\include\\lua\\CAlert.lua")	--弹出框组件
 dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件

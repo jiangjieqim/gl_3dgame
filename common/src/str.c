@@ -289,8 +289,6 @@ str_parse_eg_cn(const char* str,void* inParam,int(pCallBack)(void*,char*)){
 		if(f_is_first_code(c)){
 			if(i+1<len && f_is_second_code(str[i+1])){
 				//验证到当前字节和后续的一个字节组成的是一个汉字
-				
-				
 				/*t[0]=str[i];
 				t[1]=str[i+1];*/
 				memcpy(t,str+i,2);
@@ -304,7 +302,7 @@ str_parse_eg_cn(const char* str,void* inParam,int(pCallBack)(void*,char*)){
 			printf("[%s]\n",t);
 		#endif
 
-			if(pCallBack(inParam,t)==0){
+			if(pCallBack &&	pCallBack(inParam,t)==0){
 				return;
 			}
 

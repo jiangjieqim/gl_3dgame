@@ -47,22 +47,22 @@ local function f_select(index)
 	---[[
     if (index == 0) then
         func_ex_info();
-	    --alert("窗口测试:引擎信息");
+	    alert("窗口测试:引擎信息");
     elseif (index == 1) then
         func_gc();
 --    elseif (index == 2) then
 --        ex:switch_spriteline()
 --        print("切换为Sprite线框状态:" .. ex:get_spriteline());
     elseif (index == 2) then
-        fps(0,15);
+        fps(100,0);
     elseif (index == 3) then
         _stat = not _stat;
 --        print(_stat);
 
         if(_stat) then
-            ex:bgColor(0.1,0.1,0.1);
+            engine_setBg(0.1,0.1,0.1);
         else
-            ex:bgColor(0.4,0.4,0.4);
+            engine_setBg(0.4,0.4,0.4);
         end
 	elseif (index == 4) then
 		--创建一个mesh

@@ -226,6 +226,9 @@ f_addNode(struct EX* p, void* _node){
 			printf("error! 重名的对象_engine :%s\n",b->name);
 			assert(0);
 		}else{
+			if(b->curType == TYPE_SPRITE_FLIE){
+				sprite_set_z(_node,ex_newPosZ());
+			}
 			LStack_push(p->renderList,_node);
 		}
 	}
@@ -396,7 +399,7 @@ ex_get_info(){
 	memory_get_info(&totleByte,&nodeCnt);
 	printf("**********************************************\n");
 	//j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
-	log_color(0xffff00,"fps:%ld \n",fps);
+	log_color(0xffff00,"fps:%ld,ui_z:%.2f\n",fps,ex->ui_pos_z);
 	log_color(0x00ff00,"camera 坐标  :      %.3f %.3f %.3f\n",
 		cam_getX(_cam),
 		cam_getY(_cam),
@@ -874,28 +877,28 @@ f_get_custom_modelMatrix(Matrix44f m,struct ECamera* pcam){
 //}
 
 //用固定管线计算的透视矩阵和模型矩阵
-static void
-f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
-					   GLdouble zNear, GLdouble zFar){
-	struct EX* p = ex_getIns();
-	Matrix44f _out;
-
-
-	//struct ECamera cam = p->cam;
-	//只是处理鼠标拾取操作用来获取坐标使用gluUnProject,3d物体 不使用该方式(使用用户自定义的透视矩阵,视图矩阵,模型矩阵)
-	glMatrixMode (GL_PROJECTION);
-	glLoadIdentity ();
-	gluPerspective (fov,aspectRatio,zNear,zFar);
-
-	mat4x4_identity(_out);
-	glGetFloatv(GL_PROJECTION_MATRIX,_out);
-	mat4x4_transpose(_out);	
-	
-	//mat4x4_copy(_out,p->perspectiveMatrix);
-
-	//f_getModelMat4x4();
-	ex_refresh3dModelView();
-}
+//static void
+//f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
+//					   GLdouble zNear, GLdouble zFar){
+//	struct EX* p = ex_getIns();
+//	Matrix44f _out;
+//
+//
+//	//struct ECamera cam = p->cam;
+//	//只是处理鼠标拾取操作用来获取坐标使用gluUnProject,3d物体 不使用该方式(使用用户自定义的透视矩阵,视图矩阵,模型矩阵)
+//	glMatrixMode (GL_PROJECTION);
+//	glLoadIdentity ();
+//	gluPerspective (fov,aspectRatio,zNear,zFar);
+//
+//	mat4x4_identity(_out);
+//	glGetFloatv(GL_PROJECTION_MATRIX,_out);
+//	mat4x4_transpose(_out);	
+//	
+//	//mat4x4_copy(_out,p->perspectiveMatrix);
+//
+//	//f_getModelMat4x4();
+//	ex_refresh3dModelView();
+//}
 //
 //static void
 //updatePerspectiveMatrix( 
@@ -920,13 +923,13 @@ f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
 //	//cam_setPerspect(p->_3dcam,fov,aspectRatio,zNear,zFar);
 //}
 
-/*
-	计算透视和矩阵索引
-*/
-void 
-ex_refresh3dModelView(){
-	cam_refreshModdel(ex_getIns()->_3dcam);
-}
+///*
+//	计算透视和矩阵索引
+//*/
+//void 
+//ex_refresh3dModelView(){
+//	cam_refreshModdel(ex_getIns()->_3dcam);
+//}
 
 /*
 	绘制线段
@@ -1000,9 +1003,8 @@ f_defaultRenderFrame(){
 	//切换到前台帧缓冲,默认的窗口帧缓冲
 	glDrawBuffers(1, windowBuff);
 	glViewport (0, 0, p->_screenWidth, p->_screenHeight);
-
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//清空颜色缓冲区和深度缓冲区
 	glClearColor(p->bg_r,p->bg_g,p->bg_b,1);				//清除背景并填充背景为白色
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//清空颜色缓冲区和深度缓冲区
 
 	//深度测试
 	glEnable(GL_DEPTH_TEST);
@@ -1095,6 +1097,8 @@ float ex_newPosZ()
 	struct EX* p = ex_getIns();
 	//return p->zBuffer++;//这里存疑,UI正交zbuffer叠加的影响
 	 p->ui_pos_z+=0.01;
+
+	//printf("==>%f\n",p->ui_pos_z);
 	return p->ui_pos_z;
 }
 
@@ -1137,34 +1141,17 @@ f_init_fbo(void* fbo){
 	//fbo_bind(fbo,f_callback);
 	{
 		void* cam = fbo_getCam(fbo);
-		void* material;
+		//void* material;
 		
 		void* spr = fbospr_create(fbo_getTex(fbo),256,256);
-		struct HeadInfo* base;
-		sprite_setpos((struct Sprite*)spr,100,100);
-		
-/*
-		{
-			void* node;
-			node = ex_loadVBO("fbo0","\\resource\\md2\\bauul.md2");//"\\resource\\md2\\bauul.md2"
-			//	"\\resource\\obj\\box.obj"
-			fbo_pushNode(fbo,node);
-			//base_set_scale((void*)base_get(node),1/50);
-			base = base_get(node);
-			base->rx = PI/2;
-			base_set_scale(base,0.02);
-			base_updateMat4x4(base);
+		//base_resetv(spr,FLAGS_VISIBLE);
 
-			//设置材质
-			material = tmat_create("vboDiffuse",1,"\\resource\\texture\\bauul.tga");
-			ex_set_material(node,(void*)material);
-			base_setv(node,FLAGS_VISIBLE);
-		}
-*/            
+		sprite_setpos((struct Sprite*)spr,100,100);
+		ex_getIns()->fboTexSprite = spr;
 
 		cam_setZ(cam,-3);
 		cam_setRX(cam,PI*1.8);
-		cam_refreshModdel(cam);
+		cam_refreshModel(cam);
 	}
 }
 void 
@@ -1198,6 +1185,7 @@ ex_init(struct EX* p,GLdouble zfar){
 		
 		//初始化2d stage
 		p->stage2d = sprite_create("stage2d",0,0,32,32,f_stage_click_callback);
+		ex_add(p->stage2d);
 		stage2d = (struct Sprite*)p->stage2d;
 		//sprite_set_default_tex(p->stage2d);
 		p->curFocus = stage2d;
@@ -1208,8 +1196,6 @@ ex_init(struct EX* p,GLdouble zfar){
 	p->fbo = fbo_init(256,256);
 	f_init_fbo(p->fbo);
 }
-
-
 void ex_dispose(struct EX* p){
 	printf("销毁引擎设备!\n");
 	//getch();
@@ -1921,40 +1907,24 @@ void onKeyboardCallBack(unsigned char key, int x, int y){
 	}
 }
 
-static void 
-update3DNode(int data){
-	base_updateMat4x4(base_get((void*)data));
-}
+//static void 
+//update3DNode(int data){
+//	base_updateMat4x4(base_get((void*)data));
+//}
 
 void 
 ex_cam_set_pos(float x,float y,float z){
 	struct EX* ex = ex_getIns();	
-	//struct ECamera* cam = &ex->cam;
+
 	void* _c = ex->_3dcam;
 	
-	/*
-	if(cam->ptrFollow){
-		return;
-	}
-*/
-	//ex->camx = x;	ex->camy = y;	ex->camz = z;
-
-
-	//cam->x = x; cam->y = y; cam->z = z;
 	cam_setX(_c,x);
 	cam_setY(_c,y);
 	cam_setZ(_c,z);
 
-
-
 	//更新渲染列表中的矩阵
-	f_renderlistCall(update3DNode);
-	//printf("setCamPos	%f,%f,%f\n",x,y,z);
-	ex_refresh3dModelView();
-}
-struct EX* ex_create()
-{
-	return ex_getIns();
+	//f_renderlistCall(update3DNode);
+	cam_refreshModel(ex_getIns()->_3dcam);
 }
 
 void setBgColor(float r,float g,float b){

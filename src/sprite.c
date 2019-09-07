@@ -504,13 +504,17 @@ sprite_create(char* _spriteName,
 	if(base){
 		setv(&base->flags,FLAGS_VISIBLE);//FLAGS_RAY
 		pSpr->clickCallBack = clickCallBack;
-		ex_add(pSpr);
+		//ex_add(pSpr);
 	}
-	pSpr->pos_z = ex_newPosZ();
+	//pSpr->pos_z = ex_newPosZ();//此处不设置z的值,在ex_add的时候再设置
 	pSpr->zScale = 1.0;
 	return pSpr;
 }
-
+void
+sprite_set_z(void* p,float v){
+	struct Sprite* pSpr = (struct Sprite*)p;
+	pSpr->pos_z = v;
+}
 void 
 sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h)
 {
@@ -1069,11 +1073,15 @@ void sprite_addChild(void* p,void* child){
 	sprite_setpos(childspr,spr->screenX,spr->screenY);
 	childspr->localx = 0;
 	childspr->localy = 0;
-	
+	//if(childspr->pos_z<spr->pos_z){
+	//	sprite_set_z(childspr,ex_newPosZ());
+	//	printf("====================>%0x修改层级\n",childspr);
+	//}
 	if(f_isHasChild(spr,(int)child)){
 		//printf("is exist!!!\n");
 		return;
 	}
+	
 	//设置相对坐标
 	LStack_push(spr->childs,child);
 }

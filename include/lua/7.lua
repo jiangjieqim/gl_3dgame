@@ -15,14 +15,17 @@ cam_setPosition(0,0,-6);
 
 
 --加载一个角色模型
----[[
+--[[
 local obj2 = UnitBase:new();
 obj2:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat");--gobin,bauul
+
+
 obj2:scale(1/50);
 --obj2:setv(FLAGS_DRAW_PLOYGON_LINE);
 obj2:rx(PI/2);
 obj2:y(0.5);
 --]]
+
 local node =  node_test();
 
 
@@ -46,7 +49,7 @@ local function f_animscHandle(sc)
     
 	scrollBar_label(animsc,v);
 	if(obj2) then
-		obj2:ry(v);
+	--	obj2:ry(v);
     end
 	
 	if(node) then
@@ -104,7 +107,7 @@ local function f_onkey(data)
 	local key = tonumber(data);
 	--print('my key = '..key);
 	if(key == KEY_A) then
-	    --alert(tostring(math.random(0,100)));
+	    
         --print("get curFocus point = "..func_get_curFocus());	
 	elseif(key == KEY_B)then
         if(plane) then

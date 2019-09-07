@@ -79,6 +79,13 @@ f_draw_word(FText* txt,unsigned char* rgba,int x,int y,int w,int h){
 	GMaterial* mat = spr->material;
 	jsl_sub(tmat_getTextureByIndex(mat,0),rgba,GL_BGRA,GL_UNSIGNED_BYTE,x,y,w,h);
 }
+
+//换行
+static void
+f_nextLne(struct FText* txt){
+	txt->_py+=txt->fh;
+}
+
 /************************************************************************/
 /* 初始化临时缓冲区                                                                     */
 /************************************************************************/
@@ -127,9 +134,22 @@ static int
 f_pCallBack(void* inParam,char* str){
 	FText* txt = (FText*)inParam;
 	int w,h;
+	
+	if (strlen(str)==1){
+		switch(str[0])
+		{
+		case  10://回车占位符
+			if(txt->wordWrap){
+				txt->_px = 0;
+				f_nextLne(txt);
+				return 1;
+			}
+		}
+	}
+	
 	ftext_set(inParam,str,txt->_cx,txt->_cy,&w,&h);
 	txt->_cx+=w;
-	//printf("%s\n",str);
+
 	return txt->_stop == 0 ? 1 : 0;
 }
 
@@ -260,7 +280,7 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 	f_init_buffer(txtWidth,txtHeight);
 
 	txt->spr = sprite_create(txtName,0,0,txtWidth,txtHeight,0);
-	
+	ex_add(txt->spr);
 	txt->_bufferLength = txt->fw * txt->fh*4;//计算一个文本数据需要的缓冲区的大小
 	txt->_buffer = tl_malloc(txt->_bufferLength);
 
@@ -314,7 +334,8 @@ f_reset_xy(FText* txt,int *px,int *py,int cw,int ch,int top){
 			//换行
 			txt->_px=tw;
 			if(txt->_py+txt->fh < txt->spr->mHeight){
-				txt->_py+=txt->fh;
+				//txt->_py+=txt->fh;
+				f_nextLne(txt);
 				_st = 1;
 			}
 		}else{
@@ -390,6 +411,8 @@ ftext_set(void* p,char* s,int x,int y,int* pw,int* ph){
 		memset(txt->_buffer,0,txt->_bufferLength);
 
 		//ft_load(rgba,txt->fw,txt->fh,&iWidth,&iHeight,s);
+		//printf("==>[%s]\n",s);
+
 		ft_parse(ex_getIns()->ft,rgba,txt->fw,txt->fh,&iWidth,&iHeight,&top,s);
 #ifdef DEBUG
 		//	printf("ft_load:%s:%d %d\n",s,iWidth,iHeight);

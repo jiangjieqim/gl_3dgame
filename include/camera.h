@@ -30,7 +30,7 @@ void cam_offsetZ(void* p,float v);
 
 
 //刷新cam的模型视图矩阵,在设置完x,y,z,rx,ry,rz需更新
-void cam_refreshModdel(void *p);
+void cam_refreshModel(void *p);
 
 //void cam_refreshPerspect(void* cam);
 /************************************************************************/

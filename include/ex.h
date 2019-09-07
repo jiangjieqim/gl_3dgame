@@ -209,6 +209,9 @@ struct EX
 	
 	//fbo引用
 	void* fbo;
+	
+	//装载fbotex的sprite
+	void* fboTexSprite;
 };
 
 //接口定义
@@ -216,7 +219,7 @@ struct EX
 /*
 *	创建引擎设备上下文
 */
-struct EX* ex_create();
+//struct EX* ex_create();
 
 /*
 *	渲染循环
@@ -350,7 +353,7 @@ float ex_newPosZ();
 
 
 //void updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar);
-void ex_refresh3dModelView();
+//void ex_refresh3dModelView();
 
 
 

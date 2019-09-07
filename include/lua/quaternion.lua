@@ -1,8 +1,6 @@
 cam:position(0, 0, -5);
 -- cam:rx(PI * 1.7);
 
--- ex:bgColor(0.1,0.1,0.1);
--- µØ°å
 
 
 local function func_quat(x0, y0, x1, y1, v)

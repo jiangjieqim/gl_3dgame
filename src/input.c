@@ -39,6 +39,9 @@ f_key2(int evtId,void* data,void* thisObj){
 		//evt_dispatch(ptr);
 		//是否清空输入框中的数据
 		//ftext_clear(txt);
+		
+		//cam_refreshModdel(ex_getIns()->_3dcam);
+
 		return;
 	}
 	

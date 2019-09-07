@@ -1,4 +1,3 @@
-
 ListBox = {
 
 };
@@ -16,7 +15,6 @@ function ListBox:new(x, y, callBack)
         -- textFiled列表
 
         str = "";
-
 
         bg = nil,
         -- spirte
@@ -55,7 +53,7 @@ end
 --设置文本
 local function f_set_label(list, label)
     if (list.tf == nil) then
-        local tf = ftext_create();
+        local tf = ftext_create(128,128);
         -- tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
         ftext_setpos(tf, list.x, list.y);
         list.tf = tf;
@@ -84,22 +82,27 @@ function ListBox:tf_vis_switch()
     --        ftext_vis(value, _stat);
     --    end
     for key, value in pairs(list.tflist) do
-        fext_dispose(value);
+        --fext_dispose(value);
     end
     list.tflist = { };
 
     local c = 0;
+    local _listStr = "";
     if (_stat == 1) then
         for key, value in pairs(arr) do
             --            fext_dispose(value);
             if (string.len(value) > 0) then
-                -- print(value, string.len(value));
-                self:build(value);
+                --print(string.len(value).."\t"..value.."\t");
+                
+                --self:build(value);
+                _listStr = _listStr..value.."\n";
                 c = c + 1;
             end
         end
         --        print(c);
     end
+
+    
 	local w = self.g_width;
 	local h = (c + 1) * self.g_gap;
     func_set_sprite_size(self.bg, w,h);
@@ -108,17 +111,33 @@ function ListBox:tf_vis_switch()
     --    print(f_get_index(self));
     ----    func_gc();
     --    func_ex_info();
-
+    local _select = false;
     if (self.b_drop == false and self.callBack) then
         local i = f_get_index(self);
         if (i >= 0) then
             --f_set_label(self, arr[i + 1]);--设置标题文本
 			if(self.isSetTitle == true) then
-				self:setTitle(arr[i+1]);
-			end
+				--self:setTitle(arr[i+1]);--  .."\n".._listStr
+--                self:setTitle(_listStr);
+                _listStr = arr[i+1];
+                _select = true;
+			else
+                --self:setTitle(_listStr);
+            end
+
 			self.callBack(i);
+        else
+            --self:setTitle(_listStr);
         end
+    else
+        --print(_listStr);
+        --self:setTitle(_listStr);
     end
+--    self:setTitle("\n".._listStr);
+    if(_select == false) then
+        _listStr ="\n".._listStr;
+    end
+    self:setTitle(_listStr);
 end
 
 local function f_click(name)
@@ -139,7 +158,7 @@ function ListBox:init(_x, _y)
     --    print(self);
     _x = _x or 0;
     _y = _y or 0;
-    self.g_gap = 15;
+    self.g_gap = 12;
     self.g_width = 60;
     self.x = _x;
     self.y = _y;

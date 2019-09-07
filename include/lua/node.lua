@@ -52,9 +52,11 @@ end
 
 function node_test()
 	local n = node_new();
-	node_loadModel(n,"\\resource\\md2\\bauul.md2");
+--	node_loadModel(n,"\\resource\\md2\\bauul.md2";  node_setScale(n,0.02);
+    node_loadModel(n);
+
 	node_loadMaterial(n,"//resource//material//bauul.mat");
-	node_setScale(n,0.02);
+	
 	node_setRX(n,PI/2);
 	f_split_init(n.node);
 		--setv(node_getNode(n),FLAGS_REVERSE_FACE);--反转三角面
