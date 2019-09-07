@@ -232,11 +232,23 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\camera.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\collide.c"
 					>
 				</File>
 				<File
 					RelativePath="..\src\ex.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\fbospr.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\fbotex.c"
 					>
 				</File>
 				<File
@@ -281,10 +293,6 @@
 				</File>
 				<File
 					RelativePath="..\src\test.c"
-					>
-				</File>
-				<File
-					RelativePath="..\src\test_unit_01.c"
 					>
 				</File>
 				<File
@@ -389,11 +397,23 @@
 					>
 				</File>
 				<File
+					RelativePath="..\include\camera.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\collide.h"
 					>
 				</File>
 				<File
 					RelativePath="..\include\ex.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\fbospr.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\fbotex.h"
 					>
 				</File>
 				<File
