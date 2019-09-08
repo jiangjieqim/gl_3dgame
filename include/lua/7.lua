@@ -26,7 +26,7 @@ obj2:rx(PI/2);
 obj2:y(0.5);
 --]]
 
-local node =  node_test();
+--local node =  node_fbo();
 
 
 

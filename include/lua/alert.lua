@@ -65,6 +65,7 @@ function alert_create(w,h)
     --##############################################
     --FBOäÖÈ¾µÄSprite
     local spr = engine_get_fbo_sprite();
+    node_fbo();
     func_addchild(self.bg,spr);
     engine_addNode(spr);
     self.img = spr;

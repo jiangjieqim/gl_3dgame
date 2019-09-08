@@ -56,7 +56,6 @@ function engine_get_fbo_sprite()
     return _engine.fboTexture;
 end
 
-
 --当前的fps
 function engine_get_fps()
 	return get_attr(nil,"fps");
@@ -71,7 +70,11 @@ end
 function engine_exit()
     change_attr(nil,"exit");
 end
-
+--将一个渲染节点加入到一个fbo对象中
+function engine_fboPushNode(node,fbo)
+	fbo = fbo or 0;
+	change_attr(nil,"fbo_pushNode",tonumber(fbo)..","..tonumber(node));
+end
 function engine_setBg(r,g,b)
     --设置背景色
     change_attr(nil,"setBgColor",string.format("%s,%s,%s",r or 0,g or 0,b or 0));

@@ -799,11 +799,7 @@ function func_split(str, delimiter)
     end
     return result
 end
---将一个渲染节点加入到一个fbo对象中
-function func_fbo_pushNode(node,fbo)
-	fbo = fbo or 0;
-	change_attr(nil,"fbo_pushNode",tonumber(fbo)..","..tonumber(node));
-end
+
 --xml转化为table结构体数据
 function func_xml_to_tb(data)
     local xml = xml_load_str(data);

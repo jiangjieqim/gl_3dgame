@@ -50,16 +50,22 @@ local function f_split_init(md2)
 	func_play(md2);
 end
 
-function node_test()
+function node_fbo()
 	local n = node_new();
---	node_loadModel(n,"\\resource\\md2\\bauul.md2");  node_setScale(n,0.02);
-    node_loadModel(n);
 
-	node_loadMaterial(n,"//resource//material//bauul.mat");
+
+    --加载一个角色模型
+	node_loadModel(n,"\\resource\\md2\\bauul.md2");  node_setScale(n,0.02);
+    node_loadMaterial(n,"//resource//material//bauul.mat");
+
+--    node_loadModel(n);
+--	node_loadMaterial(n,"//resource//material//triangle.mat");--bauul.mat
+
+
 	
 	node_setRX(n,PI/2);
 	f_split_init(n.node);
 		--setv(node_getNode(n),FLAGS_REVERSE_FACE);--反转三角面
-	func_fbo_pushNode(node_getNode(n));
+	engine_fboPushNode(node_getNode(n));
 	return n;	
 end
