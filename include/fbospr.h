@@ -2,6 +2,6 @@
 #define _FBO_SPR_
 
 //创建一个Sprite用来装载FBO的texture
-void*
-fbospr_create(void* mirrorTexture,int texW,int texH);
+//void*
+//fbospr_create(int texW,int texH);
 #endif

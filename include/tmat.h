@@ -62,6 +62,8 @@ void tmat_setID(void* m,int id);
 
 //获取材质id
 int tmat_getID(void* m);
+
+//添加一个贴图句柄到材质句柄
 void 
 tmat_pushTex(void* mat,GLuint tex);
 

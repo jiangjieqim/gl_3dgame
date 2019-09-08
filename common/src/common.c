@@ -42,7 +42,7 @@ void
 tl_newName(char* buffer,int bufferSize){
 	static int _nameId;
 	memset(buffer,0,bufferSize);
-	sprintf_s(buffer,bufferSize,"instance%d",_nameId);
+	sprintf_s(buffer,bufferSize,"%d",_nameId);
 	_nameId++;
 }
 

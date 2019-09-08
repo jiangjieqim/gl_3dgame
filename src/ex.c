@@ -227,7 +227,7 @@ f_addNode(struct EX* p, void* _node){
 			assert(0);
 		}else{
 			if(b->curType == TYPE_SPRITE_FLIE){
-				sprite_set_z(_node,ex_newPosZ());
+				sprite_set_z(_node,ex_newPosZ());//设置sprite的z轴坐标
 			}
 			LStack_push(p->renderList,_node);
 		}
@@ -1138,21 +1138,21 @@ static void f_callback(){
 //初始化一个设置坐标和cam角度的fbo
 static void
 f_init_fbo(void* fbo){
-	//fbo_bind(fbo,f_callback);
-	{
-		void* cam = fbo_getCam(fbo);
-		//void* material;
-		
-		void* spr = fbospr_create(fbo_getTex(fbo),256,256);
-		//base_resetv(spr,FLAGS_VISIBLE);
+	void* cam = fbo_getCam(fbo);
+	//void* spr = sprite_createEmptyTex(256,256);
 
-		sprite_setpos((struct Sprite*)spr,100,100);
-		ex_getIns()->fboTexSprite = spr;
+	//void* mat = sprite_get_material(spr);
+	//tmat_pushTex(mat,(GLuint)fbo_getTex(fbo));
 
-		cam_setZ(cam,-3);
-		cam_setRX(cam,PI*1.8);
-		cam_refreshModel(cam);
-	}
+	//base_resetv(spr,FLAGS_VISIBLE);
+	//sprite_setpos((struct Sprite*)spr,100,100);
+	//ex_getIns()->fboTexSprite = spr;
+
+	//ex_getIns()->fboTexture = fbo_getTex(fbo);
+
+	cam_setZ(cam,-3);
+	cam_setRX(cam,PI*1.8);
+	cam_refreshModel(cam);
 }
 void 
 ex_init(struct EX* p,GLdouble zfar){	

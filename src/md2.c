@@ -10,7 +10,7 @@
 #include "gettime.h"
 #include "vmath.h"
 
-#define DEBUG
+//#define DEBUG
 
 //====================================================================================
 //MD2接口实现
@@ -354,12 +354,14 @@ void fBuildVertices(struct MD2_ParseObj* _md2,struct List* _l,const char* frameN
 	//printf("name: %s index:%d\n",frame->name,frame->index);
 }
 
+//#define CALCULATE_PARSE_TIME
+
 /*
 *	解析关键帧
 */
 static void 
-fParseFrames(struct MD2_ParseObj* _md2)
-{
+fParseFrames(struct MD2_ParseObj* _md2){
+
 	int i,k,j,t;
 	int ch,ctx,cty,ctz;
 	//int _normalIndex;//法线索引号
@@ -372,15 +374,18 @@ fParseFrames(struct MD2_ParseObj* _md2)
 	//关键帧名
 	char name[16];
 	char _tempName[16];
+	
+#ifdef CALCULATE_PARSE_TIME
+	int _time = get_longTime();
+#endif
+	
 	memset(_tempName,0,16);
 
-
-	
 	//开辟关键帧列表这里开辟了所有的缓存区,那么释放其实只要一次
 	_md2->_pframe = (struct MD2_Frame*)tl_malloc(sizeof(struct MD2_Frame) * _md2->_numFrames);
 	
 	//printf(/*"%0x\n%0x\n"*/"%d\n%d\n",&(_md2->pframe[0]),&(_md2->pframe[1]));
-	
+
 	for(i = 0;i < _md2->_numFrames;i++)
 	{
 		#ifdef DEBUG
@@ -484,6 +489,10 @@ fParseFrames(struct MD2_ParseObj* _md2)
 	tvertices = 0;
 
 	_md2->_parsedFrames =1;
+
+#ifdef CALCULATE_PARSE_TIME
+	printf("numframe:%d使用时间%d\n",_md2->_numFrames,(get_longTime()-_time));
+#endif
 }
 /**
  * Finds the final index corresponding to the original MD2's vertex and uv indices. Returns -1 if it wasn't added yet.

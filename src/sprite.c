@@ -470,7 +470,25 @@ sprite_set_clickHandle(void* p,void (*clickCallBack)(void* ,int ,int )){
 	struct Sprite* pSpr = (struct Sprite*)p;
 	pSpr->clickCallBack = clickCallBack;
 }
+void*
+sprite_createEmptyTex(int texW,int texH){
+	struct Sprite* spr = 0;
+	void* mat= tmat_create_empty("fbotex");
 
+	char buffer[64];
+	tl_newName(buffer,64);
+	tmat_setID(mat,1);
+
+	//tmat_pushTex(mat,(GLuint)mirrorTexture);		//void* mirrorTexture,
+
+	spr = sprite_create(buffer,0,0,texW,texH,0);
+	sprite_rotateZ(spr,-PI/2);//sprite旋转90度
+	sprite_rotateX(spr,PI);
+	base_setv(spr,FLAGS_REVERSE_FACE);
+
+	spr->material = mat;
+	return spr;
+}
 struct Sprite* 
 sprite_create(char* _spriteName,
 			  int x,int y,int width,int height,
@@ -604,7 +622,7 @@ sprite_set_default_tex(void* ptr){
 	sprite_texName(p,"gundi.png",0);
 }
 //获取Sprite引用的材质引用,
-//可以从图集中获取,也可以自定义材质引用
+//可以从图集中获取,也可以自定义材质引用(有图集用图集,无图集用自身的材质)
 static void* 
 getMaterial(struct Sprite* p){
 	/*
@@ -728,6 +746,12 @@ f_btn_push(struct Sprite* spr,int* pChange){
 		}
 	}
 }
+
+void*
+sprite_get_material(void* sprite){
+	return getMaterial((struct Sprite*)sprite);
+}
+
 /*
 	绘制一个sprite 
 */

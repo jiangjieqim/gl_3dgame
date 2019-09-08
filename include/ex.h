@@ -211,7 +211,10 @@ struct EX
 	void* fbo;
 	
 	//装载fbotex的sprite
-	void* fboTexSprite;
+	//void* fboTexSprite;
+
+	//fbo贴图引用
+	//void* fboTexture;
 };
 
 //接口定义

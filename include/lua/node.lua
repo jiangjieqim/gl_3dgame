@@ -7,7 +7,7 @@ function node_new()
 end
 
 function node_loadModel(avatar,url)
-	url = url or "\\resource\\obj\\box.obj";--"\\resource\\md2\\bauul.md2";
+	url = url or "\\resource\\obj\\box.obj";--"\\resource\\md2\\bauul.md2";box
 	local name = func_create_name();
 	--print(name,url);
 	avatar.node = func_ex_loadVBO(name,url);
@@ -52,7 +52,7 @@ end
 
 function node_test()
 	local n = node_new();
---	node_loadModel(n,"\\resource\\md2\\bauul.md2";  node_setScale(n,0.02);
+--	node_loadModel(n,"\\resource\\md2\\bauul.md2");  node_setScale(n,0.02);
     node_loadModel(n);
 
 	node_loadMaterial(n,"//resource//material//bauul.mat");

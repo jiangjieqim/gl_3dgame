@@ -64,7 +64,7 @@ function alert_create(w,h)
 
     --##############################################
     --FBOäÖÈ¾µÄSprite
-    local spr = engine_getFBO_sprite();
+    local spr = engine_get_fbo_sprite();
     func_addchild(self.bg,spr);
     engine_addNode(spr);
     self.img = spr;
@@ -115,7 +115,7 @@ local alert1;
 function alert(str)
 	str = str or "";
 	if(alert1 == nil) then
-		alert1 = alert_create(256,256);
+		alert1 = alert_create(300,300);
 	end
 	show(alert1,str);
 end

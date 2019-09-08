@@ -114,7 +114,7 @@ local function f_onkey(data)
 		    func_changeFlags(plane:get_p(),FLAGS_DRAW_PLOYGON_LINE);
         end
     elseif(key == KEY_ESC) then
-        ex:exit();
+        engine_exit();
 	end
 end
 --if(obj2) then

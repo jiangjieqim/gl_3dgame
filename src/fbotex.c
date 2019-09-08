@@ -17,11 +17,11 @@ struct FBOTexNode
 	void* _3dcam;
 
 	GLuint              fboName;			//FBO命名对象	
-	GLuint				mirrorTexture;		//镜像贴图
+	GLuint				tex;		//贴图
 	GLuint              depthBufferName;	//深度缓冲区
 	int					texw,texh;			//贴图的宽高
 	
-	GLuint				tex;
+	//GLuint				tex;
 
 	// 渲染节点的回调
 	void (*callBack)();
@@ -116,13 +116,13 @@ fbo_init(int texW,int texH){
 
 	fbo->depthBufferName = depthBufferName;
 	fbo->fboName = fboName;
-	fbo->mirrorTexture = mirrorTexture;
+	fbo->tex = mirrorTexture;
 
 	// Make sure all went well
 	//gltCheckErrors();
 	
 	//fbo->_2dspr=f_createSprite(mirrorTexture,texW,texH);
-	fbo->tex = mirrorTexture;
+	//fbo->tex = mirrorTexture;
 	// Reset framebuffer binding
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
@@ -140,9 +140,10 @@ fbo_dispose(void* p){
 	//释放之前要销毁那些push进去的3d节点
 	LStack_delete(fbo->nodelist);
 	fbo->nodelist = 0;
-	
-	glDeleteTextures(1, &fbo->mirrorTexture);
-
+	if(fbo->tex){
+		glDeleteTextures(1, &fbo->tex);
+		fbo->tex = 0;
+	}
 	//sprite_dipose(fbo->_2dspr);
 	//glDeleteTextures(1, textures);
 	cam_dispose(fbo->_3dcam);

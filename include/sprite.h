@@ -31,7 +31,7 @@ struct Sprite{
 	void* vertexs;//GLfloat*顶点缓存数据,使用完之后要删除tl_free
 	int	vertLen;
 
-	void* material;//按钮材质
+	void* material;//材质
 
 	struct Atals* atals;//图集
 	
@@ -211,4 +211,11 @@ sprite_set_default_tex(void* p);
  */
 void
 sprite_set_hit_rect(void*p,int x,int y,int width,int height);
+//获取sprite的材质句柄
+void*
+sprite_get_material(void* sprite);
+
+//创建一个没有赋贴图的2dSprite
+void*
+sprite_createEmptyTex(int texW,int texH);
 #endif

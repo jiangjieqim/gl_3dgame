@@ -3,7 +3,7 @@ dofile("..\\include\\lua\\core.lua");
 function f_onkey(data)
 	local key = tonumber(data);
 	if(key == KEY_ESC) then
-        ex:exit();	
+         engine_exit();
 	end
 end
 --]]
@@ -66,7 +66,6 @@ plane:scale(10);
 end
 
 
-
 --btn_create(0,0,128,128);
 
 --loadFloor();
@@ -84,7 +83,7 @@ dofile("..\\include\\lua\\7.lua");
 --}
 
 
-print(0x80,0xF7,0xA1,0xFE);
+--print(0x80,0xF7,0xA1,0xFE);
 
 
 --local t = func_get_longTime();
