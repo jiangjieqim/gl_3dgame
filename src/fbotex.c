@@ -24,7 +24,7 @@ struct FBOTexNode
 	//GLuint				tex;
 
 	// 渲染节点的回调
-	void (*callBack)();
+	//void (*callBack)();
 
 	//渲染的节点列表
 	void* nodelist;
@@ -47,9 +47,9 @@ fbo_render(void* ptr){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//清除当前的缓冲区
 	
 	ex_switch3dCam(fbo->_3dcam);
-	if(fbo->callBack){
-		fbo->callBack();
-	}
+	//if(fbo->callBack){
+	//	fbo->callBack();
+	//}
 	LStack_ergodic_t(fbo->nodelist,f_renderList,0);
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -69,10 +69,10 @@ void fbo_pushNode(void* p,void* _node){
 	}
 }
 
-void fbo_bind(void* ptr,void (*callBack)()){
-	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
-	fbo->callBack = callBack;
-}
+//void fbo_bind(void* ptr,void (*callBack)()){
+//	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
+//	//fbo->callBack = callBack;
+//}
 
 void* 
 fbo_init(int texW,int texH){
