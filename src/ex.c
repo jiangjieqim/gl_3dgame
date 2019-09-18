@@ -29,7 +29,10 @@
 #include "frame.h"
 #include "fbotex.h"
 #include "fbospr.h"
-//#define DEBUG_PRINT_HIT
+
+#define DEBUG_PRINT_HIT	//打印拾取日志
+
+
 
 int g_sprite_line;
 long g_delayTime;
@@ -420,7 +423,7 @@ ex_get_info(){
 		void* _cam = fbo_get2dCam(ex->fbo);
 		mat4x4_printf("fbo->2dcam",cam_getPerctive(_cam));
 	}
-	f_renderlistCall(f_infoNode);
+	ex_renderlistCall(f_infoNode);
 
 	printf("屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
 	printf("程序已执行:%.3f 秒\n",get_longTime()*0.001);
@@ -706,7 +709,7 @@ ex_render3dNode(int data)
 	回调
 */
 void 
-f_renderlistCall(void _callBack(int))
+ex_renderlistCall(void _callBack(int))
 {
 	struct EX* ex = ex_getIns();
 	struct LStackNode* s = (struct LStackNode* )ex->renderList;
@@ -1027,7 +1030,7 @@ f_defaultRenderFrame(){
 
 	//ex_updatePerspctiveModelView();
 	//p->allVertexTotal = 0;
-	f_renderlistCall(ex_render3dNode);//渲染节点
+	ex_renderlistCall(ex_render3dNode);//渲染节点
 
 	//drawLine(2000);
 	//f_drawline();
@@ -1038,7 +1041,7 @@ f_defaultRenderFrame(){
 	//f_renderlistCall(sprite_drawRender);//渲染2d节点
 
 	//废弃此字体的渲染,一律采用将文本数据copy到Sprite渲染出来
-	f_renderlistCall(tf_render);
+	ex_renderlistCall(tf_render);
 
 	//渲染文本(非常耗费性能,待优化)
 	// 2019.8.26 此处已经优化成Sprite模式的字体渲染
@@ -1086,7 +1089,7 @@ struct HeadInfo* ex_find_headinfo(struct EX* p,const char* name){
 void 
 ex_update_uiPos()
 {
-	f_renderlistCall(sprite_updatePos);	
+	ex_renderlistCall(sprite_updatePos);	
 }
 //
 ///*
@@ -1210,7 +1213,7 @@ ex_resize_stage2d(){
 	sprite_set_hit_rect(p->stage2d,0,0,p->_screenWidth,p->_screenHeight);
 }
 static void f_callback(){
-	f_renderlistCall(ex_render3dNode);//渲染3d节点
+	ex_renderlistCall(ex_render3dNode);//渲染3d节点
 }
 
 
@@ -1739,10 +1742,8 @@ hitUiTest(struct Sprite* spr,float x,float y,struct HitUiInfo* outptInfo)
 	return 0;
 }
 
-
 static void 
-render_hitUiNode(int data)
-{
+render_hitUiNode(int data){
 	if(sprite_isEnable(data))
 	{
 		struct EX* p = ex_getIns();
@@ -1778,7 +1779,7 @@ render_hitUiNode(int data)
 					_clickInfo->local_click_y = info.localY;
 					
 				}else{
-					if(_clickInfo->sprite->pos_z < spr->pos_z){
+					if(_clickInfo->sprite->pos_z < spr->pos_z){//按照z轴值,选择一个更加前面的,作为拾取触发的sprite
 						_clickInfo->sprite = spr;
 						_clickInfo->local_click_x = info.localX;
 						_clickInfo->local_click_y = info.localY;
@@ -1819,7 +1820,7 @@ void mouseMove(int x,int y)
 	}*/
 	
 	//只有当鼠标移动的时候才会更新Sprite
-	f_renderlistCall(sprite_mouseMove);	
+	ex_renderlistCall(sprite_mouseMove);	
 }
 
 /************************************************************************/
@@ -1892,7 +1893,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 
 		
 		//界面射线拾取检测,执行一个可以处理的点击回调
-		f_renderlistCall(render_hitUiNode);
+		ex_renderlistCall(render_hitUiNode);
 		if(_clickInfo->sprite){
 			struct HeadInfo* base = base_get((void*)_clickInfo->sprite);
 
@@ -1960,7 +1961,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	//ui鼠标事件
 	//uimouse(button,action,xMouse,yMouse);
 	
-	f_renderlistCall(sprite_action);
+	ex_renderlistCall(sprite_action);
 	glutPostRedisplay();
 
 }

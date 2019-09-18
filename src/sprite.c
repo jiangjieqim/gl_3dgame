@@ -405,8 +405,9 @@ setHitTriangle(struct Sprite* spr){
 
 void
 sprite_set2dCam(void* spr,void* _2dcam){
-	struct Sprite* sprite = (struct Sprite*)spr;
-	sprite->_2dcam = _2dcam;
+	/*struct Sprite* sprite = (struct Sprite*)spr;
+	sprite->_2dcam = _2dcam;*/
+	base_set_cam(spr,_2dcam);
 }
 
 #define _SET_POS_DEBUG_
@@ -416,7 +417,7 @@ sprite_set2dCam(void* spr,void* _2dcam){
 static void
 setSpriteScreenPos(struct Sprite* sprite,float x,float y){
 	float w,h;
-	void* cam = sprite->_2dcam;//ex_getIns()->_2dcam; 
+	void* cam = base_get_cam((void*)sprite);//sprite->_2dcam;//ex_getIns()->_2dcam; 
 	/*if(sprite->_2dcam){
 		cam = sprite->_2dcam;
 		printf("change...\n");
@@ -493,7 +494,7 @@ InitType(struct Sprite* pSpr)
 		pSpr->vertexs = LoadQuadObj(&pSpr->vertLen);//加载顶点数据(非VBO实现)
 }
 /*
-	是否有鼠标事件
+	是否有鼠标事件,有回调句柄说明有拾取事件
 */
 int 
 sprite_isCanClick(void* n){
@@ -550,15 +551,18 @@ sprite_create(char* _spriteName,
 	//设置顶点组织方式
 	InitType(pSpr);
 	
-	if(_2dCam){
-		pSpr->_2dcam = _2dCam;
-	}else{
-		pSpr->_2dcam = ex_getIns()->_2dcam;
-	}
-
 	pSpr->base = base_create(TYPE_SPRITE_FLIE,_spriteName,0,0,0);
+	
+	if(_2dCam){
+		//pSpr->_2dcam = _2dCam;
+		base_set_cam((void*)pSpr,_2dCam);
+	}else{
+		//pSpr->_2dcam = ex_getIns()->_2dcam;
+		base_set_cam((void*)pSpr,ex_getIns()->_2dcam);
+	}
+	
 	sprite_setpos(pSpr,x,y);
-
+	
 	base = pSpr->base;
 	base->parent = pSpr;
 	if(base){

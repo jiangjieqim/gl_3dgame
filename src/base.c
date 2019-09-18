@@ -707,6 +707,17 @@ base_move(HeadInfo* bp,int ms,
 	
 }
 
+void
+base_set_cam(void* p,void*cam){
+	struct HeadInfo* base=base_get(p);
+	base->cam = cam;
+}
+void*
+base_get_cam(void* p){
+	struct HeadInfo* base=base_get(p);
+	return base->cam;;
+}
+
 void 
 base_setv(void* ptr,int flag){
 	struct HeadInfo* base=base_get((void*)ptr);

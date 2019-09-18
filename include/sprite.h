@@ -75,11 +75,6 @@ struct Sprite{
 	void* parent;
 	//局部坐标,相对于父对象,如果是在stage上就为0,0
 	int localx,localy;
-		
-	//用接口sprite_set2dCam来设置
-	//当前的2d camera引用,该引用来确定该sprite在哪个2d camera矩阵空间,
-	//如果没有设置,就使用默认的帧缓冲空间的2dcam
-	void* _2dcam;
 };
 
 //设置sprite的z轴的值

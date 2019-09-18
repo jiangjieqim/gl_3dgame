@@ -126,6 +126,14 @@ typedef struct HeadInfo{
 
 	//矩阵发生变化的时候设置为1
 	int changed;
+	/*
+	当前是2dcam的时候就是2dcam(sprite)
+	用接口sprite_set2dCam来设置
+	当前的2d camera引用,该引用来确定该sprite在哪个2d camera矩阵空间,
+	 
+	当前是3d物体的时候就是3dCam(md2,obj...)
+	*/
+	void* cam;
 }HeadInfo;
 
 /*
@@ -285,4 +293,12 @@ void* base_findByName(void* list,const char* name);
 //真正的更新矩阵的接口,优化性能,保证每一个frame只计算一次矩阵
 void
 base_realUpdateMat4x4(void* p);
+
+//设置cam句柄
+void
+base_set_cam(void* p,void*cam);
+
+//获取cam句柄
+void*
+base_get_cam(void* p);
 #endif

@@ -232,7 +232,7 @@ struct EX
 void ex_render(void);
 
 void 
-f_renderlistCall(void _callBack(int));
+ex_renderlistCall(void _callBack(int));
 
 /*
 *	≥ı ºªØ

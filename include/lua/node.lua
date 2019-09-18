@@ -74,7 +74,7 @@ function node_fbo(avtar)
 	
 	engine_fboPushNode(node_getNode(n));
     
-    local sprite = sprite_create("name1",10,10,100,50,0,1,engine_get_fbocam());
+    local sprite = sprite_create("name1",0,0,100,50,0,1,engine_get_fbocam());
     func_setIcon(sprite, "smallbtn.png");
       
     --setv(sprite,FLAGS_VISIBLE);
