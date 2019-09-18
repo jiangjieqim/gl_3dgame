@@ -11,6 +11,8 @@ void cam_dispose(void* cam);
 void* cam_getPerctive(void* cam);
 //获取模型视图矩阵
 void* cam_getModel(void* cam);
+//获取cam对应的帧缓冲区的宽高
+void cam_get_wh(void *p,float *w,float *h);
 
 void cam_setX(void* cam,float x);
 void cam_setY(void* cam,float y);

@@ -21,6 +21,19 @@ void mat4x4_zero(Matrix44f M){
 		M[i] =0;
 }
 
+int mat4x4_equal(Matrix44f a,Matrix44f b,int log){
+	int i;
+	for(i = 0;i < 16;i++){
+		if(a[i]!=b[i]){
+			if(log){
+				printf("stop index : %d\n",i);
+			}
+			return 0;
+		}
+	}
+	return 1;
+}
+
 void mat4x4_2t1(Matrix44f M,int m,int n,float value)
 {
 	M[4 * m + n] = value;
@@ -277,13 +290,13 @@ void mat4x4_printf(const char* name,Matrix44f M)
 {
 	int i,n=0;
 	
-	printf("矩阵%s:=\n",name);
+	printf("[矩阵%s]\n****************************************************\n",name);
 	for(i = 0;i < 16;i++){
 		if(n >= 4){
 			printf("\n");
 			n=0;
 		}
-		printf("[%d]	%.3f\t\t",i,M[i]);//保留小数点3位
+		printf("[%d]	%f\t\t",i,M[i]);//保留小数点3位
 		n++;
 	}
 	printf("\n****************************************************\n");

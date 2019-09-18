@@ -38,7 +38,9 @@ end;
 
 local function f_hide(self)
 	resetv(self.bg,FLAGS_VISIBLE);
-    resetv(self.img,FLAGS_VISIBLE);
+	if(self.img) then
+		resetv(self.img,FLAGS_VISIBLE);
+	end
     ftext_vis(self.label,0);
 	btn_visible(self.closeBtn,false);
 end
@@ -50,6 +52,14 @@ function alert_set_drag(self,value)
 	else
 		evt_off(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag);		
 	end
+end
+
+local function addFbo(self)
+	local spr = engine_get_fbo_sprite();
+    node_fbo();
+    func_addchild(self.bg,spr);
+    engine_addNode(spr);
+    self.img = spr;
 end
 
 function alert_create(w,h)
@@ -64,11 +74,7 @@ function alert_create(w,h)
 
     --##############################################
     --FBOäÖÈ¾µÄSprite
-    local spr = engine_get_fbo_sprite();
-    node_fbo();
-    func_addchild(self.bg,spr);
-    engine_addNode(spr);
-    self.img = spr;
+    addFbo(self);
     --##############################################
 
 
@@ -104,8 +110,9 @@ end;
 local function show(self,str)
 	btn_visible(self.closeBtn,true);
 	setv(self.bg,FLAGS_VISIBLE);
-    setv(self.img,FLAGS_VISIBLE);
-
+	if(self.img) then
+		setv(self.img,FLAGS_VISIBLE);
+	end
     ftext_vis(self.label,1);
 
 	ftext_reset(self.label,str);

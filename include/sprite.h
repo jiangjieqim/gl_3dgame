@@ -75,22 +75,17 @@ struct Sprite{
 	void* parent;
 	//局部坐标,相对于父对象,如果是在stage上就为0,0
 	int localx,localy;
-	
-	//是否可以穿透界面,拾取到3d层
-	//int open_through;
-	
-	//点击到局部坐标
-	//int click_local_x,click_local_y;
-	
-	//是否使其可以被渲染
-	//int _renderState;
-	
+		
+	//用接口sprite_set2dCam来设置
+	//当前的2d camera引用,该引用来确定该sprite在哪个2d camera矩阵空间,
+	//如果没有设置,就使用默认的帧缓冲空间的2dcam
+	void* _2dcam;
 };
 
 //设置sprite的z轴的值
 void
 sprite_set_z(void* p,float v);
-/*
+/*,
  *为spr添加一个子对象
  **/
 void sprite_addChild(void* spr,void* child);
@@ -124,7 +119,7 @@ struct Sprite* sprite_create(
 	char* _spriteName,
 	int x,int y,
 	int width,int height,
-	void (*clickCallBack)(struct Sprite* ,int ,int ));
+	void (*clickCallBack)(struct Sprite* ,int ,int ),void* _2dCam);
 
 /*
 	设置sprite的UV
@@ -217,5 +212,9 @@ sprite_get_material(void* sprite);
 
 //创建一个没有赋贴图的2dSprite
 void*
-sprite_createEmptyTex(int texW,int texH);
+sprite_createEmptyTex(int texW,int texH,void* _2dCam);
+
+//设置当前的sprite的2dcam,绑定2dcam的时候用
+void
+sprite_set2dCam(void* spr,void* _2dcam);
 #endif

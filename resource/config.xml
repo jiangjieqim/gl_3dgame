@@ -1,7 +1,7 @@
 <res id="0" 
       initLuaName="init.lua" 
       winpos="1" 
-      setLogColor="0" 
+      setLogColor="1" 
       memory="0" rate="1"  
       w="512" h="512" 
       bgcolor="1.0,1.0,1.0" log="log.txt" pickSize="16" monster="//resource//monster.xml" 

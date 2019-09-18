@@ -89,7 +89,7 @@ f_uploadMat4x4(GLint location_mat4x4,Matrix44f _out_mat4x4){
 ******************************************************************/
 
 static void 
-f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
+f_updateShaderVar(const char* shader,GLuint program3D,struct GMaterial* _material, Matrix44f M){
 
 	//轮廓线颜色
 	int _outlineColor = glGetUniformLocation(program3D,"_outlineColor");
@@ -219,12 +219,22 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 	if(ui_perspectivePtr!=-1)
 	{
 		//上传2d齐次坐标矩阵
-		f_uploadMat4x4(ui_perspectivePtr,cam_getPerctive(ex_getIns()->_2dcam)/*ex_getIns()->ui_perspectiveMatrix*/);
+		
+		void* per = cam_getPerctive(ex_getIns()->_2dCurCam);
+		/*if(!strcmp(shader,"spritevbo")){
+			printf("%s,%d\n",shader,strcmp(shader,"spritevbo"));
+			mat4x4_printf("2dpercam",per);
+			mat4x4_printf("M",M);
+			getchar();
+		}*/
+		f_uploadMat4x4(ui_perspectivePtr,per/*ex_getIns()->ui_perspectiveMatrix*/);
 	}
 	if(ui_modelViewPtr!=-1)
 	{
+		void* per = cam_getModel(ex_getIns()->_2dCurCam);
+		//mat4x4_printf("2dmodelcam",per);
 		//上传2d模型矩阵
-		f_uploadMat4x4(ui_modelViewPtr,cam_getModel(ex_getIns()->_2dcam)/*ex_getIns()->ui_modelViewMatrix*/);
+		f_uploadMat4x4(ui_modelViewPtr,per/*ex_getIns()->ui_modelViewMatrix*/);
 	}
 
 	if(mat2!=-1){
@@ -354,7 +364,7 @@ void tmat_render(void* pvoid,const char* shader,Matrix44f M)
 	glUseProgram(program3D);
 	
 	//向着色器上传相关数据
-	f_updateShaderVar(program3D,material,M);
+	f_updateShaderVar(shader,program3D,material,M);
 }
 
 /*

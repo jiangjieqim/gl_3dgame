@@ -279,7 +279,7 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh){
 
 	f_init_buffer(txtWidth,txtHeight);
 
-	txt->spr = sprite_create(txtName,0,0,txtWidth,txtHeight,0);
+	txt->spr = sprite_create(txtName,0,0,txtWidth,txtHeight,0,0);
 	ex_add(txt->spr);
 	txt->_bufferLength = txt->fw * txt->fh*4;//计算一个文本数据需要的缓冲区的大小
 	txt->_buffer = tl_malloc(txt->_bufferLength);

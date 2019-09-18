@@ -19,7 +19,7 @@ FLAGS_DRAW_NORMAL 		= 	2048	--法线
 FLAGS_DRAG				=	4096	--是否可拖拽
 FLAGS_DRAW_PLOYGON_POINT= 	8192	--点模式
 FLAGS_DISABLE_CULL_FACE	=	16384	--设置显示双面
-FLAGS_REVERSE_FACE		=	32768	--反转渲染面
+FLAGS_REVERSE_FACE		=	32768	--反转渲染面,只有设置了双面渲染才有效
 
 
 --//文件类型定义
@@ -88,7 +88,7 @@ local nameKey = -1;
 local function getName(suffix)
 	nameKey=nameKey+1;
     local str = suffix or "";
-	return "instance_"..str..tostring(nameKey);
+	return "luaIns_"..str..tostring(nameKey);
 end
 --[[
 	根据一个配置加载生成一个数据对象

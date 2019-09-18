@@ -6,18 +6,33 @@ function engine_init()
 		fbocam,
 		fboTexture,
         fboSprite,
+		fbo,
 	};
 	
-	local _3dcam,fbocam,fboTexture = getEngine();
+	local _3dcam,fbocam,fboTexture,fbo = getEngine();
 	--print(_3dcam..","..fbocam);
 	e._3dcam = _3dcam;
 	e.fbocam = fbocam;
     e.fboTexture = fboTexture;
+	e.fbo = fbo;
 	return e;
 end
+
+--当前引擎中的FBO对象引用
+function engine_get_fbo()
+	local e = engine_get();
+	return e.fbo;
+end
+
+function engine_get_fbocam()
+	local e = engine_get();
+	return e.fbocam;
+end
+
 --创建一个装载fbotextue的sprite
 local function f_createFboSprite()
-    local spr = sprite_createEmptyTex(256,256);
+	local size = 256;
+    local spr = sprite_createEmptyTex(size,size);
     local tex = engine_get().fboTexture;
     if(tex)then
         local mat = sprite_get_material(spr);
@@ -72,7 +87,9 @@ function engine_exit()
 end
 --将一个渲染节点加入到一个fbo对象中
 function engine_fboPushNode(node,fbo)
-	fbo = fbo or 0;
+	fbo = fbo or engine_get_fbo();
+	--sprite_set2dCam(sprite,fbo);
+	--print("fbo = "..fbo);
 	change_attr(nil,"fbo_pushNode",tonumber(fbo)..","..tonumber(node));
 end
 function engine_setBg(r,g,b)

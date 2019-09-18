@@ -50,22 +50,41 @@ local function f_split_init(md2)
 	func_play(md2);
 end
 
-function node_fbo()
+
+function node_fbo(avtar)
 	local n = node_new();
 
-
+	local useAvtar = avtar or 0;
+	
+	if(useAvtar == 1) then
     --加载一个角色模型
-	node_loadModel(n,"\\resource\\md2\\bauul.md2");  node_setScale(n,0.02);
-    node_loadMaterial(n,"//resource//material//bauul.mat");
-
---    node_loadModel(n);
---	node_loadMaterial(n,"//resource//material//triangle.mat");--bauul.mat
-
+		node_loadModel(n,"\\resource\\md2\\bauul.md2");  node_setScale(n,0.02);
+		node_loadMaterial(n,"//resource//material//bauul.mat");
+	else
+		node_loadModel(n);
+		node_loadMaterial(n,"//resource//material//triangle.mat");--bauul.mat
+		setv(node_getNode(n),FLAGS_DRAW_PLOYGON_LINE);
+		setv(node_getNode(n),FLAGS_REVERSE_FACE);--反转三角面
+	end
 
 	
 	node_setRX(n,PI/2);
 	f_split_init(n.node);
 		--setv(node_getNode(n),FLAGS_REVERSE_FACE);--反转三角面
+	
 	engine_fboPushNode(node_getNode(n));
-	return n;	
+    
+    local sprite = sprite_create("name1",10,10,100,50,0,1,engine_get_fbocam());
+    func_setIcon(sprite, "smallbtn.png");
+      
+    --setv(sprite,FLAGS_VISIBLE);
+    local z = engine_newPosZ();
+    --print(z);
+    func_sprite_set_z(sprite,z);
+    engine_fboPushNode(sprite);
+    --setv(sprite,FLAGS_REVERSE_FACE);--反转三角面 
+    --setv(sprite,FLAGS_DISABLE_CULL_FACE);
+    
+    --engine_addNode(sprite);--增加到主舞台
+	return sprite;
 end

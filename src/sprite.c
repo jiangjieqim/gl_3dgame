@@ -14,6 +14,7 @@
 #include "tl_malloc.h"
 #include "base.h"
 #include "fbotex.h"
+#include "camera.h"
 
 static void f_refreshChildPos(void* ptr);
 
@@ -294,7 +295,7 @@ load_vbo_6Vertex()
 
 	struct Obj_vbo_model* vbo;
 	char buffer[G_BUFFER_64_SIZE];
-	tl_newName(buffer,G_BUFFER_64_SIZE);
+	tl_newName(buffer,G_BUFFER_64_SIZE,0);
 
 	vbo = objVBO_create(buffer,dataType);
 
@@ -310,7 +311,7 @@ f_objVBO_load4Vertex(){
 	char buffer[G_BUFFER_64_SIZE];
 	_objStr=tl_loadfile("\\resource\\obj\\quad.obj",0);
 
-	tl_newName(buffer,G_BUFFER_64_SIZE);
+	tl_newName(buffer,G_BUFFER_64_SIZE,0);
 	vbo = objVBO_create(buffer,dataType);
 
 	obj_parse((char*)_objStr,&_bufferSize,&verts,dataType);
@@ -401,16 +402,51 @@ setHitTriangle(struct Sprite* spr){
 //	sprite->pos_z = layer;
 //}
 
+
+void
+sprite_set2dCam(void* spr,void* _2dcam){
+	struct Sprite* sprite = (struct Sprite*)spr;
+	sprite->_2dcam = _2dcam;
+}
+
+#define _SET_POS_DEBUG_
 /*
 	设置sprite的屏幕坐标,(屏幕以左上角为0,0起始点)
 */
 static void
-setSpriteScreenPos(struct EX* ex,struct Sprite* sprite,float x,float y){
+setSpriteScreenPos(struct Sprite* sprite,float x,float y){
+	float w,h;
+	void* cam = sprite->_2dcam;//ex_getIns()->_2dcam; 
+	/*if(sprite->_2dcam){
+		cam = sprite->_2dcam;
+		printf("change...\n");
+	}*/
+	cam_get_wh(cam,&w,&h);
+
 	sprite->screenX = x;
 	sprite->screenY = y;
 	sprite->pos_x = x;
-	sprite->pos_y = ex->_screenHeight-y-sprite->mHeight;	
+	//sprite->pos_y = ex->_screenHeight-y-sprite->mHeight;	
+	sprite->pos_y = h-y-sprite->mHeight;
+
+#ifdef _SET_POS_DEBUG_
+	{
+		int _stat = 0;
+		struct HeadInfo* b = base_get(sprite);
+		
+		printf("设置坐标%s\t%.3f,%.3f\t%.3f,%.3f x = %f y = %f,是否是默认的cam %d,screenw=%f,screenh=%f\n",
+			b->name,sprite->pos_x,sprite->pos_y,sprite->screenX,sprite->screenY,x,y,
+			(cam == ex_getIns()->_2dcam ? 1 : 0),
+			ex_getIns()->_screenWidth,ex_getIns()->_screenHeight
+			);
+
+		if(!strcmp(b->name,"stage2d")){
+		//	getchar();
+		}
+	}
+#endif
 }
+
 /*
 	重置sprite的尺寸
 */
@@ -441,7 +477,7 @@ void sprite_set_self_pos(void* p,int x,int y){
 //设置绝对坐标
 void sprite_setpos(struct Sprite* spr,int x,int y){
 	//evt_once(NextFrame)到下一个关键帧的时候更新数据,这样不会抖屏
-	setSpriteScreenPos(ex_getIns(),spr,x,y);//更新屏幕坐标
+	setSpriteScreenPos(spr,x,y);//更新屏幕坐标
 	setHitTriangle(spr);//更新点击区域
 	f_refreshChildPos(spr);//更新sprite的子对象的坐标
 }
@@ -471,17 +507,17 @@ sprite_set_clickHandle(void* p,void (*clickCallBack)(void* ,int ,int )){
 	pSpr->clickCallBack = clickCallBack;
 }
 void*
-sprite_createEmptyTex(int texW,int texH){
+sprite_createEmptyTex(int texW,int texH,void* _2dCam){
 	struct Sprite* spr = 0;
 	void* mat= tmat_create_empty("fbotex");
 
 	char buffer[64];
-	tl_newName(buffer,64);
+	tl_newName(buffer,64,"sprite");
 	tmat_setID(mat,1);
 
 	//tmat_pushTex(mat,(GLuint)mirrorTexture);		//void* mirrorTexture,
 
-	spr = sprite_create(buffer,0,0,texW,texH,0);
+	spr = sprite_create(buffer,0,0,texW,texH,0,_2dCam);
 	sprite_rotateZ(spr,-PI/2);//sprite旋转90度
 	sprite_rotateX(spr,PI);
 	base_setv(spr,FLAGS_REVERSE_FACE);
@@ -492,7 +528,7 @@ sprite_createEmptyTex(int texW,int texH){
 struct Sprite* 
 sprite_create(char* _spriteName,
 			  int x,int y,int width,int height,
-			  void (*clickCallBack)(struct Sprite* ,int ,int ))
+			  void (*clickCallBack)(struct Sprite* ,int ,int ),void* _2dCam)
 {
 	//&ex->myButtonPtr;//
 	struct HeadInfo* base = NULL;
@@ -513,6 +549,12 @@ sprite_create(char* _spriteName,
 
 	//设置顶点组织方式
 	InitType(pSpr);
+	
+	if(_2dCam){
+		pSpr->_2dcam = _2dCam;
+	}else{
+		pSpr->_2dcam = ex_getIns()->_2dcam;
+	}
 
 	pSpr->base = base_create(TYPE_SPRITE_FLIE,_spriteName,0,0,0);
 	sprite_setpos(pSpr,x,y);
@@ -758,7 +800,7 @@ sprite_get_material(void* sprite){
 void 
 sprite_drawRender(int data)
 {
-	struct EX* e = ex_getIns();
+	//struct EX* e = ex_getIns();
 
 	struct Sprite* spr = (struct Sprite*)data;
 	float x = spr->pos_x+spr->mWidth/2;
@@ -785,7 +827,10 @@ sprite_drawRender(int data)
 	{
 		isChange = 1;
 	}
-
+	if (!strcmp(base->name,"name1"))
+	{
+		//printf("%s,%d,",base->name,base_getv(spr,FLAGS_VISIBLE));
+	}
 	base->x = x;
 	base->y = y;
 	base->z = z;

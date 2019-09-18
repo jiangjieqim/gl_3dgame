@@ -10,6 +10,7 @@ struct Camera{
 	float x,y,z,rx,ry,rz;	//坐标,欧拉角
 	Matrix44f perctive;		//齐次空间矩阵
 	Matrix44f model;		//模型视图矩阵
+	float sw,sh;			//当前cam所在帧缓冲区的宽高
 };
 
 void* cam_create(){
@@ -44,8 +45,16 @@ void cam_setModePosition(void* p,float x,float y,float z,
 
 void cam_setOrtho(void* p,float sw,float sh,float zbuffer){
 	struct Camera* c = (struct Camera*)p;
+	c->sw = sw;
+	c->sh = sh;
 	mat4x4_identity(c->perctive);
 	mat4x4_orthoPerspect(c->perctive,0,sw,0,sh,0,zbuffer);	
+}
+
+void cam_get_wh(void *p,float *w,float *h){
+	struct Camera* c = (struct Camera*)p;
+	*w = c->sw;
+	*h = c->sh;
 }
 
 //获取camera的齐次坐标矩阵

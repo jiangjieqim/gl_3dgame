@@ -65,11 +65,10 @@
 //#define EVENT_ENGINE_SPRITE_FOCUS_IN    109	//2d焦点进入的时候触发
 
 
-
-#define EVENT_ENGING_INIT 200	//引擎初始化完成
-
-
-
+/*
+*引擎初始化完成(stage2d,设备,lua函数注册完成,可以执行上层业务)
+*/
+#define EVENT_ENGING_INIT 200	
 //键盘事件状态
 struct E_KeyBoard
 {
@@ -207,6 +206,9 @@ struct EX
 	//当前的camera
 	void* _3dCurCam;
 	
+	//当前的2dCam
+	void* _2dCurCam;
+	
 	//fbo引用
 	void* fbo;
 	
@@ -229,10 +231,16 @@ struct EX
 */
 void ex_render(void);
 
+void 
+f_renderlistCall(void _callBack(int));
+
 /*
 *	初始化
 */
-void ex_init(struct EX* p,GLdouble zfar);
+void ex_init(struct EX* p,GLdouble zfar,float sw,float sh);
+
+void 
+ex_reshape(int w,int h);
 
 /*
 *	销毁引擎
@@ -457,5 +465,8 @@ ex_render3dNode(int data);
 //加载VBO模式的模型
 void* 
 ex_loadVBO(char* name,const char* url);
+
+//切换到2d camera
+void ex_switch2dCam(void* cam);
 
 #endif

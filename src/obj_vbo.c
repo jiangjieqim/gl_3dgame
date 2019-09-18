@@ -85,7 +85,7 @@ objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,
 
 	//Ë«Ãæ»æÖÆ
 	cull = base_cullface(base);
-
+	//printf("***%s\n",base->name);
 	tmat_render(tmat,_shaderName,m);
 
 	//ÉèÖÃ×´Ì¬

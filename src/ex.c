@@ -169,8 +169,6 @@ md2_render(struct MD2_Object* _md2){
 	//实体绘制
 	base_renderFill(base);
 }
-
-
 //static void ex_render3dNode(int data);
 //static void render_uiNode(int data);
 //int ex_mouseIsLeftDown()
@@ -383,6 +381,12 @@ void renderUI(GLenum mode){
 //}
 
 //Matrix44f ortho;
+static void 
+f_infoNode(int data){
+	//struct EX*e = ex_getIns();	
+	struct HeadInfo* base = base_get((void*)data);
+	log_color(0xff00ff,"[%d,%s,v:%d]\n",base->curType,base->name,base_getv((void*)data,FLAGS_VISIBLE));
+}
 /*
 打印引擎当前信息
 */
@@ -409,8 +413,15 @@ ex_get_info(){
 		cam_getRY(_cam)/PI,
 		cam_getRZ(_cam)/PI);
 	
-	log_color(0xff00ff,"draw call渲染节点个数:%d\n",LStack_length(ex->renderList));
+	log_color(0xff00ff,"draw call渲染节点个数:%d,sw=%.3f,sh=%.3f\n",LStack_length(ex->renderList),ex->_screenWidth,ex->_screenHeight);
 	
+	mat4x4_printf("ex->_2dcam",cam_getPerctive(ex->_2dcam));
+	{
+		void* _cam = fbo_get2dCam(ex->fbo);
+		mat4x4_printf("fbo->2dcam",cam_getPerctive(_cam));
+	}
+	f_renderlistCall(f_infoNode);
+
 	printf("屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
 	printf("程序已执行:%.3f 秒\n",get_longTime()*0.001);
 	printf("内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
@@ -689,11 +700,12 @@ ex_render3dNode(int data)
 		node_render((struct Node*)data);
 		//e->allVertexTotal+=getAllVertex(data);
 	}
+	sprite_drawRender(data);
 }
 /*
 	回调
 */
-static void 
+void 
 f_renderlistCall(void _callBack(int))
 {
 	struct EX* ex = ex_getIns();
@@ -996,7 +1008,10 @@ f_static_calculat(){
 static void
 f_defaultRenderFrame(){
 	struct EX* p = ex_getIns();
+	
+	//切换对应的cam的矩阵空间
 	ex_switch3dCam(p->_3dcam);
+	ex_switch2dCam(p->_2dcam);
 	// Reset FBO. Draw world again from the real cameras perspective
 	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
@@ -1012,7 +1027,7 @@ f_defaultRenderFrame(){
 
 	//ex_updatePerspctiveModelView();
 	//p->allVertexTotal = 0;
-	f_renderlistCall(ex_render3dNode);//渲染3d节点
+	f_renderlistCall(ex_render3dNode);//渲染节点
 
 	//drawLine(2000);
 	//f_drawline();
@@ -1020,10 +1035,10 @@ f_defaultRenderFrame(){
 	//evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
 	ex_lua_global_evt_dispatch(EVENT_ENGINE_RENDER_3D);
 
-	f_renderlistCall(sprite_drawRender);//渲染2d节点
+	//f_renderlistCall(sprite_drawRender);//渲染2d节点
 
 	//废弃此字体的渲染,一律采用将文本数据copy到Sprite渲染出来
-	//f_renderlistCall(tf_render);
+	f_renderlistCall(tf_render);
 
 	//渲染文本(非常耗费性能,待优化)
 	// 2019.8.26 此处已经优化成Sprite模式的字体渲染
@@ -1044,10 +1059,8 @@ _new(){
 	g_delayTime = get_longTime() - _longTime;
 	_longTime =  get_longTime();
 	
-	fbo_render(p->fbo);
 	f_defaultRenderFrame();
-
-	
+	fbo_render(p->fbo);	
 
 	//Do the buffer Swap
 	glutSwapBuffers ();
@@ -1126,15 +1139,7 @@ static void
 f_stage_click_callback(struct Sprite* self,int x,int y){
 	//printf("f_stage_click_callback %d,%d\n",x,y);
 }
-void 
-ex_resize_stage2d(){
-	struct EX* p = ex_getIns();
-	sprite_resize(p->stage2d,p->_screenWidth,p->_screenHeight);
-	sprite_set_hit_rect(p->stage2d,0,0,p->_screenWidth,p->_screenHeight);
-}
-static void f_callback(){
-	f_renderlistCall(ex_render3dNode);//渲染3d节点
-}
+
 //初始化一个设置坐标和cam角度的fbo
 static void
 f_init_fbo(void* fbo){
@@ -1153,17 +1158,104 @@ f_init_fbo(void* fbo){
 	cam_setZ(cam,-3);
 	cam_setRX(cam,PI*1.8);
 	cam_refreshModel(cam);
+	
+	{
+		/*void*	ptr = sprite_create("a",0,0,50,50,0);
+		sprite_
+		fbo_pushNode(fbo,ptr);*/
+	}
+}
+
+//初始化场景,舞台和设备上下文设备都处理完成了
+static void
+f_initScene(){
+	struct EX* p = ex_getIns();
+	//**************************************************
+	//初始化一个fbo texture对象
+	p->fbo = fbo_init(256,256);
+	f_init_fbo(p->fbo);
+	
+	//ex_reshape(sw,sh);
+
+	//在这里可以初始化一些 引擎需要的配置等文件
+	evt_dispatch(p,EVENT_ENGING_INIT,0);
+}
+
+//构造stage2d舞台
+static int 
+f_init_stage2d(struct EX* p,float w,float h){
+	if(!p->stage2d){
+		//初始化2d stage
+		p->stage2d = sprite_create("stage2d",0,0,32,32,f_stage_click_callback,0);
+		ex_add(p->stage2d);
+		
+		//base_resetv(p->stage2d,FLAGS_VISIBLE);
+		//stage2d = (struct Sprite*)p->stage2d;
+		//sprite_set_default_tex(p->stage2d);
+		p->curFocus = p->stage2d;
+
+		//stage2d舞台初始化完成,通知可以初始化了
+		f_initScene();
+		
+		return 1;
+	}
+	return 0;
 }
 void 
-ex_init(struct EX* p,GLdouble zfar){	
+ex_resize_stage2d(){
+	struct EX* p = ex_getIns();
+	if(!f_init_stage2d(p,p->_screenWidth,p->_screenHeight)){
+		sprite_resize(p->stage2d,p->_screenWidth,p->_screenHeight);
+	}
+	sprite_set_hit_rect(p->stage2d,0,0,p->_screenWidth,p->_screenHeight);
+}
+static void f_callback(){
+	f_renderlistCall(ex_render3dNode);//渲染3d节点
+}
+
+
+
+void 
+ex_reshape(int w,int h){
+	struct EX* p = ex_getIns();
+	void* _2dcam = p->_2dcam;
+	if(w == 0 || h == 0){
+		return;
+	}
+
+	p->_screenWidth = w;
+	p->_screenHeight = h;
+
+	ex_update_uiPos();
+
+	glViewport (0, 0, (GLsizei)w, (GLsizei)h);
+
+	//刷新3d齐次坐标矩阵,只会在渲染帧缓冲区尺寸发生变化的时候会调用该接口
+	cam_setPerspect(p->_3dcam,45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
+
+	//计算正交透视矩阵,用于2d界面,计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
+	cam_setOrtho(_2dcam,p->_screenWidth,p->_screenHeight,-p->allzBuffer);
+	
+	//fbo_resize(p->fbo);
+
+	ex_resize_stage2d();
+
+	ex_lua_global_evt_dispatch(EVENT_ENGINE_RESIZE);
+	//printf("============> %d,%d\n",w,h);
+}
+
+void 
+ex_init(struct EX* p,GLdouble zfar,float sw,float sh){	
 	//p->allzBuffer在-90000初始化的时候会被模型挡在后面
 	//计算出所有的透视模型最小深度
 	p->allzBuffer = -90000;	//初始化一个Z深度,此深度标识3d层的
 	p->ui_pos_z =  -1000;	//此深度如果小于3d层,那么界面将在3d界面后面
-	
+	p->_screenWidth = sw;
+	p->_screenHeight= sh;
 	p->_3dcam = cam_create();//初始化3d透视camera
 	ex_switch3dCam(p->_3dcam);
 	p->_2dcam = cam_create();//初始化2d正交camera
+	ex_switch2dCam(p->_2dcam);
 	//p->zBuffer = p->allzBuffer+1;
 	p->clickInfo = tl_malloc(sizeof(struct ClickInfo));
 	{
@@ -1178,24 +1270,8 @@ ex_init(struct EX* p,GLdouble zfar){
 	//loadSpriteVert(p);
 	p->evtList = (void*)LStack_create();
 	p->mouseState.action = GLUT_UP;
-
-	//构造stage舞台
-	{
-		struct Sprite* stage2d = 0;
-		
-		//初始化2d stage
-		p->stage2d = sprite_create("stage2d",0,0,32,32,f_stage_click_callback);
-		ex_add(p->stage2d);
-		stage2d = (struct Sprite*)p->stage2d;
-		//sprite_set_default_tex(p->stage2d);
-		p->curFocus = stage2d;
-	}
-
-	//**************************************************
-	//初始化一个fbo texture对象
-	p->fbo = fbo_init(256,256);
-	f_init_fbo(p->fbo);
 }
+
 void ex_dispose(struct EX* p){
 	printf("销毁引擎设备!\n");
 	//getch();
@@ -2201,6 +2277,10 @@ void* ex_get_ui_atals(){
 
 void ex_switch3dCam(void* cam){
 	ex_getIns()->_3dCurCam=cam;
+}
+
+void ex_switch2dCam(void* cam){
+	ex_getIns()->_2dCurCam = cam;
 }
 
 //########################################

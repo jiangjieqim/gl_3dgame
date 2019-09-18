@@ -49,6 +49,12 @@ DLLIMPORT
 void mat4x4_identity(Matrix44f M);
 
 /*
+ *矩阵是否相等
+ */
+DLLIMPORT
+int mat4x4_equal(Matrix44f a,Matrix44f b,int log);
+
+/*
 *反转矩阵(矩阵的逆)
 */
 DLLIMPORT 

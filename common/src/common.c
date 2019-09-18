@@ -39,10 +39,14 @@ tl_writeAppandFile(const char* filePath,char* buffer){
 }
 
 void 
-tl_newName(char* buffer,int bufferSize){
+tl_newName(char* buffer,int bufferSize,char* prefix){
 	static int _nameId;
 	memset(buffer,0,bufferSize);
-	sprintf_s(buffer,bufferSize,"%d",_nameId);
+	if(prefix==0){
+		sprintf_s(buffer,bufferSize,"%d",_nameId);
+	}else{
+		sprintf_s(buffer,bufferSize,"%s%d",prefix,_nameId);
+	}
 	_nameId++;
 }
 

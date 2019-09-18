@@ -27,7 +27,7 @@ void  tl_writeAppandFile(const char* filePath,char* buffer);
 	构造一个新名字
 */
 DLLIMPORT
-void tl_newName(char* buffer,int bufferSize);
+void tl_newName(char* buffer,int bufferSize,char* prefix);
 
 //DLLIMPORT int dllGlobalVar;
 
