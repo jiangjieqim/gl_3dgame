@@ -11,7 +11,19 @@ struct Camera{
 	Matrix44f perctive;		//齐次空间矩阵
 	Matrix44f model;		//模型视图矩阵
 	float sw,sh;			//当前cam所在帧缓冲区的宽高
+	int _2dx,_2dy;			//2d cam相对于主帧缓冲区的位置,这两个变量不作为cam的计算属性,只是在Sprite做拾取的时候做偏移计算
 };
+
+void cam_set_2dxy(void* p,int x,int y){
+	struct Camera* c = (struct Camera*)p;
+	c->_2dx = x;
+	c->_2dy = y;
+}
+void cam_get_2dxy(void* p,int* px,int* py){
+	struct Camera* c = (struct Camera*)p;
+	*px = c->_2dx;
+	*py = c->_2dy;
+}
 
 void* cam_create(){
 	void* p = tl_malloc(sizeof(struct Camera));

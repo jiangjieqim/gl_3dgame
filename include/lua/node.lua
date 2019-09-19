@@ -39,6 +39,15 @@ end
 function node_setRZ(n,value)
 	   func_setRotateZ(n.node,value)
 end
+--获取节点的名字
+function node_getName(n)
+	return func_get_name(n.node);
+end
+--获取节点所在的cam的矩阵空间
+function node_setCam(n,value)
+	--change_attr(o,"setcam",tostring(value));
+	set_cam(n.node,value);
+end
 
 --**************************************************************************
 --初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
@@ -55,7 +64,7 @@ function node_fbo(avtar)
 	local n = node_new();
 
 	local useAvtar = avtar or 0;
-	
+	local e = engine_get();
 	if(useAvtar == 1) then
     --加载一个角色模型
 		node_loadModel(n,"\\resource\\md2\\bauul.md2");  node_setScale(n,0.02);
@@ -72,19 +81,36 @@ function node_fbo(avtar)
 	f_split_init(n.node);
 		--setv(node_getNode(n),FLAGS_REVERSE_FACE);--反转三角面
 	
-	engine_fboPushNode(node_getNode(n));
-    
-    local sprite = sprite_create("name1",0,0,100,50,0,1,engine_get_fbocam());
+	--print("name="..node_getName(n));
+	node_setCam(n,e.fbo3dcam);
+	
+    engine_addNode(n.node);
+	
+    local sprite = sprite_create("name1",0,30,100,50,0,1,e.fbo2dcam);
     func_setIcon(sprite, "smallbtn.png");
-      
+    
+	
+	
+	
+	
     --setv(sprite,FLAGS_VISIBLE);
     local z = engine_newPosZ();
     --print(z);
     func_sprite_set_z(sprite,z);
-    engine_fboPushNode(sprite);
+	engine_addNode(sprite);
+	
     --setv(sprite,FLAGS_REVERSE_FACE);--反转三角面 
     --setv(sprite,FLAGS_DISABLE_CULL_FACE);
     
     --engine_addNode(sprite);--增加到主舞台
+	
+	
+	
+	--################
+	local sprite1 = sprite_create("defaultname2",20,10,100,50,0,1);
+    func_setIcon(sprite1, "smallbtn.png");
+	engine_addNode(sprite1);
+	
+	
 	return sprite;
 end

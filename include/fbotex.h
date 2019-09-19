@@ -13,7 +13,7 @@ void fbo_render(void* ptr);
 void fbo_dispose(void* p);
 
 //获取当前的3d cam
-void* fbo_getCam(void* p);
+void* fbo_get3dCam(void* p);
 //获取2d cam
 void* fbo_get2dCam(void* p);
 

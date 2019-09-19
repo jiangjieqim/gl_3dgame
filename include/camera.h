@@ -30,6 +30,9 @@ void cam_offsetX(void* p,float v);
 void cam_offsetY(void* p,float v);
 void cam_offsetZ(void* p,float v);
 
+//用于获取当前该cam矩阵空间渲染的区域,相对于主帧缓冲区基于左上角的x,y偏移
+void cam_set_2dxy(void* p,int x,int y);
+void cam_get_2dxy(void* p,int* px,int* py);
 
 //刷新cam的模型视图矩阵,在设置完x,y,z,rx,ry,rz需更新
 void cam_refreshModel(void *p);

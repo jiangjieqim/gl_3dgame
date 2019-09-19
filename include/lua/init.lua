@@ -1,11 +1,12 @@
 dofile("..\\include\\lua\\core.lua");
 
 local spr = engine_get_fbo_sprite();
-local btnspr = node_fbo();
+local btnspr = node_fbo(0);
 --func_addchild(self.bg,spr);
 engine_addNode(spr);
 --self.img = spr;
-func_setPos(spr,100,20);
+func_setPos(spr,50,100);
+
 
 
 
@@ -91,7 +92,7 @@ end
 --btn_create(0,0,128,128);
 
 
---dofile("..\\include\\lua\\7.lua");
+dofile("..\\include\\lua\\7.lua");
 
 
 

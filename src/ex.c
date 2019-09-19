@@ -32,8 +32,6 @@
 
 #define DEBUG_PRINT_HIT	//打印拾取日志
 
-
-
 int g_sprite_line;
 long g_delayTime;
 int  g_fps=-1;
@@ -388,7 +386,7 @@ static void
 f_infoNode(int data){
 	//struct EX*e = ex_getIns();	
 	struct HeadInfo* base = base_get((void*)data);
-	log_color(0xff00ff,"[%d,%s,v:%d]\n",base->curType,base->name,base_getv((void*)data,FLAGS_VISIBLE));
+	log_color(0xff00ff,"[cam:%0x,%d,%s,v:%d]\n",base->cam,base->curType,base->name,base_getv((void*)data,FLAGS_VISIBLE));
 }
 /*
 打印引擎当前信息
@@ -424,8 +422,8 @@ ex_get_info(){
 		mat4x4_printf("fbo->2dcam",cam_getPerctive(_cam));
 	}
 	ex_renderlistCall(f_infoNode);
-
-	printf("屏幕尺寸:%.1f,%.1f\n",ex->_screenWidth,ex->_screenHeight);
+	
+	printf("屏幕尺寸:%.1f,%.1f ex->3dcam=%0x ex->2dcam=%0x\n",ex->_screenWidth,ex->_screenHeight,ex->_3dcam,ex->_2dcam);
 	printf("程序已执行:%.3f 秒\n",get_longTime()*0.001);
 	printf("内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
 	
@@ -675,9 +673,30 @@ getAllVertex(int data)
 void 
 ex_render3dNode(int data)
 {
-	//struct EX*e = ex_getIns();	
+	struct EX*ex = ex_getIns();
+	void* checkcam = ex->_3dCurCam;
 	struct HeadInfo* base = base_get((void*)data);
 	int objType = base->curType;
+	void* targetCam = base->cam;
+
+	if(objType == TYPE_SPRITE_FLIE){
+		checkcam = ex->_2dCurCam;
+	}
+
+	//if(!targetCam && checkcam == ex-)
+	
+	//if(!targetCam && ex->_2dCurCam == ex->_2dcam){
+	if(!targetCam){
+		//没有指定任何cam
+		printf("*************%s没有指定任何cam\n",base->name);
+		return;
+	} 
+	
+	if(checkcam!=targetCam){
+		//printf("======>name:%s\n",base->name);
+		return;//不在同一个渲染矩阵空间,返回之
+	}
+
 	base_realUpdateMat4x4(base);
 	if(objType== TYPE_OBJ_FILE)
 	{
@@ -685,7 +704,7 @@ ex_render3dNode(int data)
 	}
 	else if(objType == TYPE_MD5_FILE)
 	{
-		struct EX*ex = ex_getIns();
+		
 		float f = base->fpsInterval <= 0 ? 0.0f : (1000.0f/base->fpsInterval);//f代表 f毫秒播放一个关键帧,f = 0的时候停止在当前关键帧
 		md5_render((struct MD5*)data,f);//ex->fps	
 
@@ -703,7 +722,10 @@ ex_render3dNode(int data)
 		node_render((struct Node*)data);
 		//e->allVertexTotal+=getAllVertex(data);
 	}
-	sprite_drawRender(data);
+	else if(objType == TYPE_SPRITE_FLIE)
+	{
+		sprite_drawRender(data);
+	}
 }
 /*
 	回调
@@ -1146,7 +1168,7 @@ f_stage_click_callback(struct Sprite* self,int x,int y){
 //初始化一个设置坐标和cam角度的fbo
 static void
 f_init_fbo(void* fbo){
-	void* cam = fbo_getCam(fbo);
+	void* cam = fbo_get3dCam(fbo);
 	//void* spr = sprite_createEmptyTex(256,256);
 
 	//void* mat = sprite_get_material(spr);
@@ -1212,11 +1234,6 @@ ex_resize_stage2d(){
 	}
 	sprite_set_hit_rect(p->stage2d,0,0,p->_screenWidth,p->_screenHeight);
 }
-static void f_callback(){
-	ex_renderlistCall(ex_render3dNode);//渲染3d节点
-}
-
-
 
 void 
 ex_reshape(int w,int h){
@@ -1754,40 +1771,54 @@ render_hitUiNode(int data){
 		//renderSprite(data);
 		struct Sprite* spr = (struct Sprite*)data;
 		struct HitUiInfo info;
-		if(sprite_isCanClick((void*)spr) && hitUiTest(spr,p->mouseState.xMouse,p->mouseState.yMouse,&info)){
+		if(sprite_isCanClick((void*)spr))
+		{
+			int ox,oy;
+			void* cam = base_get_cam(spr);
+			cam_get_2dxy(cam,&ox,&oy);
 
-			//p->isHitRaySprite = 1;//设置拾取状态
 
-			setv(&(p->flags),EX_FLAGS_RAY_TO_UI);
-			
-			spr->m_bPressed = 1;//设置鼠标的按下状态
-			
-			if(getv(&base->flags,FLAGS_DRAG))
-			{
-				//记录左键点击下的鼠标的相对坐标
-				spr->mouseDownX = info.localX;
-				spr->mouseDownY = info.localY;
-			}
-#ifdef DEBUG_PRINT_HIT
-			//是否射线拾取到了
-			printf("点击了%s界面 局部坐标 %d,%d z=%.2f\n",base->name,info.localX,info.localY,spr->pos_z);
-#endif
-			if(spr->clickCallBack!=0){
-				if(_clickInfo->sprite == 0){
-					_clickInfo->sprite = spr;
-					_clickInfo->local_click_x = info.localX;
-					_clickInfo->local_click_y = info.localY;
-					
-				}else{
-					if(_clickInfo->sprite->pos_z < spr->pos_z){//按照z轴值,选择一个更加前面的,作为拾取触发的sprite
+			if(hitUiTest(spr,p->mouseState.xMouse-ox,p->mouseState.yMouse-oy,&info)){
+
+				//p->isHitRaySprite = 1;//设置拾取状态1*
+
+				setv(&(p->flags),EX_FLAGS_RAY_TO_UI);
+				
+				spr->m_bPressed = 1;//设置鼠标的按下状态
+				
+				if(getv(&base->flags,FLAGS_DRAG))
+				{
+					//记录左键点击下的鼠标的相对坐标
+					spr->mouseDownX = info.localX;
+					spr->mouseDownY = info.localY;
+				}
+	/*
+	#ifdef DEBUG_PRINT_HIT
+				//是否射线拾取到了
+				printf("**********************************************\n点击了%s界面 局部坐标 %d,%d z=%.2f\n%0x(默认的2dcam)\n%0x(当前的sprite 2dcam)\n**********************************************\n",base->name,info.localX,info.localY,spr->pos_z,
+					p->_2dcam,
+					base_get_cam((void*)data)
+					);
+	#endif
+	*/
+
+				if(spr->clickCallBack!=0){
+					if(_clickInfo->sprite == 0){
 						_clickInfo->sprite = spr;
 						_clickInfo->local_click_x = info.localX;
 						_clickInfo->local_click_y = info.localY;
+						
+					}else{
+						if(_clickInfo->sprite->pos_z < spr->pos_z){//按照z轴值,选择一个更加前面的,作为拾取触发的sprite
+							_clickInfo->sprite = spr;
+							_clickInfo->local_click_x = info.localX;
+							_clickInfo->local_click_y = info.localY;
+						}
 					}
-				}
 
-				//调用点击回调
-				//spr->clickCallBack(spr,info.localX,info.localY);
+					//调用点击回调
+					//spr->clickCallBack(spr,info.localX,info.localY);
+				}
 			}
 		}
 	}
@@ -1912,8 +1943,10 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 											_clickInfo->local_click_y);
 
 			
-			//focus
-			//printf("************%s,%d,%d\n",base->name,_clickInfo->local_click_x,_clickInfo->local_click_y);
+			//最终拾取到的sprite对象
+#ifdef DEBUG_PRINT_HIT
+			log_color(0xff0000,"最上层对象************\t[%s]\t,%d,%d\n",base->name,_clickInfo->local_click_x,_clickInfo->local_click_y);
+#endif
 		}
 
 

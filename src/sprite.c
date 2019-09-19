@@ -15,7 +15,7 @@
 #include "base.h"
 #include "fbotex.h"
 #include "camera.h"
-
+//#define _SET_POS_DEBUG_
 static void f_refreshChildPos(void* ptr);
 
 static char*
@@ -410,7 +410,7 @@ sprite_set2dCam(void* spr,void* _2dcam){
 	base_set_cam(spr,_2dcam);
 }
 
-#define _SET_POS_DEBUG_
+
 /*
 	设置sprite的屏幕坐标,(屏幕以左上角为0,0起始点)
 */

@@ -15,6 +15,11 @@ function UnitBase:new()
     return s;
 end
 
+--设置对象的cam的矩阵空间
+local function f_set_cam(self)
+	local e = engine_get();
+	set_cam(self.p,e.cam3d);
+end
 --获取句柄
 function UnitBase:get_p()
     return self.p;
@@ -42,6 +47,7 @@ function UnitBase:loadvbo(modelURL,maturl)
     --local ss =new_sharp;
    
     self.p = md2;
+	f_set_cam(self);
 end;
 --加载一个测试立方体
 function UnitBase:loadbox()
@@ -58,6 +64,7 @@ function UnitBase:loadbox()
     setv(obj,FLAGS_REVERSE_FACE);
     setv(obj,FLAGS_VISIBLE);
     self.p = obj;
+	f_set_cam(self);
 end
 
 function UnitBase:load_model(url,maturl)
@@ -77,6 +84,7 @@ function UnitBase:load_model(url,maturl)
 --	setv(_floor,FLAGS_DRAW_PLOYGON_LINE)--线框
 --	setv(_floor,FLAGS_DISABLE_CULL_FACE)
     self.p = _floor;
+	f_set_cam(self);
 end
 
 function UnitBase:setv(v)

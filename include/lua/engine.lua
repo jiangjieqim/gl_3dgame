@@ -2,19 +2,18 @@ local _engine;
 
 function engine_init()
 	local e = {
-		_3dcam,
-		fbocam,
-		fboTexture,
-        fboSprite,
-		fbo,
+		
 	};
 	
-	local _3dcam,fbocam,fboTexture,fbo = getEngine();
-	--print(_3dcam..","..fbocam);
-	e._3dcam = _3dcam;
-	e.fbocam = fbocam;
+	local cam2d,cam3d,fbo2dcam,fbo3dcam,fboTexture,fbo = getEngine();
+	e.cam2d = cam2d;
+	e.cam3d = cam3d;
+	e.fbo2dcam = fbo2dcam;
+	e.fbo3dcam = fbo3dcam;
     e.fboTexture = fboTexture;
 	e.fbo = fbo;
+	cam_set_2dxy(e.fbo2dcam,50,100);
+	
 	return e;
 end
 
@@ -23,12 +22,11 @@ function engine_get_fbo()
 	local e = engine_get();
 	return e.fbo;
 end
-
-function engine_get_fbocam()
-	local e = engine_get();
-	return e.fbocam;
+--[[
+function engine_get_3dcam()
+	return e.cam3d;
 end
-
+--]]
 --创建一个装载fbotextue的sprite
 local function f_createFboSprite()
 	local size = 256;
@@ -55,7 +53,7 @@ end
 
 --刷新引擎默认的cam
 function engine_refreshCam3d()
-	change_attr(nil,"cam_refreshModel",_engine._3dcam);
+	change_attr(nil,"cam_refreshModel",_engine.cam3d);
 end
 --添加一个节点到引擎主frame,只有添加进去的节点才能被渲染
 function engine_addNode(n)
@@ -85,13 +83,7 @@ end
 function engine_exit()
     change_attr(nil,"exit");
 end
---将一个渲染节点加入到一个fbo对象中
-function engine_fboPushNode(node,fbo)
-	fbo = fbo or engine_get_fbo();
-	--sprite_set2dCam(sprite,fbo);
-	--print("fbo = "..fbo);
-	change_attr(nil,"fbo_pushNode",tonumber(fbo)..","..tonumber(node));
-end
+
 function engine_setBg(r,g,b)
     --设置背景色
     change_attr(nil,"setBgColor",string.format("%s,%s,%s",r or 0,g or 0,b or 0));

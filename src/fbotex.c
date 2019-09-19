@@ -32,15 +32,9 @@ struct FBOTexNode
 	//void (*callBack)();
 
 	//渲染的节点列表
-	void* nodelist;
+	//void* nodelist;
 };
-static void
-f_renderList(int data,int parms){
-	//printf("%d\n",data);
-	ex_render3dNode(data);
-	//sprite_drawRender(data);
-	//sprite_updatePos(data);
-}
+
 void
 fbo_render(void* ptr){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
@@ -87,28 +81,10 @@ fbo_render(void* ptr){
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
 
-	LStack_ergodic_t(fbo->nodelist,f_renderList,0);
-	//f_renderlistCall(sprite_drawRender);//渲染2d节点
+	//LStack_ergodic_t(fbo->nodelist,f_renderList,0);
+	ex_renderlistCall(ex_render3dNode);//渲染节点
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-}
-
-void fbo_pushNode(void* p,void* _node){
-	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-	if(_node){
-		struct HeadInfo* b;
-		b = base_get(_node);
-		if( base_findByName(fbo->nodelist,b->name)){
-			printf("fbo_pushNode,error! 重名的对象_engine :%s\n",b->name);
-			assert(0);
-		}else{
-			if(b->curType == TYPE_SPRITE_FLIE){
-				sprite_set2dCam(p,fbo->_2dcam);//设置sprite当前的cam为fbo的cam
-			}
-
-			LStack_push(fbo->nodelist,_node);
-		}
-	}
 }
 
 void* 
@@ -124,7 +100,7 @@ fbo_init(int texW,int texH){
 	
 	memset(fbo,0,sizeof(struct FBOTexNode));
 
-	fbo->nodelist = LStack_create();
+	//fbo->nodelist = LStack_create();
 
 	fbo->texw = mirrorTexWidth;
 	fbo->texh = mirrorTexHeight;
@@ -184,8 +160,8 @@ fbo_dispose(void* p){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 
 	//释放之前要销毁那些push进去的3d节点
-	LStack_delete(fbo->nodelist);
-	fbo->nodelist = 0;
+	//LStack_delete(fbo->nodelist);
+	//fbo->nodelist = 0;
 	if(fbo->tex){
 		glDeleteTextures(1, &fbo->tex);
 		fbo->tex = 0;
@@ -205,7 +181,7 @@ fbo_dispose(void* p){
 //	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 //	return fbo->_2dspr;
 //}
-void* fbo_getCam(void* p){
+void* fbo_get3dCam(void* p){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 	return fbo->_3dcam;
 }
