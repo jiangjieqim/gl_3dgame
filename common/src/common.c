@@ -37,7 +37,7 @@ tl_writeAppandFile(const char* filePath,char* buffer){
 	fwrite (buffer , strlen(buffer), 1, pFile );
 	fclose (pFile);
 }
-
+//Int32    //等于int, 占4个字节（-2147483648~2147483647）。
 void 
 tl_newName(char* buffer,int bufferSize,char* prefix){
 	static int _nameId;
@@ -45,8 +45,11 @@ tl_newName(char* buffer,int bufferSize,char* prefix){
 	if(prefix==0){
 		sprintf_s(buffer,bufferSize,"%d",_nameId);
 	}else{
-		sprintf_s(buffer,bufferSize,"%s%d",prefix,_nameId);
+		sprintf_s(buffer,bufferSize,"%d%s",_nameId,prefix);
 	}
+	
+	//printf("c:(%s)\n",buffer);
+
 	_nameId++;
 }
 

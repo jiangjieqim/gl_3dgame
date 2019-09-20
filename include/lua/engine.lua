@@ -5,28 +5,33 @@ function engine_init()
 		
 	};
 	
-	local cam2d,cam3d,fbo2dcam,fbo3dcam,fboTexture,fbo = getEngine();
+	local cam2d,cam3d= getEngine();
 	e.cam2d = cam2d;
 	e.cam3d = cam3d;
-	e.fbo2dcam = fbo2dcam;
+	--[[e.fbo2dcam = fbo2dcam;
 	e.fbo3dcam = fbo3dcam;
     e.fboTexture = fboTexture;
 	e.fbo = fbo;
-	cam_set_2dxy(e.fbo2dcam,50,100);
+	--]]
+	--cam_set_2dxy(e.fbo2dcam,50,100);
 	
 	return e;
 end
 
+
+--[[
 --当前引擎中的FBO对象引用
 function engine_get_fbo()
 	local e = engine_get();
 	return e.fbo;
 end
---[[
 function engine_get_3dcam()
 	return e.cam3d;
 end
 --]]
+
+
+--[[
 --创建一个装载fbotextue的sprite
 local function f_createFboSprite()
 	local size = 256;
@@ -40,7 +45,7 @@ local function f_createFboSprite()
     end
     return spr;
 end
-
+--]]
 --构造一个新的层级
 function engine_newPosZ()
     return get_attr(nil,"newPosZ");
@@ -59,7 +64,7 @@ end
 function engine_addNode(n)
     change_attr(nil,"ex_add",n);
 end
-
+--[[
 --获取装载fbo的Sprite
 function engine_get_fbo_sprite()
     local e = engine_get();
@@ -68,7 +73,7 @@ function engine_get_fbo_sprite()
     end
     return _engine.fboTexture;
 end
-
+--]]
 --当前的fps
 function engine_get_fps()
 	return get_attr(nil,"fps");

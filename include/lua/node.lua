@@ -61,6 +61,12 @@ end
 
 
 function node_fbo(avtar)
+	
+	local fbo = fboobj_init(256,256);
+	fboobj_set_pos(fbo,220,0);
+	
+	
+	
 	local n = node_new();
 
 	local useAvtar = avtar or 0;
@@ -82,11 +88,11 @@ function node_fbo(avtar)
 		--setv(node_getNode(n),FLAGS_REVERSE_FACE);--反转三角面
 	
 	--print("name="..node_getName(n));
-	node_setCam(n,e.fbo3dcam);
+	node_setCam(n,fbo.cam3d);
 	
     engine_addNode(n.node);
 	
-    local sprite = sprite_create("name1",0,30,100,50,0,1,e.fbo2dcam);
+    local sprite = sprite_create(0,0,0,100,256,0,1,fbo.cam2d);
     func_setIcon(sprite, "smallbtn.png");
     
 	
@@ -105,6 +111,15 @@ function node_fbo(avtar)
     --engine_addNode(sprite);--增加到主舞台
 	
 	
+    local function f_scHandle(sc)
+    local v = sc.value;
+        --print(v);
+        func_setPos(sprite,0,-128*v);--具有矩形遮罩区域的滚动条
+    end
+    local sc = scrollBar_new(200,0,CONST_DIRECTION_VERTICAL);
+    scrollBar_bind(sc,f_scHandle);
+
+
 	
 	--################
 	local sprite1 = sprite_create("defaultname2",20,10,100,50,0,1);

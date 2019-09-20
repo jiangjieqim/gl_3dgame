@@ -68,13 +68,13 @@ function alert_create(w,h)
 	
     local self = create();
 
-	self.bg = sprite_create("alert",x,y,w,h);
+	self.bg = sprite_create(nil,x,y,w,h);
 	func_setIcon(self.bg,"gundi.png");
 	--print(self.closeBtn)
 
     --##############################################
     --FBOäÖÈ¾µÄSprite
-    addFbo(self);
+--    addFbo(self);
     --##############################################
 
 

@@ -13,7 +13,7 @@ local barSize = defaultBg_height
 local BgSuffix = '_bg'
 
 
-local dragDirection = CONST_DIRECTION_HORIZONTAL --水平
+--local dragDirection = CONST_DIRECTION_HORIZONTAL --水平
 
 --创建一个按钮结构体
 local function f_create()
@@ -58,7 +58,7 @@ f_ScDragMove(sc,progress)
 	if(sc.callBack) then
 		sc.callBack(sc)
 	else
-		print(sc.callBack)--回调为nil
+		print("滚动条的回调句柄为nil!")--回调为nil
 	end
 end
 --获取小按钮的拖拽方向
@@ -178,7 +178,17 @@ function scrollBar_label(sc,label)
 end
 
 function 
-scrollBar_new(x,y)
+scrollBar_new(x,y,_dragDirection)
+    _dragDirection=_dragDirection or CONST_DIRECTION_HORIZONTAL;
+
+    if(_dragDirection == CONST_DIRECTION_HORIZONTAL) then
+        defaultBg_width = 100;
+        defaultBg_height = 14;
+    else 
+        defaultBg_width = 14;
+        defaultBg_height = 100;
+    end
+
 	local sc = f_create()
 	
 	if(x == nil) then x = 0	end
@@ -195,7 +205,7 @@ scrollBar_new(x,y)
 	
 	
 	--创建小按钮
-	local btn=sprite_create(name,x,y,barSize,barSize,dragDirection);
+	local btn=sprite_create(name,x,y,barSize,barSize,_dragDirection);
 	func_setIcon(btn,"smallbtn.png")
 	evt_on(btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move);
 	

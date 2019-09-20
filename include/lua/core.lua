@@ -83,12 +83,16 @@ end
 function func_get_default_tex()
 	return defalutTex
 end
-local nameKey = -1;
+--local nameKey = -1;
 --生成一个名字
 local function getName(suffix)
-	nameKey=nameKey+1;
-    local str = suffix or "";
-	return "luaIns_"..str..tostring(nameKey);
+--	nameKey=nameKey+1;
+--    local str = suffix or "";
+--	return "n"..str..tostring(nameKey);
+
+    local str = tl_newName(suffix);
+    --print("lua name("..str..")");
+    return str;
 end
 --[[
 	根据一个配置加载生成一个数据对象
@@ -503,10 +507,10 @@ end
 
 --创建名字
 function 
-func_create_name(name)
-	if(name) then
-		return name;
-	end
+func_create_name()
+--	if(name) then
+--		return name;
+--	end
 	return getName();
 end
 
@@ -816,10 +820,15 @@ function func_xml_to_tb(data)
 end
 --function func
 dofile("..\\include\\lua\\ex.lua")	--引擎
+
 dofile("..\\include\\lua\\engine.lua")	--引擎1
 
 dofile("..\\include\\lua\\cam.lua")	--cam
+dofile("..\\include\\lua\\fbo.lua")	--fbo
+
 dofile("..\\include\\lua\\fps.lua")	--fps组件
+
+
 
 dofile("..\\include\\lua\\listbox.lua")
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件

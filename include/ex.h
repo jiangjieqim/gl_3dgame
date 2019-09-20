@@ -209,14 +209,8 @@ struct EX
 	//当前的2dCam
 	void* _2dCurCam;
 	
-	//fbo引用
-	void* fbo;
-	
-	//装载fbotex的sprite
-	//void* fboTexSprite;
-
-	//fbo贴图引用
-	//void* fboTexture;
+	//fbo对象管理器
+	struct LStackNode *fboList;
 };
 
 //接口定义
@@ -468,5 +462,8 @@ ex_loadVBO(char* name,const char* url);
 
 //切换到2d camera
 void ex_switch2dCam(void* cam);
+
+//添加一个fbo对象到引擎
+void ex_add_fbo(void* fbo);
 
 #endif

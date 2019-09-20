@@ -15,24 +15,13 @@
 
 //#define _2D_Z_POS -90000
 
-struct FBOTexNode
-{
+struct FBOTexNode{
 	void* _3dcam;			//3d透视camera
-	
 	void* _2dcam;			//2d透视camera
-
 	GLuint              fboName;			//FBO命名对象	
-	GLuint				tex;		//贴图
+	GLuint				tex;				//贴图对象句柄
 	GLuint              depthBufferName;	//深度缓冲区
 	int					texw,texh;			//贴图的宽高
-	
-	//GLuint				tex;
-
-	// 渲染节点的回调
-	//void (*callBack)();
-
-	//渲染的节点列表
-	//void* nodelist;
 };
 
 void
@@ -159,15 +148,10 @@ void
 fbo_dispose(void* p){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 
-	//释放之前要销毁那些push进去的3d节点
-	//LStack_delete(fbo->nodelist);
-	//fbo->nodelist = 0;
 	if(fbo->tex){
 		glDeleteTextures(1, &fbo->tex);
 		fbo->tex = 0;
 	}
-	//sprite_dipose(fbo->_2dspr);
-	//glDeleteTextures(1, textures);
 	cam_dispose(fbo->_3dcam);
 
 	// Cleanup RBOs
@@ -177,10 +161,6 @@ fbo_dispose(void* p){
 	glDeleteFramebuffers(1, &fbo->fboName);
 }
 
-//void* fbo_get_spr(void* p){
-//	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-//	return fbo->_2dspr;
-//}
 void* fbo_get3dCam(void* p){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 	return fbo->_3dcam;

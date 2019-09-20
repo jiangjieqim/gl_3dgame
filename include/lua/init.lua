@@ -1,11 +1,16 @@
 dofile("..\\include\\lua\\core.lua");
-
+--[[
 local spr = engine_get_fbo_sprite();
 local btnspr = node_fbo(0);
 --func_addchild(self.bg,spr);
 engine_addNode(spr);
 --self.img = spr;
 func_setPos(spr,50,100);
+--]]
+--########################################
+node_fbo(0);
+
+
 
 
 
@@ -35,8 +40,7 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 engine_setBg(0.3,0.3,0.3);
 
 --fps(0,15);
-
---infowin(0,0);
+infowin(0,0);
 
 --创建一个输入组件
 local function f_init_input()
@@ -92,7 +96,7 @@ end
 --btn_create(0,0,128,128);
 
 
-dofile("..\\include\\lua\\7.lua");
+--dofile("..\\include\\lua\\7.lua");
 
 
 

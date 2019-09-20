@@ -235,6 +235,11 @@ f_addNode(struct EX* p, void* _node){
 void ex_add(void* ptr){
 	f_addNode(ex_getIns(),ptr);
 }
+
+void ex_add_fbo(void* fbo){
+	LStack_push(ex_getIns()->fboList,fbo);
+}
+
 ///*
 //获取模型类型
 //*/
@@ -386,7 +391,7 @@ static void
 f_infoNode(int data){
 	//struct EX*e = ex_getIns();	
 	struct HeadInfo* base = base_get((void*)data);
-	log_color(0xff00ff,"[cam:%0x,%d,%s,v:%d]\n",base->cam,base->curType,base->name,base_getv((void*)data,FLAGS_VISIBLE));
+	log_color(0xff00ff,"[cam:%0x,%d,(%s),v:%d]\n",base->cam,base->curType,base->name,base_getv((void*)data,FLAGS_VISIBLE));
 }
 /*
 打印引擎当前信息
@@ -416,10 +421,10 @@ ex_get_info(){
 	
 	log_color(0xff00ff,"draw call渲染节点个数:%d,sw=%.3f,sh=%.3f\n",LStack_length(ex->renderList),ex->_screenWidth,ex->_screenHeight);
 	
-	mat4x4_printf("ex->_2dcam",cam_getPerctive(ex->_2dcam));
+	//mat4x4_printf("ex->_2dcam",cam_getPerctive(ex->_2dcam));
 	{
-		void* _cam = fbo_get2dCam(ex->fbo);
-		mat4x4_printf("fbo->2dcam",cam_getPerctive(_cam));
+		/*void* _cam = fbo_get2dCam(ex->fbo);
+		mat4x4_printf("fbo->2dcam",cam_getPerctive(_cam));*/
 	}
 	ex_renderlistCall(f_infoNode);
 	
@@ -1069,6 +1074,16 @@ f_defaultRenderFrame(){
 	// 2019.8.26 此处已经优化成Sprite模式的字体渲染
 	//if(getv(&p->flags,EX_FLAGS_DRAW_DEBUG_TEXT)) {drawText(p);}
 }
+static void 
+f_fboRenderList(int data,int parms){
+	fbo_render((void*)data);
+}
+
+//渲染fbo列表
+static void
+f_renderFBOs(){	
+	LStack_ergodic_t(ex_getIns()->fboList,f_fboRenderList,0);
+}
 
 static void 
 _new(){
@@ -1085,7 +1100,9 @@ _new(){
 	_longTime =  get_longTime();
 	
 	f_defaultRenderFrame();
-	fbo_render(p->fbo);	
+	//fbo_render(p->fbo);	
+
+	f_renderFBOs();
 
 	//Do the buffer Swap
 	glutSwapBuffers ();
@@ -1165,31 +1182,31 @@ f_stage_click_callback(struct Sprite* self,int x,int y){
 	//printf("f_stage_click_callback %d,%d\n",x,y);
 }
 
-//初始化一个设置坐标和cam角度的fbo
-static void
-f_init_fbo(void* fbo){
-	void* cam = fbo_get3dCam(fbo);
-	//void* spr = sprite_createEmptyTex(256,256);
-
-	//void* mat = sprite_get_material(spr);
-	//tmat_pushTex(mat,(GLuint)fbo_getTex(fbo));
-
-	//base_resetv(spr,FLAGS_VISIBLE);
-	//sprite_setpos((struct Sprite*)spr,100,100);
-	//ex_getIns()->fboTexSprite = spr;
-
-	//ex_getIns()->fboTexture = fbo_getTex(fbo);
-
-	cam_setZ(cam,-3);
-	cam_setRX(cam,PI*1.8);
-	cam_refreshModel(cam);
-	
-	{
-		/*void*	ptr = sprite_create("a",0,0,50,50,0);
-		sprite_
-		fbo_pushNode(fbo,ptr);*/
-	}
-}
+////初始化一个设置坐标和cam角度的fbo
+//static void
+//f_init_fbo(void* fbo){
+//	void* cam = fbo_get3dCam(fbo);
+//	//void* spr = sprite_createEmptyTex(256,256);
+//
+//	//void* mat = sprite_get_material(spr);
+//	//tmat_pushTex(mat,(GLuint)fbo_getTex(fbo));
+//
+//	//base_resetv(spr,FLAGS_VISIBLE);
+//	//sprite_setpos((struct Sprite*)spr,100,100);
+//	//ex_getIns()->fboTexSprite = spr;
+//
+//	//ex_getIns()->fboTexture = fbo_getTex(fbo);
+//
+//	cam_setZ(cam,-3);
+//	cam_setRX(cam,PI*1.8);
+//	cam_refreshModel(cam);
+//	
+//	{
+//		/*void*	ptr = sprite_create("a",0,0,50,50,0);
+//		sprite_
+//		fbo_pushNode(fbo,ptr);*/
+//	}
+//}
 
 //初始化场景,舞台和设备上下文设备都处理完成了
 static void
@@ -1197,8 +1214,8 @@ f_initScene(){
 	struct EX* p = ex_getIns();
 	//**************************************************
 	//初始化一个fbo texture对象
-	p->fbo = fbo_init(256,256);
-	f_init_fbo(p->fbo);
+	//p->fbo = fbo_init(256,256);
+	//f_init_fbo(p->fbo);
 	
 	//ex_reshape(sw,sh);
 
@@ -1284,6 +1301,8 @@ ex_init(struct EX* p,GLdouble zfar,float sw,float sh){
 	}
 	p->zFar = zfar;
 	p->renderList = LStack_create();
+
+	p->fboList = LStack_create();
 	/*p->hit=hit_create(p->renderList,p->viewport,p->hitModelView,p->hitPerspectProjection);*/
 	
 	//==========================================
@@ -1307,7 +1326,12 @@ void ex_dispose(struct EX* p){
 	atals_dispose(p->atals);
 	p->atals = 0;
 
-	LStack_delete((struct LStackNode*)p->renderList);
+	LStack_delete(p->renderList);
+	p->renderList = 0;
+
+	LStack_delete(p->fboList);
+	p->fboList = 0;
+
 	ft_free(p->ft);
 	evt_dispose(p);
 	memory_gc();
