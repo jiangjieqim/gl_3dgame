@@ -30,7 +30,7 @@
 #include "fbotex.h"
 #include "fbospr.h"
 
-#define DEBUG_PRINT_HIT	//打印拾取日志
+//#define DEBUG_PRINT_HIT	//打印拾取日志
 
 int g_sprite_line;
 long g_delayTime;
@@ -693,7 +693,8 @@ ex_render3dNode(int data)
 	//if(!targetCam && ex->_2dCurCam == ex->_2dcam){
 	if(!targetCam){
 		//没有指定任何cam
-		printf("*************%s没有指定任何cam\n",base->name);
+		printf("*************%s type=%d 没有指定任何cam\n",base->name,base->curType);
+		getchar();
 		return;
 	} 
 	

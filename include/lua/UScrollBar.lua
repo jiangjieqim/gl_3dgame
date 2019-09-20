@@ -177,8 +177,28 @@ function scrollBar_label(sc,label)
     ftext_setpos(sc.tf,x+w,y);
 end
 
+--根据cw,ch的值来确定是横向还是综向滑动
 function 
-scrollBar_new(x,y,_dragDirection)
+scrollBar_new(x,y,cw,ch)
+	
+	local _dragDirection;
+	--cw = cw or 100;
+	--ch = ch or 14;
+	
+	
+	defaultBg_width = cw;
+	defaultBg_height= ch;
+	if(cw > ch) then
+		_dragDirection=CONST_DIRECTION_HORIZONTAL;
+		barSize = ch;
+	else
+		_dragDirection=CONST_DIRECTION_VERTICAL;
+		barSize = cw;
+	end
+	
+	--print(cw,ch,_dragDirection);
+	
+--[[
     _dragDirection=_dragDirection or CONST_DIRECTION_HORIZONTAL;
 
     if(_dragDirection == CONST_DIRECTION_HORIZONTAL) then
@@ -188,6 +208,7 @@ scrollBar_new(x,y,_dragDirection)
         defaultBg_width = 14;
         defaultBg_height = 100;
     end
+	--]]
 
 	local sc = f_create()
 	

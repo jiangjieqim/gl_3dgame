@@ -96,4 +96,10 @@ end
 function engine_get()
     return _engine;
 end
+--设置一个默认的3dcam给对象
+function engine_bind_default_3dcam(self)
+	local e = engine_get();
+	set_cam(self,e.cam3d);
+end
+
 _engine=engine_init();

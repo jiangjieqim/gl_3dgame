@@ -1,19 +1,7 @@
 dofile("..\\include\\lua\\core.lua");
---[[
-local spr = engine_get_fbo_sprite();
-local btnspr = node_fbo(0);
---func_addchild(self.bg,spr);
-engine_addNode(spr);
---self.img = spr;
-func_setPos(spr,50,100);
---]]
+
 --########################################
 node_fbo(0);
-
-
-
-
-
 
 
 function f_onkey(data)
@@ -24,15 +12,21 @@ function f_onkey(data)
 	elseif(key == 13) then
 		func_ex_info();
 	elseif(key == 49) then
+		func_ex_info();
+	
 		--setv(btnspr,FLAGS_DRAW_PLOYGON_LINE );
 		--setv(btnspr,FLAGS_DISABLE_CULL_FACE );
-		if(getv(btnspr,FLAGS_REVERSE_FACE) == 1) then
-			resetv(btnspr,FLAGS_REVERSE_FACE );
-		else
-			setv(btnspr,FLAGS_REVERSE_FACE );
+		if(btnspr) then
+			if(getv(btnspr,FLAGS_REVERSE_FACE) == 1) then
+				resetv(btnspr,FLAGS_REVERSE_FACE );
+			else
+				setv(btnspr,FLAGS_REVERSE_FACE );
+			end
 		end
 	elseif(key == 50) then
-		setv(btnspr,FLAGS_DRAW_PLOYGON_LINE );
+		if(btnspr) then
+			setv(btnspr,FLAGS_DRAW_PLOYGON_LINE );
+		end
 	end
 end
 evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
@@ -40,7 +34,7 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 engine_setBg(0.3,0.3,0.3);
 
 --fps(0,15);
-infowin(0,0);
+--infowin(0,0);
 
 --创建一个输入组件
 local function f_init_input()

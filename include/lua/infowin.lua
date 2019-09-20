@@ -12,6 +12,9 @@ local function f_loadObj(model)
 	model = model or 'tri'--'box'--'torus'
 	--local obj = func_loadobj(model)--box	'torus'
 	local obj = load_model(name,string.format("\\resource\\obj\\%s.obj",model));	
+
+	engine_bind_default_3dcam(obj);
+	
 	setMaterial(obj,func_load("//resource//material//wolf.mat"));
 	setv(obj,FLAGS_VISIBLE);
 	---[[

@@ -92,7 +92,9 @@ function node_fbo(avtar)
 	
     engine_addNode(n.node);
 	
-    local sprite = sprite_create(0,0,0,100,256,0,1,fbo.cam2d);
+	
+	local ch = 500;--容器的高度
+    local sprite = sprite_create(0,0,0,100,ch,0,1,fbo.cam2d);
     func_setIcon(sprite, "smallbtn.png");
     
 	
@@ -111,21 +113,33 @@ function node_fbo(avtar)
     --engine_addNode(sprite);--增加到主舞台
 	
 	
+	
+	
+	local cy = 0;--当前的坐标
+	local ox = 1;
+	local h = fbo.size;
+	--滑动
     local function f_scHandle(sc)
-    local v = sc.value;
+		
+		if(h >= ch) then
+			
+			return;
+		end
+		local v = sc.value;
         --print(v);
-        func_setPos(sprite,0,-128*v);--具有矩形遮罩区域的滚动条
+        func_setPos(sprite,0,(h-ch)*v);--具有矩形遮罩区域的滚动条
     end
-    local sc = scrollBar_new(200,0,CONST_DIRECTION_VERTICAL);
+    local sc = scrollBar_new(200,0,15,256);
     scrollBar_bind(sc,f_scHandle);
 
 
-	
+
+--[[	
 	--################
 	local sprite1 = sprite_create("defaultname2",20,10,100,50,0,1);
     func_setIcon(sprite1, "smallbtn.png");
 	engine_addNode(sprite1);
-	
+--]]
 	
 	return sprite;
 end
