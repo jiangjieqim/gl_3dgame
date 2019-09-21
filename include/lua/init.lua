@@ -1,8 +1,24 @@
 dofile("..\\include\\lua\\core.lua");
 
 --########################################
-node_fbo(0);
+--node_fbo(0);
 
+--*********************************************
+local cam;
+local function f_create()
+	local sprite = sprite_create(nil,0,0,99,64,0,1,cam);
+--	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
+    func_setIcon(sprite, "smallbtn.png");
+    engine_addNode(sprite);
+	return sprite;
+end
+
+local t = {1,2,3,4,5};
+local sv = scrollView_init(100,150,20,30);
+sv.itemFunc = f_create;--设置itemRende的创建回调
+cam = scrollView_get_cam(sv);
+scrollView_set_data(sv,t);
+--*******************************************
 
 function f_onkey(data)
 	local key = tonumber(data);

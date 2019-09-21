@@ -60,6 +60,23 @@ local function f_split_init(md2)
 end
 
 
+local function add_small_node(parent)
+   local cam = get_cam(parent);
+    local sprite = sprite_create(nil,0,0,64,64,0,1,cam);
+--	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
+    func_setIcon(sprite, "smallbtn.png");
+    func_addchild(parent,sprite);
+    engine_addNode(sprite);
+end
+
+
+
+
+
+
+
+
+
 function node_fbo(avtar)
 	
 	local fbo = fboobj_init(256,256);
@@ -94,7 +111,8 @@ function node_fbo(avtar)
 	
 	
 	local ch = 500;--容器的高度
-    local sprite = sprite_create(0,0,0,100,ch,0,1,fbo.cam2d);
+    local sprite = sprite_create(nil,0,0,100,ch,0,1,fbo.cam2d);
+	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
     func_setIcon(sprite, "smallbtn.png");
     
 	
@@ -107,6 +125,8 @@ function node_fbo(avtar)
     func_sprite_set_z(sprite,z);
 	engine_addNode(sprite);
 	
+
+    --add_small_node(sprite);
     --setv(sprite,FLAGS_REVERSE_FACE);--反转三角面 
     --setv(sprite,FLAGS_DISABLE_CULL_FACE);
     
@@ -141,5 +161,4 @@ function node_fbo(avtar)
 	engine_addNode(sprite1);
 --]]
 	
-	return sprite;
 end

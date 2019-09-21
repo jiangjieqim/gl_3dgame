@@ -24,4 +24,12 @@ void* fbo_getTex(void* p);
 void 
 fbo_resize(void*p);
 
+
+/*
+ *	激活或者关闭当前的FBO,在FBO关闭状态下的时候,FBO绑定的渲染节点是不渲染的
+ *	0 关闭 1 开启
+ */
+void
+fbo_enable(void*p,int v);
+
 #endif

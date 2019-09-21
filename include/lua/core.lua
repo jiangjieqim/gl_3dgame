@@ -826,6 +826,8 @@ dofile("..\\include\\lua\\engine.lua")	--引擎1
 dofile("..\\include\\lua\\cam.lua")	--cam
 dofile("..\\include\\lua\\fbo.lua")	--fbo
 
+
+
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 
 
@@ -842,6 +844,7 @@ dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位
+dofile("..\\include\\lua\\scrollview.lua")	--scrollview
 dofile("..\\include\\lua\\node.lua")		--角色单位2
 
 

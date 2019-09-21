@@ -22,58 +22,62 @@ struct FBOTexNode{
 	GLuint				tex;				//贴图对象句柄
 	GLuint              depthBufferName;	//深度缓冲区
 	int					texw,texh;			//贴图的宽高
+	int enable;//是否处于激活状态
 };
 
 void
 fbo_render(void* ptr){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
-	const GLenum fboBuffs[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
 
-	ex_switch3dCam(fbo->_3dcam);
+	if(fbo->enable){
+		const GLenum fboBuffs[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
 
-	{
-		//This is Test code for debug to equal 2 mat4x4
-		/*struct EX* p = ex_getIns();
-		cam_setOrtho(p->_2dcam,256,256,-p->allzBuffer);*/
-	
-		//void* a= cam_getPerctive(fbo->_2dcam);
-		//void* b= cam_getPerctive(ex_getIns()->_2dCurCam);
-		
-		//mat4x4_copy(b,a);//将_2dCurCam矩阵的值赋值给fbo->_2dcam
+		ex_switch3dCam(fbo->_3dcam);
 
-		//printf("比较:%d\n",mat4x4_equal(a,b));
-		//if(!mat4x4_equal(a,b,1)){
-		//	mat4x4_printf("_2dCurCam",b);
-		//	mat4x4_printf("fbocam",a);
-		//	getchar();
-		//}
-	}
-	ex_switch2dCam(fbo->_2dcam);
+		{
+			//This is Test code for debug to equal 2 mat4x4
+			/*struct EX* p = ex_getIns();
+			cam_setOrtho(p->_2dcam,256,256,-p->allzBuffer);*/
 
+			//void* a= cam_getPerctive(fbo->_2dcam);
+			//void* b= cam_getPerctive(ex_getIns()->_2dCurCam);
 
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo->fboName);
-	glDrawBuffers(1, fboBuffs);
+			//mat4x4_copy(b,a);//将_2dCurCam矩阵的值赋值给fbo->_2dcam
 
-	{//检查fbo的状态
-		GLenum state =	glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
-		if(state != GL_FRAMEBUFFER_COMPLETE){
-			printf("fbo state = %0x\n",state);
-			return;
+			//printf("比较:%d\n",mat4x4_equal(a,b));
+			//if(!mat4x4_equal(a,b,1)){
+			//	mat4x4_printf("_2dCurCam",b);
+			//	mat4x4_printf("fbocam",a);
+			//	getchar();
+			//}
 		}
+		ex_switch2dCam(fbo->_2dcam);
+
+
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo->fboName);
+		glDrawBuffers(1, fboBuffs);
+
+		{//检查fbo的状态
+			GLenum state =	glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+			if(state != GL_FRAMEBUFFER_COMPLETE){
+				printf("fbo state = %0x\n",state);
+				return;
+			}
+		}
+
+		glViewport(0, 0, fbo->texw, fbo->texh);
+		glClearColor(1,0,1,1);//绘制成紫红色
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//清除当前的缓冲区
+
+
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_MULTISAMPLE);
+
+		//LStack_ergodic_t(fbo->nodelist,f_renderList,0);
+		ex_renderlistCall(ex_render3dNode);//渲染节点
+
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
-
-	glViewport(0, 0, fbo->texw, fbo->texh);
-	glClearColor(1,0,1,1);//绘制成紫红色
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//清除当前的缓冲区
-	
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_MULTISAMPLE);
-
-	//LStack_ergodic_t(fbo->nodelist,f_renderList,0);
-	ex_renderlistCall(ex_render3dNode);//渲染节点
-
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
 void* 
@@ -88,6 +92,8 @@ fbo_init(int texW,int texH){
 	GLuint              depthBufferName; //深度缓冲区
 	
 	memset(fbo,0,sizeof(struct FBOTexNode));
+
+	fbo->enable = 1;//默认处于激活状态
 
 	//fbo->nodelist = LStack_create();
 
@@ -172,4 +178,10 @@ void* fbo_get2dCam(void* p){
 void* fbo_getTex(void* p){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 	return (void*)fbo->tex;
+}
+
+void
+fbo_enable(void*p,int v){
+	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+	fbo->enable = v;
 }
