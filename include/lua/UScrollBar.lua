@@ -4,20 +4,13 @@
 --
 --#######################################################
 
---默认宽高
-local defaultBg_width = 100
-local defaultBg_height = 14
---小按钮宽度
-local barSize = defaultBg_height
---背景后缀
-local BgSuffix = '_bg'
-
-
---local dragDirection = CONST_DIRECTION_HORIZONTAL --水平
-
 --创建一个按钮结构体
 local function f_create()
 	return {
+		--滚动条的宽高
+		defaultBg_width,
+		defaultBg_height,
+	
 		--对象类型
 		type = "ScrollBar",
 		
@@ -149,7 +142,7 @@ f_scrollBarBG_Click2(name)
 	
 	
 	--小按钮
-	local scName=string.sub(name,0,-string.len(BgSuffix)-1)
+	local scName=string.sub(name,0,-string.len("_bg")-1)
 	local sc = func_getTable(scName)
 	
 	--拖拽
@@ -182,12 +175,11 @@ function
 scrollBar_new(x,y,cw,ch)
 	
 	local _dragDirection;
-	--cw = cw or 100;
-	--ch = ch or 14;
+	local sc = f_create()
 	
-	
-	defaultBg_width = cw;
-	defaultBg_height= ch;
+	sc.defaultBg_width = cw;
+	sc.defaultBg_height= ch;
+	local barSize;
 	if(cw > ch) then
 		_dragDirection=CONST_DIRECTION_HORIZONTAL;
 		barSize = ch;
@@ -195,23 +187,7 @@ scrollBar_new(x,y,cw,ch)
 		_dragDirection=CONST_DIRECTION_VERTICAL;
 		barSize = cw;
 	end
-	
-	--print(cw,ch,_dragDirection);
-	
---[[
-    _dragDirection=_dragDirection or CONST_DIRECTION_HORIZONTAL;
-
-    if(_dragDirection == CONST_DIRECTION_HORIZONTAL) then
-        defaultBg_width = 100;
-        defaultBg_height = 14;
-    else 
-        defaultBg_width = 14;
-        defaultBg_height = 100;
-    end
-	--]]
-
-	local sc = f_create()
-	
+		
 	if(x == nil) then x = 0	end
 	if(y == nil) then y = 0 end
 	func_tableSave(sc)
@@ -219,11 +195,10 @@ scrollBar_new(x,y,cw,ch)
 	local name = func_getTableName(sc)--获取btn引用名
 
 	--背景
-	local bg = sprite_create(string.format("%s%s",name,BgSuffix),x,y,defaultBg_width,defaultBg_height)
+	local bg = sprite_create(string.format("%s%s",name,"_bg"),x,y,sc.defaultBg_width,sc.defaultBg_height)
 	func_setIcon(bg,"gundi.png")
 	
 	evt_on(bg,EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2);
-	
 	
 	--创建小按钮
 	local btn=sprite_create(name,x,y,barSize,barSize,_dragDirection);
@@ -232,7 +207,7 @@ scrollBar_new(x,y,cw,ch)
 	
 
 	--设置可拖拽范围
-	sprite_setDragScope(btn,0,0,defaultBg_width,defaultBg_height);
+	sprite_setDragScope(btn,0,0,sc.defaultBg_width,sc.defaultBg_height);
 	
 	--对sc赋值
 	sc.bg = bg
