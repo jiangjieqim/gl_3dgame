@@ -114,7 +114,7 @@ void* input_create(int w){
 	//#########################################
 	memset(name,0,_NAME_SIZE_);
 	sprintf_s(name,_NAME_SIZE_,"input%d",newid());
-	ptr->t = ftext_create(name,w,h,fh*1.1,fh);//13,12	20,15
+	ptr->t = ftext_create(name,w,h,fh*1.1,fh,0);//13,12	20,15
 	ftext_open_wordlist(ptr->t);
 	ftext_setpos(ptr->t,0,0);
 	

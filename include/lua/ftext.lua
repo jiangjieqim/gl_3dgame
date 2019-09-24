@@ -3,7 +3,8 @@ function ftext_set_buffer(txt, v)
     return ftext(txt, "set_buffer",v);
 end
 -- 创建文本对象
-function ftext_create(w, h, fw, fh)
+function ftext_create(w, h, fw, fh,cam)
+    cam = cam or 0;
     local name = func_create_name();
     w = w or 64;
     h = h or 64;
@@ -12,8 +13,8 @@ function ftext_create(w, h, fw, fh)
     fw = fw or 13;
     fh = fh or 12;
 --    fw = fw or 16;fh = fh or 15;
-
-    local p = ftext(nil, "create", name, string.format("%s,%s,%s,%s", w, h, fw, fh));
+    
+    local p = ftext(nil, "create", name, string.format("%s,%s,%s,%s,%s", w, h, fw, fh,cam));
     ftext_set_buffer(p,64);--设置预制缓冲区
     return p;
 end

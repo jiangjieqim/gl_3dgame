@@ -6,7 +6,7 @@
  *	txtName:ftext对象中的sprite对象的唯一标识
  */
 void*
-ftext_create(char* txtName,int texw,int texh,int fw,int fh);
+ftext_create(char* txtName,int texw,int texh,int fw,int fh,void* cam);
 /************************************************************************/
 /* 在指定坐标设置一个字符数据(一个汉字或者是一个英文)
  * outpw,outph输出字符的像素宽高

@@ -7,15 +7,33 @@ dofile("..\\include\\lua\\core.lua");
 local cam;
 local function f_create()
 	local sprite = sprite_create(nil,0,0,99,64,0,1,cam);
+
+    local node ={};
 --	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
     func_setIcon(sprite, "smallbtn.png");
     engine_addNode(sprite);
-	return sprite;
+    local tf = ftext_create(64,64,13,12,cam);
+    local con = ftext_get_container(tf);
+    func_addchild(sprite,con);
+    ftext_parse(tf,"1");
+--	return sprite;
+    node.view = sprite;
+    node.tf = tf;
+    node.data = nil;
+    node.used = 1;
+    return node;
+end
+
+local function itemRefreshFunc(node)
+--    print(node.data);
+    fext_clear(node.tf);
+    ftext_parse(node.tf,node.data);
 end
 
 local t = {1,2,3,4,5};
-local sv = scrollView_init(100,150,20,30);
+local sv = scrollView_init(100,128,20,30);
 sv.itemFunc = f_create;--设置itemRende的创建回调
+sv.itemRefreshFunc = itemRefreshFunc;
 cam = scrollView_get_cam(sv);
 scrollView_set_data(sv,t);
 --*******************************************
