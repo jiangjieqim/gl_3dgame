@@ -55,53 +55,45 @@ local function f_offset_xy(sv,oy,changeSub)
 --    oy = oy % sv.sh;
 
 	local cur_h = oy;
-	local data = sv.sprList;
+	local data = sv.pool;
 --	local noChangeList = {};
 
     local cnt = sv.needCnt;
-  --  cnt = math.floor(cnt);
---    print("cnt:",cnt);
-   local outNode = nil;
-
-   local _myNode = nil;
+--  cnt = math.floor(cnt);
+--  print("cnt:",cnt);
+    local outNode = nil;
+    local _myNode = nil;
     for key, value in pairs(data) do
-		--print('key=['..key..']'..'value['..value..']')
-		--print(key,value);
+	    --print('key=['..key..']'..'value['..value..']')
+	    --print(key,value);
 		
         local node = value;
         
-        --node.view = view;
-        --node.index = n;
-
-        local spr = node.view;
-        local x,y = func_get_sprite_xy(spr);
-        local ptype=f_checkItemOutside(sv,y+changeSub);
-        if( ptype~= 0) then
-            --剔除
-            if ptype == 1  then
-                --向下超出了
-                y = y - cnt * sv.itemHeight;
-            
-            elseif(ptype == 2) then
-                --向上超出了
-                y = y + cnt * sv.itemHeight;
-
-                --node.index = cnt;
-            end
-            
-            f_rebuildIndex(sv.sprList,node,ptype);
-            outNode = node;
-        else
-            y = y + changeSub;
-            
-           sprite_setpos(spr,0,y); 
-           
-        
-        end
-        
-    --    node.y = y;
-	
-       -- print(oy,node.index,node,y);
+        if(node.used == 1) then
+            --node.view = view;
+            --node.index = n;
+            local spr = node.view;
+            local x,y = func_get_sprite_xy(spr);
+            local ptype=f_checkItemOutside(sv,y+changeSub);
+            if( ptype~= 0) then
+                --剔除
+                if ptype == 1  then
+                    --向下超出了
+                    y = y - cnt * sv.itemHeight;
+                elseif(ptype == 2) then
+                    --向上超出了
+                    y = y + cnt * sv.itemHeight;
+                    --node.index = cnt;
+                end
+                f_rebuildIndex(sv.pool,node,ptype);
+                outNode = node;
+            else
+                y = y + changeSub;
+                sprite_setpos(spr,0,y);           
+            end 
+        --    node.y = y;
+	    end
+        -- print(oy,node.index,node,y);
     end
  
  ---[[
@@ -134,38 +126,45 @@ end
 local function f_pool_getItem(sv)
     local data = sv.pool;
     for key, value in pairs(data) do
-            local obj = value.obj;
-            local used = value.used;
-            if(used == 0) then
+            --local obj = value.obj;
+            --local used = value.used;
+            if(value.used == 0) then
                 value.used = 1;
-                return obj;
+                return value;
             end
 	end
+    local node = sv.itemFunc();
+    
+    --print(tostring(node));
 
+    sv.pool[tostring(node)] = node;
+    
+    return node;
+
+    --[[
     local p = {};
     p.obj =  sv.itemFunc();
     p.used = 1;
     sv.pool[sv.poolindex] = p;
+    --]]
+--      print("new node",sv.poolindex);ret
+--      sv.poolindex = sv.poolindex + 1;
+--      return p.obj;
 
---    print("new node",sv.poolindex);
-
-    sv.poolindex = sv.poolindex + 1;
-
-    return p.obj;
 end
 
 local function f_pool_recycs(sv,targetObj)
 	local data = sv.pool;
     for key, value in pairs(data) do
-            local obj = value.obj;
-            local used = value.used;
+          --  local obj = value.obj;
+         --   local used = value.used;
 			
 			--print('key=['..key..']'..'value['..value..']');
 	        --print(value,obj,targetObj);		
 			
-            if(obj == targetObj) then
+            if(value == targetObj) then
                 value.used = 0;
-				print("recycs")
+				print("recycs");
                 return;
             end
 	end
@@ -218,16 +217,15 @@ local function f_add_scrollBar(sv)
 	scrollBar_bind(sc,f_scHandle);	
 end
 
---存储节点
-local function f_saveNode(sv,view,n)
-    local node = {};
-    node.view = view;
-    node.index = n;
-    node.ptype = 0;
-   -- node.y = 0;
-    sv.sprList[n] = node;
-
-end
+----存储节点
+--local function f_saveNode(sv,view,n)
+--    local node = {};
+--    node.view = view;
+--    node.index = n;
+--    node.ptype = 0;
+--   -- node.y = 0;
+--    sv.sprList[n] = node;
+--end
 --获取该滚动组件内需要组件item个数
 local function f_need_cnt(sv)
      local a = sv.sh % sv.itemHeight;
@@ -241,10 +239,10 @@ end
 function scrollView_set_data(sv,data)
 	sv.dataList = data;
 	--local cam = f_get_cam(sv);
-	if(sv.sprList==nil) then
-        --初始化构造对象池
-		sv.sprList = {}
-	end
+--	if(sv.sprList==nil) then
+--        --初始化构造对象池
+--		sv.sprList = {}
+--	end
     local _realNeedCnt = f_need_cnt(sv);
     sv.needCnt = _realNeedCnt;
     f_pool_recycs_all(sv);
@@ -274,7 +272,7 @@ function scrollView_set_data(sv,data)
                 sprite_setpos(itemView,0,cur_h);
 
                 --sv.sprList[n]= itemView;
-                f_saveNode(sv,itemView,n);
+                --f_saveNode(sv,itemView,n);
 
                 n = n + 1;
 			    cur_h = cur_h + h;
@@ -297,7 +295,7 @@ function scrollView_init(sw,sh,x,y,dir)
 		fbo,--FBO句柄
 		sc,--滚动条句柄
 		
-		sprList,--sprite列表
+--		sprList,--sprite列表
 		dataList,--数据列表
         datacnt, --数据列表长度
 		itemFunc,--item列表的创建方法
@@ -317,7 +315,7 @@ function scrollView_init(sw,sh,x,y,dir)
         itemHeight,--单个item渲染节点的高度
 
         pool = {},--对象池
-        poolindex = 0;
+  --      poolindex = 0;
     };
 	dir = dir or CONST_DIRECTION_VERTICAL;
 	
