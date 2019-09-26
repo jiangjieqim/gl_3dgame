@@ -4,9 +4,10 @@ dofile("..\\include\\lua\\core.lua");
 --node_fbo(0);
 
 --*********************************************
+local itemHeight = 30;
 local cam;
 local function f_create()
-	local sprite = sprite_create(nil,0,0,99,64,0,1,cam);
+	local sprite = sprite_create(nil,0,0,99,itemHeight,0,1,cam);
 
     local node ={};
 --	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
@@ -18,9 +19,12 @@ local function f_create()
     ftext_parse(tf,"1");
 --	return sprite;
     node.view = sprite;
+    setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
     node.tf = tf;
     node.data = nil;
     node.used = 1;
+
+    node.cur_y = 0;
     return node;
 end
 
@@ -30,8 +34,8 @@ local function itemRefreshFunc(node)
     ftext_parse(node.tf,node.data);
 end
 
-local t = {1,2,3,4,5};
-local sv = scrollView_init(100,128,20,30);
+local t = {1,2,3,4,5,6,7};
+local sv = scrollView_init(100,itemHeight*4,20,30);
 sv.itemFunc = f_create;--设置itemRende的创建回调
 sv.itemRefreshFunc = itemRefreshFunc;
 cam = scrollView_get_cam(sv);

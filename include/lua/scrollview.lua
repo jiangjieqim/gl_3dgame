@@ -50,22 +50,52 @@ local function f_getPos(list,index)
     end
 end
 
-local function f_offset_xy(sv,oy,changeSub)
---    print(changeSub);
---    oy = oy % sv.sh;
+local function f_move_node(sv,node,offsety,changeValue)
+    local view = node.view;
+    local w,h = func_get_sprite_size(view);
+    local x,y = func_get_sprite_xy(view);
+    --if(y - changeValue <0) then
+    --    sprite_setpos(view,0,0);
+    --else
+        sprite_setpos(view,0,y-changeValue);
+    --end
+end
+
+
+local function f_find(sv,f)
+	local data = sv.pool;
+	
+    for key, value in pairs(data) do
+        local node = value;
+		if(node.data == f)then
+			return node.view;
+		end
+		
+	end
+end
+
+local function f_offset_xy(v,sv,oy,changeSub,offsetY)
+    --offsetY:移动的变化量
+
+
+    -- changeSub`s value has any error with it.
+    local ah = sv.sh;
+    local div = oy/ah;
+    local sdiv = oy % ah;
+	
+	
+	
+    print("oy="..oy,"sh=",ah,div,"余数:"..sdiv.."->"..v,"offsetY="..offsetY,changeSub);
 
 	local cur_h = oy;
 	local data = sv.pool;
---	local noChangeList = {};
 
     local cnt = sv.needCnt;
---  cnt = math.floor(cnt);
---  print("cnt:",cnt);
     local outNode = nil;
+
     local _myNode = nil;
     for key, value in pairs(data) do
 	    --print('key=['..key..']'..'value['..value..']')
-	    --print(key,value);
 		
         local node = value;
         
@@ -75,6 +105,8 @@ local function f_offset_xy(sv,oy,changeSub)
             local spr = node.view;
             local x,y = func_get_sprite_xy(spr);
             local ptype=f_checkItemOutside(sv,y+changeSub);
+            
+            --[[
             if( ptype~= 0) then
                 --剔除
                 if ptype == 1  then
@@ -88,15 +120,26 @@ local function f_offset_xy(sv,oy,changeSub)
                 f_rebuildIndex(sv.pool,node,ptype);
                 outNode = node;
             else
+            --]]
                 y = y + changeSub;
-                sprite_setpos(spr,0,y);           
+                
+                if(node.data == 1)then
+                    --print(node,node.data);
+                    resetv(spr,FLAGS_DRAW_PLOYGON_LINE);
+                    --sprite_setpos(spr,0,sdiv);
+
+                    f_move_node(sv,node,offsetY,changeSub);
+                end
+            --[[             
             end 
+            --]]
+
         --    node.y = y;
 	    end
         -- print(oy,node.index,node,y);
     end
  
- ---[[
+ --[[
     if(outNode) then
         local i = 0;
         local a = 1;
@@ -115,6 +158,12 @@ local function f_offset_xy(sv,oy,changeSub)
         sprite_setpos(view,0,y+a*sv.itemHeight); 
     end
 --]]
+
+
+
+
+
+
 end
 
 function scrollView_set_pos(sv,x,y)
@@ -190,9 +239,15 @@ local function f_add_scrollBar(sv)
 	end
 	sv.sc = sc;
 
+   
+
     local temp = 0;
+	
+	local curp = 0;
+	
 	--滑动
     local function f_scHandle(_sc)
+--         print("数据长度",sv.dataHeight);
 	---[[	
 	
 		--*************************纵向
@@ -201,15 +256,28 @@ local function f_add_scrollBar(sv)
 		end
 		local v = _sc.value;
 		
-		local oy = (sv.sh - sv.dataHeight)*v;
+		local oy = (sv.dataHeight-sv.sh)*v;
         local stat = oy - temp;
---        if(oy < temp) then
---            stat = 0;
---		else
---        end
+
         temp = oy;
         
-        f_offset_xy(sv,oy,stat);
+		local p = math.floor(oy/sv.itemHeight);
+		
+		if(p~=curp) then
+			print("******************************* change sub index %d",curp - p);
+			curp = p;
+		end
+		
+		
+		local iy= oy/sv.itemHeight-p;
+		print("dh="..sv.dataHeight,"change",stat,"oy="..oy.." sh="..sv.sh..","..(oy%sv.itemHeight),oy/sv.itemHeight,p);
+		
+		local item = f_find(sv,1);
+		resetv(item,FLAGS_DRAW_PLOYGON_LINE);
+		--print("iy="..iy,item);
+		sprite_setpos(item,0,-iy*sv.itemHeight);--设置位于顶部的item元素视图对象的坐标
+		
+        --f_offset_xy(v,sv,oy,stat,(sv.dataHeight-sv.sh)*v);
         --func_setPos(sprite,0,(h-ch)*v);--具有矩形遮罩区域的滚动条
 		--]]
 		--**************************
