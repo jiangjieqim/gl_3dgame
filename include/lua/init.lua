@@ -13,28 +13,35 @@ local function f_create()
 --	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
     func_setIcon(sprite, "smallbtn.png");
     engine_addNode(sprite);
-    local tf = ftext_create(64,64,13,12,cam);
-    local con = ftext_get_container(tf);
-    func_addchild(sprite,con);
-    ftext_parse(tf,"1");
---	return sprite;
-    node.view = sprite;
-    setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
-    node.tf = tf;
-    node.data = nil;
-    node.used = 1;
 
-    node.cur_y = 0;
+
+	if(true) then
+		local tf = ftext_create(64,64,13,12,cam);
+		local con = ftext_get_container(tf);
+		func_addchild(sprite,con);
+		node.tf = tf;
+	end
+	node.view = sprite;
+	--setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
+
+    node.data = nil;
+	
+    node.used = 1;
+	node.index = nil;
+   
     return node;
 end
 
 local function itemRefreshFunc(node)
 --    print(node.data);
-    fext_clear(node.tf);
-    ftext_parse(node.tf,node.data);
+	if(node.tf) then
+		fext_clear(node.tf);
+		ftext_parse(node.tf,node.data);
+	end
+--	print("设置数据",node.data);
 end
 
-local t = {1,2,3,4,5,6,7};
+local t = {10,20,30,40,50,60,70,80,90,100,110,120};
 local sv = scrollView_init(100,itemHeight*4,20,30);
 sv.itemFunc = f_create;--设置itemRende的创建回调
 sv.itemRefreshFunc = itemRefreshFunc;

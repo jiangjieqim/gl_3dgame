@@ -1,4 +1,4 @@
-### 需求文档  
+﻿### 需求文档  
 MD格式教程[https://blog.csdn.net/zuggs_/article/details/82381269] 
 1.GLSL实现GLOW辉光[https://blog.csdn.net/jaccen2012/article/details/78215066]  
 ```
@@ -29,3 +29,11 @@ MD格式教程[https://blog.csdn.net/zuggs_/article/details/82381269]
 ### 实现阴影
 
 localToGlobal
+
+### 实现fbo下的sprite交互
+1.List的Scroll的mask遮罩的处理
+
+### Opengl性能优化
+1.将getUniform的值存起来,这样不用每次去着色器对象中频繁获取,因为频繁获取是代价高昂的,因为上切换设备上下文
+
+### scrollview使用对象池优化之(已解决)
