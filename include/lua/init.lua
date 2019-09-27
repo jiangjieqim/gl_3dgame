@@ -3,7 +3,7 @@ dofile("..\\include\\lua\\core.lua");
 --########################################
 --node_fbo(0);
 
---*********************************************
+--*********************************************************************************
 local itemHeight = 30;
 local cam;
 local function f_create()
@@ -32,13 +32,15 @@ local function f_create()
     return node;
 end
 
+--刷新视图
 local function itemRefreshFunc(node)
 --    print(node.data);
 	if(node.tf) then
 		fext_clear(node.tf);
-		ftext_parse(node.tf,node.data);
+		local str = string.format("i = %d,__%d",node.index,node.data);
+		ftext_parse(node.tf,str);
 	end
---	print("设置数据",node.data);
+	--print("index",node.index,"刷新视图,设置数据",node.data);
 end
 
 local t = {}; --{10,20,30,40,50,60,70,80,90,100,110,120};
@@ -56,7 +58,7 @@ sv.itemFunc = f_create;--设置itemRende的创建回调
 sv.itemRefreshFunc = itemRefreshFunc;
 cam = scrollView_get_cam(sv);
 scrollView_set_data(sv,t);
---*******************************************
+--*************************************************************************************
 
 function f_onkey(data)
 	local key = tonumber(data);

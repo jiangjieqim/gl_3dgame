@@ -38,29 +38,6 @@ end
 function scrollView_get_cam(sv)
 	return sv.fbo.cam2d;
 end
---重新设置node节点的index的值
-local function f_rebuildIndex(list,pnode,ptype)
-    local cnt = 0;
-    for key, value in pairs(list) do
-        local node = value;
-        cnt = cnt + 1;
-        if(node~=pnode) then
-            if(ptype == 1) then
-                node.index = node.index + 1;
-            else
-                node.index = node.index - 1;
-            end
-           
-        end
-    end
-    if(ptype == 1) then
-        pnode.index = 0;
-    else
-        pnode.index = cnt-1;
-    end
-    pnode.ptype = ptype;
-   -- print(list);
-end
 
 local function f_move_node(sv,node,offsety,changeValue)
     local view = node.view;
@@ -139,6 +116,21 @@ local function f_find_data_by_index(sv,index)
 	end
 	return nil;
 end
+
+local function f_find_node_by_data(sv,data)
+	--[[for key, value in pairs(sv.dataList) do  
+		if(value == data) then
+			return sv.dataList[key];
+		end
+	end--]]
+	
+	for key, node in pairs(sv.pool) do
+		if(node.data == data)then
+			return node;
+		end
+	end
+end
+
 --填加一个滚动条
 local function f_add_scrollBar(sv)
 	local sc;
@@ -154,7 +146,11 @@ local function f_add_scrollBar(sv)
 	
 	local curp = 0;
 	
+	
 	local curIndex = 0;
+	
+	local _startIndex = 0;--最新的起始索引
+	
 	--print(f_need_cnt);
 	--滑动
     local function f_scHandle(_sc)
@@ -190,19 +186,49 @@ local function f_add_scrollBar(sv)
 		if(_sub~=nil) then
 			curIndex = curIndex-_sub;
 		end
+		
+		local _posList = {};--坐标列表
 		for i=0,sv.needCnt-1,1 do
-			--print(i)
-			local _node = f_find_by_index(sv,i);
-			local item = _node.view;
-			sprite_setpos(item,0,itemy);
+			_posList[i] = itemy;
 			itemy = itemy + itemH;
-			if(_sub~=nil) then
-				_node.data = f_find_data_by_index(sv,i+curIndex);
-				if(_node.data) then
-					sv.itemRefreshFunc(_node);
-				end
-			end
 		end
+		
+		local newList = {};
+		local m = 0;
+		f_pool_recycs_all(sv);
+		for n = curIndex,curIndex + sv.needCnt - 1 do
+			
+			local _td = f_find_data_by_index(sv,n);
+			
+			if(n >= _startIndex and n <= _startIndex + sv.needCnt - 1) then
+				--print("**************** same data index = ",n,"data",_td);
+				local node = f_find_node_by_data(sv,_td);
+				node.used = 1;
+				sprite_setpos(node.view,0,_posList[m]);				
+			else
+				--print("need ==> index = ",n,"data",_td);
+				newList[m]=_td;
+			end
+			m = m + 1;
+		end
+		--print("*********************************");
+		for key, value in pairs(newList) do
+			local node = f_pool_getItem(sv);
+			node.data = value;
+			sprite_setpos(node.view,0,_posList[key]);
+			sv.itemRefreshFunc(node);
+		end
+		
+		_startIndex = curIndex;
+		--********************************************************************
+		
+		--print(sv.dataList);
+--		print(string.format("起始索引为%d,节点数量为%d",_startIndex,sv.needCnt));
+		
+		--设计思路:对比起始数据和当前变化的数据,过滤求得需要refresh的itemRender节点重新刷新设置数据,偏移不需要重新刷新设置数据的节点
+		--这样就要两个列表了
+		
+		
     end
 	scrollBar_bind(sc,f_scHandle);	
 end
@@ -240,12 +266,16 @@ function scrollView_set_data(sv,data)
                 _node.data = value;
 				
                 local itemView = _node.view;
-			    sv.itemRefreshFunc(_node);--refresh data
+			    
 			    --***********************
 			    --纵向
                 sprite_setpos(itemView,0,cur_h);
 				
 				_node.index = n;
+				
+				--print("设置索引",n);
+				
+				sv.itemRefreshFunc(_node);--refresh data
 				
                 n = n + 1;
 			    cur_h = cur_h + h;
