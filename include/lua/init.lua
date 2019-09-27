@@ -41,7 +41,16 @@ local function itemRefreshFunc(node)
 --	print("设置数据",node.data);
 end
 
-local t = {10,20,30,40,50,60,70,80,90,100,110,120};
+local t = {}; --{10,20,30,40,50,60,70,80,90,100,110,120};
+
+
+for i = 1,20,1 do
+	t[i] = i;
+end
+--print(#t);--table的长度
+
+
+
 local sv = scrollView_init(100,itemHeight*4,20,30);
 sv.itemFunc = f_create;--设置itemRende的创建回调
 sv.itemRefreshFunc = itemRefreshFunc;

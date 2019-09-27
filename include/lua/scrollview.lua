@@ -1,10 +1,33 @@
+local function f_pool_getItem(sv)
+    local data = sv.pool;
+    for key, value in pairs(data) do
+            if(value.used == 0) then
+                value.used = 1;
+                return value;
+            end
+	end
+    local node = sv.itemFunc();
+    sv.pool[tostring(node)] = node;    
+    return node;
+end
+--获取当前itemRender的高度,如果非nil取初始化的时候的gap值作为高度
+local function f_getItemHeight(sv)
+	if(sv.itemHeight==nil) then
+		local node = f_pool_getItem(sv);
+		node.used = 0;
+		local w,h = func_get_sprite_size(node.view);
+		sv.itemHeight = h;
+	end
+	return sv.itemHeight;
+end
+
 --检测item对象是否在遮罩区域外
 local function f_checkItemOutside(sv,pos_y)
     if(pos_y   >= sv.sh) then
         return 1;--向下超出
     end
 
-    if(pos_y + sv.itemHeight <= 0 ) then
+    if(pos_y + f_getItemHeight(sv) <= 0 ) then
         return 2;--向上超出
     end
 
@@ -37,17 +60,6 @@ local function f_rebuildIndex(list,pnode,ptype)
     end
     pnode.ptype = ptype;
    -- print(list);
-end
-
-local function f_getPos(list,index)
- for key, value in pairs(list) do
-        local node = value;
-        if(node.index == index)then
-            local spr = node.view;
-            local x,y = func_get_sprite_xy(spr);
-            return y;
-        end
-    end
 end
 
 local function f_move_node(sv,node,offsety,changeValue)
@@ -88,35 +100,7 @@ function scrollView_set_pos(sv,x,y)
 	fboobj_set_pos(sv.fbo,x,y);
 end
 
-local function f_pool_getItem(sv)
-    local data = sv.pool;
-    for key, value in pairs(data) do
-            --local obj = value.obj;
-            --local used = value.used;
-            if(value.used == 0) then
-                value.used = 1;
-                return value;
-            end
-	end
-    local node = sv.itemFunc();
-    
-    --print(tostring(node));
 
-    sv.pool[tostring(node)] = node;
-    
-    return node;
-
-    --[[
-    local p = {};
-    p.obj =  sv.itemFunc();
-    p.used = 1;
-    sv.pool[sv.poolindex] = p;
-    --]]
---      print("new node",sv.poolindex);ret
---      sv.poolindex = sv.poolindex + 1;
---      return p.obj;
-
-end
 
 local function f_pool_recycs(sv,targetObj)
 	local data = sv.pool;
@@ -164,13 +148,6 @@ local function f_add_scrollBar(sv)
 		print("待实现");
 	end
 	sv.sc = sc;
-
-
---**************************************************
-
-	
---**************************************************
-
    
 
     local temp = 0;
@@ -195,7 +172,9 @@ local function f_add_scrollBar(sv)
 
         temp = oy;
         
-		local p = math.floor(oy/sv.itemHeight);
+		local itemH = f_getItemHeight(sv);
+		
+		local p = math.floor(oy/itemH);
 		local _sub = nil;
 		if(p~=curp) then
 			--print("******************************* change sub index %d",curp - p);
@@ -204,19 +183,10 @@ local function f_add_scrollBar(sv)
 		end
 		
 		
-		local iy= oy/sv.itemHeight-p;
+		local iy= oy/itemH-p;
 	--	print("dh="..sv.dataHeight,"change",stat,"oy="..oy.." sh="..sv.sh..","..(oy%sv.itemHeight),oy/sv.itemHeight,p);
 	
-	
-	--[[	
-		local item = f_find(sv,1);
-		resetv(item,FLAGS_DRAW_PLOYGON_LINE);
-		--print("iy="..iy,item);
-		local itemy = -iy*sv.itemHeight;
-		sprite_setpos(item,0,itemy);--设置位于顶部的item元素视图对象的坐标
-		--]]
-		
-		local itemy = -iy*sv.itemHeight;
+		local itemy = -iy*itemH ;
 		if(_sub~=nil) then
 			curIndex = curIndex-_sub;
 		end
@@ -225,7 +195,7 @@ local function f_add_scrollBar(sv)
 			local _node = f_find_by_index(sv,i);
 			local item = _node.view;
 			sprite_setpos(item,0,itemy);
-			itemy = itemy + sv.itemHeight;
+			itemy = itemy + itemH;
 			if(_sub~=nil) then
 				_node.data = f_find_data_by_index(sv,i+curIndex);
 				if(_node.data) then
@@ -239,14 +209,13 @@ end
 
 --获取该滚动组件内需要组件item个数
 local function f_need_cnt(sv)
-     local a = sv.sh % sv.itemHeight;
+	local h = f_getItemHeight(sv);
+    local a = sv.sh % h;
 
     if(a > 0) then a = 1 end
 	
-    return (math.ceil(sv.sh/sv.itemHeight) + a)+2;
+    return (math.ceil(sv.sh/h) + a)+2;
 end
-
-
 
 --数据驱动填充srollView中的数据
 function scrollView_set_data(sv,data)
@@ -259,6 +228,7 @@ function scrollView_set_data(sv,data)
 	local cur_h = 0;
 	local n = 0;
     local cnt = 0;
+	local h =  f_getItemHeight(sv);
 	if(data) then
 		for key, value in pairs(data) do      
 			--print('key=['..key..']'..'value['..value..']')
@@ -271,16 +241,9 @@ function scrollView_set_data(sv,data)
 				
                 local itemView = _node.view;
 			    sv.itemRefreshFunc(_node);--refresh data
-			    local w,h = func_get_sprite_size(itemView);
-			    --print(w,h);
-			    sv.itemHeight = h;
 			    --***********************
 			    --纵向
                 sprite_setpos(itemView,0,cur_h);
-
-                --sv.sprList[n]= itemView;
-                --f_saveNode(sv,itemView,n);
-				--print(n);
 				
 				_node.index = n;
 				
@@ -303,13 +266,15 @@ function scrollView_set_data(sv,data)
 	
 	end--]]
     
-	sv.dataHeight = cnt * sv.itemHeight;
+	sv.dataHeight = cnt * h;
     sv.datacnt = cnt;
 end
 
 --CONST_DIRECTION_HORIZONTAL = 0	--水平,横
 --CONST_DIRECTION_VERTICAL   = 1 	--垂直,竖
-function scrollView_init(sw,sh,x,y,dir)
+
+--gap 自定义的间隔,默认是取itemRender的容器的高度
+function scrollView_init(sw,sh,x,y,gap)
     local sv = {
 		fbo,--FBO句柄
 		sc,--滚动条句柄
@@ -333,15 +298,13 @@ function scrollView_init(sw,sh,x,y,dir)
 
         itemHeight,--单个item渲染节点的高度
 		
-		
-		
         pool = {},--对象池
   --      poolindex = 0;
     };
-	dir = dir or CONST_DIRECTION_VERTICAL;
-	
-    sv.itemHeight = 64;
-
+	local dir = CONST_DIRECTION_VERTICAL;
+	if(gap) then
+		sv.itemHeight = gap;
+	end
 	local maxSize = sw;
 
 	if(sw < sh) then
