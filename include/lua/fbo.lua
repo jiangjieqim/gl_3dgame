@@ -29,8 +29,17 @@ function fboobj_init(tw,th)
 	
 	engine_addNode(fbo.spr);--将spr添加到渲染列表
 	
-	add_fbo(ptr);--添加到引擎
+	add_fbo(ptr);--添加到引擎的fbolist中
+		
 	return fbo;
+end
+
+--销毁fbo对象
+function fboobj_dispose(fbo)
+	fbo_dispose(fbo.ptr);
+	remove_fbo(fbo.ptr);--将fbo从引擎的fbolist移除
+
+	ptr_remove(fbo.spr);
 end
 
 function fboobj_set_pos(fbo,x,y)
@@ -40,4 +49,3 @@ function fboobj_set_pos(fbo,x,y)
 end
 
 --print(fbo.ptr);
-

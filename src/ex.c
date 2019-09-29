@@ -237,7 +237,15 @@ void ex_add(void* ptr){
 }
 
 void ex_add_fbo(void* fbo){
+	if(LStack_findNodeByData(ex_getIns()->fboList,(int)fbo)){
+		printf("列表中已经有了这个fbo节点\n");
+	}
 	LStack_push(ex_getIns()->fboList,fbo);
+}
+void ex_remove_fbo(void* fbo){
+	if(!LStack_delNode(ex_getIns()->fboList,(int)fbo)){
+		printf("删除fbo节点失败!");
+	}
 }
 
 ///*

@@ -158,6 +158,7 @@ fbo_dispose(void* p){
 		glDeleteTextures(1, &fbo->tex);
 		fbo->tex = 0;
 	}
+
 	cam_dispose(fbo->_3dcam);
 
 	// Cleanup RBOs
@@ -165,6 +166,8 @@ fbo_dispose(void* p){
 
 	// Cleanup FBOs
 	glDeleteFramebuffers(1, &fbo->fboName);
+
+	tl_free(fbo);
 }
 
 void* fbo_get3dCam(void* p){

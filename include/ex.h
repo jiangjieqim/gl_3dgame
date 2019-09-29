@@ -466,4 +466,6 @@ void ex_switch2dCam(void* cam);
 //添加一个fbo对象到引擎
 void ex_add_fbo(void* fbo);
 
+//从引擎列表中移除fbo
+void ex_remove_fbo(void* fbo);
 #endif

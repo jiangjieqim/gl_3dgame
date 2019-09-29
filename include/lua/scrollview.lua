@@ -1,3 +1,4 @@
+
 local function f_pool_getItem(sv)
     local data = sv.pool;
     for key, value in pairs(data) do
@@ -14,7 +15,7 @@ end
 local function f_getItemHeight(sv)
 	if(sv.itemHeight==nil) then
 		local node = f_pool_getItem(sv);
-		node.used = 0;
+		node.used = 0                                                                                                                     
 		local w,h = func_get_sprite_size(node.view);
 		sv.itemHeight = h;
 	end
@@ -300,20 +301,44 @@ function scrollView_set_data(sv,data)
     sv.datacnt = cnt;
 end
 
+--销毁滚动条组件
+function scrollView_dispose(sv)
+	if(sv.itemDisposeFunc == nil) then
+		--print(sv.itemDisposeFunc);
+		print("itemDisposeFunc = nil");
+	end
+	
+	--遍历itemRender对象池,根据itemDispose回调销毁itemRender对象
+    for key, node in pairs(sv.pool) do
+		sv.itemDisposeFunc(node);
+	end
+	
+	if(sv.fbo) then
+		fboobj_dispose(sv.fbo);
+	end
+	
+	if(sv.sc) then
+		scrollBar_del(sv.sc);
+	end
+	
+	func_clearTableItem(sv);--清空sv表
+end
+
 --CONST_DIRECTION_HORIZONTAL = 0	--水平,横
 --CONST_DIRECTION_VERTICAL   = 1 	--垂直,竖
 
 --gap 自定义的间隔,默认是取itemRender的容器的高度
 function scrollView_init(sw,sh,x,y,gap)
     local sv = {
-		fbo,--FBO句柄
-		sc,--滚动条句柄
+		fbo,--FBO句柄对象
+		sc,--滚动条句柄对象
 		
 --		sprList,--sprite列表
 		dataList,--数据列表
         datacnt, --数据列表长度
-		itemFunc,--item列表的创建方法
-        itemRefreshFunc,--设置数据,刷新视图的方法
+		itemFunc,			--item列表的创建方法回调函数
+        itemRefreshFunc,	--设置数据,刷新视图的方法回调函数
+		itemDisposeFunc,	--销毁itemRender的回调函数函数
 
         needCnt,--需要的元素节点数
 		
@@ -321,14 +346,14 @@ function scrollView_init(sw,sh,x,y,gap)
 		y,
 		sw,--遮罩区域的宽
 		sh,--遮罩区域的高
-		dir,
+		dir,--滚动条的滚动方向,是横向还是纵向
 		maxSize,
 		
 		dataHeight,--容器总高度，跟dataList有关系
 
         itemHeight,--单个item渲染节点的高度
 		
-        pool = {},--对象池
+        pool = {},--itemRender列表的对象池
   --      poolindex = 0;
     };
 	local dir = CONST_DIRECTION_VERTICAL;
@@ -358,5 +383,81 @@ function scrollView_init(sw,sh,x,y,gap)
     ---[[
 	scrollView_set_pos(sv,x,y);
 	--]]
+	return sv;
+end
+
+--遮罩滚动条使用案例
+function srollView_example()
+	--*********************************************************************************
+	local itemHeight = 30;
+	local cam;
+	local function f_create()
+		local sprite = sprite_create(nil,0,0,99,itemHeight,0,1,cam);
+
+		local node ={};
+	--	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
+		func_setIcon(sprite, "smallbtn.png");
+		engine_addNode(sprite);
+
+
+		if(true) then
+			--节点特别多的时候,这里的渲染绘制会比较卡顿,可以考虑用分帧处理渲染
+			local tf = ftext_create(64,64,13,12,cam);
+			local con = ftext_get_container(tf);
+			func_addchild(sprite,con);
+			node.tf = tf;
+		end
+		node.view = sprite;
+		--setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
+
+		node.data = nil;
+		
+		node.used = 1;
+		node.index = nil;
+		local function clickEvt()
+			print("点击的节点index = ",node.index,"data = ",node.data);
+		end
+		
+		evt_on(sprite,EVENT_ENGINE_SPRITE_CLICK,clickEvt);
+		return node;
+	end
+	--节点销毁回调
+	local function f_dispose(node)
+		if(node.tf) then
+			fext_dispose(node.tf);
+			node.tf = nil;
+		end
+		if(node.view) then
+			ptr_remove(node.view);
+		end
+	end
+
+	--刷新视图
+	local function itemRefreshFunc(node)
+	--    print(node.data);
+		if(node.tf) then
+			fext_clear(node.tf);
+			local str = string.format("i = %d,__%d",node.index,node.data);
+			ftext_parse(node.tf,str);
+		end
+		--print("index",node.index,"刷新视图,设置数据",node.data);
+	end
+
+	local t = {}; --{10,20,30,40,50,60,70,80,90,100,110,120};
+
+	for i = 1,10,1 do
+		t[i] = i;
+	end
+	--print(#t);--table的长度
+	
+	--*************************************************************************************
+	--初始化
+	local sv = scrollView_init(100,itemHeight*4,20,30);
+	sv.itemFunc = f_create;				--设置itemRende的创建回调
+	sv.itemRefreshFunc = itemRefreshFunc;	--设置刷新视图的回调
+	sv.itemDisposeFunc = f_dispose;		--设置itemRender销毁回调函数
+	cam = scrollView_get_cam(sv);
+	scrollView_set_data(sv,t);
+	--*************************************************************************************
 	return sv;
 end
