@@ -173,6 +173,11 @@ end
 --根据cw,ch的值来确定是横向还是综向滑动
 function 
 scrollBar_new(x,y,cw,ch)
+	cw = cw or 100;
+	ch = ch or 15;
+
+	x = x or 0;
+	y = y or 0;
 	
 	local _dragDirection;
 	local sc = f_create()
@@ -188,8 +193,7 @@ scrollBar_new(x,y,cw,ch)
 		barSize = cw;
 	end
 		
-	if(x == nil) then x = 0	end
-	if(y == nil) then y = 0 end
+	
 	func_tableSave(sc)
 	
 	local name = func_getTableName(sc)--获取btn引用名
