@@ -1,4 +1,4 @@
-
+--从itemRender list对象池中获取一个itemRender节点对象,如果对象池中没有就创建一个
 local function f_pool_getItem(sv)
     local data = sv.pool;
     for key, value in pairs(data) do
@@ -32,68 +32,29 @@ local function f_checkItemOutside(sv,pos_y)
         return 2;--向上超出
     end
 
-    return 0;
+    return 0;--不在遮罩区域外
 end
 
---当前的2dcam句柄
+--当前的2dcam句柄,指定sprite必须指定对应的cam引用
 function scrollView_get_cam(sv)
 	return sv.fbo.cam2d;
 end
 
-local function f_move_node(sv,node,offsety,changeValue)
-    local view = node.view;
-    local w,h = func_get_sprite_size(view);
-    local x,y = func_get_sprite_xy(view);
-    --if(y - changeValue <0) then
-    --    sprite_setpos(view,0,0);
-    --else
-        sprite_setpos(view,0,y-changeValue);
-    --end
-end
-
-
-local function f_find(sv,f)
-	local data = sv.pool;
-	
-    for key, value in pairs(data) do
-        local node = value;
-		if(node.data == f)then
-			return node.view;
-		end
-		
-	end
-end
-
-local function f_find_by_index(sv,index)
-	for key, node in pairs(sv.pool) do
-		if(node.index == index)then
-			return node;
-		end
-	end
-end
-
+--设置滚动条组件的坐标
 function scrollView_set_pos(sv,x,y)
 	sv.x = x;
 	sv.y = y;
 	fboobj_set_pos(sv.fbo,x,y);
 end
-
-
-
+--从对象池中释放一个节点
 local function f_pool_recycs(sv,targetObj)
 	local data = sv.pool;
     for key, value in pairs(data) do
-          --  local obj = value.obj;
-         --   local used = value.used;
-			
-			--print('key=['..key..']'..'value['..value..']');
-	        --print(value,obj,targetObj);		
-			
-            if(value == targetObj) then
-                value.used = 0;
-				print("recycs");
-                return;
-            end
+		if(value == targetObj) then
+			value.used = 0;
+			print("recycs");
+			return;
+		end
 	end
 end
 
@@ -101,11 +62,11 @@ end
 local function f_pool_recycs_all(sv)
     local data = sv.pool;
     for key, value in pairs(data) do
-       -- local obj = value.obj;
-       -- local used = value.used;
         value.used = 0;
 	end
 end
+
+--根据索引获取该索引对应的数据
 local function f_find_data_by_index(sv,index)
 	local n = 0;
 	for key, value in pairs(sv.dataList) do  
@@ -118,13 +79,8 @@ local function f_find_data_by_index(sv,index)
 	return nil;
 end
 
+--根据数据获取对应的node引用
 local function f_find_node_by_data(sv,data)
-	--[[for key, value in pairs(sv.dataList) do  
-		if(value == data) then
-			return sv.dataList[key];
-		end
-	end--]]
-	
 	for key, node in pairs(sv.pool) do
 		if(node.data == data)then
 			return node;
@@ -142,22 +98,14 @@ local function f_add_scrollBar(sv)
 	end
 	sv.sc = sc;
    
-
-    local temp = 0;
-	
 	local curp = 0;
-	
 	
 	local curIndex = 0;
 	
 	local _startIndex = 0;--最新的起始索引
 	
-	--print(f_need_cnt);
-	--滑动
+	--滑动回调
     local function f_scHandle(_sc)
---         print("数据长度",sv.dataHeight);
-	---[[	
-	
 		--*************************纵向
 		if(sv.sh >= sv.dataHeight) then
 			return;
@@ -165,9 +113,6 @@ local function f_add_scrollBar(sv)
 		local v = _sc.value;
 		
 		local oy = (sv.dataHeight-sv.sh)*v;
-        local stat = oy - temp;
-
-        temp = oy;
         
 		local itemH = f_getItemHeight(sv);
 		
@@ -179,9 +124,7 @@ local function f_add_scrollBar(sv)
 			curp = p;
 		end
 		
-		
 		local iy= oy/itemH-p;
-	--	print("dh="..sv.dataHeight,"change",stat,"oy="..oy.." sh="..sv.sh..","..(oy%sv.itemHeight),oy/sv.itemHeight,p);
 	
 		local itemy = -iy*itemH ;
 		if(_sub~=nil) then
@@ -196,12 +139,16 @@ local function f_add_scrollBar(sv)
 		
 		local newList = {};
 		local m = 0;
-		f_pool_recycs_all(sv);
+		
+		f_pool_recycs_all(sv);--释放对象池中的所有的node
+		
 		for n = curIndex,curIndex + sv.needCnt - 1 do
 			
 			local _td = f_find_data_by_index(sv,n);
 			
 			if(n >= _startIndex and n <= _startIndex + sv.needCnt - 1) then
+				--这里的节点只需要重置坐标即可
+				
 				--print("**************** same data index = ",n,"data",_td);
 				local node = f_find_node_by_data(sv,_td);
 				node.used = 1;
@@ -214,6 +161,7 @@ local function f_add_scrollBar(sv)
 		end
 		--print("*********************************");
 		for key, value in pairs(newList) do
+			--这里的节点要重新刷新节点视图
 			local node = f_pool_getItem(sv);
 			node.data = value;
 			sprite_setpos(node.view,0,_posList[key]);
@@ -228,8 +176,6 @@ local function f_add_scrollBar(sv)
 		
 		--设计思路:对比起始数据和当前变化的数据,过滤求得需要refresh的itemRender节点重新刷新设置数据,偏移不需要重新刷新设置数据的节点
 		--这样就要两个列表了
-		
-		
     end
 	scrollBar_bind(sc,f_scHandle);	
 end
@@ -287,18 +233,8 @@ function scrollView_set_data(sv,data)
             cnt = cnt + 1;	
 		end
 	end
-	
-	
---	print(string.format("cnt=%d,n=%d",cnt,n));
-	
---[[	if(n + 1 <= cnt) then
-	local _node = f_pool_getItem(sv);
-    _node.data = 5;
-	
-	end--]]
     
 	sv.dataHeight = cnt * h;
-    sv.datacnt = cnt;
 end
 
 --销毁滚动条组件
@@ -333,21 +269,18 @@ function scrollView_init(sw,sh,x,y,gap)
 		fbo,--FBO句柄对象
 		sc,--滚动条句柄对象
 		
---		sprList,--sprite列表
 		dataList,--数据列表
-        datacnt, --数据列表长度
 		itemFunc,			--item列表的创建方法回调函数
         itemRefreshFunc,	--设置数据,刷新视图的方法回调函数
 		itemDisposeFunc,	--销毁itemRender的回调函数函数
 
-        needCnt,--需要的元素节点数
+        needCnt,--需要的元素节点数,此数量代表当前的pool对象池中需要的最大渲染节点数
 		
-		x,
-		y,
+		x,y,--当前的坐标,相对于窗口的绝对坐标,其实是fbo挂载的sprite的坐标,将帧缓冲渲染到这个sprite而已
 		sw,--遮罩区域的宽
 		sh,--遮罩区域的高
 		dir,--滚动条的滚动方向,是横向还是纵向
-		maxSize,
+		maxSize,--因为现在的sprite用的等宽等高的,所以这里取最大的maxSize作为宽高
 		
 		dataHeight,--容器总高度，跟dataList有关系
 
