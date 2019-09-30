@@ -2,7 +2,7 @@ dofile("..\\include\\lua\\core.lua");
 
 --########################################
 --node_fbo(0);
-local sv = srollView_example();
+--local sv = srollView_example();
 
 function f_onkey(data)
 	local key = tonumber(data);
@@ -94,38 +94,11 @@ end
 
 --dofile("..\\include\\lua\\7.lua");
 
-local function load_avatar()
-	
-	cam_setRotateX(PI * 1.8);
-	cam_setPosition(0,0,-6);
-	
-	--添加一个角色模型
-	local obj2 = UnitBase:new();
-	obj2:loadvbo("\\resource\\md2\\bauul.md2",
-		"//resource//material//bauul.mat");--gobin,bauul
 
-	obj2:scale(1/50);
-	--obj2:setv(FLAGS_DRAW_PLOYGON_LINE);
-	obj2:rx(PI/2);
-	obj2:y(0.5);
-	
-	--添加一个滚动条组件
-	
-	local animsc = scrollBar_new();
-	
-	local function f_animscHandle(sc)
-		local v = sc.value * PI * 2;
-		scrollBar_label(animsc,v);	
-		if(obj2) then
-			obj2:ry(v);
-		end	
-	end
 
-	scrollBar_setRange(animsc,0,1);
-	scrollBar_bind(animsc,f_animscHandle);
-end
 
-load_avatar();
+
+--example_unit();
 
 
 --//汉字第一个字节的范围

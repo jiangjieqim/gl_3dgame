@@ -847,4 +847,4 @@ dofile("..\\include\\lua\\UnitBase.lua")		--角色单位
 dofile("..\\include\\lua\\scrollview.lua")	--scrollview
 dofile("..\\include\\lua\\node.lua")		--角色单位2
 
-
+dofile("..\\include\\lua\\unit.lua")		--角色单位
