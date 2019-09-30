@@ -259,6 +259,8 @@ ftext_set_buffer(void* p,int bufferSize){
 	txt->_curLength = bufferSize;
 }
 
+
+
 void*
 ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh,void* cam){
 	//int txtWidth = 64;
@@ -296,6 +298,12 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh,void* cam){
 	
 	spr->material = tmat_create_rgba("font1",txtWidth,txtHeight,GL_BGRA);//"font"
 	
+	{
+		struct GMaterial* m =  (struct GMaterial*)spr->material;
+		m->updateVarCallback = font1_updateVarCallback;
+	}
+
+
 	//ÉèÖÃ±³¾°²»Í¸Ã÷
 	//tmat_set_discardAlpha(spr->material,1);
 	

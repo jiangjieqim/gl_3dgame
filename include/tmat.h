@@ -45,9 +45,16 @@ typedef struct GMaterial{
 	
 	//设置alpha
 	float _Alpha;
-	int _DiscardAlpha;//丢弃alpha是0的片段
+	//int _DiscardAlpha;//丢弃alpha是0的片段
 
 	int flags;//材质标示符
+	
+	//着色器传递变量回调
+	void (*updateVarCallback)(void* material,Matrix44f m);
+	//存储一些着色器中需要使用的变量
+	void* shaderVars;
+
+
 }GMaterial;
 
 /*
@@ -111,10 +118,6 @@ GLuint tmat_getTextureByIndex(struct GMaterial* pmat,int index);
 void* 
 tmat_create_rgba(const char* glslType,GLint width,GLint height,GLenum rgbaType);
 
-//设置是否丢弃alpha片段
-void
-tmat_set_discardAlpha(void* p,int value);
-
 /*
 *	存储在到GPU显存中一张贴图,指定texIndex索引位置存储一张贴图
 *	int texIndex		:		纹理索引
@@ -126,5 +129,10 @@ tmat_setTexFromGPU(struct GMaterial* mat,int texIndex,GLuint tex);
 //创建一个空材质对象,此材质对象贴图属性
 void* 
 tmat_create_empty(const char* glslType);
+
+
+//font1文本着色器上传数据到GPU
+void 
+font1_updateVarCallback(void* material,Matrix44f M);
 
 #endif

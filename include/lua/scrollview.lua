@@ -320,7 +320,7 @@ function scrollView_init(sw,sh,x,y,gap)
 end
 
 --遮罩滚动条使用案例
-function srollView_example()
+function example_srollView()
 	--*********************************************************************************
 	local itemHeight = 30;
 	local cam;

@@ -11,7 +11,7 @@
 #include "ex.h"
 #include "gettime.h"
 #include "camera.h"
-//#define _DEBUG_
+#define _DEBUG_
 
 
 
@@ -89,7 +89,7 @@ f_uploadMat4x4(GLint location_mat4x4,Matrix44f _out_mat4x4){
 ******************************************************************/
 
 static void 
-f_updateShaderVar(const char* shader,GLuint program3D,struct GMaterial* _material, Matrix44f M){
+f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 
 	//轮廓线颜色
 	int _outlineColor = glGetUniformLocation(program3D,"_outlineColor");
@@ -252,9 +252,9 @@ f_updateShaderVar(const char* shader,GLuint program3D,struct GMaterial* _materia
 		GLfloat _openSpecular = 1.0f;
 		glUniform1f(bSpecular,_openSpecular);
 	}
-	if(_DiscardAlpha!=-1){
+	/*if(_DiscardAlpha!=-1){
 		glUniform1i(_DiscardAlpha,_material->_DiscardAlpha);
-	}
+	}*/
 	if(_Alpha!=-1)
 	{
 		glUniform1f(_Alpha,_material->_Alpha);
@@ -362,9 +362,13 @@ void tmat_render(void* pvoid,const char* shader,Matrix44f M)
 	
 	//切换到当前的着色器引用
 	glUseProgram(program3D);
-	
-	//向着色器上传相关数据
-	f_updateShaderVar(shader,program3D,material,M);
+	if(material->updateVarCallback){
+		material->updateVarCallback(material,M);
+	}else{
+		//向着色器上传相关数据
+		f_updateShaderVar(program3D,material,M);
+	}
+	//设置自定义的着色器回调传值
 }
 
 /*
@@ -419,6 +423,10 @@ void tmat_dispose(void* pvoid)
 
 	f_deleteGPU_texture(mat);	
 	
+	if(mat->shaderVars){
+		tl_free(mat->shaderVars);
+	}
+
 	tl_free((void*)mat);
 }
 /*
@@ -439,6 +447,9 @@ static void f_createMaterialTexture(struct GMaterial *p)
 static void 
 f_assignShader(struct GMaterial* tmat,const char* glslType)
 {
+#ifdef _DEBUG_
+	printf("设置着色器%s\n",glslType);
+#endif
 	memset(tmat->glslType,0,G_BUFFER_32_SIZE);
 	memcpy(tmat->glslType,glslType,strlen(glslType));
 }
@@ -545,12 +556,12 @@ tmat_create_rgba(const char* glslType,GLint width,GLint height,GLenum rgbaType){
 	f_initMaterial(tmat);
 	return tmat;
 }
-
-void
-tmat_set_discardAlpha(void* p,int value){
-	struct GMaterial* tmat = (struct GMaterial*)p;
-	tmat->_DiscardAlpha = value;
-}
+//
+//void
+//tmat_set_discardAlpha(void* p,int value){
+//	struct GMaterial* tmat = (struct GMaterial*)p;
+//	//tmat->_DiscardAlpha = value;
+//}
 
 void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f mat4x4,GLfloat* vertexs,int vertLen,int format,int mode)
 {
@@ -561,4 +572,44 @@ void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f 
 	glInterleavedArrays(format,0,vertexs);
 	glDrawArrays(GL_TRIANGLES,0,(GLsizei)vertLen);
 	glDisable(GL_CULL_FACE);
+}
+
+
+struct GM_Font 
+{
+	GLuint program3D;
+	GLint mat1;
+	GLint ui_perspectivePtr;
+};
+
+void 
+font1_updateVarCallback(void* material,Matrix44f M){
+	struct GMaterial* gm =  (struct GMaterial*)material;
+	struct GM_Font* f;
+	if(!gm->shaderVars){
+		//这里初始化的时候只处理一次,在帧循环中其实是不需要每次都取GLSL中的共享变量的
+		//每次都取是代价高昂的,所以这里优化处理,对每一个Shader都要做这样的优化
+
+		GLuint program3D = tlgl_getShader(gm->glslType);
+		//获取第1个矩阵引用
+		GLint mat1 = glGetUniformLocation(program3D,"_mat1");
+
+		GLint ui_perspectivePtr = glGetUniformLocation(program3D,"ui_PerspectiveMatrix4x4");
+		gm->shaderVars = tl_malloc(sizeof(struct GM_Font));
+		f = (struct GM_Font*)gm->shaderVars;
+		f->mat1 = mat1;
+		f->program3D = program3D;
+		f->ui_perspectivePtr = ui_perspectivePtr;
+	}
+	f = (struct GM_Font*)gm->shaderVars;
+	
+	f_updateTexture(f->program3D,gm);
+	
+	f_uploadMat4x4(f->mat1,M);
+	
+	//上传2d齐次坐标矩阵
+	f_uploadMat4x4(f->ui_perspectivePtr,cam_getPerctive(ex_getIns()->_2dCurCam));
+
+	//printf("****\n");
+	
 }

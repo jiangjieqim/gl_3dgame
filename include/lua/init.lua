@@ -2,7 +2,7 @@ dofile("..\\include\\lua\\core.lua");
 
 --########################################
 --node_fbo(0);
---local sv = srollView_example();
+local sv = example_srollView();
 
 function f_onkey(data)
 	local key = tonumber(data);
@@ -36,7 +36,7 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 engine_setBg(0.3,0.3,0.3);
 
---fps(0,0);
+fps(0,0);
 --infowin(0,0);
 
 --创建一个输入组件
