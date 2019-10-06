@@ -608,8 +608,5 @@ font1_updateVarCallback(void* material,Matrix44f M){
 	f_uploadMat4x4(f->mat1,M);
 	
 	//上传2d齐次坐标矩阵
-	f_uploadMat4x4(f->ui_perspectivePtr,cam_getPerctive(ex_getIns()->_2dCurCam));
-
-	//printf("****\n");
-	
+	f_uploadMat4x4(f->ui_perspectivePtr,cam_getPerctive(ex_getIns()->_2dCurCam));	
 }
