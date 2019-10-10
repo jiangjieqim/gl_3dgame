@@ -578,7 +578,7 @@ void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f 
 struct GM_Font 
 {
 	GLuint program3D;
-	GLint mat1;
+	GLint matrix;
 	GLint ui_perspectivePtr;
 };
 
@@ -592,12 +592,12 @@ font1_updateVarCallback(void* material,Matrix44f M){
 
 		GLuint program3D = tlgl_getShader(gm->glslType);
 		//获取第1个矩阵引用
-		GLint mat1 = glGetUniformLocation(program3D,"_mat1");
+		GLint _matrix4x4 = glGetUniformLocation(program3D,"_mat1");
 
 		GLint ui_perspectivePtr = glGetUniformLocation(program3D,"ui_PerspectiveMatrix4x4");
 		gm->shaderVars = tl_malloc(sizeof(struct GM_Font));
 		f = (struct GM_Font*)gm->shaderVars;
-		f->mat1 = mat1;
+		f->matrix = _matrix4x4;
 		f->program3D = program3D;
 		f->ui_perspectivePtr = ui_perspectivePtr;
 	}
@@ -605,7 +605,7 @@ font1_updateVarCallback(void* material,Matrix44f M){
 	
 	f_updateTexture(f->program3D,gm);
 	
-	f_uploadMat4x4(f->mat1,M);
+	f_uploadMat4x4(f->matrix,M);
 	
 	//上传2d齐次坐标矩阵
 	f_uploadMat4x4(f->ui_perspectivePtr,cam_getPerctive(ex_getIns()->_2dCurCam));	
