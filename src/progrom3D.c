@@ -79,3 +79,11 @@ progrom3d_get(void* _ptr,const char* shaderName){
 
 	return (void*)shaderNode->progrom;
 }
+
+//销毁单个ShaderNode节点
+static void
+f_freeNode(struct ShaderNode* node){
+	tl_free(node->name);
+	glDeleteProgram(node->progrom);
+	tl_free(node);
+}
