@@ -13,8 +13,6 @@
 #include "camera.h"
 #define _DEBUG_
 
-
-
 //=======================================================================================
 void 
 tmat_setFlatColor(struct GMaterial* ptr,float r,float g,float b)
@@ -358,7 +356,7 @@ void tmat_render(void* pvoid,const char* shader,Matrix44f M)
 		return;
 	}
 	
-	program3D = tlgl_getShader(shader);//mat->glslType
+	program3D = ex_getProgrom3D(shader);//mat->glslType
 	
 	//切换到当前的着色器引用
 	glUseProgram(program3D);
@@ -590,7 +588,7 @@ font1_updateVarCallback(void* material,Matrix44f M){
 		//这里初始化的时候只处理一次,在帧循环中其实是不需要每次都取GLSL中的共享变量的
 		//每次都取是代价高昂的,所以这里优化处理,对每一个Shader都要做这样的优化
 
-		GLuint program3D = tlgl_getShader(gm->glslType);
+		GLuint program3D = ex_getProgrom3D(gm->glslType);
 		//获取第1个矩阵引用
 		GLint _matrix4x4 = glGetUniformLocation(program3D,"_mat1");
 

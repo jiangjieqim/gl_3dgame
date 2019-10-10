@@ -10,6 +10,7 @@
 #include "str.h"
 #include "ftfont.h"
 #include "tlgl.h"
+#include "progrom3D.h"
 #include "tmat.h"
 #include "ex.h"
 #include "md5.h"
@@ -246,6 +247,17 @@ void ex_remove_fbo(void* fbo){
 	if(!LStack_delNode(ex_getIns()->fboList,(int)fbo)){
 		printf("删除fbo节点失败!");
 	}
+}
+
+/*
+	根据shader类型获取一个
+*/
+GLuint ex_getProgrom3D(const char* glslType){
+	
+	if(!ex_getIns()->pro3d){
+		ex_getIns()->pro3d = progrom3d_create();
+	}
+	return (GLuint)progrom3d_get(ex_getIns()->pro3d,glslType);
 }
 
 ///*

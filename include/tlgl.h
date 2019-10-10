@@ -175,7 +175,7 @@ void tlgl_render_triangles(GLfloat* vertex,int vertexCount);
 /*
 	根据shader类型获取一个
 */
-GLuint tlgl_getShader(const char* glslType);
+//GLuint tlgl_getShader(const char* glslType);
 
 
 

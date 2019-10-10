@@ -211,6 +211,8 @@ struct EX
 	
 	//fbo对象管理器
 	struct LStackNode *fboList;
+
+	void* pro3d;//着色器管理器句柄
 };
 
 //接口定义
@@ -468,4 +470,10 @@ void ex_add_fbo(void* fbo);
 
 //从引擎列表中移除fbo
 void ex_remove_fbo(void* fbo);
+
+/*
+	根据shader类型获取一个
+*/
+GLuint ex_getProgrom3D(const char* glslType);
+
 #endif
