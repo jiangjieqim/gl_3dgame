@@ -6,4 +6,8 @@
 void 
 font1_updateVarCallback(void* material,Matrix44f M);
 
+//9宫格着色器回调
+void
+grid9CallBack(void* material,Matrix44f M);
+
 #endif

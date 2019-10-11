@@ -226,7 +226,7 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 		void* per = cam_getModel(ex_getIns()->_2dCurCam);
 		//mat4x4_printf("2dmodelcam",per);
 		//上传2d模型矩阵
-		tmat_uploadMat4x4(ui_modelViewPtr,per/*ex_getIns()->ui_modelViewMatrix*/);
+		tmat_uploadMat4x4(ui_modelViewPtr,per);
 	}
 
 	if(mat2!=-1){
