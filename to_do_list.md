@@ -37,3 +37,5 @@ localToGlobal
 1.将getUniform的值存起来,这样不用每次去着色器对象中频繁获取,因为频繁获取是代价高昂的,因为上切换设备上下文
 
 ### scrollview使用对象池优化之(已解决)
+
+### list.sort 其实是冒泡排序,实现一个LStackNode的.sort回调接口
