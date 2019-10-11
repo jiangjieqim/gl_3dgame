@@ -1,0 +1,15 @@
+#version 110
+uniform sampler2D texture1;//界面贴图
+uniform sampler2D texture2;//alpha通道
+varying vec2 out_texcoord;
+
+
+uniform float top;
+
+void main(void){
+	vec4 finalColor=texture2D(texture1, out_texcoord);	
+	
+	if(top == 12.0){
+		gl_FragColor = finalColor;
+	}
+}
