@@ -1,4 +1,5 @@
 #include <gl/glew.h>
+#include <string.h>
 #include "progrom3D.h"
 #include "tools.h"
 #include "tlgl.h"

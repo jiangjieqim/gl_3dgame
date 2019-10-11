@@ -131,8 +131,26 @@ void*
 tmat_create_empty(const char* glslType);
 
 
-//font1文本着色器上传数据到GPU
+
+
+/*
+ *
+ *	上传模型变换矩阵到顶点着色器
+ ****
+	变换
+	自缩放,旋转
+	缩放==> 平移到(0,0,0) ==>缩放 ==>恢复到原来坐标
+	旋转==> 平移到(0,0,0) ==>旋转 ==>恢复到原来坐标
+
+*/
 void 
-font1_updateVarCallback(void* material,Matrix44f M);
+tmat_uploadMat4x4(GLint location_mat4x4,Matrix44f _out_mat4x4);
+
+/*
+	着色器更新贴图数据
+	检查有无纹理引用
+*/
+void 
+tmat_updateTexture(GLuint program3D,struct GMaterial* mat);
 
 #endif

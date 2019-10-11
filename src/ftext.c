@@ -16,6 +16,8 @@
 #include "str.h"
 #include "base.h"
 
+#include "shader.h"
+
 #define DEBUG
 
 #define _Font_Size_ 512
@@ -300,7 +302,7 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh,void* cam){
 	
 	{
 		struct GMaterial* m =  (struct GMaterial*)spr->material;
-		m->updateVarCallback = font1_updateVarCallback;
+		m->updateVarCallback = font1_updateVarCallback;//设置着色器对象自定义回调
 	}
 
 

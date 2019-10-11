@@ -39,8 +39,8 @@ enum{_TEXTURE_NUM_=2};
 	着色器更新贴图数据
 	检查有无纹理引用
 */
-static void 
-f_updateTexture(GLuint program3D,struct GMaterial* mat){
+void 
+tmat_updateTexture(GLuint program3D,struct GMaterial* mat){
 	const char *_textureKeyArray[_TEXTURE_NUM_] = {"texture1","texture2"};
 	const int _textureIndexArray[_TEXTURE_NUM_] = {GL_TEXTURE0,GL_TEXTURE1};
 	int _texIndex;
@@ -76,8 +76,8 @@ f_updateTexture(GLuint program3D,struct GMaterial* mat){
 	旋转==> 平移到(0,0,0) ==>旋转 ==>恢复到原来坐标
 
 */
-static void 
-f_uploadMat4x4(GLint location_mat4x4,Matrix44f _out_mat4x4){
+void 
+tmat_uploadMat4x4(GLint location_mat4x4,Matrix44f _out_mat4x4){
 	glUniformMatrix4fv(location_mat4x4,1,GL_TRUE,_out_mat4x4);
 }
 
@@ -130,7 +130,7 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 	int _uvScale =glGetUniformLocation(program3D,"_uvScale");
 
 	//更新位图
-	f_updateTexture(program3D,_material);
+	tmat_updateTexture(program3D,_material);
 
 	if(iGlobalTime!=-1)
 	{
@@ -195,7 +195,7 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 
 	if(mat1!=-1){//模型变换矩阵
 
-		f_uploadMat4x4(mat1,M);
+		tmat_uploadMat4x4(mat1,M);
 
 	}else{
 		//printf("着色器中未找到传入矩阵变量mat1\n");
@@ -205,13 +205,13 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 	if(_perspectivePtr!=-1)
 	{
 		void* perspect = cam_getPerctive(ex_getIns()->_3dCurCam);
-		f_uploadMat4x4(_perspectivePtr,perspect/*ex_getIns()->perspectiveMatrix*/);
+		tmat_uploadMat4x4(_perspectivePtr,perspect/*ex_getIns()->perspectiveMatrix*/);
 	}
 
 	if(_modelViewPtr!=-1)
 	{
 		//mat4x4_transpose(ex_getInstance()->modelViewMatrix);//转置矩阵
-		f_uploadMat4x4(_modelViewPtr,cam_getModel(ex_getIns()->_3dCurCam)/*ex_getIns()->modelViewMatrix*/);
+		tmat_uploadMat4x4(_modelViewPtr,cam_getModel(ex_getIns()->_3dCurCam)/*ex_getIns()->modelViewMatrix*/);
 	}
 
 	if(ui_perspectivePtr!=-1)
@@ -219,20 +219,14 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 		//上传2d齐次坐标矩阵
 		
 		void* per = cam_getPerctive(ex_getIns()->_2dCurCam);
-		/*if(!strcmp(shader,"spritevbo")){
-			printf("%s,%d\n",shader,strcmp(shader,"spritevbo"));
-			mat4x4_printf("2dpercam",per);
-			mat4x4_printf("M",M);
-			getchar();
-		}*/
-		f_uploadMat4x4(ui_perspectivePtr,per/*ex_getIns()->ui_perspectiveMatrix*/);
+		tmat_uploadMat4x4(ui_perspectivePtr,per);
 	}
 	if(ui_modelViewPtr!=-1)
 	{
 		void* per = cam_getModel(ex_getIns()->_2dCurCam);
 		//mat4x4_printf("2dmodelcam",per);
 		//上传2d模型矩阵
-		f_uploadMat4x4(ui_modelViewPtr,per/*ex_getIns()->ui_modelViewMatrix*/);
+		tmat_uploadMat4x4(ui_modelViewPtr,per/*ex_getIns()->ui_modelViewMatrix*/);
 	}
 
 	if(mat2!=-1){
@@ -337,12 +331,6 @@ void tmat_render(void* pvoid,const char* shader,Matrix44f M)
 	GLuint program3D;
 	struct GMaterial* material = pvoid;
 
-	if(shader==NULL)
-	{
-		printf("传递的Shader字符串为null\n");
-		assert(0);
-	}
-
 	if(material==NULL)
 	{
 		printf("模型（%s）没有设置材质\n");
@@ -350,19 +338,26 @@ void tmat_render(void* pvoid,const char* shader,Matrix44f M)
 		return;
 	}
 
+	if(shader==NULL)
+	{
+		printf("传递的Shader字符串为null\n");
+		assert(0);
+	}
+
 	if(!material->glslType){
 		printf("无着色器类型指定,需要设置着色器\n");
 		assert(0);
 		return;
 	}
-	
-	program3D = ex_getProgrom3D(shader);//mat->glslType
-	
-	//切换到当前的着色器引用
-	glUseProgram(program3D);
+
 	if(material->updateVarCallback){
 		material->updateVarCallback(material,M);
 	}else{
+		program3D = ex_getProgrom3D(shader);//mat->glslType
+
+		//切换到当前的着色器引用
+		glUseProgram(program3D);
+
 		//向着色器上传相关数据
 		f_updateShaderVar(program3D,material,M);
 	}
@@ -570,41 +565,4 @@ void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f 
 	glInterleavedArrays(format,0,vertexs);
 	glDrawArrays(GL_TRIANGLES,0,(GLsizei)vertLen);
 	glDisable(GL_CULL_FACE);
-}
-
-
-struct GM_Font 
-{
-	GLuint program3D;
-	GLint matrix;
-	GLint ui_perspectivePtr;
-};
-
-void 
-font1_updateVarCallback(void* material,Matrix44f M){
-	struct GMaterial* gm =  (struct GMaterial*)material;
-	struct GM_Font* f;
-	if(!gm->shaderVars){
-		//这里初始化的时候只处理一次,在帧循环中其实是不需要每次都取GLSL中的共享变量的
-		//每次都取是代价高昂的,所以这里优化处理,对每一个Shader都要做这样的优化
-
-		GLuint program3D = ex_getProgrom3D(gm->glslType);
-		//获取第1个矩阵引用
-		GLint _matrix4x4 = glGetUniformLocation(program3D,"_mat1");
-
-		GLint ui_perspectivePtr = glGetUniformLocation(program3D,"ui_PerspectiveMatrix4x4");
-		gm->shaderVars = tl_malloc(sizeof(struct GM_Font));
-		f = (struct GM_Font*)gm->shaderVars;
-		f->matrix = _matrix4x4;
-		f->program3D = program3D;
-		f->ui_perspectivePtr = ui_perspectivePtr;
-	}
-	f = (struct GM_Font*)gm->shaderVars;
-	
-	f_updateTexture(f->program3D,gm);
-	
-	f_uploadMat4x4(f->matrix,M);
-	
-	//上传2d齐次坐标矩阵
-	f_uploadMat4x4(f->ui_perspectivePtr,cam_getPerctive(ex_getIns()->_2dCurCam));	
 }
