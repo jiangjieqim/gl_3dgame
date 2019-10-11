@@ -29,7 +29,6 @@
 #include "base.h"
 #include "frame.h"
 #include "fbotex.h"
-#include "fbospr.h"
 
 //#define DEBUG_PRINT_HIT	//打印拾取日志
 
