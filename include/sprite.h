@@ -212,4 +212,7 @@ sprite_createEmptyTex(int texW,int texH,void* _2dCam);
 //设置当前的sprite的2dcam,绑定2dcam的时候用
 void
 sprite_set2dCam(void* spr,void* _2dcam);
+//设置9宫格
+void
+sprite_set9Grid(void* spr,int top,int bottom,int left,int right);
 #endif

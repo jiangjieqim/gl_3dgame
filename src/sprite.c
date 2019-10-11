@@ -1237,20 +1237,15 @@ sprite_set_scale_z(struct Sprite* spr,float v){
 	}
 	spr->zScale = v;
 }
-//void
-//sprite_open_through(void* p){
-//	struct Sprite* spr = (struct Sprite*)p;
-//	spr->open_through = 1;
-//}
-//void 
-//sprite_set_render(void* p,int v){
-//	struct Sprite* spr = (struct Sprite* )p;
-//	//spr->_renderState = v; 
-//}
 
 void
 sprite_set_hit_rect(void*p,int x,int y,int w,int h){
 	struct Sprite* ptr = (struct Sprite* )p;
 	ptr->hitX = x,	ptr->hitY = y, ptr->hitWidth = w,ptr->hitHeight = h;
 	setHitTriangle(ptr);
+}
+
+void
+sprite_set9Grid(void* spr,int top,int bottom,int left,int right){
+
 }
