@@ -44,7 +44,7 @@ struct GM_Grid9
 	GLint matrix;
 	GLint ui_perspectivePtr;
 	GLint ui_modelViewPtr;
-	GLint top;
+	GLint top,bottom,left,right,sx,sy;
 };
 
 void
@@ -69,8 +69,12 @@ grid9CallBack(void* material,Matrix44f M){
 		f->ui_modelViewPtr = ui_modelViewPtr;
 
 		f->top = glGetUniformLocation(program3D,"top");
-			
-		printf("%d,",f->top);
+		f->bottom = glGetUniformLocation(program3D,"bottom");
+		f->left = glGetUniformLocation(program3D,"left");
+		f->right = glGetUniformLocation(program3D,"right");
+		f->sx = glGetUniformLocation(program3D,"sx");
+		f->sy = glGetUniformLocation(program3D,"sy");
+		//printf("%d,",f->top);
 		
 	}
 	f = (struct GM_Grid9*)gm->shaderVars;
@@ -82,6 +86,15 @@ grid9CallBack(void* material,Matrix44f M){
 	tmat_uploadMat4x4(f->ui_perspectivePtr,cam_getPerctive(ex_getIns()->_2dCurCam));	
 	tmat_uploadMat4x4(f->ui_modelViewPtr,cam_getModel(ex_getIns()->_2dCurCam));
 
-	glUniform1f(f->top,2.0f);	
-
+	{
+		//这里要优化成,当top值发生变化的时候才传递数据
+		float w = 60;
+		float h = 20;
+		glUniform1f(f->top,5.0f/h);	
+		glUniform1f(f->bottom,5.0f/h);
+		glUniform1f(f->left,20.0f/w);
+		glUniform1f(f->right,20.0f/w);
+		glUniform1f(f->sx,2.0f);
+		glUniform1f(f->sy,2.0f);
+	}
 }
