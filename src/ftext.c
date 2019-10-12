@@ -261,7 +261,12 @@ ftext_set_buffer(void* p,int bufferSize){
 	txt->_curLength = bufferSize;
 }
 
-
+static void
+f_rotate(struct Sprite* spr){
+	sprite_rotateZ(spr,0);
+	sprite_rotateX(spr,PI);
+	base_setv(spr,FLAGS_REVERSE_FACE);
+}
 
 void*
 ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh,void* cam){
@@ -289,11 +294,13 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh,void* cam){
 	txt->_buffer = tl_malloc(txt->_bufferLength);
 
 	spr = txt->spr;
-
 	
-	sprite_rotateZ(spr,-PI/2);
-	sprite_set_scale_z(spr,1/n);
+	//sprite_rotateZ(spr,-PI/2);
+	//sprite_setUV(spr,0,0,1,1);
 
+	sprite_set_scale_z(spr,1/n);
+	
+	f_rotate(spr);
 	//spr->material = tmat_create_rgba("font1",64,64,GL_BGRA);//"font"
 	
 	spr->material = tmat_create_rgba("font1",txtWidth,txtHeight,GL_BGRA);//"font"

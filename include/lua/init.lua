@@ -2,7 +2,7 @@ dofile("..\\include\\lua\\core.lua");
 
 --########################################
 --node_fbo(1);
-local sv = example_srollView();
+--local sv = example_srollView();
 
 function f_onkey(data)
 	local key = tonumber(data);
@@ -75,15 +75,7 @@ end
 
 --f_init_input();
 
-
 --alert("aa");
-
-
-	
-
-
-
-
 
 
 --input_dispose(_in);
@@ -94,12 +86,7 @@ end
 
 --dofile("..\\include\\lua\\7.lua");
 
-
-
-
-
 --example_unit();
-
 
 --//汉字第一个字节的范围
 --static int
@@ -111,7 +98,6 @@ end
 --f_is_second_code(unsigned char c){
 --	return (0xA1 <= c) && (0xFE > c);
 --}
-
 
 --print(0x80,0xF7,0xA1,0xFE);
 

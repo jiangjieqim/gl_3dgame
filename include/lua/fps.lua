@@ -3,6 +3,8 @@ local isShow = false;
 local DELAT_TIME = 1000;--À¢–¬—”≥Ÿ
 local ticket = 0;
 
+local maxValue = 0;
+
 local _default = false;-- «∑Ò π”√æ…µƒ◊÷ÃÂ‰÷»æ
 
 local function f_render()
@@ -14,12 +16,18 @@ local function f_render()
 	
 	ticket = _time
 	if(tf) then
-		local s = string.format("fps=%d—”≥Ÿ%d",engine_get_fps(),engine_getDelayTime());
+		local curFbs = engine_get_fps();
+		if(curFbs > maxValue) then
+			maxValue = curFbs;
+		end
+		
+		local s = string.format("fps=%d—”≥Ÿ%d-%d-%d",curFbs,engine_getDelayTime(),maxValue,_time/1000);
         if(_default) then
 		    tf_setText(tf,s);
         else
             ftext_reset(tf,s);
         end
+		--print(s);
 	end
 end
 

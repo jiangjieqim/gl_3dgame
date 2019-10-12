@@ -522,7 +522,8 @@ sprite_createEmptyTex(int texW,int texH,void* _2dCam){
 	//sprite_rotateZ(spr,-PI/2);//sprite旋转90度
 	//sprite_rotateX(spr,PI);
 	//base_setv(spr,FLAGS_REVERSE_FACE);
-	sprite_setUV(spr,0,0,1,1);
+	
+	//sprite_setUV(spr,0,0,1,1);
 
 	spr->material = mat;
 	return spr;
@@ -573,7 +574,7 @@ sprite_create(char* _spriteName,
 	}
 	//pSpr->pos_z = ex_newPosZ();//此处不设置z的值,在ex_add的时候再设置
 	pSpr->zScale = 1.0;
-
+	sprite_setUV(pSpr,0,0,1,1);//初始化设置UV
 	return pSpr;
 }
 void

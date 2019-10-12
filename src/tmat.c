@@ -11,7 +11,7 @@
 #include "ex.h"
 #include "gettime.h"
 #include "camera.h"
-#define _DEBUG_
+//#define _DEBUG_
 
 //=======================================================================================
 void 

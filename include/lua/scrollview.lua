@@ -325,7 +325,7 @@ function example_srollView()
 	local itemHeight = 30;
 	local cam;
 	local function f_create()
-		local sprite = sprite_create(nil,0,0,99,itemHeight,0,1,cam);
+		local sprite = sprite_create(nil,0,0,90,itemHeight,0,1,cam);
 
 		local node ={};
 	--	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
@@ -385,7 +385,7 @@ function example_srollView()
 	
 	--*************************************************************************************
 	--初始化
-	local sv = scrollView_init(100,itemHeight*4,20,30);
+	local sv = scrollView_init(100,itemHeight*4,120,10);
 	sv.itemFunc = f_create;				--设置itemRende的创建回调
 	sv.itemRefreshFunc = itemRefreshFunc;	--设置刷新视图的回调
 	sv.itemDisposeFunc = f_dispose;		--设置itemRender销毁回调函数
