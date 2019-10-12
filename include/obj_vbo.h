@@ -65,6 +65,7 @@ void objVBO_render(int data,int parms);
  * renderCallBackäÖÈ¾»Øµ÷
  */
 void objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,const char* shader,Matrix44f m,int mode,struct HeadInfo* base,
-					   void (*renderCallBack)(int,struct ObjVBO*));
+					   void (*renderCallBack)(int,struct ObjVBO*),
+					   void* grid9);
 
 #endif

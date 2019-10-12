@@ -1,8 +1,8 @@
 dofile("..\\include\\lua\\core.lua");
 
 --########################################
---node_fbo(0);
---local sv = example_srollView();
+--node_fbo(1);
+local sv = example_srollView();
 
 function f_onkey(data)
 	local key = tonumber(data);

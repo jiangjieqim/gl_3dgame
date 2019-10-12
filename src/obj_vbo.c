@@ -53,7 +53,7 @@ vbo_dispose(struct ObjVBO* p)
 void 
 objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,
 				  const char* _shaderName,Matrix44f m,int mode,struct HeadInfo* base,
-				  void (*renderCallBack)(int,struct ObjVBO*))
+				  void (*renderCallBack)(int,struct ObjVBO*),void* grid9)
 {
 	GLboolean cull;
 	
@@ -86,7 +86,7 @@ objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,
 	//Ë«Ãæ»æÖÆ
 	cull = base_cullface(base);
 	//printf("***%s\n",base->name);
-	tmat_render(tmat,_shaderName,m);
+	tmat_render(tmat,_shaderName,m,grid9);
 
 	//ÉèÖÃ×´Ì¬
 	if(renderCallBack!=NULL)
@@ -139,7 +139,7 @@ objVBO_render(int data,int parms)
 		
 		objVBO_renderNode((struct ObjVBO*)data,(struct GMaterial*)base->tmat,base->tmat->curGlslType,base->m,base_get_ploygonLineMode(base),
 			base,
-			ptr->renderCallBack);
+			ptr->renderCallBack,0);
 	}else{
 		printf("objVBO_render(..)--->data = null!\n");
 	}

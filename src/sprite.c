@@ -519,9 +519,10 @@ sprite_createEmptyTex(int texW,int texH,void* _2dCam){
 	//tmat_pushTex(mat,(GLuint)mirrorTexture);		//void* mirrorTexture,
 
 	spr = sprite_create(buffer,0,0,texW,texH,0,_2dCam);
-	sprite_rotateZ(spr,-PI/2);//sprite旋转90度
-	sprite_rotateX(spr,PI);
-	base_setv(spr,FLAGS_REVERSE_FACE);
+	//sprite_rotateZ(spr,-PI/2);//sprite旋转90度
+	//sprite_rotateX(spr,PI);
+	//base_setv(spr,FLAGS_REVERSE_FACE);
+	sprite_setUV(spr,0,0,1,1);
 
 	spr->material = mat;
 	return spr;
@@ -572,6 +573,7 @@ sprite_create(char* _spriteName,
 	}
 	//pSpr->pos_z = ex_newPosZ();//此处不设置z的值,在ex_add的时候再设置
 	pSpr->zScale = 1.0;
+
 	return pSpr;
 }
 void
@@ -727,7 +729,7 @@ renderSprite(struct Sprite* p)
 				objVBO_renderNode(getvbo(p),material,
 					"spritevbo1",
 					p->mat4x4,
-					GL_LINE,base,NULL);
+					GL_LINE,base,0,p->grid9);
 			//}
 			}else{
 //#else
@@ -735,7 +737,7 @@ renderSprite(struct Sprite* p)
 				//"spritevbo",
 				shaderName,
 				p->mat4x4,
-				base_get_ploygonLineMode(base),base,NULL);
+				base_get_ploygonLineMode(base),base,0,p->grid9);
 			}
 
 //#endif
@@ -1067,7 +1069,10 @@ void sprite_dipose(struct Sprite* spr)
 		base_dispose(spr->base);
 		spr->base = NULL;
 	}
-	
+	if (spr->grid9){
+		tl_free(spr->grid9);
+	}
+
 	if(spr->vbo)
 	{
 		objVBO_dispose(spr->vbo);
@@ -1246,6 +1251,20 @@ sprite_set_hit_rect(void*p,int x,int y,int w,int h){
 }
 
 void
-sprite_set9Grid(void* spr,int top,int bottom,int left,int right){
-
+sprite_set_grid9(void* ptr,float left,float right,float top,float bottom,float w,float h){
+	struct Grid9Node* grid9 = 0;
+	struct Sprite *_sprite = (struct Sprite *)ptr;
+	if(!_sprite->grid9){
+		_sprite->grid9 = (struct Grid9Node*)tl_malloc(sizeof(struct Grid9Node));
+		memset(_sprite->grid9,0,sizeof(struct Grid9Node));
+	}
+	grid9 = _sprite->grid9;
+	grid9->left = left;
+	grid9->right = right;
+	grid9->top = top;
+	grid9->bottom = bottom;
+	grid9->width = w;
+	grid9->height = h;
+	grid9->sx = _sprite->mWidth / w;
+	grid9->sy = _sprite->mHeight / h;
 }

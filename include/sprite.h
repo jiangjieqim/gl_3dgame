@@ -2,7 +2,12 @@
 #define _SPRITE_H_
 #include "vmath.h"
 //#define USE_VBO_SPRITE	//是否使用VBO模式的Sprite
-
+/************************************************************************/
+/* 九宫格结构体                                                                     */
+/************************************************************************/
+struct Grid9Node{
+	float left,right,top,bottom,sx,sy,width,height;
+};
 //2d触发界面
 struct Sprite{
 
@@ -75,6 +80,8 @@ struct Sprite{
 	void* parent;
 	//局部坐标,相对于父对象,如果是在stage上就为0,0
 	int localx,localy;
+	//九宫格引用
+	struct Grid9Node* grid9;
 };
 
 //设置sprite的z轴的值
@@ -213,6 +220,11 @@ sprite_createEmptyTex(int texW,int texH,void* _2dCam);
 void
 sprite_set2dCam(void* spr,void* _2dcam);
 //设置9宫格
+//void
+//sprite_set9Grid(void* spr,int top,int bottom,int left,int right);
+
+//设置九宫格数据
 void
-sprite_set9Grid(void* spr,int top,int bottom,int left,int right);
+sprite_set_grid9(void* mat,float left,float right,float top,float bottom,float w,float h);
+
 #endif

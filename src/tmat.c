@@ -325,7 +325,7 @@ tmat_getTextureByIndex(struct GMaterial* pmat,int index)
 	struct GMaterial* mat:	材质引用
 	float x,float y,float z	坐标
 */
-void tmat_render(void* pvoid,const char* shader,Matrix44f M)
+void tmat_render(void* pvoid,const char* shader,Matrix44f M,void* param)
 	 //float x,float y,float z,float scale,
 {
 	GLuint program3D;
@@ -351,7 +351,7 @@ void tmat_render(void* pvoid,const char* shader,Matrix44f M)
 	}
 
 	if(material->updateVarCallback){
-		material->updateVarCallback(material,M);
+		material->updateVarCallback(material,M,param);
 	}else{
 		program3D = ex_getProgrom3D(shader);//mat->glslType
 
@@ -558,7 +558,7 @@ tmat_create_rgba(const char* glslType,GLint width,GLint height,GLenum rgbaType){
 
 void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f mat4x4,GLfloat* vertexs,int vertLen,int format,int mode)
 {
-	tmat_render(_material,shader,mat4x4);	
+	tmat_render(_material,shader,mat4x4,0);	
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);//剔除前面
 	glPolygonMode (GL_BACK,mode);
@@ -566,3 +566,4 @@ void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f 
 	glDrawArrays(GL_TRIANGLES,0,(GLsizei)vertLen);
 	glDisable(GL_CULL_FACE);
 }
+

@@ -290,10 +290,8 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh,void* cam){
 
 	spr = txt->spr;
 
-	//printf("%d\n%d\n",txt,txt->spr);
 	
 	sprite_rotateZ(spr,-PI/2);
-	
 	sprite_set_scale_z(spr,1/n);
 
 	//spr->material = tmat_create_rgba("font1",64,64,GL_BGRA);//"font"

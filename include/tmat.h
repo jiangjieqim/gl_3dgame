@@ -9,6 +9,8 @@
 */
 #define MATERIAL_TEXTURE_COUNT 8
 
+
+
 /*
 	材质结构体
 	和着色器相关,配合各种参数,调用GLSL
@@ -50,11 +52,11 @@ typedef struct GMaterial{
 	int flags;//材质标示符
 	
 	//着色器传递变量回调
-	void (*updateVarCallback)(void* material,Matrix44f m);
+	void (*updateVarCallback)(void* material,Matrix44f m,void* param);
 	//存储一些着色器中需要使用的变量
 	void* shaderVars;
-
-
+	
+	
 }GMaterial;
 
 /*
@@ -89,7 +91,7 @@ void tmat_dispose(void* mat);
 /*
 	切换为当前的材质
 */
-void tmat_render(void* mat,const char* shader,Matrix44f M);  
+void tmat_render(void* mat,const char* shader,Matrix44f M,void* param);  
 
 /*
 	获取当前材质着色器名(这是一个材质默认的一个shader)

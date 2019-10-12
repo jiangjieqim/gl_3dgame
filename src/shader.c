@@ -1,6 +1,8 @@
 #include "tlgl.h"
 #include "camera.h"
+
 #include "ex.h"
+#include "sprite.h"
 
 struct GM_Font 
 {
@@ -10,7 +12,7 @@ struct GM_Font
 };
 
 void 
-font1_updateVarCallback(void* material,Matrix44f M){
+font1_updateVarCallback(void* material,Matrix44f M,void* param){
 	struct GMaterial* gm =  (struct GMaterial*)material;
 	struct GM_Font* f;
 	if(!gm->shaderVars){
@@ -48,7 +50,7 @@ struct GM_Grid9
 };
 
 void
-grid9CallBack(void* material,Matrix44f M){
+grid9CallBack(void* material,Matrix44f M,void* param){
 	struct GMaterial* gm =  (struct GMaterial*)material;
 	struct GM_Grid9* f;
 	if(!gm->shaderVars){
@@ -87,14 +89,15 @@ grid9CallBack(void* material,Matrix44f M){
 	tmat_uploadMat4x4(f->ui_modelViewPtr,cam_getModel(ex_getIns()->_2dCurCam));
 
 	{
+		struct Grid9Node* node = (struct Grid9Node*)param;
 		//这里要优化成,当top值发生变化的时候才传递数据
-		float w = 60;
-		float h = 20;
-		glUniform1f(f->top,5.0f/h);	
-		glUniform1f(f->bottom,5.0f/h);
-		glUniform1f(f->left,20.0f/w);
-		glUniform1f(f->right,20.0f/w);
-		glUniform1f(f->sx,2.0f);
-		glUniform1f(f->sy,2.0f);
+		float w = node->width;
+		float h = node->height;
+		glUniform1f(f->top,node->top/h);	
+		glUniform1f(f->bottom,node->bottom/h);
+		glUniform1f(f->left,node->left/w);
+		glUniform1f(f->right,node->right/w);
+		glUniform1f(f->sx,node->sx);
+		glUniform1f(f->sy,node->sy);
 	}
 }
