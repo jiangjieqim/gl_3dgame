@@ -244,10 +244,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\fbospr.c"
-					>
-				</File>
-				<File
 					RelativePath="..\src\fbotex.c"
 					>
 				</File>
@@ -285,6 +281,14 @@
 				</File>
 				<File
 					RelativePath="..\src\obj_vbo.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\progrom3D.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\shader.c"
 					>
 				</File>
 				<File
@@ -466,6 +470,14 @@
 				</File>
 				<File
 					RelativePath="..\include\obj_vbo.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\progrom3D.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\shader.h"
 					>
 				</File>
 				<File
