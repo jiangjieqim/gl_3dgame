@@ -238,5 +238,10 @@ sv.itemRefreshFunc = itemRefreshFunc;
 cam = scrollView_get_cam(sv);
 scrollView_set_data(sv,t);
 ```
-
+## 灰度滤镜ps
+```
+	vec4 finalColor=texture2D(texture1, result);
+	float v = dot(finalColor.rgb,vec3(0.3,0.59,0.11));
+	gl_FragColor = vec4(v,v,v,1.0);
+```
 
