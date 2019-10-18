@@ -2,11 +2,16 @@ dofile("..\\include\\lua\\core.lua");
 
 --########################################
 --node_fbo(1);
---local sv = example_srollView();
+local sv = example_srollView();
 
 --btn_create(200,50,60,20,"smallbtn.png");
 --btn_create(200,70,120,40,"smallbtn.png");
-sprite_create_9grid("smallbtn.png",100,100,240,80);
+
+local spr = sprite_create_9grid("smallbtn.png",100,200,90,30);
+engine_addNode(spr);
+--ptr_remove(spr);
+
+
 
 function f_onkey(data)
 	local key = tonumber(data);

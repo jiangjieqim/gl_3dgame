@@ -10,6 +10,9 @@
 #include "fbotex.h"
 #include "ex.h"
 #include "sprite.h"
+
+//	#define SHOW_TIME
+
 /*
 	根据图集资源id获取配置
 
@@ -91,8 +94,17 @@ atals_tex(struct Atals* atals,const char* name,struct AtlasNode* ptrOut)
 		assert(0);
 	}
 }
+
+#ifdef SHOW_TIME
+static long time;
+#endif
+
 static void f_onceCallBack(void* fbo,void* sprite){
 	ex_ptr_remove(sprite);//从渲染列表中移除
+	// 
+#ifdef SHOW_TIME
+	printf("atals_new_tex消耗 : %ld 毫秒\n",get_longTime()-time);
+#endif
 }
 //从图集中创建一块纹理数据,并返回
 GLuint
@@ -105,28 +117,25 @@ atals_new_tex(struct Atals* atals,const char* icon){
 	struct AtlasNode p;
 	void* sprite;//用于在frame buffer object中渲染
 
+	char tname[32];
+#ifdef SHOW_TIME
+	time = get_longTime();
+#endif
+
 	atals_tex(atals,icon,&p);
 	fbo = fbo_init(p.width,p.height);
 
 	tex = (GLuint)fbo_getTex(fbo);
 
-	//spr =sprite_createEmptyTex(p.width,p.height,ex_getIns()->_2dcam);
-	//material = sprite_get_material(spr);
-	//tmat_pushTex(material,(GLuint)tex);
+	tl_newName(tname,32,0);
 
-	sprite = (void*)sprite_create("temp_sprite",0,0,p.width,p.height,0,fbo_get2dCam(fbo));
+	sprite = (void*)sprite_create(tname,0,0,p.width,p.height,0,fbo_get2dCam(fbo));
 	sprite_bindAtals(sprite,atals);
 	sprite_texName(sprite,icon,0);
 	ex_add(sprite);
 	//ex_add(spr);
 	ex_add_fbo(fbo);
 
-	//callBack(tex,parms);
-
-	//fbo_dispose(fbo,0);
-	//ex_remove_fbo(fbo);
-	//ex_ptrRemove(sprite);
-	// 
 	fbo_set_once(fbo,f_onceCallBack,sprite);
 
 	return tex;

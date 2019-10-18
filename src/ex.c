@@ -411,7 +411,7 @@ static void
 f_infoNode(int data){
 	//struct EX*e = ex_getIns();	
 	struct HeadInfo* base = base_get((void*)data);
-	log_color(0xff00ff,"[cam:%0x,%d,(%s),v:%d]\n",base->cam,base->curType,base->name,base_getv((void*)data,FLAGS_VISIBLE));
+	log_color(0xff00ff,"[cam:%0x,%d,(name=%s),visible:%d]\n",base->cam,base->curType,base->name,base_getv((void*)data,FLAGS_VISIBLE));
 }
 /*
 打印引擎当前信息

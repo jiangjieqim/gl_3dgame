@@ -325,11 +325,16 @@ function example_srollView()
 	local itemHeight = 30;
 	local cam;
 	local function f_create()
-		local sprite = sprite_create(nil,0,0,90,itemHeight,0,1,cam);
-
+		--local sprite = sprite_create(nil,0,0,90,itemHeight,0,1,cam);	func_setIcon(sprite, "smallbtn.png");
+		
+		local sprite = sprite_create_9grid("smallbtn.png",0,0,90,itemHeight,cam);	sprite_set_hit_rect(sprite,0,0,90,itemHeight);
+		
+		
+		--print(itemHeight);
+		
 		local node ={};
 	--	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
-		func_setIcon(sprite, "smallbtn.png");
+		
 		engine_addNode(sprite);
 
 
