@@ -155,4 +155,9 @@ tmat_uploadMat4x4(GLint location_mat4x4,Matrix44f _out_mat4x4);
 void 
 tmat_updateTexture(GLuint program3D,struct GMaterial* mat);
 
+//打印材质对象中的所有贴图句柄
+void
+tmat_print_tex(void* mat);
+//创建一个九宫格材质
+void* tmat_create_9grid(struct Atals* atals,const char* icon);
 #endif

@@ -818,6 +818,10 @@ function func_xml_to_tb(data)
     tb.z = z;
     return tb;
 end
+
+
+
+
 --function func
 dofile("..\\include\\lua\\ex.lua")	--ÒýÇæ
 

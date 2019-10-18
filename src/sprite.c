@@ -16,6 +16,10 @@
 #include "fbotex.h"
 #include "camera.h"
 //#define _SET_POS_DEBUG_
+
+//#define _UV_DEBUG_
+
+
 static void f_refreshChildPos(void* ptr);
 
 static char*
@@ -1060,15 +1064,15 @@ void sprite_dipose(struct Sprite* spr)
 	//É¾³ý²ÄÖÊ¾ä±ú
 	if(spr->material){
 		tmat_dispose(spr->material);
-		spr->material = NULL;
+		spr->material = 0;
 	}
 	/*if(spr->material)
 		tmat_dispose(spr->material);*/
-	spr->atals = NULL;
+	spr->atals = 0;
 	
 	if(spr->base){
 		base_dispose(spr->base);
-		spr->base = NULL;
+		spr->base = 0;
 	}
 	if (spr->grid9){
 		tl_free(spr->grid9);
@@ -1116,14 +1120,24 @@ sprite_texName(struct Sprite* ptr,
 	}
 
 	n = *ptrNode;
-
+#ifdef _UV_DEBUG_
+	printf("ÐÞ¸ÄUV,%s:%.3f,%.3f,%.3f,%.3f",texName,
+		1.0f-(height-n.y)/height,
+		1.0f-(width-n.x)/width,
+		n.height/height,
+		n.width/width
+		);
+#endif
+	
 	//ÉèÖÃÍ¼¼¯UV.
 	sprite_setUV(ptr,		
-		1.0f-(height-n.y)/height+1,
-		1.0f-(width-n.x)/width+1,
+		1.0f-(height-n.y)/height,
+		1.0f-(width-n.x)/width,
 		n.height/height,
 		n.width/width
 		); 
+
+	
 
 	if (_pNode!=0){
 		memcpy(_pNode,ptrNode,sizeof(struct AtlasNode));
@@ -1243,6 +1257,12 @@ sprite_set_scale_z(struct Sprite* spr,float v){
 	}
 	spr->zScale = v;
 }
+void
+sprite_bindAtals(void* p,void* atals){
+	struct Sprite* sprite = (struct Sprite*)p;
+	//ÉèÖÃÍ¼¼¯
+	sprite->atals = (struct Atals*)atals;
+}
 
 void
 sprite_set_hit_rect(void*p,int x,int y,int w,int h){
@@ -1269,3 +1289,6 @@ sprite_set_grid9(void* ptr,float left,float right,float top,float bottom,float w
 	grid9->sx = _sprite->mWidth / w;
 	grid9->sy = _sprite->mHeight / h;
 }
+
+
+

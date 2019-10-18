@@ -7,7 +7,8 @@ void* fbo_init(int texW,int texH);
 void fbo_render(void* ptr);
 
 //销毁fbo对象
-void fbo_dispose(void* p);
+// deltex 1 销毁纹理对象 0 不销毁纹理对象
+void fbo_dispose(void* p,int deltex);
 
 //获取当前的3d cam
 void* fbo_get3dCam(void* p);
@@ -28,5 +29,9 @@ fbo_resize(void*p);
  */
 void
 fbo_enable(void*p,int v);
-
+//设置fbo只渲染一次,并且不销毁纹理对象
+//void 
+//fbo_set_once(void* ptr);
+void 
+fbo_set_once(void* ptr,void (*onceCallBack)(void*,void*),void* parms);
 #endif

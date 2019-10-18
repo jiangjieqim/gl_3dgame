@@ -227,4 +227,7 @@ sprite_set2dCam(void* spr,void* _2dcam);
 void
 sprite_set_grid9(void* mat,float left,float right,float top,float bottom,float w,float h);
 
+//…Ë÷√ÕººØ
+void
+sprite_bindAtals(void* p,void* atals);
 #endif

@@ -11,6 +11,8 @@
 #include "ex.h"
 #include "gettime.h"
 #include "camera.h"
+#include "atlas.h"
+#include "shader.h"
 //#define _DEBUG_
 
 //=======================================================================================
@@ -278,6 +280,15 @@ f_tmat_pushTex(struct GMaterial* p,const char* path){
 	}else
 	{
 		//assert(0);
+	}
+}
+
+void 
+tmat_print_tex(void* mat){
+	struct GMaterial* m = (struct GMaterial*)mat;
+	int i;
+	for (i = 0;i < m->curTexIndex;i++){
+		printf("索引%d贴图句柄:%d",i,m->texs[i]);
 	}
 }
 
@@ -566,4 +577,12 @@ void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f 
 	glDrawArrays(GL_TRIANGLES,0,(GLsizei)vertLen);
 	glDisable(GL_CULL_FACE);
 }
-
+//创建一个九宫格材质
+void* tmat_create_9grid(struct Atals* atals,const char* icon){
+	void* _mater = tmat_create_empty("grid9vbo");
+	struct GMaterial* _matarial = (struct GMaterial*)_mater;
+	GLuint tex =  atals_new_tex(atals,icon);
+	_matarial->updateVarCallback = grid9CallBack;
+	tmat_pushTex(_matarial,tex);
+	return _mater;
+}

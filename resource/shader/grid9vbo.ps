@@ -1,6 +1,6 @@
 #version 110
-uniform sampler2D texture1;//界面贴图
-uniform sampler2D texture2;//alpha通道
+uniform sampler2D texture1;
+
 varying vec2 out_texcoord;
 
 uniform float top;
@@ -12,6 +12,8 @@ uniform float sy;
 
 //九宫格uv转化
 vec2 convertUV(vec2 _texcoord){
+	const float aw = 1.0;
+	const float ah = 1.0;
 	vec2 result = _texcoord;
 	vec2 origin = _texcoord;
 	if(left + right > sx){
@@ -20,32 +22,38 @@ vec2 convertUV(vec2 _texcoord){
 		if (origin.x * sx < left){
 			result.x = origin.x * sx;
 		}else{
-			if((1.0f-origin.x)*sx < right){
-				result.x = 1.0f - (1.0f - origin.x) * sx;
-			}else{
-				result.x = (origin.x * sx - left) / (sx - left - right)*(1.0f - left - right) + left;
+			if((aw-origin.x)*sx < right){
+				result.x = aw - (aw - origin.x) * sx;
+			}else{ 
+				result.x = (origin.x * sx - left) / (sx - left - right)*(aw - left - right) + left;
 			}
 		}
 	}
-	
 	if (top + bottom > sy){
 		result.y = origin.y;
 	}else{
+		
+	
 		if (origin.y * sy < top){
-			result.y = origin.y * sy;
+			result.y = origin.y * sy ;//bottom
+			//discard;
 		}else{
-			if ((1.0f - origin.y) * sy < bottom){
-				result.y = 1.0f - (1.0f - origin.y) * sy;
+			if ((ah - origin.y) * sy < bottom){
+				result.y = ah - (ah - origin.y) * sy;//top ok
+				//discard;
 			}else{
-				result.y = (origin.y * sy - top) / (sy - top - bottom)*(1.0f - top - bottom) + top;
+				result.y = (origin.y * sy - top) / (sy - top - bottom)*(ah - top - bottom) + top;//middle
+				//discard;
 			}
 		}
 	}
+	//result.y = result.y * p;
 	return result;
 }
 
 void main(void){
 	vec2 result = convertUV(out_texcoord);
-	vec4 finalColor=texture2D(texture1, result);	//out_texcoord
+	vec4 finalColor=texture2D(texture1, result);
+	
 	gl_FragColor = finalColor;	
 }

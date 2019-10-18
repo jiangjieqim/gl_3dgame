@@ -383,7 +383,7 @@ ex_find(const char* name);
 /*
 	删除引擎中的一个对象
 */
-void ex_ptrRemove(void* ptr);
+void ex_ptr_remove(void* ptr);
 
 /*
  *设置对象的朝向目标

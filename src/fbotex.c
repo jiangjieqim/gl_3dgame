@@ -19,10 +19,14 @@ struct FBOTexNode{
 	void* _3dcam;			//3d透视camera
 	void* _2dcam;			//2d透视camera
 	GLuint              fboName;			//FBO命名对象	
-	GLuint				tex;				//贴图对象句柄
+	GLuint				tex;				//贴图对象句柄,fbo渲染的帧缓冲会输出到此纹理句柄上
 	GLuint              depthBufferName;	//深度缓冲区
 	int					texw,texh;			//贴图的宽高
-	int enable;//是否处于激活状态
+	int enable;								//是否处于激活状态
+	//int once;								//是否只渲染回调一次
+	//int disposeTexStatus;							//是否销毁纹理对象
+	void (*onceCallBack)(void*,void*);
+	void* parms;
 };
 
 void
@@ -78,8 +82,24 @@ fbo_render(void* ptr){
 
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
-}
 
+	//printf("%d,",fbo->wait);
+	if(fbo->onceCallBack){
+		
+		fbo_dispose(fbo,0);
+		ex_remove_fbo(fbo);
+
+		//printf("销毁fbo\n");
+		fbo->onceCallBack(fbo,fbo->parms);
+	}
+}
+void 
+fbo_set_once(void* ptr,void (*onceCallBack)(void*,void*),void* parms){
+	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
+	//fbo->once = 1;
+	fbo->onceCallBack= onceCallBack;
+	fbo->parms = parms;
+}
 void* 
 fbo_init(int texW,int texH){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)tl_malloc(sizeof(struct FBOTexNode));
@@ -151,10 +171,10 @@ fbo_resize(void*p){
 
 //销毁fbo对象
 void
-fbo_dispose(void* p){
+fbo_dispose(void* p ,int deltex){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 
-	if(fbo->tex){
+	if(deltex && fbo->tex){
 		glDeleteTextures(1, &fbo->tex);
 		fbo->tex = 0;
 	}
@@ -168,6 +188,14 @@ fbo_dispose(void* p){
 	glDeleteFramebuffers(1, &fbo->fboName);
 
 	tl_free(fbo);
+
+	//{
+	//	struct EX* p = ex_getIns();
+
+	//	//切换对应的cam的矩阵空间
+	//	ex_switch3dCam(p->_3dcam);
+	//	ex_switch2dCam(p->_2dcam);
+	//}
 }
 
 void* fbo_get3dCam(void* p){

@@ -29,6 +29,7 @@
 #include "base.h"
 #include "frame.h"
 #include "fbotex.h"
+#include "atlas.h"
 
 //#define DEBUG_PRINT_HIT	//打印拾取日志
 
@@ -1125,9 +1126,9 @@ _new(){
 	f_renderFBOs();
 
 	//Do the buffer Swap
-	glutSwapBuffers ();
+	glutSwapBuffers();
 	// Do it again
-	glutPostRedisplay ();
+	glutPostRedisplay();
 
 	//渐变管理器回调
 	//ramp_callBack();
@@ -2256,7 +2257,7 @@ ex_rename(void* p,const char* name){
 	assert(0);
 	return 0;
 }
-void ex_ptrRemove(void* ptr){
+void ex_ptr_remove(void* ptr){
 	struct HeadInfo* b = base_get((void*)ptr);
 	if(!b)
 	{

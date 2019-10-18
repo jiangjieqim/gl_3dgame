@@ -47,6 +47,7 @@ struct GM_Grid9
 	GLint ui_perspectivePtr;
 	GLint ui_modelViewPtr;
 	GLint top,bottom,left,right,sx,sy;
+	//GLint tex;//ÌùÍ¼¾ä±ú
 };
 
 void

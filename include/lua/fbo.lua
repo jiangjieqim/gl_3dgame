@@ -10,7 +10,7 @@ local function f_createSprite(size,tex)
     end
     return spr;
 end
-
+--初始化FBO对象
 function fboobj_init(tw,th)
     local fbo = {};
     local ptr,cam3d,cam2d,tex = fbo_init(tw,th);--构建fbo对象
