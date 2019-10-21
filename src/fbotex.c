@@ -25,10 +25,19 @@ struct FBOTexNode{
 	int enable;								//是否处于激活状态
 	//int once;								//是否只渲染回调一次
 	//int disposeTexStatus;							//是否销毁纹理对象
-	void (*onceCallBack)(void*,void*);
+	//void (*onceCallBack)(void*,void*);
 	void* parms;
 };
-
+//static void
+//f_callLater(void*p){
+//	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+//	//fbo->enable=0;          parms);
+//	fbo->onceCallBack(fbo,fbo->parms);
+//	ex_remove_fbo(fbo);
+//	fbo_dispose(fbo,0);
+//	// 
+//	printf("f_callLater 构造纹理[%d]结束\n",fbo->tex);	
+//}
 void
 fbo_render(void* ptr){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
@@ -84,22 +93,17 @@ fbo_render(void* ptr){
 	}
 
 	//printf("%d,",fbo->wait);
-	if(fbo->onceCallBack){
-		
-		fbo_dispose(fbo,0);
-		ex_remove_fbo(fbo);
-
-		//printf("销毁fbo\n");
-		fbo->onceCallBack(fbo,fbo->parms);
-	}
+	/*if(fbo->onceCallBack){
+		callLater(f_callLater,fbo);
+	}*/
 }
-void 
-fbo_set_once(void* ptr,void (*onceCallBack)(void*,void*),void* parms){
-	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
-	//fbo->once = 1;
-	fbo->onceCallBack= onceCallBack;
-	fbo->parms = parms;
-}
+//void 
+//fbo_set_once(void* ptr,void (*onceCallBack)(void*,void*),void* parms){
+//	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
+//	//fbo->once = 1;
+//	fbo->onceCallBack= onceCallBack;
+//	fbo->parms = parms;
+//}
 void* 
 fbo_init(int texW,int texH){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)tl_malloc(sizeof(struct FBOTexNode));

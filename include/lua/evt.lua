@@ -60,9 +60,10 @@ end
 --全局事件
 function evt_dispatch(...)
 	 --id,data,obj
-	local id;
+	local obj; --指向的对象
+	local id;  --事件id
 	local data;--数据
-	local obj;
+	
 	for index,value in ipairs({...}) do
 		--print(index,value);
 		if(index == 1) then

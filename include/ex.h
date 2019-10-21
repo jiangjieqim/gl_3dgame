@@ -60,6 +60,9 @@
 #define EVENT_ENGINE_SPRITE_CLICK_DOWN	   105//click down
 #define EVENT_ENGINE_SPRITE_CLICK_MOVE	   106//click move
 #define EVENT_ENGINE_SPRITE_FOCUS_CHANGE   107//焦点发生变化
+#define EVENT_ENGINE_TEX_LOAD_COMPLETE	   108//贴图加载完成了
+
+
 
 //#define EVENT_ENGINE_SPRITE_FOCUS_OUT   108	//2d焦点离开的时候触发
 //#define EVENT_ENGINE_SPRITE_FOCUS_IN    109	//2d焦点进入的时候触发
@@ -213,6 +216,13 @@ struct EX
 	struct LStackNode *fboList;
 
 	void* pro3d;//着色器管理器句柄
+
+	//纹理键值对象
+	void* texmap;
+
+	//int lock;
+	//drawcall调用完成之后的回调列表
+	struct LStackNode* lastList;
 };
 
 //接口定义
@@ -475,5 +485,9 @@ void ex_remove_fbo(void* fbo);
 	根据shader类型获取一个
 */
 GLuint ex_getProgrom3D(const char* glslType);
+
+//在drawcall的最后回调
+void
+callLater(void _callBack(void*),void* parms);
 
 #endif

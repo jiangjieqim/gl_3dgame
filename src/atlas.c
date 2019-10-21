@@ -2,6 +2,8 @@
 #include <assert.h>
 #include <string.h>
 
+
+#include "common.h"
 #include "tools.h"
 #include "tl_malloc.h"
 #include "atlas.h"
@@ -10,8 +12,10 @@
 #include "fbotex.h"
 #include "ex.h"
 #include "sprite.h"
+#include "map.h"
+#include "gettime.h"
 
-//	#define SHOW_TIME
+#define DEBUG_SHOW_TIME
 
 /*
 	根据图集资源id获取配置
@@ -95,49 +99,114 @@ atals_tex(struct Atals* atals,const char* name,struct AtlasNode* ptrOut)
 	}
 }
 
-#ifdef SHOW_TIME
+
+#define _ICON_SIZE_  32
+struct Atals_params
+{
+	void* sprite;
+	GLuint tex;
+	char icon[_ICON_SIZE_];
+	void* fbo;
+	void (*callBack)(void*,void*);
+	void* parms;
+};
+#ifdef DEBUG_SHOW_TIME
 static long time;
 #endif
+//
+//static void 
+//f_onceCallBack(void* fbo,void* atals_params){
+//
+//}
 
-static void f_onceCallBack(void* fbo,void* sprite){
-	ex_ptr_remove(sprite);//从渲染列表中移除
-	// 
-#ifdef SHOW_TIME
+static void
+f_callLater(void*p){
+	struct Atals_params* ap = (struct Atals_params*)p;
+
+	struct FBOTexNode* fbo = ap->fbo;
+	//fbo->enable=0;          parms);
+	//fbo->onceCallBack(fbo,fbo->parms);
+	//f_onceCallBack(fbo,fbo->parms);
+	
+	ex_ptr_remove(ap->sprite);//从渲染列表中移除
+	map_set(ex_getIns()->texmap,ap->icon,(void*)ap->tex); 
+#ifdef DEBUG_SHOW_TIME
 	printf("atals_new_tex消耗 : %ld 毫秒\n",get_longTime()-time);
 #endif
+	ex_remove_fbo(fbo);
+	fbo_dispose(fbo,0);
+	// 
+	printf("f_callLater 构造纹理结束\n");
+	if(ap->callBack)
+		ap->callBack((void*)ap->tex,ap->parms);
+
+	tl_free(p);//销毁回调参数对象
+
+	//ex_lua_evt_dispatch(sprite,EVENT_ENGINE_SPRITE_CLICK,b->name);
 }
 //从图集中创建一块纹理数据,并返回
 GLuint
-atals_new_tex(struct Atals* atals,const char* icon){
-	void* fbo = 0;
-	//void* spr;//用于展示的Sprite,用于观察渲染的对象是否正确
-	//void* material;
+atals_new_tex(struct Atals* atals,const char* icon,
+			  void (*callBack)(void*,void*),void* parms){
 	GLuint tex;
-	//struct Atals* atals = ex_get_ui_atals();//图集
-	struct AtlasNode p;
-	void* sprite;//用于在frame buffer object中渲染
+	//long t = get_longTime();
+	struct MapNode * node ;
+	
+	struct Atals_params* ap;
 
-	char tname[32];
-#ifdef SHOW_TIME
-	time = get_longTime();
+	//printf("***\n");
+	node = map_get(ex_getIns()->texmap,icon);
+	//printf("map_get消耗 : %ld 毫秒\n",get_longTime()-t);
+	if(node){
+		printf("复用键值:%0x\n",node);
+		return (GLuint)node->value;
+	}
+	else{
+		void* fbo = 0;
+		//void* spr;//用于展示的Sprite,用于观察渲染的对象是否正确
+		//void* material;
+
+		//struct Atals* atals = ex_get_ui_atals();//图集
+		struct AtlasNode p;
+		void* sprite;//用于在frame buffer object中渲染
+
+		char tname[32];
+
+		if(strlen(icon)>_ICON_SIZE_){
+			printf("icon的文本长度太大\n");
+			assert(0);
+		}
+
+#ifdef DEBUG_SHOW_TIME
+		time = get_longTime();
 #endif
 
-	atals_tex(atals,icon,&p);
-	fbo = fbo_init(p.width,p.height);
+		atals_tex(atals,icon,&p);
+		fbo = fbo_init(p.width,p.height);
 
-	tex = (GLuint)fbo_getTex(fbo);
+		tex = (GLuint)fbo_getTex(fbo);
 
-	tl_newName(tname,32,0);
+		tl_newName(tname,32,0);
 
-	sprite = (void*)sprite_create(tname,0,0,p.width,p.height,0,fbo_get2dCam(fbo));
-	sprite_bindAtals(sprite,atals);
-	sprite_texName(sprite,icon,0);
-	ex_add(sprite);
-	//ex_add(spr);
-	ex_add_fbo(fbo);
-
-	fbo_set_once(fbo,f_onceCallBack,sprite);
-
+		sprite = (void*)sprite_create(tname,0,0,p.width,p.height,0,fbo_get2dCam(fbo));
+		sprite_bindAtals(sprite,atals);
+		sprite_texName(sprite,icon,0);
+		ex_add(sprite);
+		//ex_add(spr);
+		ex_add_fbo(fbo);
+		ap = (struct Atals_params*)tl_malloc(sizeof(struct Atals_params));
+		memset(ap,0,sizeof(struct Atals_params));
+		ap->sprite = sprite;
+		ap->tex = tex;
+		ap->fbo = fbo;
+		ap->callBack = callBack;
+		memset(ap->icon,0,_ICON_SIZE_);
+		memcpy(ap->icon,icon,strlen(icon));
+		//printf("icon = %s\n",ap->icon);
+		//fbo_set_once(fbo,f_onceCallBack,ap);
+		printf("构造tex:%d\n",tex);
+		callLater(f_callLater,ap);
+	}
 	return tex;
 }
 

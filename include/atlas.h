@@ -41,5 +41,5 @@ void atals_tex(struct Atals* atals,const char* name,struct AtlasNode* ptrOut);
 
 //从图集中创建一块纹理数据,并返回
 GLuint
-atals_new_tex(struct Atals* atals,const char* icon);
+atals_new_tex(struct Atals* atals,const char* icon,void (*callBack)(void*,void*),void* parms);
 #endif

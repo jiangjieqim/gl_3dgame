@@ -32,6 +32,5 @@ fbo_enable(void*p,int v);
 //设置fbo只渲染一次,并且不销毁纹理对象
 //void 
 //fbo_set_once(void* ptr);
-void 
-fbo_set_once(void* ptr,void (*onceCallBack)(void*,void*),void* parms);
+//void fbo_set_once(void* ptr,void (*onceCallBack)(void*,void*),void* parms);
 #endif

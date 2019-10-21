@@ -13,6 +13,7 @@
 #include "camera.h"
 #include "atlas.h"
 #include "shader.h"
+#include "map.h"
 //#define _DEBUG_
 
 //=======================================================================================
@@ -399,10 +400,18 @@ static void f_deleteGPU_texture(struct GMaterial* mat)
 	int i;
 	for(i = 0;i< MATERIAL_TEXTURE_COUNT;i++)
 	{
-		if(mat->texs[i]!=0)
+		GLuint tex = mat->texs[i];
+		if(tex!=0)
 		{
 			//如果要删除纹理缓冲区数据	请这样使用下面方式;
-			glDeleteTextures(1,&(mat->texs[i]));
+			void* node = map_getNodeByValue(ex_getIns()->texmap,(void*)tex);
+			
+			if(node){
+				printf("使用texmap = %0x,tex=%d,不使用glDeleteTextures删除贴图\n",node,tex);
+			}else{
+				printf("销毁纹理%d\n",tex);
+				glDeleteTextures(1,&(mat->texs[i]));
+			}
 			mat->texs[i] = 0;
 		}
 	}
@@ -581,7 +590,7 @@ void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f 
 void* tmat_create_9grid(struct Atals* atals,const char* icon){
 	void* _mater = tmat_create_empty("grid9vbo");
 	struct GMaterial* _matarial = (struct GMaterial*)_mater;
-	GLuint tex =  atals_new_tex(atals,icon);
+	GLuint tex =  atals_new_tex(atals,icon,0,0);
 	_matarial->updateVarCallback = grid9CallBack;
 	tmat_pushTex(_matarial,tex);
 	return _mater;

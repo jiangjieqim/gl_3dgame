@@ -30,7 +30,7 @@
 #include "frame.h"
 #include "fbotex.h"
 #include "atlas.h"
-
+#include "map.h"
 //#define DEBUG_PRINT_HIT	//打印拾取日志
 
 int g_sprite_line;
@@ -57,6 +57,42 @@ struct ClickInfo{
 	int local_click_x,local_click_y;	//临时点击相对于sprite的坐标
 	float pos_z;
 };
+
+struct CallLaterNode
+{
+	void* parms;
+	void (*callBack)(void*);
+};
+
+//在drawcall的最后回调
+void
+callLater(void _callBack(void*),void* parms){
+	struct CallLaterNode* node = (struct CallLaterNode*)tl_malloc(sizeof(struct CallLaterNode));
+	node->callBack = _callBack;
+	node->parms = parms;
+	//ex_getIns()->lastList;
+	LStack_push(ex_getIns()->lastList,(void*)node);
+}
+static void 
+runLastList(){
+	struct LStackNode* s = ex_getIns()->lastList;
+	struct CallLaterNode* _node;
+	int cnt = 0;
+	void* top,*p;
+	top = s;
+	p=top;
+	while((int)LStack_next(p)){
+		int data;
+		p=(void*)LStack_next(p);
+		data = LStack_data(p);
+
+		_node = (struct CallLaterNode*)data;
+		_node->callBack(_node->parms);
+		tl_free(_node);
+	}
+
+	LStack_clear(s);
+}
 
 struct Ent3D{
 	struct HeadInfo* base;
@@ -244,9 +280,13 @@ void ex_add_fbo(void* fbo){
 	LStack_push(ex_getIns()->fboList,fbo);
 }
 void ex_remove_fbo(void* fbo){
+	//ex_getIns()->lock = 1;
+
 	if(!LStack_delNode(ex_getIns()->fboList,(int)fbo)){
 		printf("删除fbo节点失败!");
+		return;
 	}
+	//ex_getIns()->lock = 0;
 }
 
 /*
@@ -411,7 +451,7 @@ static void
 f_infoNode(int data){
 	//struct EX*e = ex_getIns();	
 	struct HeadInfo* base = base_get((void*)data);
-	log_color(0xff00ff,"[cam:%0x,%d,(name=%s),visible:%d]\n",base->cam,base->curType,base->name,base_getv((void*)data,FLAGS_VISIBLE));
+	log_color(0xff00ff,"[cam=%0x,curType=%d,(name=%s),visible:%d]\n",base->cam,base->curType,base->name,base_getv((void*)data,FLAGS_VISIBLE));
 }
 /*
 打印引擎当前信息
@@ -1103,7 +1143,8 @@ f_fboRenderList(int data,int parms){
 //渲染fbo列表
 static void
 f_renderFBOs(){	
-	LStack_ergodic_t(ex_getIns()->fboList,f_fboRenderList,0);
+	//if(!ex_getIns()->lock)
+		LStack_ergodic_t(ex_getIns()->fboList,f_fboRenderList,0);
 }
 
 static void 
@@ -1134,7 +1175,8 @@ _new(){
 	//ramp_callBack();
 
 	tween_run(_longTime,g_delayTime);
-
+	
+	runLastList();
 	//printf("**** %d\n",p->fps);
 }
 void ex_render(void)
@@ -1310,6 +1352,8 @@ ex_init(struct EX* p,GLdouble zfar,float sw,float sh){
 	p->ui_pos_z =  -1000;	//此深度如果小于3d层,那么界面将在3d界面后面
 	p->_screenWidth = sw;
 	p->_screenHeight= sh;
+
+	p->texmap = map_create();
 	p->_3dcam = cam_create();//初始化3d透视camera
 	ex_switch3dCam(p->_3dcam);
 	p->_2dcam = cam_create();//初始化2d正交camera
@@ -1324,6 +1368,7 @@ ex_init(struct EX* p,GLdouble zfar,float sw,float sh){
 	p->renderList = LStack_create();
 
 	p->fboList = LStack_create();
+	p->lastList = LStack_create();
 	/*p->hit=hit_create(p->renderList,p->viewport,p->hitModelView,p->hitPerspectProjection);*/
 	
 	//==========================================
@@ -2210,7 +2255,7 @@ ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
 	
 	lua_State* L =ex_getIns()->mylua;
 	if(L){
-		lua_getglobal(L,"evt_dispatch");
+		lua_getglobal(L,"evt_dispatch");//调用lua的eve_dispath方法
 		lua_pushinteger(L,(int)obj);
 		lua_pushinteger(L,evtid);
 		lua_pushstring(L,data);

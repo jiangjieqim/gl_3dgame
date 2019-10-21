@@ -55,5 +55,8 @@ void main(void){
 	vec2 result = convertUV(out_texcoord);
 	vec4 finalColor=texture2D(texture1, result);
 	
-	gl_FragColor = finalColor;	
+	float v = dot(finalColor.rgb,vec3(0.3,0.59,0.11));
+	//gl_FragColor = vec4(v,v,v,1.0);//»Ò¶ÈÂË¾µ
+	
+	gl_FragColor = finalColor;
 }

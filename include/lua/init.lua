@@ -2,14 +2,26 @@ dofile("..\\include\\lua\\core.lua");
 
 --########################################
 --node_fbo(1);
-local sv = example_srollView();
 
 --btn_create(200,50,60,20,"smallbtn.png");
 --btn_create(200,70,120,40,"smallbtn.png");
 
-local spr = sprite_create_9grid("smallbtn.png",100,200,90,30);
-engine_addNode(spr);
---ptr_remove(spr);
+
+
+local function f_onLoadTex(data,param)
+	
+	print(data,param);
+	
+	local sv = example_srollView();
+
+
+	local spr = sprite_create_9grid("smallbtn.png",100,200,90,30);
+	engine_addNode(spr);
+	ptr_remove(spr);
+end
+
+evt_on(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_onLoadTex,"myparam");
+load_tex("smallbtn.png");
 
 
 
