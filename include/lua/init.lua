@@ -7,21 +7,24 @@ dofile("..\\include\\lua\\core.lua");
 --btn_create(200,70,120,40,"smallbtn.png");
 
 
-
+--[[
 local function f_onLoadTex(data,param)
-	
-	print(data,param);
-	
+	--print(data,param);
 	local sv = example_srollView();
-
-
-	local spr = sprite_create_9grid("smallbtn.png",100,200,90,30);
+	local spr = sprite_create_9grid("smallbtn.png",100,200,200,50,0,3,3,3,3);
 	engine_addNode(spr);
-	ptr_remove(spr);
+	--ptr_remove(spr);
 end
 
 evt_on(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_onLoadTex,"myparam");
 load_tex("smallbtn.png");
+--]]
+
+local function f_callback(p)
+	print("a",p);
+end
+
+resload(f_callback,nil,"smallbtn.png","gundi.png");
 
 
 

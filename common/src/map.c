@@ -142,9 +142,9 @@ map_set(void* mapptr,const char* key,void* value){
 		node->value=value;
 
 		LStack_push(map->list,(void*)node);
-		printf("构造map节点0x%0x,key=%s,value=%d\n",node,node->key,node->value);
+		//printf("构造map节点0x%0x,key=%s,value=%d\n",node,node->key,node->value);
 	}else{
-		printf("找到节点%0x\n",_node);
+		//printf("找到节点%0x\n",_node);
 	}
 }
 

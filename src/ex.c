@@ -62,6 +62,7 @@ struct CallLaterNode
 {
 	void* parms;
 	void (*callBack)(void*);
+	int i;
 };
 
 //在drawcall的最后回调
@@ -71,6 +72,7 @@ callLater(void _callBack(void*),void* parms){
 	node->callBack = _callBack;
 	node->parms = parms;
 	//ex_getIns()->lastList;
+	node->i = ex_getIns()->index;
 	LStack_push(ex_getIns()->lastList,(void*)node);
 }
 static void 
@@ -79,6 +81,9 @@ runLastList(){
 	struct CallLaterNode* _node;
 	int cnt = 0;
 	void* top,*p;
+
+	printf("lstack length = %d\n",LStack_length(s));
+
 	top = s;
 	p=top;
 	while((int)LStack_next(p)){
@@ -89,8 +94,10 @@ runLastList(){
 		_node = (struct CallLaterNode*)data;
 		_node->callBack(_node->parms);
 		tl_free(_node);
+		//LStack_delNode(s,data);
+		printf("** lstack length = %d\n",LStack_length(s));
 	}
-
+	//printf("**lstack length = %d\n",LStack_length(s));
 	LStack_clear(s);
 }
 
@@ -1177,6 +1184,7 @@ _new(){
 	tween_run(_longTime,g_delayTime);
 	
 	runLastList();
+	p->index++;
 	//printf("**** %d\n",p->fps);
 }
 void ex_render(void)

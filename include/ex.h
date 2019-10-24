@@ -223,6 +223,8 @@ struct EX
 	//int lock;
 	//drawcall调用完成之后的回调列表
 	struct LStackNode* lastList;
+
+	int index;
 };
 
 //接口定义

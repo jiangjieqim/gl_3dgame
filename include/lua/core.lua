@@ -823,6 +823,8 @@ end
 
 
 --function func
+
+dofile("..\\include\\lua\\resload.lua")	--资源加载器
 dofile("..\\include\\lua\\ex.lua")	--引擎
 
 dofile("..\\include\\lua\\engine.lua")	--引擎1

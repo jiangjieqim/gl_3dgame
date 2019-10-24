@@ -15,7 +15,7 @@
 #include "map.h"
 #include "gettime.h"
 
-#define DEBUG_SHOW_TIME
+//#define DEBUG_SHOW_TIME
 
 /*
 	根据图集资源id获取配置
@@ -136,7 +136,7 @@ f_callLater(void*p){
 	ex_remove_fbo(fbo);
 	fbo_dispose(fbo,0);
 	// 
-	printf("f_callLater 构造纹理结束\n");
+	printf("f_callLater 构造%s纹理%d结束\n",ap->icon,(void*)ap->tex);
 	if(ap->callBack)
 		ap->callBack((void*)ap->tex,ap->parms);
 
@@ -158,7 +158,7 @@ atals_new_tex(struct Atals* atals,const char* icon,
 	node = map_get(ex_getIns()->texmap,icon);
 	//printf("map_get消耗 : %ld 毫秒\n",get_longTime()-t);
 	if(node){
-		printf("复用键值:%0x\n",node);
+		//printf("复用键值:%0x\n",node);
 		return (GLuint)node->value;
 	}
 	else{
@@ -204,7 +204,7 @@ atals_new_tex(struct Atals* atals,const char* icon,
 		memcpy(ap->icon,icon,strlen(icon));
 		//printf("icon = %s\n",ap->icon);
 		//fbo_set_once(fbo,f_onceCallBack,ap);
-		printf("构造tex:%d\n",tex);
+		//printf("构造tex:%d\n",tex);
 		callLater(f_callLater,ap);
 	}
 	return tex;
