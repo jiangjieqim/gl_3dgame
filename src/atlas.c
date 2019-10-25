@@ -154,7 +154,6 @@ atals_new_tex(struct Atals* atals,const char* icon,
 	
 	struct Atals_params* ap;
 
-	//printf("***\n");
 	node = map_get(ex_getIns()->texmap,icon);
 	//printf("map_getÏûºÄ : %ld ºÁÃë\n",get_longTime()-t);
 	if(node){

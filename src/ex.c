@@ -68,37 +68,95 @@ struct CallLaterNode
 //在drawcall的最后回调
 void
 callLater(void _callBack(void*),void* parms){
+	
 	struct CallLaterNode* node = (struct CallLaterNode*)tl_malloc(sizeof(struct CallLaterNode));
+	
+	{
+		printf("push parms 0x%0x\n",parms);
+	}
 	node->callBack = _callBack;
 	node->parms = parms;
 	//ex_getIns()->lastList;
 	node->i = ex_getIns()->index;
 	LStack_push(ex_getIns()->lastList,(void*)node);
+	printf("push node 0x%0x\n",node);
+}
+
+
+
+
+
+static void
+f_pop(){
+	void* p = ex_getIns()->lastList;
+
+	//struct CallLaterNode* n = 0;
+	if(LStack_length((struct LStackNode*)p)>0){
+		int data;
+		int status = LStack_pop(p,&data);
+		if (status)
+		{
+			struct CallLaterNode* _node = (struct CallLaterNode*)data;
+			_node->callBack(_node->parms);//这里有问题
+			//n = _node;
+			tl_free(_node);
+
+			
+		}
+
+	}
+
+	//if(n){
+	//	n->callBack(n->parms);//这里有问题
+	//	tl_free(n);
+	//}
+
+	//printf("pop\n");
 }
 static void 
 runLastList(){
-	struct LStackNode* s = ex_getIns()->lastList;
-	struct CallLaterNode* _node;
-	int cnt = 0;
-	void* top,*p;
 
-	printf("lstack length = %d\n",LStack_length(s));
+	f_pop();
+	//struct LStackNode* s = ex_getIns()->lastList;
+	//struct CallLaterNode* _node;
+	//int cnt = 0;
+	//void* top,*p;
 
-	top = s;
-	p=top;
-	while((int)LStack_next(p)){
-		int data;
-		p=(void*)LStack_next(p);
-		data = LStack_data(p);
+	////printf("lstack length = %d\n",LStack_length(s));
 
-		_node = (struct CallLaterNode*)data;
-		_node->callBack(_node->parms);
-		tl_free(_node);
-		//LStack_delNode(s,data);
-		printf("** lstack length = %d\n",LStack_length(s));
-	}
-	//printf("**lstack length = %d\n",LStack_length(s));
-	LStack_clear(s);
+	//top = s;
+	//p=top;
+	//while((int)LStack_next(p)){
+	//	int data;
+	//	p=(void*)LStack_next(p);
+	//	data = LStack_data(p);
+	//	if(data){
+	//		
+	//		if(!LStack_delNode(s,data)){
+	//			printf("删除失败!\n");
+	//		}else{
+	//			printf("%0x删除成功\n",p);
+	//		}
+	//		
+	//		_node = (struct CallLaterNode*)data;
+	//		printf("** lstack length = %d,0x%0x,执行回调\n",LStack_length(s),_node);
+	//		
+	//		_node->callBack(_node->parms);//这里有问题
+
+	//		tl_free(_node);
+
+	//		{
+	//			struct LStackNode* cn = p;
+	//			cn->data = 0;
+	//		}
+	//	}
+
+	//	
+	//}
+	//if(LStack_length(s) > 0)
+	//	printf("清除栈的时候栈的长度 = %d\n",LStack_length(s));
+	//
+	////LStack_clear(s);
 }
 
 struct Ent3D{

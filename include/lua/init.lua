@@ -21,7 +21,7 @@ load_tex("smallbtn.png");
 --]]
 
 local function f_callback(p)
-	print("a",p);
+	print("º”‘ÿΩ· ¯",p);
 end
 
 resload(f_callback,nil,"smallbtn.png","gundi.png");
