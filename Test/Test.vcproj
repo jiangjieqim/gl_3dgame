@@ -340,6 +340,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\common\src\map.c"
+					>
+				</File>
+				<File
 					RelativePath="..\common\src\psv.c"
 					>
 				</File>
@@ -526,6 +530,10 @@
 				</File>
 				<File
 					RelativePath="..\common\include\list.h"
+					>
+				</File>
+				<File
+					RelativePath="..\common\include\map.h"
 					>
 				</File>
 				<File
