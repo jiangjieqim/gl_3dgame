@@ -324,7 +324,7 @@ f_objVBO_load4Vertex(){
 	node = map_get(ex_getIns()->texmap,path);
 	if(node){
 		_objStr = node->value;
-		printf("¸´ÓÃ_gobj_str %0x\n",_objStr);
+		//printf("¸´ÓÃ_gobj_str %0x\n",_objStr);
 	}else{
 		_objStr = tl_loadfile(path,0);
 		map_set(ex_getIns()->texmap,path,_objStr);

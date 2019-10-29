@@ -56,7 +56,7 @@ end
 local btn = btn_create(0,50);
 btn_bindClick(btn,f_onClick);
 
-
+node_fbo(1);
 
 
 

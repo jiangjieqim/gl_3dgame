@@ -558,7 +558,7 @@ ex_get_info(){
 	
 	printf("屏幕尺寸:%.1f,%.1f ex->3dcam=%0x ex->2dcam=%0x\n",ex->_screenWidth,ex->_screenHeight,ex->_3dcam,ex->_2dcam);
 	printf("程序已执行:%.3f 秒\n",get_longTime()*0.001);
-	printf("内存池已使用 %d bytes(%.3f kb),闲置节点数 %d 总内存池使用 %d bytes\n",totleByte,(float)(totleByte/1024),nodeCnt,pg_total);
+	printf("内存池已使用 %d bytes(%.3f kb),闲置节点数 %d 总内存池使用 %.3f kb\n",totleByte,(float)(totleByte/1024),nodeCnt,(float)pg_total/1024);
 	
 	//printf( "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
 	
