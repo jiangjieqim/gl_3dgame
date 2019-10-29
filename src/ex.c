@@ -347,13 +347,13 @@ void ex_add_fbo(void* fbo){
 void ex_remove_fbo(void* fbo){
 	//ex_getIns()->lock = 1;
 	
-	printf("######### 节点删除之前当前的fbo节点数:%d\n",LStack_length(ex_getIns()->fboList));
+	//printf("######### 节点删除之前当前的fbo节点数:%d\n",LStack_length(ex_getIns()->fboList));
 
 	if(!LStack_delNode(ex_getIns()->fboList,(int)fbo)){
 		printf("删除fbo节点失败!");
 		return;
 	}
-	printf("######### 当前的fbo节点数:%d\n",LStack_length(ex_getIns()->fboList));
+	//printf("######### 当前的fbo节点数:%d\n",LStack_length(ex_getIns()->fboList));
 	//ex_getIns()->lock = 0;
 }
 

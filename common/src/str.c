@@ -192,8 +192,8 @@ f_splitByStrNode(char* str,const char* dest,int signStrLength,int start,int i,vo
 }
 
 #define _SIGN_LEN_ 1//标示的长度
-void str_split(const char* dest,const char sign,void (*pCallBack)(int*,char*),int* parms)
-{
+void str_split(const char* dest,const char sign
+			   ,void (*pCallBack)(int*,char*),int* parms){
 	int i,start=0;
 	char _ch;
 	int len = (int)strlen(dest);
@@ -201,7 +201,7 @@ void str_split(const char* dest,const char sign,void (*pCallBack)(int*,char*),in
 
 	int signLen = _SIGN_LEN_;
 
-	char* str = (char*)MALLOC(length);
+	char* str = (char*)tl_malloc(length);
 	for(i = 0;i < len;i++){
 		_ch = dest[i];
 		if(_ch==sign){
@@ -212,7 +212,7 @@ void str_split(const char* dest,const char sign,void (*pCallBack)(int*,char*),in
 	}
 	memset(str,0,len+1);
 	f_splitByStrNode(str,dest,signLen,start,i,pCallBack,parms);
-	FREE(str);
+	tl_free(str);
 }
 
 static void 

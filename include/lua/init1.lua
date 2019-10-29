@@ -27,40 +27,26 @@ local function f_callback2(data,obj)
 	engine_addNode(spr);
 end--]]
 
-local arr = {};
-arr[0] = "gundi.png";
-arr[1] = "arrow3.png";
-arr[2] = "checkbox.png";
-arr[3] = "dagou.png";
-local a = 0;
+
 
 local function f_callback1(data,obj)
-	print("******************************加载结束1",data,obj);
-		
+	print("******************************加载结束",data,obj);
 	--evt_once(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback2,0);
 	--load_tex("smallbtn.png");
-	
-	local spr = sprite_create_9grid(data,150,(a-1)*50,200,50,0,3,3,3,3);
-	engine_addNode(spr);
+	local arr = func_split(data,";");
+	local n = 0;
+	for n = 1,#arr do
+		print(arr[n]);
+		local spr = sprite_create_9grid(arr[n],150,n*50,200,50,0,3,3,3,3);
+		engine_addNode(spr);
+	end
 end
+evt_once(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback1,0);
+load_tex("gundi.png;arrow3.png;checkbox.png;dagou.png");	
 
-
-
-local function f_onClick()
-	evt_once(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback1,0);
-	load_tex(arr[a]);
-	
-	print(arr[a]);
-	a = a + 1;
-end
-local btn = btn_create(0,50);
-btn_bindClick(btn,f_onClick);
-
-node_fbo(1);
-
-
-
-
+--[[local btn = btn_create(0,50);
+btn_bindClick(btn,f_onClick);--]]
+--**********************************************************
 
 function f_onkey(data)
 	local key = tonumber(data);
