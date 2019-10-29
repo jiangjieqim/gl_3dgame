@@ -1,5 +1,5 @@
 <res id="0" 
-      initLuaName="init.lua" 
+      initLuaName="init1.lua" 
       winpos="1" 
       setLogColor="1" 
       memory="0" rate="1"  

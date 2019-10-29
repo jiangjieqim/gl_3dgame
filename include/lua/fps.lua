@@ -20,8 +20,9 @@ local function f_render()
 		if(curFbs > maxValue) then
 			maxValue = curFbs;
 		end
-		
-		local s = string.format("fps=%d—”≥Ÿ%d-%d-%d",curFbs,engine_getDelayTime(),maxValue,_time/1000);
+		local bytes ,emptycnt,allbytes= memory_get_info();
+		local s = string.format("fps=%d—”≥Ÿ%d-%d-%d-[%d,%d,(%.3fkb)]",curFbs,engine_getDelayTime(),maxValue,_time/1000,
+					bytes,emptycnt,allbytes / 1024);
         if(_default) then
 		    tf_setText(tf,s);
         else

@@ -8,7 +8,7 @@ local evtlist = {};
     end
 ]]--
 
-function evt_on(obj,id,func,params)	
+function evt_on(obj,id,func,params,once)	
 	
     if(func == nil) then
         func_error("func = nil");
@@ -29,9 +29,16 @@ function evt_on(obj,id,func,params)
 		func = func;
 		obj = obj;
         params = params;
+		once = once
 	}
 	evtlist[evt] = evt;
 end
+
+
+function evt_once(obj,id,func,params)
+	evt_on(obj,id,func,params,true);
+end
+
 
 --移除事件 并且释放事件引用
 function evt_off(obj,id,func)
@@ -85,6 +92,10 @@ function evt_dispatch(...)
 			local node = evtlist[k];
 			if(node and node.id == id) then
 				node.func(data,node.params);
+				if(node.once) then
+					evt_off(obj,id,node.func);--obj,id,func
+					print("移除事件"..id);
+				end
 			end
 		end
 	else
@@ -93,6 +104,10 @@ function evt_dispatch(...)
 			local node = evtlist[k];
 			if(node and node.obj == obj and node.id == id) then
 				node.func(data,node.params);
+				if(node.once) then
+					evt_off(obj,id,node.func);--obj,id,func
+					print("移除事件"..id);
+				end
 			end
 		end
 	end

@@ -820,10 +820,6 @@ function func_xml_to_tb(data)
 end
 
 
-
-
---function func
-
 dofile("..\\include\\lua\\resload.lua")	--资源加载器
 dofile("..\\include\\lua\\ex.lua")	--引擎
 

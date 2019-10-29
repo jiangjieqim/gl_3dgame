@@ -313,9 +313,13 @@ void
 objVBO_pushExportObj(struct Obj_vbo_model* _pvboModel,const char* _objStr)
 {
 	struct ObjVBO* vboPtr = CreateNewNode(_pvboModel);
-	struct ExportOBJ_Data* ptr=obj_getData(_objStr);
-	initVBO(ptr,vboPtr,_pvboModel->dataType,ptr->renderVertCount,ptr->indexLength);
-	obj_delData(ptr);
+	//printf("CreateNewNode\n");
+	{
+		struct ExportOBJ_Data* ptr=obj_getData(_objStr);
+		//printf("obj_getData\n");
+		initVBO(ptr,vboPtr,_pvboModel->dataType,ptr->renderVertCount,ptr->indexLength);
+		obj_delData(ptr);
+	}
 }
 
 /*

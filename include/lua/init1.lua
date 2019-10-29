@@ -20,11 +20,45 @@ evt_on(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_onLoadTex,"myparam");
 load_tex("smallbtn.png");
 --]]
 
-local function f_callback(p)
-	print("加载结束",p);
+--[[
+local function f_callback2(data,obj)
+	print("******************************加载结束2",data,obj);	
+	local spr = sprite_create_9grid(data,100,50,200,50,0,3,3,3,3);
+	engine_addNode(spr);
+end--]]
+
+local arr = {};
+arr[0] = "gundi.png";
+arr[1] = "arrow3.png";
+arr[2] = "checkbox.png";
+arr[3] = "dagou.png";
+local a = 0;
+
+local function f_callback1(data,obj)
+	print("******************************加载结束1",data,obj);
+		
+	--evt_once(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback2,0);
+	--load_tex("smallbtn.png");
+	
+	local spr = sprite_create_9grid(data,150,(a-1)*50,200,50,0,3,3,3,3);
+	engine_addNode(spr);
 end
 
-resload(f_callback,nil,"smallbtn.png","gundi.png");
+
+
+local function f_onClick()
+	evt_once(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback1,0);
+	load_tex(arr[a]);
+	
+	print(arr[a]);
+	a = a + 1;
+end
+local btn = btn_create(0,50);
+btn_bindClick(btn,f_onClick);
+
+
+
+
 
 
 
@@ -60,8 +94,8 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 engine_setBg(0.3,0.3,0.3);
 
---fps(0,0);
---infowin(0,0);
+fps();
+infowin(0,100);
 
 --创建一个输入组件
 local function f_init_input()

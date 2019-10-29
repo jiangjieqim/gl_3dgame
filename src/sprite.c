@@ -15,6 +15,8 @@
 #include "base.h"
 #include "fbotex.h"
 #include "camera.h"
+#include "map.h"
+
 //#define _SET_POS_DEBUG_
 
 //#define _UV_DEBUG_
@@ -306,6 +308,9 @@ load_vbo_6Vertex()
 	objVBO_pushNode(vbo ,(GLfloat*)_lverts,sizeof(_lverts) / sizeof(GLfloat));
 	return vbo;
 }
+
+//static char* _gobj_str = 0;//共享顶点数据
+
 static struct Obj_vbo_model* 
 f_objVBO_load4Vertex(){
 	int verts,_bufferSize;
@@ -313,14 +318,42 @@ f_objVBO_load4Vertex(){
 	const int dataType = OBJ_UV_VERTEX;
 	struct Obj_vbo_model* vbo;
 	char buffer[G_BUFFER_64_SIZE];
-	_objStr=tl_loadfile("\\resource\\obj\\quad.obj",0);
+	//printf("_gobj_str = %0x\n",_gobj_str);
+	struct MapNode * node ;
+	const char* path = "\\resource\\obj\\quad.obj";
+	node = map_get(ex_getIns()->texmap,path);
+	if(node){
+		_objStr = node->value;
+		printf("复用_gobj_str %0x\n",_objStr);
+	}else{
+		_objStr = tl_loadfile(path,0);
+		map_set(ex_getIns()->texmap,path,_objStr);
+	}
+	/*if(_gobj_str == 0){
+		_objStr=tl_loadfile("\\resource\\obj\\quad.obj",0);
+		_gobj_str = _objStr;
+	}
+	else{
+		printf("复用_gobj_str %0x\n",_gobj_str);
+		_objStr = _gobj_str;
+	}*/
+	//printf("f_objVBO_load4Vertex = %0x\n",_objStr);
 
 	tl_newName(buffer,G_BUFFER_64_SIZE,0);
 	vbo = objVBO_create(buffer,dataType);
+	//printf("vbo objVBO_create = %0x\n",vbo);
 
 	obj_parse((char*)_objStr,&_bufferSize,&verts,dataType);
+
+	//printf("obj_parse\n");
+
 	objVBO_pushExportObj(vbo,_objStr);
-	tl_free(_objStr);
+
+	//printf("objVBO_pushExportObj\n");
+
+	//tl_free(_objStr);
+	//printf("last vbo = %0x\n",vbo);
+
 	return vbo;
 }
 
@@ -336,7 +369,7 @@ load_vbo(int ParseType){
 	else if(ParseType == Type_4Vertex){
 		return f_objVBO_load4Vertex();
 	}
-	return NULL;
+	return 0;
 }
 
 /*
@@ -493,7 +526,9 @@ InitType(struct Sprite* pSpr)
 	pSpr->useVBO = 1;
 	if(pSpr->useVBO){
 		pSpr->parseType = Type_4Vertex;//Type_4Vertex,Type_6Vertex;
+		
 		pSpr->vbo=load_vbo(pSpr->parseType);//使用VBO
+		//printf("pSpr->vbo = %0x\n",pSpr->vbo);
 	}else
 		pSpr->vertexs = LoadQuadObj(&pSpr->vertLen);//加载顶点数据(非VBO实现)
 }
@@ -541,6 +576,7 @@ sprite_create(char* _spriteName,
 	struct HeadInfo* base = NULL;
 	//初始化按钮
 	struct Sprite* pSpr =	(struct Sprite*)tl_malloc(sizeof(struct Sprite));//new Button;
+	
 	memset(pSpr,0,sizeof(struct Sprite));
 	
 	pSpr->m_bPressed = 0;
@@ -553,9 +589,10 @@ sprite_create(char* _spriteName,
 	pSpr->hitWidth = width;
 	pSpr->hitHeight = height;
 	pSpr->hitTriangle = tl_malloc(sizeof(float)*SPRITE_TRIANGLE_COUNT);
-
+	//printf("pSpr = %0x\n",pSpr);
 	//设置顶点组织方式
 	InitType(pSpr);
+	//printf("InitType end = %0x\n",pSpr);
 	
 	pSpr->base = base_create(TYPE_SPRITE_FLIE,_spriteName,0,0,0);
 	
@@ -579,6 +616,9 @@ sprite_create(char* _spriteName,
 	//pSpr->pos_z = ex_newPosZ();//此处不设置z的值,在ex_add的时候再设置
 	pSpr->zScale = 1.0;
 	sprite_setUV(pSpr,0,0,1,1);//初始化设置UV
+	
+
+	
 	return pSpr;
 }
 void

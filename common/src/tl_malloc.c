@@ -9,7 +9,7 @@
 #define BUILDING_DLL
 
 //是否使用自定义的内存管理,此方式没有原生的malloc 和 free的性能更加好
-//#define CUST_MEMORY
+#define CUST_MEMORY
 
 #include "tools.h"
 #include "gettime.h"
@@ -78,12 +78,15 @@ f_calculate_mem(){
 	}
 }
 void
-memory_get_info(int* pDisable_bytes,int* pDisable_cnt){
+memory_get_info(int* pDisable_bytes,int* pDisable_cnt,int* pg_total){
 	f_calculate_mem();
 	//log_color(0xffff00,"空置节点总数:%d,总大小:%d字节,内存池总占用:%d字节\n",g_disable_cnt,g_disable_bytes,g_total);
 	if(pDisable_cnt)*pDisable_cnt = g_disable_cnt;
 
 	if(pDisable_bytes)*pDisable_bytes = g_disable_bytes;
+
+	if(pg_total)
+		*pg_total = g_total;
 }
 
 static int
@@ -224,6 +227,9 @@ void* tl_malloc(int size){
 	void* p = memory_new(size);
 #else
 	void*p =malloc(size);
+	if(p == 0){
+		printf("tl_malloc size %d false",size);
+	}
 #endif
 	//m++;
 #ifdef DEBUG

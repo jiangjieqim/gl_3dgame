@@ -107,63 +107,74 @@ fbo_render(void* ptr){
 void* 
 fbo_init(int texW,int texH){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)tl_malloc(sizeof(struct FBOTexNode));
-	
-	GLint mirrorTexWidth  = texW;
-	GLint mirrorTexHeight = texH;
+	//printf("tl_malloc %0x\n",fbo);
+	if(!fbo){
+		printf("fbo 创建失败 %0x\n",fbo);
+		return 0;
+	}else{
 
-	GLuint              fboName;
-	GLuint				mirrorTexture;//镜像贴图
-	GLuint              depthBufferName; //深度缓冲区
-	
-	memset(fbo,0,sizeof(struct FBOTexNode));
+		GLint mirrorTexWidth  = texW;
+		GLint mirrorTexHeight = texH;
 
-	fbo->enable = 1;//默认处于激活状态
+		GLuint              fboName;
+		GLuint				mirrorTexture;//镜像贴图
+		GLuint              depthBufferName; //深度缓冲区
+		
+		memset(fbo,0,sizeof(struct FBOTexNode));
+		
+		fbo->enable = 1;//默认处于激活状态
 
-	//fbo->nodelist = LStack_create();
+		//fbo->nodelist = LStack_create();
 
-	fbo->texw = mirrorTexWidth;
-	fbo->texh = mirrorTexHeight;
+		fbo->texw = mirrorTexWidth;
+		fbo->texh = mirrorTexHeight;
+		//printf("glGenFramebuffers\n");
+		// Create and bind an FBO(创建,绑定帧缓存对象fbo)
+		glGenFramebuffers(1,&fboName);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboName);
 
-	// Create and bind an FBO(创建,绑定帧缓存对象fbo)
-	glGenFramebuffers(1,&fboName);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboName);
+		// Create depth renderbuffer(创建深度缓存)
+		glGenRenderbuffers(1, &depthBufferName);
+		glBindRenderbuffer(GL_RENDERBUFFER, depthBufferName);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, mirrorTexWidth, mirrorTexHeight);
 
-	// Create depth renderbuffer(创建深度缓存)
-	glGenRenderbuffers(1, &depthBufferName);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthBufferName);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, mirrorTexWidth, mirrorTexHeight);
+		// Create the reflection texture(创建映射贴图)
+		glGenTextures(1, &mirrorTexture);
+		glBindTexture(GL_TEXTURE_2D, mirrorTexture);
+		//作者的bug
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	// Create the reflection texture(创建映射贴图)
-	glGenTextures(1, &mirrorTexture);
-	glBindTexture(GL_TEXTURE_2D, mirrorTexture);
-	//作者的bug
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, mirrorTexWidth, mirrorTexHeight, 0, GL_RGBA, GL_FLOAT, 0);
+	  
+		// Attach texture to first color attachment and the depth RBO(将texture绑定到RBO)
+		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mirrorTexture, 0);
+		glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBufferName);//深度缓冲区
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, mirrorTexWidth, mirrorTexHeight, 0, GL_RGBA, GL_FLOAT, 0);
-  
-	// Attach texture to first color attachment and the depth RBO(将texture绑定到RBO)
-	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mirrorTexture, 0);
-	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBufferName);//深度缓冲区
+		//printf("glFramebufferRenderbuffer\n");
+		fbo->depthBufferName = depthBufferName;
+		fbo->fboName = fboName;
+		fbo->tex = mirrorTexture;
+		//printf("****fbo %0x\n",fbo);
 
-	fbo->depthBufferName = depthBufferName;
-	fbo->fboName = fboName;
-	fbo->tex = mirrorTexture;
 
-	// Make sure all went well
-	//gltCheckErrors();
-	
-	//fbo->_2dspr=f_createSprite(mirrorTexture,texW,texH);
-	//fbo->tex = mirrorTexture;
-	// Reset framebuffer binding
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		// Make sure all went well
+		//gltCheckErrors();
+		
+		//fbo->_2dspr=f_createSprite(mirrorTexture,texW,texH);
+		//fbo->tex = mirrorTexture;
+		// Reset framebuffer binding
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
-	//###################################
-	fbo->_3dcam = cam_create();
-	cam_setPerspect(fbo->_3dcam,45.0,fbo->texw / fbo->texh , 0.1, 10000);
-
-	fbo->_2dcam = cam_create();
-	fbo_resize(fbo);
+		//###################################
+		fbo->_3dcam = cam_create();
+		cam_setPerspect(fbo->_3dcam,45.0,fbo->texw / fbo->texh , 0.1, 10000);
+		//printf("****cam_setPerspect %0x\n",fbo->_3dcam);
+		fbo->_2dcam = cam_create();
+		//printf("****_2dcam %0x\n",fbo->_2dcam);
+		fbo_resize(fbo);
+		//printf("****fbo_resize %0x\n",fbo);
+	}
 	return fbo;
 }
 

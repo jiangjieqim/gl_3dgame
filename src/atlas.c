@@ -14,7 +14,7 @@
 #include "sprite.h"
 #include "map.h"
 #include "gettime.h"
-
+#include "evt.h"
 //#define DEBUG_SHOW_TIME
 
 /*
@@ -23,9 +23,11 @@
 	struct AtlasNode* ptrOut:根据name获取到的数据会填充到ptrOut中
 */
 static int
-getNode(struct XMLSList* xml,const char* name,struct AtlasNode* ptrOut)
-{
-	struct XmlNode* node=xml_getrow(xml,"n",name);
+getNode(struct XMLSList* xml,const char* name,struct AtlasNode* ptrOut){
+	struct XmlNode* node=0;
+	//printf("xml=%0x,ptrOut=%0x\n",xml,ptrOut);
+
+	node = xml_getrow(xml,"n",name);
 	if(!node){
 		return 0;//未找到节点
 	}
@@ -91,7 +93,7 @@ atals_load(const char* path,const char* name){
 void
 atals_tex(struct Atals* atals,const char* name,struct AtlasNode* ptrOut)
 {
-	//printf("===============>%s,%s\n",atals->name,name);
+	//printf("===============>atals_tex %0x %0x %0x\n",atals->xml,name,ptrOut);
 	if(!getNode(atals->xml,name,ptrOut))
 	{
 		printf("未找到图集(%s)中的资源(%s)\n",atals->name,name);
@@ -120,14 +122,24 @@ static long time;
 //}
 
 static void
+f_render1(int id,void* p,void* thisObj){
+	//f_callLater(thisObj);
+	struct Atals_params* ap = (struct Atals_params*)thisObj;
+	if(ap->callBack)
+		ap->callBack((void*)ap->tex,ap->parms);
+
+	tl_free(thisObj);//销毁回调参数对象
+}
+
+static void
 f_callLater(void*p){
 	struct Atals_params* ap = (struct Atals_params*)p;
-
-	struct FBOTexNode* fbo = ap->fbo;
+	struct FBOTexNode* fbo;
+	//printf("ap地址=0x%0x\n",ap);
+	fbo = ap->fbo;
 	//fbo->enable=0;          parms);
 	//fbo->onceCallBack(fbo,fbo->parms);
 	//f_onceCallBack(fbo,fbo->parms);
-	
 	ex_ptr_remove(ap->sprite);//从渲染列表中移除
 	map_set(ex_getIns()->texmap,ap->icon,(void*)ap->tex); 
 #ifdef DEBUG_SHOW_TIME
@@ -136,14 +148,21 @@ f_callLater(void*p){
 	ex_remove_fbo(fbo);
 	fbo_dispose(fbo,0);
 	// 
-	printf("f_callLater 构造%s纹理%d结束\n",ap->icon,(void*)ap->tex);
-	if(ap->callBack)
-		ap->callBack((void*)ap->tex,ap->parms);
+	//printf("f_callLater 构造%s纹理%d结束\n",ap->icon,(void*)ap->tex);
 
-	tl_free(p);//销毁回调参数对象
+
+	evt_once(ex_getIns(),EVENT_ENGINE_RENDER_3D,f_render1,ap);
+	
 
 	//ex_lua_evt_dispatch(sprite,EVENT_ENGINE_SPRITE_CLICK,b->name);
 }
+
+static void
+f_render(int id,void* p,void* thisObj){
+	//printf("开始构造之后callback f_render\n");
+	f_callLater(thisObj);
+}
+
 //从图集中创建一块纹理数据,并返回
 GLuint
 atals_new_tex(struct Atals* atals,const char* icon,
@@ -153,20 +172,27 @@ atals_new_tex(struct Atals* atals,const char* icon,
 	struct MapNode * node ;
 	
 	struct Atals_params* ap;
-
+	//printf("开始atals_new_tex  %0x %0x,%s\n",ex_getIns()->texmap,icon,icon);
 	node = map_get(ex_getIns()->texmap,icon);
 	//printf("map_get消耗 : %ld 毫秒\n",get_longTime()-t);
+	//printf("node=%0x\n",node);
 	if(node){
 		//printf("复用键值:%0x\n",node);
+		//printf("====%s,%0x\n",icon,parms);
+		if(callBack){
+			callBack((void*)icon,parms);
+		}
 		return (GLuint)node->value;
 	}
 	else{
 		void* fbo = 0;
+		void* _2dfbo = 0;
 		//void* spr;//用于展示的Sprite,用于观察渲染的对象是否正确
 		//void* material;
 
 		//struct Atals* atals = ex_get_ui_atals();//图集
-		struct AtlasNode p;
+		//struct AtlasNode p;
+		struct AtlasNode* pnode;
 		void* sprite;//用于在frame buffer object中渲染
 
 		char tname[32];
@@ -175,36 +201,58 @@ atals_new_tex(struct Atals* atals,const char* icon,
 			printf("icon的文本长度太大\n");
 			assert(0);
 		}
+		pnode = tl_malloc(sizeof(struct AtlasNode));
 
 #ifdef DEBUG_SHOW_TIME
 		time = get_longTime();
 #endif
 
-		atals_tex(atals,icon,&p);
-		fbo = fbo_init(p.width,p.height);
-
+		//printf("atals_tex===>%0x,%0x,%0x\n",atals,icon,pnode);
+		atals_tex(atals,icon,pnode);
+		
+		//printf("p = %0x %.3f %.3f\n",pnode,pnode->width,pnode->height);
+		fbo = fbo_init(pnode->width,pnode->height);
+		//printf("fbo = %0x  %.3f %.3f\n",fbo,pnode->width,pnode->height);
+		
 		tex = (GLuint)fbo_getTex(fbo);
+		
+		//printf("tex = %0x\n",tex);
 
 		tl_newName(tname,32,0);
 
-		sprite = (void*)sprite_create(tname,0,0,p.width,p.height,0,fbo_get2dCam(fbo));
+		_2dfbo = fbo_get2dCam(fbo);
+		//printf("tname = %s _2dfbo = %d\n",tname,_2dfbo);
+
+		sprite = (void*)sprite_create(tname,0,0,pnode->width,pnode->height,0,_2dfbo);
+
+		tl_free(pnode);
+
+		//printf("sprite = %0x\n",sprite);
 		sprite_bindAtals(sprite,atals);
 		sprite_texName(sprite,icon,0);
 		ex_add(sprite);
+		
+		
 		//ex_add(spr);
 		ex_add_fbo(fbo);
 		ap = (struct Atals_params*)tl_malloc(sizeof(struct Atals_params));
+
+		//printf("ap = %0x sprite = %0x\n",ap,sprite);
+
 		memset(ap,0,sizeof(struct Atals_params));
 		ap->sprite = sprite;
 		ap->tex = tex;
 		ap->fbo = fbo;
+		ap->parms = parms;
 		ap->callBack = callBack;
 		memset(ap->icon,0,_ICON_SIZE_);
 		memcpy(ap->icon,icon,strlen(icon));
 		//printf("icon = %s\n",ap->icon);
 		//fbo_set_once(fbo,f_onceCallBack,ap);
-		//printf("构造tex:%d\n",tex);
-		callLater(f_callLater,ap);
+		//printf("开始构造tex:%d\n",tex);
+		
+		//callLater(f_callLater,ap);
+		evt_once(ex_getIns(),EVENT_ENGINE_RENDER_3D,f_render,ap);
 	}
 	return tex;
 }

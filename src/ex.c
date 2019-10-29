@@ -346,11 +346,14 @@ void ex_add_fbo(void* fbo){
 }
 void ex_remove_fbo(void* fbo){
 	//ex_getIns()->lock = 1;
+	
+	printf("######### 节点删除之前当前的fbo节点数:%d\n",LStack_length(ex_getIns()->fboList));
 
 	if(!LStack_delNode(ex_getIns()->fboList,(int)fbo)){
 		printf("删除fbo节点失败!");
 		return;
 	}
+	printf("######### 当前的fbo节点数:%d\n",LStack_length(ex_getIns()->fboList));
 	//ex_getIns()->lock = 0;
 }
 
@@ -528,10 +531,10 @@ ex_get_info(){
 	//struct ECamera cam = ex->cam;
 
 	void* _cam = ex->_3dcam;
-	int totleByte,nodeCnt;
+	int totleByte,nodeCnt,pg_total;
 	int j=0;
 	int fps = f_get_fps();
-	memory_get_info(&totleByte,&nodeCnt);
+	memory_get_info(&totleByte,&nodeCnt,&pg_total);
 	printf("**********************************************\n");
 	//j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
 	log_color(0xffff00,"fps:%ld,ui_z:%.2f\n",fps,ex->ui_pos_z);
@@ -555,7 +558,7 @@ ex_get_info(){
 	
 	printf("屏幕尺寸:%.1f,%.1f ex->3dcam=%0x ex->2dcam=%0x\n",ex->_screenWidth,ex->_screenHeight,ex->_3dcam,ex->_2dcam);
 	printf("程序已执行:%.3f 秒\n",get_longTime()*0.001);
-	printf("内存池已使用 %d bytes(%.3f kb),闲置节点数 %d \n",totleByte,(float)(totleByte/1024),nodeCnt);
+	printf("内存池已使用 %d bytes(%.3f kb),闲置节点数 %d 总内存池使用 %d bytes\n",totleByte,(float)(totleByte/1024),nodeCnt,pg_total);
 	
 	//printf( "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
 	
@@ -568,6 +571,8 @@ ex_get_info(){
 	//mat4x4_printf("ui_perspectiveMatrix",ex->ui_perspectiveMatrix);
 	//mat4x4_printf("ui_modelViewMatrix",ex->ui_modelViewMatrix);
 	//mat4x4_printf("ortho",ortho);
+	
+	printf("************ 当前的fbo节点数:%d\n",LStack_length(ex_getIns()->fboList));
 }
 
 /*
@@ -598,7 +603,7 @@ f_show_all_info(){
 	//if(tl_memGetStat())
 	{
 		//size = (int)tl_memByteSize();
-		memory_get_info(&size,0);
+		memory_get_info(&size,0,0);
 	}
 
 	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d total %d bytes ",fps,size);
@@ -1244,6 +1249,10 @@ _new(){
 	runLastList();
 	p->index++;
 	//printf("**** %d\n",p->fps);
+	
+	evt_dispatch(ex_getIns(),EVENT_ENGINE_RENDER_3D,0);
+
+//	sleep(1000);
 }
 void ex_render(void)
 {
