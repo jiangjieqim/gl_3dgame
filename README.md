@@ -245,3 +245,27 @@ scrollView_set_data(sv,t);
 	gl_FragColor = vec4(v,v,v,1.0);
 ```
 
+## resload创建tex的lua测试代码
+```
+--点击一次按钮,创建一个tex对象
+local arr = {};
+arr[0] = "gundi.png";
+arr[1] = "arrow3.png";
+arr[2] = "checkbox.png";
+arr[3] = "dagou.png";
+local a = 0;
+local function f_callback1(data,obj)
+	print("******************************加载结束",data,obj);
+	local spr = sprite_create_9grid(data,150,(a-1)*50,200,50,0,3,3,3,3);
+	engine_addNode(spr);
+end
+local function f_onClick()
+	evt_once(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback1,0);
+	load_tex(arr[a]);
+	print(arr[a]);
+	a = a + 1;
+end
+local btn = btn_create(0,50);
+btn_bindClick(btn,f_onClick);
+```
+
