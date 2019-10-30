@@ -30,6 +30,8 @@ end--]]
 
 
 local function f_callback1(data,obj)
+	
+	
 	print("******************************º”‘ÿΩ· ¯",data,obj);
 	--evt_once(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback2,0);
 	--load_tex("smallbtn.png");
@@ -41,8 +43,11 @@ local function f_callback1(data,obj)
 		engine_addNode(spr);
 	end
 end
-evt_once(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback1,0);
-load_tex("gundi.png;arrow3.png;checkbox.png;dagou.png");	
+
+--local res =  load_tex("gundi.png;arrow3.png;checkbox.png;dagou.png");	
+--evt_once(res,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback1,"myparams");
+
+--print(string.format("res = %d",res));
 
 --[[local btn = btn_create(0,50);
 btn_bindClick(btn,f_onClick);--]]

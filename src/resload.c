@@ -11,11 +11,11 @@
 
 struct RES_Load{
 	struct LStackNode* list;
-	void(*endCallBack)(void* param);
+	void(*endCallBack)(void* pResload,void* param);
 	void* param;
 };
 //void resload_tex(const char* tex, void(*endCallBack)(void*,void* param){
-void* resload_create(void(*endCallBack)(void*),void* param){
+void* resload_create(void(*endCallBack)(void*,void*),void* param){
 	struct RES_Load* res = tl_malloc(sizeof(struct RES_Load));
 	res->endCallBack = endCallBack;
 	res->param = param;
@@ -73,7 +73,7 @@ f_render(int id,void* p,void* thisObj){
 		
 	}else{
 		//printf("***********½áÊø!\n");
-		res->endCallBack(res->param);
+		res->endCallBack(res,res->param);
 
 		LStack_delete(res->list);
 		tl_free(res);

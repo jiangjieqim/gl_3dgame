@@ -2331,9 +2331,9 @@ ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
 	lua_State* L =ex_getIns()->mylua;
 	if(L){
 		lua_getglobal(L,"evt_dispatch");//调用lua的eve_dispath方法
-		lua_pushinteger(L,(int)obj);
-		lua_pushinteger(L,evtid);
-		lua_pushstring(L,data);
+		lua_pushinteger(L,(int)obj);//事件派发的对象
+		lua_pushinteger(L,evtid);//事件id号
+		lua_pushstring(L,data);//事件数据
 		lua_pcall(L,3,0,0);
 	}
 	else{

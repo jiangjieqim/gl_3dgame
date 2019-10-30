@@ -26,6 +26,13 @@ local function f_createBtn()
 		--id = 0,	--按钮id
 		
 		data = nil,
+		
+		name,
+		x,
+		y,
+		w,
+		h,
+		url,
 	};
 end
 local function f_delLabel(btn)
@@ -37,6 +44,15 @@ local function f_delLabel(btn)
 end
 
 
+local function f_callback1(data,obj)
+	--local sprite = sprite_create(name,x,y,w,h);	
+	--func_setIcon(sprite,url)
+	print(obj.url);
+	local btn = obj;
+	local sprite = sprite_create_9grid(btn.url,btn.x,btn.y,btn.w,btn.h,0,3,3,3,3);
+	btn.sprite =  sprite;
+	btn_scaleStyle(btn);
+end
 --[[
 	创建一个按钮
 	x,y默认值为0,0
@@ -65,13 +81,14 @@ function btn_create(x,y,w,h,url)
 --	local sprite = sprite_create(name,x,y,w,h,"btnCallBackEvt",nil,"btnMouseDownEvt");
 
 	--print(name);
-	local sprite = sprite_create(name,x,y,w,h);
-	
-	func_setIcon(sprite,url)
-	
-	btn.sprite =  sprite
-	
-	btn_scaleStyle(btn);
+	btn.x = x;
+	btn.y = y;
+	btn.name = name;
+	btn.w = w;
+	btn.h = h;
+	btn.url = url;
+	local res =  load_tex(url);	
+	evt_once(res,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback1,btn);
 	
 	return btn
 end
