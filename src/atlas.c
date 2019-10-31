@@ -141,7 +141,7 @@ f_callLater(void*p){
 	//fbo->onceCallBack(fbo,fbo->parms);
 	//f_onceCallBack(fbo,fbo->parms);
 	ex_ptr_remove(ap->sprite);//从渲染列表中移除
-	map_set(ex_getIns()->texmap,ap->icon,(void*)ap->tex); 
+	map_set(ex_getIns()->mapptr,ap->icon,(void*)ap->tex); 
 #ifdef DEBUG_SHOW_TIME
 	printf("atals_new_tex消耗 : %ld 毫秒\n",get_longTime()-time);
 #endif
@@ -173,11 +173,13 @@ atals_new_tex(struct Atals* atals,const char* icon,
 	
 	struct Atals_params* ap;
 	//printf("开始atals_new_tex  %0x %0x,%s\n",ex_getIns()->texmap,icon,icon);
-	node = map_get(ex_getIns()->texmap,icon);
+	node = map_get(ex_getIns()->mapptr,icon);
 	//printf("map_get消耗 : %ld 毫秒\n",get_longTime()-t);
 	//printf("node=%0x\n",node);
 	if(node){
-		//printf("复用键值:%0x\n",node);
+		
+		//log_color(0,"复用键值:%0x,%s\n",node,icon);
+
 		//printf("====%s,%0x\n",icon,parms);
 		if(callBack){
 			callBack((void*)icon,parms);
@@ -192,22 +194,25 @@ atals_new_tex(struct Atals* atals,const char* icon,
 
 		//struct Atals* atals = ex_get_ui_atals();//图集
 		//struct AtlasNode p;
+		struct AtlasNode _pNode;
+
 		struct AtlasNode* pnode;
 		void* sprite;//用于在frame buffer object中渲染
-
+		
+		
 		char tname[32];
-
+		
 		if(strlen(icon)>_ICON_SIZE_){
 			printf("icon的文本长度太大\n");
 			assert(0);
 		}
-		pnode = tl_malloc(sizeof(struct AtlasNode));
-
+		//pnode = tl_malloc(sizeof(struct AtlasNode));
+		pnode = &_pNode;
 #ifdef DEBUG_SHOW_TIME
 		time = get_longTime();
 #endif
 
-		//printf("atals_tex===>%0x,%0x,%0x\n",atals,icon,pnode);
+		
 		atals_tex(atals,icon,pnode);
 		
 		//printf("p = %0x %.3f %.3f\n",pnode,pnode->width,pnode->height);
@@ -225,14 +230,14 @@ atals_new_tex(struct Atals* atals,const char* icon,
 
 		sprite = (void*)sprite_create(tname,0,0,pnode->width,pnode->height,0,_2dfbo);
 
-		tl_free(pnode);
+		//tl_free(pnode);
 
 		//printf("sprite = %0x\n",sprite);
 		sprite_bindAtals(sprite,atals);
 		sprite_texName(sprite,icon,0);
 		ex_add(sprite);
 		
-		
+		log_color(0,"构建 atals===>%0x,(%s) tex=0x%0x\n",atals,icon,tex);
 		//ex_add(spr);
 		ex_add_fbo(fbo);
 		ap = (struct Atals_params*)tl_malloc(sizeof(struct Atals_params));

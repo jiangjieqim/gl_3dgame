@@ -404,7 +404,7 @@ static void f_deleteGPU_texture(struct GMaterial* mat)
 		if(tex!=0)
 		{
 			//如果要删除纹理缓冲区数据	请这样使用下面方式;
-			void* node = map_getNodeByValue(ex_getIns()->texmap,(void*)tex);
+			void* node = map_getNodeByValue(ex_getIns()->mapptr,(void*)tex);
 			
 			if(node){
 				printf("使用texmap = %0x,tex=%d,不使用glDeleteTextures删除贴图\n",node,tex);

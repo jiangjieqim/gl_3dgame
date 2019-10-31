@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "gettime.h"
 #include "map.h"
 #include "tools.h"
 
@@ -41,6 +42,30 @@ map_getNodeByValue(void* mapptr,void* value){
 		}
 	}
 	return 0;
+}
+
+void
+map_info(void* mapptr){
+	struct Map* map = (struct Map*)mapptr;
+
+	struct LStackNode* s = map->list;
+
+	int cnt = 0;
+	struct MapNode* _node = 0;
+	void* top,*p;
+	top = s;
+	p=top;
+	while((int)LStack_next(p)){
+		int data;
+		p=(void*)LStack_next(p);
+		data = LStack_data(p);
+
+		_node = (struct MapNode*)data;
+		log_color(0,"map key = (%s)\t map value = (0x%0x)\n",_node->key,_node->value);
+		
+		cnt++;
+	}
+	log_color(0,"map node length = %d\n",cnt);
 }
 
 void*

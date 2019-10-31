@@ -170,6 +170,11 @@ function scrollBar_label(sc,label)
     ftext_setpos(sc.tf,x+w,y);
 end
 
+local function f_loadend(n)
+	--print("f_loadend  "..n.url);
+	sprite_set_9grid(n.sprite,n.url,3,3,3,3);
+end
+
 --根据cw,ch的值来确定是横向还是综向滑动
 function 
 scrollBar_new(x,y,cw,ch)
@@ -199,8 +204,13 @@ scrollBar_new(x,y,cw,ch)
 	local name = func_getTableName(sc)--获取btn引用名
 
 	--背景
-	local bg = sprite_create(string.format("%s%s",name,"_bg"),x,y,sc.defaultBg_width,sc.defaultBg_height)
-	func_setIcon(bg,"gundi.png")
+	--local bg = sprite_create(string.format("%s%s",name,"_bg"),x,y,sc.defaultBg_width,sc.defaultBg_height)
+	--func_setIcon(bg,"gundi.png");
+	
+	local bg = sprite_create_typical(string.format("%s%s",name,"_bg"),x,y,sc.defaultBg_width,sc.defaultBg_height);
+    local url = "checkbox.png";
+	engine_addNode(bg);
+	loadtexs(url,f_loadend, { sprite=bg;url=url});
 	
 	evt_on(bg,EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2);
 	

@@ -556,14 +556,14 @@ ex_get_info(){
 	}
 	ex_renderlistCall(f_infoNode);
 	
-	printf("屏幕尺寸:%.1f,%.1f ex->3dcam=%0x ex->2dcam=%0x\n",ex->_screenWidth,ex->_screenHeight,ex->_3dcam,ex->_2dcam);
-	printf("程序已执行:%.3f 秒\n",get_longTime()*0.001);
-	printf("内存池已使用 %d bytes(%.3f kb),闲置节点数 %d 总内存池使用 %.3f kb\n",totleByte,(float)(totleByte/1024),nodeCnt,(float)pg_total/1024);
+	log_color(0,"屏幕尺寸:%.1f,%.1f ex->3dcam=%0x ex->2dcam=%0x\n",ex->_screenWidth,ex->_screenHeight,ex->_3dcam,ex->_2dcam);
+	log_color(0,"程序已执行:%.3f 秒\n",get_longTime()*0.001);
+	log_color(0,"内存池已使用 %d bytes(%.3f kb),闲置节点数 %d 总内存池使用 %.3f kb\n",totleByte,(float)(totleByte/1024),nodeCnt,(float)pg_total/1024);
 	
 	//printf( "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
 	
-	printf( "vbo使用:%d bytes\n",tlgl_getVboSize());
-	printf( "当前(射线检测)状态:%d\n",getv(&(ex_getIns()->flags),EX_FLAGS_RAY));
+	log_color(0, "vbo使用:%d bytes\n",tlgl_getVboSize());
+	log_color(0, "当前(射线检测)状态:%d\n",getv(&(ex_getIns()->flags),EX_FLAGS_RAY));
 
 	//mat4x4_printf("perspectiveMatrix",ex->perspectiveMatrix);
 	//mat4x4_printf("modelViewMatrix",ex->modelViewMatrix);
@@ -572,7 +572,9 @@ ex_get_info(){
 	//mat4x4_printf("ui_modelViewMatrix",ex->ui_modelViewMatrix);
 	//mat4x4_printf("ortho",ortho);
 	
-	printf("************ 当前的fbo节点数:%d\n",LStack_length(ex_getIns()->fboList));
+	log_color(0,"************ 当前的fbo节点数:%d\n",LStack_length(ex_getIns()->fboList));
+	
+	map_info(ex->mapptr);
 }
 
 /*
@@ -1428,7 +1430,7 @@ ex_init(struct EX* p,GLdouble zfar,float sw,float sh){
 	p->_screenWidth = sw;
 	p->_screenHeight= sh;
 
-	p->texmap = map_create();
+	p->mapptr = map_create();
 	p->_3dcam = cam_create();//初始化3d透视camera
 	ex_switch3dCam(p->_3dcam);
 	p->_2dcam = cam_create();//初始化2d正交camera

@@ -217,8 +217,8 @@ struct EX
 
 	void* pro3d;//着色器管理器句柄
 
-	//纹理键值对象
-	void* texmap;
+	//键值对象句柄
+	void* mapptr;
 
 	//int lock;
 	//drawcall调用完成之后的回调列表

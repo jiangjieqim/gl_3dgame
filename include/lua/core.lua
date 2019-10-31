@@ -819,8 +819,7 @@ function func_xml_to_tb(data)
     return tb;
 end
 
-
-dofile("..\\include\\lua\\resload.lua")	--资源加载器
+dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器
 dofile("..\\include\\lua\\ex.lua")	--引擎
 
 dofile("..\\include\\lua\\engine.lua")	--引擎1
@@ -833,11 +832,13 @@ dofile("..\\include\\lua\\fbo.lua")	--fbo
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 
 
-
 dofile("..\\include\\lua\\listbox.lua")
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
-dofile("..\\include\\lua\\UScrollBar.lua")	--滑un动条组件
-dofile("..\\include\\lua\\btn.lua")		--按钮组件
+
+
+dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
+
+dofile("..\\include\\lua\\btn.lua");		--按钮组件
 
 dofile("..\\include\\lua\\crlui.lua")
 dofile("..\\include\\lua\\infowin.lua")	--fps组件

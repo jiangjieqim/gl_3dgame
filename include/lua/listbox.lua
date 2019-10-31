@@ -154,6 +154,19 @@ local function f_click(name)
 
     list:tf_vis_switch();
 end
+
+local function f_callback(self)
+	--print("alert资源加载结束",data,param);
+	--alert1 = alert_create(300,300);
+	--show(alert1,param);
+	local name = func_tableSave(self);
+	local sprite = sprite_create_typical(name,self.x,self.y,self.g_width, self.g_gap);
+	sprite_set_9grid(sprite,"gundi.png",1,1,1,1);
+	engine_addNode(sprite);
+	self.bg = sprite;
+	evt_on(self.bg, EVENT_ENGINE_SPRITE_CLICK, f_click);
+end
+
 function ListBox:init(_x, _y)
     --    print(self);
     _x = _x or 0;
@@ -163,11 +176,17 @@ function ListBox:init(_x, _y)
     self.x = _x;
     self.y = _y;
     self.b_drop = false;
-    local name = func_tableSave(self);
-    self.bg = sprite_create(name, _x, _y, self.g_width, self.g_gap);
-    func_setIcon(self.bg, "gundi.png");
+    --local name = func_tableSave(self);
+	
+	
+	
+	loadtexs("gundi.png",f_callback,self);
 
-    evt_on(self.bg, EVENT_ENGINE_SPRITE_CLICK, f_click);
+	
+    --self.bg = sprite_create(name, _x, _y, self.g_width, self.g_gap);
+    --func_setIcon(self.bg, "gundi.png");
+
+    
 
     --    setv(self.bg,FLAGS_VISIBLE);
 end

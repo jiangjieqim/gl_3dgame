@@ -1,24 +1,19 @@
+
+
+
 dofile("..\\include\\lua\\core.lua");
 
+
+local function init()
+
 --########################################
---node_fbo(1);
+node_fbo();
 
 --btn_create(200,50,60,20,"smallbtn.png");
 --btn_create(200,70,120,40,"smallbtn.png");
 
 
---[[
-local function f_onLoadTex(data,param)
-	--print(data,param);
-	local sv = example_srollView();
-	local spr = sprite_create_9grid("smallbtn.png",100,200,200,50,0,3,3,3,3);
-	engine_addNode(spr);
-	--ptr_remove(spr);
-end
 
-evt_on(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_onLoadTex,"myparam");
-load_tex("smallbtn.png");
---]]
 
 --[[
 local function f_callback2(data,obj)
@@ -33,21 +28,21 @@ local function f_callback1(data,obj)
 	
 	
 	print("******************************加载结束",data,obj);
-	--evt_once(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback2,0);
-	--load_tex("smallbtn.png");
-	local arr = func_split(data,";");
-	local n = 0;
-	for n = 1,#arr do
-		print(arr[n]);
-		local spr = sprite_create_9grid(arr[n],150,n*50,200,50,0,3,3,3,3);
-		engine_addNode(spr);
-	end
+	
+	
+	
+	
+	local spr1 = sprite_create_typical(100,100,100,50,0);
+	sprite_set_9grid(spr1,"smallbtn.png",3,3,3,3);
+	engine_addNode(spr1);
 end
 
---local res =  load_tex("gundi.png;arrow3.png;checkbox.png;dagou.png");	
---evt_once(res,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback1,"myparams");
 
 --print(string.format("res = %d",res));
+
+
+
+
 
 --[[local btn = btn_create(0,50);
 btn_bindClick(btn,f_onClick);--]]
@@ -85,7 +80,7 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 engine_setBg(0.3,0.3,0.3);
 
-fps();
+--fps();
 infowin(0,100);
 
 --创建一个输入组件
@@ -160,3 +155,27 @@ end
 
 
 engine_refreshCam3d();
+
+end
+
+
+init();
+
+--btn_create();
+--btn_create(100);
+
+
+
+--alert("aa");
+--[[
+local function f_loadend(p)
+	
+	print(p);
+end
+local function f_loadend2(p)
+	
+	print(p);
+end
+
+loadtexs("gundi.png;checkbox.png",f_loadend,1);
+loadtexs("arrow3.png;smallbtn.png",f_loadend2,2);--]]

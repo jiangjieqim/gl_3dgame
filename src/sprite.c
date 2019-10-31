@@ -321,13 +321,13 @@ f_objVBO_load4Vertex(){
 	//printf("_gobj_str = %0x\n",_gobj_str);
 	struct MapNode * node ;
 	const char* path = "\\resource\\obj\\quad.obj";
-	node = map_get(ex_getIns()->texmap,path);
+	node = map_get(ex_getIns()->mapptr,path);
 	if(node){
 		_objStr = node->value;
 		//printf("复用_gobj_str %0x\n",_objStr);
 	}else{
 		_objStr = tl_loadfile(path,0);
-		map_set(ex_getIns()->texmap,path,_objStr);
+		map_set(ex_getIns()->mapptr,path,_objStr);
 	}
 	/*if(_gobj_str == 0){
 		_objStr=tl_loadfile("\\resource\\obj\\quad.obj",0);
@@ -738,6 +738,9 @@ getMaterial(struct Sprite* p){
 	//printf("getMaterial %s ,没有设置图集,也没有默认材质\n",head->name);
 	//assert(0);//这里需要对没有设置材质的对象进行修复!!!
 	//sprite_set_default_tex(p);
+	// 
+	
+	//printf("===>%s\n",base_get(p)->name);
 	return 0;
 }
 

@@ -37,12 +37,7 @@ f_render1(int id,void* p,void* thisObj){
 }
 static void
 f_load_textCallBack(void* tex,void* param){
-	struct MapNode* node =(struct MapNode*)map_getNodeByValue(ex_getIns()->texmap,tex);
-	
-	//printf("纹理加载结束 句柄 tex = %d\n",tex);
-	
-	//ex_lua_evt_dispatch(0,EVENT_ENGINE_TEX_LOAD_COMPLETE,(const char*)node->key);//纹理构建完成
-	
+	//struct MapNode* node =(struct MapNode*)map_getNodeByValue(ex_getIns()->texmap,tex);
 	if(param){
 		//struct RES_Load* res = (struct RES_Load*)param;
 		//printf("下一个资源节点index = %d\n\n\n",ex_getIns()->index);

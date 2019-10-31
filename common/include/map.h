@@ -26,4 +26,8 @@ map_dispose(void* map);
 void*
 map_getNodeByValue(void* mapptr,void* value);
 
+//打印输出map的节点列表信息
+void
+map_info(void* mapptr);
+
 #endif

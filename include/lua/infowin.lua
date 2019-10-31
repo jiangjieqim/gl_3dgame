@@ -49,7 +49,7 @@ local function f_select(index)
 	
 	---[[
     if (index == 0) then
-        func_ex_info();
+        --func_ex_info();
 	    alert("窗口测试:引擎信息");
     elseif (index == 1) then
         func_gc();
