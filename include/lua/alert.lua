@@ -62,14 +62,29 @@ local function addFbo(self)
     self.img = spr;
 end
 
+
+
+
 function alert_create(w,h)
+	
+	
+
+	
+	
+	
 	local x = 0;
 	local y = 0;
 	
     local self = create();
 
-	self.bg = sprite_create(nil,x,y,w,h);
-	func_setIcon(self.bg,"gundi.png");
+	--self.bg = sprite_create(nil,x,y,w,h);
+	--func_setIcon(self.bg,"gundi.png");
+	
+	local sprite = sprite_create_typical(name,x,y,w,h);
+	sprite_set_9grid(sprite,"checkbox.png",3,3,3,3);
+	engine_addNode(sprite);
+	self.bg = sprite;
+	
 	--print(self.closeBtn)
 
     --##############################################
@@ -80,7 +95,7 @@ function alert_create(w,h)
 
 
 	local closeSize = self.closeSize;
-	self.closeBtn=btn_create(x,y,closeSize,closeSize);
+	self.closeBtn=btn_create(x,y,closeSize,closeSize,"checkbox.png");
 	--func_sprite_removechild(self.bg,self.closeBtn.sprite);
 	
 	alert_set_drag(self,true);
@@ -103,9 +118,8 @@ function alert_create(w,h)
 
     evt_on(self,EVENT_ENGINE_RESIZE,f_resize,self);	
 	
-	
     return self;
-end;
+end
 
 local function show(self,str)
 	btn_visible(self.closeBtn,true);
@@ -120,10 +134,18 @@ local function show(self,str)
 end
 
 local alert1;
+
+
+local function f_callback(str)
+	alert1 = alert_create(300,300);
+	show(alert1,str);
+end
+
 function alert(str)
 	str = str or "";
 	if(alert1 == nil) then
-		alert1 = alert_create(300,300);
+		loadtexs("checkbox.png",f_callback,str);
+	else
+		show(alert1,str);
 	end
-	show(alert1,str);
 end
