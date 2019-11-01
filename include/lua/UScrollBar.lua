@@ -170,11 +170,6 @@ function scrollBar_label(sc,label)
     ftext_setpos(sc.tf,x+w,y);
 end
 
-local function f_loadend(n)
-	--print("f_loadend  "..n.url);
-	sprite_set_9grid(n.sprite,n.url,3,3,3,3);
-end
-
 --根据cw,ch的值来确定是横向还是综向滑动
 function 
 scrollBar_new(x,y,cw,ch)
@@ -210,13 +205,20 @@ scrollBar_new(x,y,cw,ch)
 	local bg = sprite_create_typical(string.format("%s%s",name,"_bg"),x,y,sc.defaultBg_width,sc.defaultBg_height);
     local url = "checkbox.png";
 	engine_addNode(bg);
-	loadtexs(url,f_loadend, { sprite=bg;url=url});
+	loadtexs(url,func_texloadend, { sprite=bg;url=url});
 	
 	evt_on(bg,EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2);
 	
 	--创建小按钮
-	local btn=sprite_create(name,x,y,barSize,barSize,_dragDirection);
-	func_setIcon(btn,"smallbtn.png")
+	--local btn=sprite_create(name,x,y,barSize,barSize,_dragDirection);
+	--func_setIcon(btn,"smallbtn.png");
+	url = "gundi.png";
+	local btn = sprite_create_typical(name,x,y,barSize,barSize);
+	engine_addNode(btn);
+	loadtexs(url,func_texloadend, { sprite=btn;url=url});
+	sprite_set_direction(btn,_dragDirection);
+	
+	
 	evt_on(btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move);
 	
 
@@ -271,17 +273,21 @@ scrollBar_getInfo(sc)
 	return x,y,bgw,bgh
 end
 
---显示一个文本
-local function 
-f_showTF(x,y,label)
-	local tf = tf_create(128,x,y);
-	tf_setText(tf,label);
-	return tf
-end
+----显示一个文本
+--local function 
+--f_showTF(x,y,label)
+--	local tf = tf_create(128,x,y);
+--	tf_setText(tf,label);
+--	return tf
+--end
 
 --添加一个text
-function 
-scrollBar_add_text(sc,label)
-	local x,y,sw,sh=scrollBar_getInfo(sc)
-	return f_showTF(x + sw,y,label)
-end
+--function 
+--scrollBar_add_text(sc,label)
+--    print("scrollBar_add_text error");
+
+
+
+--	--local x,y,sw,sh=scrollBar_getInfo(sc)
+--	--return f_showTF(x + sw,y,label)
+--end

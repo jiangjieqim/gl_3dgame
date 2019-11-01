@@ -14,6 +14,10 @@ function evt_on(obj,id,func,params,once)
         func_error("func = nil");
     end
 
+	--local str = string.format("绑定事件 evt id = %d , obj = %d",id,obj);
+	local str = string.format("绑定事件 evt id=(%d),obj=(%s)",id,tostring(obj));
+	func_print(str);
+
 	for k, v in pairs(evtlist) do
 		local node = evtlist[k];
 		if(node and node.obj == obj and node.id == id and node.func == func) then
@@ -94,7 +98,7 @@ function evt_dispatch(...)
 				node.func(data,node.params);
 				if(node.once) then
 					evt_off(obj,id,node.func);--obj,id,func
-					print("移除全局事件"..id);
+					func_print("移除全局事件"..id);
 				end
 			end
 		end
@@ -107,7 +111,8 @@ function evt_dispatch(...)
 				if(node.once) then
 					evt_off(obj,id,node.func);--obj,id,func
 					local str = string.format("移除事件 evt id = %d node = %s obj = %d",id,tostring(node),obj);
-					print(str);
+					func_print(str);
+					
 				end
 			end
 		end

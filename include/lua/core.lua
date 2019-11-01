@@ -296,13 +296,14 @@ end
 	获取当前时间 精确到豪秒
 --]]
 function func_getTime()
-	return  dofunc("GetLongTime")
+	return  dofunc("GetLongTime");
 end
 
 --打印一个有颜色的日志到控制台
 function func_print(s,c)
-	c = c or 0xffff00
-	dofunc("LogPut",string.format("%s\n",s),c)
+	--c = c or 0xffff00
+	c = c or 0;
+	dofunc("LogPut",string.format("lua: %s\n",s),c);
 end
 function func_error(msg,func)
 	local s = ''
@@ -817,6 +818,20 @@ function func_xml_to_tb(data)
     tb.y = y;
     tb.z = z;
     return tb;
+end
+
+--加载完tex之后的回调方法
+function func_texloadend(n)
+	sprite_set_9grid(n.sprite,n.url,n.l or 3,n.r or 3,n.t or 3,n.b or 3);
+end
+
+--创建一个支持九宫格的的sprite
+function func_create_grid_sprite(x,y,w,h,url)
+	url = url or "gundi.png";
+	local sprite = sprite_create_typical(name,x,y,w,h);
+	loadtexs(url,func_texloadend, { sprite=sprite;url=url});
+	engine_addNode(sprite);
+	return sprite;
 end
 
 dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器

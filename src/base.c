@@ -710,6 +710,7 @@ base_move(HeadInfo* bp,int ms,
 void
 base_set_cam(void* p,void*cam){
 	struct HeadInfo* base=base_get(p);
+	log_color(0,"base_set_cam %0x,%s,cam = %0x\n",p,base->name,cam);
 	base->cam = cam;
 }
 void*

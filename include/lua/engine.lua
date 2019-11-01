@@ -18,34 +18,6 @@ function engine_init()
 	return e;
 end
 
-
---[[
---当前引擎中的FBO对象引用
-function engine_get_fbo()
-	local e = engine_get();
-	return e.fbo;
-end
-function engine_get_3dcam()
-	return e.cam3d;
-end
---]]
-
-
---[[
---创建一个装载fbotextue的sprite
-local function f_createFboSprite()
-	local size = 256;
-    local spr = sprite_createEmptyTex(size,size);
-    local tex = engine_get().fboTexture;
-    if(tex)then
-        local mat = sprite_get_material(spr);
-        tmat_pushTex(mat,tex);
-    else
-        print("fboTexture is nil");
-    end
-    return spr;
-end
---]]
 --构造一个新的层级
 function engine_newPosZ()
     return get_attr(nil,"newPosZ");
@@ -64,16 +36,12 @@ end
 function engine_addNode(n)
     change_attr(nil,"ex_add",n);
 end
---[[
---获取装载fbo的Sprite
-function engine_get_fbo_sprite()
-    local e = engine_get();
-    if(e.fboSprite==nil) then 
-        e.fboTexture = f_createFboSprite();
-    end
-    return _engine.fboTexture;
+
+
+function ex_addnode(n)
+	change_attr(nil,"ex_add",n);
 end
---]]
+
 --当前的fps
 function engine_get_fps()
 	return get_attr(nil,"fps");
@@ -100,6 +68,10 @@ end
 function engine_bind_default_3dcam(self)
 	local e = engine_get();
 	set_cam(self,e.cam3d);
+end
+--设置默认的摄影机
+function ex_set_cam(self)
+	engine_bind_default_3dcam(self);
 end
 
 _engine=engine_init();

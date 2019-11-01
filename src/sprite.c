@@ -577,6 +577,8 @@ sprite_create(char* _spriteName,
 	//³õÊ¼»¯°´Å¥
 	struct Sprite* pSpr =	(struct Sprite*)tl_malloc(sizeof(struct Sprite));//new Button;
 	
+	//log_color(0,"sprite_create name=(%s)\n",_spriteName);
+
 	memset(pSpr,0,sizeof(struct Sprite));
 	
 	pSpr->m_bPressed = 0;

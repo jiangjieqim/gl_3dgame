@@ -324,18 +324,32 @@ function example_srollView()
 	--*********************************************************************************
 	local itemHeight = 30;
 	local cam;
+	--local cnt = 0;
 	local function f_create()
 		--local sprite = sprite_create(nil,0,0,90,itemHeight,0,1,cam);	func_setIcon(sprite, "smallbtn.png");
 		
-		local sprite = sprite_create_9grid("smallbtn.png",0,0,90,itemHeight,cam,3,3,3,3);	sprite_set_hit_rect(sprite,0,0,90,itemHeight);
+		--local sprite = sprite_create_9grid("smallbtn.png",0,0,90,itemHeight,cam,3,3,3,3);	
+		--sprite_set_hit_rect(sprite,0,0,90,itemHeight);
 		 
-		--print("::::"..sprite);
-		--print(itemHeight);
+		--********************************************************
+		local x = 0;
+		local y = 0;
+		local w = 90;
+		local h = itemHeight;
+		local url = "smallbtn.png";
+		
+		local sprite = sprite_create_typical(nil,x,y,w,h);--string.format("sv%d",cnt)
+		engine_addNode(sprite);
+		loadtexs(url,func_texloadend, { sprite=sprite;url=url});
+		sprite_set_hit_rect(sprite,x,y,w,h);
+		set_cam(sprite,cam);
+
+		--********************************************************
 		
 		local node ={};
 	--	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
 		
-		engine_addNode(sprite);
+		--engine_addNode(sprite);
 
 
 		if(true) then
@@ -390,7 +404,7 @@ function example_srollView()
 	
 	--*************************************************************************************
 	--初始化
-	local sv = scrollView_init(100,itemHeight*4,120,10);
+	local sv = scrollView_init(100,itemHeight*4,300,0);
 	sv.itemFunc = f_create;				--设置itemRende的创建回调
 	sv.itemRefreshFunc = itemRefreshFunc;	--设置刷新视图的回调
 	sv.itemDisposeFunc = f_dispose;		--设置itemRender销毁回调函数

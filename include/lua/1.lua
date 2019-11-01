@@ -18,6 +18,9 @@ f_load(line)
 	
 	--vbo
 	md2=load_VBO_model(name,getPath(name));
+	
+	ex_set_cam(md2);
+	
 	--非vbo要去检查mat是否是支持非vbo的材质
 	--md2 = load_model(name,getPath(name));	
 	setMaterial(md2,func_load("//resource//material//horse.mat"));
@@ -56,13 +59,13 @@ local function
 f_anim_control_ui(m)
 	local animsc = scrollBar_new(0,0)
 	scrollBar_setRange(animsc,0,197)
-	local animTF = scrollBar_add_text(animsc,'anim')
+	--local animTF = scrollBar_add_text(animsc,'anim')
 	scrollBar_bind(animsc,
 		function(sc)
 			local v = string.format('%.0f',sc.value)
 			func_play_anim(m,v,v)
 			--func_setRotateX(func_find_obj(ModelName),sc.value)
-			tf_setText(animTF,'anim '..v)
+			--tf_setText(animTF,'anim '..v)
 		end
 	)
 	local anim = "stand,run,attack,jump,crwalk";
@@ -77,5 +80,5 @@ f_anim_control_ui(m)
 	listbox:add(anim);
 end
 ---------------------------------------------------------------------------
-cam:position(0,0,-90)
+--cam:position(0,0,-90)
 f_anim_control_ui(f_load())

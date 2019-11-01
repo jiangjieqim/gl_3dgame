@@ -37,16 +37,11 @@ local function f_delLabel(btn)
 	end
 end
 
-local function f_loadend(n)
-	--print("f_loadend  "..n.url);
-	sprite_set_9grid(n.sprite,n.url,3,3,3,3);
-end
-
 --[[
 	创建一个按钮
 	x,y默认值为0,0
 --]]
-function btn_create(x,y,w,h,url)
+function btn_create(x,y,w,h,url,use9grid)
 	local btn = f_createBtn()
 	--local w = 100
 	--local h = 100
@@ -61,17 +56,23 @@ function btn_create(x,y,w,h,url)
 	
 	---------------------------------------
 	--默认参数设置
-	if(url == nil ) then url = "smallbtn.png" end
-	if(x == nil) then x = 0	end
-	if(y == nil) then y = 0 	end
-	if(w == nil) then w = 80	end
-	if(h == nil) then h = 18	end
+	
+	url = url or "smallbtn.png";
+	x = x or 0;
+	y = y or 0;
+	w = w or 80;
+	h = h or 18;
 	---------------------------------------
 
 	local sprite = sprite_create_typical(name,x,y,w,h);
 	engine_addNode(sprite);
-	loadtexs(url,f_loadend, { sprite=sprite;url=url});
-    	
+	
+	use9grid = use9grid or 1;--是否使用9宫格
+	if(use9grid == 1) then
+		loadtexs(url,func_texloadend, { sprite=sprite;url=url});
+	else
+		func_setIcon(sprite,url);
+	end
 	
 	btn.sprite =  sprite;
 	btn_scaleStyle(btn);

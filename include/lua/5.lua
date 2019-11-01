@@ -1,6 +1,6 @@
 -- dofile("..\\include\\lua\\core.lua")
 
-func_print('#######################\t材质测试\t#######################', 0xff0000)
+func_print('#######################\t材质测试\t#######################')
 --local _model_ptr;
 
 -- 初始化标示
@@ -114,21 +114,31 @@ local function f_shader_init()
     function(index)
 
         local _l = listbox;
+		
+		--print(g_model);
+		
         if (g_model) then
             func_ptr_remove(g_model)
         end
-
+		
 
         -- local obj =func_loadobj("torus")
         local t = func_get_longTime();
         local obj = func_fixed_load()
-
+		ex_set_cam(obj);
+		
+		
+		
+		--print("&&&",obj);
+		
         -- func_fixed_load()--func_loadmd5('wolf',0.01)--func_loadobj("torus")
 
         if (obj) then
 
-            g_model = obj
-
+            g_model = obj;
+			
+			--ex_addnode(obj);
+			
             --            _model_ptr = g_model
             local arr = func_split(config);
             local s = string.format('index = %d\tlabel = [%s]\t	vbo:%s',
@@ -149,30 +159,7 @@ local function f_shader_init()
     -- 渲染回调
     local _ticket = 0;
     local tt = 0;
---    evt_on(listbox, EVENT_ENGINE_RENDER_3D, function()
 
---        -- print(func_fps())
---        -- drawCall回调
---        if (func_get_longTime() - tt <= 20) then
---            -- 相关毫秒一次
---            return
---        end
-
---        tt = func_get_longTime();
-
---        if (g_model) then
---            -- _temp += PI--func_fps()*PI
---            local fps = ex:fps();
---            local f = func_get_longTime() / fps
---            -- *PI
-
---            _ticket = _ticket +(1000 / fps) * 0.1
---            -- print(string.format("f = %.3f fps = %d ticket = %.3f",f, func_fps(),_ticket))
-
---            func_setRotateX(g_model, _ticket);
---        end
---    end
---    );
 
     return listbox
 end
@@ -182,6 +169,6 @@ end
 -- cam:position(0,0,-2)
 -- load_alpha_model()
 
-cam:position(0, 0, -10)
+cam_setPosition(0, 0, -10);
 local list = f_shader_init();
 -- listbox_select(list,0)--默认选择一个

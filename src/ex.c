@@ -324,7 +324,7 @@ f_addNode(struct EX* p, void* _node){
 		//base_get(_node,&base);
 		b = base_get(_node);
 		if( ex_find_ptr(p,b->name) != NULL){
-			printf("error! 重名的对象_engine :%s\n",b->name);
+			log_color(0xff0000,"error! 重名的对象 :%s\n",b->name);
 			assert(0);
 		}else{
 			if(b->curType == TYPE_SPRITE_FLIE){
@@ -335,6 +335,8 @@ f_addNode(struct EX* p, void* _node){
 	}
 }
 void ex_add(void* ptr){
+	struct HeadInfo* b = base_get(ptr);
+	log_color(0,"*** ex_add 0x%0x name=(%s)\n",ptr,b->name);
 	f_addNode(ex_getIns(),ptr);
 }
 
@@ -514,12 +516,35 @@ void renderUI(GLenum mode){
 //	memcpy(name,targetName,strlen(targetName));
 //}
 
+
+static char* f_getFileName(int type){
+	switch(type){
+		case TYPE_OBJ_FILE:
+			return "obj";
+		case TYPE_MD5_FILE:
+			return "md5";
+		case TYPE_MD2_FILE:
+			return "md2";
+		case TYPE_SPRITE_FLIE:
+			return "sprite";
+		case TYPE_TEXT_FILE:
+			return "text";
+		case TYPE_OBJ_VBO_FILE:
+			return "obj_vbo";
+		case TYPE_FONT_TXT:
+			return "font_txt";		
+	}
+	return "errorType";
+}
+
 //Matrix44f ortho;
 static void 
 f_infoNode(int data){
 	//struct EX*e = ex_getIns();	
 	struct HeadInfo* base = base_get((void*)data);
-	log_color(0xff00ff,"[cam=%0x,curType=%d,(name=%s),visible:%d]\n",base->cam,base->curType,base->name,base_getv((void*)data,FLAGS_VISIBLE));
+
+
+	log_color(0xff00ff,"[cam=%0x,curType=%d(%s),(name=%s),visible:%d]\n",base->cam,base->curType,f_getFileName(base->curType),base->name,base_getv((void*)data,FLAGS_VISIBLE));
 }
 /*
 打印引擎当前信息
@@ -535,7 +560,7 @@ ex_get_info(){
 	int j=0;
 	int fps = f_get_fps();
 	memory_get_info(&totleByte,&nodeCnt,&pg_total);
-	printf("**********************************************\n");
+	log_color(0,"**********************************************\n");
 	//j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
 	log_color(0xffff00,"fps:%ld,ui_z:%.2f\n",fps,ex->ui_pos_z);
 	log_color(0x00ff00,"camera 坐标  :      %.3f %.3f %.3f\n",
@@ -825,8 +850,11 @@ ex_render3dNode(int data)
 	//if(!targetCam && ex->_2dCurCam == ex->_2dcam){
 	if(!targetCam){
 		//没有指定任何cam
-		printf("*************%s type=%d 没有指定任何cam\n",base->name,base->curType);
-		getchar();
+		
+		//log_color(0,"************name = (%s) type=%d 没有指定任何cam\n",base->name,base->curType);
+		
+		
+		//getchar();
 		return;
 	} 
 	
@@ -2388,35 +2416,7 @@ void ex_ptr_remove(void* ptr){
 		assert(0);
 		return;
 	}
-	//int curType = b->curType;
-/*
-	if(curType==TYPE_SPRITE_FLIE)
-	{
-		sprite_dipose((struct Sprite*)ptr);
-	}
-	else if(curType==TYPE_TEXT_FILE)
-	{
-		tf_dispose((struct TextField*)ptr);
-	}
-	else if(b->curType ==  TYPE_OBJ_VBO_FILE)
-	{
-		//md2,obj的vbo模式
-		//objVBO_dispose((struct Obj_vbo_model*)ptr);
-		node_dispose((struct Node*)ptr);
-	}
-	else if(b->curType == TYPE_MD2_FILE)
-	{
-		md2_dispose((struct MD2_Object*)ptr);
-	}
-	else if(b->curType == TYPE_OBJ_FILE)
-	{
-		ent_dispose((struct Ent3D*)ptr);
-	}
-	else if(b->curType == TYPE_MD5_FILE)
-	{
-		md5Model_dispose((struct MD5*)ptr);
-	}
-*/
+	log_color(0,"ex_ptr_remove curType = %d(%s) name = %s\n",b->curType,f_getFileName(b->curType),b->name);
 	switch(b->curType){
 		case TYPE_SPRITE_FLIE:
 			sprite_dipose((struct Sprite*)ptr);

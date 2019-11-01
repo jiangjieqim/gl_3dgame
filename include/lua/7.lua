@@ -57,7 +57,7 @@ local function f_animscHandle(sc)
 	end
 	
     if(select)then
-    --    select:ry(v);
+		select:ry(v);
     end
 
  --  cam_setRotateX(v);
