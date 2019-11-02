@@ -1,4 +1,4 @@
-local Camera = {}
+--[[local Camera = {}
 
 function Camera:position(x,y,z)
 	change_attr(nil,"cam_xyz",string.format("%.3f,%.3f,%.3f",x,y,z))
@@ -28,7 +28,7 @@ function Camera:new()
     setmetatable(cam, self);
 	--print("***************cam");
 	return cam;
-end
+end--]]
 --cam = Camera:new();
 
 

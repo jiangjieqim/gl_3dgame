@@ -94,9 +94,9 @@ end
 	为按钮绑定一个点击回调
 	clickEvt(point)		point 为btn引用
 --]]
-function btn_bindClick(btn,clickEvt)
+function btn_bindClick(btn,clickEvt,param)
 	btn.clickEvtCallBack = clickEvt;
-	evt_on(btn.sprite,EVENT_ENGINE_SPRITE_CLICK,clickEvt);
+	evt_on(btn.sprite,EVENT_ENGINE_SPRITE_CLICK,clickEvt,param);
 end
 
 --[[
@@ -123,7 +123,7 @@ function btn_dispose(btn)
 	btn.sprite = nil
 	
 	btn.mouseDownCallBack = nil
-	--btn.clickEvtCallBack = nil
+	
 	f_remove_evt(btn);
 
 

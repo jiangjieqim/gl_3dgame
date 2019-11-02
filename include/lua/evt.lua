@@ -15,7 +15,7 @@ function evt_on(obj,id,func,params,once)
     end
 
 	--local str = string.format("绑定事件 evt id = %d , obj = %d",id,obj);
-	local str = string.format("绑定事件 evt id=(%d),obj=(%s)",id,tostring(obj));
+	local str = string.format("绑定事件 evt id=(%d),obj=(%s) params=(%s)",id,tostring(obj),tostring(params));
 	func_print(str);
 
 	for k, v in pairs(evtlist) do
@@ -108,11 +108,12 @@ function evt_dispatch(...)
 			local node = evtlist[k];
 			if(node and node.obj == obj--[[  接受事件的对象检测判断--]] and node.id == id) then
 				node.func(data,node.params);
+				
+				local str = string.format("evt_dispatch 事件 evt id = %d node = (%s) obj = (%d)==>node.func(data,node.params)  data=(%s) node.params=(%s)",id,tostring(node),obj,tostring(data),tostring(node.params));
+				func_print(str);
+				
 				if(node.once) then
 					evt_off(obj,id,node.func);--obj,id,func
-					local str = string.format("移除事件 evt id = %d node = %s obj = %d",id,tostring(node),obj);
-					func_print(str);
-					
 				end
 			end
 		end

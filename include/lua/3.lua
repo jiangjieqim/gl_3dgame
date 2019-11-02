@@ -1,25 +1,15 @@
 --模型控制器
 
---dofile("..\\include\\lua\\core.lua")
-local crl = CrlUI:new(0,50);
+--local crl = CrlUI:new(0,50);
 
 local modelList={}
 
---local function f_selectPick(p)
---	for key, value in pairs(modelList) do      
---		if( tonumber(value) == p) then
---			func_set_box_color(value,1,1,0)			
---		else
---			func_set_box_color(value,1,0,0)
---		end
---	end 
---end
+
 
 function f_pick(p)
-	--moduleUI_bind(p)
-	--f_selectPick(p)
-    --print(p);
-    crl:bind(p);
+	if(crl) then
+		crl:bind(p);
+	end
 end
 
 --添加到列表,并且选择其模型碰撞体
@@ -64,7 +54,7 @@ local function loadMD5(name)
 	--func_set_x(model,x)
 	
 	f_init(model)
-	
+	ex_set_cam(model);
 	return model
 end
 --local model = func_loadobj()--加载一个obj模型
@@ -90,7 +80,7 @@ local function loadObj(model)
 
 	func_set_pick(obj,"f_pick")
 	--]]
-	
+	ex_set_cam(obj);
 	return obj
 end
 
@@ -110,6 +100,7 @@ local function loadMd2(x)
 	func_bind_collide(obj,"\\resource\\md2\\horse.md2")
 	f_add_model(obj)
 	func_set_pick(obj,"f_pick")
+	ex_set_cam(obj)
 	return obj
 end 
 
@@ -123,11 +114,11 @@ cam_setPosition(0,0,-5);
 
 
 
-
----[[
+--[[
 local _md5 = loadMD5('wolf')
 func_set_scale(_md5,0.02)
 func_set_rayRadius(_md5,30)--设置静态碰撞检测盒
+
 
 local obj1 = loadObj()
 func_set_x(obj1,1)
@@ -137,6 +128,6 @@ func_set_scale(_md2,1/50)
 func_set_x(_md2,2)
 --]]
 
-
-
-crl:bind(_md2);
+if(cri) then
+	crl:bind(_md2);
+end

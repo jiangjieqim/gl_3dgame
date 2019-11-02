@@ -76,7 +76,7 @@ end
 --uiinit();
 --dofile("..\\include\\lua\\3.lua");
 
-
+alert("aa");
 
 --example_unit();
 

@@ -63,7 +63,10 @@ local function addFbo(self)
 end
 
 
-
+local function f_closeCallBack(data,param)
+	
+	f_hide(param);
+end
 
 function alert_create(w,h)
 	
@@ -95,11 +98,7 @@ function alert_create(w,h)
 	
 	alert_set_drag(self,true);
 		
-	btn_bindClick(self.closeBtn,
-			function(b)
-				f_hide(self);
-			end
-	);
+	btn_bindClick(self.closeBtn,f_closeCallBack,self);
 	
 	self.label=ftext_create(w-closeSize,w-closeSize);--tf_create(128,x,y,1.0,0.0,0.0);
     ftext_set_buffer(self.label,256);
