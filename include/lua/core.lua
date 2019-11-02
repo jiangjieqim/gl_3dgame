@@ -46,6 +46,7 @@ EVENT_ENGINE_SPRITE_CLICK = 104
 EVENT_ENGINE_SPRITE_CLICK_DOWN = 105
 EVENT_ENGINE_SPRITE_CLICK_MOVE = 106
 EVENT_ENGINE_TEX_LOAD_COMPLETE = 108
+EVENT_ENGINE_COMPLETE		   = 109	--完成事件
 --键值枚举
  KEY_ESC = 27
  KEY_1 = 49
@@ -75,8 +76,18 @@ getDddress(value)
 	local len = string.len("table:  ")
 	local a = string.len(tostring(value))
 	local v = string.sub(tostring(value),len,a)
-	local s = tonumber('0x'..v)
-	return s
+	local s = tonumber('0x'..v);
+	return s;
+end
+
+--将"table: ff"转化为number
+function func_get_address(value)
+	return getDddress(value);
+end
+--是否是table字符串
+function func_is_table_str(value)
+	local s = tostring(value);
+	return string.find(s,"table: ") ~= nil;
 end
 
 --获取一个默认的贴图
@@ -301,8 +312,12 @@ end
 
 --打印一个有颜色的日志到控制台
 function func_print(s,c)
+	
+	
 	c = c or 0xffff00
 	--c = c or 0;
+	
+	--向控制台输出有颜色的文本日志
 	dofunc("LogPut",string.format("lua: %s\n",s),c);
 end
 function func_error(msg,func)
@@ -842,14 +857,10 @@ dofile("..\\include\\lua\\engine.lua")	--引擎1
 dofile("..\\include\\lua\\cam.lua")	--cam
 dofile("..\\include\\lua\\fbo.lua")	--fbo
 
-
-
 dofile("..\\include\\lua\\fps.lua")	--fps组件
-
 
 --dofile("..\\include\\lua\\listbox.lua")
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
-
 
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
 

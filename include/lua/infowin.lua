@@ -50,7 +50,7 @@ local function f_select(list)
 --        ex:switch_spriteline()
 --        print("切换为Sprite线框状态:" .. ex:get_spriteline());
     elseif (index == 2) then
-        fps(100,0);
+        fps();
     elseif (index == 3) then
         _stat = not _stat;
 --        print(_stat);
@@ -72,20 +72,7 @@ end
 
 
 function infowin(x, y)
-	local list;
-	--[[
-    if (list == nil) then
-        list = ListBox:new(x or 0, y or 0, f_select);
-		list:isSetTitle(true);
-        list:add("引擎信息,gc,fps,背景颜色,创建mesh,重置cam");
-        list:set_toplabel("infowin");
-		
-		
-        -- list:add("线框ui");--切换线框渲染sprite
-    end
-	--]]
-	
-	list = listbox_new(x or 0, y or 0);
+	local list  = listbox_new(x or 0, y or 0);
 	listbox_bind(list,f_select);
 	
 	

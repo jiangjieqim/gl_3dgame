@@ -1,12 +1,12 @@
-local function create()
+function alert_init()
     local new_sharp = { 
-	    bg;
-	    closeBtn;
+	    bg;--sprite
+	    closeBtn;--btn
 	    label;
 	    isDrag;--是否可以拖拽
         closeSize = 30;
 
-        img;
+        --img;
     };
     return new_sharp;
 end
@@ -38,9 +38,9 @@ end;
 
 local function f_hide(self)
 	resetv(self.bg,FLAGS_VISIBLE);
-	if(self.img) then
+	--[[if(self.img) then
 		resetv(self.img,FLAGS_VISIBLE);
-	end
+	end--]]
     ftext_vis(self.label,0);
 	btn_visible(self.closeBtn,false);
 end
@@ -54,33 +54,34 @@ function alert_set_drag(self,value)
 	end
 end
 
-local function addFbo(self)
+--[[local function addFbo(self)
 	local spr = engine_get_fbo_sprite();
     node_fbo();
     func_addchild(self.bg,spr);
     engine_addNode(spr);
     self.img = spr;
-end
+end--]]
 
 
 local function f_closeCallBack(data,param)
-	
 	f_hide(param);
 end
 
-function alert_create(w,h)
+local function f_alert_create(self,w,h)
 	
 	local x = 0;
 	local y = 0;
 	
-    local self = create();
+    --local self = create();
 
 	--self.bg = sprite_create(nil,x,y,w,h);
 	--func_setIcon(self.bg,"gundi.png");
 	
-	local sprite = sprite_create_typical(name,x,y,w,h);
+--[[	local sprite = sprite_create_typical(name,x,y,w,h);
 	sprite_set_9grid(sprite,"checkbox.png",3,3,3,3);
-	engine_addNode(sprite);
+	engine_addNode(sprite);--]]
+	
+	local sprite=func_create_grid_sprite(x,y,w,h,"checkbox.png",name);
 	self.bg = sprite;
 	
 	--print(self.closeBtn)
@@ -114,32 +115,39 @@ function alert_create(w,h)
 	
     return self;
 end
+--销毁视图
+function alert_dispose(self)
+	ptr_remove(self.bg);
+	fext_dispose(self.label);
+	btn_dispose(self.closeBtn);
+end
 
 local function show(self,str)
 	btn_visible(self.closeBtn,true);
 	setv(self.bg,FLAGS_VISIBLE);
-	if(self.img) then
+--[[	if(self.img) then
 		setv(self.img,FLAGS_VISIBLE);
-	end
+	end--]]
     ftext_vis(self.label,1);
 
 	ftext_reset(self.label,str);
 	f_resize(nil,self);
 end
 
-local alert1;
-
-
-local function f_callback(str)
-	alert1 = alert_create(300,150);
-	show(alert1,str);
+local function f_tex_complete(n)
+	local str = n.str or "";
+	local self = n.self;
+	f_alert_create(self,300,150);
+	show(self,str);
+	--[[if(n.callBack) then
+		n.callBack(alert1);
+	end--]]
+	
+	local obj = func_get_address(self);
+	evt_dispatch(obj,EVENT_ENGINE_COMPLETE,obj);
 end
 
-function alert(str)
-	str = str or "";
-	if(alert1 == nil) then
-		loadtexs("checkbox.png",f_callback,str);
-	else
-		show(alert1,str);
-	end
+function alert_start(self,str)	
+	local url = "checkbox.png";
+	loadtexs(url,f_tex_complete, {str=str,self=self});
 end

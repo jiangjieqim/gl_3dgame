@@ -61,7 +61,7 @@
 #define EVENT_ENGINE_SPRITE_CLICK_MOVE	   106//click move
 #define EVENT_ENGINE_SPRITE_FOCUS_CHANGE   107//焦点发生变化
 #define EVENT_ENGINE_TEX_LOAD_COMPLETE	   108//贴图加载完成了
-
+#define EVENT_ENGINE_COMPLETE			   109//完成事件,此事件是可以共享的
 
 
 //#define EVENT_ENGINE_SPRITE_FOCUS_OUT   108	//2d焦点离开的时候触发

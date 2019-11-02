@@ -10,6 +10,12 @@ local evtlist = {};
 
 function evt_on(obj,id,func,params,once)	
 	
+	if(func_is_table_str(obj)) then
+		func_print("evt_on==>"..tostring(obj).." 转化为number");
+		obj = func_get_address(obj);
+	end
+	
+	
     if(func == nil) then
         func_error("func = nil");
     end
@@ -23,6 +29,8 @@ function evt_on(obj,id,func,params,once)
 		if(node and node.obj == obj and node.id == id and node.func == func) then
 			--node.func(data);
 			--重复的事件
+			
+			func_print("重复的事件");
 			return;
 		end
 	end	
@@ -37,7 +45,6 @@ function evt_on(obj,id,func,params,once)
 	}
 	evtlist[evt] = evt;
 end
-
 
 function evt_once(obj,id,func,params)
 	evt_on(obj,id,func,params,true);
@@ -107,10 +114,13 @@ function evt_dispatch(...)
 		for k, v in pairs(evtlist) do
 			local node = evtlist[k];
 			if(node and node.obj == obj--[[  接受事件的对象检测判断--]] and node.id == id) then
+				
+				local str = string.format("evt_dispatch 事件 evt id = %d\n    node = (%s) obj = (%d)\n    ==>node.func(data,node.params)  data=(%s) node.params=(%s)",id,tostring(node),obj,tostring(data),tostring(node.params));
+				func_print(str);
+				
 				node.func(data,node.params);
 				
-				local str = string.format("evt_dispatch 事件 evt id = %d node = (%s) obj = (%d)==>node.func(data,node.params)  data=(%s) node.params=(%s)",id,tostring(node),obj,tostring(data),tostring(node.params));
-				func_print(str);
+				
 				
 				if(node.once) then
 					evt_off(obj,id,node.func);--obj,id,func

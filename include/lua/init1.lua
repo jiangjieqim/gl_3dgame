@@ -56,7 +56,7 @@ local function uiinit()
 	fps();
 	btn_create(150,0,100,45);
 	example_input(0,80);
-	infowin(0,100);
+	infowin(150,50);
 	example_srollView();
 	alert("aa");
 	dofile("..\\include\\lua\\1.lua");--md2动作控制
@@ -76,7 +76,7 @@ end
 --uiinit();
 --dofile("..\\include\\lua\\3.lua");
 
-alert("aa");
+--alert("aa");
 
 --example_unit();
 
@@ -112,8 +112,40 @@ engine_refreshCam3d();
 --btn_create(100);
 
 
+--[[local function loadCallBack(a)
+	print("***************************************",a);
+	alert_dispose(a);
+end
 
---alert("aa");
+alert("aa",loadCallBack);--]]
+--function evt_once(obj,id,func,params)
+	
+local function loadCallBack(obj,param)
+	print("alert初始化完成",obj,param);
+	
+	
+	--alert_dispose(param);
+end
+local a = alert_init();
+evt_once(a,EVENT_ENGINE_COMPLETE,loadCallBack,a);
+alert_start(a,"aaa");
+
+
+
+--[[local key = func_get_address(a);
+evt_once(a,EVENT_ENGINE_COMPLETE,loadCallBack,"h");
+evt_dispatch(key,EVENT_ENGINE_COMPLETE,key);--]]
+
+
+
+
+--print(func_is_table_str(1212));
+
+
+
+--alert_dispose(a);
+
+
 --[[
 local function f_loadend(p)
 	
