@@ -30,12 +30,15 @@ function input_clear(ptr)
 end
 
 --创建一个输入组件
-function example_input()
+function example_input(x,y)
 	--作为输入框的背景
 	--local sprite =sprite_create("bg11",100,50,128,14);
 	--func_setIcon(sprite,"gundi.png");
 	
-	local sprite = func_create_grid_sprite(100,50,128,14);
+	x = x or 0;
+	y = y or 0;
+	
+	local sprite = func_create_grid_sprite(x,y,128,14);
 	
 	
 	
@@ -47,7 +50,7 @@ function example_input()
 	--setv(sprite1,FLAGS_DRAW_PLOYGON_LINE);
 
 	local _in = input_create();
-	input_set_pos(_in,100,50);
+	input_set_pos(_in,x,y);
 	local function f_onkey(data)
 		local key = tonumber(data);
 		--print('my key = '..key);

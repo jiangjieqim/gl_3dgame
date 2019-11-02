@@ -24,6 +24,7 @@ local function f_create()
 		e = 1.0,
 		
 		callBack = nil,
+		param = nil,
 		
 		--进度值
 		value = nil,
@@ -253,8 +254,15 @@ end
 
 --绑定一个回调函数
 function 
-scrollBar_bind(sc,call)
-	sc.callBack = call
+scrollBar_bind(sc,call,param)
+	sc.callBack = call;
+	sc.param = param;
+end
+
+--获取一个参数
+function 
+scrollBar_get_param(sc)
+	return sc.param;
 end
 
 --设置区间
@@ -272,22 +280,3 @@ scrollBar_getInfo(sc)
 	local bgw,bgh = get_attr(bg,"spriteSize")
 	return x,y,bgw,bgh
 end
-
-----显示一个文本
---local function 
---f_showTF(x,y,label)
---	local tf = tf_create(128,x,y);
---	tf_setText(tf,label);
---	return tf
---end
-
---添加一个text
---function 
---scrollBar_add_text(sc,label)
---    print("scrollBar_add_text error");
-
-
-
---	--local x,y,sw,sh=scrollBar_getInfo(sc)
---	--return f_showTF(x + sw,y,label)
---end

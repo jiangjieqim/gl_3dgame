@@ -1,7 +1,7 @@
 --md2动作控制器管理
 --dofile("..\\include\\lua\\core.lua")
 
-print('md2动作控制')
+func_print('md2动作控制')
 
 local function getPath(name)
 	return "\\resource\\md2\\"..name..".md2"
@@ -54,31 +54,37 @@ f_load(line)
 	return md2;
 end
 
+local function f_listSelect(list)
+	local label = listbox_get_label(list);
+	local m = listbox_get_param(list);
+	func_set_anim(m,label);
+end
+
+local function f_bar(sc)
+	local v = string.format('%.0f',sc.value);
+	local m = scrollBar_get_param(sc);
+	func_play_anim(m,v,v);
+	--func_setRotateX(func_find_obj(ModelName),sc.value)
+	--tf_setText(animTF,'anim '..v)
+end
+
 --动作控制器
 local function 
-f_anim_control_ui(m)
-	local animsc = scrollBar_new(0,0)
-	scrollBar_setRange(animsc,0,197)
+f_anim_control_ui(m,x,y)
+	local animsc = scrollBar_new(x,y);
+	scrollBar_setRange(animsc,0,197);
 	--local animTF = scrollBar_add_text(animsc,'anim')
-	scrollBar_bind(animsc,
-		function(sc)
-			local v = string.format('%.0f',sc.value)
-			func_play_anim(m,v,v)
-			--func_setRotateX(func_find_obj(ModelName),sc.value)
-			--tf_setText(animTF,'anim '..v)
-		end
-	)
-	local anim = "stand,run,attack,jump,crwalk";
-	local listbox =  ListBox:new(0,15,
-        function (index)
-            local arr = func_split(anim);
-            local label = arr[index+1];
-            func_set_anim(m,label);
-            --print(anim,arr);
-        end    
-    )
-	listbox:add(anim);
+	scrollBar_bind(animsc,f_bar,m);
+	
+	local list = listbox_new(x,y+15);
+	listbox_add(list,"stand");
+	listbox_add(list,"run");
+	listbox_add(list,"attack");
+	listbox_add(list,"jump");
+	listbox_add(list,"crwalk");
+	listbox_set_title(list,"md2动作控制");
+	listbox_bind(list,f_listSelect,m);
 end
 ---------------------------------------------------------------------------
---cam:position(0,0,-90)
-f_anim_control_ui(f_load())
+cam_setPosition(0,0,-90);
+f_anim_control_ui(f_load(),0,120);

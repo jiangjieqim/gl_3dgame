@@ -36,17 +36,10 @@ end
 
 --------------------------------------------------------------------
 -- 信息调试面板
-local list;
-local _stat;
-local function f_select(index)
-    -- local label = listbox_get_label(_l)
-    -- func_set_anim(m,label)
-    -- string.format('%s vbo=%s',label,tostring(func_is_vbo(obj)) )
-    -- listbox_set_label(_l,label)
-    -- listbox_set_label(_l,label)
 
-	--print(index);
-	
+local _stat;
+local function f_select(list)
+	local index =listbox_get_index(list);
 	---[[
     if (index == 0) then
         --func_ex_info();
@@ -76,16 +69,33 @@ local function f_select(index)
 	--]]
 end
 
+
+
 function infowin(x, y)
+	local list;
+	--[[
     if (list == nil) then
         list = ListBox:new(x or 0, y or 0, f_select);
 		list:isSetTitle(true);
         list:add("引擎信息,gc,fps,背景颜色,创建mesh,重置cam");
-        
+        list:set_toplabel("infowin");
+		
+		
         -- list:add("线框ui");--切换线框渲染sprite
     end
-
-    -- listbox_bind(list,f_select)
-    -- listbox_select(list,0)--默认选0号索引
-    --    listbox_refresh(list);
+	--]]
+	
+	list = listbox_new(x or 0, y or 0);
+	listbox_bind(list,f_select);
+	
+	
+	listbox_add(list,"引擎信息");
+	listbox_add(list,"gc");
+	listbox_add(list,"fps");
+	listbox_add(list,"背景颜色");
+	listbox_add(list,"创建mesh");
+	listbox_add(list,"重置cam");
+	listbox_set_title(list,"infowin");
+	--listbox_del(list);
+	return list;
 end

@@ -67,11 +67,6 @@ end
 
 function alert_create(w,h)
 	
-	
-
-	
-	
-	
 	local x = 0;
 	local y = 0;
 	
@@ -137,7 +132,7 @@ local alert1;
 
 
 local function f_callback(str)
-	alert1 = alert_create(300,300);
+	alert1 = alert_create(300,150);
 	show(alert1,str);
 end
 

@@ -34,6 +34,8 @@ function ListBox:new(x, y, callBack)
         g_width,-- (一行的宽度)
 		
 		isSetTitle=nil,	--是否自动设置标题栏文本
+		
+		toplabel,--顶部文本对象
     }
     setmetatable(s, ListBox);
     s.callBack = callBack;
@@ -49,6 +51,17 @@ local function f_get_index(list)
     -- return tonumber( string.format('%#.0f',f)) - 1
     return math.floor(y / list.g_gap) -1;
 end
+
+function ListBox:set_toplabel(str)
+	if(self.toplabel==nil) then
+		 local tf = ftext_create(128,128);
+        -- tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
+        ftext_setpos(tf, self.x + self.g_width, self.y);
+		self.toplabel = tf;
+	end
+	ftext_reset(self.toplabel, str);
+end
+
 
 --设置文本
 local function f_set_label(list, label)
@@ -223,9 +236,14 @@ function ListBox:add(str)
 end
 function ListBox:dispose()
     local list = self;
-    for key, value in pairs(list.tflist) do
-        fext_dispose(value);
+    for key, value in pairs(list.tflist) do        
+		fext_dispose(value);
     end
+	
+	if(self.toplabel) then
+		fext_dispose(self.toplabel);
+	end
+	
     list.tflist = { };
     if(self.tf) then
         fext_dispose(self.tf);

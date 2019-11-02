@@ -16,12 +16,15 @@ local listBox=
 		bg=nil,--spirte
 		
 		callBack = nil,--选择回调
+		param;
 		
 		x=0,y=0,
 		
 		index = 0,--选择的索引0开始,默认初始化为0
 		
 		tf,	--文本
+		
+		titletf,--列表标题文本
 	};
 	return listBox
 end
@@ -108,6 +111,10 @@ end
 function listbox_get_index(list)
 	return list.index
 end
+
+function listbox_get_param(list)
+	return list.param;
+end
 local function f_click(name)
 	--f_listBoxCallBack(b);
 	local list = func_getTable(name);
@@ -128,11 +135,14 @@ listbox_new(_x,_y)
 	local name = func_getTableName(list)--获取引用名
 	
 	--list.bg = sprite_create(name,_x,_y,g_width,g_gap,"f_listBoxCallBack","","");
-	list.bg = sprite_create(name,_x,_y,g_width,g_gap);
+	--list.bg = sprite_create(name,_x,_y,g_width,g_gap);
+	--func_setIcon(list.bg,"gundi.png")
+	
+	list.bg = func_create_grid_sprite(_x,_y,g_width,g_gap,"gundi.png",name);
 	
 	evt_on(list.bg,EVENT_ENGINE_SPRITE_CLICK,f_click);
 
-	func_setIcon(list.bg,"gundi.png")
+	
 
 --	list.tf =ftext_create(); --tf_create(128,list.x,list.y,r,g,b);
 --  ftext_setpos(list.tf,list.x,list.y);
@@ -142,8 +152,9 @@ end
 
 --绑定一个回调函数
 function 
-listbox_bind(list,callBack)
-	list.callBack = callBack
+listbox_bind(list,callBack,param)
+	list.callBack = callBack;
+	list.param = param;
 end
 
 --获取选择的文本字符
@@ -168,6 +179,15 @@ listbox_add(list,str)
     ftext_reset(tf,str);
 end
 
+--为列表选项卡设置一个标题
+function listbox_set_title(self,str)
+	if(self.titletf == nil) then
+		local tf = ftext_create(128,128);
+		ftext_setpos(tf, self.x + g_width, self.y);
+		self.titletf = tf;
+	end
+	ftext_reset(self.titletf, str);
+end
 
 
 --销毁listbox组件
@@ -181,7 +201,15 @@ listbox_del(list)
 		fext_dispose(value)
 	end
 	--ptr_remove(list.tf)
-    fext_dispose(list.tf);
+	
+	if(list.tf) then 
+		fext_dispose(list.tf); 
+	end
+	
+	if(list.titletf)then
+		fext_dispose(list.titletf); 
+	end
+	
 	func_clearTableItem(list.tflist)
 	func_clearTableItem(list)
 end

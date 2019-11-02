@@ -1,15 +1,10 @@
 dofile("..\\include\\lua\\core.lua");
 
-
-
 --########################################
 --node_fbo();
 
 --btn_create(200,50,60,20,"smallbtn.png");
 --btn_create(200,70,120,40,"smallbtn.png");
-
-
-
 
 --[[
 local function f_callback2(data,obj)
@@ -18,16 +13,7 @@ local function f_callback2(data,obj)
 	engine_addNode(spr);
 end--]]
 
-
-
-
-
-
 --print(string.format("res = %d",res));
-
-
-
-
 
 --[[local btn = btn_create(0,50);
 btn_bindClick(btn,f_onClick);--]]
@@ -66,13 +52,15 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 engine_setBg(0.3,0.3,0.3);
 --********************************************
-local function ui()
+local function uiinit()
 	fps();
 	btn_create(150,0,100,45);
+	example_input(0,80);
 	infowin(0,100);
-	example_input();
 	example_srollView();
 	alert("aa");
+	dofile("..\\include\\lua\\1.lua");--md2动作控制
+	dofile("..\\include\\lua\\5.lua");--材质测试
 end
 --********************************************
 
@@ -83,10 +71,10 @@ end
 
 --arrow();
 
---dofile("..\\include\\lua\\7.lua");
 
-ui();
 
+--uiinit();
+--dofile("..\\include\\lua\\3.lua");
 
 
 

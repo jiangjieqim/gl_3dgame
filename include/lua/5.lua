@@ -1,6 +1,9 @@
 -- dofile("..\\include\\lua\\core.lua")
 
 func_print('#######################\t材质测试\t#######################')
+
+
+
 --local _model_ptr;
 
 -- 初始化标示
@@ -104,64 +107,65 @@ local function f_setLabel(label, obj)
 
 end
 
+local g_model;
+local function f_listCallBack(list)
+	local index = listbox_get_index(list);
+	 --local _l = listbox;
+		
+	--print(g_model);
+
+	if (g_model) then
+		func_ptr_remove(g_model)
+	end
+
+
+	-- local obj =func_loadobj("torus")
+	local t = func_get_longTime();
+	local obj = func_fixed_load()
+	ex_set_cam(obj);
+
+
+
+	--print("&&&",obj);
+
+	-- func_fixed_load()--func_loadmd5('wolf',0.01)--func_loadobj("torus")
+
+	if (obj) then
+
+		g_model = obj;
+		
+		--ex_addnode(obj);
+		
+		--            _model_ptr = g_model
+		--local arr = func_split(config);
+		local label = listbox_get_label(list);
+		
+		local s = string.format('index = %d\tlabel = [%s]\t	vbo:%s',
+		index,
+		label,
+		tostring(func_is_vbo(obj))
+		)
+
+		print(s..","..(func_get_longTime() - t));
+
+		f_setLabel(label, g_model);
+	end
+end
+
 -- ###############################################################
 -- 初始化listbox,用来测试不同的材质
 local function f_shader_init()
-    local g_model;
-    local config = "diffuse,ploygonLine,outline,point,drawCollison,glslOutline,normal";
-
-    local listbox = ListBox:new(0, 0,
-    function(index)
-
-        local _l = listbox;
-		
-		--print(g_model);
-		
-        if (g_model) then
-            func_ptr_remove(g_model)
-        end
-		
-
-        -- local obj =func_loadobj("torus")
-        local t = func_get_longTime();
-        local obj = func_fixed_load()
-		ex_set_cam(obj);
-		
-		
-		
-		--print("&&&",obj);
-		
-        -- func_fixed_load()--func_loadmd5('wolf',0.01)--func_loadobj("torus")
-
-        if (obj) then
-
-            g_model = obj;
-			
-			--ex_addnode(obj);
-			
-            --            _model_ptr = g_model
-            local arr = func_split(config);
-            local s = string.format('index = %d\tlabel = [%s]\t	vbo:%s',
-            index,
-            arr[index + 1],
-            tostring(func_is_vbo(obj))
-            )
-
-            print(s..","..(func_get_longTime() - t));
-
-            f_setLabel(arr[index + 1], g_model);
-        end
-
-    end )
-
-    listbox:add(config)
-    --######################################################
-    -- 渲染回调
-    local _ticket = 0;
-    local tt = 0;
-
-
-    return listbox
+	local list = listbox_new(0,50);
+	listbox_add(list,"diffuse");
+	listbox_add(list,"ploygonLine");
+	listbox_add(list,"outline");
+	listbox_add(list,"point");
+	listbox_add(list,"drawCollison");
+	listbox_add(list,"glslOutline");
+	listbox_add(list,"normal");
+	listbox_set_title(list,"材质测试");
+	listbox_bind(list,f_listCallBack);
+    return list;
 end
 
 -- #########################################################
@@ -171,4 +175,5 @@ end
 
 cam_setPosition(0, 0, -10);
 local list = f_shader_init();
+
 -- listbox_select(list,0)--默认选择一个

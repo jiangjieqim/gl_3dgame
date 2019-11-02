@@ -301,8 +301,8 @@ end
 
 --打印一个有颜色的日志到控制台
 function func_print(s,c)
-	--c = c or 0xffff00
-	c = c or 0;
+	c = c or 0xffff00
+	--c = c or 0;
 	dofunc("LogPut",string.format("lua: %s\n",s),c);
 end
 function func_error(msg,func)
@@ -826,7 +826,7 @@ function func_texloadend(n)
 end
 
 --创建一个支持九宫格的的sprite
-function func_create_grid_sprite(x,y,w,h,url)
+function func_create_grid_sprite(x,y,w,h,url,name)
 	url = url or "gundi.png";
 	local sprite = sprite_create_typical(name,x,y,w,h);
 	loadtexs(url,func_texloadend, { sprite=sprite;url=url});
@@ -847,7 +847,7 @@ dofile("..\\include\\lua\\fbo.lua")	--fbo
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 
 
-dofile("..\\include\\lua\\listbox.lua")
+--dofile("..\\include\\lua\\listbox.lua")
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 
 
