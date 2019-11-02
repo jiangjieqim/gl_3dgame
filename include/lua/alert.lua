@@ -1,12 +1,14 @@
 function alert_init()
-    local new_sharp = { 
-	    bg;--sprite
-	    closeBtn;--btn
+    local new_sharp = {
+	    bg;			--sprite
+	    closeBtn;	--btn
 	    label;
-	    isDrag;--是否可以拖拽
-        closeSize = 30;
-
-        --img;
+	    isDrag;		--是否可以拖拽
+        closeSize = 30;--关闭按钮的宽度
+		w = nil,
+		h = nil,
+		close_url = nil,
+		bg_url = nil,
     };
     return new_sharp;
 end
@@ -36,13 +38,15 @@ local function f_resize(evtData,self)
 	f_center(self);
 end;
 
+--隐藏界面
 local function f_hide(self)
 	resetv(self.bg,FLAGS_VISIBLE);
-	--[[if(self.img) then
-		resetv(self.img,FLAGS_VISIBLE);
-	end--]]
-    ftext_vis(self.label,0);
-	btn_visible(self.closeBtn,false);
+	if(self.label) then
+		ftext_vis(self.label,0);
+	end
+	if(self.closeBtn) then
+		btn_visible(self.closeBtn,false);
+	end
 end
 --设置可拖拽
 function alert_set_drag(self,value)
@@ -54,17 +58,38 @@ function alert_set_drag(self,value)
 	end
 end
 
---[[local function addFbo(self)
-	local spr = engine_get_fbo_sprite();
-    node_fbo();
-    func_addchild(self.bg,spr);
-    engine_addNode(spr);
-    self.img = spr;
-end--]]
-
-
 local function f_closeCallBack(data,param)
 	f_hide(param);
+end
+
+--创建label
+local function f_create_label(self)
+	local w = self.w;
+	local closeSize = self.closeSize
+	self.label=ftext_create(w-closeSize,w-closeSize);
+    ftext_set_buffer(self.label,256);
+	func_addchild(self.bg,ftext_get_container(self.label));
+end
+
+--创建closeBtn 
+local function f_create_close_btn(self)
+	local x = 0;
+	local y = 0;
+	local closeSize = self.closeSize;
+	--print(self.close_url);
+	if(self.close_url == nil) then 
+		func_error("self.close_url = nil");
+	end
+	self.closeBtn=btn_create(x,y,closeSize,closeSize,self.close_url);
+	
+	btn_bindClick(self.closeBtn,f_closeCallBack,self);
+	func_addchild(self.bg,btn_get_container(self.closeBtn),self.w-self.closeSize,0);
+end
+--设置显示(关闭按钮)
+function alert_add_closebtn(self)
+	if(self.closeBtn == nil) then
+		f_create_close_btn(self);
+	end
 end
 
 local function f_alert_create(self,w,h)
@@ -72,82 +97,73 @@ local function f_alert_create(self,w,h)
 	local x = 0;
 	local y = 0;
 	
-    --local self = create();
-
-	--self.bg = sprite_create(nil,x,y,w,h);
-	--func_setIcon(self.bg,"gundi.png");
-	
---[[	local sprite = sprite_create_typical(name,x,y,w,h);
-	sprite_set_9grid(sprite,"checkbox.png",3,3,3,3);
-	engine_addNode(sprite);--]]
-	
-	local sprite=func_create_grid_sprite(x,y,w,h,"checkbox.png",name);
+	local sprite=func_create_grid_sprite(x,y,w,h,self.bg_url,name);
 	self.bg = sprite;
 	
-	--print(self.closeBtn)
+	self.w = w;
+	self.h = h;
 
-    --##############################################
-    --FBO渲染的Sprite
---    addFbo(self);
-    --##############################################
+	alert_set_drag(self,false);
 
-
-
-	local closeSize = self.closeSize;
-	self.closeBtn=btn_create(x,y,closeSize,closeSize,"checkbox.png");
-	--func_sprite_removechild(self.bg,self.closeBtn.sprite);
-	
-	alert_set_drag(self,true);
-		
-	btn_bindClick(self.closeBtn,f_closeCallBack,self);
-	
-	self.label=ftext_create(w-closeSize,w-closeSize);--tf_create(128,x,y,1.0,0.0,0.0);
-    ftext_set_buffer(self.label,256);
-
-	func_addchild(self.bg,btn_get_container(self.closeBtn),w-self.closeSize,0);
-	func_addchild(self.bg,ftext_get_container(self.label));
     
-    
-
---    func_sprite_removechild(self.bg,ftext_get_container(self.label));
-
-    evt_on(self,EVENT_ENGINE_RESIZE,f_resize,self);	
-	
-    return self;
+	return self;
 end
+
+function alert_enable_resize(self,v)
+	if(v) then
+		evt_on(self,EVENT_ENGINE_RESIZE,f_resize,self);
+		f_resize(nil,self);
+	else
+		evt_off(self,EVENT_ENGINE_RESIZE,f_resize,self);
+	end
+end
+
 --销毁视图
 function alert_dispose(self)
 	ptr_remove(self.bg);
-	fext_dispose(self.label);
-	btn_dispose(self.closeBtn);
+	if(self.label)then
+		fext_dispose(self.label);
+	end
+	if(self.closeBtn) then
+		btn_dispose(self.closeBtn);
+	end
 end
 
-local function show(self,str)
-	btn_visible(self.closeBtn,true);
+local function show(self)
+	if(self.closeBtn) then
+		btn_visible(self.closeBtn,true);
+	end
+	
 	setv(self.bg,FLAGS_VISIBLE);
---[[	if(self.img) then
-		setv(self.img,FLAGS_VISIBLE);
-	end--]]
-    ftext_vis(self.label,1);
-
-	ftext_reset(self.label,str);
-	f_resize(nil,self);
 end
 
 local function f_tex_complete(n)
-	local str = n.str or "";
 	local self = n.self;
 	f_alert_create(self,300,150);
-	show(self,str);
-	--[[if(n.callBack) then
-		n.callBack(alert1);
-	end--]]
+	show(self);
 	
 	local obj = func_get_address(self);
 	evt_dispatch(obj,EVENT_ENGINE_COMPLETE,obj);
 end
+--设置文本
+function alert_set_label(self,str)
+	if(str) then
+		if(self.label == nil) then
+			f_create_label(self)
+		end
+		
+		ftext_vis(self.label,1);	
+		ftext_reset(self.label,str);
+	end
+end
 
-function alert_start(self,str)	
-	local url = "checkbox.png";
-	loadtexs(url,f_tex_complete, {str=str,self=self});
+--str传递非nil值的时候会创建一个label对象
+--url分割成数组1号位是背景,2号位是关闭按钮
+function alert_start(self,url)	
+	url = url or "gundi.png;checkbox.png";
+	local arr=func_split(url,";");
+	--print(arr[1],arr[2]);
+	self.bg_url = arr[1];
+	self.close_url = arr[2];
+	loadtexs(url,f_tex_complete, {self=self});
 end

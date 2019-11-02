@@ -115,14 +115,13 @@ function evt_dispatch(...)
 			local node = evtlist[k];
 			if(node and node.obj == obj--[[  接受事件的对象检测判断--]] and node.id == id) then
 				
-				local str = string.format("evt_dispatch 事件 evt id = %d\n    node = (%s) obj = (%d)\n    ==>node.func(data,node.params)  data=(%s) node.params=(%s)",id,tostring(node),obj,tostring(data),tostring(node.params));
-				func_print(str);
-				
 				node.func(data,node.params);
 				
-				
-				
 				if(node.once) then
+					
+					local str = string.format("evt_dispatch之后移除事件 evt id = %d  node = (%s) obj =(%d)  data=(%s) node.params=(%s)",id,tostring(node),obj,tostring(data),tostring(node.params));
+					func_print(str);
+					
 					evt_off(obj,id,node.func);--obj,id,func
 				end
 			end

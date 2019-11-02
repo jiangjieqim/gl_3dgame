@@ -120,30 +120,26 @@ end
 alert("aa",loadCallBack);--]]
 --function evt_once(obj,id,func,params)
 	
-local function loadCallBack(obj,param)
-	print("alert初始化完成",obj,param);
+local function loadCallBack(obj,self)
+	--print("alert初始化完成",obj,self);
 	
+	alert_set_drag(self,true);
+	alert_enable_resize(self,true);
 	
-	--alert_dispose(param);
+	alert_add_closebtn(self);
+	alert_set_label(self,"Adahsjkd,你好");
+	
+	--alert_dispose(self);
 end
+
 local a = alert_init();
 evt_once(a,EVENT_ENGINE_COMPLETE,loadCallBack,a);
-alert_start(a,"aaa");
-
-
-
---[[local key = func_get_address(a);
-evt_once(a,EVENT_ENGINE_COMPLETE,loadCallBack,"h");
-evt_dispatch(key,EVENT_ENGINE_COMPLETE,key);--]]
+alert_start(a);
 
 
 
 
---print(func_is_table_str(1212));
 
-
-
---alert_dispose(a);
 
 
 --[[

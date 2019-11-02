@@ -319,6 +319,10 @@ function func_print(s,c)
 	
 	--向控制台输出有颜色的文本日志
 	dofunc("LogPut",string.format("lua: %s\n",s),c);
+	
+	--打印堆栈
+	--dofunc("LogPut",string.format("lua stack: %s\n",debug.traceback()),0x00ff00);
+	
 end
 function func_error(msg,func)
 	local s = ''
