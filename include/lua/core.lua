@@ -57,7 +57,7 @@ EVENT_ENGINE_COMPLETE		   = 109	--完成事件
  KEY_D = 100
  KEY_I = 105
 
-
+dofile("..\\include\\lua\\stack.lua")
 dofile("..\\include\\lua\\xml.lua")	--xml组件
 dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
 --dofile("..\\include\\lua\\sprite.lua");

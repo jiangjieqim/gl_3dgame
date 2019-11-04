@@ -1,5 +1,7 @@
 dofile("..\\include\\lua\\core.lua");
 
+--example_stack();
+
 --########################################
 --node_fbo();
 

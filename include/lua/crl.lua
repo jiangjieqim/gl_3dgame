@@ -13,7 +13,9 @@ local function loadCallBack(obj,param)
 	alert_set_drag(self,true);
 	alert_enable_resize(self,true);
 	
-	alert_add_closebtn(self);
+	--alert_add_closebtn(self);
+	
+	
 	--alert_set_label(self,param.str);
 	
 	--alert_dispose(self);--]]
@@ -29,7 +31,6 @@ local function loadCallBack(obj,param)
 	fext_dispose(nameTf);
 	--f_dispose(param);
 end
-
 
 function crl_init()
 	local ins = {

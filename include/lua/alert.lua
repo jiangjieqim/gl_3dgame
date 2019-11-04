@@ -9,6 +9,9 @@ function alert_init()
 		h = nil,
 		close_url = nil,
 		bg_url = nil,
+		
+--		labellist = {};
+--		spritelist = {};
     };
     return new_sharp;
 end
