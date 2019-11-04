@@ -85,6 +85,12 @@ local function f_create_close_btn(self)
 	btn_bindClick(self.closeBtn,f_closeCallBack,self);
 	func_addchild(self.bg,btn_get_container(self.closeBtn),self.w-self.closeSize,0);
 end
+
+--容器
+function alert_get_container(self)
+	return self.bg;
+end
+
 --设置显示(关闭按钮)
 function alert_add_closebtn(self)
 	if(self.closeBtn == nil) then
@@ -129,7 +135,7 @@ function alert_dispose(self)
 	end
 end
 
-local function show(self)
+function alert_show(self)
 	if(self.closeBtn) then
 		btn_visible(self.closeBtn,true);
 	end
@@ -140,7 +146,7 @@ end
 local function f_tex_complete(n)
 	local self = n.self;
 	f_alert_create(self,300,150);
-	show(self);
+	alert_show(self);
 	
 	local obj = func_get_address(self);
 	evt_dispatch(obj,EVENT_ENGINE_COMPLETE,obj);
@@ -160,7 +166,7 @@ end
 --str传递非nil值的时候会创建一个label对象
 --url分割成数组1号位是背景,2号位是关闭按钮
 function alert_start(self,url)	
-	url = url or "gundi.png;checkbox.png";
+	url = url or "gundi.png;checkbox.png";--gundi
 	local arr=func_split(url,";");
 	--print(arr[1],arr[2]);
 	self.bg_url = arr[1];

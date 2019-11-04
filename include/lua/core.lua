@@ -874,6 +874,9 @@ dofile("..\\include\\lua\\crlui.lua")
 dofile("..\\include\\lua\\infowin.lua")	--fps组件
 
 dofile("..\\include\\lua\\alert.lua")		--弹出框组件
+dofile("..\\include\\lua\\alertx.lua")
+dofile("..\\include\\lua\\crl.lua")
+
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位

@@ -71,6 +71,9 @@ end
 
 --arrow();
 
+--infowin(150,50);
+
+crl_init();
 
 
 --uiinit();
@@ -120,21 +123,7 @@ end
 alert("aa",loadCallBack);--]]
 --function evt_once(obj,id,func,params)
 	
-local function loadCallBack(obj,self)
-	--print("alert初始化完成",obj,self);
-	
-	alert_set_drag(self,true);
-	alert_enable_resize(self,true);
-	
-	alert_add_closebtn(self);
-	alert_set_label(self,"Adahsjkd,你好");
-	
-	--alert_dispose(self);
-end
 
-local a = alert_init();
-evt_once(a,EVENT_ENGINE_COMPLETE,loadCallBack,a);
-alert_start(a);
 
 
 
