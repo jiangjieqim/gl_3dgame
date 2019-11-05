@@ -201,9 +201,8 @@ scrollBar_new(x,y,cw,ch,parent)
 		_dragDirection=CONST_DIRECTION_VERTICAL;
 		barSize = cw;
 	end
-		
-	
-	func_tableSave(sc)
+
+	--func_tableSave(sc);
 	
 	--local name = func_getTableName(sc)--获取btn引用名
 
@@ -211,22 +210,21 @@ scrollBar_new(x,y,cw,ch,parent)
 	--local bg = sprite_create(string.format("%s%s",name,"_bg"),x,y,sc.defaultBg_width,sc.defaultBg_height)
 	--func_setIcon(bg,"gundi.png");
 	--string.format("%s%s",name,"_bg")
+	
 	local bg = sprite_create_typical(nil,x,y,sc.defaultBg_width,sc.defaultBg_height);
     local url = "checkbox.png";
 	engine_addNode(bg);
 	loadtexs(url,func_texloadend, { sprite=bg;url=url});
-	
-	
+		
 	--创建小按钮
 	--local btn=sprite_create(name,x,y,barSize,barSize,_dragDirection);
 	--func_setIcon(btn,"smallbtn.png");
 	url = "gundi.png";
 	local btn = sprite_create_typical(nil,x,y,barSize,barSize);
 	engine_addNode(btn);
-	
-	--func_addchild(bg,btn);
+	--print(bg,btn);
+	func_addchild(bg,btn);
 
-	
 	loadtexs(url,func_texloadend, { sprite=btn;url=url});
 	sprite_set_direction(btn,_dragDirection);
 	
@@ -262,7 +260,7 @@ function scrollBar_del(sc)
 	
 	ptr_remove(sc.btn)
 	ptr_remove(sc.bg)
-	func_tableDel(sc)
+	--func_tableDel(sc)
 end
 
 --绑定一个回调函数

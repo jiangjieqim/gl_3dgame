@@ -9,8 +9,6 @@ function alert_init()
 		h = nil,
 		close_url = nil,
 		bg_url = nil,
-		
-		
     };
     return new_sharp;
 end

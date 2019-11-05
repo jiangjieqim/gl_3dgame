@@ -48,11 +48,11 @@ function btn_create(x,y,w,h,url,use9grid)
 	--btn.id = 123
 	
 	--保存按钮表引用
-	func_tableSave(btn)
+	--func_tableSave(btn)
 
 	--func_printTable(btn)
 	
-	local name = func_getTableName(btn)--获取btn引用名
+	--local name = func_getTableName(btn)--获取btn引用名
 	
 	---------------------------------------
 	--默认参数设置
@@ -64,7 +64,7 @@ function btn_create(x,y,w,h,url,use9grid)
 	h = h or 18;
 	---------------------------------------
 
-	local sprite = sprite_create_typical(name,x,y,w,h);
+	local sprite = sprite_create_typical(nil,x,y,w,h);
 	engine_addNode(sprite);
 	
 	use9grid = use9grid or 1;--是否使用9宫格
@@ -127,7 +127,7 @@ function btn_dispose(btn)
 	f_remove_evt(btn);
 
 
-	func_tableDel(btn)
+	--func_tableDel(btn)
 	
 end
 --[[
@@ -217,3 +217,12 @@ end
 --    setv( btn.sprite,FLAGS_DRAW_PLOYGON_LINE);
 --end
 ---------------------------------------------------
+
+function example_btn()
+	local function btnClick(btnName,p)
+		print(btnName,p);--p = abc
+	end
+	local b = btn_create();
+	btn_bindClick(b,btnClick,"abc");
+end
+

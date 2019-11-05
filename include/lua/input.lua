@@ -67,4 +67,6 @@ function example_input(x,y)
 		end
 	end
 	evt_on(_in,EVENT_ENGINE_KEYBOARD,f_onkey);
+
+	--input_dispose(_in);
 end
