@@ -172,6 +172,7 @@ end
 function scrollBar_label(sc,label)
     if(sc.tf ==nil) then
         sc.tf = ftext_create();
+		func_addchild(sc.bg,ftext_get_container(sc.tf));
     end
     ftext_reset(sc.tf,label);
     local x,y = get_attr(sc.bg,"spritePos");
@@ -256,8 +257,9 @@ function scrollBar_del(sc)
 	evt_off(sc.btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move);
     if(sc.tf) then
         fext_dispose(sc.tf);
+		func_sprite_removechild(sc.bg,ftext_get_container(sc.tf));
     end
-	
+	func_sprite_removechild(sc.bg,sc.btn);
 	ptr_remove(sc.btn)
 	ptr_remove(sc.bg)
 	--func_tableDel(sc)
