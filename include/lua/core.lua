@@ -402,6 +402,16 @@ function func_addchild(parent,child,x,y)
 	sprite_addChild(parent,child);
 	f_set_sprite_local_pos(child,x,y);
 end
+--child类型是ftext
+function func_addchild_label(parent,tf,x,y)
+	func_addchild(parent,ftext_get_container(tf));
+end
+
+--[[function func_addchild_scrollBar(parent,sc,x,y)
+	sc.parent = parent;
+	func_addchild(parent,sc.bg,x,y);
+end--]]
+
 --从parent(Sprite)移除掉child(Sprite)对象
 function func_sprite_removechild(parent,child)
 	sprite_removeChild(parent,child);

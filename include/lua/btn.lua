@@ -142,7 +142,6 @@ local function f_reset_label_pos(btn)
     local x,y = func_get_sprite_xy(btn.sprite);--get_attr(btn.sprite,"spritePos")
     local sw,sh=func_get_sprite_size(btn.sprite);
     ftext_setpos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
-
 end
 --[[
 	…Ë÷√∞¥≈•label

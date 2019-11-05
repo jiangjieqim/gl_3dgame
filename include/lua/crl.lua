@@ -1,54 +1,25 @@
-local function f_dispose(self)
-	fext_dispose(self.nameTf);
-end
-
 local TYPE_LABEL = 1;
-
-
-
-
-
+local TYPE_SCROLL_BAR = 2;
 
 local function f_create_node(t,node)
 	local n = {
 		node = node;
-		t = t;
+		t = t;--类型
 	};
 	--print(n.node,n.t);
 	return n;
 end
 
-local function f_add_rotate(key, x, y)
-    local sc = scrollBar_new(x, y);
-    local function f_animscHandle(sc)
-       -- func_rotate(crl.o, key, sc.value);
-		print(sc.value);
-    end
-
-    scrollBar_bind(sc, f_animscHandle);
-    scrollBar_setRange(sc, 0, PI)
-    scrollBar_label(sc, key);
-    --crl.sclist[key] = sc;
-    --return scrollBar_get_rect(sc);
-	return sc;
-end
-
-local function loadCallBack(obj,param)
-	
-	---[[
-	local self = param.alert;
-	
-	local labelStack = param.labelStack;
-	--print("alert初始化完成",obj,self);
-	
-	local container = alert_get_container(self);
-	
-	local function f_delLabel(n)
---		local n = node.node;
+local function f_delAll(n,index,p)
+		local container = p;
+		local _type = n.t;
+		--print(n.t,n.node);		
 		
-		if(n.t == TYPE_LABEL) then
+		if(_type == TYPE_LABEL) then
 			func_sprite_removechild(container,ftext_get_container(n.node));
 			fext_dispose(n.node);
+		elseif(_type == TYPE_SCROLL_BAR) then
+			scrollBar_del(n.node);
 		end
 		
 		
@@ -57,6 +28,30 @@ local function loadCallBack(obj,param)
 			fext_dispose(n);
 		end--]]
 	end	
+
+local function f_add_rotate(key, x, y,container)
+    local sc = scrollBar_new(x, y,container);
+    local function f_animscHandle(sc)
+       -- func_rotate(crl.o, key, sc.value);
+		--print(sc.value);
+    end
+
+    scrollBar_bind(sc, f_animscHandle);
+    --scrollBar_setRange(sc, 0, PI)
+    scrollBar_label(sc, key);
+    --crl.sclist[key] = sc;
+    --return scrollBar_get_rect(sc);
+	return sc;
+end
+
+local function loadCallBack(obj,param)
+	---[[
+	local self = param.alert;
+	
+	local labelStack = param.labelStack;
+	--print("alert初始化完成",obj,self);
+	
+	local container = alert_get_container(self);
 	
 	alert_set_drag(self,true);
 	alert_enable_resize(self,true);
@@ -71,17 +66,17 @@ local function loadCallBack(obj,param)
 	--###################################
 	local nameTf =  ftext_create(150, 150);
 	ftext_reset(nameTf, "信息");
-	func_addchild(container,ftext_get_container(nameTf));
+	func_addchild_label(container,nameTf);
 	stack_push(labelStack,f_create_node(TYPE_LABEL,nameTf));
 	
+	local sc =f_add_rotate("rx",10,20,container);
+	--func_addchild_scrollBar(container,sc,10,20);
+	--scrollBar_pos(sc,10,10);
+	stack_push(labelStack,f_create_node(TYPE_SCROLL_BAR,sc));
 	
 	--清理label列表
-	--stack_foreach(labelStack,f_delLabel);
+	--stack_foreach(labelStack,f_delAll,container);
 	
-	--f_add_rotate("rx",0,20);
-	
-	
-	--f_dispose(param);
 end
 
 function crl_init()

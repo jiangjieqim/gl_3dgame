@@ -509,12 +509,25 @@ void sprite_set_self_pos(void* p,int x,int y){
 		x = realx;
 		y = realy;
 	}
+	//printf("%d,%d\n",x,y);
 	sprite_setpos(spr,x,y);
 }
 
+//void sprite_refresh_local_pos(void* p){
+//	struct Sprite* spr = (struct Sprite*)p;	
+//	if(spr->parent){
+//		struct Sprite* parent = (struct Sprite*)spr->parent;
+//		spr->localx = parent->screenX - spr->screenX;
+//		spr->localy = parent->screenY - spr->screenY;
+//	}
+//}
+
 //设置绝对坐标
 void sprite_setpos(struct Sprite* spr,int x,int y){
+	//printf("%d,%d\n",x,y);
+	
 	//evt_once(NextFrame)到下一个关键帧的时候更新数据,这样不会抖屏
+	
 	setSpriteScreenPos(spr,x,y);//更新屏幕坐标
 	setHitTriangle(spr);//更新点击区域
 	f_refreshChildPos(spr);//更新sprite的子对象的坐标
@@ -964,24 +977,49 @@ GetHeight(struct Sprite* p)
 #endif
 	return p->mHeight;
 }
+
+//p的父节点的绝对坐标
+static void
+f_get_global(struct Sprite* p,int* px,int* py){
+	if(p->parent){
+		//*px 
+		struct Sprite* ps = (struct Sprite*)p->parent;
+		*px = ps->screenX-ps->localx;
+		*py = ps->screenY-ps->localy;
+
+		p->localx = p->screenX - ps->screenX;
+		p->localy = p->screenY - ps->screenY;
+
+		//printf("%0x %0x parent sx sy = %d,%d\n",p,ps,*px,*py);
+	}else{
+		*px = 0;
+		*py = 0;
+		p->localx = 0;
+		p->localy = 0;
+	}
+}
 static void 
 changeDragXY(struct Sprite* p,int* px,int* py){
 //检查ScrollBar ScrollBarBG_Click接口
-
-
-	if(haveDragScope(p))
-	{
+	if(haveDragScope(p)){
 		int cx0,cx1,cy0,cy1,oldx,oldy;
 		float progress;
-	
+		//sprite_refresh_local_pos((void*)p);
+
+		int ppx,ppy;
+		f_get_global(p,&ppx,&ppy);
+	/*	ppx-=p->localx;
+		ppy-=p->localy;*/
+
+		
 		oldx = p->oldx;
 		oldy = p->oldy;
 
-		cx0 = p->dragX+oldx;
-		cx1 = oldx+p->dragWidth - GetWidth(p);
+		cx0 = p->dragX+oldx + ppx;
+		cx1 = oldx+p->dragWidth - GetWidth(p) + ppx;
 
-		cy0 = p->dragY+oldy; 
-		cy1 = oldy+p->dragHeight- GetHeight(p);
+		cy0 = p->dragY+oldy + ppy; 
+		cy1 = oldy+p->dragHeight- GetHeight(p) + ppy;
 
 		if(*px <= cx0)
 			*px = cx0;
@@ -994,9 +1032,9 @@ changeDragXY(struct Sprite* p,int* px,int* py){
 			*py = cy1;
 		
 		if(IsDragDirection(p))
-			progress = (p->screenY-p->oldy)/(p->dragHeight - GetWidth(p));//纵向比率
+			progress = (p->screenY-p->oldy-ppy)/(p->dragHeight - GetWidth(p));//纵向比率
 		else
-			progress = (p->screenX-p->oldx)/(p->dragWidth - GetHeight(p));//横向比率
+			progress = (p->screenX-p->oldx-ppx)/(p->dragWidth - GetHeight(p));//横向比率
 		
 		//if(p->callLuaDragMove)
 		//	fLuaDragMove(p->callLuaDragMove,progress);//发送更新事件
@@ -1011,7 +1049,9 @@ changeDragXY(struct Sprite* p,int* px,int* py){
 			char _str[G_BUFFER_64_SIZE];
 			struct HeadInfo* b = base_get(p);
 			sprintf_s(_str, G_BUFFER_64_SIZE,"%s,%d,%d,%.3f",b->name,*px,*py,progress);	
-			//printf("c=[%s]\n",_str);
+			
+			//printf("c=[%s]lx = %.3f,ly = %.3f %d %d,0x%0x	\t cx0 = %d cx1 = %d\n",_str,p->screenX,p->screenY,p->localx,p->localy,p->parent,cx0,cx1);
+			
 			ex_lua_evt_dispatch(p,EVENT_ENGINE_SPRITE_CLICK_MOVE,_str);
 		}
 	}
@@ -1032,8 +1072,13 @@ sprite_mouseMove(int data)
 					//鼠标按下,只有在鼠标坐标发生变化的时候				
 					int x = e->mouseState.moveX - ptr->mouseDownX;
 					int y = e->mouseState.moveY - ptr->mouseDownY;
+
+					//x,y 当前鼠标拾取到的绝对坐标
+					//printf("******* mx = %d,my = %d\n",x,y);
 					changeDragXY(ptr,&x,&y);
+					//printf("mx = %d,my = %d\n",x,y);
 					sprite_setpos(ptr,x,y);
+					//sprite_set_self_pos(ptr,x,y);
 				}
 			}
 		}
@@ -1204,7 +1249,7 @@ f_init_childsContner(void* p){
 void sprite_addChild(void* p,void* child){
 	struct Sprite* spr = (struct Sprite* )p;
 	struct Sprite* childspr = (struct Sprite* )child;
-	childspr->parent = child;
+	childspr->parent = p;//child;		//设置父对象引用
 	if(!spr->parent){
 		f_init_childsContner(p);
 	}
@@ -1229,7 +1274,16 @@ void sprite_removeChild(void* spr,void* child){
 	struct Sprite* parent = (struct Sprite* )spr;
 	childspr->parent = 0;
 	if(LStack_delNode(parent->childs,(int)child)){
-		//printf("del succeed!\n");
+		log_color(0,"(parent: %0x child %0x)	sprite_removeChild succeed!\n",spr,child);
+	}
+}
+
+void sprite_removeSelf(void* p){
+	struct Sprite* spr = (struct Sprite* )p;
+	struct Sprite* parent = (struct Sprite* )spr->parent;
+	if(parent){
+		sprite_removeChild(parent,p);
+		//log_color(0,"sprite_removeSelf %0x\n",p);
 	}
 }
 /*

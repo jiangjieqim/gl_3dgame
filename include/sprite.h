@@ -100,7 +100,7 @@ void sprite_removeChild(void* spr,void* child);
 /*
  *获取全局坐标
  */
-void sprite_getGlobalPos(void* spr,int* px,int *py);
+//void sprite_getGlobalPos(void* spr,int* px,int *py);
 
 //设置点击回调
 void
@@ -230,4 +230,5 @@ sprite_set_grid9(void* mat,float left,float right,float top,float bottom,float w
 //设置图集
 void
 sprite_bindAtals(void* p,void* atals);
+//void sprite_refresh_local_pos(void* p);
 #endif

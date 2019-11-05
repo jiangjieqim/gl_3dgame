@@ -32,17 +32,17 @@ function stack_pop(l)
 	end
 end
 --±È¿˙’ª
-function stack_foreach(l,func)
+function stack_foreach(l,func,p)
 	local list = l.list;
 	for i=0,l.cnt-1,1 do
 		local node = l.list[i];
-		func(node,i);
+		func(node,i,p);
 	end
 end
 
 function example_stack()
-	local function forEach(n,index)
-		print(n,index);
+	local function forEach(n,index,p)
+		print(n,index,p);
 	end
 	
 	
@@ -53,5 +53,7 @@ function example_stack()
 	
 	stack_pop(_l);
 	
-	stack_foreach(_l,forEach);
+	stack_foreach(_l,forEach,"params");
 end
+
+--example_stack();
