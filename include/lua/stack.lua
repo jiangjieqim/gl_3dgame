@@ -15,6 +15,11 @@ function stack_length(l)
 	return l.cnt;
 end
 
+function stack_del(l)
+	func_clearTableItem(l.list);
+	func_clearTableItem(l);
+end
+
 function stack_pop(l)
 	local length = stack_length(l);
 	if(length <=0) then

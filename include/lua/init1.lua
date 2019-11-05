@@ -75,10 +75,17 @@ end
 
 --infowin(150,50);
 
-crl_init();
+--crl_init();
 
+local sc = scrollBar_new(100,100);
+local function f_animscHandle(sc)
+   -- func_rotate(crl.o, key, sc.value);
+	--print("****",sc.value);
+end
 
---uiinit();
+--scrollBar_bind(sc, f_animscHandle);
+
+uiinit();
 --dofile("..\\include\\lua\\3.lua");
 
 --alert("aa");

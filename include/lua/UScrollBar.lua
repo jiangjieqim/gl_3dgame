@@ -52,13 +52,13 @@ f_ScDragMove(sc,progress)
 	if(sc.callBack) then
 		sc.callBack(sc)
 	else
-		print("滚动条的回调句柄为nil!")--回调为nil
+		--print("滚动条的回调句柄为nil!")--回调为nil
 	end
 end
 --获取小按钮的拖拽方向
 local function 
-f_Sprite_DragDirection(littleName)
-	local scrollbtn = func_find_obj(littleName)
+f_Sprite_DragDirection(scrollbtn)
+	--local scrollbtn = func_find_obj(littleName)
 	return get_attr(scrollbtn,"dragDirection")
 end
 
@@ -70,13 +70,13 @@ end
 	DragDirection:拖拽的方向
 --]]
 local function 
-f_SetBarPostion(bgName,littleName)
+f_SetBarPostion(sprite,scrollbtn)
 	
 	--滑动的方向
-	local dragDirection=f_Sprite_DragDirection(littleName)
+	local dragDirection=f_Sprite_DragDirection(scrollbtn)
 	
 	--背景sprite引用
-	local sprite = func_find_obj(bgName)--func_getTable(bgName)
+	--local sprite = func_find_obj(bgName)--func_getTable(bgName)
 	
 	--背景局部坐标
 	local local_x,local_y = get_attr(sprite,"spriteLocalXY")
@@ -88,7 +88,7 @@ f_SetBarPostion(bgName,littleName)
 	local sprite_w,sprite_h = get_attr(sprite,"spriteSize")
 	
 	--小按钮引用
-	local scrollbtn = func_find_obj(littleName)
+	--local scrollbtn = func_find_obj(littleName)
 	
 	--小按钮的宽高
 	local sc_w,sc_h = get_attr(scrollbtn,"spriteSize")
@@ -131,10 +131,13 @@ end
 	点击滑动条上的小按钮
 --]]
 local function 
-f_scrollBarBG_Click2(name)
+f_scrollBarBG_Click2(name,p)
+	local sc = p.sc;--func_getTable(scName)
+
 	
+	--print(name,p);
 	--大背景
-	local sprite = func_find_obj(name)
+	local sprite = sc.bg;--func_find_obj(name)
 	--print('########### '..name)
 	--print(sprite)
 	
@@ -143,21 +146,26 @@ f_scrollBarBG_Click2(name)
 	
 	
 	--小按钮
-	local scName=string.sub(name,0,-string.len("_bg")-1)
-	local sc = func_getTable(scName)
+	--local scName=string.sub(name,0,-string.len("_bg")-1)
 	
 	--拖拽
-	local v =  f_SetBarPostion(name,scName)
+	local v =  f_SetBarPostion(sprite,sc.btn);
 	f_ScDragMove(sc,v)
-end
+end;
 
-local function f_f_LuaDrag_move(data)
+local function f_f_LuaDrag_move(data,p)
+	local sc = p;
+	
+	
 	local arr = func_split(data,",");
-	--print(arr[2])
-	local name = arr[1];
+	
+	--local name = arr[1];
 	local progress = tonumber(arr[4]);
-	arr = nil
-	f_ScDragMove(func_getTable(name),progress)
+	--arr = nil
+	--f_ScDragMove(func_getTable(name),progress);
+	--print(progress);	
+	
+	f_ScDragMove(sc,progress);
 end
 
 --设置滑动条的文本
@@ -173,7 +181,7 @@ end
 
 --根据cw,ch的值来确定是横向还是综向滑动
 function 
-scrollBar_new(x,y,cw,ch)
+scrollBar_new(x,y,cw,ch,parent)
 	cw = cw or 100;
 	ch = ch or 15;
 
@@ -197,39 +205,44 @@ scrollBar_new(x,y,cw,ch)
 	
 	func_tableSave(sc)
 	
-	local name = func_getTableName(sc)--获取btn引用名
+	--local name = func_getTableName(sc)--获取btn引用名
 
 	--背景
 	--local bg = sprite_create(string.format("%s%s",name,"_bg"),x,y,sc.defaultBg_width,sc.defaultBg_height)
 	--func_setIcon(bg,"gundi.png");
-	
-	local bg = sprite_create_typical(string.format("%s%s",name,"_bg"),x,y,sc.defaultBg_width,sc.defaultBg_height);
+	--string.format("%s%s",name,"_bg")
+	local bg = sprite_create_typical(nil,x,y,sc.defaultBg_width,sc.defaultBg_height);
     local url = "checkbox.png";
 	engine_addNode(bg);
 	loadtexs(url,func_texloadend, { sprite=bg;url=url});
 	
-	evt_on(bg,EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2);
 	
 	--创建小按钮
 	--local btn=sprite_create(name,x,y,barSize,barSize,_dragDirection);
 	--func_setIcon(btn,"smallbtn.png");
 	url = "gundi.png";
-	local btn = sprite_create_typical(name,x,y,barSize,barSize);
+	local btn = sprite_create_typical(nil,x,y,barSize,barSize);
 	engine_addNode(btn);
+	
+	--func_addchild(bg,btn);
+
+	
 	loadtexs(url,func_texloadend, { sprite=btn;url=url});
 	sprite_set_direction(btn,_dragDirection);
 	
+	--对sc赋值
+	sc.bg = bg
+	sc.btn = btn
 	
-	evt_on(btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move);
+	evt_on(bg,EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2,{sc=sc});
+
+	evt_on(btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move,sc);
 	
 
 	--设置可拖拽范围
 	sprite_setDragScope(btn,0,0,sc.defaultBg_width,sc.defaultBg_height);
 	
-	--对sc赋值
-	sc.bg = bg
-	sc.btn = btn
-	return sc
+	return sc;
 end
 
 function scrollBar_get_rect(sc)
