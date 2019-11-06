@@ -57,12 +57,20 @@ EVENT_ENGINE_COMPLETE		   = 109	--完成事件
  KEY_D = 100
  KEY_I = 105
 
+
+local UI_TYPE = {
+	Label = 1,
+	ScrollBar = 2,
+};
+--print(UI_TYPE.Label,UI_TYPE.ScrollBar);
+
 dofile("..\\include\\lua\\stack.lua")
 dofile("..\\include\\lua\\xml.lua")	--xml组件
 dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
 --dofile("..\\include\\lua\\sprite.lua");
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
 dofile("..\\include\\lua\\ftext.lua");
+dofile("..\\include\\lua\\label.lua");--label是对ftext进行的一次封装
 dofile("..\\include\\lua\\input.lua");
 
 local defalutTex = '1.tga'
@@ -403,8 +411,8 @@ function func_addchild(parent,child,x,y)
 	f_set_sprite_local_pos(child,x,y);
 end
 --child类型是ftext
-function func_addchild_label(parent,tf,x,y)
-	func_addchild(parent,ftext_get_container(tf));
+function func_addchild_label(parent,label,x,y)
+	func_addchild(parent,ftext_get_container(label.tf));
 end
 
 --[[function func_addchild_scrollBar(parent,sc,x,y)
@@ -862,6 +870,17 @@ function func_create_grid_sprite(x,y,w,h,url,name)
 	engine_addNode(sprite);
 	return sprite;
 end
+
+--销毁组件
+function func_dispose(n)
+	local _type = n.type;
+	if(_type == UI_TYPE.Label) then
+		label_dispose(n);
+	elseif(_type == UI_TYPE.ScrollBar) then
+		scrollBar_del(n);
+	end		
+end
+
 
 dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器
 dofile("..\\include\\lua\\ex.lua")	--引擎

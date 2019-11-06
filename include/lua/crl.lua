@@ -1,33 +1,7 @@
-local TYPE_LABEL = 1;
-local TYPE_SCROLL_BAR = 2;
 
-local function f_create_node(t,node)
-	local n = {
-		node = node;
-		t = t;--类型
-	};
-	--print(n.node,n.t);
-	return n;
-end
-
-local function f_delAll(n,index,p)
-		local container = p;
-		local _type = n.t;
-		--print(n.t,n.node);		
-		
-		if(_type == TYPE_LABEL) then
-			--func_sprite_removechild(container,ftext_get_container(n.node));
-			fext_dispose(n.node);
-		elseif(_type == TYPE_SCROLL_BAR) then
-			scrollBar_del(n.node);
-		end
-		
-		
-		--[[if(n.t == TYPE_LABEL) then
-			func_sprite_removechild(container,ftext_get_container(n));
-			fext_dispose(n);
-		end--]]
-	end	
+local function f_delAll(n)
+	func_dispose(n);
+end	
 
 local function f_add_rotate(key, x, y,container)
     local sc = scrollBar_new(x, y,container);
@@ -38,7 +12,7 @@ local function f_add_rotate(key, x, y,container)
 
     scrollBar_bind(sc, f_animscHandle);
     --scrollBar_setRange(sc, 0, PI)
-    scrollBar_label(sc, key);
+    --scrollBar_label(sc, key);
     --crl.sclist[key] = sc;
     --return scrollBar_get_rect(sc);
 	return sc;
@@ -64,17 +38,16 @@ local function loadCallBack(obj,param)
 	--alert_dispose(self);--]]
 	
 	--###################################
-	local nameTf =  ftext_create(150, 150);
-	ftext_reset(nameTf, "信息");
+	local nameTf =  label_create(150, 150);
+	label_text(nameTf, "信息");
 	func_addchild_label(container,nameTf);
-	stack_push(labelStack,f_create_node(TYPE_LABEL,nameTf));
+	stack_push(labelStack,nameTf);
 	
 	local sc =f_add_rotate("rx",10,20,container);
-	stack_push(labelStack,f_create_node(TYPE_SCROLL_BAR,sc));
+	stack_push(labelStack,sc);
 	
 	--清理label列表
-	--stack_foreach(labelStack,f_delAll,container);
-	
+	stack_foreach(labelStack,f_delAll);
 end
 
 function crl_init()

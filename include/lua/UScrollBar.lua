@@ -12,7 +12,7 @@ local function f_create()
 		defaultBg_height,
 	
 		--对象类型
-		type = "ScrollBar",
+		type = 2,
 		
 		--滚动按钮实例(Sprite)
 		btn = nil,
@@ -303,6 +303,8 @@ function scrollBar_del(sc)
 		--print("移除sc");
 	--end
 	--func_tableDel(sc)	
+	
+	func_clearTableItem(sc);
 end
 
 --绑定一个回调函数
