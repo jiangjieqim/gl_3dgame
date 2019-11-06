@@ -982,15 +982,19 @@ GetHeight(struct Sprite* p)
 static void
 f_get_global(struct Sprite* p,int* px,int* py){
 	if(p->parent){
-		//*px 
+		 
 		struct Sprite* ps = (struct Sprite*)p->parent;
-		*px = ps->screenX-ps->localx;
-		*py = ps->screenY-ps->localy;
 
+		if(ps->parent){
+			*px = ps->screenX;//-ps->localx;
+			*py = ps->screenY;//-ps->localy;
+		}else{
+			
+		}
 		p->localx = p->screenX - ps->screenX;
 		p->localy = p->screenY - ps->screenY;
 
-		//printf("%0x %0x parent sx sy = %d,%d\n",p,ps,*px,*py);
+		//printf("%0x %0x parent sx sy = %d,%d==>%d,%d\n",p,ps,*px,*py,p->localx,p->localy);
 	}else{
 		*px = 0;
 		*py = 0;

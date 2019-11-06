@@ -12,7 +12,7 @@ local function f_create()
 		defaultBg_height,
 	
 		--对象类型
-		type = 2,
+		type = 3,
 		
 		--滚动按钮实例(Sprite)
 		btn = nil,
@@ -172,6 +172,10 @@ local function f_f_LuaDrag_move(data,p)
 	f_ScDragMove(sc,progress);
 end
 
+function scrollBar_get_container(sc)
+	return sc.bg;
+end
+
 --设置滑动条的文本
 function scrollBar_label(sc,label)
    --[[ if(sc.tf ==nil) then
@@ -262,14 +266,12 @@ scrollBar_new(x,y,parent,cw,ch)
 
 	evt_on(btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move,sc);
 	
-	
-	
 
 	--设置可拖拽范围
 	sprite_setDragScope(btn,0,0,sc.defaultBg_width,sc.defaultBg_height);
-	if(parent)then
-		func_addchild(parent,bg,x,y);
-	end
+	--if(parent)then
+	--	func_addchild(parent,bg,x,y);
+	--end
 	return sc;
 end
 

@@ -60,7 +60,8 @@ EVENT_ENGINE_COMPLETE		   = 109	--完成事件
 
 local UI_TYPE = {
 	Label = 1,
-	ScrollBar = 2,
+	Button =2,
+	ScrollBar = 3,
 };
 --print(UI_TYPE.Label,UI_TYPE.ScrollBar);
 
@@ -409,10 +410,6 @@ function func_addchild(parent,child,x,y)
 	y = y or 0;
 	sprite_addChild(parent,child);
 	f_set_sprite_local_pos(child,x,y);
-end
---child类型是ftext
-function func_addchild_label(parent,label,x,y)
-	func_addchild(parent,ftext_get_container(label.tf));
 end
 
 --[[function func_addchild_scrollBar(parent,sc,x,y)
@@ -870,6 +867,21 @@ function func_create_grid_sprite(x,y,w,h,url,name)
 	engine_addNode(sprite);
 	return sprite;
 end
+--相当于addchild
+function func_addnode(parent,n,x,y)
+	x = x or 0;
+	y = y or 0;
+	local _type = n.type;
+	
+	if(_type == UI_TYPE.Label) then
+		func_addchild(parent,ftext_get_container(n.tf),x,y);
+	elseif(_type == UI_TYPE.ScrollBar) then
+		func_addchild(parent,scrollBar_get_container(n),x,y);
+	elseif(_type == UI_TYPE.Button)then
+		func_addchild(parent,btn_get_container(n),x,y);
+	end
+		
+end
 
 --销毁组件
 function func_dispose(n)
@@ -878,6 +890,8 @@ function func_dispose(n)
 		label_dispose(n);
 	elseif(_type == UI_TYPE.ScrollBar) then
 		scrollBar_del(n);
+	elseif(_type == UI_TYPE.Button)then
+		btn_dispose(n);
 	end		
 end
 

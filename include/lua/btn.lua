@@ -10,7 +10,7 @@
 local function f_createBtn()
 	return {
 		--对象类型
-		type = "Button",
+		type = 2,
 		--引擎中的Sprite引用
 		sprite=nil,
 		
@@ -31,9 +31,9 @@ local function f_createBtn()
 end
 local function f_delLabel(btn)
 	if(btn.label) then
-		--ptr_remove(btn.label);
-        fext_dispose(btn.label);
-		btn.label = nil
+       -- fext_dispose(btn.label);
+		--btn.label = nil
+		func_dispose(btn.label);
 	end
 end
 
@@ -46,9 +46,6 @@ function btn_create(x,y,w,h,url,use9grid)
 	--local w = 100
 	--local h = 100
 	--btn.id = 123
-	
-	--保存按钮表引用
-	--func_tableSave(btn)
 
 	--func_printTable(btn)
 	
@@ -125,10 +122,7 @@ function btn_dispose(btn)
 	btn.mouseDownCallBack = nil
 	
 	f_remove_evt(btn);
-
-
-	--func_tableDel(btn)
-	
+		
 end
 --[[
 	设置按钮按下的缩放状态
@@ -138,10 +132,12 @@ function btn_scaleStyle(btn)
 end
 --重置label的坐标
 local function f_reset_label_pos(btn)
-    local w,h = ftext_getsize(btn.label);
+    local w,h = label_get_size(btn.label);--ftext_getsize(btn.label);
+	
     local x,y = func_get_sprite_xy(btn.sprite);--get_attr(btn.sprite,"spritePos")
     local sw,sh=func_get_sprite_size(btn.sprite);
-    ftext_setpos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
+    --ftext_setpos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
+	label_set_pos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
 end
 --[[
 	设置按钮label
@@ -158,15 +154,11 @@ function btn_label(btn,str,r,g,b)
 			if(g == nil) then g = 1.0	end
 			if(b == nil) then b = 1.0	end
 			
---			local x,y = get_attr(btn.sprite,"spritePos")
-
---			btn.label=tf_create(128,x,y,r,g,b);
-            btn.label = ftext_create();
---            ftext_setpos(btn.label,x,y);
+            btn.label = label_create();
+			func_addnode(btn.sprite,btn.label);
 		end
---		tf_setText(btn.label,str);
-        ftext_reset(btn.label,str);
-        
+		-- ftext_reset(btn.label,str);
+		label_set_text(btn.label,str);
         f_reset_label_pos(btn);
 	end
 end
@@ -187,13 +179,15 @@ function btn_visible(btn,vis)
 	if(vis) then
 		if(btn.label) then
 --			setv(btn.label,f);
-            ftext_vis(btn.label,1);
+            --ftext_vis(btn.label,1);
+			label_set_visible(btn.label,true);
 		end
 		setv(btn.sprite,f);
 	else
 		if(btn.label) then
 --			resetv(btn.label,f);
-            ftext_vis(btn.label,0);
+            --ftext_vis(btn.label,0);
+			label_set_visible(btn.label,false);
 		end
 		resetv(btn.sprite,f);
 	end

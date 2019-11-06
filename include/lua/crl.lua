@@ -2,20 +2,12 @@
 local function f_delAll(n)
 	func_dispose(n);
 end	
-
-local function f_add_rotate(key, x, y,container)
-    local sc = scrollBar_new(x, y,container);
-    local function f_animscHandle(sc)
-       -- func_rotate(crl.o, key, sc.value);
-		--print(sc.value);
-    end
-
-    scrollBar_bind(sc, f_animscHandle);
-    --scrollBar_setRange(sc, 0, PI)
-    --scrollBar_label(sc, key);
-    --crl.sclist[key] = sc;
-    --return scrollBar_get_rect(sc);
-	return sc;
+local function f_animscHandle(sc)
+   -- func_rotate(crl.o, key, sc.value);
+	--print(sc.value);
+	
+	local label = scrollBar_get_param(sc);
+	label_set_text(label,sc.value);
 end
 
 local function loadCallBack(obj,param)
@@ -38,16 +30,26 @@ local function loadCallBack(obj,param)
 	--alert_dispose(self);--]]
 	
 	--###################################
-	local nameTf =  label_create(150, 150);
-	label_text(nameTf, "信息");
-	func_addchild_label(container,nameTf);
+	local nameTf =  label_create();
+	label_set_text(nameTf, "信息");
+	func_addnode(container,nameTf);
 	stack_push(labelStack,nameTf);
 	
-	local sc =f_add_rotate("rx",10,20,container);
+	--local sc =f_add_rotate(0,0,container,nameTf);
+	
+	local sc = scrollBar_new();
+    scrollBar_bind(sc, f_animscHandle,nameTf);
+	func_addnode(container,sc,10,20);
 	stack_push(labelStack,sc);
 	
+	local btn = btn_create();
+	btn_label(btn,"Button");
+	func_addnode(container,btn,0,40);
+	stack_push(labelStack,btn);
+
+	
 	--清理label列表
-	stack_foreach(labelStack,f_delAll);
+	--stack_foreach(labelStack,f_delAll);
 end
 
 function crl_init()
