@@ -16,7 +16,7 @@ local function f_delAll(n,index,p)
 		--print(n.t,n.node);		
 		
 		if(_type == TYPE_LABEL) then
-			func_sprite_removechild(container,ftext_get_container(n.node));
+			--func_sprite_removechild(container,ftext_get_container(n.node));
 			fext_dispose(n.node);
 		elseif(_type == TYPE_SCROLL_BAR) then
 			scrollBar_del(n.node);
@@ -70,8 +70,6 @@ local function loadCallBack(obj,param)
 	stack_push(labelStack,f_create_node(TYPE_LABEL,nameTf));
 	
 	local sc =f_add_rotate("rx",10,20,container);
-	--func_addchild_scrollBar(container,sc,10,20);
-	--scrollBar_pos(sc,10,10);
 	stack_push(labelStack,f_create_node(TYPE_SCROLL_BAR,sc));
 	
 	--清理label列表

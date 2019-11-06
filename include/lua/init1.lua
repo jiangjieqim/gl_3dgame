@@ -77,11 +77,6 @@ end
 
 crl_init();
 
-
-
-
-
-
 --uiinit();
 
 --dofile("..\\include\\lua\\3.lua");

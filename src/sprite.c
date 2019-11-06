@@ -1133,12 +1133,26 @@ void sprite_updatePos(int data)
 		sprite_setpos(sprite,sprite->screenX,sprite->screenY);
 	}	
 }
-
+static char* 
+f_get_name(void* p){
+	struct Sprite* spr = (struct Sprite* )p;
+	struct HeadInfo* b = base_get(p);
+	return b->name;
+}
+static void 
+f_sprite_removeSelf(void* p){
+	struct Sprite* spr = (struct Sprite* )p;
+	struct Sprite* parent = (struct Sprite* )spr->parent;
+	if(parent){
+		log_color(0,"sprite_removeSelf %s\n",f_get_name(p));
+		sprite_removeChild(parent,p);
+	}
+}
 /*
 	销毁sprite
 */
-void sprite_dipose(struct Sprite* spr)
-{
+void sprite_dipose(struct Sprite* spr){
+	f_sprite_removeSelf((void*)spr);
 	if (spr->childs){
 		LStack_delete(spr->childs);
 		spr->childs = 0;
@@ -1268,24 +1282,20 @@ void sprite_addChild(void* p,void* child){
 	//设置相对坐标
 	LStack_push(spr->childs,child);
 }
+
 /*移除子对象*/
 void sprite_removeChild(void* spr,void* child){
 	struct Sprite* childspr = (struct Sprite* )child;
 	struct Sprite* parent = (struct Sprite* )spr;
 	childspr->parent = 0;
 	if(LStack_delNode(parent->childs,(int)child)){
-		log_color(0,"(parent: %0x child %0x)	sprite_removeChild succeed!\n",spr,child);
+		log_color(0,"(parent: %s child: %s)	sprite_removeChild 成功!\n",f_get_name(spr),f_get_name(child));
+	}else{
+		//log_color(0xff0000,"(parent: %s child: %s)	sprite_removeChild 失败!\n",f_get_name(spr),f_get_name(child));
+		log_color(0xff0000,"%s ===>%0x sprite_removeChild fail,父对象%0x已经被dispose掉了\n",f_get_name(child),child,spr);
 	}
 }
 
-void sprite_removeSelf(void* p){
-	struct Sprite* spr = (struct Sprite* )p;
-	struct Sprite* parent = (struct Sprite* )spr->parent;
-	if(parent){
-		sprite_removeChild(parent,p);
-		//log_color(0,"sprite_removeSelf %0x\n",p);
-	}
-}
 /*
  *刷新子对象列表的sprite
  */

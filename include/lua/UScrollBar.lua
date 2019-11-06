@@ -205,6 +205,7 @@ end--]]
 end--]]
 
 --根据cw,ch的值来确定是横向e还是综向滑动
+--parent:为Sprite类型
 function 
 scrollBar_new(x,y,parent,cw,ch)
 	cw = cw or 100;
@@ -292,11 +293,10 @@ function scrollBar_del(sc)
 	--]]
 	--func_sprite_removechild(sc.bg,sc.btn);
 	
-	sprite_removeSelf(sc.bg);
-	sprite_removeSelf(sc.btn);
 	
+	
+	ptr_remove(sc.btn);
 	ptr_remove(sc.bg)
-	ptr_remove(sc.btn)
 	--local parent = sc.parent;
 	--if(parent) then
 	--	func_sprite_removechild(parent,sc.bg);

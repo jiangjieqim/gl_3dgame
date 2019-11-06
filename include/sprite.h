@@ -231,4 +231,6 @@ sprite_set_grid9(void* mat,float left,float right,float top,float bottom,float w
 void
 sprite_bindAtals(void* p,void* atals);
 //void sprite_refresh_local_pos(void* p);
+//ÒÆ³ý×ÔÉí
+//void sprite_removeSelf(void* p);
 #endif

@@ -92,7 +92,7 @@ end
 local function f_add_scrollBar(sv)
 	local sc;
 	if(sv.dir == CONST_DIRECTION_VERTICAL) then
-		sc = scrollBar_new(sv.x+sv.sw,sv.y,15,sv.maxSize);
+		sc = scrollBar_new(sv.x+sv.sw,sv.y,nil,15,sv.maxSize);
 	else
 		print("´ýÊµÏÖ");
 	end

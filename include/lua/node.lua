@@ -149,7 +149,7 @@ function node_fbo(avtar)
         --print(v);
         func_setPos(sprite,0,(h-ch)*v);--具有矩形遮罩区域的滚动条
     end
-    local sc = scrollBar_new(200,0,15,256);
+    local sc = scrollBar_new(200,0,nil,15,256);
     scrollBar_bind(sc,f_scHandle);
 
 
