@@ -1,5 +1,6 @@
 function label_create(w,h,cam)
 	local label = {
+		name = nil,
 		--组件类型
 		type = 1,
 		tf = nil;

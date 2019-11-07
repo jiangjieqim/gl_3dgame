@@ -129,4 +129,10 @@ DLLIMPORT float xml_getfloat(const struct XmlNode* node,const char* key);
 	返回一个tl_malloc的字符串引用,在堆上,用完要释放
 */
 DLLIMPORT char* xml_getCopystr(const struct XmlNode* node,const char* key);
+
+/*
+	获取xml的长度
+*/
+DLLIMPORT int xml_get_node_cont(struct XMLSList* xml);
+
 #endif

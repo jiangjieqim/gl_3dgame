@@ -164,6 +164,7 @@ static int freeXmlDelNode(int data,int parm){
 	delXmlNode((struct XmlNode*)data);
 	return 1;
 }
+
 void xml_del(struct XMLSList* xml){
 	tl_free(xml->buffer);
 	xml->buffer=0;
@@ -177,7 +178,10 @@ void xml_del(struct XMLSList* xml){
 
 	tl_free(xml);
 	xml = 0;
+}
 
+int xml_get_node_cont(struct XMLSList* xml){
+	return LStack_length(xml->list);
 }
 
 static int 
@@ -265,7 +269,7 @@ int xml_getint(const struct XmlNode* node,const char* key){
 float 
 xml_getfloat(const struct XmlNode* node,const char* key)
 {
-	float res;
+	float res=0;
 	fillData(node,key);
 	sscanf_s(node->parentXml->buffer,"%f",&res);
 	//sscanf(node->parentXml->buffer,"%f",&res);

@@ -75,7 +75,7 @@ end
 
 --infowin(150,50);
 
-crl_init();
+--crl_init();
 
 --uiinit();
 
@@ -106,42 +106,21 @@ crl_init();
 --end
 --print(func_get_longTime()-t);
 
-
-engine_refreshCam3d();
-
-
-
---init();
-
---btn_create();
---btn_create(100);
-
-
---[[local function loadCallBack(a)
-	print("***************************************",a);
-	alert_dispose(a);
-end
-
-alert("aa",loadCallBack);--]]
---function evt_once(obj,id,func,params)
-	
-
-
-
-
-
+--***************************************************
 
 
 
 --[[
-local function f_loadend(p)
-	
-	print(p);
-end
-local function f_loadend2(p)
-	
-	print(p);
-end
 
-loadtexs("gundi.png;checkbox.png",f_loadend,1);
-loadtexs("arrow3.png;smallbtn.png",f_loadend2,2);--]]
+
+
+<ui name="1" type="Panel" drag="1" center="1"/>
+<ui name="2" type="Label" x="10" y="20" parent="1"/>
+<ui name="3" type="Button" x="0" y="50" parent="1"/>
+
+
+--]]
+
+loadui("\\resource\\crl.xml");
+
+engine_refreshCam3d();

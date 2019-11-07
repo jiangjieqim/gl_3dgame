@@ -3,7 +3,12 @@ function xml_load(url)
 end
 
 function xml_load_str(str)
-	return core_xml("loadstr",str)
+	return core_xml("loadstr",str);
+end
+
+--xml中的节点的个数
+function xml_get_length(xml)
+	return	core_xml("get_node_cnt",xml);
 end
 
 function xml_get_node_by_index(xml,index)

@@ -9,6 +9,7 @@
 --创建一个按钮结构体
 local function f_createBtn()
 	return {
+		name = nil,
 		--对象类型
 		type = 2,
 		--引擎中的Sprite引用

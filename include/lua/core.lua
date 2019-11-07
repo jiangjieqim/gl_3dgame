@@ -62,7 +62,10 @@ local UI_TYPE = {
 	Label = 1,
 	Button =2,
 	ScrollBar = 3,
+	Panel = 4,
 };
+
+
 --print(UI_TYPE.Label,UI_TYPE.ScrollBar);
 
 dofile("..\\include\\lua\\stack.lua")
@@ -882,6 +885,19 @@ function func_addnode(parent,n,x,y)
 	end
 		
 end
+--获取当前节点的容器
+function func_get_container(n)
+	local _type = n.type;
+	local c;
+	if(_type == UI_TYPE.Panel)then
+		c=  alert_get_container(n);
+	elseif(_type == UI_TYPE.ScrollBar) then
+		c= scrollBar_get_container(n);
+	elseif(_type == UI_TYPE.Button)then
+		c= btn_get_container(n);
+	end
+	return c;
+end
 
 --销毁组件
 function func_dispose(n)
@@ -920,6 +936,7 @@ dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 dofile("..\\include\\lua\\alertx.lua")
 dofile("..\\include\\lua\\crl.lua")
 
+dofile("..\\include\\lua\\loadui.lua")
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位

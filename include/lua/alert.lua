@@ -1,5 +1,7 @@
 function alert_init()
     local new_sharp = {
+		name=nil;
+		type = 4,
 	    bg;			--sprite
 	    closeBtn;	--btn
 	    label;
@@ -149,7 +151,7 @@ local function f_tex_complete(n)
 	alert_show(self);
 	
 	local obj = func_get_address(self);
-	evt_dispatch(obj,EVENT_ENGINE_COMPLETE,obj);
+	--evt_dispatch(obj,EVENT_ENGINE_COMPLETE,obj);
 end
 --…Ë÷√Œƒ±æ
 function alert_set_label(self,str)
@@ -171,5 +173,7 @@ function alert_start(self,url)
 	--print(arr[1],arr[2]);
 	self.bg_url = arr[1];
 	self.close_url = arr[2];
-	loadtexs(url,f_tex_complete, {self=self});
+	--loadtexs(url,f_tex_complete, {self=self});
+	
+	f_tex_complete({self=self});
 end
