@@ -24,6 +24,13 @@
 
 static void f_refreshChildPos(void* ptr);
 
+static f_refreshLocalPos(struct Sprite* spr){
+	if(spr->parent){
+		struct Sprite* parent = (struct Sprite*)spr->parent;
+		spr->localx = spr->screenX - parent->screenX;
+		spr->localy = spr->screenY - parent->screenY ;
+	}
+}
 static char*
 f_getName(struct Sprite* p){
 	struct HeadInfo* b =(struct HeadInfo*)p->base;
@@ -493,6 +500,7 @@ void sprite_resize(struct Sprite* spr,int w,int h){
 	spr->mHeight = h;
 	sprite_setpos(spr,spr->screenX,spr->screenY);
 }
+
 /*
  *如果此sprite是其他的sprite的子对象的时候,使用该接口设置其相对于父对象的坐标
  */
@@ -530,6 +538,7 @@ void sprite_setpos(struct Sprite* spr,int x,int y){
 	
 	setSpriteScreenPos(spr,x,y);//更新屏幕坐标
 	setHitTriangle(spr);//更新点击区域
+	f_refreshLocalPos(spr);
 	f_refreshChildPos(spr);//更新sprite的子对象的坐标
 }
 

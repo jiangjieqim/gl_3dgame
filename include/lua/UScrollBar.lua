@@ -7,6 +7,8 @@
 --创建一个按钮结构体
 local function f_create()
 	return {
+		name = nil,
+	
 		--滚动条的宽高
 		defaultBg_width,
 		defaultBg_height,
@@ -109,9 +111,9 @@ f_SetBarPostion(sprite,scrollbtn)
 			target_x = sprite_w - sc_w + bx;
 			--print('纠正!!!')
 		end
-		--sprint(target_x,by);
+
 		sprite_setpos(scrollbtn,target_x,by);
-		--print("***",target_x,by);
+		--print("设置坐标***",target_x,by);
 		return v / sprite_w
 	else
 

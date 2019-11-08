@@ -53,6 +53,7 @@ local function f_create_byNode(list,node,name,_type)
 		
 	elseif(_type == "ScrollBar") then
 		local sc = scrollBar_new();
+		sc.name = name;
 		func_addnode(parent,sc,x,y);
 		stack_push(list,sc);
 	end

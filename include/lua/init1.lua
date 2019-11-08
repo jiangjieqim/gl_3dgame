@@ -120,18 +120,37 @@ end
 
 
 --]]
+
+local function btnClick(btnName,p)
+		print(btnName,p);--p = abc
+end
+
+local function f_animscHandle(sc)
+   -- func_rotate(crl.o, key, sc.value);
+	--print(sc.value);
+	
+	local label = scrollBar_get_param(sc);
+	label_set_text(label,sc.value);
+end
+
 local function f_callBack(skin)
 	--skin_dispose(skin);
 	--print(skin);
 	
 	local p = skin_get_param(skin);
-	print("**************==>",p,"***");
+	--func_print(string.format("****************[%s]",tostring(p)));
 	
 	
+	local btn = skin_find(skin,"3");
+	btn_bindClick(btn,btnClick,"abc");
+
+	local sc = skin_find(skin,"4");
 	
+	local label = skin_find(skin,"2");
 	
-	
-	
+	--print(sc,label);
+	scrollBar_bind(sc, f_animscHandle,label);
+
 end
 skin_load("\\resource\\crl.xml",f_callBack,"myParam");
 
