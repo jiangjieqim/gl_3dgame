@@ -7,14 +7,13 @@ local function f_get_parent(list,node)
 	end
 	return nil;
 end
-
 local function f_create_byNode(list,node,name,_type)
 	local parent = f_get_parent(list,node);
 	local x = xml_get_float(node,"x");
 	local y = xml_get_float(node,"y");
 	--print("构造对象=============>",x,y,"name=",name,_type);
 	
-	if(_type == "Panel") then
+	if(_type == "Panel") then																													
 		
 		local a = alert_init();
 		a.name = name;
@@ -77,18 +76,49 @@ local function f_tex_complete(param)
 		f_create_byNode(ins.list,node,name,_type);
 	end
 	xml_del(xml);
+	
+	if(ins.completeCallBack) then
+		ins.completeCallBack(ins);
+	end
+	
+end
+--获取当前皮肤组件的参数
+function skin_get_param(skin)
+	return skin.param;
 end
 
-function loadui(url,texs)
+--根据skin组件中的name获取组件
+function skin_find(skin,name)
+	local list = skin.list;
+	return stack_find_by_name(list,name);
+end
+--根据xml加载界面skin,创建成功之后回调completeCallBack
+function skin_load(url,completeCallBack,param,texs)
 	
 	local ins = {
-		list;--栈链表
-		url,--xml url
+		list = nil;--栈链表
+		url = nil;--xml url
+		completeCallBack = nil;--加载完成回调
+		param = nil;
 	};
 	ins.url = url;
 	texs = texs  or "gundi.png;checkbox.png";
 	ins.list=stack_new();
-
+	ins.completeCallBack = completeCallBack;
+	ins.param = param;
 	loadtexs(texs,f_tex_complete,ins);
 	return ins;
+end
+
+local function f_delAll(n)
+	func_dispose(n);
+end	
+--销毁皮肤组件
+function skin_dispose(skin)
+	--销毁皮肤组件
+	stack_foreach(skin.list,f_delAll,nil,true);
+	
+	
+	stack_del(skin.list);
+	func_clearTableItem(skin);
 end

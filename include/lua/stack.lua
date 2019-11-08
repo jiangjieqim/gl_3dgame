@@ -32,11 +32,22 @@ function stack_pop(l)
 	end
 end
 --遍历栈
-function stack_foreach(l,func,p)
+function stack_foreach(l,func,p,isReverse)
 	local list = l.list;
-	for i=0,l.cnt-1,1 do
-		local node = l.list[i];
-		func(node,i,p);
+	
+	if(isReverse) then
+		for i=l.cnt-1,0,-1 do
+			local node = l.list[i];
+			
+			--print("===>",i,node);
+			
+			func(node,i,p);
+		end
+	else
+		for i=0,l.cnt-1,1 do
+			local node = l.list[i];
+			func(node,i,p);
+		end
 	end
 end
 --根据名字寻找node

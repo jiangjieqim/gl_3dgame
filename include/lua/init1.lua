@@ -120,7 +120,22 @@ end
 
 
 --]]
+local function f_callBack(skin)
+	--skin_dispose(skin);
+	--print(skin);
+	
+	local p = skin_get_param(skin);
+	print("**************==>",p,"***");
+	
+	
+	
+	
+	
+	
+end
+skin_load("\\resource\\crl.xml",f_callBack,"myParam");
 
-loadui("\\resource\\crl.xml");
+
+
 
 engine_refreshCam3d();

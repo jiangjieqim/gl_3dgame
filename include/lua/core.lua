@@ -908,7 +908,9 @@ function func_dispose(n)
 		scrollBar_del(n);
 	elseif(_type == UI_TYPE.Button)then
 		btn_dispose(n);
-	end		
+    elseif(_type == UI_TYPE.Panel)then	
+		alert_dispose(n);
+	end
 end
 
 
@@ -936,7 +938,7 @@ dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 dofile("..\\include\\lua\\alertx.lua")
 dofile("..\\include\\lua\\crl.lua")
 
-dofile("..\\include\\lua\\loadui.lua")
+dofile("..\\include\\lua\\skin.lua");--皮肤组件
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位
