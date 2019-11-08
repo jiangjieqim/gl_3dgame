@@ -60,3 +60,62 @@ a:plus()            -- 子类对象可以访问到父类中的成员和方法
 a:go()                -- 子类对象调用子类中的新增方法
 a:test()            -- 子类对象调用重写的方法
 ```
+
+
+
+
+```
+要用lua实现私有函数，关键就是使用metatable的特性来实现。
+
+Test.lua：
+
+local v = {};
+v.x = 100;
+v.y = 200;
+
+function v.new()
+　　local o = {};
+　　setmetatable(o, v);
+
+　　local mt = {f=v.f,x=v.x,y=v.y};
+　　v.__index = mt;--metatable中只提供f方法，则f成为共有函数，g成为私有函数
+　　return o;
+end
+
+function v:f()
+　　return v.g(self);
+end
+
+function v:g()
+　　return self.x + self.y;
+end
+
+return v;
+
+ 
+
+主函数：
+
+local test = require("Test.lua").new();
+
+print(test:f());--输出300
+
+print(test:g());--error 找不到g方法
+
+ 
+
+分析下整个过程：
+
+1.主函数new了一个test对象
+
+2.调用test:f()会从test的field中寻找f方法，没找到
+
+3.寻找metatable是否有__index，找到__index,发现是个table，则直接从table中找f方法
+
+4.找到f方法，等同于调用了v:f()
+
+5.v:f()中调用v表中的g方法，因为此时self是test对象，所以只能使用v.g(self)而不是v:g()
+
+6.v:g()根据传入的test对象，将test的x,y相加，输出300。
+
+```
