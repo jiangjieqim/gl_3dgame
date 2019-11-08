@@ -63,6 +63,7 @@ local UI_TYPE = {
 	Button =2,
 	ScrollBar = 3,
 	Panel = 4,
+	Skin = 5,
 };
 
 
@@ -910,9 +911,10 @@ function func_dispose(n)
 		btn_dispose(n);
     elseif(_type == UI_TYPE.Panel)then	
 		alert_dispose(n);
+	elseif(_type == UI_TYPE.Skin) then
+		skin_dispose(n);
 	end
 end
-
 
 dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器
 dofile("..\\include\\lua\\ex.lua")	--引擎
@@ -938,7 +940,7 @@ dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 dofile("..\\include\\lua\\alertx.lua")
 dofile("..\\include\\lua\\crl.lua")
 
-dofile("..\\include\\lua\\skin.lua");--皮肤组件
+dofile("..\\include\\lua\\skin.lua");--skin皮肤组件
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位

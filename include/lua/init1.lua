@@ -134,7 +134,7 @@ local function f_animscHandle(sc)
 end
 
 local function f_callBack(skin)
-	--skin_dispose(skin);
+	--
 	--print(skin);
 	
 	local p = skin_get_param(skin);
@@ -150,11 +150,10 @@ local function f_callBack(skin)
 	
 	--print(sc,label);
 	scrollBar_bind(sc, f_animscHandle,label);
+	
+	skin_dispose(skin);
 
 end
-skin_load("\\resource\\crl.xml",f_callBack,"myParam");
-
-
-
+skin_load("crl.xml",f_callBack,"myParam");
 
 engine_refreshCam3d();

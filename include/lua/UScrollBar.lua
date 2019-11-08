@@ -251,7 +251,7 @@ scrollBar_new(x,y,parent,cw,ch)
 	--创建小按钮
 	--local btn=sprite_create(name,x,y,barSize,barSize,_dragDirection);
 	--func_setIcon(btn,"smallbtn.png");
-	url = "checkbox.png";--"gundi.png";
+	url = "smallbtn.png";--"checkbox.png";--"gundi.png";
 	local btn = sprite_create_typical(nil,x,y,barSize,barSize);
 	engine_addNode(btn);
 	--print(bg,btn);

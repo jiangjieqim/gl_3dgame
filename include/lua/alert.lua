@@ -147,7 +147,7 @@ end
 
 local function f_tex_complete(n)
 	local self = n.self;
-	f_alert_create(self,300,150);
+	f_alert_create(self,n.width,n.height);
 	alert_show(self);
 	
 	local obj = func_get_address(self);
@@ -167,7 +167,10 @@ end
 
 --str传递非nil值的时候会创建一个label对象
 --url分割成数组1号位是背景,2号位是关闭按钮
-function alert_start(self,url)	
+function alert_start(self,url,width,height)
+	
+	width = width or 300;
+	height = height or 150;
 	url = url or "gundi.png;checkbox.png";--gundi
 	local arr=func_split(url,";");
 	--print(arr[1],arr[2]);
@@ -175,5 +178,5 @@ function alert_start(self,url)
 	self.close_url = arr[2];
 	--loadtexs(url,f_tex_complete, {self=self});
 	
-	f_tex_complete({self=self});
+	f_tex_complete({self=self;width=width;height=height});
 end

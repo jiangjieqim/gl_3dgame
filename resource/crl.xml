@@ -1,5 +1,7 @@
-<ui name="1" type="Panel" drag="1" center="1"/>
-<ui name="2" type="Label" x="100" y="0" label="hello" parent="1"/>
-<ui name="3" type="Button" x="50" y="50" parent="1" label="aaa"/>
-<ui name="4" type="ScrollBar" x="0" y="0" parent="1"/>
-<ui name="5" type="Button" x="50" y="100" parent="1" label=""/>
+<ui name="1" type="Panel" drag="1" center="1" width="400" height="250"/>
+<ui name="2" type="Label" x="100" y="10" label="0" parent="1"/>
+<ui name="3" type="Button" x="150" y="50" parent="1" label="aaa"/>
+<ui name="4" type="ScrollBar" x="0" y="10" parent="1"/>
+<ui name="5" type="Button" x="50" y="100" parent="1" label="°´Å¥ÎÄ±¾"/>
+<ui name="6" type="Skin" x="150" y="100" url="scrollabel.xml" parent="1" />
+
