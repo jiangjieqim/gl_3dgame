@@ -1,5 +1,8 @@
 dofile("..\\include\\lua\\core.lua");
 
+dofile("..\\include\\lua\\modelControl.lua");
+
+
 --example_stack();
 
 --########################################
@@ -60,8 +63,8 @@ local function uiinit()
 	example_input(0,80);
 	infowin(150,50);
 	example_srollView();
-	alert("aa");
-	dofile("..\\include\\lua\\1.lua");--md2动作控制
+	--alert("aa");
+	--dofile("..\\include\\lua\\1.lua");--md2动作控制
 	dofile("..\\include\\lua\\5.lua");--材质测试
 end
 --********************************************
@@ -77,7 +80,7 @@ end
 
 --crl_init();
 
---uiinit();
+--		uiinit();
 
 --dofile("..\\include\\lua\\3.lua");
 
@@ -121,39 +124,25 @@ end
 
 --]]
 
-local function btnClick(btnName,p)
-		print(btnName,p);--p = abc
+--skin_load("crl.xml",f_callBack,"myParam");
+fps();
+func_enable_debug(false);
+
+local function loadbox()
+	local obj2 = unit_load("\\resource\\obj\\box.obj",--triangle,bauul
+	"//resource//material//triangle.mat");
+--unit_scale(obj2,20);
+	
+		setv(obj2.p,FLAGS_REVERSE_FACE);
+		setv(obj2.p,FLAGS_DRAW_PLOYGON_LINE);
+	return obj2;
 end
+cam_setPosition(0,0,-5);
 
-local function f_animscHandle(sc)
-   -- func_rotate(crl.o, key, sc.value);
-	--print(sc.value);
-	
-	local label = scrollBar_get_param(sc);
-	label_set_text(label,sc.value);
-end
+local u = loadbox();
 
-local function f_callBack(skin)
-	--
-	--print(skin);
-	
-	local p = skin_get_param(skin);
-	--func_print(string.format("****************[%s]",tostring(p)));
-	
-	
-	local btn = skin_find(skin,"3");
-	btn_bindClick(btn,btnClick,"abc");
+local mc = ModelControl:new(10,10);
 
-	local sc = skin_find(skin,"4");
-	
-	local label = skin_find(skin,"2");
-	
-	--print(sc,label);
-	scrollBar_bind(sc, f_animscHandle,label);
-	
-	skin_dispose(skin);
-
-end
-skin_load("crl.xml",f_callBack,"myParam");
+mc:bind(u);
 
 engine_refreshCam3d();

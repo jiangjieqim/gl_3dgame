@@ -50,6 +50,9 @@ log_color(int color,char* format, ...);
 DLLIMPORT void
 log_state(int value);
 
+//是否激活日志
+DLLIMPORT
+void log_enable(int v);
 //进程睡眠ms毫秒
 DLLIMPORT void sleep(long ms);
 

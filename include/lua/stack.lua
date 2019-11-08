@@ -54,11 +54,17 @@ end
 function stack_find_by_name(l,name)
 	local list = l.list;
 	for i=0,l.cnt-1,1 do
-		local node = l.list[i];
+		local node = list[i];
 		if(node.name == name)then
 			return node;
 		end
 	end
+end
+
+--根据index获取其节点
+function stack_find_by_index(l,index)
+	local list = l.list;
+	return list[index];
 end
 
 function example_stack()

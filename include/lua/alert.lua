@@ -26,8 +26,13 @@ local function f_center(self)
 	local bgw,bgh = func_get_sprite_size(self.bg);
 	x = (sx - bgw)/2;
 	y = (sy - bgh)/2;
-	func_setPos(self.bg,x,y);--设置关闭按钮的坐标
+	func_setPos(self.bg,x,y);
 end
+
+function alert_set_pos(self,x,y)
+	func_setPos(self.bg,x,y);
+end
+
 local function f_resize(evtData,self)
 	local sw,sh = func_screenSize();
 	

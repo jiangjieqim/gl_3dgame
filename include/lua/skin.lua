@@ -43,9 +43,7 @@ local function f_create_by_node(skin,node,name,_type)
 	x = x + skin.ox or 0;
 	y = y + skin.oy or 0;
 
-	
-	if(_type == "Panel") then																													
-		
+	if(_type == "Panel") then
 		local a = alert_init();
 		a.name = name;
 		
@@ -118,7 +116,7 @@ function skin_parse(skin)
 	xml_del(xml);
 	
 	if(ins.completeCallBack) then
-		ins.completeCallBack(ins);
+		ins.completeCallBack(ins,ins.param);
 	end
 end
 
@@ -142,7 +140,7 @@ function skin_load(url,
 	
 	local ins = {
 		type = 5;
-		container = nil;--当前skin的容器
+		--container = nil;--当前skin的容器
 		customParent = nil;--自定义一个父对象
 		--偏移坐标
 		ox = 0;
@@ -177,4 +175,15 @@ function skin_dispose(skin)
 	
 	stack_del(skin.list);
 	func_clearTableItem(skin);
+end
+
+function skin_set_pos(skin,x,y)
+	local list = skin.list;
+	local node = stack_find_by_index(list,0);
+	
+	if(node and node.type == UI_TYPE.Panel) then
+		alert_set_pos(node,x,y);
+	else
+		func_error("================= skin_set_pos 未找到节点");
+	end
 end

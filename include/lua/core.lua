@@ -58,7 +58,7 @@ EVENT_ENGINE_COMPLETE		   = 109	--完成事件
  KEY_I = 105
 
 
-local UI_TYPE = {
+UI_TYPE = {
 	Label = 1,
 	Button =2,
 	ScrollBar = 3,
@@ -66,6 +66,7 @@ local UI_TYPE = {
 	Skin = 5,
 };
 
+local DEBUG = true;
 
 --print(UI_TYPE.Label,UI_TYPE.ScrollBar);
 
@@ -92,7 +93,16 @@ getDddress(value)
 	local s = tonumber('0x'..v);
 	return s;
 end
-
+--是否开启debug模式
+function func_enable_debug(v)
+	if(v == true)then
+		DEBUG=1;
+		log_enable(1);
+	else
+		DEBUG=nil;
+		log_enable(0);
+	end
+end
 --将"table: ff"转化为number
 function func_get_address(value)
 	return getDddress(value);
@@ -325,17 +335,16 @@ end
 
 --打印一个有颜色的日志到控制台
 function func_print(s,c)
-	
-	
-	c = c or 0xffff00
-	--c = c or 0;
-	
-	--向控制台输出有颜色的文本日志
-	dofunc("LogPut",string.format("lua: %s\n",s),c);
-	
-	--打印堆栈
-	--dofunc("LogPut",string.format("lua stack: %s\n",debug.traceback()),0x00ff00);
-	
+	if(DEBUG~=nil)then
+		c = c or 0xffff00
+		--c = c or 0;
+		
+		--向控制台输出有颜色的文本日志
+		dofunc("LogPut",string.format("lua: %s\n",s),c);
+		
+		--打印堆栈
+		--dofunc("LogPut",string.format("lua stack: %s\n",debug.traceback()),0x00ff00);
+	end
 end
 function func_error(msg,func)
 	local s = ''

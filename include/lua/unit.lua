@@ -10,6 +10,11 @@ local function f_init()
 	};
 	return self;	
 end
+
+function unit_get_model(self)
+	return self.p;
+end
+
 --初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
 function unit_split_anim(self)
 	local md2 = self.p;
