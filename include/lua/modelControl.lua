@@ -12,7 +12,8 @@ local function f_rx_handle(sc)
 	--print(sc.value);
 	local self = scrollBar_get_param(sc);
 	local label = self.rxlabel;
-	--label_set_text(label,"rx:"..sc.value);
+    local v = string.format("%.1f",sc.value);
+	label_set_text(label,v);--…Ë÷√Œƒ±æ
 	
 	func_rotate(unit_get_model(self.obj), "rx", sc.value*PI);
 	--print(sc.value*PI);
@@ -33,11 +34,8 @@ local function f_scale_handle(sc)
 end
 
 local function f_callBack(skin,self)
-	
-	
 	local p = skin_get_param(skin);
 	--func_print(string.format("****************[%s]",tostring(p)));
-	
 	
 	local btn = skin_find(skin,"3");
 	btn_bindClick(btn,btnClick,"abc");

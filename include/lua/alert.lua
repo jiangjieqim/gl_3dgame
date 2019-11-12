@@ -58,11 +58,11 @@ end
 --设置可拖拽
 function alert_set_drag(self,value)
 	self.isDrag = value;
-	if(value) then
-		evt_on(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag,self);--增加拖拽事件
-	else
-		evt_off(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag);		
-	end
+	--if(value) then
+	--	evt_on(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag,self);--增加拖拽事件
+	--else
+	--	evt_off(self.bg,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_drag);		
+	--end
 end
 
 local function f_closeCallBack(data,param)

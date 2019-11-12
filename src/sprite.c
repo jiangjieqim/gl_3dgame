@@ -1057,16 +1057,14 @@ changeDragXY(struct Sprite* p,int* px,int* py){
 		//	fLuaDragMove(p->callLuaDragMove,b->name,progress);
 		//}
 
-		{
-			//发送事件给lua
-			char _str[G_BUFFER_64_SIZE];
-			struct HeadInfo* b = base_get(p);
-			sprintf_s(_str, G_BUFFER_64_SIZE,"%s,%d,%d,%.3f",b->name,*px,*py,progress);	
+	
+		 //发送事件给lua
+//		char _str[G_BUFFER_64_SIZE];
+//		struct HeadInfo* b = base_get(p);
+//		sprintf_s(_str, G_BUFFER_64_SIZE,"%s,%d,%d,%.3f",b->name,*px,*py,progress);	
 			
-			//printf("c=[%s]lx = %.3f,ly = %.3f %d %d,0x%0x	\t cx0 = %d cx1 = %d\n",_str,p->screenX,p->screenY,p->localx,p->localy,p->parent,cx0,cx1);
-			
-			ex_lua_evt_dispatch(p,EVENT_ENGINE_SPRITE_CLICK_MOVE,_str);
-		}
+		//printf("c=[%s]lx = %.3f,ly = %.3f %d %d,0x%0x	\t cx0 = %d cx1 = %d\n",_str,p->screenX,p->screenY,p->localx,p->localy,p->parent,cx0,cx1);
+		ex_lua_evt_dispatch_f(p,EVENT_ENGINE_SPRITE_CLICK_MOVE,progress);
 	}
 }
 //========================================================
@@ -1091,6 +1089,9 @@ sprite_mouseMove(int data)
 					changeDragXY(ptr,&x,&y);
 					//printf("mx = %d,my = %d\n",x,y);
 					sprite_setpos(ptr,x,y);
+
+
+
 					//sprite_set_self_pos(ptr,x,y);
 				}
 			}

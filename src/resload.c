@@ -37,11 +37,7 @@ f_render1(int id,void* p,void* thisObj){
 }
 static void
 f_load_textCallBack(void* tex,void* param){
-	//struct MapNode* node =(struct MapNode*)map_getNodeByValue(ex_getIns()->texmap,tex);
 	if(param){
-		//struct RES_Load* res = (struct RES_Load*)param;
-		//printf("下一个资源节点index = %d\n\n\n",ex_getIns()->index);
-		//evt_once(ex_getIns(),EVENT_ENGINE_RENDER_3D,f_render1,param);
 		resload_start(param);
 	}
 }
@@ -76,7 +72,5 @@ f_render(int id,void* p,void* thisObj){
 	}
 }
 void resload_start(void* ptr){
-	//printf("********0x%0x",ptr);
 	f_render(0,0,ptr);
-	//evt_once(ex_getIns(),EVENT_ENGINE_RENDER_3D,f_render,ptr);
 }

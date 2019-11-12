@@ -31,6 +31,7 @@
 #include "fbotex.h"
 #include "atlas.h"
 #include "map.h"
+#include "timelater.h"
 //#define DEBUG_PRINT_HIT	//打印拾取日志
 
 int g_sprite_line;
@@ -1223,8 +1224,7 @@ f_defaultRenderFrame(){
 	//drawLine(2000);
 	//f_drawline();
 
-	//evt_dispatch(p,EVENT_ENGINE_RENDER_3D,0);
-	ex_lua_global_evt_dispatch(EVENT_ENGINE_RENDER_3D);
+	//ex_lua_global_evt_dispatch(EVENT_ENGINE_RENDER_3D);//这个一直在给lua模块发送数据,性能不好,需要优化
 
 	//f_renderlistCall(sprite_drawRender);//渲染2d节点
 
@@ -1278,11 +1278,9 @@ _new(){
 	
 	runLastList();
 	p->index++;
-	//printf("**** %d\n",p->fps);
 	
 	evt_dispatch(ex_getIns(),EVENT_ENGINE_RENDER_3D,0);
-
-//	sleep(1000);
+	timelater_run();
 }
 void ex_render(void)
 {
@@ -2203,13 +2201,14 @@ void onKeyboardCallBack(unsigned char key, int x, int y){
 	
 	evt_dispatch(ex_getIns(),EVENT_ENGINE_KEYBOARD,(void*)&ekey);
 
-	{
-		char _str[G_BUFFER_16_SIZE];
+	//{
+		/*char _str[G_BUFFER_16_SIZE];
 		memset(_str,0,G_BUFFER_16_SIZE);
 		sprintf_s(_str,G_BUFFER_16_SIZE,"%d",key);
-		//printf("key=(%s)\n",_str);
-		ex_lua_evt_dispatch(0,EVENT_ENGINE_KEYBOARD,_str);
-	}
+		printf("键盘键值key=(%s)\n",_str);
+		ex_lua_evt_dispatch(0,EVENT_ENGINE_KEYBOARD,_str);*/
+	//}
+	ex_lua_evt_dispatch_f(0,EVENT_ENGINE_KEYBOARD,key);
 }
 
 //static void 
@@ -2355,6 +2354,19 @@ void
 ex_lua_global_evt_dispatch(int evtid){
 	ex_lua_evt_dispatch(0,evtid,0);
 }
+
+void 
+ex_lua_evt_dispatch_f(void* obj,int evtid,float data){
+	lua_State* L =ex_getIns()->mylua;
+	if(L){
+		lua_getglobal(L,"evt_dispatch");//调用lua的eve_dispath方法
+		lua_pushinteger(L,(int)obj);//事件派发的对象
+		lua_pushinteger(L,evtid);//事件id号
+		lua_pushnumber(L,data);//事件数据
+		lua_pcall(L,3,0,0);
+	}
+}
+
 void 
 ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
 	

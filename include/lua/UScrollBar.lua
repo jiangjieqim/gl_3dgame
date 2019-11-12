@@ -1,7 +1,5 @@
 --#######################################################
 --	ScrollBar组件
---
---
 --#######################################################
 
 --创建一个按钮结构体
@@ -19,6 +17,7 @@ local function f_create()
 		--滚动按钮实例(Sprite)
 		btn = nil,
 		
+		--底部的Sprite
 		bg = nil,
 		
 		--滑条的区间(默认设置一个初值)
@@ -43,15 +42,14 @@ end
 --设置百分比
 local function 
 f_ScDragMove(sc,progress)
-	
 	if(sc == nil) then
-		print('f_ScDragMove sc = nil')
+		func_error('f_ScDragMove sc = nil');
 		return
 	end	
 	
 	local width = progress * (sc.e - sc.s)
 	
-	sc.value = sc.s + width
+	sc.value = sc.s + width;
 	
 	if(sc.callBack) then
 		sc.callBack(sc)
@@ -159,18 +157,9 @@ f_scrollBarBG_Click2(name,p)
 	f_ScDragMove(sc,v)
 end;
 
-local function f_f_LuaDrag_move(data,p)
+local function f_f_LuaDrag_move(data,p)    
 	local sc = p;
-	
-	
-	local arr = func_split(data,",");
-	
-	--local name = arr[1];
-	local progress = tonumber(arr[4]);
-	--arr = nil
-	--f_ScDragMove(func_getTable(name),progress);
-	--print(progress);	
-	
+	local progress = data;
 	f_ScDragMove(sc,progress);
 end
 

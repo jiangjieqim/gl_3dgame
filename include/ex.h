@@ -72,6 +72,12 @@
 *引擎初始化完成(stage2d,设备,lua函数注册完成,可以执行上层业务)
 */
 #define EVENT_ENGING_INIT 200	
+
+/**
+ * 计时器
+ */
+#define EVENT_TIMER 201
+
 //键盘事件状态
 struct E_KeyBoard
 {
@@ -223,6 +229,8 @@ struct EX
 	//int lock;
 	//drawcall调用完成之后的回调列表
 	struct LStackNode* lastList;
+
+	struct LStackNode* timelaterList;
 
 	int index;
 };
@@ -491,5 +499,9 @@ GLuint ex_getProgrom3D(const char* glslType);
 //在drawcall的最后回调
 void
 callLater(void _callBack(void*),void* parms);
+
+//向指定的事件发送一个浮点型数据
+void 
+ex_lua_evt_dispatch_f(void* obj,int evtid,float data);
 
 #endif

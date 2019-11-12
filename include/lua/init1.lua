@@ -2,6 +2,7 @@ dofile("..\\include\\lua\\core.lua");
 
 dofile("..\\include\\lua\\modelControl.lua");
 
+func_enable_debug(false);
 
 --example_stack();
 
@@ -125,8 +126,8 @@ end
 --]]
 
 --skin_load("crl.xml",f_callBack,"myParam");
+
 fps();
-func_enable_debug(false);
 
 local function loadbox()
 	local obj2 = unit_load("\\resource\\obj\\box.obj",--triangle,bauul

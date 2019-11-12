@@ -81,7 +81,17 @@ function evt_dispatch(...)
 	local obj; --指向的对象
 	local id;  --事件id
 	local data;--数据
+--	obj ,id,data = f_parse({...});
+	local arr = {...};
+	obj = arr[1];
+	id  = arr[2];
+	data= arr[3];
 	
+	
+	
+	print("evt_dispatch",obj ,id,data );
+		
+--[[		
 	for index,value in ipairs({...}) do
 		--print(index,value);
 		if(index == 1) then
@@ -91,7 +101,7 @@ function evt_dispatch(...)
 		elseif(index == 3) then
 			data = value;
 		end
-	end
+	end--]]
 	
 --    if(id == 103)then
 --        print("************");
@@ -129,7 +139,3 @@ function evt_dispatch(...)
 	end
 	--print(id);
 end
-
-
-
-
