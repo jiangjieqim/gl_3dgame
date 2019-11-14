@@ -269,3 +269,11 @@ local btn = btn_create(0,50);
 btn_bindClick(btn,f_onClick);
 ```
 
+
+## 根据xml解析界面
+```
+<ui name="1" type="Panel" drag="1" center="1" width="200" height="250"/>
+<ui name="rx_sc" type="ScrollBar" x="0" y="0" parent="1"/>
+<ui name="rx_label" type="Label" x="100" y="0" label="rx" parent="1"/>
+```
+参考接口function skin_parse(skin)  
