@@ -32,13 +32,23 @@ local function f_scale_handle(sc)
 	local self = scrollBar_get_param(sc);
 	func_rotate(unit_get_model(self.obj), "scale", sc.value);
 end
+local function f_model_fps_sc_handle(sc)
+	local self = scrollBar_get_param(sc);
+		
+	local cur = sc.value * 60;
+	
+	change_attr(unit_get_model(self.obj), "fps", tostring(cur));
+	local label = skin_find(self.skin,"model_fps_label");
+	
+	label_set_text(label,math.floor(cur));
+end
 
 local function f_callBack(skin,self)
 	local p = skin_get_param(skin);
 	--func_print(string.format("****************[%s]",tostring(p)));
 	
-	local btn = skin_find(skin,"3");
-	btn_bindClick(btn,btnClick,"abc");
+	--local btn = skin_find(skin,"3");
+	--btn_bindClick(btn,btnClick,"abc");
 
 	local sc = skin_find(skin,"rx_sc");
 	local rxlabel = skin_find(skin,"rx_label");
@@ -54,6 +64,31 @@ local function f_callBack(skin,self)
 
 	scrollBar_bind(skin_find(skin,"scale_sc"),f_scale_handle,self);
 
+	scrollBar_bind(skin_find(skin,"model_fps_sc"),f_model_fps_sc_handle,self);
+	
+	
+	--[[scrollBar_bind(skin_find(skin,"setframe"),
+		function(sc)
+		
+			--md5
+			local o = unit_get_model(self.obj);
+			change_attr(o, "setframe", sc.value*47 - 1)
+		end
+	,self);--]]
+	
+	
+	--[[local container = skin_get_container(skin);
+	local mc = FpsView:new();
+	mc:show();
+	func_addnode(container,mc:container(),300);--]]
+
+	
+
+	
+	
+
+
+	--设置界面的初始坐标
 	skin_set_pos(skin,self.x,self.y);
 
 end
@@ -66,10 +101,11 @@ function ModelControl:new(x,y)
 	self.y = y;
 	self.rxlabel = nil;
 	self.obj = nil;
+	self.skin = nil;
 	
 --	self.bind = bind;
 	--print(self);
-	skin_load("crl.xml",f_callBack,self);
+	self.skin=skin_load("crl.xml",f_callBack,self);
 
 	return self;
 end
@@ -80,6 +116,17 @@ end
 
 
 
+
+--[[
+
+
+<ui name="3" type="Button" x="150" y="50" parent="1" label="aaa"/>
+
+<ui name="5" type="Button" x="50" y="100" parent="1" label="按钮文本"/>
+<ui name="6" type="Skin" x="150" y="100" url="scrollabel.xml" parent="1" />
+
+
+--]]
 
 
 

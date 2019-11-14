@@ -2,7 +2,7 @@ dofile("..\\include\\lua\\core.lua");
 
 dofile("..\\include\\lua\\modelControl.lua");
 
-func_enable_debug(false);
+--func_enable_debug(false);
 
 --example_stack();
 
@@ -100,6 +100,7 @@ end
 --	return (0xA1 <= c) && (0xFE > c);
 --}
 
+
 --print(0x80,0xF7,0xA1,0xFE);
 
 
@@ -127,23 +128,35 @@ end
 
 --skin_load("crl.xml",f_callBack,"myParam");
 
-fps();
+--fps();
 
 local function loadbox()
-	local obj2 = unit_load("\\resource\\obj\\box.obj",--triangle,bauul
+--[[	local obj2 = unit_load("\\resource\\obj\\box.obj",--triangle,bauul
 	"//resource//material//triangle.mat");
 --unit_scale(obj2,20);
 	
 		setv(obj2.p,FLAGS_REVERSE_FACE);
-		setv(obj2.p,FLAGS_DRAW_PLOYGON_LINE);
+		setv(obj2.p,FLAGS_DRAW_PLOYGON_LINE);--]]
+		
+		
+		local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
+		"//resource//material//bauul.mat");
+	unit_scale(obj2,0.02);
+	unit_rx(obj2,PI/2);
+	unit_split_anim(obj2);
+	
 	return obj2;
 end
 cam_setPosition(0,0,-5);
 
-local u = loadbox();
 
-local mc = ModelControl:new(10,10);
+local f = FpsView:new();
+f:show();
+--print(f.p);
 
-mc:bind(u);
+--local u = loadbox();
+
+--local mc = ModelControl:new(10,10);
+--mc:bind(u);
 
 engine_refreshCam3d();

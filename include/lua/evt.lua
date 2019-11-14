@@ -56,6 +56,10 @@ function evt_off(obj,id,func)
 	for k, v in pairs(evtlist) do
 		local node = evtlist[k];
 		if(node and node.id == id and node.func == func and node.obj == obj) then
+			
+			local str = string.format("移除事件 evt_off==> evt.id = "..id..",obj = "..obj);
+			func_print(str);
+			
 			node.id = nil
 			node.func = nil;
 			node.obj = nil;
@@ -89,7 +93,9 @@ function evt_dispatch(...)
 	
 	
 	
-	print("evt_dispatch",obj ,id,data );
+--	print("evt_dispatch",obj ,id,data );
+	
+	
 		
 --[[		
 	for index,value in ipairs({...}) do
@@ -115,7 +121,7 @@ function evt_dispatch(...)
 				node.func(data,node.params);
 				if(node.once) then
 					evt_off(obj,id,node.func);--obj,id,func
-					func_print("移除全局事件"..id);
+					--func_print("移除全局事件"..id);
 				end
 			end
 		end
@@ -129,8 +135,8 @@ function evt_dispatch(...)
 				
 				if(node.once) then
 					
-					local str = string.format("evt_dispatch之后移除事件 evt id = %d  node = (%s) obj =(%d)  data=(%s) node.params=(%s)",id,tostring(node),obj,tostring(data),tostring(node.params));
-					func_print(str);
+					--local str = string.format("evt_dispatch之后移除事件 evt id = %d  node = (%s) obj =(%d)  data=(%s) node.params=(%s)",id,tostring(node),obj,tostring(data),tostring(node.params));
+					--func_print(str);
 					
 					evt_off(obj,id,node.func);--obj,id,func
 				end

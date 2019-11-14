@@ -23,6 +23,10 @@ local function f_itemskin_load(xmlurl,parent,x,y)
 	skin_parse(skin);
 	return skin;
 end
+--skin的容器
+function skin_get_container(skin)
+	return skin.container;
+end
 
 local function f_create_by_node(skin,node,name,_type)
 	local list = skin.list;
@@ -35,6 +39,8 @@ local function f_create_by_node(skin,node,name,_type)
 		--使用非自定义的父容器的时候,找到该组件的父对象
 		parent = f_get_parent(list,node);
 	end
+	
+	skin.container = parent;
 	
 	local x = xml_get_float(node,"x");
 	local y = xml_get_float(node,"y");
@@ -135,12 +141,11 @@ function skin_find(skin,name)
 end
 --根据xml加载界面skin,创建成功之后回调completeCallBack
 --如果completeCallBack不传递值,是不进行异步回调的
-function skin_load(url,
-	completeCallBack,param,texs)
+function skin_load(url,completeCallBack,param,texs)
 	
 	local ins = {
 		type = 5;
-		--container = nil;--当前skin的容器
+		container = nil;--当前skin的容器
 		customParent = nil;--自定义一个父对象
 		--偏移坐标
 		ox = 0;
