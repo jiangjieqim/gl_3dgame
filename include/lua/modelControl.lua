@@ -77,16 +77,21 @@ local function f_callBack(skin,self)
 	,self);--]]
 	
 	
-	--[[local container = skin_get_container(skin);
-	local mc = FpsView:new();
+	local container = skin_get_container(skin);
+	--[[local mc = FpsView:new();
 	mc:show();
 	func_addnode(container,mc:container(),300);--]]
 
 	
-
 	
+	local function onCk(_status,p)
+			print(_status,p);
+	end
+	local ck = CheckBox:new();
+	ck:bind(onCk,12);
 	
-
+	func_addnode(container,ck.container,120);
+	
 
 	--设置界面的初始坐标
 	skin_set_pos(skin,self.x,self.y);

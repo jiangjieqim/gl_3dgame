@@ -895,6 +895,8 @@ function func_addnode(parent,n,x,y)
 		func_addchild(parent,scrollBar_get_container(n),x,y);
 	elseif(_type == UI_TYPE.Button)then
 		func_addchild(parent,btn_get_container(n),x,y);
+	else
+		func_error(parent);
 	end
 		
 end
@@ -954,7 +956,10 @@ dofile("..\\include\\lua\\crl.lua")
 
 dofile("..\\include\\lua\\skin.lua");--skin皮肤组件
 
+
+dofile("..\\include\\lua\\checkbox.lua")	--checkbox组件
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
+
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位
 dofile("..\\include\\lua\\scrollview.lua")	--scrollview
 dofile("..\\include\\lua\\node.lua")		--角色单位2

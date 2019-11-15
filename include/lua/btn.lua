@@ -41,9 +41,13 @@ end
 --[[
 	创建一个按钮
 	x,y默认值为0,0
+	use9grid: 默认使用九宫格数据
+	useeffect:是否使用按钮缩放特效,默认是使用(true)
 --]]
-function btn_create(x,y,w,h,url,use9grid)
-	local btn = f_createBtn()
+function btn_create(x,y,w,h,url,use9grid,useeffect)
+	local btn = f_createBtn();
+	
+	useeffect = useeffect or true;
 	--local w = 100
 	--local h = 100
 	--btn.id = 123
@@ -73,8 +77,9 @@ function btn_create(x,y,w,h,url,use9grid)
 	end
 	
 	btn.sprite =  sprite;
-	btn_scaleStyle(btn);
-	
+	if(useeffect) then
+		btn_scaleStyle(btn);
+	end
 	return btn
 end
 --获取btn的位置及其尺寸

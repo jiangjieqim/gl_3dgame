@@ -156,7 +156,8 @@ f:show();
 
 --local u = loadbox();
 
---local mc = ModelControl:new(10,10);
+local mc = ModelControl:new(10,10);
+
 --mc:bind(u);
 
 engine_refreshCam3d();
