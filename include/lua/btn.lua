@@ -137,18 +137,31 @@ function btn_scaleStyle(btn)
 	setv(btn.sprite,FLAGS_BUTTON_EFFECT);
 end
 --重置label的坐标
-local function f_reset_label_pos(btn)
+local function f_reset_label_pos(btn,style)
     local w,h = label_get_size(btn.label);--ftext_getsize(btn.label);
 	
     local x,y = func_get_sprite_xy(btn.sprite);--get_attr(btn.sprite,"spritePos")
     local sw,sh=func_get_sprite_size(btn.sprite);
     --ftext_setpos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
-	label_set_pos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
+	
+	if(style==nil) then
+		label_set_pos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
+	elseif(style == "rightout")then	
+		label_set_pos(btn.label,x+w,y+(sh-h)/2);
+	end
 end
+	
 --[[
 	设置按钮label
+	
+	style:checkbox的对齐方式的样式,
+	
+		nil:默认居中对齐方式
+		rightout:右边框对齐
 --]]
-function btn_label(btn,str,r,g,b)
+function btn_label(btn,str,style,r,g,b)
+	--center = center or true;
+	
 	if(str == nil) then
 		
 		--删除文本
@@ -165,7 +178,8 @@ function btn_label(btn,str,r,g,b)
 		end
 		-- ftext_reset(btn.label,str);
 		label_set_text(btn.label,str);
-        f_reset_label_pos(btn);
+		
+        f_reset_label_pos(btn,style);
 	end
 end
 --设置btn的name

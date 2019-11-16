@@ -2,7 +2,7 @@ dofile("..\\include\\lua\\core.lua");
 
 dofile("..\\include\\lua\\modelControl.lua");
 
---func_enable_debug(false);--关闭调试日志
+func_enable_debug(false);--关闭调试日志
 
 --example_stack();
 

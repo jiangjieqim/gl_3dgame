@@ -100,6 +100,13 @@ local function f_create_by_node(skin,node,name,_type)
 		stack_push(list,itemSkin);
 	elseif(_type == "CheckBox") then
 		local ck = CheckBox:new();
+		ck:setname(name);
+		local label = xml_get_str(node,"label");
+		
+		if(#label > 0) then
+			ck:setlabel(label);
+		end
+		
 		func_addnode(parent,ck,x,y);
 		stack_push(list,ck);
 	end

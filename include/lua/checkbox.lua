@@ -5,7 +5,7 @@ CheckBox = {
 	btn,
 	container,
 	callback,
-	param
+	param,
 };
 CheckBox.__index = CheckBox;
 
@@ -35,12 +35,16 @@ function CheckBox:new()
 	return self;
 end
 
+function CheckBox:setlabel(label)
+	btn_label(self.btn,label,"rightout");
+end
+--ÉèÖÃCheckBoxµÄÃû×Ö
+function CheckBox:setname(name)
+	self.name = name;
+end
 function CheckBox:bind(callback,param)
 	self.callback = callback;
-	--if(callback) then
-		self.param = param;
-		--btn_bindClick(self.btn,ckfunc,self);
-	--end
+	self.param = param;
 end
 
 function CheckBox:dispose()

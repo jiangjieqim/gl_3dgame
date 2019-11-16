@@ -43,7 +43,7 @@ local function f_model_fps_sc_handle(sc)
 	label_set_text(label,math.floor(cur));
 end
 local function onCk(_status,p)
-	--print(_status,p);
+	print("CheckBox call onCk",_status,p);
 end
 local function f_callBack(skin,self)
 	local p = skin_get_param(skin);
@@ -79,17 +79,17 @@ local function f_callBack(skin,self)
 	,self);--]]
 	
 	
-	local container = skin_get_container(skin);
+	--local container = skin_get_container(skin);
 	--[[local mc = FpsView:new();
 	mc:show();
 	func_addnode(container,mc:container(),300);--]]
 
 	
+	local ck = skin_find(skin,"ck0");
+	--print(ck);
+	ck:bind(onCk,self);
 	
 	
-	--local ck = CheckBox:new();
-	--ck:bind(onCk,self);
-	--func_addnode(container,ck.container,120);
 	
 
 	--设置界面的初始坐标
