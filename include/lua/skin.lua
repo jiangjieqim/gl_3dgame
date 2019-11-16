@@ -109,6 +109,11 @@ local function f_create_by_node(skin,node,name,_type)
 		
 		func_addnode(parent,ck,x,y);
 		stack_push(list,ck);
+	elseif(_type == "ProgressBar") then
+		local pb = ProgressBar:new();
+		pb.name = name;
+		func_addnode(parent,pb,x,y);
+		stack_push(list,pb);
 	end
 	--print("====>",parent);
 end
@@ -175,7 +180,7 @@ function skin_load(url,completeCallBack,param,texs)
 	if(completeCallBack) then 
 		ins.completeCallBack = completeCallBack;
 		ins.param = param;
-		loadtexs(texs or "gundi.png;checkbox.png",f_tex_complete,ins);
+		loadtexs(texs or "gundi.png;checkbox.png;smallbtn.png",f_tex_complete,ins);
 	end
 	return ins;
 end

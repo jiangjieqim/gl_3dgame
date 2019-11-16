@@ -17,6 +17,10 @@
 <ui name="model_fps_sc" type="ScrollBar" x="0" y="80" parent="1"/>
 <ui name="model_fps_label" type="Label" x="100" y="80" label="fps_model" parent="1"/>
 
+<!--½ø¶ÈÌõ-->
+<ui name="pb1" type="ProgressBar" x="0" y="100" parent="1"/>
+
+
 
 
 

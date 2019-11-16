@@ -67,7 +67,8 @@ UI_TYPE = {
 	ScrollBar = 3,
 	Panel = 4,
 	Skin = 5,
-	CheckBox = 6,--选显卡类型
+	CheckBox = 6,--选项卡类型
+	ProgressBar = 7,
 };
 
 local DEBUG = true;
@@ -351,6 +352,7 @@ function func_print(s,c)
 	end
 end
 function func_error(msg,func)
+	msg = msg or "";
 	local s = ''
 	
 	s = 'lua:'..msg..''
@@ -896,7 +898,10 @@ function func_addnode(parent,n,x,y)
 		func_addchild(parent,scrollBar_get_container(n),x,y);
 	elseif(_type == UI_TYPE.Button)then
 		func_addchild(parent,btn_get_container(n),x,y);
-	elseif(_type == UI_TYPE.CheckBox) then
+	elseif(_type == UI_TYPE.CheckBox 
+		or _type == UI_TYPE.ProgressBar 
+	
+	) then
 		func_addchild(parent,n.container,x,y);
 	else
 		func_error(parent);
@@ -929,7 +934,9 @@ function func_dispose(n)
 		alert_dispose(n);
 	elseif(_type == UI_TYPE.Skin) then
 		skin_dispose(n);
-	elseif(_type == UI_TYPE.CheckBox)then
+	elseif(_type == UI_TYPE.CheckBox
+		or _type == UI_TYPE.ProgressBar 
+	)then
 		n:dispose();
 	end
 end
@@ -960,6 +967,7 @@ dofile("..\\include\\lua\\crl.lua")
 
 
 dofile("..\\include\\lua\\checkbox.lua")	--checkbox组件
+dofile("..\\include\\lua\\progrossbar.lua")
 dofile("..\\include\\lua\\skin.lua");--skin皮肤组件
 
 

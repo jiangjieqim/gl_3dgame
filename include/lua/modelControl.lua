@@ -90,6 +90,12 @@ local function f_callBack(skin,self)
 	ck:bind(onCk,self);
 	
 	
+	--local pb = ProgressBar:new(100);
+	--pb:progress(0.5);
+	--pb:dispose();
+	
+	local pb1 = skin_find(skin,"pb1");
+	pb1:progress(0.6);
 	
 
 	--设置界面的初始坐标

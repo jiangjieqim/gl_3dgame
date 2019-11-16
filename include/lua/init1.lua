@@ -164,4 +164,31 @@ local mc = ModelControl:new(10,10);
 
 --mc:bind(u);
 
+--[[local function f_tex_complete()
+	
+	local pb = ProgressBar:new(100);
+	
+	pb:progress(0.1);
+	
+	--func_print("##############################");
+	
+	--pb:dispose();
+end
+loadtexs("checkbox.png;gundi.png",f_tex_complete);--]]
+
+
+--[[
+local x = 2;
+
+if(	   x == 1 
+	or x == 2 
+	or x == 3 
+	or x == 4) then
+	print("x = "..x);
+end
+
+--]]
+
+
+
 engine_refreshCam3d();
