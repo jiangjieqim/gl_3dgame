@@ -67,6 +67,7 @@ UI_TYPE = {
 	ScrollBar = 3,
 	Panel = 4,
 	Skin = 5,
+	CheckBox = 6,--选显卡类型
 };
 
 local DEBUG = true;
@@ -895,10 +896,11 @@ function func_addnode(parent,n,x,y)
 		func_addchild(parent,scrollBar_get_container(n),x,y);
 	elseif(_type == UI_TYPE.Button)then
 		func_addchild(parent,btn_get_container(n),x,y);
+	elseif(_type == UI_TYPE.CheckBox) then
+		func_addchild(parent,n.container,x,y);
 	else
 		func_error(parent);
 	end
-		
 end
 --获取当前节点的容器
 function func_get_container(n)
@@ -927,6 +929,8 @@ function func_dispose(n)
 		alert_dispose(n);
 	elseif(_type == UI_TYPE.Skin) then
 		skin_dispose(n);
+	elseif(_type == UI_TYPE.CheckBox)then
+		n:dispose();
 	end
 end
 
@@ -954,10 +958,11 @@ dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 dofile("..\\include\\lua\\alertx.lua")
 dofile("..\\include\\lua\\crl.lua")
 
+
+dofile("..\\include\\lua\\checkbox.lua")	--checkbox组件
 dofile("..\\include\\lua\\skin.lua");--skin皮肤组件
 
 
-dofile("..\\include\\lua\\checkbox.lua")	--checkbox组件
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件
 
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位

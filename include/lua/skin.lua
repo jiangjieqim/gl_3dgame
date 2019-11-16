@@ -98,6 +98,10 @@ local function f_create_by_node(skin,node,name,_type)
 		local url = xml_get_str(node,"url");
 		local itemSkin = f_itemskin_load(url,parent,x,y);
 		stack_push(list,itemSkin);
+	elseif(_type == "CheckBox") then
+		local ck = CheckBox:new();
+		func_addnode(parent,ck,x,y);
+		stack_push(list,ck);
 	end
 	--print("====>",parent);
 end

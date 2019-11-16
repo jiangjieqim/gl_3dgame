@@ -65,5 +65,4 @@ end
 --mc:hide();
 --mc:dispose();
 
-
 --fps();

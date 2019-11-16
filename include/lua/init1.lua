@@ -2,7 +2,7 @@ dofile("..\\include\\lua\\core.lua");
 
 dofile("..\\include\\lua\\modelControl.lua");
 
---func_enable_debug(false);
+--func_enable_debug(false);--关闭调试日志
 
 --example_stack();
 
@@ -150,8 +150,12 @@ end
 cam_setPosition(0,0,-5);
 
 
-local f = FpsView:new();
-f:show();
+
+--添加fps显示视图
+--local f = FpsView:new();
+--f:show();
+
+
 --print(f.p);
 
 --local u = loadbox();

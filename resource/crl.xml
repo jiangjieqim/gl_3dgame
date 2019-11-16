@@ -2,6 +2,8 @@
 
 <ui name="rx_sc" type="ScrollBar" x="0" y="0" parent="1"/>
 <ui name="rx_label" type="Label" x="100" y="0" label="rx" parent="1"/>
+<ui name="ck0" type="CheckBox" x="120" y="0" label="rx" parent="1"/>
+
 
 <ui name="ry_sc" type="ScrollBar" x="0" y="20" parent="1"/>
 <ui name="ry_label" type="Label" x="100" y="20" label="ry" parent="1"/>
@@ -12,6 +14,7 @@
 <ui name="scale_sc" type="ScrollBar" x="0" y="60" parent="1"/>
 <ui name="scale" type="Label" x="100" y="60" label="scale" parent="1"/>
 
+<!--设置模型的fps-->
 <ui name="model_fps_sc" type="ScrollBar" x="0" y="80" parent="1"/>
 <ui name="model_fps_label" type="Label" x="100" y="80" label="fps_model" parent="1"/>
 

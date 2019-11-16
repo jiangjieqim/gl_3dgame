@@ -4,7 +4,7 @@ ModelControl = {x=0,y=0};
 
 
 local function btnClick(btnName,p)
-		print("btnName=",btnName,"p=",p);--p = abc
+	print("btnName=",btnName,"p=",p);--p = abc
 end
 
 local function f_rx_handle(sc)
@@ -42,7 +42,9 @@ local function f_model_fps_sc_handle(sc)
 	
 	label_set_text(label,math.floor(cur));
 end
-
+local function onCk(_status,p)
+	--print(_status,p);
+end
 local function f_callBack(skin,self)
 	local p = skin_get_param(skin);
 	--func_print(string.format("****************[%s]",tostring(p)));
@@ -84,17 +86,16 @@ local function f_callBack(skin,self)
 
 	
 	
-	local function onCk(_status,p)
-			print(_status,p);
-	end
-	local ck = CheckBox:new();
-	ck:bind(onCk,12);
 	
-	func_addnode(container,ck.container,120);
+	--local ck = CheckBox:new();
+	--ck:bind(onCk,self);
+	--func_addnode(container,ck.container,120);
 	
 
 	--设置界面的初始坐标
 	skin_set_pos(skin,self.x,self.y);
+
+	--skin_dispose(skin);
 
 end
 

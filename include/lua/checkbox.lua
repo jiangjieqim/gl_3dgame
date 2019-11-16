@@ -1,4 +1,6 @@
 CheckBox = {
+	name = nil,
+	type = 6,
 	selected = false,
 	btn,
 	container,
@@ -18,32 +20,34 @@ local function ckfunc(btnName,p)
 	else
 		func_setIcon(s,"checkbox.png");
 	end
-	self.callback(self.selected,self.param);
+	if (self.callback~=nil) then
+		self.callback(self.selected,self.param);
+	end
 end
 
 function CheckBox:new()
 	local self = {};
 	setmetatable(self, CheckBox);
 	self.btn = btn_create(0,0,20,20,"checkbox.png",0,false);
-	--self.container = --btn_get_container(self.btn);
-	self.container = self.btn;
-	
+	self.container = btn_get_container(self.btn);
+	--self.container = self.btn;
+	btn_bindClick(self.btn,ckfunc,self);
 	return self;
 end
 
 function CheckBox:bind(callback,param)
 	self.callback = callback;
-	if(callback) then
+	--if(callback) then
 		self.param = param;
-		btn_bindClick(self.btn,ckfunc,self);
-	end
+		--btn_bindClick(self.btn,ckfunc,self);
+	--end
 end
 
 function CheckBox:dispose()
+	--print("Ïú»ÙCheckBox");
 	btn_dispose(self.btn);
 	func_clearTableItem(self);
 end
-
 
 --[[
 
