@@ -19,6 +19,10 @@ function label_set_text(label,s)
 	ftext_reset(label.tf,s);
 end
 
+function label_get_text(label,s)
+	return	ftext_str(label.tf);
+end
+
 function label_set_pos(label,x,y)
 	ftext_setpos(label.tf,x,y);
 	
@@ -28,10 +32,13 @@ function label_get_size(label)
 	return ftext_getsize(label.tf);
 end
 function label_set_visible(label,v)
---[[	if(v == 1) then
-		v = true;
-	else 
-		v = false;
-	end--]]
+	if(type(v) == "boolean") then
+		if(v) then 
+			v  = 1;
+		else
+			v = 0;
+		end
+	end
+	
 	ftext_vis(label.tf,v);
 end

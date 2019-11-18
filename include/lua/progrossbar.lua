@@ -42,7 +42,7 @@ end
 function ProgressBar:progress(v)
 	local o = self.bar;
 	if(v <=0) then
-		resetv(o,FLAGS_VISIBLE);
+		resetv(o,FLAGS_VISIBLE);--进度值小于0就隐藏掉bar,优化drawcall
 	else
 		if(v > 1.0) then
 			func_error("值超过1.0!");

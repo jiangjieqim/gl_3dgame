@@ -45,6 +45,11 @@ end
 local function onCk(_status,p)
 	print("CheckBox call onCk",_status,p);
 end
+
+local function f_list_box_select(list,param)
+	local index =listbox_get_index(list);
+	print("f_list_box_select===>",index,list,param);
+end
 local function f_callBack(skin,self)
 	local p = skin_get_param(skin);
 	--func_print(string.format("****************[%s]",tostring(p)));
@@ -97,12 +102,20 @@ local function f_callBack(skin,self)
 	local pb1 = skin_find(skin,"pb1");
 	pb1:progress(0.6);
 	
+	
+	
+	local lb1 = skin_find(skin,"lb1");
+	listbox_bind(lb1,f_list_box_select,"my_param");
+	
+	
+	
 
 	--设置界面的初始坐标
 	skin_set_pos(skin,self.x,self.y);
 
-	--skin_dispose(skin);
 
+
+	--skin_dispose(skin);
 end
 
 ModelControl.__index = ModelControl;

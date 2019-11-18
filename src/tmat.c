@@ -409,7 +409,7 @@ static void f_deleteGPU_texture(struct GMaterial* mat)
 			if(node){
 				printf("使用texmap = %0x,tex=%d,不使用glDeleteTextures删除贴图\n",node,tex);
 			}else{
-				printf("销毁纹理%d\n",tex);
+				printf("销毁纹理,纹理句柄=%d\n",tex);
 				glDeleteTextures(1,&(mat->texs[i]));
 			}
 			mat->texs[i] = 0;

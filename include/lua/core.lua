@@ -68,7 +68,8 @@ UI_TYPE = {
 	Panel = 4,
 	Skin = 5,
 	CheckBox = 6,--选项卡类型
-	ProgressBar = 7,
+	ProgressBar = 7,--进度条
+	ListBox = 8,--下拉列表
 };
 
 local DEBUG = true;
@@ -700,7 +701,6 @@ function func_get_curFocus()
 end
 
 --为sprite设置贴图
---sprite_texName(listBox.sprite,"gundi.png");废弃
 function func_setIcon(sprite,url)
 	--获取一个atals图集,没有图集的界面是黑色的
 	local atals = get_ui_atals();
@@ -899,10 +899,10 @@ function func_addnode(parent,n,x,y)
 	elseif(_type == UI_TYPE.Button)then
 		func_addchild(parent,btn_get_container(n),x,y);
 	elseif(_type == UI_TYPE.CheckBox 
-		or _type == UI_TYPE.ProgressBar 
-	
-	) then
+		or _type == UI_TYPE.ProgressBar ) then
 		func_addchild(parent,n.container,x,y);
+	elseif(_type == UI_TYPE.ListBox) then
+		func_addchild(parent,listbox_get_container(n),x,y);
 	else
 		func_error(parent);
 	end
@@ -935,9 +935,10 @@ function func_dispose(n)
 	elseif(_type == UI_TYPE.Skin) then
 		skin_dispose(n);
 	elseif(_type == UI_TYPE.CheckBox
-		or _type == UI_TYPE.ProgressBar 
-	)then
+		or _type == UI_TYPE.ProgressBar )then
 		n:dispose();
+	elseif(_type == UI_TYPE.ListBox) then	
+		listbox_del(n);
 	end
 end
 

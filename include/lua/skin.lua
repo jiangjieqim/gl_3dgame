@@ -114,6 +114,23 @@ local function f_create_by_node(skin,node,name,_type)
 		pb.name = name;
 		func_addnode(parent,pb,x,y);
 		stack_push(list,pb);
+	elseif(_type == "ListBox")then	
+		local lb  = listbox_new();
+		lb.name = name;
+		--print(listbox_get_container(lb));
+		local v = xml_get_str(node,"value");
+		local ls = func_split(tostring(v),",");
+		
+		--print("["..tostring(v).."]"..#ls);
+		local _len = #ls;
+		local n;
+		for n = 0,_len-1 do
+			--print(ls[n+1].."**");
+			listbox_add(lb,ls[n+1]);
+		end
+
+		func_addnode(parent,lb,x,y);
+		stack_push(list,lb);
 	end
 	--print("====>",parent);
 end

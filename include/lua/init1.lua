@@ -158,10 +158,12 @@ cam_setPosition(0,0,-5);
 
 --print(f.p);
 
---local u = loadbox();
+
+
 
 local mc = ModelControl:new(10,10);
 
+--local u = loadbox();
 --mc:bind(u);
 
 --[[local function f_tex_complete()
