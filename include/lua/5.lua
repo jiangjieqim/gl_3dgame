@@ -59,9 +59,6 @@ local function
     return o;
 end
 local function f_setLabel(label, obj)
-    -- local label = listbox_get_label(_l)
-
-    -- listbox_set_label(_l, string.format('%s vbo=%s', label, tostring(func_is_vbo(obj))))
 
     if (label == 'diffuse') then
 
@@ -138,7 +135,7 @@ local function f_listCallBack(list)
 		
 		--            _model_ptr = g_model
 		--local arr = func_split(config);
-		local label = listbox_get_label(list);
+		local label = listbox_get_select_label(list);
 		
 		local s = string.format('index = %d\tlabel = [%s]\t	vbo:%s',
 		index,

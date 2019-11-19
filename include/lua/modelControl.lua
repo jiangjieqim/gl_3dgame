@@ -46,9 +46,11 @@ local function onCk(_status,p)
 	print("CheckBox call onCk",_status,p);
 end
 
-local function f_list_box_select(list,param)
-	local index =listbox_get_index(list);
-	print("f_list_box_select===>",index,list,param);
+local function f_list_box_select(list,index,label,param)
+	--local index =listbox_get_index(list);
+	print("f_list_box_select===>",list,index,label,param);
+
+	--listbox_set_label(list,index);
 end
 local function f_callBack(skin,self)
 	local p = skin_get_param(skin);
@@ -106,7 +108,7 @@ local function f_callBack(skin,self)
 	
 	local lb1 = skin_find(skin,"lb1");
 	listbox_bind(lb1,f_list_box_select,"my_param");
-	
+	listbox_set_title(lb1,"infowin");
 	
 	
 

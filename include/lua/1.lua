@@ -55,7 +55,7 @@ f_load(line)
 end
 
 local function f_listSelect(list)
-	local label = listbox_get_label(list);
+	local label = listbox_get_select_label(list);
 	local m = listbox_get_param(list);
 	func_set_anim(m,label);
 end
