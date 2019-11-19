@@ -19,7 +19,7 @@
 
 <!--进度条-->
 <ui name="pb1" type="ProgressBar" x="0" y="100" parent="1"/>
-<ui name="lb1" type="ListBox" x="0" y="120" value="引擎信息,gc" parent="1"/>
+<ui name="lb1" type="ListBox" x="30" y="120" value="引擎信息,gc" parent="1"/>
 
 
 

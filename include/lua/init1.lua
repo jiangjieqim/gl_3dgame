@@ -192,5 +192,9 @@ end
 --]]
 
 
+--local str = "abc";
+--local s = string.sub(str,0,#str - 1);
+
+
 
 engine_refreshCam3d();

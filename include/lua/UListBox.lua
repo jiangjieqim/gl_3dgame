@@ -1,4 +1,4 @@
-local g_gap = 15--(一行的高度间隔)
+local g_gap = 12--(一行的高度间隔)
 local g_width = 60 --(一行的宽度)
 
 local r = 1.0;
@@ -14,7 +14,7 @@ local function f_create()
         --*******************************************
 		b_drop = false,--是否是下拉着的
 		
-		tflist={},--textFiled列表
+--		tflist={},--textFiled列表
 		
 		bg=nil,--spirte,容器
 		
@@ -29,6 +29,8 @@ local function f_create()
 		
 		titletf,--列表标题文本
 		
+		curTf,--列表中显示的文本,单个文本对象
+		
 		data;--数据
 	};
 	return listBox
@@ -37,10 +39,15 @@ end
 --显示隐藏文本
 local function f_tf_vis(list)
 	local v = list.b_drop
-	for key, value in pairs(list.tflist) do      
-		local tf =  value;
-		label_set_visible(tf,v);
-	end 
+--	for key, value in pairs(list.tflist) do      
+--		local tf =  value;
+--		label_set_visible(tf,v);
+--	end
+	
+	if(list.curTf) then
+		label_set_visible(list.curTf,v);
+	end
+	
 end
 --获取索引(-1开始)
 local function f_get_index(list)
@@ -53,10 +60,10 @@ function listbox_select(list,n)
 		list.index = n
 		if(list.callBack) then
 			--print(list.index);
-			local label = nil;
-			if(list.data) then
-				label = list.data[list.index + 1];
-			end
+			local label = listbox_get_select_label(list);
+			--if(list.data) then
+			--	label = list.data[list.index + 1];
+			--end
             list.callBack(list,list.index,label,list.param);
         end
 	end
@@ -66,6 +73,15 @@ function listbox_get_container(list)
 	return list.bg;
 end
 
+--获取列表的长度
+local function f_get_cnt(list)
+	local cnt = 0;
+	if(list.data) then
+		cnt = #list.data;
+	end
+	return cnt;
+end
+
 local function f_select_call(list)
 	list.b_drop = not list.b_drop
 	local height = g_gap
@@ -73,7 +89,7 @@ local function f_select_call(list)
 	
 	if(list.b_drop) then
 		--展开
-		height = (func_get_table_count(list.tflist) + 1) * g_gap
+		height = (f_get_cnt(list) + 1) * g_gap
 	end
 	
 	func_set_sprite_size(list.bg,g_width,height)--重绘背景宽高
@@ -124,24 +140,65 @@ end
 
 --获取选择的文本字符
 function listbox_get_select_label(list)
-	local n = listbox_get_index(list);
-    return label_get_text(list.tflist[n]);
+	--local n = listbox_get_index(list);
+    --return label_get_text(list.tflist[n])
+	local label = nil;
+	if(list.data) then
+		label = list.data[list.index + 1];
+	end
+	return label;
+end
+
+--刷新当前的列表文本
+local function f_refresh_curTf(list)
+	if(list.curTf == nil)then
+		local tf = label_create();
+		label_set_visible(tf,false);
+		--label_set_text(tf,str);--str
+		func_addnode(list.bg,tf,0,g_gap);
+		
+		list.curTf = tf;
+	end
+	
+	local _tf = list.curTf;
+	
+	if(list.data) then
+		local n;
+		local str = "";
+		local _len = #list.data;
+		for n = 1,_len do
+			str = str..list.data[n].."\n";
+		end
+		if(#str > 0 ) then
+			local s = string.sub(str,0,#str - 1);--去掉最后的一个换行符
+			label_set_text(_tf,s);
+		end
+	end
 end
 
 --增加一个节点
 function 
 listbox_add(list,str)
+
+--[[
 	local count =	func_get_table_count(list.tflist) + 1;	
 	local tf = label_create();
 	list.tflist[count - 1] = tf;
 	label_set_visible(tf,0);
-	label_set_text(tf,str);
+	label_set_text(tf,str);--str
 	func_addnode(list.bg,tf,0,g_gap*(count));
-
+--]]
 	if(list.data==nil)then
 		list.data = {};
 	end
 	list.data[#list.data+1]=str;
+	
+	
+	
+	f_refresh_curTf(list);
+	
+	
+	
 	--print(#list.data);
 end
 
@@ -163,9 +220,9 @@ listbox_del(list)
 
 	ptr_remove(list.bg)
 
-	for key, value in pairs(list.tflist) do
-		label_dispose(value)
-	end
+--	for key, value in pairs(list.tflist) do
+--		label_dispose(value)
+--	end
 	--ptr_remove(list.tf)
 	
 	--if(list.tf) then 
@@ -175,6 +232,11 @@ listbox_del(list)
 	if(list.titletf)then
 		label_dispose(list.titletf); 
 	end
+	
+	if(list.curTf) then
+		label_dispose(list.curTf);
+	end
+	
 	
 	if(list.data) then
 		func_clearTableItem(list.data);
