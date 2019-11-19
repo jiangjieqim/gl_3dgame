@@ -27,7 +27,7 @@ btn_bindClick(btn,f_onClick);--]]
 
 function f_onkey(data)
 	local key = tonumber(data);
-	print("key = "..key);
+	--print("key = "..key);
 	if(key == KEY_ESC) then
          engine_exit();
 	elseif(key == 13) then
@@ -158,7 +158,9 @@ cam_setPosition(0,0,-5);
 
 --print(f.p);
 
-
+		--local img = Image:new();
+		--local v = xml_get_str(node,"value");
+		--img:seticon("checkbox.png");
 
 
 local mc = ModelControl:new(10,10);
@@ -194,7 +196,7 @@ end
 
 --local str = "abc";
 --local s = string.sub(str,0,#str - 1);
-
+----
 
 
 engine_refreshCam3d();

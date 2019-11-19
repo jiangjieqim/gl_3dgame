@@ -130,7 +130,8 @@ void* input_create(int w){
 void input_dispose(void* p){
 	
 	struct Input* ptr=(struct Input*)p;
-
+	evt_off(ex_getIns(),EVENT_ENGINE_KEYBOARD,f_key2);
+	evt_off(ex_getIns(),EVENT_ENGINE_SPRITE_FOCUS_CHANGE,focusChangeHandle);
 	//sprite_dipose(ptr->bg);
 	ftext_dispose(ptr->t);
 	ptr->t = 0;

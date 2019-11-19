@@ -2,7 +2,9 @@
 
 <ui name="rx_sc" type="ScrollBar" x="0" y="0" parent="1"/>
 <ui name="rx_label" type="Label" x="100" y="0" label="rx" parent="1"/>
-<ui name="ck0" type="CheckBox" x="120" y="0" label="ck1" parent="1"/>
+<ui name="ck0" type="CheckBox" x="120" y="0" label="线框渲染" parent="1"/>
+<ui name="cullck" type="CheckBox" x="120" y="20" label="双面" parent="1"/>
+
 
 <ui name="ry_sc" type="ScrollBar" x="0" y="20" parent="1"/>
 <ui name="ry_label" type="Label" x="100" y="20" label="ry" parent="1"/>
@@ -18,15 +20,11 @@
 <ui name="model_fps_label" type="Label" x="100" y="80" label="fps_model" parent="1"/>
 
 <!--进度条-->
+
+
 <ui name="pb1" type="ProgressBar" x="0" y="100" parent="1"/>
 <ui name="lb1" type="ListBox" x="30" y="120" value="引擎信息,gc" parent="1"/>
 
 
-
-
-
-
-
-
-
-
+<ui name="img1" type="Image" x="0" y="140" w="128" h="14" value="checkbox.png" linestlye="1" parent="1"/>
+<ui name="input1" type="Input" x="0" y="140" parent="1"/>

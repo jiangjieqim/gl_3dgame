@@ -43,7 +43,16 @@ local function f_model_fps_sc_handle(sc)
 	label_set_text(label,math.floor(cur));
 end
 local function onCk(_status,p)
-	print("CheckBox call onCk",_status,p);
+	---print("CheckBox call onCk",_status,p);
+	local self = p;
+	local obj =	unit_get_model(self.obj)
+	func_changeFlags(obj, FLAGS_DRAW_PLOYGON_LINE);--线框切换
+end
+
+local function onCullCk(_status,p)
+	local self = p;
+	local obj =	unit_get_model(self.obj)
+	func_changeFlags(obj, FLAGS_DISABLE_CULL_FACE);--设置显示双面
 end
 
 local function f_list_box_select(list,index,label,param)
@@ -51,6 +60,7 @@ local function f_list_box_select(list,index,label,param)
 	print("f_list_box_select===>",list,index,label,param);
 	--listbox_set_title(list,label);
 end
+
 local function f_callBack(skin,self)
 	local p = skin_get_param(skin);
 	--func_print(string.format("****************[%s]",tostring(p)));
@@ -75,25 +85,13 @@ local function f_callBack(skin,self)
 	scrollBar_bind(skin_find(skin,"model_fps_sc"),f_model_fps_sc_handle,self);
 	
 	
-	--[[scrollBar_bind(skin_find(skin,"setframe"),
-		function(sc)
-		
-			--md5
-			local o = unit_get_model(self.obj);
-			change_attr(o, "setframe", sc.value*47 - 1)
-		end
-	,self);--]]
-	
-	
-	--local container = skin_get_container(skin);
-	--[[local mc = FpsView:new();
-	mc:show();
-	func_addnode(container,mc:container(),300);--]]
-
 	
 	local ck = skin_find(skin,"ck0");
 	--print(ck);
 	ck:bind(onCk,self);
+	
+	local cullck = skin_find(skin,"cullck");
+	cullck:bind(onCullCk,self);
 	
 	
 	--local pb = ProgressBar:new(100);

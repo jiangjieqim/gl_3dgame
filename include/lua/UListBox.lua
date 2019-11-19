@@ -217,17 +217,6 @@ end
 function 
 listbox_del(list)
 	evt_off(list.bg,EVENT_ENGINE_SPRITE_CLICK,f_click);
-
-	ptr_remove(list.bg)
-
---	for key, value in pairs(list.tflist) do
---		label_dispose(value)
---	end
-	--ptr_remove(list.tf)
-	
-	--if(list.tf) then 
-	--	label_dispose(list.tf); 
-	--end
 	
 	if(list.titletf)then
 		label_dispose(list.titletf); 
@@ -241,7 +230,6 @@ listbox_del(list)
 	if(list.data) then
 		func_clearTableItem(list.data);
 	end
-	
-	func_clearTableItem(list.tflist)
+	ptr_remove(list.bg)
 	func_clearTableItem(list)
 end

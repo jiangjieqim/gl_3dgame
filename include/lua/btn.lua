@@ -145,9 +145,9 @@ local function f_reset_label_pos(btn,style)
     --ftext_setpos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
 	
 	if(style==nil) then
-		label_set_pos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
+		label_set_pos(btn.label,(sw-w)/2,(sh-h)/2);
 	elseif(style == "rightout")then	
-		label_set_pos(btn.label,x+w,y+(sh-h)/2);
+		label_set_pos(btn.label,sw,(sh-h)/2);
 	end
 end
 	

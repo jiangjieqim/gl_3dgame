@@ -48,7 +48,9 @@ local function f_create_by_node(skin,node,name,_type)
 	
 	x = x + skin.ox or 0;
 	y = y + skin.oy or 0;
-
+	
+	local child = nil;
+	
 	if(_type == "Panel") then
 		local a = alert_init();
 		a.name = name;
@@ -73,9 +75,10 @@ local function f_create_by_node(skin,node,name,_type)
 		local str = xml_get_str(node,"label");
 		label_set_text(label, str);
 		
-		func_addnode(parent,label,x,y);
+		child = label;
 		
-		stack_push(list,label);
+		--func_addnode(parent,label,x,y);
+		--stack_push(list,label);
 	elseif(_type == "Button") then
 		
 		local btn = btn_create();
@@ -85,14 +88,16 @@ local function f_create_by_node(skin,node,name,_type)
 		if(str~="")then
 			btn_label(btn,str);
 		end
-		func_addnode(parent,btn,x,y);
-		stack_push(list,btn);
+		child = btn;
+		--func_addnode(parent,btn,x,y);
+		--stack_push(list,btn);
 		
 	elseif(_type == "ScrollBar") then
 		local sc = scrollBar_new();
 		sc.name = name;
-		func_addnode(parent,sc,x,y);
-		stack_push(list,sc);
+		child = sc;
+		--func_addnode(parent,sc,x,y);
+		--stack_push(list,sc);
 	elseif(_type == "Skin") then
 		--string.format("%s")
 		local url = xml_get_str(node,"url");
@@ -107,13 +112,15 @@ local function f_create_by_node(skin,node,name,_type)
 			ck:setlabel(label);
 		end
 		
-		func_addnode(parent,ck,x,y);
-		stack_push(list,ck);
+		--func_addnode(parent,ck,x,y);
+		--stack_push(list,ck);
+		child = ck;
 	elseif(_type == "ProgressBar") then
 		local pb = ProgressBar:new();
 		pb.name = name;
-		func_addnode(parent,pb,x,y);
-		stack_push(list,pb);
+		--func_addnode(parent,pb,x,y);
+		--stack_push(list,pb);
+		child = pb;
 	elseif(_type == "ListBox")then	
 		local lb  = listbox_new();
 		lb.name = name;
@@ -129,9 +136,42 @@ local function f_create_by_node(skin,node,name,_type)
 			listbox_add(lb,ls[n+1]);
 		end
 
-		func_addnode(parent,lb,x,y);
-		stack_push(list,lb);
+		--func_addnode(parent,lb,x,y);
+		--stack_push(list,lb);
+		
+		child = lb;
+		
+	elseif(_type == "Input") then
+		local _in = Input:new();
+		_in.name = name;
+		--_in:setbg();
+		--func_addnode(parent,_in,x,y);
+		--stack_push(list,_in);
+		
+		child = _in;
+	elseif(_type == "Image")then
+		local w = xml_get_float(node,"w");
+		local h = xml_get_float(node,"h");
+		local img = Image:new(w,h);
+		img.name = name;
+		local v = xml_get_str(node,"value");
+		img:seticon(v);
+		if(xml_get_float(node,"linestlye") == 1) then
+			img:linestlye();
+		end
+		--func_addnode(parent,img,x,y);
+		--stack_push(list,img);
+		
+		child = img;
+		
 	end
+	
+	--****************************************
+	if(child~=nil) then
+		func_addnode(parent,child,x,y);
+		stack_push(list,child);
+	end
+	
 	--print("====>",parent);
 end
 

@@ -70,6 +70,8 @@ UI_TYPE = {
 	CheckBox = 6,--选项卡类型
 	ProgressBar = 7,--进度条
 	ListBox = 8,--下拉列表
+	Input = 9,--输入组件
+	Image = 10,--image组件
 };
 
 local DEBUG = true;
@@ -899,10 +901,13 @@ function func_addnode(parent,n,x,y)
 	elseif(_type == UI_TYPE.Button)then
 		func_addchild(parent,btn_get_container(n),x,y);
 	elseif(_type == UI_TYPE.CheckBox 
-		or _type == UI_TYPE.ProgressBar ) then
+		or _type == UI_TYPE.ProgressBar 
+		or _type == UI_TYPE.Input
+		or _type == UI_TYPE.Image
+		) then
 		func_addchild(parent,n.container,x,y);
 	elseif(_type == UI_TYPE.ListBox) then
-		func_addchild(parent,listbox_get_container(n),x,y);
+		func_addchild(parent,listbox_get_container(n),x,y);	
 	else
 		func_error(parent);
 	end
@@ -935,7 +940,10 @@ function func_dispose(n)
 	elseif(_type == UI_TYPE.Skin) then
 		skin_dispose(n);
 	elseif(_type == UI_TYPE.CheckBox
-		or _type == UI_TYPE.ProgressBar )then
+		or _type == UI_TYPE.ProgressBar 
+		or _type == UI_TYPE.Input
+		or _type == UI_TYPE.Image)then
+		
 		n:dispose();
 	elseif(_type == UI_TYPE.ListBox) then	
 		listbox_del(n);
@@ -966,6 +974,7 @@ dofile("..\\include\\lua\\alert.lua")		--弹出框组件
 dofile("..\\include\\lua\\alertx.lua")
 dofile("..\\include\\lua\\crl.lua")
 
+dofile("..\\include\\lua\\image.lua")	--image组件
 
 dofile("..\\include\\lua\\checkbox.lua")	--checkbox组件
 dofile("..\\include\\lua\\progrossbar.lua")
