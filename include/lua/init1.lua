@@ -163,7 +163,7 @@ cam_setPosition(0,0,-5);
 		--img:seticon("checkbox.png");
 
 
---local mc = ModelControl:new(10,10);
+local mc = ModelControl:new(10,10);
 
 --local u = loadbox();
 --mc:bind(u);
@@ -199,7 +199,7 @@ end
 ----
 
 
-example_stack();
+--example_stack();
 
 
 engine_refreshCam3d();

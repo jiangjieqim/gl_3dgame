@@ -28,8 +28,9 @@ function skin_get_container(skin)
 	return skin.container;
 end
 
-local function f_create_by_node(skin,node,_type)
+local function f_create_by_node(skin,node)
 	local name = xml_get_str(node,"name");
+	local _type =  xml_get_str(node,"type");
 	local list = skin.list;
 	local parent = nil;
 	
@@ -179,7 +180,15 @@ end
 
 
 
-
+local function f_sort(_pre,_next)	
+	local t1 = xml_get_str(_pre,"type");
+	local t2 = xml_get_str(_next,"type");
+		
+	if(t1 == "ListBox" and t2 ~= "ListBox")then
+		return 1;
+	end
+	return -1;
+end
 
 function skin_parse(skin)
 	
@@ -193,11 +202,29 @@ function skin_parse(skin)
 	local n = 0;
 	
 	--这里要进行一个排序 比如讲ListBox放到父容器的最上层
+	
+	local _l = stack_new();
+
 	for n = 0,cnt-1 do
 		local node = xml_get_node_by_index(xml,n);
-		local _type = xml_get_str(node,"type");
-		f_create_by_node(ins,node,_type);
+		--local _type = xml_get_str(node,"type");
+		--f_create_by_node(ins,node);
+		
+		stack_push(_l,node);
 	end
+	--print(_l.cnt);
+	
+	
+	_l = stack_sort(_l,f_sort);
+	
+	for n = 0,cnt-1 do
+		local node = stack_find_by_index(_l,n);
+		--local _type = xml_get_str(node,"type");
+		--print(_type);
+		f_create_by_node(ins,node);
+	end	
+	
+	
 	xml_del(xml);
 	
 	if(ins.completeCallBack) then

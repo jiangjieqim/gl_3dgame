@@ -62,7 +62,7 @@ end
 
 --local _stat = 0;
 
-local function f_sort(cnt,l,func)
+local function f_sort(cnt,l,func,newlist)
 	local list = l.list;
 	
 	--local cnt = l.cnt-n;
@@ -73,7 +73,7 @@ local function f_sort(cnt,l,func)
 		if(i < cnt-1) then
 			local _next = list[i+1];
 			--print(_pre,_next);
-			if	(func(_pre,_next)==-1)	then
+			if	(_next~=nil and func(_pre,_next)==-1)	then
 				local t = list[i+1];
 				list[i+1]=list[i];
 				list[i]=t;
@@ -83,25 +83,28 @@ local function f_sort(cnt,l,func)
 			--stack_foreach(l,forEach,"test"..i);
 		end
 	end
-	if(cnt > 0) then
-		--local _top = stack_pop(l);
-		local _top = list[cnt-1];
+	if(l.cnt > 0) then
+		local _top = stack_pop(l);
+		--local _top = list[cnt-1];
 		--_stat=_stat+1;
-		--print("big =",_stat,_top);
+		--print("big =",_top);
+		
+		stack_push(newlist,_top);
 	end
 	local i;
-	cnt = cnt - 1;
+	cnt = l.cnt;
 	for i = 0,cnt-1 do 
-		f_sort(cnt,l,func);
+		f_sort(cnt,l,func,newlist);
 	end	
 end
 
 --ÅÅÐò
 function stack_sort(l,func)
+	local newlist = stack_new();
 	local i;
-	--for i = 0,l.cnt-1 do 
-		f_sort(l.cnt,l,func);
-	--end	
+	f_sort(l.cnt,l,func,newlist);
+	stack_del(l);
+	return newlist;	
 end
 
 --¸ù¾ÝÃû×ÖÑ°ÕÒnode
@@ -145,8 +148,12 @@ function example_stack()
 
 	--stack_push(_l,4);
 	--stack_pop(_l);
-	stack_sort(_l,test_sort);
 	
+	
+	--print(func_getTime());
+	_l = stack_sort(_l,test_sort);
+	--print(func_getTime());
+
 	
 	stack_foreach(_l,forEach,"params");
 end
