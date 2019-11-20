@@ -31,6 +31,7 @@ function stack_pop(l)
 		return node;	
 	end
 end
+
 --±È¿˙’ª
 function stack_foreach(l,func,p,isReverse)
 	local list = l.list;
@@ -50,6 +51,59 @@ function stack_foreach(l,func,p,isReverse)
 		end
 	end
 end
+
+local function forEach(node,index,p)
+	print(node,index,p);
+end
+
+--local function f_c(l,n)
+--	return l.cnt - n;
+--end
+
+--local _stat = 0;
+
+local function f_sort(cnt,l,func)
+	local list = l.list;
+	
+	--local cnt = l.cnt-n;
+	
+	local i;
+	for i = 0,cnt - 1 do
+		local _pre = list[i];
+		if(i < cnt-1) then
+			local _next = list[i+1];
+			--print(_pre,_next);
+			if	(func(_pre,_next)==-1)	then
+				local t = list[i+1];
+				list[i+1]=list[i];
+				list[i]=t;
+				--print("c")			
+			end
+			
+			--stack_foreach(l,forEach,"test"..i);
+		end
+	end
+	if(cnt > 0) then
+		--local _top = stack_pop(l);
+		local _top = list[cnt-1];
+		--_stat=_stat+1;
+		--print("big =",_stat,_top);
+	end
+	local i;
+	cnt = cnt - 1;
+	for i = 0,cnt-1 do 
+		f_sort(cnt,l,func);
+	end	
+end
+
+--≈≈–Ú
+function stack_sort(l,func)
+	local i;
+	--for i = 0,l.cnt-1 do 
+		f_sort(l.cnt,l,func);
+	--end	
+end
+
 --∏˘æ›√˚◊÷—∞’“node
 function stack_find_by_name(l,name)
 	local list = l.list;
@@ -67,18 +121,32 @@ function stack_find_by_index(l,index)
 	return list[index];
 end
 
-function example_stack()
-	local function forEach(n,index,p)
-		print(n,index,p);
+--…˝–Ú
+local function test_sort(a,b)
+	if(a > b) then
+		return -1;
+	elseif (a < b) then
+		return 1;
+	else
+		return 0;
 	end
+end
+
+function example_stack()
+	
 	
 	
 	local _l = stack_new();
-	stack_push(_l,"a");
-	stack_push(_l,"b");
-	stack_push(_l,"c");
+	stack_push(_l,2);
+	stack_push(_l,3);
+	stack_push(_l,-30);
+	stack_push(_l,1);
+	stack_push(_l,5);
+
+	--stack_push(_l,4);
+	--stack_pop(_l);
+	stack_sort(_l,test_sort);
 	
-	stack_pop(_l);
 	
 	stack_foreach(_l,forEach,"params");
 end

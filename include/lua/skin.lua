@@ -28,7 +28,8 @@ function skin_get_container(skin)
 	return skin.container;
 end
 
-local function f_create_by_node(skin,node,name,_type)
+local function f_create_by_node(skin,node,_type)
+	local name = xml_get_str(node,"name");
 	local list = skin.list;
 	local parent = nil;
 	
@@ -80,8 +81,9 @@ local function f_create_by_node(skin,node,name,_type)
 		--func_addnode(parent,label,x,y);
 		--stack_push(list,label);
 	elseif(_type == "Button") then
-		
-		local btn = btn_create();
+		local w = xml_get_float(node,"w");
+		local h = xml_get_float(node,"h");
+		local btn = btn_create(0,0,w,h);
 		btn.name = name;
 
 		local str = xml_get_str(node,"label");
@@ -175,6 +177,10 @@ local function f_create_by_node(skin,node,name,_type)
 	--print("====>",parent);
 end
 
+
+
+
+
 function skin_parse(skin)
 	
 	local ins = skin;
@@ -185,12 +191,12 @@ function skin_parse(skin)
 	--print(cnt);
 
 	local n = 0;
+	
+	--这里要进行一个排序 比如讲ListBox放到父容器的最上层
 	for n = 0,cnt-1 do
 		local node = xml_get_node_by_index(xml,n);
-		local name = xml_get_str(node,"name");
 		local _type = xml_get_str(node,"type");
-		--print("n = ",n,name,_type);
-		f_create_by_node(ins,node,name,_type);
+		f_create_by_node(ins,node,_type);
 	end
 	xml_del(xml);
 	

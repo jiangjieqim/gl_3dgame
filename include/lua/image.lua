@@ -23,7 +23,7 @@ end
 function Image:linestlye()
 	setv(self.container,FLAGS_DRAW_PLOYGON_LINE);
 end
-
+--Ïú»Ù
 function Image:dispose()
 	ptr_remove(self.container);
 	func_clearTableItem(self);
