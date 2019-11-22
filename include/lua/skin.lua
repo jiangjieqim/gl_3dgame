@@ -9,7 +9,7 @@ end
 --获取父亲节点
 local function f_get_parent(list,node)
 	local parentName = xml_get_str(node,"parent");
-	if(parentName ~= "") then
+	if(parentName ~= nil) then
 		local fnode	 = stack_find_by_name(list,parentName);
 		return func_get_container(fnode);
 	end
@@ -31,6 +31,11 @@ end
 local function f_create_by_node(skin,node)
 	local name = xml_get_str(node,"name");
 	local _type =  xml_get_str(node,"type");
+	
+	if(name == nil) then
+		name = func_create_name(_type);--没有命名的时候,默认构造一个名字
+		--print("newname:"..name);
+	end
 	local list = skin.list;
 	local parent = nil;
 	
@@ -73,6 +78,8 @@ local function f_create_by_node(skin,node)
 		stack_push(list,a);
 	elseif(_type == "Label") then
 		local label =  label_create();
+		
+		--print(string.format("name:[%s]%d",name,#name));
 		label.name = name;
 		local str = xml_get_str(node,"label");
 		label_set_text(label, str);
@@ -207,9 +214,6 @@ function skin_parse(skin)
 
 	for n = 0,cnt-1 do
 		local node = xml_get_node_by_index(xml,n);
-		--local _type = xml_get_str(node,"type");
-		--f_create_by_node(ins,node);
-		
 		stack_push(_l,node);
 	end
 	--print(_l.cnt);
@@ -219,8 +223,6 @@ function skin_parse(skin)
 	
 	for n = 0,cnt-1 do
 		local node = stack_find_by_index(_l,n);
-		--local _type = xml_get_str(node,"type");
-		--print(_type);
 		f_create_by_node(ins,node);
 	end	
 	

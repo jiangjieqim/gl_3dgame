@@ -94,6 +94,8 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 
 	//轮廓线颜色
 	int _outlineColor = glGetUniformLocation(program3D,"_outlineColor");
+	//传递camera的坐标
+	int _camPos = glGetUniformLocation(program3D,"_camPos");
 
 	//Alpha	-->vboDiffuse.ps
 	int _Alpha = glGetUniformLocation(program3D,"_Alpha");
@@ -134,6 +136,8 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 
 	//更新位图
 	tmat_updateTexture(program3D,_material);
+
+	
 
 	if(iGlobalTime!=-1)
 	{
@@ -208,7 +212,13 @@ f_updateShaderVar(GLuint program3D,struct GMaterial* _material, Matrix44f M){
 	if(_perspectivePtr!=-1)
 	{
 		void* perspect = cam_getPerctive(ex_getIns()->_3dCurCam);
-		tmat_uploadMat4x4(_perspectivePtr,perspect/*ex_getIns()->perspectiveMatrix*/);
+		tmat_uploadMat4x4(_perspectivePtr,perspect);
+	}
+
+	if(_camPos!=-1){
+		void* cam = ex_getIns()->_3dCurCam;
+		//printf("%.3f,%.3f,%.3f\n",cam_getX(cam),cam_getY(cam),cam_getZ(cam));
+		glUniform3f(_camPos,cam_getX(cam),cam_getY(cam),cam_getZ(cam));
 	}
 
 	if(_modelViewPtr!=-1)

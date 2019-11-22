@@ -332,7 +332,9 @@ getKeyPos(const char* str,const char* key){
 	return tl_strpos_s(str,buffer);
 }
 
-
+/*
+ * return 0:获取失败 1:获取成功
+ */
 int 
 xml_getstr(const struct XmlNode* node,const char* key,char* buffer,int bufferSize){
 
@@ -373,8 +375,14 @@ xml_getstr(const struct XmlNode* node,const char* key,char* buffer,int bufferSiz
 		chs = 0;
 		stat=1;
 	}
+
+	//printf("%s stat:%d\n",key,stat);
+
 	tl_free(str);
 	str = 0;
 	//printf("%d\n",tl_memByteSize());
+
+
+	
 	return stat;
 }

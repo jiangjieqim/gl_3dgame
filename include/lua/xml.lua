@@ -19,9 +19,11 @@ function xml_get_node(xml,k,v)
 	return	core_xml("getrow",xml,k,v);
 end
 
+--获取节点中等于k的值(string),如果没有取到该key对应的值就返回nil
 function xml_get_str(node,k,buffersize)
-	buffersize = buffersize or 128
-	return	core_xml("getstr",node,k,buffersize);
+	buffersize = buffersize or 128;
+	local str = core_xml("getstr",node,k,buffersize);
+	return	str;
 end
 
 function xml_get_float(node,k)

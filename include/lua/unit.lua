@@ -177,3 +177,34 @@ function example_unit()
 --if(obj2) then
     evt_on(obj2,EVENT_ENGINE_KEYBOARD,f_onkey);
 end
+--*****************************************************
+
+Unit = {
+	material,--材质引用
+	p,--模型引用
+};
+
+Unit.__index = Unit;
+
+function Unit:new()
+	local self = {};
+	setmetatable(self, Unit);
+	return self;
+end
+
+function Unit:load(url,maturl)
+	local name = func_create_name();
+	local m =load_model(name,url);
+	self.m = m;
+	self.material = func_load(maturl);
+    setMaterial(m,self.material);
+	setv(m,FLAGS_VISIBLE);
+	engine_bind_default_3dcam(m);
+--	print(m);
+end
+
+function Unit:set_pos(x,y,z)
+	func_set_x(self.m,x);
+	func_set_x(self.m,y);
+	func_set_x(self.m,z);
+end

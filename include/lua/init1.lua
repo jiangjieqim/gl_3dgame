@@ -131,23 +131,35 @@ end
 --fps();
 
 local function loadbox()
---[[	local obj2 = unit_load("\\resource\\obj\\box.obj",--triangle,bauul
-	"//resource//material//triangle.mat");
+	
+	
+	local obj2 = Unit:new();
+	obj2:load("\\resource\\obj\\quad.obj",--triangle,bauul
+	"//resource//material//particle.mat");
 --unit_scale(obj2,20);
 	
-		setv(obj2.p,FLAGS_REVERSE_FACE);
-		setv(obj2.p,FLAGS_DRAW_PLOYGON_LINE);--]]
+		--setv(obj2.p,FLAGS_REVERSE_FACE);
+		setv(obj2.m,FLAGS_DRAW_PLOYGON_LINE);
 		
 		
-		local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
+		--[[local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
 		"//resource//material//bauul.mat");
 	unit_scale(obj2,0.02);
 	unit_rx(obj2,PI/2);
-	unit_split_anim(obj2);
+	unit_split_anim(obj2);--]]
 	
 	return obj2;
 end
-cam_setPosition(0,0,-5);
+local obj = Unit:new();
+obj:load("\\resource\\obj\\quad.obj",--triangle,bauul
+	"//resource//material//triangle.mat");
+setv(obj.m,FLAGS_DRAW_PLOYGON_LINE);
+
+obj:set_pos(1,1,1)
+
+
+
+cam_setPosition(0,0,-10);
 
 
 
@@ -158,14 +170,11 @@ cam_setPosition(0,0,-5);
 
 --print(f.p);
 
-		--local img = Image:new();
-		--local v = xml_get_str(node,"value");
-		--img:seticon("checkbox.png");
 
 
 local mc = ModelControl:new(10,10);
 
---local u = loadbox();
+local u = loadbox();
 --mc:bind(u);
 
 --[[local function f_tex_complete()

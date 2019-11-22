@@ -40,7 +40,12 @@ local function f_model_fps_sc_handle(sc)
 	change_attr(unit_get_model(self.obj), "fps", tostring(cur));
 	local label = skin_find(self.skin,"model_fps_label");
 	
-	label_set_text(label,math.floor(cur));
+	local obj =	unit_get_model(self.obj)
+	func_changeFlags(obj, FLAGS_DISABLE_CULL_FACE);--设置显示双面
+end
+
+local function f_list_box_select(list,index,label,param)
+	--local index =listbox_g	label_set_text(label,math.floor(cur));
 end
 local function onCk(_status,p)
 	---print("CheckBox call onCk",_status,p);
@@ -51,15 +56,20 @@ end
 
 local function onCullCk(_status,p)
 	local self = p;
-	local obj =	unit_get_model(self.obj)
-	func_changeFlags(obj, FLAGS_DISABLE_CULL_FACE);--设置显示双面
-end
-
-local function f_list_box_select(list,index,label,param)
-	--local index =listbox_get_index(list);
+et_index(list);
 	print("f_list_box_select===>",list,index,label,param);
 	--listbox_set_title(list,label);
 end
+
+
+
+local function f_camx_handle(sc)
+	local cur = sc.value * 1;
+	--print(cur);
+	cam_setPosition(cur*5,0,-10);
+	engine_refreshCam3d();
+end
+
 
 local function f_callBack(skin,self)
 	local p = skin_get_param(skin);
@@ -101,12 +111,12 @@ local function f_callBack(skin,self)
 	local pb1 = skin_find(skin,"pb1");
 	pb1:progress(0.6);
 	
-	
-	
 	local lb1 = skin_find(skin,"lb1");
 	listbox_bind(lb1,f_list_box_select,"my_param");
 	--listbox_set_title(lb1,"infowin");
 	
+	local camx_sc = skin_find(skin,"camx_sc");
+	scrollBar_bind(camx_sc,f_camx_handle,self);
 	
 
 	--设置界面的初始坐标

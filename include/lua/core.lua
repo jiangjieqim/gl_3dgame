@@ -151,25 +151,32 @@ function func_load(url)
 		local node = xml_get_node_by_index(xml,0);
 		local shader = xml_get_str(node,"shader");
 		
-		local shaderParm = xml_get_str(node,"shaderParm");
-		result = createMaterial(shader,
-			xml_get_str(node,"tex0"),
-			xml_get_str(node,"tex1"),
-			xml_get_str(node,"tex2"),
-			xml_get_str(node,"tex3"),
-			xml_get_str(node,"tex4"),
-			xml_get_str(node,"tex5"),
-			xml_get_str(node,"tex6"),
-			xml_get_str(node,"tex7")
-		);
+		if(shader == nil) then
+			func_error("shader is nil,"..url);
+		else			
+			if(shader == "") then
+				func_error(url);
+			end
+			
+			result = createMaterial(shader,
+				xml_get_str(node,"tex0"),
+				xml_get_str(node,"tex1"),
+				xml_get_str(node,"tex2"),
+				xml_get_str(node,"tex3"),
+				xml_get_str(node,"tex4"),
+				xml_get_str(node,"tex5"),
+				xml_get_str(node,"tex6"),
+				xml_get_str(node,"tex7")
+			);
 
-        if(shader == "diffuseStateBox") then
-            local _lineColor =    xml_get_str(node,"_lineColor");
-            --print(_lineColor);
-            --local arr=func_split(_lineColor,",");
+			if(shader == "diffuseStateBox") then
+				local _lineColor =    xml_get_str(node,"_lineColor");
+				--print(_lineColor);
+				--local arr=func_split(_lineColor,",");
 
-            glsl_set(result,string.format("_lineColor,%s",_lineColor));
-        end
+				glsl_set(result,string.format("_lineColor,%s",_lineColor));
+			end
+		end
 		
 	elseif(suffix == "obj") then
 	
@@ -362,7 +369,7 @@ function func_error(msg,func)
 	--func_print(s,0xff0000)
 	--func_print('lua error:'..s,0xff0000)
 	
-	func_print(s,0xff0000)
+	print(s);
 	
 	s = ''
 	if(func) then
@@ -389,7 +396,7 @@ function func_error(msg,func)
 				end
 		end
 	end
-	func_print(s,0xffff00)
+	print(s)
 	--func_printTable(debug.getinfo(1))
 	print(debug.traceback())
 	
@@ -564,11 +571,11 @@ end
 
 --´´½¨Ãû×Ö
 function 
-func_create_name()
+func_create_name(suffix)
 --	if(name) then
 --		return name;
 --	end
-	return getName();
+	return getName(suffix);
 end
 
 

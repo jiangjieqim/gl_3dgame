@@ -27,3 +27,5 @@
 <ui name="input1" type="Input" x="0" y="140" parent="1"/>
 <ui name="inputBtn" type="Button" x="128" y="140" w="50" h="14" parent="1"/>
 
+<ui name="camx_sc" type="ScrollBar" x="0" y="160" parent="1"/>
+<ui type="Label" x="100" y="160" label="ÉèÖÃcamX" parent="1"/>
