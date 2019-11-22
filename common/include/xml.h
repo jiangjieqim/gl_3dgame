@@ -135,4 +135,17 @@ DLLIMPORT char* xml_getCopystr(const struct XmlNode* node,const char* key);
 */
 DLLIMPORT int xml_get_node_cont(struct XMLSList* xml);
 
+
+/************************************************************************/
+/* 获取一个num类型的数据,成功返回1,失败返回0                                                                  */
+/************************************************************************/
+DLLIMPORT int xml_getnum( struct XmlNode* node,
+		   const char* key,void* res);
+
+/*
+ *根据索引获取node引用
+ *成功返回1,失败返回0    
+ */
+DLLIMPORT int xml_get_node_by_index(void* _xml,int index,int* _out);
+
 #endif

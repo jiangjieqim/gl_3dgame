@@ -155,7 +155,7 @@ function example_unit()
 	scrollBar_bind(animsc,f_animscHandle);
 	
 	local function f_on_click_floor_handle(data)
-		local pos = func_split(data,",");--func_xml_to_tb(data);
+		local pos = func_split(data,",");
 		if(obj2) then
 			unit_move(obj2,pos[1],pos[2],pos[3]);
 		end

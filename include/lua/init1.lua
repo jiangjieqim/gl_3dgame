@@ -155,7 +155,7 @@ obj:load("\\resource\\obj\\quad.obj",--triangle,bauul
 	"//resource//material//triangle.mat");
 setv(obj.m,FLAGS_DRAW_PLOYGON_LINE);
 
-obj:set_pos(1,1,1)
+--obj:set_pos(1,1,1)
 
 
 

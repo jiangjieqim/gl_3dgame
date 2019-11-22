@@ -177,7 +177,6 @@ void xml_del(struct XMLSList* xml){
 	xml->list = 0;
 
 	tl_free(xml);
-	xml = 0;
 }
 
 int xml_get_node_cont(struct XMLSList* xml){
@@ -250,13 +249,24 @@ xml_getNodeByIndex(void* _xml,int index){
 	LStatk_getNodeByIndex(xml->list,index,&_out);
 	return (void*)_out;
 }
+
+int xml_get_node_by_index(void* _xml,int index,int* _out){
+	struct XMLSList* xml = (struct XMLSList*)_xml;
+	if(LStatk_getNodeByIndex(xml->list,index,_out)){
+		return 1;
+	}
+	return 0;
+}
 /*
 	将获取的数据设置到xml->out中
 */
-static void 
+static int 
 fillData(const struct XmlNode* node,const char* key){
 	const struct XMLSList* xml = node->parentXml;
-	xml_getstr(node,key,xml->buffer,NUM_STR_LENGTH);
+	if(xml_getstr(node,key,xml->buffer,NUM_STR_LENGTH)){
+		return 1;
+	}
+	return 0;
 }
 
 int xml_getint(const struct XmlNode* node,const char* key){
@@ -267,14 +277,28 @@ int xml_getint(const struct XmlNode* node,const char* key){
 }
 
 float 
-xml_getfloat(const struct XmlNode* node,const char* key)
-{
+xml_getfloat(const struct XmlNode* node,const char* key){
 	float res=0;
-	fillData(node,key);
-	sscanf_s(node->parentXml->buffer,"%f",&res);
-	//sscanf(node->parentXml->buffer,"%f",&res);
+	if(fillData(node,key)){
+		sscanf_s(node->parentXml->buffer,"%f",&res);
+		return res;
+	}else{
+		printf("xml_getfloat未找到key=%s\n",key);
+	}
+	printf("%s设置默认值=0\n",key);
 	return res;
 }
+
+int 
+xml_getnum( struct XmlNode* node,
+		   const char* key,void* res){
+	if(fillData(node,key)){
+		sscanf_s(node->parentXml->buffer,"%f",res);
+		return 1;
+	}
+	return 0;
+}
+
 char* xml_getCopystr(const struct XmlNode* node,const char* key){
 	char* str = getNodeRow((struct XmlNode*)node);//node->row;
 	int pos = tl_strpos_s(str,key);

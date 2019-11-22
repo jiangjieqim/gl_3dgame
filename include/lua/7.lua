@@ -84,7 +84,7 @@ glsl_set(plane.material,string.format("_lineColor,%s","0.5,0.5,0.5"));
 glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())));--…Ë÷√diffuse.vs (uniform float _uvScale)uv÷ÿ∏¥÷µ
 --plane:set_position(0,-2,0);
 local function f_on_click_floor_handle(data)
-    local pos = func_split(data,",");--func_xml_to_tb(data);
+    local pos = func_split(data,",");
     if(obj2) then
 		obj2:move(pos[1],pos[2],pos[3]);
     end
