@@ -237,7 +237,7 @@ xml_getrow(struct XMLSList* xml,const char* tParms,const char* tParmsValue){
 	_mynode.value = (char*)tParmsValue;
 	LStack_ergodic(xml->list,findXmlNode,(int)&_mynode);
 	if(!_mynode.result){
-		printf("Î´ÕÒµ½¹Ø¼ü×Ö:%s,value:%s\n",tParms,tParmsValue);
+		//printf("Î´ÕÒµ½¹Ø¼ü×Ö:%s,value:%s\n",tParms,tParmsValue);
 	}
 	return _mynode.result;
 }

@@ -20,8 +20,10 @@ function xml_get_node_by_index(xml,index)
 	return n;
 end
 
-function xml_get_node(xml,k,v)	
-	return	core_xml("getrow",xml,k,v);
+function xml_get_node(xml,k,v)
+	local n = core_xml("getrow",xml,k,v);
+	
+	return n;
 end
 
 --获取节点中等于k的值(string),如果没有取到该key对应的值就返回nil

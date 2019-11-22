@@ -204,6 +204,11 @@ function skin_parse(skin)
 
 	local cnt = xml_get_length(xml);
 
+
+	--local n = xml_get_node(xml,"name","rx_sc11");
+	--print(n);
+	
+	
 	--print(cnt);
 
 	local n = 0;
