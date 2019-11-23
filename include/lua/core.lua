@@ -914,12 +914,13 @@ function func_addnode(parent,n,x,y)
 		or _type == UI_TYPE.ProgressBar 
 		or _type == UI_TYPE.Input
 		or _type == UI_TYPE.Image
+		or _type == UI_TYPE.Shape
 		) then
 		func_addchild(parent,n.container,x,y);
 	elseif(_type == UI_TYPE.ListBox) then
 		func_addchild(parent,listbox_get_container(n),x,y);	
 	else
-		func_error(parent);
+		func_error(string.format("type = %s未实现",tostring(_type)));
 	end
 end
 --获取当前节点的容器
@@ -952,7 +953,9 @@ function func_dispose(n)
 	elseif(_type == UI_TYPE.CheckBox
 		or _type == UI_TYPE.ProgressBar 
 		or _type == UI_TYPE.Input
-		or _type == UI_TYPE.Image)then
+		or _type == UI_TYPE.Image
+		or _type == UI_TYPE.Shape
+		)then
 		
 		n:dispose();
 	elseif(_type == UI_TYPE.ListBox) then	

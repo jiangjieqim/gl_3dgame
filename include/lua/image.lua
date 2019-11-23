@@ -14,7 +14,7 @@ end
 
 function Image:new(w,h)
 	local self = {};
-	self = Shape:new(w,h);
+	self = Shape:new(false,w,h);
 	setmetatable(self, Image);
 	self:settype(10);
 
@@ -42,9 +42,4 @@ end
 --线框模式渲染
 function Image:linestlye()
 	setv(self.container,FLAGS_DRAW_PLOYGON_LINE);
-end
---销毁
-function Image:dispose()
-	ptr_remove(self.container);
-	func_clearTableItem(self);
 end

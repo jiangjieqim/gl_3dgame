@@ -571,7 +571,7 @@ sprite_set_clickHandle(void* p,void (*clickCallBack)(void* ,int ,int )){
 void*
 sprite_createEmptyTex(int texW,int texH,void* _2dCam){
 	struct Sprite* spr = 0;
-	void* mat= tmat_create_empty("fbotex");
+	void* mat= tmat_create_empty("fbotex");//fbotex
 
 	char buffer[64];
 	tl_newName(buffer,64,"sprite");
@@ -764,7 +764,14 @@ getMaterial(struct Sprite* p){
 	//sprite_set_default_tex(p);
 	// 
 	
-	//printf("===>%s\n",base_get(p)->name);
+	if(p->base){
+		HeadInfo* head = (HeadInfo*)p->base;
+		if(head->tmat){
+			return head->tmat;
+		}
+	}
+	//printf("%s,",base_get(p)->name);
+
 	return 0;
 }
 
@@ -778,11 +785,17 @@ renderSprite(struct Sprite* p)
 		//void* material = getMaterial(p);//p->atals->material;
 		struct HeadInfo* base = base_get(p);
 		char* shaderName = 0;
+
+
+
 		if(!material){
 			printf("(%s)SpriteÃ»ÓÐ¸³Óè²ÄÖÊ\n",((struct HeadInfo*)p->base)->name);
 			assert(0);
 		}
 		
+
+		
+
 
 		{
 			GMaterial* __mat = (GMaterial*)material;

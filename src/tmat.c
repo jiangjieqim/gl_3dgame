@@ -444,6 +444,8 @@ void tmat_dispose(void* pvoid)
 {
 	struct GMaterial* mat = pvoid;
 
+	log_color(0,"销毁材质%0x\n",pvoid);
+
 	f_deleteGPU_texture(mat);	
 	
 	if(mat->shaderVars){
@@ -533,7 +535,7 @@ tmat_create(const char* glslType,int texCnt,...){
 	f_clearTexArray(tmat);
 
 	f_initMaterial(tmat);
-
+	log_color(0,"构建材质%0x,shader=%s\n",tmat,tmat->glslType);
 	return tmat;
 }
 

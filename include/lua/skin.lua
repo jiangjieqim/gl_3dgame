@@ -173,11 +173,23 @@ local function f_create_by_node(skin,node)
 		--stack_push(list,img);
 		
 		child = img;
+	elseif(_type == "Shape") then
+		local w = xml_get_float(node,"w");
+		local h = xml_get_float(node,"h");
+		local shape = Shape:new(true,w,h);
 		
+		local r =  xml_get_str(node,"r");
+		local g =  xml_get_str(node,"g");
+		local b =  xml_get_str(node,"b");
+		shape:setcolor(r,g,b);
+		
+		shape:setname(name);
+		child = shape;
 	end
 	
 	--****************************************
 	if(child~=nil) then
+		
 		func_addnode(parent,child,x,y);
 		stack_push(list,child);
 	end

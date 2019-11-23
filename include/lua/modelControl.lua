@@ -77,7 +77,10 @@ local function f_callBack(skin,self)
 
 --local img = Image:new(50,50);
 --img:seticon("smallbtn.png");	
+
 	
+	--local shape = Shape:new(true);
+	--shape:dispose();
 	
 	
 	local p = skin_get_param(skin);

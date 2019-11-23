@@ -150,11 +150,13 @@ local function loadbox()
 	
 	return obj2;
 end
+--[[
+
 local obj = Unit:new();
 obj:load("\\resource\\obj\\arrow.obj",--triangle,bauul
 	"//resource//material//triangle.mat");
 setv(obj.m,FLAGS_DRAW_PLOYGON_LINE);
-
+--]]
 --obj:set_pos(1,1,1)
 
 
@@ -174,9 +176,11 @@ cam_setPosition(0,0,-10);
 
 
 local mc = ModelControl:new(10,10);
-
 local u = loadbox();
 --mc:bind(u);
+
+
+
 
 --[[local function f_tex_complete()
 	
