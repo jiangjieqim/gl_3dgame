@@ -72,6 +72,14 @@ end
 
 
 local function f_callBack(skin,self)
+	
+	
+
+--local img = Image:new(50,50);
+--img:seticon("smallbtn.png");	
+	
+	
+	
 	local p = skin_get_param(skin);
 	--func_print(string.format("****************[%s]",tostring(p)));
 	
@@ -124,6 +132,7 @@ local function f_callBack(skin,self)
 
 
 
+
 	--skin_dispose(skin);
 end
 
@@ -147,26 +156,8 @@ end
 function ModelControl:bind(obj)
 	self.obj = obj;
 end
-
-
-
-
 --[[
-
-
 <ui name="3" type="Button" x="150" y="50" parent="1" label="aaa"/>
-
 <ui name="5" type="Button" x="50" y="100" parent="1" label="°´Å¥ÎÄ±¾"/>
 <ui name="6" type="Skin" x="150" y="100" url="scrollabel.xml" parent="1" />
-
-
 --]]
-
-
-
-
-
-
-
-
-

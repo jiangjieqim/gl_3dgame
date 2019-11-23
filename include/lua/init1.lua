@@ -151,7 +151,7 @@ local function loadbox()
 	return obj2;
 end
 local obj = Unit:new();
-obj:load("\\resource\\obj\\quad.obj",--triangle,bauul
+obj:load("\\resource\\obj\\arrow.obj",--triangle,bauul
 	"//resource//material//triangle.mat");
 setv(obj.m,FLAGS_DRAW_PLOYGON_LINE);
 
@@ -169,6 +169,7 @@ cam_setPosition(0,0,-10);
 
 
 --print(f.p);
+
 
 
 

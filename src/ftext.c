@@ -205,10 +205,12 @@ ftext_get_str(void* p){
 	return txt->_cur;
 }
 void
-ftext_get_size(void* p,int* w,int *h){
+ftext_get_wordpos(void* p,int* w,int *h){
 	FText* txt = (FText*)p;
-	*w = txt->w;
-	*h = txt->h;
+	//*w = txt->w;
+	//*h = txt->h;
+	*w = txt->_px;
+	*h = txt->_py;
 }
 void
 ftext_clear(void* p){
@@ -469,6 +471,12 @@ f_clear_word(FText* txt,struct Rect* r){
 	}
 	txt->_px = r->x;
 	if(txt->_py+txt->fh <= txt->spr->mHeight)	txt->_stop = 0;
+
+	//更新ftext的w,h属性
+	//txt->w = r->x - r->w;
+	//txt->h = r->y - r->h;
+
+	//printf("del one word:%d,%d,%d,%d w = %d h = %d\n",r->x,r->y,r->w,r->h,txt->w,txt->h);
 	f_draw_word(txt,rgba,r->x,r->y,r->w,r->h);
 }
 

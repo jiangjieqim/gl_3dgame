@@ -13,7 +13,7 @@
 //****************************************************************//
 typedef struct Input{
 	//ftext句柄
-	void* t;	
+	void* t;
 }Input;
 
 //键盘事件
@@ -53,9 +53,12 @@ f_key2(int evtId,void* data,void* thisObj){
 static void
 focusChangeHandle(int evtId,void* data,void* thisObj){
 	struct Sprite* p = (struct Sprite*)data;
-	//printf("%0x 焦点变化为 %0x!\n",p,ex_getInstance()->curFocus);
+	struct Input* ptr = (struct Input*)thisObj;
+	void* c = ftext_get_container(ptr->t);
+	void* f = ex_getIns()->curFocus;
+	//printf("%0x 焦点变化为 %0x!\t lis object = %0x\n",p,f,c);
+	ex_lua_evt_dispatch_f(ptr,CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE,c == f?1:0);
 	
-	//struct Input* ptr = (struct Input*)thisObj;
 	//if(ex_getInstance()->curFocus == ptr->bg){
 	//	ex_setv(ptr->bg,FLAGS_DRAW_PLOYGON_LINE);
 	//}else{
@@ -89,6 +92,12 @@ void* input_get_container(void* p){
 	struct Input* ptr=(struct Input*)p;
 	return	ftext_get_container(ptr->t);//ptr->bg;
 }
+
+void* input_get_ftext(void* p){
+	struct Input* ptr=(struct Input*)p;
+	return	ptr->t;
+}
+
 void* input_create(int w){
 	#define _NAME_SIZE_ 64
 

@@ -17,6 +17,11 @@ end
 local function input_get_container(ptr)
 	return c_input(ptr,"get_container");
 end
+
+local function input_get_ftext(ptr)
+	return c_input(ptr, "get_ftext");
+end
+
 --输入框是否在焦点内
 local function input_isFocusIn(ptr)	
 	if (func_get_curFocus() == input_get_container(ptr))then
@@ -76,21 +81,64 @@ Input = {
 	name = nil,
 	type = 9,
 	_in,
-	container;
+	container,
+	img,
+	timer,
+	
 };
 
 Input.__index = Input;
+local function f_timer(data,self)
+	local w,h = self:get_size();
+	local img = self.img;		
+	img:set_pos(w,0);
+	img:visible(not img:is_visible());
+end
+local function f_onFocusChange(data,self)
+	--print(data,param);
+	if(data == 1) then
+		--print("进入焦点");
+		evt_on(self.timer,EVENT_TIMER,f_timer,self);
+	else
+		--print("离开焦点");
+		evt_off(self.timer,EVENT_TIMER,f_timer);
+		self.img:hide();
+	end
+end
+--输入文本的尺寸
+function Input:get_size()
+	local txt = input_get_ftext(self._in);
+	return ftext_getsize(txt);
+end
 
 function Input:new()
 	local self = {};
 	setmetatable(self, Input);
 	local _in = input_create();
 	self._in = _in;
-	self.container = input_get_container(_in);	
+	self.container = input_get_container(_in);
+	evt_on(_in,CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE,f_onFocusChange,self);
+	
+	local img = Image:new(2,14);
+	self.img = img;
+	img:seticon("gundi.png");
+	func_addnode(self.container,img);
+	img:visible(false);
+	
+	local timer = timelater_new(1000);
+	self.timer = timer;
+	--evt_on(timer,EVENT_TIMER,f_timer,self);
+
 	return self;
 end
 
 function Input:dispose()
+	evt_off(self._in,CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE,f_onFocusChange);
+	evt_off(self.timer,EVENT_TIMER,f_timer);
+	timelater_remove(self.timer);
+
+	self.img:dispose();
+	
 	input_dispose(self._in);
 	func_clearTableItem(self);
 end

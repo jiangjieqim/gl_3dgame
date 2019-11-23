@@ -48,6 +48,7 @@ EVENT_ENGINE_SPRITE_CLICK_MOVE = 106    --click move
 EVENT_ENGINE_TEX_LOAD_COMPLETE = 108
 EVENT_ENGINE_COMPLETE		   = 109	--完成事件
 
+CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE =110 --向lua层发送焦点变化
 EVENT_TIMER = 201--计时器
 
 --键值枚举
@@ -72,6 +73,7 @@ UI_TYPE = {
 	ListBox = 8,--下拉列表
 	Input = 9,--输入组件
 	Image = 10,--image组件
+	Shape = 11,--shape组件
 };
 
 local DEBUG = true;
@@ -427,10 +429,11 @@ end
 --[[
 	设置sprite对象的相对于父对象的坐标
 --]]
-local function f_set_sprite_local_pos(p,x,y)
+function func_set_local_pos(p,x,y)
 	local pos = x..","..y;
 	change_attr(p,"sprite_set_self_pos",pos);
 end
+
 --[[
 	将child添加到parent中
 --]]
@@ -438,7 +441,7 @@ function func_addchild(parent,child,x,y)
 	x = x or 0;
 	y = y or 0;
 	sprite_addChild(parent,child);
-	f_set_sprite_local_pos(child,x,y);
+	func_set_local_pos(child,x,y);
 end
 
 --[[function func_addchild_scrollBar(parent,sc,x,y)
@@ -966,6 +969,7 @@ dofile("..\\include\\lua\\cam.lua")	--cam
 dofile("..\\include\\lua\\fbo.lua")	--fbo
 
 dofile("..\\include\\lua\\fps.lua")	--fps组件
+dofile("..\\include\\lua\\shape.lua")	--shape组件
 
 --dofile("..\\include\\lua\\listbox.lua")
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件

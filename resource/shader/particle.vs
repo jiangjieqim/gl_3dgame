@@ -24,7 +24,7 @@ void main()
 		
 	vec4 dir = vec4( vR + vU, 0.0 );
 	
-	gl_Position = _PerspectiveMatrix4x4*_ModelViewMatrix4x4  * _mat1 * (gl_Vertex + dir);
+	gl_Position = _PerspectiveMatrix4x4*_ModelViewMatrix4x4  * _mat1 * (gl_Vertex);
 	
 	
 	//gl_Position = _PerspectiveMatrix4x4 * _ModelViewMatrix4x4 * _mat1 * vec4(gl_Vertex.xyz, 1.0);

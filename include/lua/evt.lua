@@ -131,7 +131,7 @@ function evt_dispatch(...)
 			local node = evtlist[k];
 			if(node and node.obj == obj--[[  接受事件的对象检测判断--]] and node.id == id) then
 				
-				node.func(data,node.params);
+				node.func(data,node.params);--data:C层传递的参数 node.params:Lua层传递的参数
 				
 				if(node.once) then
 					

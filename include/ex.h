@@ -67,7 +67,7 @@
 //#define EVENT_ENGINE_SPRITE_FOCUS_OUT   108	//2d焦点离开的时候触发
 //#define EVENT_ENGINE_SPRITE_FOCUS_IN    109	//2d焦点进入的时候触发
 
-
+#define CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE 110 //向lua层发送焦点变化
 /*
 *引擎初始化完成(stage2d,设备,lua函数注册完成,可以执行上层业务)
 */

@@ -138,11 +138,10 @@ function btn_scaleStyle(btn)
 end
 --ÖØÖÃlabelµÄ×ø±ê
 local function f_reset_label_pos(btn,style)
-    local w,h = label_get_size(btn.label);--ftext_getsize(btn.label);
+    local w,h = label_get_size(btn.label);
 	
-    local x,y = func_get_sprite_xy(btn.sprite);--get_attr(btn.sprite,"spritePos")
+    local x,y = func_get_sprite_xy(btn.sprite);
     local sw,sh=func_get_sprite_size(btn.sprite);
-    --ftext_setpos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
 	
 	if(style==nil) then
 		label_set_pos(btn.label,(sw-w)/2,(sh-h)/2);

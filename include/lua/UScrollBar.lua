@@ -179,26 +179,6 @@ function scrollBar_label(sc,label)
     ftext_setpos(sc.tf,x+w,y);--]]
 end
 
-
-
---[[--重置label的坐标
-local function f_reset_label_pos(btn)
-    local w,h = ftext_getsize(btn.label);
-    local x,y = func_get_sprite_xy(btn.sprite);--get_attr(btn.sprite,"spritePos")
-    local sw,sh=func_get_sprite_size(btn.sprite);
-    ftext_setpos(btn.label,x+(sw-w)/2,y+(sh-h)/2);
-end--]]
-
---[[function scrollBar_pos(sc,x,y)
-	func_setPos(sc.bg,x,y)
-	
-	if(sc.tf) then
---		func_setPos(btn.label,x,y)
---        ftext_setpos(btn.label,x,y);
-    --     f_reset_label_pos(btn);
-	end
-end--]]
-
 --根据cw,ch的值来确定是横向e还是综向滑动
 --parent:为Sprite类型
 function 
