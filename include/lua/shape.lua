@@ -74,6 +74,7 @@ function Shape:getsize()
 	return self.w,self.h;
 end
 
+--获取Shape当前容器
 function Shape:get_container()
 	return self.container;
 end
@@ -104,15 +105,19 @@ end
 
 --设置Shape的宽度
 function Shape:set_width(w)
+	self.w = w;
 	change_attr(self.container,"sprite_set_width",w);
 end
 
 --设置Shape的高度
 function Shape:set_height(h)
+	self.h = h;
 	change_attr(self.container,"sprite_set_height",h);	
 end
 
 --设置Shape的宽高
 function Shape:set_size(w,h)
+	self.w = w;
+	self.h = h;
 	func_set_sprite_size(self.container,w,h);
 end
