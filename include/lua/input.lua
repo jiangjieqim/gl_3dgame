@@ -102,7 +102,7 @@ local function f_onFocusChange(data,self)
 	else
 		--print("离开焦点");
 		evt_off(self.timer,EVENT_TIMER,f_timer);
-		self.img:hide();
+		self.img:visible(false);
 	end
 end
 --输入文本的尺寸
@@ -119,10 +119,11 @@ function Input:new()
 	self.container = input_get_container(_in);
 	evt_on(_in,CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE,f_onFocusChange,self);
 	
-	local img = Image:new(2,14);
+	local img = Shape:new(true,1,14);
 	self.img = img;
-	img:seticon("gundi.png");
+	--img:seticon("gundi.png");
 	func_addnode(self.container,img);
+	img:setcolor(1,1,1);
 	img:visible(false);
 	
 	local timer = timelater_new(1000);
