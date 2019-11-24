@@ -3,8 +3,6 @@ Shape = {
 	type = nil,
 	w,h,
 	container,--Sprite对象
-
-	material,
 }
 
 Shape.__index = Shape;
@@ -32,7 +30,7 @@ function Shape:init()
 	local material = func_load("//resource//material//shape.mat");
 	setMaterial(self.container,material);
 	self:mouseEnable(false);--默认关闭鼠标事件
-	self.material = material;
+	--self.material = material;
 	
 	--self:setcolor(1.0);
 end
@@ -47,7 +45,8 @@ function Shape:setcolor(r,g,b)
 	g = g or 0;
 	b = b or 0;
 	local str = string.format("_lineColor,%f,%f,%f",r,g,b);
-	glsl_set(self.material,str);
+	local m = sprite_get_material(self.container);
+	glsl_set(m,str);
 end
 
 function Shape:settype(t)
@@ -101,4 +100,19 @@ end
 function Shape:dispose()
 	ptr_remove(self.container);
 	func_clearTableItem(self);
+end
+
+--设置Shape的宽度
+function Shape:set_width(w)
+	change_attr(self.container,"sprite_set_width",w);
+end
+
+--设置Shape的高度
+function Shape:set_height(h)
+	change_attr(self.container,"sprite_set_height",h);	
+end
+
+--设置Shape的宽高
+function Shape:set_size(w,h)
+	func_set_sprite_size(self.container,w,h);
 end

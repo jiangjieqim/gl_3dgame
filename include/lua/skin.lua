@@ -183,6 +183,10 @@ local function f_create_by_node(skin,node)
 		local b =  xml_get_str(node,"b");
 		shape:setcolor(r,g,b);
 		
+		--shape:set_size(20,20);
+		--shape:set_height(75);
+		
+		
 		shape:setname(name);
 		child = shape;
 	end

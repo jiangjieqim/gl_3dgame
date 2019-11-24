@@ -233,4 +233,8 @@ sprite_bindAtals(void* p,void* atals);
 //void sprite_refresh_local_pos(void* p);
 //ÒÆ³ý×ÔÉí
 //void sprite_removeSelf(void* p);
+
+void sprite_set_width(struct Sprite* spr,int w);
+void sprite_set_height(struct Sprite* spr,int h);
+
 #endif

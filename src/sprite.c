@@ -501,6 +501,16 @@ void sprite_resize(struct Sprite* spr,int w,int h){
 	sprite_setpos(spr,spr->screenX,spr->screenY);
 }
 
+void sprite_set_width(struct Sprite* spr,int w){
+	spr->mWidth = w;
+	sprite_setpos(spr,spr->screenX,spr->screenY);
+}
+
+void sprite_set_height(struct Sprite* spr,int h){
+	spr->mHeight = h;
+	sprite_setpos(spr,spr->screenX,spr->screenY);
+}
+
 /*
  *如果此sprite是其他的sprite的子对象的时候,使用该接口设置其相对于父对象的坐标
  */
