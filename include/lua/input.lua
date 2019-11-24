@@ -82,8 +82,9 @@ Input = {
 	type = 9,
 	_in,
 	container,
-	img,
+	img,--¿Ì¶ÈShape
 	timer,
+	
 	
 };
 
@@ -119,6 +120,11 @@ function Input:new()
 	self.container = input_get_container(_in);
 	evt_on(_in,CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE,f_onFocusChange,self);
 	
+--[[	if(hasBg) then
+		self.bg = Shape:new(true,128,14);
+		func_addnode(self.container,self.bg);
+	end--]]
+	
 	local img = Shape:new(true,1,14);
 	self.img = img;
 	--img:seticon("gundi.png");
@@ -139,7 +145,9 @@ function Input:dispose()
 	timelater_remove(self.timer);
 
 	self.img:dispose();
-	
+	--[[if(self.bg) then
+		self.bg:dispose();
+	end--]]
 	input_dispose(self._in);
 	func_clearTableItem(self);
 end

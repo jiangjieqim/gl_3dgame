@@ -160,6 +160,9 @@ local function f_create_by_node(skin,node)
 		
 		child = _in;
 	elseif(_type == "Image")then
+	
+		--	<ui type="Image" x="0" y="140" w="128" h="14" value="checkbox.png" linestlye="0" parent="1"/>
+
 		local w = xml_get_float(node,"w");
 		local h = xml_get_float(node,"h");
 		local img = Image:new(w,h);
