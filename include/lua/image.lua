@@ -1,7 +1,5 @@
 Image = {
-	--name = nil,
-	--type = 10,
-	--container,
+	
 };
 Image.__index = Image;
 

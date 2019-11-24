@@ -23,8 +23,7 @@
 <ui name="lb1" type="ListBox" x="30" y="120" value="引擎信息,gc" parent="1"/>
 
 
-<ui type="Image" x="0" y="140" w="128" h="14" value="checkbox.png" linestlye="0" parent="1"/>
-
+<ui type="Shape" x="0" y="140" w="128" h="14" r="0" g="0" b="0"  parent="1"/>
 <ui name="input1" type="Input" x="0" y="140" parent="1"/>
 
 <ui name="inputBtn" type="Button" x="128" y="140" w="50" h="14" parent="1"/>
@@ -32,4 +31,3 @@
 <ui name="camx_sc" type="ScrollBar" x="0" y="160" parent="1"/>
 <ui type="Label" x="100" y="160" label="设置camX" parent="1"/>
 
-<ui type="Shape" x="0" y="180" w="128" h="14" r="1.0" g="1.0" b="0.0"  parent="1"/>

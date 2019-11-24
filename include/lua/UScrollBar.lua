@@ -169,14 +169,6 @@ end
 
 --设置滑动条的文本
 function scrollBar_label(sc,label)
-   --[[ if(sc.tf ==nil) then
-        sc.tf = ftext_create();
-		func_addchild(sc.bg,ftext_get_container(sc.tf));
-    end
-    ftext_reset(sc.tf,label);
-    local x,y = get_attr(sc.bg,"spritePos");
-    local w,h = get_attr(sc.bg,"spriteSize")
-    ftext_setpos(sc.tf,x+w,y);--]]
 end
 
 --根据cw,ch的值来确定是横向e还是综向滑动
@@ -218,12 +210,10 @@ scrollBar_new(x,y,parent,cw,ch)
 	loadtexs(url,func_texloadend, { sprite=bg;url=url});
 	
 	--创建小按钮
-	--local btn=sprite_create(name,x,y,barSize,barSize,_dragDirection);
-	--func_setIcon(btn,"smallbtn.png");
 	url = "smallbtn.png";--"checkbox.png";--"gundi.png";
 	local btn = sprite_create_typical(nil,x,y,barSize,barSize);
 	engine_addNode(btn);
-	--print(bg,btn);
+	
 	func_addchild(bg,btn);
 
 	loadtexs(url,func_texloadend, { sprite=btn;url=url});
@@ -258,24 +248,13 @@ function scrollBar_del(sc)
 	evt_off(sc.bg,EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2);
 	evt_off(sc.btn,EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move);
 	
-	--[[
-    if(sc.tf) then
-        fext_dispose(sc.tf);
-		func_sprite_removechild(sc.bg,ftext_get_container(sc.tf));
-    end
-	--]]
-	--func_sprite_removechild(sc.bg,sc.btn);
+	
 	
 	
 	
 	ptr_remove(sc.btn);
 	ptr_remove(sc.bg)
-	--local parent = sc.parent;
-	--if(parent) then
-	--	func_sprite_removechild(parent,sc.bg);
-		--print("移除sc");
-	--end
-	--func_tableDel(sc)	
+	
 	
 	func_clearTableItem(sc);
 end
