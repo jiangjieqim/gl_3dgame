@@ -18,11 +18,7 @@ function Image:new(w,h)
 
 	self:init();
 	self:mouseEnable(false);--默认关闭鼠标事件
-	
-	
 	--self:on(EVENT_ENGINE_SPRITE_CLICK,clickEvt,self);
-	
-	
 	return self;
 end
 

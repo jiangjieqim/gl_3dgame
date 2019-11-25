@@ -318,7 +318,7 @@ function skin_set_pos(skin,x,y)
 	local list = skin.list;
 	local node = stack_find_by_index(list,0);
 	
-	if(node and node.type == UI_TYPE.Panel) then
+	if(node and node.type == 4) then -- UI_TYPE.Panel
 		alert_set_pos(node,x,y);
 	else
 		func_error("================= skin_set_pos Î´ÕÒµ½½Úµã");

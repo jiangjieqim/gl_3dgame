@@ -62,7 +62,7 @@ EVENT_TIMER = 201--计时器
  KEY_I = 105
 
 
-UI_TYPE = {
+local UI_TYPE = {
 	Label = 1,
 	Button =2,
 	ScrollBar = 3,
@@ -74,6 +74,7 @@ UI_TYPE = {
 	Input = 9,--输入组件
 	Image = 10,--image组件
 	Shape = 11,--shape组件
+	NScrollBar = 12,--滚动条组件
 };
 
 local DEBUG = true;
@@ -919,6 +920,8 @@ function func_addnode(parent,n,x,y)
 		func_addchild(parent,n.container,x,y);
 	elseif(_type == UI_TYPE.ListBox) then
 		func_addchild(parent,listbox_get_container(n),x,y);	
+	elseif(_type == UI_TYPE.NScrollBar) then
+		func_addchild(parent,n:get_container(),x,y);	
 	else
 		func_error(string.format("type = %s未实现",tostring(_type)));
 	end
@@ -955,6 +958,7 @@ function func_dispose(n)
 		or _type == UI_TYPE.Input
 		or _type == UI_TYPE.Image
 		or _type == UI_TYPE.Shape
+		or _type == UI_TYPE.NScrollBar
 		)then
 		
 		n:dispose();
@@ -963,6 +967,7 @@ function func_dispose(n)
 	end
 end
 
+dofile("..\\include\\lua\\base.lua")
 dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器
 dofile("..\\include\\lua\\ex.lua")	--引擎
 
@@ -978,6 +983,8 @@ dofile("..\\include\\lua\\shape.lua")	--shape组件
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
+
+dofile("..\\include\\lua\\NScrollBar.lua")	--滑动条组件
 
 dofile("..\\include\\lua\\btn.lua");		--按钮组件
 

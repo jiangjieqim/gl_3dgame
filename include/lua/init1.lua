@@ -174,8 +174,7 @@ cam_setPosition(0,0,-10);
 
 
 
-
-local mc = ModelControl:new(10,10);
+local mc = ModelControl:new(30,30);
 local u = loadbox();
 --mc:bind(u);
 

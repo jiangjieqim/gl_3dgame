@@ -74,6 +74,15 @@ function Shape:getsize()
 	return self.w,self.h;
 end
 
+--设置为线框渲染
+function Shape:drawPloygonLine(v)
+	if(v) then
+		setv(self:get_container(),FLAGS_DRAW_PLOYGON_LINE);
+	else
+		resetv(self:get_container(),FLAGS_DRAW_PLOYGON_LINE);
+	end
+end
+
 --获取Shape当前容器
 function Shape:get_container()
 	return self.container;
@@ -120,4 +129,18 @@ function Shape:set_size(w,h)
 	self.w = w;
 	self.h = h;
 	func_set_sprite_size(self.container,w,h);
+end
+
+--将一个sprite添加到该shape中,使其作为子对象
+function Shape:addChild(sprite,x,y)
+	func_addchild(self:get_container(),sprite,x,y);
+end
+
+--设置拖拽的方向
+function Shape:set_drag_direct(v)
+	sprite_set_direction(self:get_container(),v);
+end
+--设置可拖拽范围
+function Shape:set_drag_rect(x,y,w,h)
+	sprite_setDragScope(self:get_container(),x,y,w,h);
 end

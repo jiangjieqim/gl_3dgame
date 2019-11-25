@@ -1042,7 +1042,7 @@ changeDragXY(struct Sprite* p,int* px,int* py){
 		float progress;
 		//sprite_refresh_local_pos((void*)p);
 
-		int ppx,ppy;
+		int ppx=0,ppy=0;
 		f_get_global(p,&ppx,&ppy);
 	/*	ppx-=p->localx;
 		ppy-=p->localy;*/
@@ -1108,7 +1108,7 @@ sprite_mouseMove(int data)
 					int y = e->mouseState.moveY - ptr->mouseDownY;
 
 					//x,y 当前鼠标拾取到的绝对坐标
-					//printf("******* mx = %d,my = %d\n",x,y);
+					//printf("******* mx = %d,my = %d ===>%d %d\n",x,y,e->mouseState.moveX,ptr->mouseDownX);
 					changeDragXY(ptr,&x,&y);
 					//printf("mx = %d,my = %d\n",x,y);
 					sprite_setpos(ptr,x,y);

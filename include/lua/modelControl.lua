@@ -70,7 +70,9 @@ local function f_camx_handle(sc)
 	engine_refreshCam3d();
 end
 
-
+local function fc(progress,p)
+	--print(progress,p);
+end
 local function f_callBack(skin,self)
 	
 	
@@ -81,6 +83,12 @@ local function f_callBack(skin,self)
 	
 	--local shape = Shape:new(true);
 	--shape:dispose();
+	
+	
+	
+	local sc = NScrollBar:new();	
+	sc:bindCallback(fc,1);
+	--sc:dispose();	
 	
 	
 	local p = skin_get_param(skin);
