@@ -192,6 +192,11 @@ local function f_create_by_node(skin,node)
 		
 		shape:setname(name);
 		child = shape;
+	elseif(_type == "NScrollBar")then
+		local nb = NScrollBar:new();	
+		--nb:set_pos(x,y);
+		nb:setname(name);
+		child = nb;
 	end
 	
 	--****************************************

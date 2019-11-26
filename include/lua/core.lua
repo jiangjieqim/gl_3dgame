@@ -959,9 +959,10 @@ function func_dispose(n)
 		or _type == UI_TYPE.Image
 		or _type == UI_TYPE.Shape
 		or _type == UI_TYPE.NScrollBar
-		)then
+										)then
 		
-		n:dispose();
+		n:dispose();--É¾³ý×é¼þ
+		
 	elseif(_type == UI_TYPE.ListBox) then	
 		listbox_del(n);
 	end

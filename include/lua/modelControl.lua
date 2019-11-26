@@ -71,7 +71,7 @@ local function f_camx_handle(sc)
 end
 
 local function fc(progress,p)
-	print(progress);
+	--print(progress);
 end
 local function f_callBack(skin,self)
 	
@@ -85,10 +85,6 @@ local function f_callBack(skin,self)
 	--shape:dispose();
 	
 	
-	
-	local sc = NScrollBar:new();	
-	sc:bindCallback(fc,1);
-	--sc:dispose();	
 	
 	
 	local p = skin_get_param(skin);
@@ -141,9 +137,13 @@ local function f_callBack(skin,self)
 	--设置界面的初始坐标
 	skin_set_pos(skin,self.x,self.y);
 
+	
+	local sc1 = skin_find(skin,"sc1");	
+	sc1:bindCallback(fc,1);
+	--sc:dispose();	
+	
 
-
-
+	--销毁skin组件
 	--skin_dispose(skin);
 end
 

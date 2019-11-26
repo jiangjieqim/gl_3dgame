@@ -2,8 +2,6 @@ local DIRECTION_HORIZONTAL = 0	--水平,横
 local DIRECTION_VERTICAL   = 1 	--垂直,竖
 
 NScrollBar = {
-	name = nil,
-	type = 12,
 	
 	bg,--可滚动的背景(Image)
 	btn,--滚动交互小按钮
@@ -14,6 +12,7 @@ NScrollBar = {
 };
 
 NScrollBar.__index = NScrollBar;
+setmetatable(NScrollBar, Base);
 
 local function 
 f_setBarPostion(sprite,scrollbtn)
@@ -23,7 +22,7 @@ f_setBarPostion(sprite,scrollbtn)
 	local local_x,local_y = sprite:local_mouse_xy();
 	
 	--进度条的坐标
-	local bx,by = sprite:get_pos();
+	local bx,by = 0,0;--sprite:get_pos();
 
 	--进度条的宽高
 	local sprite_w,sprite_h = sprite:get_size();
@@ -84,8 +83,10 @@ function NScrollBar:bindCallback(callBack,callBackParam)
 	self.callBackParam = callBackParam;
 end
 
-function NScrollBar:new(cw,ch)
-	local self = {};
+function NScrollBar:new(x,y,cw,ch)
+	local self = Base:new();
+	self:settype(12);
+
 	setmetatable(self, NScrollBar);
 	cw = cw or 100;
 	ch = ch or 15;
@@ -103,6 +104,7 @@ function NScrollBar:new(cw,ch)
 	--创建可滑动的背景
 	local bg = Image:new(cw,ch);
 	bg:mouseEnable(true);
+	bg:set_pos(x or 0,y or 0);
 	bg:seticon("checkbox.png");
 	self.bg = bg;	
 	--创建小按钮
@@ -114,7 +116,7 @@ function NScrollBar:new(cw,ch)
 	btn:setcolor(0,1,0);
 	btn:set_drag_type(_dragDirection);
 	--设置可拖拽范围
-	--btn:set_drag_rect(0,0,cw,ch);
+	btn:set_drag_rect(0,0,cw,ch);
 	
 	self.btn = btn;
 	
@@ -125,18 +127,18 @@ function NScrollBar:new(cw,ch)
 	bg:on(EVENT_ENGINE_SPRITE_CLICK,f_scrollBarClick,self);
 	btn:on(EVENT_ENGINE_SPRITE_CLICK_MOVE,f_luaDrag_move,self);
 	
-	self:set_pos(0,0);
+	--self:set_pos(0,0);
 	return self;
 end
 
---设置坐标
+--[[--设置坐标
 function NScrollBar:set_pos(x,y)
 	local bg = self.bg;
 	local btn = self.btn;
 	bg:set_pos(x,y);
 	local cw,ch = bg:get_size();
 	btn:set_drag_rect(0,0,cw,ch);
-end
+end--]]
 function NScrollBar:get_container()
 	local bg = self.bg;
 	return bg:get_container();
