@@ -90,7 +90,7 @@ Input = {
 
 Input.__index = Input;
 local function f_timer(data,self)
-	local w,h = self:get_size();
+	local w,h = self:get_get_wordpos();
 	local img = self.img;		
 	img:set_pos(w,0);
 	img:visible(not img:is_visible());
@@ -113,9 +113,9 @@ local function f_onFocusChange(data,self)
 	end
 end
 --输入文本的尺寸
-function Input:get_size()
+function Input:get_get_wordpos()
 	local txt = input_get_ftext(self._in);
-	return ftext_getsize(txt);
+	return ftext_get_wordpos(txt);
 end
 
 function Input:new()
