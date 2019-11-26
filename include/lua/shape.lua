@@ -58,7 +58,8 @@ function Shape:is_visible()
 	return getv(self.container,FLAGS_VISIBLE) == 1;
 end
 
-function Shape:getsize()
+function Shape:get_size()
+	--func_error("*");
 	return self.w,self.h;
 end
 

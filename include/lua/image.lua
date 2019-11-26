@@ -23,7 +23,7 @@ function Image:new(w,h)
 end
 
 function Image:init()
-	local sw,sh = self:getsize();
+	local sw,sh = self:get_size();
 	local img = sprite_create_typical(nil,0,0,sw,sh);
 	self.container = img;
 	engine_addNode(img);
