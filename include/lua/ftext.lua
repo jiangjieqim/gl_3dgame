@@ -45,10 +45,16 @@ end
 function ftext_str(txt)
     return ftext(txt, "str");
 end
---获取文本的w,h
-function ftext_getsize(txt)
+function ftext_get_wordpos(txt)
+--function ftext_getsize(txt)
+	--func_error(1);
     return ftext(txt, "wordpos");
 end
+--获取文本的w,h
+function ftext_get_wh(txt)
+	return ftext(txt,"size");
+end
+
 --获取ftext的容器,此容器是sprite
 function ftext_get_container(txt)
 	return ftext(txt, "get_container");

@@ -114,7 +114,7 @@ local function init(crl)
     ftext_reset(crl.nameTf, "пео╒");
     local x, y, w, h;
     local oy = 0;
-    w, h = ftext_getsize(crl.nameTf);
+    w, h = ftext_wordpos(crl.nameTf);
     oy = oy + h;
 
     x, y, w, h = f_add_rotate(crl, "rx", crl.x, crl.y + oy);

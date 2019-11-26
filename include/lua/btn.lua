@@ -138,7 +138,7 @@ function btn_scaleStyle(btn)
 end
 --ÖØÖÃlabelµÄ×ø±ê
 local function f_reset_label_pos(btn,style)
-    local w,h = label_get_size(btn.label);
+    local w,h = label_get_wordpos(btn.label);--label_get_size(btn.label);
 	
     local x,y = func_get_sprite_xy(btn.sprite);
     local sw,sh=func_get_sprite_size(btn.sprite);

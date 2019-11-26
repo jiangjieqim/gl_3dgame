@@ -144,6 +144,17 @@ local function f_callBack(skin,self)
 	
 	local nl = NListBox:new();
 
+--*******************
+	local a = NLabel:new();
+	a:set_text("k我amkoa");
+	--a:set_pos(10,10);
+	--print(a:get_text());
+	--local w,h = a:get_size();
+	--print(w,h);
+	--a:dispose();
+	
+	
+	
 	--销毁skin组件
 	--skin_dispose(skin);
 end

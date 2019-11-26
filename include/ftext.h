@@ -42,6 +42,9 @@ char*
 ftext_get_str(void* p);
 //获取文本对象的宽高
 void
+ftext_get_size(void* p,int* w,int *h);
+//获取当前文本的坐标
+void
 ftext_get_wordpos(void* p,int* w,int *h);
 /************************************************************************/
 /* 销毁字体句柄                                                                     */

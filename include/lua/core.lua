@@ -78,6 +78,7 @@ local UI_TYPE = {
 	Shape = 11,--shape组件
 	NScrollBar = 12,--滚动条组件
 	NListBox = 13,--列表
+	NLabel = 14,--Label
 
 };
 
@@ -91,7 +92,6 @@ dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
 --dofile("..\\include\\lua\\sprite.lua");
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
 dofile("..\\include\\lua\\ftext.lua");
-dofile("..\\include\\lua\\label.lua");--label是对ftext进行的一次封装
 dofile("..\\include\\lua\\input.lua");
 
 local defalutTex = '1.tga'
@@ -972,7 +972,9 @@ function func_dispose(n)
 	end
 end
 
-dofile("..\\include\\lua\\base.lua")
+dofile("..\\include\\lua\\base.lua");
+dofile("..\\include\\lua\\label.lua");--label是对ftext进行的一次封装
+
 dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器
 dofile("..\\include\\lua\\ex.lua")	--引擎
 

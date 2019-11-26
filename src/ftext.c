@@ -213,6 +213,13 @@ ftext_get_wordpos(void* p,int* w,int *h){
 	*h = txt->_py;
 }
 void
+ftext_get_size(void* p,int* w,int *h){
+	FText* txt = (FText*)p;
+	*w = txt->w;
+	*h = txt->h;
+}
+
+void
 ftext_clear(void* p){
 	FText* txt = (FText*)p;
 	//int length;
