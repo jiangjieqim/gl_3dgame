@@ -132,3 +132,8 @@ end
 function Shape:set_drag_rect(x,y,w,h)
 	sprite_setDragScope(self:get_container(),x,y,w,h);
 end
+
+--获取鼠标拾取的sprite相对坐标(局部local坐标)
+function Shape:local_mouse_xy()
+	return func_get_sprite_mouse_xy(self.container);
+end
