@@ -62,6 +62,10 @@ function Shape:get_size()
 	--func_error("*");
 	return self.w,self.h;
 end
+--获取其坐标
+function Shape:get_pos()
+	return get_attr(self:get_container(),"spritePos");
+end
 
 --设置为线框渲染
 function Shape:drawPloygonLine(v)
@@ -126,9 +130,15 @@ function Shape:addChild(sprite,x,y)
 end
 
 --设置拖拽的方向
-function Shape:set_drag_direct(v)
+function Shape:set_drag_type(v)
 	sprite_set_direction(self:get_container(),v);
 end
+
+--获取拖拽的方向
+function Shape:get_drag_type()
+	return get_attr(self:get_container(),"dragDirection");
+end
+
 --设置可拖拽范围
 function Shape:set_drag_rect(x,y,w,h)
 	sprite_setDragScope(self:get_container(),x,y,w,h);

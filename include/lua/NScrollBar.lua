@@ -15,16 +15,68 @@ NScrollBar = {
 
 NScrollBar.__index = NScrollBar;
 
-local function f_scrollBarBG_Click2(name,p)
-	print(name,p);
+local function 
+f_setBarPostion(sprite,scrollbtn)
+	--滑动的方向
+	local dragDirection=scrollbtn:get_drag_type();
+	--背景局部坐标
+	local local_x,local_y = sprite:local_mouse_xy();
+	
+	--进度条的坐标
+	local bx,by = sprite:get_pos();
+
+	--进度条的宽高
+	local sprite_w,sprite_h = sprite:get_size();
+
+	--小按钮的宽高
+	local sc_w,sc_h = scrollbtn:get_size();
+				
+	if(dragDirection == DIRECTION_HORIZONTAL) then
+		local v = local_x;
+		local target_x = bx + v;
+		--print("设置小按钮的位置:"..tostring(target_x)..","..tostring(by)..",sc_w="..sc_w..',sc_h='..sc_h..',sprite_w='..sprite_w..',sprite_h='..sprite_h)
+		if (target_x > sprite_w  - sc_w + bx) then
+			target_x = sprite_w - sc_w + bx;
+			--print('纠正!!!')
+		end
+
+		--sprite_setpos(scrollbtn,target_x,by);
+		scrollbtn:set_pos(target_x,by);
+		
+		--print("设置坐标***",target_x,by);
+		return v / sprite_w;
+	else
+		local v = local_y;
+		local target_y = by + v ;
+		--print("设置小按钮的位置:"..tostring(target_x)..","..tostring(by)..",sc_w="..sc_w..',sc_h='..sc_h..',sprite_w='..sprite_w..',sprite_h='..sprite_h)
+
+		if (target_y > sprite_h  - sc_h + by) then
+			target_y = sprite_h - sc_h + by;
+			--print('纠正!!!')
+		end
+		
+--		sprite_setpos(scrollbtn,bx,target_y);
+		scrollbtn:set_pos(bx,target_y);
+		
+		--print("##",bx,target_y);
+		return v / sprite_h;
+	end
+	
+--]]
 end
+
 --当滚动游标移动的时候触发
-local function f_f_LuaDrag_move(progress,self)    
+local function f_luaDrag_move(progress,self)    
 	--print(data,p);
 	--print(data);;
 	if(self.callBack) then
 		self.callBack(progress,self.callBackParam);
 	end
+end
+
+local function f_scrollBarClick(name,self)
+	local v = f_setBarPostion(self.bg,self.btn);
+	f_luaDrag_move(v,self);
 end
 
 function NScrollBar:bindCallback(callBack,callBackParam)
@@ -60,7 +112,7 @@ function NScrollBar:new(cw,ch)
 	
 	btn:mouseEnable(true);
 	btn:setcolor(0,1,0);
-	btn:set_drag_direct(_dragDirection);
+	btn:set_drag_type(_dragDirection);
 	--设置可拖拽范围
 	--btn:set_drag_rect(0,0,cw,ch);
 	
@@ -70,8 +122,8 @@ function NScrollBar:new(cw,ch)
 	
 	--bg:drawPloygonLine(true);
 	
-	--bg:on(EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2,self);
-	btn:on(EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move,self);
+	bg:on(EVENT_ENGINE_SPRITE_CLICK,f_scrollBarClick,self);
+	btn:on(EVENT_ENGINE_SPRITE_CLICK_MOVE,f_luaDrag_move,self);
 	
 	self:set_pos(0,0);
 	return self;
@@ -93,11 +145,11 @@ end
 function NScrollBar:dispose()
 	local bg = self.bg;
 	local btn = self.btn;
-	bg:off(EVENT_ENGINE_SPRITE_CLICK,f_scrollBarBG_Click2);
+	bg:off(EVENT_ENGINE_SPRITE_CLICK,f_scrollBarClick);
 	bg:dispose();
 	
 	btn:dispose();
-	btn:off(EVENT_ENGINE_SPRITE_CLICK_MOVE,f_f_LuaDrag_move);
+	btn:off(EVENT_ENGINE_SPRITE_CLICK_MOVE,f_luaDrag_move);
 	
 	func_clearTableItem(self);
 end

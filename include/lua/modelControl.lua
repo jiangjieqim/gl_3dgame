@@ -71,7 +71,7 @@ local function f_camx_handle(sc)
 end
 
 local function fc(progress,p)
-	--print(progress,p);
+	print(progress);
 end
 local function f_callBack(skin,self)
 	
