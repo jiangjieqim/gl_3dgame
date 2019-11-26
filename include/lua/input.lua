@@ -95,6 +95,12 @@ local function f_timer(data,self)
 	img:set_pos(w,0);
 	img:visible(not img:is_visible());
 end
+
+local function f_onInputChange(data,self)
+	f_timer(nil,self);
+	--print(data,self);
+end
+
 local function f_onFocusChange(data,self)
 	--print(data,param);
 	if(data == 1) then
@@ -120,6 +126,10 @@ function Input:new()
 	self.container = input_get_container(_in);
 	evt_on(_in,CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE,f_onFocusChange,self);
 	
+	evt_on(_in,CUST_LUA_EVENT_INPUT_CHANGE,f_onInputChange,self);
+
+	
+	
 --[[	if(hasBg) then
 		self.bg = Shape:new(true,128,14);
 		func_addnode(self.container,self.bg);
@@ -141,6 +151,8 @@ end
 
 function Input:dispose()
 	evt_off(self._in,CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE,f_onFocusChange);
+	evt_off(self._in,CUST_LUA_EVENT_INPUT_CHANGE,f_onInputChange);
+
 	evt_off(self.timer,EVENT_TIMER,f_timer);
 	timelater_remove(self.timer);
 

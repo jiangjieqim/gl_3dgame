@@ -32,7 +32,6 @@ f_key2(int evtId,void* data,void* thisObj){
 	if(pkey->key == 8){
 		//ÍË¸ñ
 		ftext_pop_word(txt);
-		return;
 	}else if(pkey->key == 13){
 		//»Ø³µ
 		//printf("input key = %d,(%s)\n",pkey->key,input_get_heap_str(ptr));
@@ -42,13 +41,12 @@ f_key2(int evtId,void* data,void* thisObj){
 		
 		//cam_refreshModdel(ex_getIns()->_3dcam);
 
-		return;
+	}else{
+		memset(_word,0,_WORD_SIZE_);
+		sprintf_s(_word,_WORD_SIZE_,"%c",pkey->key);
+		ftext_parse(txt,_word,0,0);
 	}
-	
-	memset(_word,0,_WORD_SIZE_);
-	sprintf_s(_word,_WORD_SIZE_,"%c",pkey->key);
-
-	ftext_parse(txt,_word,0,0);
+	ex_lua_evt_dispatch_f(ptr,CUST_LUA_EVENT_INPUT_CHANGE,0);
 }
 static void
 focusChangeHandle(int evtId,void* data,void* thisObj){

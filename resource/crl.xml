@@ -31,3 +31,4 @@
 <ui name="camx_sc" type="ScrollBar" x="0" y="160" parent="1"/>
 <ui type="Label" x="100" y="160" label="ÉèÖÃcamX" parent="1"/>
 
+<ui name="sc1" type="NScrollBar" x="0" y="180" parent="1"/>
