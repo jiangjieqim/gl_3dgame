@@ -142,6 +142,7 @@ local function f_callBack(skin,self)
 	sc1:bindCallback(fc,1);
 	--sc:dispose();	
 	
+	local nl = NListBox:new();
 
 	--Ïú»Ùskin×é¼þ
 	--skin_dispose(skin);

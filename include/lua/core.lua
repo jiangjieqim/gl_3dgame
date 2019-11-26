@@ -77,6 +77,8 @@ local UI_TYPE = {
 	Image = 10,--image组件
 	Shape = 11,--shape组件
 	NScrollBar = 12,--滚动条组件
+	NListBox = 13,--列表
+
 };
 
 local DEBUG = true;
@@ -982,7 +984,7 @@ dofile("..\\include\\lua\\fbo.lua")	--fbo
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 dofile("..\\include\\lua\\shape.lua")	--shape组件
 
---dofile("..\\include\\lua\\listbox.lua")
+dofile("..\\include\\lua\\NListbox.lua")
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
 
 dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
