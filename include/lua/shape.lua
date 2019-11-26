@@ -1,16 +1,15 @@
 Shape = {
-	name = nil,
-	type = nil,
 	w,h,
 	container,--Sprite对象
 }
 
 Shape.__index = Shape;
+setmetatable(Shape, Base);
 
 function Shape:new(issuper,w,h)
 	w = w or 32;
 	h = h or 32;
-	local self = {};
+	local self = Base:new();
 	setmetatable(self, Shape);
 	
 	self.w = w;
@@ -35,9 +34,6 @@ function Shape:init()
 	--self:setcolor(1.0);
 end
 
-function Shape:setname(name)
-	self.name = name;
-end
 
 --设置颜色
 function Shape:setcolor(r,g,b)
@@ -49,14 +45,6 @@ function Shape:setcolor(r,g,b)
 	glsl_set(m,str);
 end
 
-function Shape:settype(t)
-	--print(t);
-	self.type = t;	
-end
-
-function Shape:gettype()
-	return self.type;
-end
 
 function Shape:visible(v)
 	if(v) then

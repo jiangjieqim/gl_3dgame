@@ -1,6 +1,4 @@
 CheckBox = {
-	name = nil,
-	type = 6,
 	selected = false,
 	btn,
 	container,
@@ -8,6 +6,7 @@ CheckBox = {
 	param,
 };
 CheckBox.__index = CheckBox;
+setmetatable(CheckBox, Base);
 
 local function ckfunc(btnName,p)
 	local self= p;
@@ -26,8 +25,10 @@ local function ckfunc(btnName,p)
 end
 
 function CheckBox:new()
-	local self = {};
+	local self =  Base:new();
 	setmetatable(self, CheckBox);
+	
+	self:settype(6);
 	self.btn = btn_create(0,0,20,20,"checkbox.png",0,false);
 	self.container = btn_get_container(self.btn);
 	--self.container = self.btn;
@@ -38,10 +39,10 @@ end
 function CheckBox:setlabel(label)
 	btn_label(self.btn,label,"rightout");
 end
---设置CheckBox的名字
+--[[--设置CheckBox的名字
 function CheckBox:setname(name)
 	self.name = name;
-end
+end--]]
 function CheckBox:bind(callback,param)
 	self.callback = callback;
 	self.param = param;
