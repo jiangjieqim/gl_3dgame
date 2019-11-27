@@ -145,7 +145,7 @@ local function f_callBack(skin,self)
 	sc1:bindCallback(fc,1);
 	--sc:dispose();	
 	
-	local nl = NListBox:new();
+	local nl = skin_find(skin,"nb1");--NListBox:new();
 	nl:addItem("a");
 	nl:addItem("b");
 	nl:bind(f_nl,9);

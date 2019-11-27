@@ -924,7 +924,9 @@ function func_addnode(parent,n,x,y)
 		func_addchild(parent,n.container,x,y);
 	elseif(_type == UI_TYPE.ListBox) then
 		func_addchild(parent,listbox_get_container(n),x,y);	
-	elseif(_type == UI_TYPE.NScrollBar) then
+	elseif(_type == UI_TYPE.NScrollBar
+			or _type == UI_TYPE.NListBox
+	) then
 		func_addchild(parent,n:get_container(),x,y);	
 	else
 		func_error(string.format("type = %s未实现",tostring(_type)));
@@ -963,6 +965,7 @@ function func_dispose(n)
 		or _type == UI_TYPE.Image
 		or _type == UI_TYPE.Shape
 		or _type == UI_TYPE.NScrollBar
+		or _type == UI_TYPE.NListBox
 										)then
 		
 		n:dispose();--删除组件

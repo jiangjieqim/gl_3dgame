@@ -40,12 +40,7 @@ local function f_refresh(self,index,isSpread)
 	local c = f_get_label(self,index) or "";
 	--print(index,isSpread,c);
 	
-	if(list.tf == nil)then
-		local label = NLabel:new();
-		list.tf = label;
-		local bg = list.bg;
-		bg:addChild(label:get_container());
-	end
+	
 	
 	if(list.data) then
 		local n;
@@ -70,6 +65,9 @@ local function f_refresh(self,index,isSpread)
 	end
 end
 
+function NListBox:get_container()
+	return self.bg:get_container();
+end
 function NListBox:selectIndex(v)
 	f_refresh(self,v);
 end
@@ -125,6 +123,9 @@ function NListBox:new(w)
 	bg:on(EVENT_ENGINE_SPRITE_CLICK,f_click,self);
 	self.h = h;
 	self.index = -1;
+	local label = NLabel:new();
+	self.tf = label;
+	bg:addChild(label:get_container());
 	return self;
 end
 

@@ -197,8 +197,11 @@ local function f_create_by_node(skin,node)
 		--nb:set_pos(x,y);
 		nb:setname(name);
 		child = nb;
+	elseif(_type == "NListBox")then
+		local nb = NListBox:new();	
+		nb:setname(name);
+		child = nb;
 	end
-	
 	--****************************************
 	if(child~=nil) then
 		
