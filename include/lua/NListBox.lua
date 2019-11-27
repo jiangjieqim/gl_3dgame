@@ -7,6 +7,9 @@ NListBox = {
 	data,--tabel列表中的数据
 
 	index,--当前的索引
+
+	labelstr,--上一次的label值
+	
 	callBack,
 	param,
 };
@@ -34,12 +37,18 @@ end
 
 local function f_refresh(self,index,isSpread)
 	local list = self;
+	--local i = index;
 	
-	local i = index;
+	
 	
 	local c = f_get_label(self,index) or "";
 	--print(index,isSpread,c);
 	
+	if(c~="") then
+		self.labelstr = c;
+	else
+		c = self.labelstr;
+	end
 	
 	
 	if(list.data) then

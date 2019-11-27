@@ -146,8 +146,8 @@ local function f_callBack(skin,self)
 	--sc:dispose();	
 	
 	local nl = skin_find(skin,"nb1");--NListBox:new();
-	nl:addItem("a");
-	nl:addItem("b");
+	nl:addItem("a1");
+	nl:addItem("b2");
 	nl:bind(f_nl,9);
 	nl:selectIndex(1);
 
