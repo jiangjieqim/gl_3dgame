@@ -73,6 +73,9 @@ end
 local function fc(progress,p)
 	--print(progress);
 end
+local function f_nl(self,index,param)
+	print(self,index,param);
+end
 local function f_callBack(skin,self)
 	
 	
@@ -143,10 +146,14 @@ local function f_callBack(skin,self)
 	--sc:dispose();	
 	
 	local nl = NListBox:new();
+	nl:addItem("a");
+	nl:addItem("b");
+	nl:bind(f_nl,9);
+	nl:selectIndex(1);
 
 --*******************
-	local a = NLabel:new();
-	a:set_text("kŒ“amkoa");
+	--local a = NLabel:new();
+	--a:set_text("kŒ“amkoa");
 	--a:set_pos(10,10);
 	--print(a:get_text());
 	--local w,h = a:get_size();

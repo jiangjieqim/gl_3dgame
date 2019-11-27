@@ -148,3 +148,7 @@ end
 function Shape:local_mouse_xy()
 	return func_get_sprite_mouse_xy(self.container);
 end
+--设置可点击区域的范围
+function Shape:hit_rect(x,y,w,h)
+	sprite_set_hit_rect(self:get_container(),x,y,w,h);
+end

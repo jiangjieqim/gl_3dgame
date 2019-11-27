@@ -80,3 +80,6 @@ function NLabel:dispose()
 	func_clearTableItem(self);
 end
 
+function NLabel:get_container()
+	return ftext_get_container(self.tf);
+end
