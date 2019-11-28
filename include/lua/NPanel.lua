@@ -63,6 +63,7 @@ end
 function NPanel:dispose()
 	local bg = self.bg;
 	self:enable_center(false);
+	--func_error(0);
 	bg:dispose();
 	--local bg = self.bg;
 end

@@ -64,9 +64,14 @@ function Shape:get_size()
 	--func_error("*");
 	return self.w,self.h;
 end
---获取其坐标
+--获取Shape的坐标
 function Shape:get_pos()
-	return get_attr(self:get_container(),"spritePos");
+	local p = self:get_container();
+	
+	func_error(1);
+
+	--print("*"..tostring(p));
+	return get_attr(p,"spritePos");
 end
 
 --设置为线框渲染
@@ -98,7 +103,7 @@ function Shape:on(id,func,params)
 end
 
 function Shape:off(id,func)
-	evt_off(self.container,func);
+	evt_off(self.container,id,func);
 end
 
 --销毁
