@@ -30,3 +30,22 @@ end
 function Base:getname()
 	return self.name;
 end
+--************单例**************
+Instance={
+	ins,--单例引用
+};
+Instance.__index = Instance;
+
+function Instance:new()
+	local self = {};
+	setmetatable(self, Instance);
+	return self;
+end
+
+--单例
+function Instance:getIns()
+    if self.ins == nil then
+        self.ins = self:new();	
+    end
+    return self.ins;
+end

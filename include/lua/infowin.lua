@@ -37,6 +37,8 @@ end
 --------------------------------------------------------------------
 -- 信息调试面板
 
+--[[local mc = FpsView:new();
+mc:show();--]]
 local _stat;
 local function f_select(self,index,param)
 	
@@ -46,14 +48,20 @@ local function f_select(self,index,param)
 	---[[
     if (index == 0) then
         --func_ex_info();
-	    alert("窗口测试:引擎信息");
+
+
+--	    alert("窗口测试:引擎信息");
+		print("windows test!");
+		
+		FpsView:getIns():show();
+		
     elseif (index == 1) then
         func_gc();
 --    elseif (index == 2) then
 --        ex:switch_spriteline()
 --        print("切换为Sprite线框状态:" .. ex:get_spriteline());
     elseif (index == 2) then
-        fps();
+        --fps();
     elseif (index == 3) then
         _stat = not _stat;
 --        print(_stat);

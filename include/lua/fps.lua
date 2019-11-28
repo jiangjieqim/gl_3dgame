@@ -5,12 +5,20 @@
 --##################################################################
 
 --Fps视图类
-FpsView = {label,timer,formatstr};
+FpsView = {
+	label,
+	timer,
+	formatstr,
+};
 
 FpsView.__index = FpsView;
+setmetatable(FpsView, Instance);--继承自单例
+
 function FpsView:new()
-	local self = {};
+	local self = Instance:new();
 	setmetatable(self, FpsView);
+	
+	print("初始化FpsView!");
 	
 	--tf = ftext_create(128,128);
     --ftext_set_buffer(tf,128);
@@ -47,7 +55,6 @@ function FpsView:show(x,y,formatstr)
 		evt_on(timer,EVENT_TIMER,f_fps_timer,self);
 	end
 end
-
 function FpsView:hide()
 	--ftext_vis(self.tf,0);
 	label_set_visible(self.label,0);

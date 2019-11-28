@@ -77,7 +77,7 @@ end
 
 --arrow();
 
---infowin(150,50);
+infowin(150,50);
 
 --crl_init();
 
