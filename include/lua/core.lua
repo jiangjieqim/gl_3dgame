@@ -79,6 +79,7 @@ local UI_TYPE = {
 	NScrollBar = 12,--滚动条组件
 	NListBox = 13,--列表
 	NLabel = 14,--Label
+	NPanel = 15,
 
 };
 
@@ -988,6 +989,7 @@ dofile("..\\include\\lua\\fbo.lua")	--fbo
 
 dofile("..\\include\\lua\\fps.lua")	--fps组件
 dofile("..\\include\\lua\\shape.lua")	--shape组件
+dofile("..\\include\\lua\\NPanel.lua");
 
 dofile("..\\include\\lua\\NListbox.lua")
 dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件

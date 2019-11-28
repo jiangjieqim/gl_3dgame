@@ -38,8 +38,11 @@ end
 -- 信息调试面板
 
 local _stat;
-local function f_select(list)
-	local index =listbox_get_index(list);
+local function f_select(self,index,param)
+	
+	
+	
+	--local index =listbox_get_index(list);
 	---[[
     if (index == 0) then
         --func_ex_info();
@@ -72,7 +75,9 @@ end
 
 
 function infowin(x, y)
-	local list  = listbox_new(x or 0, y or 0);
+	
+	
+	--[[local list  = listbox_new(x or 0, y or 0);
 	listbox_bind(list,f_select);
 	
 	
@@ -82,7 +87,18 @@ function infowin(x, y)
 	listbox_add(list,"背景颜色");
 	listbox_add(list,"创建mesh");
 	listbox_add(list,"重置cam");
-	listbox_set_title(list,"infowin");
+	listbox_set_title(list,"infowin");--]]
+	
+	local list = NListBox:new(x,y,128);
+	list:addItem("引擎信息");
+	list:addItem("gc");
+	list:addItem("fps");
+	list:addItem("背景颜色");
+	list:addItem("创建mesh");
+	list:addItem("重置cam");
+	list:bind(f_select);
+
+	
 	--listbox_del(list);
-	return list;
+	--return list;
 end

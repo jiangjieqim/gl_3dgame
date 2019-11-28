@@ -672,6 +672,8 @@ sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h)
 		return;
 	}
 
+	log_color(0,"Sprite name=[%s]设置FLAGS_DRAG\n",base->name);
+
 	setv(&base->flags,FLAGS_DRAG);
 	pSpr->oldx = pSpr->screenX;
 	pSpr->oldy = pSpr->screenY;
@@ -1098,9 +1100,12 @@ sprite_mouseMove(int data)
 	if(sprite_isEnable(data))
 	{
 		struct HeadInfo* base = base_get((void*)data);
+
 		if(getv(&base->flags,FLAGS_DRAG))
 		{
 			struct Sprite* ptr = (struct Sprite*)data;
+			
+			//printf("c = %s,y = %s\n",base_get(ex_getIns()->curFocus)->name,base_get(ptr)->name);
 			if(ex_getIns()->curFocus == ptr){
 				if(ptr->m_bPressed){
 					//鼠标按下,只有在鼠标坐标发生变化的时候				

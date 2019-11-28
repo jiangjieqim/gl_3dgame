@@ -160,6 +160,13 @@ local function f_callBack(skin,self)
 	--print(w,h);
 	--a:dispose();
 	
+	infowin(20,10);
+	local p = NPanel:new();
+	p:enable_center(true);
+	p:setDrag(true);
+	p:center();
+	
+	--p:dispose();
 	
 	
 	--Ïú»Ùskin×é¼þ

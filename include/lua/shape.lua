@@ -13,6 +13,7 @@ function Shape:new(issuper,w,h)
 	setmetatable(self, Shape);
 	
 	self.w = w;
+	
 	self.h = h;
 	if(issuper) then
 		self:init();
@@ -58,6 +59,7 @@ function Shape:is_visible()
 	return getv(self.container,FLAGS_VISIBLE) == 1;
 end
 
+--当前的Shape的宽高
 function Shape:get_size()
 	--func_error("*");
 	return self.w,self.h;

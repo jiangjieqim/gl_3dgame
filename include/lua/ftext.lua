@@ -14,6 +14,8 @@ function ftext_create(w, h, fw, fh,cam)
     fh = fh or 12;
 --    fw = fw or 16;fh = fh or 15;
     
+	--func_error("ftext_create w = "..w.." h = "..h);
+	
     local p = ftext(nil, "create", name, string.format("%s,%s,%s,%s,%s", w, h, fw, fh,cam));
     ftext_set_buffer(p,64);--…Ë÷√‘§÷∆ª∫≥Â«¯
     return p;

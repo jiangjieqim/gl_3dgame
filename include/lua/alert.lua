@@ -40,6 +40,7 @@ local function f_resize(evtData,self)
 	local bgw,bgh = func_get_sprite_size(self.bg)
 
 	if(self.isDrag and sw > bgw and sh > bgh) then
+		--print(-sx,-sy,sw-sx,sh-sy);
 		sprite_setDragScope(self.bg,-sx,-sy,sw-sx,sh-sy);
 	end
 	f_center(self);
@@ -127,7 +128,7 @@ function alert_enable_resize(self,v)
 		evt_on(self,EVENT_ENGINE_RESIZE,f_resize,self);
 		f_resize(nil,self);
 	else
-		evt_off(self,EVENT_ENGINE_RESIZE,f_resize,self);
+		evt_off(self,EVENT_ENGINE_RESIZE,f_resize);
 	end
 end
 

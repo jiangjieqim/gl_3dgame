@@ -2126,7 +2126,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 				//ex_lua_evt_dispatch(ex->curFocus,EVENT_ENGINE_SPRITE_FOCUS_OUT,0);
 				ex->curFocus = _clickInfo->sprite;
 				//ex_lua_evt_dispatch(ex->curFocus,EVENT_ENGINE_SPRITE_FOCUS_IN,0);
-				//printf("focus change\t 0x%0x\n",ex->curFocus);
+				//printf("focus change\t %0x\tname=[%s]\n",ex->curFocus,base_get(ex->curFocus)->name);
 				evt_dispatch(ex_getIns(),EVENT_ENGINE_SPRITE_FOCUS_CHANGE,_old);
 			}
 

@@ -35,21 +35,21 @@ local function f_get_label(list,index)
 	return label;
 end
 
+function NListBox:getLabelByIndex(index)
+	return f_get_label(self,index);
+end
+
 local function f_refresh(self,index,isSpread)
 	local list = self;
-	--local i = index;
-	
-	
 	
 	local c = f_get_label(self,index) or "";
-	--print(index,isSpread,c);
-	
+	--print("####",index,isSpread,c,"*");
+	--print(string.format("[%s]",c));
 	if(c~="") then
 		self.labelstr = c;
 	else
-		c = self.labelstr;
+		c = self.labelstr or "";
 	end
-	
 	
 	if(list.data) then
 		local n;
@@ -66,7 +66,7 @@ local function f_refresh(self,index,isSpread)
 			local label = list.tf;
 			
 			label:set_text(s);
-			--print(s);
+			--print("set label:",s);
 		end
 	end
 	if(self.callBack and index ~= -1)then
@@ -111,15 +111,19 @@ local function f_click(name,self)
 	end
 	f_refresh(self,index,isSpread);
 end
-
-function NListBox:new(w)
+--w的listBox的宽度
+--size:Label的size大小
+function NListBox:new(x,y,size,w)
+	x = x or 0;
+	y = y or 0;
 	
 	local self = Base:new();
 	setmetatable(self, NListBox);
 	self:settype(13);
 	
 	local h = 12;
-	w = w or 60;
+	w = w or 64;
+	size = size or 64;
 	--local label = NLabel:new();
 	--label:set_text("R");
 	--local w,h = label:get_size();
@@ -127,12 +131,13 @@ function NListBox:new(w)
 	--print(w,h);
 	
 	local bg = Shape:new(true,w,h);
+	bg:set_pos(x,y);
 	self.bg = bg;
 	bg:mouseEnable(true);
 	bg:on(EVENT_ENGINE_SPRITE_CLICK,f_click,self);
 	self.h = h;
 	self.index = -1;
-	local label = NLabel:new();
+	local label = NLabel:new(size,size);
 	self.tf = label;
 	bg:addChild(label:get_container());
 	return self;
