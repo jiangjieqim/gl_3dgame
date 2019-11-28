@@ -1374,20 +1374,20 @@ f_stage_click_callback(struct Sprite* self,int x,int y){
 //	}
 //}
 
-//初始化场景,舞台和设备上下文设备都处理完成了
-static void
-f_initScene(){
-	struct EX* p = ex_getIns();
-	//**************************************************
-	//初始化一个fbo texture对象
-	//p->fbo = fbo_init(256,256);
-	//f_init_fbo(p->fbo);
-	
-	//ex_reshape(sw,sh);
-
-	//在这里可以初始化一些 引擎需要的配置等文件
-	evt_dispatch(p,EVENT_ENGING_INIT,0);
-}
+////初始化场景,舞台和设备上下文设备都处理完成了
+//static void
+//f_initScene(){
+//	struct EX* p = ex_getIns();
+//	//**************************************************
+//	//初始化一个fbo texture对象
+//	//p->fbo = fbo_init(256,256);
+//	//f_init_fbo(p->fbo);
+//	
+//	//ex_reshape(sw,sh);
+//
+//	//在这里可以初始化一些 引擎需要的配置等文件
+//	evt_dispatch(ex_getIns(),EVENT_ENGING_INIT,0);
+//}
 
 //构造stage2d舞台
 static int 
@@ -1403,8 +1403,8 @@ f_init_stage2d(struct EX* p,float w,float h){
 		p->curFocus = p->stage2d;
 
 		//stage2d舞台初始化完成,通知可以初始化了
-		f_initScene();
-		
+		//f_initScene();
+		//evt_dispatch(ex_getIns(),EVENT_ENGING_INIT,0);
 		return 1;
 	}
 	return 0;
@@ -1445,6 +1445,8 @@ ex_reshape(int w,int h){
 
 	ex_lua_global_evt_dispatch(EVENT_ENGINE_RESIZE);
 	//printf("============> %d,%d\n",w,h);
+
+	evt_dispatch(ex_getIns(),EVENT_ENGING_INIT,0);
 }
 
 void 

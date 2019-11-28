@@ -38,6 +38,8 @@ end
 
 --设置颜色
 function Shape:setcolor(r,g,b)
+	--func_error();
+	
 	r = r or 0;
 	g = g or 0;
 	b = b or 0;
@@ -68,7 +70,7 @@ end
 function Shape:get_pos()
 	local p = self:get_container();
 	
-	func_error(1);
+	--func_error(1);
 
 	--print("*"..tostring(p));
 	return get_attr(p,"spritePos");
@@ -96,6 +98,8 @@ function Shape:mouseEnable(v)
 	local _status = v == true and 1 or 0;
 	--print(status);
 	sprite_enable_click(self.container,_status);
+	
+	--func_error(string.format("%s,%s",tostring(self),tostring(v)));
 end
 
 function Shape:on(id,func,params)
@@ -148,6 +152,7 @@ end
 
 --设置可拖拽范围
 function Shape:set_drag_rect(x,y,w,h)
+	--func_error();
 	sprite_setDragScope(self:get_container(),x,y,w,h);
 end
 

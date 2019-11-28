@@ -2,7 +2,7 @@ dofile("..\\include\\lua\\core.lua");
 
 dofile("..\\include\\lua\\modelControl.lua");
 
---func_enable_debug(false);--关闭调试日志
+func_enable_debug(false);--关闭调试日志
 
 --example_stack();
 
@@ -172,11 +172,14 @@ cam_setPosition(0,0,-10);
 
 --print(f.p);
 
+--[[
 local p = NPanel:new();
 p:enable_center(true);
 p:setDrag(true);
 p:center();
-p:dispose();
+--p:dispose();
+--]]
+
 
 --[[
 local p1 = NPanel:new();
@@ -184,7 +187,7 @@ p1:enable_center(true);
 p1:setDrag(true);
 p1:center();--]]
 
---local mc = ModelControl:new(30,30);local u = loadbox();mc:bind(u);
+local mc = ModelControl:new(30,30);local u = loadbox();mc:bind(u);
 
 
 

@@ -74,18 +74,11 @@ local function fc(progress,p)
 	--print(progress);
 end
 local function f_nl(self,index,param)
-	print(self,index,param);
+	--print(self,index,param);
 end
 local function f_callBack(skin,self)
 	
 	
-
---local img = Image:new(50,50);
---img:seticon("smallbtn.png");	
-
-	
-	--local shape = Shape:new(true);
-	--shape:dispose();
 	
 	
 	
@@ -150,6 +143,8 @@ local function f_callBack(skin,self)
 	nl:addItem("b2");
 	nl:bind(f_nl,9);
 	nl:selectIndex(1);
+	
+	
 
 --*******************
 	--local a = NLabel:new();
@@ -160,11 +155,12 @@ local function f_callBack(skin,self)
 	--print(w,h);
 	--a:dispose();
 	
-	infowin(20,10);
+	--infowin(20,10);
+	--[[
 	local p = NPanel:new();
 	p:enable_center(true);
 	p:setDrag(true);
-	p:center();
+	p:center();--]]
 	
 	--p:dispose();
 	

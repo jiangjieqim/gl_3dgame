@@ -10,6 +10,7 @@ end
 local function f_get_parent(list,node)
 	local parentName = xml_get_str(node,"parent");
 	if(parentName ~= nil) then
+		--没有parent属性的xml row作为父对象
 		local fnode	 = stack_find_by_name(list,parentName);
 		return func_get_container(fnode);
 	end
@@ -76,6 +77,21 @@ local function f_create_by_node(skin,node)
 		end
 		
 		stack_push(list,a);
+		
+	elseif(_type == "NPanel") then
+		local width = xml_get_float(node,"width");
+		local height = xml_get_float(node,"height");
+
+		local np = NPanel:new(width,height);
+		np:setname(name);
+		local center = xml_get_float(node,"center");
+		if(center == 1) then 
+			np:enable_center(true);
+			np:setDrag(true);
+			np:center();
+		end
+		stack_push(list,np);
+	
 	elseif(_type == "Label") then
 		local label =  label_create();
 		
@@ -258,7 +274,6 @@ function skin_parse(skin)
 		f_create_by_node(ins,node);
 	end	
 	
-	
 	xml_del(xml);
 	
 	if(ins.completeCallBack) then
@@ -325,10 +340,10 @@ end
 function skin_set_pos(skin,x,y)
 	local list = skin.list;
 	local node = stack_find_by_index(list,0);
-	
-	if(node and node.type == 4) then -- UI_TYPE.Panel
-		alert_set_pos(node,x,y);
-	else
-		func_error("================= skin_set_pos 未找到节点");
-	end
+	node:set_pos(x,y);
+	--if(node and node.type == 4) then -- UI_TYPE.Panel
+	--	alert_set_pos(node,x,y);
+	--else
+	--	func_error("================= skin_set_pos 未找到节点");
+	--end
 end

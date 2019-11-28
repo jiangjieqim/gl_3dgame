@@ -446,6 +446,11 @@ end
 function func_addchild(parent,child,x,y)
 	x = x or 0;
 	y = y or 0;
+	
+	if(parent==nil) then
+		func_error();
+	end
+	
 	sprite_addChild(parent,child);
 	func_set_local_pos(child,x,y);
 end
@@ -943,6 +948,8 @@ function func_get_container(n)
 		c= scrollBar_get_container(n);
 	elseif(_type == UI_TYPE.Button)then
 		c= btn_get_container(n);
+	elseif(_type ==UI_TYPE.NPanel) then
+		c = n:get_container();
 	end
 	return c;
 end
@@ -967,6 +974,7 @@ function func_dispose(n)
 		or _type == UI_TYPE.Shape
 		or _type == UI_TYPE.NScrollBar
 		or _type == UI_TYPE.NListBox
+		or _type == UI_TYPE.NPanel
 										)then
 		
 		n:dispose();--É¾³ý×é¼þ
