@@ -126,10 +126,6 @@ infowin(150,50);
 
 --]]
 
---skin_load("crl.xml",f_callBack,"myParam");
-
---fps();
-
 local function loadbox()
 	
 	

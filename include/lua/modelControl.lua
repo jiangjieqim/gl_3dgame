@@ -94,7 +94,7 @@ local function f_callBack(skin,self)
 	self.rxlabel = rxlabel;
 	scrollBar_bind(sc,f_rx_handle,self);
 	
-	--skin_dispose(skin);
+	
 	
 	--print(self,self.x,self.y);
 	scrollBar_bind(skin_find(skin,"ry_sc"),f_ry_handle,self);

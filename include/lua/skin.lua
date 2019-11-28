@@ -24,10 +24,12 @@ local function f_itemskin_load(xmlurl,parent,x,y)
 	skin_parse(skin);
 	return skin;
 end
+--[[
 --skinµÄÈİÆ÷
 function skin_get_container(skin)
 	return skin.container;
 end
+--]]
 
 local function f_create_by_node(skin,node)
 	local name = xml_get_str(node,"name");

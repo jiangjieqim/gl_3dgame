@@ -53,7 +53,7 @@ local function f_select(self,index,param)
 --	    alert("窗口测试:引擎信息");
 		print("windows test!");
 		
-		FpsView:getIns():show();
+		FpsView:getIns():show();--显示fps
 		
     elseif (index == 1) then
         func_gc();

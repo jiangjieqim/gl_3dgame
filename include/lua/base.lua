@@ -39,6 +39,7 @@ Instance.__index = Instance;
 function Instance:new()
 	local self = {};
 	setmetatable(self, Instance);
+	--print(tostring(self).."µ¥Àý³õÊ¼»¯");
 	return self;
 end
 

@@ -17,9 +17,7 @@ setmetatable(FpsView, Instance);--继承自单例
 function FpsView:new()
 	local self = Instance:new();
 	setmetatable(self, FpsView);
-	
-	print("初始化FpsView!");
-	
+		
 	--tf = ftext_create(128,128);
     --ftext_set_buffer(tf,128);
 	--self.tf = tf;
