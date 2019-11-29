@@ -288,6 +288,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\resload.c"
+					>
+				</File>
+				<File
 					RelativePath="..\src\shader.c"
 					>
 				</File>
@@ -301,6 +305,10 @@
 				</File>
 				<File
 					RelativePath="..\src\text.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\timelater.c"
 					>
 				</File>
 				<File
@@ -364,6 +372,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\common\src\tree.c"
+					>
+				</File>
+				<File
 					RelativePath="..\common\src\tween.c"
 					>
 				</File>
@@ -414,10 +426,6 @@
 				</File>
 				<File
 					RelativePath="..\include\ex.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\fbospr.h"
 					>
 				</File>
 				<File
@@ -481,6 +489,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\include\resload.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\shader.h"
 					>
 				</File>
@@ -490,6 +502,10 @@
 				</File>
 				<File
 					RelativePath="..\include\text.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\timelater.h"
 					>
 				</File>
 				<File
@@ -554,6 +570,10 @@
 				</File>
 				<File
 					RelativePath="..\common\include\tools.h"
+					>
+				</File>
+				<File
+					RelativePath="..\common\include\tree.h"
 					>
 				</File>
 				<File
