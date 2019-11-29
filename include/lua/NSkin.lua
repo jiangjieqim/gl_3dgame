@@ -11,9 +11,16 @@ function NSkin:new()
 	self:settype(5);
 	return self;
 end
-
+local function f_delAll(n)
+	func_dispose(n);
+end	
 function NSkin:dispose()
+	local skin = self;
+	--Ïú»ÙÆ¤·ô×é¼þ
+	stack_foreach(skin.list,f_delAll,nil,true);
 	
+	stack_del(skin.list);
+	func_clearTableItem(skin);
 	--ENGINE_EVENT_COMPLETE
 end
 

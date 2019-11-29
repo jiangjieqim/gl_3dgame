@@ -226,6 +226,7 @@ end
 
 local function f_cpmlete(self)
 	print("¼ÓÔØ½áÊø");
+	--self:dispose();
 end
 
 local nskin = NSkin:new();
