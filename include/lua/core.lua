@@ -65,8 +65,8 @@ ENGINE_EVENT_COMPLETE = 1000;	--结束事件
  KEY_D = 100
  KEY_I = 105
 
-
-local UI_TYPE = {
+--界面类型
+UI_TYPE = {
 	Label = 1,
 	Button =2,
 	ScrollBar = 3,
@@ -965,10 +965,10 @@ function func_dispose(n)
 		scrollBar_del(n);
 	elseif(_type == UI_TYPE.Button)then
 		btn_dispose(n);
-    elseif(_type == UI_TYPE.Panel)then	
-		alert_dispose(n);
-	elseif(_type == UI_TYPE.Skin) then
-		skin_dispose(n);
+    --elseif(_type == UI_TYPE.Panel)then	
+	--	alert_dispose(n);
+	--elseif(_type == UI_TYPE.Skin) then
+	--	skin_dispose(n);
 	elseif(_type == UI_TYPE.CheckBox
 		or _type == UI_TYPE.ProgressBar 
 		or _type == UI_TYPE.Input
@@ -977,12 +977,15 @@ function func_dispose(n)
 		or _type == UI_TYPE.NScrollBar
 		or _type == UI_TYPE.NListBox
 		or _type == UI_TYPE.NPanel
+		or _type == UI_TYPE.Skin
 										)then
 		
 		n:dispose();--删除组件
 		
 	elseif(_type == UI_TYPE.ListBox) then	
 		listbox_del(n);
+	else
+		func_error();
 	end
 end
 

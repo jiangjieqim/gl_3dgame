@@ -1,6 +1,6 @@
 NSkin = {
 	xmlurl,--xml地址
-	list,-- stack
+	list,-- 存储节点列表的链栈
 }
 NSkin.__index = NSkin;
 setmetatable(NSkin, Base);
@@ -14,6 +14,8 @@ end
 local function f_delAll(n)
 	func_dispose(n);
 end	
+
+--销毁组件
 function NSkin:dispose()
 	local skin = self;
 	--销毁皮肤组件
@@ -23,8 +25,6 @@ function NSkin:dispose()
 	func_clearTableItem(skin);
 	--ENGINE_EVENT_COMPLETE
 end
-
-
 
 local function f_sort(_pre,_next)	
 	local t1 = xml_get_str(_pre,"type");
@@ -46,7 +46,7 @@ local function f_get_parent(list,node)
 	end
 end
 
-local function f_create_by_node(skin,node)
+local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 	local name = xml_get_str(node,"name");
 	local _type =  xml_get_str(node,"type");
 	
@@ -58,9 +58,20 @@ local function f_create_by_node(skin,node)
 	if(skin.list == nil) then
 		skin.list = stack_new();--构造一个栈
 	end
-	
+	local x = xml_get_float(node,"x");
+	local y = xml_get_float(node,"y");
 	local list = skin.list;
-	local parent = f_get_parent(skin.list,node);
+	local parent = nil;
+	--*********************************************************
+	if(myParent) then
+		parent = myParent;
+		x = x + offsetx;
+		y = y + offsety;
+	else
+		parent = f_get_parent(skin.list,node);
+	end
+	--*********************************************************
+	
 --[[	
 	if(skin.customParent ~= nil) then
 		--使用自定义的父容器对象
@@ -72,8 +83,7 @@ local function f_create_by_node(skin,node)
 --]]	
 	--skin.container = parent;
 	
-	local x = xml_get_float(node,"x");
-	local y = xml_get_float(node,"y");
+	
 	--print("构造对象=============>",x,y,"name=",name,_type);
 	
 	--x = x + skin.ox or 0;
@@ -84,7 +94,7 @@ local function f_create_by_node(skin,node)
 	if(_type == "Panel") then
 
 		func_error("不支持Panel类型!");
-		
+--[[		
 		local a = alert_init();
 		a.name = name;
 		
@@ -102,7 +112,7 @@ local function f_create_by_node(skin,node)
 		end
 		
 		stack_push(list,a);
-		
+--]]		
 	elseif(_type == "NPanel") then
 		local width = xml_get_float(node,"width");
 		local height = xml_get_float(node,"height");
@@ -152,8 +162,11 @@ local function f_create_by_node(skin,node)
 	elseif(_type == "Skin") then
 		--string.format("%s")
 		local url = xml_get_str(node,"url");
-		local itemSkin = f_itemskin_load(url,parent,x,y);
-		stack_push(list,itemSkin);
+		--local itemSkin = f_itemskin_load(url,parent,x,y);
+		local nskin = NSkin:new();
+		nskin:setname(name);
+		nskin:synload(url,parent,x,y);
+		stack_push(list,nskin);
 	elseif(_type == "CheckBox") then
 		local ck = CheckBox:new();
 		ck:setname(name);
@@ -254,18 +267,17 @@ local function f_create_by_node(skin,node)
 	
 	--print("====>",parent);
 end
-local function f_skin_parse(self)
+
+--[[
+
+	myParent,offsetx,offsety
+	这3个参数只有在解析skin类型的数据的时候才用
+--]]
+local function f_skin_parse(self,myParent,offsetx,offsety)
 	
 	local xml = xml_load(self.xmlurl);
 
 	local cnt = xml_get_length(xml);
-
-
-	--local n = xml_get_node(xml,"name","rx_sc11");
-	--print(n);
-	
-	
-	--print(cnt);
 
 	local n = 0;
 	
@@ -282,15 +294,11 @@ local function f_skin_parse(self)
 	
 	for n = 0,cnt-1 do
 		local node = stack_find_by_index(_l,n);
-		f_create_by_node(self,node);
+		f_create_by_node(self,node,myParent,offsetx,offsety);
 	end	
 	
 	stack_del(_l);
 	xml_del(xml);
-	
-	--[[if(ins.completeCallBack) then
-		ins.completeCallBack(ins,ins.param);
-	end--]]
 end
 local function f_tex_complete(self)
 	--skin_parse(param);
@@ -298,12 +306,66 @@ local function f_tex_complete(self)
 	--print(self);
 	evt_dispatch(self,ENGINE_EVENT_COMPLETE,self);
 end
---加载skin	 "gundi.png;checkbox.png;smallbtn.png"
+--[[
+
+1.	加载skin	 "gundi.png;checkbox.png;smallbtn.png"
+2.	texs == nil的时候不用异步加载,直接生成皮肤
+
+--]]
 function NSkin:load(xmlurl,texs)
 	if(texs == nil) then
 		func_error();
 		return;
 	end
 	self.xmlurl = xmlurl;
-	loadtexs(texs,f_tex_complete,self);
+	if(texs~=nil) then
+		loadtexs(texs,f_tex_complete,self);
+	else
+		f_tex_complete(self);
+	end
 end
+--加载Skin中的skin组件的时候是用,注意此方法只适用于Skin的内部item组件,它们有一个共同的Parent
+function NSkin:synload(xmlurl,myParent,offsetx,offsety)
+	self.xmlurl = xmlurl;
+	f_skin_parse(self,myParent,offsetx,offsety);
+end
+
+--设置坐标
+function NSkin:set_pos(x,y)
+	local list = self.list;
+	local node = stack_find_by_index(list,0);--默认取栈中0号索引中的数据
+	node:set_pos(x,y);
+end
+
+--根据名字找到组件引用
+function NSkin:find(name)
+	if(self.list~=nil) then
+		return stack_find_by_name(self.list,name);
+	end
+end
+
+--[[
+--调用示例
+
+--************************************************************************
+
+local function f_cpmlete(self)
+	print("加载结束");
+	
+	self:set_pos(10,20);--设置坐标
+
+	local skin1 = self:find("skin1");
+	local label = skin1:find("2");
+	--print(skin1,label);
+	--label_set_text(label, "x*");
+
+	--self:dispose();--销毁
+end
+
+local nskin = NSkin:new();
+evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
+nskin:load("\\resource\\crl.xml","gundi.png;checkbox.png;smallbtn.png");
+
+--************************************************************************
+
+--]]

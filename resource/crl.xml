@@ -33,3 +33,5 @@
 
 <ui name="sc1" type="NScrollBar" x="0" y="180" parent="1"/>
 <ui name="nb1" type="NListBox" x="0" y="200" parent="1"/>
+
+<ui name="skin1" type="Skin" url="\\resource\\scrollabel.xml" x="0" y="220" parent="1"/>

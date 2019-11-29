@@ -1,2 +1,2 @@
 <ui name="1" type="ScrollBar" x="0" y="0" desc="带有label的滑动条组件"/>
-<ui name="1" type="Label" x="100" y="0" label="0" />
+<ui name="2" type="Label" x="100" y="0" label="0" />
