@@ -7,14 +7,19 @@ local evtlist = {};
         print(c_data);--来自evt_dispatch中的	local data;--数据
     end
 ]]--
+--将table转化为一个Number值(其实是table的地址引用)
+local function f_cv(obj)
+	if(func_is_table_str(obj)) then
+		local n = func_get_address(obj);
+		func_print("evt_on==>"..tostring(obj).." 转化为Number:"..string.format("%0x",n));
+		return n;
+	end
+	return obj;
+end
 
 function evt_on(obj,id,func,params,once)	
 	
-	if(func_is_table_str(obj)) then
-		func_print("evt_on==>"..tostring(obj).." 转化为number");
-		obj = func_get_address(obj);
-	end
-	
+	obj = f_cv(obj);
 	
     if(func == nil) then
         func_error("func = nil");
@@ -91,7 +96,8 @@ function evt_dispatch(...)
 	id  = arr[2];
 	data= arr[3];
 	
-	
+	obj = f_cv(obj);
+
 	
 --	print("evt_dispatch",obj ,id,data );
 	

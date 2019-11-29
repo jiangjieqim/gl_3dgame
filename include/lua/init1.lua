@@ -183,7 +183,7 @@ p1:enable_center(true);
 p1:setDrag(true);
 p1:center();--]]
 
-local mc = ModelControl:new(30,30);local u = loadbox();mc:bind(u);
+--local mc = ModelControl:new(30,30);local u = loadbox();mc:bind(u);
 
 
 
@@ -220,6 +220,19 @@ end
 
 
 --example_stack();
+
+
+
+
+local function f_cpmlete(self)
+	print("º”‘ÿΩ· ¯");
+end
+
+local nskin = NSkin:new();
+evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
+nskin:load("\\resource\\crl.xml","gundi.png;checkbox.png;smallbtn.png");
+
+
 
 
 engine_refreshCam3d();

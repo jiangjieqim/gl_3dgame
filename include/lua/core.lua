@@ -53,6 +53,8 @@ CUST_LUA_EVENT_INPUT_CHANGE = 111		--input输入内容发生变化
 
 EVENT_TIMER = 201--计时器
 
+ENGINE_EVENT_COMPLETE = 1000;	--结束事件
+
 --键值枚举
  KEY_ESC = 27
  KEY_1 = 49
@@ -1020,6 +1022,7 @@ dofile("..\\include\\lua\\image.lua")	--image组件
 dofile("..\\include\\lua\\checkbox.lua")	--checkbox组件
 dofile("..\\include\\lua\\progrossbar.lua")
 dofile("..\\include\\lua\\skin.lua");--skin皮肤组件
+dofile("..\\include\\lua\\NSkin.lua");--NSkin皮肤组件
 
 
 dofile("..\\include\\lua\\arrow.lua")		--箭头组件

@@ -30,6 +30,7 @@ end
 function Base:getname()
 	return self.name;
 end
+
 --************单例**************
 Instance={
 	ins,--单例引用
