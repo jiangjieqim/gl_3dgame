@@ -55,6 +55,8 @@ local function f_select(self,index,param)
 		
 		FpsView:getIns():show();--œ‘ æfps
 		
+		Alert:getIns():show(tostring(math.random()));
+		
     elseif (index == 1) then
         func_gc();
 --    elseif (index == 2) then

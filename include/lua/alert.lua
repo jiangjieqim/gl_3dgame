@@ -187,5 +187,63 @@ function alert_start(self,url,width,height)
 	f_tex_complete({self=self;width=width;height=height});
 end
 
+--******************************************************
+Alert = {
+	str,--文本
+	nskin,
+};
+Alert.__index = Alert;
+setmetatable(Alert, Instance);--继承自单例
 
+function Alert:new()
+	local self = Instance:new();
+	setmetatable(self, Alert);
+	return self;
+end
 
+local function f_refresh(self)
+	local nskin = self.nskin;
+	
+	local label = nskin:find("label");
+	label:set_text(self.str);
+	
+	nskin:visible(true);
+end
+
+--关闭按钮回调
+local function btnClick(btnName,self)
+	--print(btnName,self);--p = abc
+	self:hide();
+end
+
+local function f_cpmlete(skin,self)
+	--print(skin,self,self.str);
+	local closebtn = skin:find("close");
+	
+	btn_bindClick(closebtn,btnClick,self);
+
+	f_refresh(self);
+
+	--self:dispose();
+end
+
+function Alert:hide()
+	self.nskin:visible(false);
+end
+
+function Alert:show(str)
+	self.str = str;
+	if(self.nskin==nil) then
+		local nskin = NSkin:new();
+		self.nskin = nskin;
+		evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete,self);
+		nskin:load("\\resource\\alert.xml","smallbtn.png");
+	else
+		--f_cpmlete(self.nskin,self);
+		f_refresh(self);
+	end
+end
+function Alert:dispose()
+	self.nskin:dispose();
+	func_clearTableItem(self);
+end

@@ -139,6 +139,14 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		
 		--func_addnode(parent,label,x,y);
 		--stack_push(list,label);
+		
+	elseif(_type == "NLabel") then
+		local str = xml_get_str(node,"label");
+		local label = NLabel:new();
+		label:set_text(str);
+		label:setname(name);
+		child = label;
+		
 	elseif(_type == "Button") then
 		local w = xml_get_float(node,"w");
 		local h = xml_get_float(node,"h");
@@ -342,6 +350,33 @@ function NSkin:find(name)
 	if(self.list~=nil) then
 		return stack_find_by_name(self.list,name);
 	end
+end
+local function f_node_visible(n,v)
+	local _type = n.type;
+	if(	   _type == UI_TYPE.NPanel
+		or _type == UI_TYPE.NLabel
+		) then
+		--label_dispose(n);
+		n:visible(v);
+	elseif(_type == UI_TYPE.Button) then
+		btn_visible(n,v);
+	else
+		func_error("未实现类型:".._type);
+	end
+end
+function NSkin:visible(v)
+	local l = self.list;
+	--local node = stack_find_by_index(list,0);--默认取栈中0号索引中的数据
+	--node:visible(v);
+	local list = l.list;
+	for i=0,l.cnt-1,1 do
+		local node = list[i];
+		--[[if(node.name == name)then
+			return node;
+		end--]]
+		f_node_visible(node,v);
+	end
+	
 end
 
 --[[

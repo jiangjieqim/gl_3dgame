@@ -75,6 +75,10 @@ function NPanel:enable_center(v)
 	end
 end
 
+function NPanel:visible(v)
+	self.bg:visible(v);
+end
+
 function NPanel:setDrag(v)
 	self.isDrag = v;
 	local bg = self.bg;
@@ -84,11 +88,26 @@ end
 
 function NPanel:dispose()
 	local bg = self.bg;
+	--self:set_click_close(false);
 	self:enable_center(false);
 	--func_error(0);
 	bg:dispose();
 	func_clearTableItem(self);
 end
+
+--[[local function f_click(name,self)
+	self:visible(false);
+end--]]
+--设置点击任意位置关闭NPanel
+--[[function NPanel:set_click_close(v)
+	local bg = self.bg;
+	bg:mouseEnable(v);
+	if(v) then
+		bg:on(EVENT_ENGINE_SPRITE_CLICK,f_click,self);
+	else
+		bg:off(EVENT_ENGINE_SPRITE_CLICK,f_click);
+	end
+end--]]
 
 --[[
 

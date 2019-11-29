@@ -934,6 +934,8 @@ function func_addnode(parent,n,x,y)
 		func_addchild(parent,listbox_get_container(n),x,y);	
 	elseif(_type == UI_TYPE.NScrollBar
 			or _type == UI_TYPE.NListBox
+			or _type == UI_TYPE.NLabel
+
 	) then
 		func_addchild(parent,n:get_container(),x,y);	
 	else
@@ -978,6 +980,7 @@ function func_dispose(n)
 		or _type == UI_TYPE.NListBox
 		or _type == UI_TYPE.NPanel
 		or _type == UI_TYPE.Skin
+		or _type == UI_TYPE.NLabel
 										)then
 		
 		n:dispose();--É¾³ý×é¼þ

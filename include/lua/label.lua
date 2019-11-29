@@ -75,7 +75,17 @@ function NLabel:get_text()
 	return ftext_str(self.tf);
 end
 
+function NLabel:visible(v)
+	if(v) then
+		v = 1;
+	else
+		v = 0;
+	end
+	ftext_vis(self.tf,v);
+end
+
 function NLabel:dispose()
+	--func_error();
 	fext_dispose(self.tf);
 	func_clearTableItem(self);
 end
