@@ -331,6 +331,7 @@ end
 
 --]]
 function func_get_type(p)--func_getGameObjectType
+	--func_error();
 	return	get_attr(p,"type")
 end
 

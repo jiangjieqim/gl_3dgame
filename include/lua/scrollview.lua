@@ -404,7 +404,7 @@ function example_srollView()
 	
 	--*************************************************************************************
 	--初始化
-	local sv = scrollView_init(100,itemHeight*4,300,0);
+	local sv = scrollView_init(100,itemHeight*4,10,0);
 	sv.itemFunc = f_create;				--设置itemRende的创建回调
 	sv.itemRefreshFunc = itemRefreshFunc;	--设置刷新视图的回调
 	sv.itemDisposeFunc = f_dispose;		--设置itemRender销毁回调函数

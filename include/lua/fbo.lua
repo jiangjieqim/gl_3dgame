@@ -49,3 +49,47 @@ function fboobj_set_pos(fbo,x,y)
 end
 
 --print(fbo.ptr);
+--**************************************************
+FboRender = {
+	ptr,cam3d,cam2d,tex,spr
+}
+FboRender.__index = FboRender;
+setmetatable(FboRender, Base);
+
+function FboRender:new(tw,th)
+	local fbo = Base:new();
+	setmetatable(fbo, FboRender);
+	w = w or 128;
+	h = h or 128;
+	local ptr,cam3d,cam2d,tex = fbo_init(tw,th);--构建fbo对象
+	fbo.ptr = ptr;
+	fbo.cam3d = cam3d;
+	fbo.cam2d = cam2d;
+	fbo.tex = tex;
+	
+	fbo.spr = f_createSprite(tw,tex);
+	
+	engine_addNode(fbo.spr);--将spr添加到渲染列表
+	
+	add_fbo(ptr);--添加到引擎的fbolist中
+	return fbo;
+end
+
+function FboRender:dispose()
+--还需要将添加进来的渲染对象删除掉
+
+	fbo_dispose(self.ptr);
+	remove_fbo(self.ptr);--将fbo从引擎的fbolist移除
+	ptr_remove(self.spr);
+end
+
+function FboRender:get_cam3d()
+	return self.cam3d;
+end
+
+function FboRender:set_pos(x,y)
+	local fbo = self;
+	local spr = fbo.spr;
+	func_setPos(spr,x,y);
+	cam_set_2dxy(fbo.cam2d,x,y);
+end

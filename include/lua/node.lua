@@ -79,8 +79,11 @@ end
 
 function node_fbo(avtar)
 	
-	local fbo = fboobj_init(256,256);
-	fboobj_set_pos(fbo,220,0);
+	--local fbo = fboobj_init(256,256);
+	--fboobj_set_pos(fbo,220,0);
+	local fbo = FboRender:new(256,256);
+	fbo:set_pos(220,0);
+	
 	
 	
 	
@@ -105,26 +108,22 @@ function node_fbo(avtar)
 		--setv(node_getNode(n),FLAGS_REVERSE_FACE);--反转三角面
 	
 	--print("name="..node_getName(n));
-	node_setCam(n,fbo.cam3d);
+	node_setCam(n,fbo:get_cam3d());
 	
     engine_addNode(n.node);
 	
-	
+	--[[
 	local ch = 500;--容器的高度
     local sprite = sprite_create(nil,0,0,100,ch,0,1,fbo.cam2d);
 	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
     func_setIcon(sprite, "smallbtn.png");
     
-	
-	
-	
-	
     --setv(sprite,FLAGS_VISIBLE);
     local z = engine_newPosZ();
     --print(z);
     func_sprite_set_z(sprite,z);
 	engine_addNode(sprite);
-	
+	--]]
 
     --add_small_node(sprite);
     --setv(sprite,FLAGS_REVERSE_FACE);--反转三角面 
@@ -135,7 +134,7 @@ function node_fbo(avtar)
 	
 	
 	
-	local cy = 0;--当前的坐标
+	--[[local cy = 0;--当前的坐标
 	local ox = 1;
 	local h = fbo.size;
 	--滑动
@@ -148,9 +147,9 @@ function node_fbo(avtar)
 		local v = sc.value;
         --print(v);
         func_setPos(sprite,0,(h-ch)*v);--具有矩形遮罩区域的滚动条
-    end
-    local sc = scrollBar_new(200,0,nil,15,256);
-    scrollBar_bind(sc,f_scHandle);
+    end--]]
+    --local sc = scrollBar_new(200,0,nil,15,256);
+    --scrollBar_bind(sc,f_scHandle);
 
 
 

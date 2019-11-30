@@ -7,7 +7,8 @@ func_enable_debug(false);--关闭调试日志
 --example_stack();
 
 --########################################
---node_fbo();
+node_fbo();
+example_srollView();
 
 --btn_create(200,50,60,20,"smallbtn.png");
 --btn_create(200,70,120,40,"smallbtn.png");
@@ -128,22 +129,26 @@ infowin(150,50);
 
 local function loadbox()
 	
-	
+	----[[
 	local obj2 = Unit:new();
 	obj2:load("\\resource\\obj\\quad.obj",--triangle,bauul
 	"//resource//material//particle.mat");
 --unit_scale(obj2,20);
 	
 		--setv(obj2.p,FLAGS_REVERSE_FACE);
+
 		setv(obj2.m,FLAGS_DRAW_PLOYGON_LINE);
 		
+		--]]
 		
-		--[[local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
+		
+	--[[
+	local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
 		"//resource//material//bauul.mat");
 	unit_scale(obj2,0.02);
 	unit_rx(obj2,PI/2);
-	unit_split_anim(obj2);--]]
-	
+	unit_split_anim(obj2);
+	--]]
 	return obj2;
 end
 --[[
@@ -183,7 +188,9 @@ p1:enable_center(true);
 p1:setDrag(true);
 p1:center();--]]
 
---local mc = ModelControl:new(30,30);local u = loadbox();mc:bind(u);
+--local mc = ModelControl:new(30,30);
+local u = loadbox();
+--mc:bind(u);
 
 
 
@@ -244,14 +251,6 @@ evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
 nskin:load("\\resource\\crl.xml","gundi.png;checkbox.png;smallbtn.png");
 --]]
 
-local function f_click(p)
-	print(p);
-end
-local btn = Button:new();
-btn:bind_click(f_click,12);
-btn:set_label("aaa");
-btn:set_pos(10,20);
---btn:dispose();
 
 
 engine_refreshCam3d();

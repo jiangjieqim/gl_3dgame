@@ -18,8 +18,7 @@ function Button:new(w,h,url)
 	img:mouseEnable(true);
 	self:settype(16);
 	self.img = img;
-	--self:btn_effect(true);
-	--self:btn_effect(false);
+	self:btn_effect(true);--设置按钮的缩放效果
 	return self;
 end
 
