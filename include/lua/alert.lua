@@ -211,7 +211,7 @@ local function f_refresh(self)
 end
 
 --关闭按钮回调
-local function btnClick(btnName,self)
+local function btnClick(self)
 	--print(btnName,self);--p = abc
 	self:hide();
 end
@@ -220,8 +220,8 @@ local function f_cpmlete(skin,self)
 	--print(skin,self,self.str);
 	local closebtn = skin:find("close");
 	
-	btn_bindClick(closebtn,btnClick,self);
-
+	--btn_bindClick(closebtn,btnClick,self);
+	closebtn:bind_click(btnClick,self);
 	f_refresh(self);
 
 	--self:dispose();

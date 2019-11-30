@@ -1,0 +1,3 @@
+<ui name="1" type="NPanel" drag="1" center="1" width="300" height="150"/>
+<ui name="close" type="NButton" x="0" y="10" w="50" h="14" url="smallbtn.png" label="¹Ø±Õ" parent="1"/>
+<ui name="label" type="NLabel" x="0" y="75" label="rx" parent="1"/>

@@ -138,8 +138,7 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		child = label;
 		
 		--func_addnode(parent,label,x,y);
-		--stack_push(list,label);
-		
+		--stack_push(list,label);	
 	elseif(_type == "NLabel") then
 		local str = xml_get_str(node,"label");
 		local label = NLabel:new();
@@ -160,7 +159,17 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		child = btn;
 		--func_addnode(parent,btn,x,y);
 		--stack_push(list,btn);
-		
+	
+	elseif(_type == "NButton") then
+		local w = xml_get_float(node,"w");
+		local h = xml_get_float(node,"h");
+		local url = xml_get_str(node,"url");
+		local label = xml_get_str(node,"label");
+		local btn = Button:new(w,h,url);
+		btn:setname(name);
+		btn:set_label(label);
+		btn:set_pos(x,y);
+		child = btn;
 	elseif(_type == "ScrollBar") then
 		local sc = scrollBar_new();
 		sc.name = name;
@@ -355,6 +364,7 @@ local function f_node_visible(n,v)
 	local _type = n.type;
 	if(	   _type == UI_TYPE.NPanel
 		or _type == UI_TYPE.NLabel
+		or _type == UI_TYPE.NButton 
 		) then
 		--label_dispose(n);
 		n:visible(v);

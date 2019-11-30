@@ -23,7 +23,7 @@ function Base:gettype()
 end
 
 function Base:setname(name)
-	--print(string.format("设置名字为[%s]",name));
+	print(string.format("设置名字为[%s]",name));
 	self.name = name;
 end
 

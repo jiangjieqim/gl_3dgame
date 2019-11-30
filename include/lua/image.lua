@@ -11,8 +11,7 @@ end
 --]]
 
 function Image:new(w,h)
-	local self = {};
-	self = Shape:new(false,w,h);
+	local self = Shape:new(false,w,h);
 	setmetatable(self, Image);
 	self:settype(10);
 

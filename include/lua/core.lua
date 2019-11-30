@@ -82,7 +82,7 @@ UI_TYPE = {
 	NListBox = 13,--列表
 	NLabel = 14,--Label
 	NPanel = 15,
-
+	NButton = 16,
 };
 
 local DEBUG = true;
@@ -935,6 +935,7 @@ function func_addnode(parent,n,x,y)
 	elseif(_type == UI_TYPE.NScrollBar
 			or _type == UI_TYPE.NListBox
 			or _type == UI_TYPE.NLabel
+			or _type == UI_TYPE.NButton
 
 	) then
 		func_addchild(parent,n:get_container(),x,y);	
@@ -944,6 +945,8 @@ function func_addnode(parent,n,x,y)
 end
 --获取当前节点的容器
 function func_get_container(n)
+	func_error();
+	
 	local _type = n.type;
 	local c;
 	if(_type == UI_TYPE.Panel)then
@@ -981,6 +984,7 @@ function func_dispose(n)
 		or _type == UI_TYPE.NPanel
 		or _type == UI_TYPE.Skin
 		or _type == UI_TYPE.NLabel
+		or _type == UI_TYPE.NButton
 										)then
 		
 		n:dispose();--删除组件
@@ -1015,6 +1019,8 @@ dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
 dofile("..\\include\\lua\\NScrollBar.lua")	--滑动条组件
 
 dofile("..\\include\\lua\\btn.lua");		--按钮组件
+
+dofile("..\\include\\lua\\button.lua");		--按钮组件
 
 dofile("..\\include\\lua\\crlui.lua")
 dofile("..\\include\\lua\\infowin.lua")	--fps组件

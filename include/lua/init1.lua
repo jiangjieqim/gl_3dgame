@@ -238,12 +238,20 @@ local function f_cpmlete(self)
 
 	--self:dispose();--Ïú»Ù
 end
-
+--[[
 local nskin = NSkin:new();
 evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
 nskin:load("\\resource\\crl.xml","gundi.png;checkbox.png;smallbtn.png");
+--]]
 
-
+local function f_click(p)
+	print(p);
+end
+local btn = Button:new();
+btn:bind_click(f_click,12);
+btn:set_label("aaa");
+btn:set_pos(10,20);
+--btn:dispose();
 
 
 engine_refreshCam3d();
