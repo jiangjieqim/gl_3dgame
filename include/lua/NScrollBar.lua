@@ -82,7 +82,12 @@ function NScrollBar:bindCallback(callBack,callBackParam)
 	self.callBack = callBack;
 	self.callBackParam = callBackParam;
 end
-
+function NScrollBar:visible(v)
+	local bg = self.bg;
+	local btn = self.btn;
+	bg:visible(v);
+	btn:visible(v);
+end
 function NScrollBar:new(x,y,cw,ch)
 	local self = Base:new();
 	self:settype(12);

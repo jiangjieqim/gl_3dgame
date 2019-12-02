@@ -220,10 +220,21 @@ local function f_cpmlete(skin,self)
 	--print(skin,self,self.str);
 	local closebtn = skin:find("close");
 	
+	
+	
+	local nl = skin_find(skin,"nb1");--NListBox:new();
+	nl:addItem("a1");
+	nl:addItem("b2");
+	
+	
 	--btn_bindClick(closebtn,btnClick,self);
 	closebtn:bind_click(btnClick,self);
 	f_refresh(self);
-
+	
+	--local pb1 = skin_find(skin,"pb1");--NListBox:new();
+	--pb1:dispose();
+	
+	
 	--self:dispose();
 end
 

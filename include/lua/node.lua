@@ -81,8 +81,8 @@ function node_fbo(avtar)
 	
 	--local fbo = fboobj_init(256,256);
 	--fboobj_set_pos(fbo,220,0);
-	local fbo = FboRender:new(256,256);
-	fbo:set_pos(220,0);
+	local fbo = FboRender:new(128,128);
+	fbo:set_pos(0,128);
 	
 	
 	

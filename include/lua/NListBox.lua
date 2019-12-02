@@ -111,6 +111,14 @@ local function f_click(name,self)
 	end
 	f_refresh(self,index,isSpread);
 end
+
+function NListBox:visible(v)
+	local bg = self.bg;
+	local tf = self.tf;
+	bg:visible(v);
+	tf:visible(v);
+end
+
 --w的listBox的宽度
 --size:Label的size大小
 function NListBox:new(x,y,size,w)

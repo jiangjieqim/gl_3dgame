@@ -95,7 +95,6 @@ dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
 --dofile("..\\include\\lua\\sprite.lua");
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
 dofile("..\\include\\lua\\ftext.lua");
-dofile("..\\include\\lua\\input.lua");
 
 local defalutTex = '1.tga'
 local defalutObjModel = 'quad'
@@ -924,22 +923,31 @@ function func_addnode(parent,n,x,y)
 		func_addchild(parent,scrollBar_get_container(n),x,y);
 	elseif(_type == UI_TYPE.Button)then
 		func_addchild(parent,btn_get_container(n),x,y);
-	elseif(_type == UI_TYPE.CheckBox 
-		or _type == UI_TYPE.ProgressBar 
-		or _type == UI_TYPE.Input
-		or _type == UI_TYPE.Image
+	elseif(
+	
+		--_type == UI_TYPE.Input
+		_type == UI_TYPE.Image
 		or _type == UI_TYPE.Shape
 		) then
 		func_addchild(parent,n.container,x,y);
 	elseif(_type == UI_TYPE.ListBox) then
 		func_addchild(parent,listbox_get_container(n),x,y);	
 	elseif(_type == UI_TYPE.NScrollBar
+			or _type == UI_TYPE.ProgressBar 
 			or _type == UI_TYPE.NListBox
 			or _type == UI_TYPE.NLabel
 			or _type == UI_TYPE.NButton
+			or _type == UI_TYPE.CheckBox
+			or _type == UI_TYPE.Input
 
 	) then
-		func_addchild(parent,n:get_container(),x,y);	
+		local c = n:get_container();
+		if(c == nil) then
+			func_error();
+		end
+		
+		--print(c);
+		func_addchild(parent,c,x,y);	
 	else
 		func_error(string.format("type = %s未实现",tostring(_type)));
 	end
@@ -999,6 +1007,8 @@ end
 
 dofile("..\\include\\lua\\base.lua");
 dofile("..\\include\\lua\\label.lua");--label是对ftext进行的一次封装
+
+dofile("..\\include\\lua\\input.lua");
 
 dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器
 dofile("..\\include\\lua\\ex.lua")	--引擎

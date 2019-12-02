@@ -198,7 +198,8 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		child = ck;
 	elseif(_type == "ProgressBar") then
 		local pb = ProgressBar:new();
-		pb.name = name;
+		pb:setname(name);
+		--pb.name = name;
 		--func_addnode(parent,pb,x,y);
 		--stack_push(list,pb);
 		child = pb;
@@ -223,7 +224,9 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		
 	elseif(_type == "Input") then
 		local _in = Input:new();
-		_in.name = name;
+		_in:setname(name);
+
+		--_in.name = name;
 		--_in:setbg();
 		--func_addnode(parent,_in,x,y);
 		--stack_push(list,_in);
@@ -235,8 +238,12 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 
 		local w = xml_get_float(node,"w");
 		local h = xml_get_float(node,"h");
+		
+		if(w == 0 or h == 0) then
+			func_error("Image¿í»ò¸ßÊÇ0");
+		end
 		local img = Image:new(w,h);
-		img.name = name;
+		img:setname(name);
 		local v = xml_get_str(node,"value");
 		img:seticon(v);
 		if(xml_get_float(node,"linestlye") == 1) then
@@ -365,6 +372,13 @@ local function f_node_visible(n,v)
 	if(	   _type == UI_TYPE.NPanel
 		or _type == UI_TYPE.NLabel
 		or _type == UI_TYPE.NButton 
+		or _type == UI_TYPE.NScrollBar
+		or _type == UI_TYPE.NListBox
+		or _type == UI_TYPE.CheckBox
+		or _type == UI_TYPE.ProgressBar
+		or _type == UI_TYPE.Shape
+		or _type == UI_TYPE.Input
+		or _type == UI_TYPE.Image
 		) then
 		--label_dispose(n);
 		n:visible(v);

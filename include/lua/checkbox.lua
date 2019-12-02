@@ -24,11 +24,14 @@ local function ckfunc(btnName,p)
 	end
 end
 
+function CheckBox:get_container()
+	return  btn_get_container(self.btn);
+end
+
 function CheckBox:new()
 	local self =  Base:new();
-	setmetatable(self, CheckBox);
-	
 	self:settype(6);
+	setmetatable(self, CheckBox);
 	self.btn = btn_create(0,0,20,20,"checkbox.png",0,false);
 	self.container = btn_get_container(self.btn);
 	--self.container = self.btn;
@@ -52,6 +55,10 @@ function CheckBox:dispose()
 	--print("Ïú»ÙCheckBox");
 	btn_dispose(self.btn);
 	func_clearTableItem(self);
+end
+
+function CheckBox:visible(v)
+	btn_visible(self.btn,v);
 end
 
 --[[

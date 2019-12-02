@@ -7,8 +7,8 @@ func_enable_debug(false);--关闭调试日志
 --example_stack();
 
 --########################################
-node_fbo();
-example_srollView();
+--node_fbo();
+--example_srollView();
 
 --btn_create(200,50,60,20,"smallbtn.png");
 --btn_create(200,70,120,40,"smallbtn.png");

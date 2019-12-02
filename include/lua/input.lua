@@ -18,6 +18,15 @@ local function input_get_container(ptr)
 	return c_input(ptr,"get_container");
 end
 
+local function input_visible(ptr,v)
+	local o = input_get_container(ptr);
+	if(v ) then
+		setv(o,FLAGS_VISIBLE);
+	else
+		resetv(o,FLAGS_VISIBLE);
+	end
+end
+
 local function input_get_ftext(ptr)
 	return c_input(ptr, "get_ftext");
 end
@@ -78,17 +87,14 @@ end
 
 --输入框组件
 Input = {
-	name = nil,
-	type = 9,
 	_in,
-	container,
 	img,--刻度Shape
 	timer,
-	
-	
 };
 
 Input.__index = Input;
+setmetatable(Input, Base);
+
 local function f_timer(data,self)
 	local w,h = self:get_get_wordpos();
 	local img = self.img;		
@@ -119,11 +125,14 @@ function Input:get_get_wordpos()
 end
 
 function Input:new()
-	local self = {};
-	setmetatable(self, Input);
+	local self = Base:new();
+	self:settype(9);
+	setmetatable(self,Input);
+	
 	local _in = input_create();
+
 	self._in = _in;
-	self.container = input_get_container(_in);
+	local container = input_get_container(_in);
 	evt_on(_in,CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE,f_onFocusChange,self);
 	
 	evt_on(_in,CUST_LUA_EVENT_INPUT_CHANGE,f_onInputChange,self);
@@ -138,7 +147,7 @@ function Input:new()
 	local img = Shape:new(true,1,14);
 	self.img = img;
 	--img:seticon("gundi.png");
-	func_addnode(self.container,img);
+	func_addnode(container,img);
 	img:setcolor(1,1,1);
 	img:visible(false);
 	
@@ -148,7 +157,10 @@ function Input:new()
 
 	return self;
 end
-
+function Input:get_container()
+	--func_error();
+	return input_get_container(self._in);
+end
 function Input:dispose()
 	evt_off(self._in,CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE,f_onFocusChange);
 	evt_off(self._in,CUST_LUA_EVENT_INPUT_CHANGE,f_onInputChange);
@@ -164,3 +176,7 @@ function Input:dispose()
 	func_clearTableItem(self);
 end
 
+function Input:visible(v)
+	input_visible(self._in,v);
+	self.img:visible(v);
+end
