@@ -192,9 +192,11 @@ function Unit:new()
 	return self;
 end
 
-function Unit:load(url,maturl)
-	local name = func_create_name();
-	local m =load_model(name,url);
+function Unit:load(url,maturl,mname)
+	local name = mname or func_create_name();
+	--print(name);
+	
+	local m =load_VBO_model(name,url);--load_model(name,url);
 	self.m = m;
 	self.material = func_load(maturl);
     setMaterial(m,self.material);
@@ -205,6 +207,10 @@ end
 
 function Unit:set_pos(x,y,z)
 	func_set_x(self.m,x);
-	func_set_x(self.m,y);
-	func_set_x(self.m,z);
+	func_set_y(self.m,y);
+	func_set_z(self.m,z);
+end
+
+function Unit:set_rx(value)
+	func_setRotateX(self.m,value)
 end

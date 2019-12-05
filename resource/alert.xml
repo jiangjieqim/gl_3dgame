@@ -1,10 +1,3 @@
 <ui name="1" type="NPanel" drag="1" center="1" width="128" height="64"/>
 <ui name="close" type="NButton" x="98" y="0" w="30" h="20" url="smallbtn.png" label="¹Ø±Õ" parent="1"/>
 <ui name="label" type="NLabel" x="0" y="0" label="rx" parent="1"/>
-<ui name="sc" type="NScrollBar" x="0" y="20" parent="1"/>
-<ui name="nb1" type="NListBox" x="0" y="40" parent="1"/>
-<ui name="ck0" type="CheckBox" x="0" y="60" label="Ïß¿òäÖÈ¾" parent="1"/>
-<ui name="pb1" type="ProgressBar" x="0" y="80" parent="1"/>
-<ui type="Shape" x="0" y="100" w="128" h="14" r="0" g="0" b="0"  parent="1"/>
-<ui name="input1" type="Input" x="0" y="100" parent="1"/>
-<ui type="Image" x="0" y="120" w="32" h="32" value="smallbtn.png" parent="1"/>

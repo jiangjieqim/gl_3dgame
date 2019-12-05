@@ -1,0 +1,2 @@
+<ui name="1" type="NPanel" drag="1" center="0" width="128" height="64"/>
+<ui name="sc" type="NScrollBar" x="0" y="0" parent="1"/>

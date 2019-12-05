@@ -2,7 +2,7 @@ dofile("..\\include\\lua\\core.lua");
 
 dofile("..\\include\\lua\\modelControl.lua");
 
-func_enable_debug(false);--关闭调试日志
+--func_enable_debug(false);--关闭调试日志
 
 --example_stack();
 
@@ -131,12 +131,12 @@ local function loadbox()
 	
 	----[[
 	local obj2 = Unit:new();
-	obj2:load("\\resource\\obj\\box.obj",--triangle,bauul
-	"//resource//material//triangle.mat");
---unit_scale(obj2,20);
+	obj2:load("\\resource\\obj\\tri.obj",--triangle,bauul,box,o1
+	"//resource//material//triangle.mat","obj2");
+	--unit_scale(obj2,20);
 	
-		--setv(obj2.p,FLAGS_REVERSE_FACE);
-
+		--setv(obj2.m,FLAGS_REVERSE_FACE);
+		setv(obj2.m,FLAGS_DISABLE_CULL_FACE);--双面渲染
 		--setv(obj2.m,FLAGS_DRAW_PLOYGON_LINE);
 		
 		--]]
@@ -228,7 +228,7 @@ end
 --example_stack();
 
 
-
+--[[
 
 local function f_cpmlete(self)
 	print("加载结束");
@@ -244,11 +244,32 @@ local function f_cpmlete(self)
 
 	--self:dispose();--销毁
 end
---[[
+
 local nskin = NSkin:new();
 evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
 nskin:load("\\resource\\crl.xml","gundi.png;checkbox.png;smallbtn.png");
 --]]
+
+
+
+--*************************************************************
+local model = u;
+local function f_rx_handle(progress,p)
+	
+	--cam_setRotateX(2*PI*(1-progress));
+	--engine_refreshCam3d();
+
+	--print(progress,p);
+	model:set_rx(progress*PI);
+end
+
+local function f_cpmlete(skin)
+	local sc = skin_find(skin,"sc");
+	sc:bindCallback(f_rx_handle);
+end
+local nskin = NSkin:new();
+evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
+nskin:load("\\resource\\rx.xml","gundi.png;checkbox.png;smallbtn.png");
 
 
 

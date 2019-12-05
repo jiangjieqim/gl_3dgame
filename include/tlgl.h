@@ -56,17 +56,16 @@ enum
 //顶点分布方式
 //#define OBJ_UV_VERTEX			0
 //#define OBJ_UV_VERTEX_NORMAL	1
-enum {
-	//OBJ_NULL = -1,
-	/*
-	 * uv vertex
-	 */
-	OBJ_UV_VERTEX=0,
-	/*
-	 * uv vertex normal
-	 */
-	OBJ_UV_VERTEX_NORMAL=1,
-};
+//enum {
+//OBJ_NULL = -1,
+/*
+* uv vertex
+*/
+#define OBJ_VERTEX 0//vertex 只有顶点坐标数据
+
+#define	OBJ_UV_VERTEX 1//uv vertex
+#define	OBJ_UV_VERTEX_NORMAL 2//uv vertex normal
+//};
 struct VertexData
 {
 	//GLfloat数据的长度
