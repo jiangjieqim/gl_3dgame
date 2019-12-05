@@ -124,8 +124,9 @@ objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-
+	if(vbo->uvID){
+		glDisableVertexAttribArray(1);
+	}
 	if(vbo->normalID)
 		glDisableVertexAttribArray(2);
 
