@@ -103,7 +103,12 @@ objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,
 #endif
 //GL_TRIANGLES
 //GL_LINES
-		glDrawElements(GL_TRIANGLES,vbo->renderVertCount,_enum , 0);
+//可用的模式 GL_POINTS GL_LINE_STRIP
+		if(!strcmp(base->name,"obj2")){
+			glDrawElements(GL_LINE_STRIP,vbo->renderVertCount,_enum , 0);
+		}else{
+			glDrawElements(GL_TRIANGLES,vbo->renderVertCount,_enum , 0);
+		}
 	}
 
 	//清理状态
@@ -158,7 +163,6 @@ initVBO(struct ExportOBJ_Data* _ptr,struct ObjVBO* vbo,int type,int renderVertCo
 	vbo->renderVertCount = renderVertCount;
 
 	glEnableVertexAttribArray(0);//顶点坐标
-	glEnableVertexAttribArray(1);//顶点uv
 	
 	//顶点
 	glGenBuffers(1, &vbo->vertexID);
@@ -167,13 +171,15 @@ initVBO(struct ExportOBJ_Data* _ptr,struct ObjVBO* vbo,int type,int renderVertCo
 	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	dataByteSize+=sizeof(GLfloat)*VERTEX_GAP * _ptr->vertexCount;
 
-	//uv
-	glGenBuffers(1, &vbo->uvID);
-	glBindBuffer(GL_ARRAY_BUFFER,vbo->uvID);
-	glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*UV_GAP * _ptr->vertexCount,_ptr->ptrUV,GL_STATIC_DRAW);
-	glVertexAttribPointer( 1, 2, GL_FLOAT, GL_FALSE, 0, 0 );
-	dataByteSize+=sizeof(GLfloat)*UV_GAP * _ptr->vertexCount;
-
+	if(type == OBJ_UV_VERTEX_NORMAL || type == OBJ_UV_VERTEX){
+		//uv
+		glEnableVertexAttribArray(1);//顶点uv
+		glGenBuffers(1, &vbo->uvID);
+		glBindBuffer(GL_ARRAY_BUFFER,vbo->uvID);
+		glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*UV_GAP * _ptr->vertexCount,_ptr->ptrUV,GL_STATIC_DRAW);
+		glVertexAttribPointer( 1, 2, GL_FLOAT, GL_FALSE, 0, 0 );
+		dataByteSize+=sizeof(GLfloat)*UV_GAP * _ptr->vertexCount;
+	}
 	if(type== OBJ_UV_VERTEX_NORMAL)
 	{
 		glEnableVertexAttribArray(2);//顶点normal
@@ -205,8 +211,13 @@ initVBO(struct ExportOBJ_Data* _ptr,struct ObjVBO* vbo,int type,int renderVertCo
 	//状态清除操作
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	
+	if(type == OBJ_UV_VERTEX_NORMAL || type == OBJ_UV_VERTEX){
+		glDisableVertexAttribArray(1);
+	}
+	if(type == OBJ_UV_VERTEX_NORMAL){
+		glDisableVertexAttribArray(2);
+	}
+
 	//计算VBO的占用的内存数
 	//printf("VBO缓冲区申请的大小 %d bytes\n",dataByteSize);
 	
@@ -257,7 +268,18 @@ objVBO_create(const char* name,int type)
 static int 
 getGapByVertexType(int vertsType)
 {
-	return (vertsType == OBJ_UV_VERTEX) ? (UV_GAP + VERTEX_GAP) : (UV_GAP + VERTEX_GAP + NORMAL_GAP);
+	if(vertsType == OBJ_UV_VERTEX){
+		return UV_GAP + VERTEX_GAP;
+	}
+	else if(vertsType == OBJ_UV_VERTEX_NORMAL){
+		return UV_GAP + VERTEX_GAP + NORMAL_GAP;
+	}
+	else if(vertsType == OBJ_VERTEX){
+		return VERTEX_GAP;
+	}
+	assert(0);
+	return 0;
+	//return (vertsType == OBJ_UV_VERTEX) ? (UV_GAP + VERTEX_GAP) : (UV_GAP + VERTEX_GAP + NORMAL_GAP);
 }
 /*
  *复制数据
@@ -366,16 +388,21 @@ objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _bufferSize)
 
 	if(_pvboModel->dataType== OBJ_UV_VERTEX_NORMAL)
 	{
+		//构造法线数据
 		normalSize = sizeof(GLfloat)*NORMAL_GAP;
 		ptr->ptrNormal = tl_malloc(normalSize * vertCount);
 		memset(ptr->ptrNormal,0,normalSize * vertCount);
 	}
-	ptr->ptrUV = tl_malloc(uvSize*vertCount);
+	if(_pvboModel->dataType == OBJ_UV_VERTEX_NORMAL || _pvboModel->dataType == OBJ_UV_VERTEX){
+		//构造UV数据
+		ptr->ptrUV = tl_malloc(uvSize*vertCount);
+		memset(ptr->ptrUV,0,uvSize * vertCount);
+	}
 	ptr->indexLength = vertCount;
 	ptr->ptrIndex = tl_malloc(ptr->indexLength*sizeof(_UNSIGNED_SHORT));
 
 	memset(ptr->ptrVertex,0,positionSize * vertCount);
-	memset(ptr->ptrUV,0,uvSize * vertCount);
+	
 	//////////////////////////////////////////////////////////////////////////
 
 	for(i = 0;i < _bufferSize;i+=__gap)
