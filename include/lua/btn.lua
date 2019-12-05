@@ -142,11 +142,11 @@ local function f_reset_label_pos(btn,style)
 	
     local x,y = func_get_sprite_xy(btn.sprite);
     local sw,sh=func_get_sprite_size(btn.sprite);
-	
+	local y = (sh-h)/2;
 	if(style==nil) then
-		label_set_pos(btn.label,(sw-w)/2,(sh-h)/2);
+		label_set_pos(btn.label,(sw-w)/2,y);
 	elseif(style == "rightout")then	
-		label_set_pos(btn.label,sw,(sh-h)/2);
+		label_set_pos(btn.label,sw,0);
 	end
 end
 	

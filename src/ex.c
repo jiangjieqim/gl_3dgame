@@ -31,6 +31,7 @@
 #include "fbotex.h"
 #include "atlas.h"
 #include "map.h"
+#include "line.h"
 #include "timelater.h"
 //#define DEBUG_PRINT_HIT	//打印拾取日志
 
@@ -1220,6 +1221,8 @@ f_defaultRenderFrame(){
 	//ex_updatePerspctiveModelView();
 	//p->allVertexTotal = 0;
 	ex_renderlistCall(ex_render3dNode);//渲染节点
+	
+	//drawLine(200);
 
 	//drawLine(2000);
 	//f_drawline();
@@ -1263,6 +1266,8 @@ _new(){
 	
 	f_defaultRenderFrame();
 	//fbo_render(p->fbo);	
+
+	
 
 	f_renderFBOs();
 
@@ -1442,6 +1447,8 @@ ex_reshape(int w,int h){
 	//fbo_resize(p->fbo);
 
 	ex_resize_stage2d();
+	
+	//printf("%d,%d\n",sizeof(struct HeadInfo),sizeof(struct LStackNode));
 
 	ex_lua_global_evt_dispatch(EVENT_ENGINE_RESIZE);
 	//printf("============> %d,%d\n",w,h);
@@ -1731,6 +1738,8 @@ vbo_loadObj3d(char* name,const char* url)
 	struct Node* node;
 
 	const int useIndexExport = 1;//使用索引方式导入
+
+	//printf("****\n");
 
 	node = node_create(name);
 	_objStr=tl_loadfile(url,0);
@@ -2101,6 +2110,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	ex->mouseState.action = action;
 	ex->mouseState.xMouse = xMouse;
 	ex->mouseState.yMouse = yMouse;
+	ex->mouseState.midDirection = 0;
 	
 	//printf("%d %d\n",button,action);
 
@@ -2179,12 +2189,14 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	//滚轮事件
 	if(button == GLUT_WHEEL_UP)
 	{
-
+		ex->mouseState.midDirection = -1;
 	}
 	else if(button == GLUT_WHEEL_DOWN)
 	{
-		
+		ex->mouseState.midDirection = 1;
 	}
+
+	//printf("中键滚动状态 = %d\n",ex->mouseState.midDirection);
 
 	//ui鼠标事件
 	//uimouse(button,action,xMouse,yMouse);

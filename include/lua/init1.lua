@@ -7,7 +7,7 @@ func_enable_debug(false);--关闭调试日志
 --example_stack();
 
 --########################################
---node_fbo();
+--node_fbo(1);
 --example_srollView();
 
 --btn_create(200,50,60,20,"smallbtn.png");
@@ -131,13 +131,13 @@ local function loadbox()
 	
 	----[[
 	local obj2 = Unit:new();
-	obj2:load("\\resource\\obj\\quad.obj",--triangle,bauul
-	"//resource//material//particle.mat");
+	obj2:load("\\resource\\obj\\box.obj",--triangle,bauul
+	"//resource//material//triangle.mat");
 --unit_scale(obj2,20);
 	
 		--setv(obj2.p,FLAGS_REVERSE_FACE);
 
-		setv(obj2.m,FLAGS_DRAW_PLOYGON_LINE);
+		--setv(obj2.m,FLAGS_DRAW_PLOYGON_LINE);
 		
 		--]]
 		
@@ -163,7 +163,6 @@ setv(obj.m,FLAGS_DRAW_PLOYGON_LINE);
 
 
 cam_setPosition(0,0,-10);
-
 
 
 --添加fps显示视图

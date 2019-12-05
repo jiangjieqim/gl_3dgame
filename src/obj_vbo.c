@@ -101,7 +101,8 @@ objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,
 #else
 		_enum = GL_UNSIGNED_INT;
 #endif
-
+//GL_TRIANGLES
+//GL_LINES
 		glDrawElements(GL_TRIANGLES,vbo->renderVertCount,_enum , 0);
 	}
 

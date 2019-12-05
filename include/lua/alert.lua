@@ -215,6 +215,14 @@ local function btnClick(self)
 	--print(btnName,self);--p = abc
 	self:hide();
 end
+local function f_rx_handle(progress,p)
+
+	cam_setRotateX(2*PI*(1-progress));
+	
+	engine_refreshCam3d();
+
+	--print(progress);
+end
 
 local function f_cpmlete(skin,self)
 	--print(skin,self,self.str);
@@ -231,9 +239,12 @@ local function f_cpmlete(skin,self)
 	closebtn:bind_click(btnClick,self);
 	f_refresh(self);
 	
-	--local pb1 = skin_find(skin,"pb1");--NListBox:new();
+	local pb1 = skin_find(skin,"pb1");--NListBox:new();	
+	pb1:progress(0.7);
 	--pb1:dispose();
-	
+	local sc = skin_find(skin,"sc");--NListBox:new();	
+	sc:bindCallback(f_rx_handle,self);
+
 	
 	--self:dispose();
 end
@@ -248,7 +259,7 @@ function Alert:show(str)
 		local nskin = NSkin:new();
 		self.nskin = nskin;
 		evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete,self);
-		nskin:load("\\resource\\alert.xml","smallbtn.png");
+		nskin:load("\\resource\\alert.xml","smallbtn.png;checkbox.png");
 	else
 		--f_cpmlete(self.nskin,self);
 		f_refresh(self);

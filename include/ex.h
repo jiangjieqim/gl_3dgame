@@ -95,6 +95,8 @@ struct MouseState
 	GLint xMouse,yMouse;//点击下的鼠标状态
 	
 	int moveX,moveY;//当前移动的位置
+	// 中键方向 -1:向上,1:向下 0:的时候 说明没有滚动
+	int midDirection;
 };
 //struct ECamera{
 //	/*
