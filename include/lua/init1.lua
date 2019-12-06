@@ -151,6 +151,25 @@ local function loadbox()
 	--]]
 	return obj2;
 end
+----[[
+local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
+	"//resource//material//bauul.mat");
+unit_scale(obj2,0.02);
+unit_rx(obj2,PI/2);
+unit_split_anim(obj2);
+
+--]]
+
+
+
+
+
+
+
+
+
+
+
 --[[
 
 local obj = Unit:new();

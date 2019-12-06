@@ -1230,7 +1230,7 @@ void sprite_dipose(struct Sprite* spr){
 	}
 	LStack_delNode(ex_getIns()->renderList,(int)spr);//从渲染节点列表中移除
 
-//	tl_free(spr);
+	tl_free(spr);
 }
 
 /*

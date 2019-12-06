@@ -759,7 +759,7 @@ f_ent_dispose(struct Ent3D* p){
 	p->base = NULL;
 
 	LStack_delNode(ex_getIns()->renderList,(int)p);
-	//tl_free((void*)p);
+	tl_free((void*)p);
 }
 /*
 *	销毁md2对象
@@ -775,7 +775,7 @@ md2_dispose(struct MD2_Object* _md2)
 
 	LStack_delNode(ex_getIns()->renderList,(int)_md2);
 
-	//tl_free((void*)_md2);
+	tl_free((void*)_md2);
 }
 
 void md5Model_dispose(struct MD5* _md5)
@@ -787,7 +787,7 @@ void md5Model_dispose(struct MD5* _md5)
 
 	LStack_delNode(ex_getIns()->renderList,(int)_md5);
 
-	//tl_free((void*)_md5);
+	tl_free((void*)_md5);
 }
 
 static void 

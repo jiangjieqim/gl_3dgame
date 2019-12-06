@@ -48,7 +48,7 @@ void node_dispose(struct Node* p)
 		p->ptrCollide = 0;
 	}
 	LStack_delNode(ex_getIns()->renderList,(int)p);//从渲染节点列表中移除
-//	tl_free(p);
+	tl_free(p);
 
 	//log_color(0xff0000,"node_dispose删除%s消耗%ld毫秒\n",name,get_longTime() - time);
 }

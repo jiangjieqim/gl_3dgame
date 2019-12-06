@@ -46,6 +46,10 @@ void objVBO_dispose(struct Obj_vbo_model* p);
 	int	_bufferSize float的个数
 */
 void objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _bufferSize);
+
+//获取到一个struct ObjVBO*对象
+void* 
+objVBO_createNode(int vertsType,GLfloat* verts,int size);
 /*
 	按照索引方式导入数据
 */

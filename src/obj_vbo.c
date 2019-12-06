@@ -22,7 +22,7 @@ objData_dispose(struct ExportOBJ_Data* obj)
 		tl_free(obj->ptrNormal);
 	}
 	tl_free(obj->ptrIndex);
-	obj->ptrIndex = NULL;
+	tl_free(obj);
 }
 //销毁vbo
 static void 
@@ -61,12 +61,12 @@ objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo->vertexID);
 	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	//uv
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER,vbo->uvID);
-	glVertexAttribPointer( 1, 2, GL_FLOAT, GL_FALSE, 0, 0 );
-	
+	if(vbo->uvID){
+		//uv
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER,vbo->uvID);
+		glVertexAttribPointer( 1, 2, GL_FLOAT, GL_FALSE, 0, 0 );
+	}
 	if(vbo->normalID)
 	{
 		//normal
@@ -345,12 +345,8 @@ objVBO_pushExportObj(struct Obj_vbo_model* _pvboModel,const char* _objStr)
 		obj_delData(ptr);
 	}
 }
-
-/*
-	添加一个VBO节点
-*/
-void
-objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _bufferSize)
+void* 
+objVBO_createNode(int vertsType,GLfloat* verts,int size)
 {
 	float* ptrVerts;
 	int i,vertCount;//_bufferSize	float的个数
@@ -358,15 +354,19 @@ objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _bufferSize)
 	struct ExportOBJ_Data* ptr;
 	int k = 0;
 	int normalSize,uvSize,positionSize;
-	int vertsType;
+	//int vertsType;
 	//////////////////////////////////////////////////////////////////////////
 
 	/*struct ObjVBO* vboPtr=tl_malloc(sizeof(struct ObjVBO));
 	memset(vboPtr,0,sizeof(struct ObjVBO));
 	LStack_push((void*)_pvboModel->ptrList,(int)vboPtr);*/
-	struct ObjVBO* vboPtr=CreateNewNode(_pvboModel);
+	//struct ObjVBO* vboPtr=CreateNewNode(_pvboModel);
 	
-	vertsType = _pvboModel->dataType;
+	struct ObjVBO* vboPtr=tl_malloc(sizeof(struct ObjVBO));
+	memset(vboPtr,0,sizeof(struct ObjVBO));
+	
+
+	//vertsType = _pvboModel->dataType;
 
 	//根据数据类型设置数据间隔
 	__gap = getGapByVertexType(vertsType);
@@ -379,7 +379,7 @@ objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _bufferSize)
 
 	ptrVerts = (GLfloat*)verts;
 
-	vertCount = _bufferSize / __gap;//顶点个数
+	vertCount = size /sizeof(GLfloat)/ __gap ;/// sizeof(GLfloat);//顶点个数
 
 	ptr = tl_malloc(sizeof(struct ExportOBJ_Data));
 	memset(ptr,0,sizeof(struct ExportOBJ_Data));
@@ -387,14 +387,14 @@ objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _bufferSize)
 
 	ptr->ptrVertex = tl_malloc(positionSize * vertCount);
 
-	if(_pvboModel->dataType== OBJ_UV_VERTEX_NORMAL)
+	if(vertsType== OBJ_UV_VERTEX_NORMAL)
 	{
 		//构造法线数据
 		normalSize = sizeof(GLfloat)*NORMAL_GAP;
 		ptr->ptrNormal = tl_malloc(normalSize * vertCount);
 		memset(ptr->ptrNormal,0,normalSize * vertCount);
 	}
-	if(_pvboModel->dataType == OBJ_UV_VERTEX_NORMAL || _pvboModel->dataType == OBJ_UV_VERTEX){
+	if(vertsType == OBJ_UV_VERTEX_NORMAL ||vertsType == OBJ_UV_VERTEX){
 		//构造UV数据
 		ptr->ptrUV = tl_malloc(uvSize*vertCount);
 		memset(ptr->ptrUV,0,uvSize * vertCount);
@@ -405,8 +405,8 @@ objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _bufferSize)
 	memset(ptr->ptrVertex,0,positionSize * vertCount);
 	
 	//////////////////////////////////////////////////////////////////////////
-
-	for(i = 0;i < _bufferSize;i+=__gap)
+	
+	for(i = 0;i < size/sizeof(GLfloat);i+=__gap)
 	{
 		copyData(ptr,&i,&k,ptrVerts,vertsType);
 
@@ -415,8 +415,18 @@ objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _bufferSize)
 
 	//////////////////////////////////////////////////////////////////////////
 
-	initVBO(ptr,vboPtr,_pvboModel->dataType,ptr->vertexCount,ptr->vertexCount);
+	initVBO(ptr,vboPtr,vertsType,ptr->vertexCount,ptr->vertexCount);
 
 	objData_dispose(ptr);
-	tl_free(ptr);
+
+	return vboPtr;
+}
+/*
+	添加一个VBO节点
+*/
+void
+objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _glFloatCnt)
+{
+	void* vboPtr = objVBO_createNode(_pvboModel->dataType,verts,_glFloatCnt*sizeof(GLfloat));
+	LStack_push((void*)_pvboModel->ptrList,vboPtr);	
 }

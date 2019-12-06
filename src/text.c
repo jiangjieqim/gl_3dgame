@@ -93,7 +93,7 @@ tf_dispose(struct TextField* tf){
 	base_dispose(tf->base);
 	tl_free(tf->textPtr);
     LStack_delNode(ex_getIns()->renderList,(int)tf);
-	//tl_free(tf);
+	tl_free(tf);
 }
 
 void tf_render(int data)
