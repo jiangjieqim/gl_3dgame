@@ -809,31 +809,30 @@ renderSprite(struct Sprite* p)
 		
 
 
-		{
-			GMaterial* __mat = (GMaterial*)material;
-			//char* type = __mat->glslType;
-			shaderName = __mat->glslType;
-		}
+		
 		if(p->useVBO){
 			//渲染管线采用vbo模式
 			objVBO_renderNode(
 				getvbo(p),
 				material,
-				shaderName,
 				p->mat4x4,
-				base_get_ploygonLineMode(base),
 				base->flags,
 				0,
 				p->grid9);
 
-		}else
+		}else{
+			GMaterial* __mat = (GMaterial*)material;
+			//char* type = __mat->glslType;
+			shaderName = __mat->glslType;
+		
 			//采用固定管线方式
 			tmat_renderSprite(material,
 							//"sprite",
 							shaderName,
 							p->mat4x4,p->vertexs,p->vertLen,
 							GL_T2F_V3F,
-							base_get_ploygonLineMode(base));//非vbo模式
+							base_get_ploygonLineMode(base->flags));//非vbo模式
+		}
 	}
 }
 

@@ -200,7 +200,7 @@ void base_md2_staticBox(struct HeadInfo* base);
 /*
 	获取渲染模式是否是线框还是实体模式
 */
-int base_get_ploygonLineMode(struct HeadInfo* base);
+int base_get_ploygonLineMode(int flag);
 
 /*
 *	在渲染列表射线拾取

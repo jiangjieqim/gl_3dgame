@@ -71,9 +71,7 @@ void objVBO_render(int data,int parms);
 void objVBO_renderNode(
 						struct ObjVBO* vbo,
 						struct GMaterial* tmat,
-						const char* shader,
-						Matrix44f m,
-						int mode,
+						Matrix44f m,//当前模型的矩阵
 						int flag,
 						void (*renderCallBack)(int,struct ObjVBO*),
 						void* grid9);

@@ -55,16 +55,13 @@ void
 objVBO_renderNode(
 				struct ObjVBO* vbo,
 				struct GMaterial* tmat,
-				const char* _shaderName,
 				Matrix44f m,
-				int mode,
-				//struct HeadInfo* base,
 				int flag,
 				void (*renderCallBack)(int,struct ObjVBO*),
 				void* grid9)
 {
 	GLboolean cull;
-	
+	int mode = base_get_ploygonLineMode(flag);
 	//顶点
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo->vertexID);
@@ -94,7 +91,7 @@ objVBO_renderNode(
 	//双面绘制
 	cull = base_cullface(flag);
 	//printf("***%s\n",base->name);
-	tmat_render(tmat,_shaderName,m,grid9);
+	tmat_render(tmat,tmat->glslType,m,grid9);
 
 	//设置状态
 	if(renderCallBack!=NULL)
@@ -155,8 +152,7 @@ objVBO_render(int data,int parms)
 		objVBO_renderNode(
 			(struct ObjVBO*)data,
 			(struct GMaterial*)base->tmat,
-			base->tmat->curGlslType,
-			base->m,base_get_ploygonLineMode(base),
+			base->m,
 			base->flags,
 			ptr->renderCallBack,0);
 	}else{

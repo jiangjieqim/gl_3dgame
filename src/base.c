@@ -434,11 +434,11 @@ base_seachPick(struct LStackNode* s,struct Vec3* nearPoint,struct Vec3* farPoint
 /*
 	获取渲染模式是否是线框还是实体模式
 */
-int base_get_ploygonLineMode(struct HeadInfo* base){
-	if(getv(&base->flags,FLAGS_DRAW_PLOYGON_LINE)){
+int base_get_ploygonLineMode(int flag){
+	if(getv(&flag,FLAGS_DRAW_PLOYGON_LINE)){
 		return GL_LINE;
 	}
-	if(getv(&base->flags,FLAGS_DRAW_PLOYGON_POINT)){
+	if(getv(&flag,FLAGS_DRAW_PLOYGON_POINT)){
 		return GL_POINT;
 	}
 	return GL_FILL;
@@ -469,7 +469,7 @@ void base_renderByMaterial(struct HeadInfo* base)
 {	
 	char _shaderName[G_BUFFER_32_SIZE];
 
-	int mode = base_get_ploygonLineMode(base);
+	int mode = base_get_ploygonLineMode(base->flags);
 
 	GLboolean _cull = base_cullface(base->flags);
 	//===================================================

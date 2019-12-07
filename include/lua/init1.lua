@@ -136,7 +136,7 @@ local function loadbox()
 	--unit_scale(obj2,20);
 	
 		--setv(obj2.m,FLAGS_REVERSE_FACE);
-		setv(obj2.m,FLAGS_DISABLE_CULL_FACE);--Ë«ÃæäÖÈ¾
+		--setv(obj2.m,FLAGS_DISABLE_CULL_FACE);--Ë«ÃæäÖÈ¾
 		--setv(obj2.m,FLAGS_DRAW_PLOYGON_LINE);
 		
 		--]]
