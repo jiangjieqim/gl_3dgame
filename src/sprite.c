@@ -850,7 +850,7 @@ updateMatrix(struct Sprite* p)
 //按钮特效
 static void
 f_btn_push(struct Sprite* spr,int* pChange){
-	struct HeadInfo* base = spr->base;
+	//struct HeadInfo* base = spr->base;
 	if(spr->m_bPressed )
 	{
 		float targetScale = 0.95;
@@ -861,7 +861,7 @@ f_btn_push(struct Sprite* spr,int* pChange){
 
 			spr->zScale = targetScale;//点击时,按钮宽高比变化
 			//printf("鼠标一直点着按钮Sprite %f,%f\n",pBtn->m_fWidth,pBtn->m_fHeight);
-			base->time=get_longTime()+_Time_Delay_;
+			spr->btntime=get_longTime()+_Time_Delay_;
 			*pChange = 1;
 		}
 	}
@@ -869,11 +869,11 @@ f_btn_push(struct Sprite* spr,int* pChange){
 	{
 		spr->zScale = 1.0;
 
-		if(base->time!=0 && base->time - get_longTime()<=0)
+		if(spr->btntime!=0 && spr->btntime - get_longTime()<=0)
 		{
 			//_Time_Delay_毫秒之后会处理
 			*pChange = 1;
-			base->time = 0;
+			spr->btntime = 0;
 		}
 	}
 }

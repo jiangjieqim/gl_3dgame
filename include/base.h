@@ -95,7 +95,7 @@ typedef struct HeadInfo{
 	//int lookat;
 	
 	//做计时器存储的变量
-	long time;
+	//long time;
 	
 	/*单个对象的关键帧帧率*/
 	//int fpsInterval;
