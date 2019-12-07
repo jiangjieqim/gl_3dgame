@@ -822,7 +822,7 @@ renderSprite(struct Sprite* p)
 				shaderName,
 				p->mat4x4,
 				base_get_ploygonLineMode(base),
-				base,
+				base->flags,
 				0,
 				p->grid9);
 

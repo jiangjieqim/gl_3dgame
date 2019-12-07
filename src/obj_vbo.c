@@ -58,7 +58,8 @@ objVBO_renderNode(
 				const char* _shaderName,
 				Matrix44f m,
 				int mode,
-				struct HeadInfo* base,
+				//struct HeadInfo* base,
+				int flag,
 				void (*renderCallBack)(int,struct ObjVBO*),
 				void* grid9)
 {
@@ -91,7 +92,7 @@ objVBO_renderNode(
 	}
 
 	//双面绘制
-	cull = base_cullface(base);
+	cull = base_cullface(flag);
 	//printf("***%s\n",base->name);
 	tmat_render(tmat,_shaderName,m,grid9);
 
@@ -111,11 +112,11 @@ objVBO_renderNode(
 //GL_TRIANGLES
 //GL_LINES
 //可用的模式 GL_POINTS GL_LINE_STRIP
-		if(!strcmp(base->name,"obj2")){
-			glDrawElements(GL_LINE_STRIP,vbo->renderVertCount,_enum , 0);
-		}else{
+		//if(!strcmp(base->name,"obj2")){
+		//	glDrawElements(GL_LINE_STRIP,vbo->renderVertCount,_enum , 0);
+		//}else{
 			glDrawElements(GL_TRIANGLES,vbo->renderVertCount,_enum , 0);
-		}
+		//}
 	}
 
 	//清理状态
@@ -153,10 +154,10 @@ objVBO_render(int data,int parms)
 		
 		objVBO_renderNode(
 			(struct ObjVBO*)data,
-			(struct GMaterial*)base->tmat
-			,base->tmat->curGlslType,
+			(struct GMaterial*)base->tmat,
+			base->tmat->curGlslType,
 			base->m,base_get_ploygonLineMode(base),
-			base,
+			base->flags,
 			ptr->renderCallBack,0);
 	}else{
 		printf("objVBO_render(..)--->data = null!\n");
@@ -417,14 +418,13 @@ objVBO_createNode(int vertsType,GLfloat* verts,int size)
 	memset(ptr->ptrVertex,0,positionSize * vertCount);
 	
 	//////////////////////////////////////////////////////////////////////////
-	
-	for(i = 0;i < size/sizeof(GLfloat);i+=__gap)
 	{
-		copyData(ptr,&i,&k,ptrVerts,vertsType);
-
-		k++;
+		int c = size / sizeof(GLfloat);
+		for(i = 0;i < c;i+=__gap){
+			copyData(ptr,&i,&k,ptrVerts,vertsType);
+			k++;
+		}
 	}
-
 	//////////////////////////////////////////////////////////////////////////
 
 	initVBO(ptr,vboPtr,vertsType,ptr->vertexCount,ptr->vertexCount);

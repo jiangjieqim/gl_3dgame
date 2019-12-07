@@ -214,3 +214,9 @@ end
 function Unit:set_rx(value)
 	func_setRotateX(self.m,value)
 end
+function Unit:set_ry(value)
+	func_setRotateY(self.m,value)
+end
+function Unit:set_rz(value)
+	func_setRotateZ(self.m,value)
+end

@@ -68,8 +68,14 @@ void objVBO_render(int data,int parms);
  * 渲染一个vbo节点
  * renderCallBack渲染回调
  */
-void objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,const char* shader,Matrix44f m,int mode,struct HeadInfo* base,
-					   void (*renderCallBack)(int,struct ObjVBO*),
-					   void* grid9);
+void objVBO_renderNode(
+						struct ObjVBO* vbo,
+						struct GMaterial* tmat,
+						const char* shader,
+						Matrix44f m,
+						int mode,
+						int flag,
+						void (*renderCallBack)(int,struct ObjVBO*),
+						void* grid9);
 
 #endif

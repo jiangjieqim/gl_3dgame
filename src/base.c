@@ -447,9 +447,9 @@ int base_get_ploygonLineMode(struct HeadInfo* base){
 //#define _RenderTest_
 
 GLboolean 
-base_cullface(struct HeadInfo* base)
+base_cullface(int flag)
 {
-	int flag = base->flags;
+	//int flag = base->flags;
 	if(getv(&flag,FLAGS_DISABLE_CULL_FACE)){
 		glDisable(GL_CULL_FACE);
 	}else{
@@ -471,7 +471,7 @@ void base_renderByMaterial(struct HeadInfo* base)
 
 	int mode = base_get_ploygonLineMode(base);
 
-	GLboolean _cull = base_cullface(base);
+	GLboolean _cull = base_cullface(base->flags);
 	//===================================================
 	if(!base->tmat)//没有材质就返回
 		return;

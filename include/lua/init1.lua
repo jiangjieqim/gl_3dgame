@@ -280,7 +280,9 @@ local function f_rx_handle(progress,p)
 	--engine_refreshCam3d();
 
 	--print(progress,p);
-	model:set_rx(progress*PI);
+	if(model) then
+		model:set_ry(progress*PI);
+	end
 end
 
 local function f_cpmlete(skin)
@@ -290,10 +292,11 @@ end
 local nskin = NSkin:new();
 evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
 nskin:load("\\resource\\rx.xml","gundi.png;checkbox.png;smallbtn.png");
+--#######################################################
 local function f_fps_timer(data)
-	print(data);
+	--print(data);
 	if(model) then
-		--model:set_rx(progress*PI);
+		model:set_rx(data*PI/1000);
 	end
 end
 local timer = timelater_new(10);

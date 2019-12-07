@@ -250,7 +250,7 @@ void base_set_suffix(struct HeadInfo* base,const char* str);
 /*
 	Ë«Ãæ»æÖÆ
 */
-GLboolean base_cullface(struct HeadInfo* base);
+GLboolean base_cullface(int flag);
 //==========================================================================
 
 /*
