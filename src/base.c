@@ -10,7 +10,7 @@
 #include "tlgl.h"
 #include "base.h"
 #include "node.h"
-
+#include "map.h"
 //#define DEBUG
 
 //接口实现部分
@@ -186,8 +186,27 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 //	base->luaPickCallBack = str;
 //}
 
-void base_dispose(struct HeadInfo* base){
+static void
+f_buildtweenname(struct HeadInfo* base,char* tweenkey,int len){
+	memset(tweenkey,0,len);
+	sprintf_s(tweenkey,len,"%s_tw",base->name);
+	//printf("[%s]\n",tweenkey);
+}
 
+static void
+f_deltw(struct HeadInfo* base){
+	char tw[64];
+	struct MapNode * node ;
+
+	f_buildtweenname(base,tw,64);
+	node = map_get(ex_getIns()->mapptr,tw);
+	if(node){
+		map_del_key(ex_getIns()->mapptr,tw);
+	}
+}
+
+void base_dispose(struct HeadInfo* base){
+	f_deltw(base);
 	if(base->tmat){
 		tmat_dispose(base->tmat);
 	}
@@ -666,6 +685,7 @@ f_ry_tpUpdate(void* p){
 	HeadInfo* ptr = (HeadInfo*)p;
 	base_updateMat4x4(ptr);
 }
+
 /*
 void 
 base_rotate_to(HeadInfo* bp,float ms,float ry){
@@ -684,13 +704,32 @@ base_move(HeadInfo* bp,int ms,
 		)
 {
 	//printf("===========\n%d\n%d\n%d\n",&(bp->x),&(bp->y),&(bp->z));
-	void* _tweenPtr = bp->_move_tp;
+
+	char tw[64];
+	struct MapNode * node ;
+	void* _tweenPtr ;//= bp->_move_tp;
+	
+	f_buildtweenname(bp,tw,64);
+	node = map_get(ex_getIns()->mapptr,tw);
+	if(node == 0){
+		node = map_set(ex_getIns()->mapptr,tw,0);
+	}
+	_tweenPtr = (void*)node->value;
+
+	/*if(node){
+		_tweenPtr = (void*)node->value;
+	}else{
+		map_set(ex_getIns()->mapptr,tw,0);
+	}*/
 	if(_tweenPtr && tween_is_play(_tweenPtr))
 	{
 		tween_stop(_tweenPtr);
-		bp->_move_tp = 0;
+		//bp->_move_tp = 0;
+		node->value = 0;
 	}
-	bp->_move_tp=tween_to(bp,ms,endCallBack,updateCallBack,
+	//bp->_move_tp
+		
+	node->value	=tween_to(bp,ms,endCallBack,updateCallBack,
 		6,//参数个数
 		&(bp->x),x,
 		&(bp->y),y,

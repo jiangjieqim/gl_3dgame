@@ -14,6 +14,7 @@ static void
 f_delNode(struct MapNode* node){
 	tl_free(node->key);
 	tl_free(node);
+	log_color(0,"成功删除map节点[%s]\n",node->key);
 }
 
 void*
@@ -131,14 +132,14 @@ map_del_key(void* mapptr,const char* key){
 	}
 }
 
-void
+void*
 map_set(void* mapptr,const char* key,void* value){
 	struct Map* map = (struct Map*)mapptr;
 
 	struct LStackNode* s = map->list;
 
 	int isfind = 0;
-
+	struct MapNode* _savenode;
 	struct MapNode* _node;
 	void* top,*p;
 	top = s;
@@ -155,6 +156,7 @@ map_set(void* mapptr,const char* key,void* value){
 			isfind = 1;
 			//map节点赋值
 			_node->value = value;
+			_savenode = _node;
 		}
 	}
 
@@ -165,12 +167,13 @@ map_set(void* mapptr,const char* key,void* value){
 		memcpy(name,key,strlen(key));
 		node->key = name;
 		node->value=value;
-
+		_savenode = node;
 		LStack_push(map->list,(void*)node);
 		//printf("构造map节点0x%0x,key=%s,value=%d\n",node,node->key,node->value);
 	}else{
 		//printf("找到节点%0x\n",_node);
 	}
+	return _savenode;
 }
 
 void

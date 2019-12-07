@@ -16,7 +16,7 @@ map_get(void* map,const char* key);
 void
 map_del_key(void*map,const char* key);
 //设置一个键值对象值
-void
+void*
 map_set(void* map,const char* key,void* value);
 //销毁map值对象
 void

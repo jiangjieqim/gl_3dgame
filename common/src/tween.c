@@ -61,7 +61,9 @@ tween_stop(void* ptr){
 		tl_free(_node->ptr);
 		_node->ptr = 0;
 		LStack_delNode(g_list,(int)_node);
-		//tl_free(_node);
+		tl_free(_node);
+
+		log_color(0,"tw Ïú»Ù½Úµã%0x\n",_node);
 	}
 	
 }

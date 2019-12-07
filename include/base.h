@@ -52,11 +52,6 @@ typedef struct HeadInfo{
 	*/
 	struct VertexData rayVertexData;
 
-	///*
-	//*	静态包围盒的长宽高
-	//*/
-	//float boundWidth,boundHeight,boundLength;
-
 	/*
 		标识位,标识各种状态
 	*/
@@ -122,7 +117,7 @@ typedef struct HeadInfo{
 		所属的父对象
 	*/
 	//void* parent;
-	void* _move_tp;
+	
 	//void* _ry_tp;
 
 	//矩阵发生变化的时候设置为1
@@ -135,6 +130,9 @@ typedef struct HeadInfo{
 	当前是3d物体的时候就是3dCam(md2,obj...)
 	*/
 	void* cam;
+
+
+	//void* _move_tp;//tween pointer
 }HeadInfo;
 
 /*

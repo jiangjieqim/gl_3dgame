@@ -181,7 +181,7 @@ end
 
 Unit = {
 	material,--材质引用
-	p,--模型引用
+	m,--模型引用
 };
 
 Unit.__index = Unit;
@@ -234,4 +234,8 @@ function Unit:move(x,y,z,usetime)
 	--evt_off(self.m,EVENT_ENGINE_BASE_END,f_endCall);
 	evt_once(self.m,EVENT_ENGINE_BASE_END,f_endCall);
 	func_move(self.m,usetime,x,y,z);
+end
+
+function Unit:dispose()
+	func_ptr_remove(self.m);
 end

@@ -333,6 +333,17 @@ local function f_cpmlete(skin)
 			end
 		end
 	);
+	
+	local tbtn1 = skin_find(skin,"tbtn1");
+
+	tbtn1:bind_click(function ()
+			if(model) then
+				model:dispose();
+			end
+		end
+	);
+	
+	
 end
 local nskin = NSkin:new();
 evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
