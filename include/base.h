@@ -103,7 +103,7 @@ typedef struct HeadInfo{
 	自定义设置当前的关键帧索引,0开始										
 	-1标示没有使用的状态,0代表使用指定的关键帧,初始化的时候设置成-1
 	*/
-	int custframe;
+	//int custframe;
 	
 	/*
 		lua拾取回调

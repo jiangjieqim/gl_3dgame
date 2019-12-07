@@ -2062,7 +2062,9 @@ REG_change_attr(lua_State *L)
 		}
 
 		if(base->curType == TYPE_MD5_FILE){
-			base->custframe = v;
+			struct MD5* md5 = (struct MD5*)ptr;
+			//base->custframe = v;
+			md5->custframe = v;
 		}else{
 			log_code(ERROR_PTR_TYPE_FAIL);
 		}

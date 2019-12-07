@@ -1540,7 +1540,7 @@ load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
 	//================================================
 	md5 = (struct MD5*)tl_malloc(sizeof(struct MD5));
 	memset(md5,0,sizeof(struct MD5));
-	
+	md5->custframe = -1;
 	_base=base_create(TYPE_MD5_FILE,_name,x,y,z);
 	_base->parent = md5;
 	md5->base = _base;

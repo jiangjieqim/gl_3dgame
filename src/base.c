@@ -161,7 +161,7 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 
 	base->scale = 1.0;
 
-	base->custframe = -1;
+	//base->custframe = -1;
 
 	//设置默认的拾取框颜色
 	base->boxR = 1.0f;

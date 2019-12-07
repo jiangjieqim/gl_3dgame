@@ -526,7 +526,7 @@ anim_adaptivePlay(struct MD5* p,int fps,double curent_time){
 		}
 	}else{
 		(*frameTicket) = 0;
-		anim_nextFrame( md5anim,animInfo,curent_time,base_get((void*)p)->custframe);
+		anim_nextFrame( md5anim,animInfo,curent_time,p->custframe);
 	}
 
 
