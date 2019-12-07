@@ -81,9 +81,9 @@ addRenderNode(struct Node* p)
 static void 
 f_setShader(struct HeadInfo* base,const char* shader)
 {
-	struct GMaterial* tmat = base->tmat;
-	memset(tmat->curGlslType,0,G_BUFFER_32_SIZE);
-	memcpy(tmat->curGlslType,shader,strlen(shader));
+	//struct GMaterial* tmat = base->tmat;
+	//memset(tmat->curGlslType,0,G_BUFFER_32_SIZE);
+	//memcpy(tmat->curGlslType,shader,strlen(shader));
 }
 /*
 	设置默认的材质
@@ -91,10 +91,10 @@ f_setShader(struct HeadInfo* base,const char* shader)
 static void 
 setDefaultShader(struct Node* ptr)
 {
-	struct HeadInfo* base =	base_get(ptr);
-	char _shaderName[G_BUFFER_32_SIZE];
-	tmat_getShader(base->tmat,_shaderName,G_BUFFER_32_SIZE);
-	f_setShader(base,_shaderName);
+	//struct HeadInfo* base =	base_get(ptr);
+	//char _shaderName[G_BUFFER_32_SIZE];
+	//tmat_getShader(base->tmat,_shaderName,G_BUFFER_32_SIZE);
+	//f_setShader(base,_shaderName);
 }
 
 static int 

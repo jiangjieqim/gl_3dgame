@@ -25,7 +25,7 @@ typedef struct GMaterial{
 	/*
 	*	当前的着色器类型
 	*/
-	char curGlslType[G_BUFFER_32_SIZE];
+	//char curGlslType[G_BUFFER_32_SIZE];
 
 	/*
 	*	纹理数组,预留个动态空间,这里存储着GPU纹理缓冲区的数据,使用完成后要释放
