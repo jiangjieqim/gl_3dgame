@@ -88,10 +88,9 @@ typedef struct HeadInfo{
 	/************************************************************************/
 	/* 四元数矩阵															*/
 	/************************************************************************/
-	Matrix44f quat_m;
-
-	struct Vec3 target;
-	int lookat;
+	//Matrix44f quat_m;
+	//struct Vec3 target;
+	//int lookat;
 	
 	//做计时器存储的变量
 	long time;

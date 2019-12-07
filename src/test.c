@@ -936,7 +936,7 @@ REG_test_unit_02(lua_State *L){
 	
 	Quat_slerp(s,e,value,o);
 	
-	Quat_to_matrrix(o,h->quat_m);
+	//Quat_to_matrrix(o,h->quat_m);
 	base_updateMat4x4(h);
 	return 0;
 }
@@ -2120,14 +2120,14 @@ REG_change_attr(lua_State *L)
 		change = 1;
 	}
 
-	//设置look at target
-	if(!strcmp(attrKey,"setLookTarget"))
-	{
-		float x,y,z;
-		sscanf_s(str,"%f,%f,%f",&x,&y,&z);
-		setLookTarget((void*)ptr,x,y,z);
-		change = 1;
-	}
+	////设置look at target
+	//if(!strcmp(attrKey,"setLookTarget"))
+	//{
+	//	float x,y,z;
+	//	sscanf_s(str,"%f,%f,%f",&x,&y,&z);
+	//	setLookTarget((void*)ptr,x,y,z);
+	//	change = 1;
+	//}
 	
 	//显示日志
 	if(!strcmp(attrKey,"ex_showLog"))

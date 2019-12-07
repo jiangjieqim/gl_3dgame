@@ -2398,25 +2398,25 @@ ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
 #endif
 	}
 }
-
-void 
-setLookTarget(void* ptr,float x,float y,float z)
-{
-	struct HeadInfo* b = base_get(ptr);
-	b->lookat = 1;
-	b->target.x = x;
-	b->target.y = y;
-	b->target.z = z;
-	vec3Normalize(&b->target);
-	//printf("%f.%f,%f\n",x,y,z);
-
-	if(vec3IsZero(&b->target)){
-		printf("不能是0向量\n");
-		assert(0);
-	}
-	else
-		base_updateMat4x4(b);
-}
+//
+//void 
+//setLookTarget(void* ptr,float x,float y,float z)
+//{
+//	struct HeadInfo* b = base_get(ptr);
+//	b->lookat = 1;
+//	b->target.x = x;
+//	b->target.y = y;
+//	b->target.z = z;
+//	vec3Normalize(&b->target);
+//	//printf("%f.%f,%f\n",x,y,z);
+//
+//	if(vec3IsZero(&b->target)){
+//		printf("不能是0向量\n");
+//		assert(0);
+//	}
+//	else
+//		base_updateMat4x4(b);
+//}
 void
 ex_set_material(void* ptr,void* material){
 	struct HeadInfo*  base = base_get(ptr);

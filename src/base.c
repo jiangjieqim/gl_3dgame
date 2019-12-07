@@ -166,7 +166,7 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 	base->boxR = 1.0f;
 
 	//初始化四元数矩阵
-	mat4x4_identity(base->quat_m);
+	//mat4x4_identity(base->quat_m);
 
 	return base;
 }

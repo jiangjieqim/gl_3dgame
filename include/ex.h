@@ -411,7 +411,7 @@ void ex_ptr_remove(void* ptr);
 /*
  *设置对象的朝向目标
  */
-void setLookTarget(void* ptr,float x,float y,float z);
+//void setLookTarget(void* ptr,float x,float y,float z);
 
 
 /************************************************************************/
