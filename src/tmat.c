@@ -26,12 +26,13 @@ tmat_setFlatColor(struct GMaterial* ptr,float r,float g,float b)
 	ptr->_diffuseOutLineColor.z = b;
 	ptr->_diffuseOutLineColor.w = 1.0f;
 }
-void tmat_getShader(void* pvoid,char* _out,int _outBufferSize)
-{
-	struct GMaterial* _mat = pvoid;
-	memset(_out,0,_outBufferSize);
-	memcpy(_out,_mat->glslType,strlen(_mat->glslType));
-}
+//void tmat_getShader(void* pvoid,char* _out,int _outBufferSize)
+//{
+//	struct GMaterial* _mat = pvoid;
+//	//memset(_out,0,_outBufferSize);
+//	//memcpy(_out,_mat->glslType,strlen(_mat->glslType));
+//	return _mat->glslType;
+//}
 
 //播放的时间戳
 static float playTime = 0;
@@ -453,6 +454,9 @@ void tmat_dispose(void* pvoid)
 	if(mat->shaderVars){
 		tl_free(mat->shaderVars);
 	}
+	if(mat->glslType){
+		tl_free(mat->glslType);
+	}
 
 	tl_free((void*)mat);
 }
@@ -477,8 +481,16 @@ f_assignShader(struct GMaterial* tmat,const char* glslType)
 #ifdef _DEBUG_
 	printf("设置着色器%s\n",glslType);
 #endif
-	memset(tmat->glslType,0,G_BUFFER_32_SIZE);
+	//memset(tmat->glslType,0,G_BUFFER_32_SIZE);
+	//memcpy(tmat->glslType,glslType,strlen(glslType));
+	
+	if(tmat->glslType){
+		tl_free(tmat->glslType);
+	}
+	tmat->glslType = (char*)tl_malloc(strlen(glslType)+1);
+	memset(tmat->glslType,0,strlen(glslType)+1);
 	memcpy(tmat->glslType,glslType,strlen(glslType));
+	//printf("[%s]\n",tmat->glslType);
 }
 
 void tmat_setID(void* m,int id){

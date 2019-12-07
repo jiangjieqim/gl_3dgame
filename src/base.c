@@ -467,7 +467,7 @@ base_cullface(int flag)
 */
 void base_renderByMaterial(struct HeadInfo* base)
 {	
-	char _shaderName[G_BUFFER_32_SIZE];
+	//char _shaderName[G_BUFFER_32_SIZE];
 
 	int mode = base_get_ploygonLineMode(base->flags);
 
@@ -476,12 +476,12 @@ void base_renderByMaterial(struct HeadInfo* base)
 	if(!base->tmat)//没有材质就返回
 		return;
 
-	tmat_getShader(base->tmat,_shaderName,G_BUFFER_32_SIZE);
+	//tmat_getShader(base->tmat,_shaderName,G_BUFFER_32_SIZE);
 	
 	glLineWidth(1.0f);
 
 	//指定着色器及贴图,传递坐标(该坐标传递到着色器矩阵中)
-	tmat_render(base->tmat,_shaderName,base->m);
+	tmat_render(base->tmat,base->tmat->glslType,base->m);
 
 	//设置渲染模式
 	glPolygonMode (GL_FRONT_AND_BACK,mode);

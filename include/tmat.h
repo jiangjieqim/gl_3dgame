@@ -20,7 +20,7 @@ typedef struct GMaterial{
 	/*
 	*	默认的着色器类型
 	*/
-	char glslType[G_BUFFER_32_SIZE];
+	char* glslType;//[G_BUFFER_32_SIZE];
 
 	/*
 	*	当前的着色器类型
@@ -98,7 +98,7 @@ void tmat_render(void* mat,const char* shader,Matrix44f M);
 /*
 	获取当前材质着色器名(这是一个材质默认的一个shader)
 */
-void tmat_getShader(void* mat,char* _out,int _outBufferSize);
+//void tmat_getShader(void* mat,char* _out,int _outBufferSize);
 
 /*
 	 绘制一个Sprite(基于正交视图的多边形),非VBO模式
