@@ -111,7 +111,7 @@ objVBO_renderNode(
 		//if(!strcmp(base->name,"obj2")){
 		//	glDrawElements(GL_LINE_STRIP,vbo->renderVertCount,_enum , 0);
 		//}else{
-			glDrawElements(GL_TRIANGLES,vbo->renderVertCount,_enum , 0);
+			glDrawElements(tmat->rendermode,vbo->renderVertCount,_enum , 0);
 		//}
 	}
 

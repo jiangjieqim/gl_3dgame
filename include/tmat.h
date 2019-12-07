@@ -58,6 +58,10 @@ typedef struct GMaterial{
 	
 	//shader的参数引用(九宫格引用)
 	void* params;
+
+	//渲染模式		GL_TRIANGLES GL_LINE_STRIP
+	//				GL_POINTS GL_LINES
+	GLbyte rendermode;
 	
 }GMaterial;
 

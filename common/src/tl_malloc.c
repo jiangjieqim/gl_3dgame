@@ -59,10 +59,10 @@ f_getInfo(int data,int parm){
 	if(node->bUse == EMemoryDisable){
 		g_disable_cnt++;
 		g_disable_bytes+=node->length;
-		//log_color(0xffff00,"0x%x \t%d bytes\n",node,node->length);
+		log_color(0xffff00,"0x%x \t%d bytes \t未使用\n",node,node->length);
 	}
 	else{
-		//log_color(0x00ff00,"0x%x \t%d bytes\n",node,node->length);
+		log_color(0x00ff00,"0x%x \t%d bytes \t使用中\n",node,node->length);
 	}
 	return 1;
 }

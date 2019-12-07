@@ -515,6 +515,8 @@ f_initMaterial(struct GMaterial* tmat){
 
 	//ÉèÖÃflatÑÕÉ«
 	tmat_setFlatColor(tmat,0.43,0.51,0.96);
+
+	tmat->rendermode = GL_TRIANGLES;
 }
 
 void* 
