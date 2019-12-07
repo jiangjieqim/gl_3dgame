@@ -81,7 +81,7 @@ struct Sprite{
 	//局部坐标,相对于父对象,如果是在stage上就为0,0
 	int localx,localy;
 	//九宫格引用
-	struct Grid9Node* grid9;
+	//struct Grid9Node* grid9;
 };
 
 //设置sprite的z轴的值

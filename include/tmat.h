@@ -56,6 +56,8 @@ typedef struct GMaterial{
 	//存储一些着色器中需要使用的变量
 	void* shaderVars;
 	
+	//shader的参数引用(九宫格引用)
+	void* params;
 	
 }GMaterial;
 
@@ -91,7 +93,7 @@ void tmat_dispose(void* mat);
 /*
 	切换为当前的材质
 */
-void tmat_render(void* mat,const char* shader,Matrix44f M,void* param);  
+void tmat_render(void* mat,const char* shader,Matrix44f M);  
 
 /*
 	获取当前材质着色器名(这是一个材质默认的一个shader)

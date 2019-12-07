@@ -481,7 +481,7 @@ void base_renderByMaterial(struct HeadInfo* base)
 	glLineWidth(1.0f);
 
 	//指定着色器及贴图,传递坐标(该坐标传递到着色器矩阵中)
-	tmat_render(base->tmat,_shaderName,base->m,0);
+	tmat_render(base->tmat,_shaderName,base->m);
 
 	//设置渲染模式
 	glPolygonMode (GL_FRONT_AND_BACK,mode);
@@ -525,7 +525,7 @@ static void f_outlineByGLSL(struct HeadInfo* base,float r,float g,float b)
 	//===================================================
 
 	//指定着色器及贴图,传递坐标(该坐标传递到着色器矩阵中)
-	tmat_render(base->tmat,"line",base->m,0);
+	tmat_render(base->tmat,"line",base->m);
 
 	//设置渲染模式
 	glPolygonMode (GL_FRONT_AND_BACK,GL_FILL);

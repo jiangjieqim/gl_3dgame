@@ -347,7 +347,7 @@ tmat_getTextureByIndex(struct GMaterial* pmat,int index)
 	struct GMaterial* mat:	材质引用
 	float x,float y,float z	坐标
 */
-void tmat_render(void* pvoid,const char* shader,Matrix44f M,void* param)
+void tmat_render(void* pvoid,const char* shader,Matrix44f M)
 	 //float x,float y,float z,float scale,
 {
 	GLuint program3D;
@@ -373,7 +373,7 @@ void tmat_render(void* pvoid,const char* shader,Matrix44f M,void* param)
 	}
 
 	if(material->updateVarCallback){
-		material->updateVarCallback(material,M,param);
+		material->updateVarCallback(material,M,material->params);
 	}else{
 		program3D = ex_getProgrom3D(shader);//mat->glslType
 
@@ -443,7 +443,9 @@ void tmat_disposeTextureByIndex(struct GMaterial* mat,int index)
 void tmat_dispose(void* pvoid)
 {
 	struct GMaterial* mat = pvoid;
-
+	if (mat->params){
+		tl_free(mat->params);
+	}
 	log_color(0,"销毁材质%0x\n",pvoid);
 
 	f_deleteGPU_texture(mat);	
@@ -590,7 +592,7 @@ tmat_create_rgba(const char* glslType,GLint width,GLint height,GLenum rgbaType){
 
 void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f mat4x4,GLfloat* vertexs,int vertLen,int format,int mode)
 {
-	tmat_render(_material,shader,mat4x4,0);	
+	tmat_render(_material,shader,mat4x4);	
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);//剔除前面
 	glPolygonMode (GL_BACK,mode);

@@ -817,8 +817,7 @@ renderSprite(struct Sprite* p)
 				material,
 				p->mat4x4,
 				base->flags,
-				0,
-				p->grid9);
+				0);
 
 		}else{
 			GMaterial* __mat = (GMaterial*)material;
@@ -1207,9 +1206,9 @@ void sprite_dipose(struct Sprite* spr){
 		base_dispose(spr->base);
 		spr->base = 0;
 	}
-	if (spr->grid9){
-		tl_free(spr->grid9);
-	}
+	//if (spr->grid9){
+	//	tl_free(spr->grid9);
+	//}
 
 	if(spr->vbo)
 	{
@@ -1413,19 +1412,26 @@ void
 sprite_set_grid9(void* ptr,float left,float right,float top,float bottom,float w,float h){
 	struct Grid9Node* grid9 = 0;
 	struct Sprite *_sprite = (struct Sprite *)ptr;
-	if(!_sprite->grid9){
-		_sprite->grid9 = (struct Grid9Node*)tl_malloc(sizeof(struct Grid9Node));
-		memset(_sprite->grid9,0,sizeof(struct Grid9Node));
+	
+	struct GMaterial* tmat = getMaterial(_sprite);
+	if(tmat){
+		if(!tmat->params){
+			tmat->params = tl_malloc(sizeof(struct Grid9Node));
+			memset(tmat->params,0,sizeof(struct Grid9Node));
+		}
+		grid9 = tmat->params;
+
+		grid9->left = left;
+		grid9->right = right;
+		grid9->top = top;
+		grid9->bottom = bottom;
+		grid9->width = w;
+		grid9->height = h;
+		grid9->sx = _sprite->mWidth / w;
+		grid9->sy = _sprite->mHeight / h;
+	}else{
+		assert(0);
 	}
-	grid9 = _sprite->grid9;
-	grid9->left = left;
-	grid9->right = right;
-	grid9->top = top;
-	grid9->bottom = bottom;
-	grid9->width = w;
-	grid9->height = h;
-	grid9->sx = _sprite->mWidth / w;
-	grid9->sy = _sprite->mHeight / h;
 }
 
 

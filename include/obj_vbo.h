@@ -73,7 +73,6 @@ void objVBO_renderNode(
 						struct GMaterial* tmat,
 						Matrix44f m,//当前模型的矩阵
 						int flag,
-						void (*renderCallBack)(int,struct ObjVBO*),
-						void* grid9);
+						void (*renderCallBack)(int,struct ObjVBO*));
 
 #endif
