@@ -738,7 +738,7 @@ load_md2(const char* name,const char* model,float x,float y,float z,float scale)
 	base->scale = scale;
 
 	frame =	md2parse_getFrame(md2->parseHandle,0);	// &(md2->parseHandle->pframe[0]);//取第1帧为射线拾取的索引
-	tlgl_createRay(&base->rayVertexData,frame->vertices,frame->vertCount);
+	//tlgl_createRay(&base->rayVertexData,frame->vertices,frame->vertCount);
 
 	printf("创建md2 [%s],每%ld毫秒切换一帧, 坐标x:%.3f,y:%.3f,z:%.3f 当前动作:%s\n",name,md2->frameAnim->fpsInterval,x,y,z,md2->frameAnim->curAnim);
 
@@ -1545,8 +1545,8 @@ load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
 	//_base->parent = md5;
 	md5->base = _base;
 	
-	_base->rayVertexData.vertex = 0;
-	_base->rayVertexData.vertLen = 0;
+	//_base->rayVertexData.vertex = 0;
+	//_base->rayVertexData.vertLen = 0;
 
 	_base->scale = scale;//缩放值
 
@@ -1557,9 +1557,10 @@ load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
 
 	/*base_boxStaticVert_init(_base);
 	tl_createAbsBoundBox(_base->boundLength,_base->boundHeight,_base->boundWidth,_base->staticBoxVert);*/
-	_base->rayVertexData.vertLen = BOX_SIZE;
-	_base->rayVertexData.vertex = tl_malloc(sizeof(float)*_base->rayVertexData.vertLen);
-	tlgl_setAbsBoundBox(1,1,1,_base->rayVertexData.vertex);//默认一个半径0.5的立方体
+	
+	//_base->rayVertexData.vertLen = BOX_SIZE;
+	//_base->rayVertexData.vertex = tl_malloc(sizeof(float)*_base->rayVertexData.vertLen);
+	//tlgl_setAbsBoundBox(1,1,1,_base->rayVertexData.vertex);//默认一个半径0.5的立方体
 	
 	//======================================================================================
 	//加载md5模型
@@ -1625,7 +1626,7 @@ load_obj(const char* name,const char* mesh_s,
 
 	f_end3d_loadMesh(ent,mesh_s);//加载解析数据
 
-	tlgl_createRay(&base->rayVertexData,ent->vertex,ent->vertexCount);
+	//tlgl_createRay(&base->rayVertexData,ent->vertex,ent->vertexCount);
 
 	base_updateMat4x4(base);
 

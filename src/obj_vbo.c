@@ -151,7 +151,7 @@ objVBO_render(int data,int parms)
 		objVBO_renderNode(
 			(struct ObjVBO*)data,
 			(struct GMaterial*)base->tmat,
-			base->m,
+			*base->m,
 			base->flags,
 			ptr->renderCallBack);
 	}else{

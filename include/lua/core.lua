@@ -505,7 +505,8 @@ end
 
 --设置ray拾取半径
 function func_set_rayRadius(o,value)
-	change_attr(o,"set_rayRadius",tostring(value));
+    func_error("未实现func_set_rayRadius");
+	--change_attr(o,"set_rayRadius",tostring(value));
 end
 --设置坐标
 function func_set_x(o,x)

@@ -13,9 +13,7 @@ typedef struct HeadInfo{
 	int curType;
 	
 	/*名字,可用于查询,作为唯一实例*/
-	char* name;//[G_BUFFER_32_SIZE];
-	/*文件后缀*/
-	//char suffix[G_BUFFER_16_SIZE];
+	char* name;
 
 	/*坐标*/
 	double x,y,z;
@@ -30,109 +28,31 @@ typedef struct HeadInfo{
 	*/
 	struct GMaterial* tmat;
 
-	//char curShader[G_BUFFER_32_SIZE];//当前使用的shader
-
-	///*
-	//	vbo引用
-	//*/
-	//void* vboPtr;
-
-	/*
-	*	动态包围盒顶点数组引用
-	*/
-	//float* boxVertPtr;
-
-	///*
-	//*	静态包围盒顶点数组,用来做射线拾取的
-	//*/
-	//float* staticBoxVert;
-
-	/*
-		静态顶点数据
-	*/
-	struct VertexData rayVertexData;
-
 	/*
 		标识位,标识各种状态
 	*/
 	int flags;
-	
-	/*
-	*	动作管理器
-	*/
-	//struct FrameAnim* frameAnim;
-
-	///*
-	//*	渲染回调
-	//*/
-	//void (*render)(struct HeadInfo*);
 
 	/*
-	*	被渲染数据(顶点数据)
+	*	被渲染数据(顶点数据) 非VBO数据
 	*/
 	struct VertexData rData;
-
-	/*
-		渲染节点回调接口,此接口做向外扩展用
-	*/
-	//void (*renderCallBack)(void* ptr);
 	
 	/*
 		输入的变换矩阵
 	*/
-	Matrix44f m;
-	
-	/************************************************************************/
-	/* 四元数矩阵															*/
-	/************************************************************************/
-	//Matrix44f quat_m;
-	//struct Vec3 target;
-	//int lookat;
-	
-	//做计时器存储的变量
-	//long time;
-	
-	/*单个对象的关键帧帧率*/
-	//int fpsInterval;
-	
-
-	/*
-	自定义设置当前的关键帧索引,0开始										
-	-1标示没有使用的状态,0代表使用指定的关键帧,初始化的时候设置成-1
-	*/
-	//int custframe;
-	
-	/*
-		lua拾取回调
-	*/
-	//char* luaPickCallBack;
-	/*
-		拾取框颜色
-	*/
-	//float boxR,boxG,boxB;
-	/*是否是一个Node*结构*/
-	//GLbyte isNode;
-	
-	/*
-		所属的父对象
-	*/
-	//void* parent;
-	
-	//void* _ry_tp;
+	Matrix44f* m;
 
 	//矩阵发生变化的时候设置为1
 	GLbyte changed;
 	/*
-	当前是2dcam的时候就是2dcam(sprite)
-	用接口sprite_set2dCam来设置
-	当前的2d camera引用,该引用来确定该sprite在哪个2d camera矩阵空间,
-	 
-	当前是3d物体的时候就是3dCam(md2,obj...)
+		当前是2dcam的时候就是2dcam(sprite)
+		用接口sprite_set2dCam来设置
+		当前的2d camera引用,该引用来确定该sprite在哪个2d camera矩阵空间,
+		 
+		当前是3d物体的时候就是3dCam(md2,obj...)
 	*/
 	void* cam;
-
-
-	//void* _move_tp;//tween pointer
 }HeadInfo;
 
 /*

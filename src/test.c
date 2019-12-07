@@ -2072,16 +2072,16 @@ REG_change_attr(lua_State *L)
 		
 	}
 	//设置md5的碰撞半径
-	if(!strcmp(attrKey,"set_rayRadius"))
-	{
-		float radius = toFloat(str);
-		if(base->curType == TYPE_MD5_FILE){
-			float v = radius * 2;
-			tlgl_setAbsBoundBox(v,v,v,base->rayVertexData.vertex);
-		}else{
-			log_code(ERROR_PTR_TYPE_FAIL);
-		}
-	}
+	//if(!strcmp(attrKey,"set_rayRadius"))
+	//{
+	//	float radius = toFloat(str);
+	//	if(base->curType == TYPE_MD5_FILE){
+	//		float v = radius * 2;
+	//		tlgl_setAbsBoundBox(v,v,v,base->rayVertexData.vertex);
+	//	}else{
+	//		log_code(ERROR_PTR_TYPE_FAIL);
+	//	}
+	//}
 	/************************************************************************/
 	/* 设置静态盒子颜色                                                                     */
 	/************************************************************************/
@@ -2248,8 +2248,14 @@ REG_change_attr(lua_State *L)
 		int frameCount = 0;
 		if(str2)
 			sscanf_s(str2,"%d",&frameCount);
-
-		node->ptrCollide=collide_load(str,frameCount);//"\\resource\\obj\\"..objName..".obj"
+		//if(base->curType)
+		//log_color(0,"collide_load设置base->curType=%d\n",base->curType);
+		if(base->curType == TYPE_OBJ_VBO_FILE){
+			node->ptrCollide=collide_load(str,frameCount);//"\\resource\\obj\\"..objName..".obj"
+		}else{
+			log_color(0xff0000,"collide_load未实现类型%d\n",base->curType);
+			assert(0);
+		}
 	}
 	//if(change)
 	//	ex_refresh3dModelView();

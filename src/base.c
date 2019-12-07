@@ -54,7 +54,7 @@ f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
 		//}
 		//生成包围盒数据,将数据填充到boxVert中,这里的顶点会自己变化
 		dataLength=tlgl_aabb(vertices,vertCount,boxVertPtr);
-		tlgl_drawColorLine(base->m,base->tmat,boxVertPtr,dataLength,
+		tlgl_drawColorLine(*base->m,base->tmat,boxVertPtr,dataLength,
 			BOX_R,0,0);
 	}
 }
@@ -69,7 +69,7 @@ base_realUpdateMat4x4(void* p){
 	}
 	base->changed = 0;
 
-	mat4x4_zero(base->m);
+	mat4x4_zero(*base->m);
 
 	//x,y,z坐标
 	mat4x4_identity(xyz);
@@ -93,7 +93,7 @@ base_realUpdateMat4x4(void* p){
 	mat4x4_identity(rz);
 	mat4x4_rotateZ(rz,base->rz);
 
-	mat4x4_mult(5,base->m,xyz,ry,rx,rz,scale);	//矩阵base->m = xyz * ry * rx * rz * scale
+	mat4x4_mult(5,*base->m,xyz,ry,rx,rz,scale);	//矩阵base->m = xyz * ry * rx * rz * scale
 }
 /*
 	当位置，缩放,旋转发生变化的时候更新矩阵
@@ -141,7 +141,7 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 	struct HeadInfo* base = (struct HeadInfo*)tl_malloc(sizeof(struct HeadInfo));
 	memset(base,0,sizeof(struct HeadInfo));
 	memset(&base->rData,0,sizeof(struct VertexData));
-	
+	base->m = (Matrix44f*)tl_malloc(sizeof(Matrix44f));
 	//base->changed = 1;//强制计算第一帧的矩阵
 
 	//创建事件监听句柄
@@ -208,10 +208,12 @@ f_deltw(struct HeadInfo* base){
 
 void base_dispose(struct HeadInfo* base){
 	f_deltw(base);
+	if(base->m){
+		tl_free(base->m);
+	}
 	if(base->tmat){
 		tmat_dispose(base->tmat);
 	}
-	base->tmat = NULL;
 
 	evt_dispose(base);
 
@@ -226,11 +228,11 @@ void base_dispose(struct HeadInfo* base){
 	//	base->staticBoxVert = NULL;
 	//}
 
-	//射线拾取盒子
-	if(base->rayVertexData.vertex!=NULL){
-		tl_free(base->rayVertexData.vertex);
-		base->rayVertexData.vertex=NULL;
-	}
+	////射线拾取盒子
+	//if(base->rayVertexData.vertex!=NULL){
+	//	tl_free(base->rayVertexData.vertex);
+	//	base->rayVertexData.vertex=NULL;
+	//}
 
 	////销毁动作管理器
 	//if(base->frameAnim){
@@ -251,22 +253,22 @@ void base_dispose(struct HeadInfo* base){
 /*
 	绘制静态包围盒,该包围盒是自定义长宽高的
 */
-static void 
-f_base_staticBox(struct HeadInfo* base){
-
-	struct VertexData* ray = &base->rayVertexData;
-	if(!getv(&base->flags,FLAGS_DRAW_RAY_COLLISION) || !ray->vertex || !ray->vertLen){
-		return;
-	}
-	tlgl_drawColorLine(base->m,base->tmat,ray->vertex,ray->vertLen,
-		BOX_R,0,0);
-}
+//static void 
+//f_base_staticBox(struct HeadInfo* base){
+//
+//	struct VertexData* ray = &base->rayVertexData;
+//	if(!getv(&base->flags,FLAGS_DRAW_RAY_COLLISION) || !ray->vertex || !ray->vertLen){
+//		return;
+//	}
+//	tlgl_drawColorLine(base->m,base->tmat,ray->vertex,ray->vertLen,
+//		BOX_R,0,0);
+//}
 
 void base_renderFill(struct HeadInfo* base){
 	struct VertexData* node=&base->rData;
 
 	//绘制静态包围盒
-	f_base_staticBox(base);
+	//f_base_staticBox(base);
 
 	if(!getv(&(base->flags),FLAGS_VISIBLE))
 	{
@@ -405,7 +407,7 @@ base_seachPick(struct LStackNode* s,struct Vec3* nearPoint,struct Vec3* farPoint
 		//=========================================
 		//base_get((void*)data,&__base);
 		base = base_get((void*)data);
-		vd = &base->rayVertexData;
+		vd = 0;//&base->rayVertexData;
 		if(base->curType == TYPE_OBJ_VBO_FILE){
 		//if(base->isNode){
 			struct Node* node = (struct Node*)data;
@@ -413,38 +415,39 @@ base_seachPick(struct LStackNode* s,struct Vec3* nearPoint,struct Vec3* farPoint
 				vd = collide_cur(node->ptrCollide);
 			}
 		}
+		if(vd){
+			tri = vd->vertex;
+			
+			if(tri && base){
+				int rayStat = getv(&base->flags,FLAGS_RAY);
+				if(rayStat){
 
-		tri = vd->vertex;
+					float newTri[BOX_SIZE];
+					memcpy(newTri,tri,vd->vertLen * sizeof(float));
 
-		if(tri && base){
-			int rayStat = getv(&base->flags,FLAGS_RAY);
-			if(rayStat){
+					if(vd->vertLen && base->scale!=1.0f)
+					{
+						int i;
 
-				float newTri[BOX_SIZE];
-				memcpy(newTri,tri,vd->vertLen * sizeof(float));
+						//对静态碰撞盒进行缩放
+						for( i = 0;i< vd->vertLen;i++)
+							newTri[i] *= base->scale;
 
-				if(vd->vertLen && base->scale!=1.0f)
-				{
-					int i;
+					}
 
-					//对静态碰撞盒进行缩放
-					for( i = 0;i< vd->vertLen;i++)
-						newTri[i] *= base->scale;
+					pos.x = base->x;
+					pos.y = base->y;
+					pos.z = base->z;
 
-				}
+					tl_pickTriangle(newTri,vd->vertLen,nearPoint,farPoint,&pos,pHit);
 
-				pos.x = base->x;
-				pos.y = base->y;
-				pos.z = base->z;
+					if(pHit->isHit && pHit->distance < maxDistance){
+						memset(pHit->name,0,G_BUFFER_32_SIZE);
+						memcpy(pHit->name,base->name,strlen(base->name));
+						maxDistance = pHit->distance;
 
-				tl_pickTriangle(newTri,vd->vertLen,nearPoint,farPoint,&pos,pHit);
-
-				if(pHit->isHit && pHit->distance < maxDistance){
-					memset(pHit->name,0,G_BUFFER_32_SIZE);
-					memcpy(pHit->name,base->name,strlen(base->name));
-					maxDistance = pHit->distance;
-
-					memcpy(last,pHit,sizeof(struct HitResultObject));
+						memcpy(last,pHit,sizeof(struct HitResultObject));
+					}
 				}
 			}
 		}
@@ -503,7 +506,7 @@ void base_renderByMaterial(struct HeadInfo* base)
 	glLineWidth(1.0f);
 
 	//指定着色器及贴图,传递坐标(该坐标传递到着色器矩阵中)
-	tmat_render(base->tmat,base->tmat->glslType,base->m);
+	tmat_render(base->tmat,base->tmat->glslType,*base->m);
 
 	//设置渲染模式
 	glPolygonMode (GL_FRONT_AND_BACK,mode);
@@ -547,7 +550,7 @@ static void f_outlineByGLSL(struct HeadInfo* base,float r,float g,float b)
 	//===================================================
 
 	//指定着色器及贴图,传递坐标(该坐标传递到着色器矩阵中)
-	tmat_render(base->tmat,"line",base->m);
+	tmat_render(base->tmat,"line",*base->m);
 
 	//设置渲染模式
 	glPolygonMode (GL_FRONT_AND_BACK,GL_FILL);

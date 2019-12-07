@@ -186,16 +186,23 @@ local function loadmd5(name)
 
 	setv(model,FLAGS_VISIBLE);
 	--func_set_x(model,x)
-	func_set_scale(model,0.02)--设置模型的缩放
+	--func_set_scale(model,0.02)--设置模型的缩放
 
 	--f_init(model)
 	ex_set_cam(model);
 	
 	func_changeFlags(model,FLAGS_ANIM_ADAPTIVE)			--设置固定的fps模式,另一种自适应的有BUG
-	func_set_ptr_fps(model,60);--设置fps
 	
-	change_attr(model, "setframe", 10);--设置当前的关键帧
 	
+	func_changeFlags(model,FLAGS_DRAW_RAY_COLLISION);
+	func_changeFlags(model,FLAGS_RAY);
+
+	func_set_ptr_fps(model,260);--设置fps
+	
+	--change_attr(model, "setframe", 10);--设置当前的关键帧
+	func_set_x(model,2);
+	--func_bind_collide(model);
+
 	return model
 end
 local function loadObj(model)
@@ -230,8 +237,8 @@ local function loadObj(model)
 end
 
 --loadmd2();
---loadmd5();
-loadObj();
+loadmd5();
+--loadObj();
 
 
 

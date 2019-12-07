@@ -1,4 +1,5 @@
 #include <string.h>
+#include <assert.h>
 
 #include "tools.h"
 #include "tl_malloc.h"
@@ -91,6 +92,9 @@ collide_load(const char* url,int frameCount)
 	else if(!strcmp(suffix,"md2"))
 	{
 		loadmd2(ptr,url,frameCount);
+	}else{
+		log_color(0xff0000,"未实现类型%s\n",url);
+		assert(0);
 	}
 	return ptr;
 }
