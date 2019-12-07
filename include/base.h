@@ -115,7 +115,7 @@ typedef struct HeadInfo{
 	*/
 	float boxR,boxG,boxB;
 	/*是否是一个Node*结构*/
-	int isNode;
+	//GLbyte isNode;
 	
 	/*
 		所属的父对象

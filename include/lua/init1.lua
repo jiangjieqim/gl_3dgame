@@ -138,6 +138,10 @@ local function loadbox()
 		--setv(obj2.m,FLAGS_REVERSE_FACE);
 		--setv(obj2.m,FLAGS_DISABLE_CULL_FACE);--Ë«ÃæäÖÈ¾
 		--setv(obj2.m,FLAGS_DRAW_PLOYGON_LINE);
+		func_bind_collide(obj2.m);
+		setv(obj2.m,FLAGS_DRAW_RAY_COLLISION);
+		setv(obj2.m,FLAGS_RAY);
+
 		
 		--]]
 		

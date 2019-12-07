@@ -6,7 +6,7 @@
 #include "str.h"
 #include "evt.h"
 #include "tween.h"
-
+#include "ex.h"
 #include "tlgl.h"
 #include "base.h"
 #include "node.h"
@@ -384,8 +384,8 @@ base_seachPick(struct LStackNode* s,struct Vec3* nearPoint,struct Vec3* farPoint
 		//base_get((void*)data,&__base);
 		base = base_get((void*)data);
 		vd = &base->rayVertexData;
-		//if(base->curType == TYPE_OBJ_VBO_FILE)
-		if(base->isNode){
+		if(base->curType == TYPE_OBJ_VBO_FILE){
+		//if(base->isNode){
 			struct Node* node = (struct Node*)data;
 			if(node->ptrCollide){
 				vd = collide_cur(node->ptrCollide);
@@ -631,7 +631,7 @@ struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMat
 	base_seachPick(renderList,&nearPoint,&farPoint,&last);
 
 	if(last.isHit && mRayPickCallBack!=NULL){
-		//printf("%s 交点:%.3f,%.3f,%.3f\n",last.name,last.x,last.y,last.z);
+		log_color(0,"%s 交点:%.3f,%.3f,%.3f\n",last.name,last.x,last.y,last.z);
 		mRayPickCallBack(&last);
 	}
 }

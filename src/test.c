@@ -2531,6 +2531,8 @@ f_init(int id,void* p,void* thisObj){
 		
 			//void* t= timelater_new(1000,0,0);
 			//timelater_remove(t);
+			// 
+			printf("headinfo = %d bytes \n",sizeof(struct HeadInfo));
 		}
 
 	}
