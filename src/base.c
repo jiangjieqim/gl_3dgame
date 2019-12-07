@@ -447,30 +447,20 @@ int base_get_ploygonLineMode(struct HeadInfo* base){
 //#define _RenderTest_
 
 GLboolean 
-base_cullface(struct HeadInfo* base){
+base_cullface(struct HeadInfo* base)
+{
 	int flag = base->flags;
-
 	if(getv(&flag,FLAGS_DISABLE_CULL_FACE)){
 		glDisable(GL_CULL_FACE);
 	}else{
 		//剔除多边形背面
 		glEnable(GL_CULL_FACE);//GL_FRONT	//GL_BACK
 		//前后面处理
-
 		glCullFace(getv(&flag,FLAGS_REVERSE_FACE) ? GL_BACK : GL_FRONT);
-
-		//glCullFace(f_check(base->curType) ? GL_FRONT : GL_BACK);
-
-		//glCullFace(GL_BACK);
-
-
-
 		return GL_TRUE;
 	}
-
 	return GL_FALSE;
 }
-
 
 /*
 	渲染一个带材质的模型

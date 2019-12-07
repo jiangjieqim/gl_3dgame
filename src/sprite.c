@@ -816,20 +816,15 @@ renderSprite(struct Sprite* p)
 		}
 		if(p->useVBO){
 			//渲染管线采用vbo模式
-			
-
-
-			//if(g_sprite_line){
-			//	objVBO_renderNode(getvbo(p),material,
-			//		"spritevbo1",
-			//		p->mat4x4,
-			//		GL_LINE,base,0,p->grid9);
-			//}else{
-			objVBO_renderNode(getvbo(p),material,
+			objVBO_renderNode(
+				getvbo(p),
+				material,
 				shaderName,
 				p->mat4x4,
-				base_get_ploygonLineMode(base),base,0,p->grid9);
-			//}
+				base_get_ploygonLineMode(base),
+				base,
+				0,
+				p->grid9);
 
 		}else
 			//采用固定管线方式

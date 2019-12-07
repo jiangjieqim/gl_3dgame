@@ -52,9 +52,15 @@ vbo_dispose(struct ObjVBO* p)
 /* 这里只渲染一个VBO节点                                                          */
 /************************************************************************/
 void 
-objVBO_renderNode(struct ObjVBO* vbo,struct GMaterial* tmat,
-				  const char* _shaderName,Matrix44f m,int mode,struct HeadInfo* base,
-				  void (*renderCallBack)(int,struct ObjVBO*),void* grid9)
+objVBO_renderNode(
+				struct ObjVBO* vbo,
+				struct GMaterial* tmat,
+				const char* _shaderName,
+				Matrix44f m,
+				int mode,
+				struct HeadInfo* base,
+				void (*renderCallBack)(int,struct ObjVBO*),
+				void* grid9)
 {
 	GLboolean cull;
 	
@@ -145,7 +151,11 @@ objVBO_render(int data,int parms)
 		struct Node* ptr = (struct Node*)parms;
 		struct HeadInfo* base =	base_get(ptr);
 		
-		objVBO_renderNode((struct ObjVBO*)data,(struct GMaterial*)base->tmat,base->tmat->curGlslType,base->m,base_get_ploygonLineMode(base),
+		objVBO_renderNode(
+			(struct ObjVBO*)data,
+			(struct GMaterial*)base->tmat
+			,base->tmat->curGlslType,
+			base->m,base_get_ploygonLineMode(base),
 			base,
 			ptr->renderCallBack,0);
 	}else{

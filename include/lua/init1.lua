@@ -290,6 +290,14 @@ end
 local nskin = NSkin:new();
 evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
 nskin:load("\\resource\\rx.xml","gundi.png;checkbox.png;smallbtn.png");
+local function f_fps_timer(data)
+	print(data);
+	if(model) then
+		--model:set_rx(progress*PI);
+	end
+end
+local timer = timelater_new(10);
+evt_on(timer,EVENT_TIMER,f_fps_timer);
 
 
 

@@ -11,6 +11,7 @@ struct TimeLaterNode{
 	int delay;
 	int old;
 	//(*callBack)(void*);
+	int cur;//当前timer已经运行了的毫秒数
 	void (*callBack)(void*);
 	void* param;
 };
@@ -18,6 +19,7 @@ struct TimeLaterNode{
 void* timelater_new(int ms,void (*callBack)(void*),void* param){
 	struct TimeLaterNode* node = (struct TimeLaterNode*)tl_malloc(sizeof(struct TimeLaterNode));
 	node->delay = ms;
+	node->cur = 0;
 	node->callBack = callBack;
 	node->param = param;
 	node->old = 0;
@@ -41,13 +43,14 @@ void timelater_remove(void* timer){
 static void 
 callBack(int data,int param){
 	struct TimeLaterNode* node =(struct TimeLaterNode*)data;
+	node->cur+=(int)g_delayTime;
 	if(node->old+g_delayTime>node->delay){
 		//printf("old=%d\n",node->old);
 		node->old = 0;
 		if (node->callBack!=0){
 			node->callBack(node->param);
 		}
-		ex_lua_evt_dispatch_f(node,EVENT_TIMER,0);
+		ex_lua_evt_dispatch_f(node,EVENT_TIMER,node->cur);
 	}else{
 		node->old+=g_delayTime;
 	}
