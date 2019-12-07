@@ -28,7 +28,7 @@ local function f_loadObj(model)
 	--moduleUI_bind(obj)
 	--f_add_model(obj)
 
-	func_set_pick(obj,"f_pick");
+	--func_set_pick(obj,"f_pick");
 	func_set_x(obj,1);
 	--]]
 	return obj

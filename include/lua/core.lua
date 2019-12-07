@@ -477,11 +477,13 @@ end
 
 --绑定拾取回调
 function func_set_pick(o,func)
-	change_attr(o,"set_pickBind",func);
+    func_error("set_pickBind未实现");
+	--change_attr(o,"set_pickBind",func);
 end
 --设置碰撞盒子颜色
 function func_set_box_color(o,r,g,b)
-	change_attr(o,"set_box_color",string.format("%f,%f,%f",r,g,b))
+    func_error("set_box_color未实现");
+	--change_attr(o,"set_box_color",string.format("%f,%f,%f",r,g,b))
 end
 function func_rotate(o,key,value)
     change_attr(o,key,tostring(value));

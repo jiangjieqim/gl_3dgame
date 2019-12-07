@@ -231,6 +231,7 @@ local function f_endCall(data)
     --print(data);
 end
 function Unit:move(x,y,z,usetime)
+	--evt_off(self.m,EVENT_ENGINE_BASE_END,f_endCall);
 	evt_once(self.m,EVENT_ENGINE_BASE_END,f_endCall);
 	func_move(self.m,usetime,x,y,z);
 end

@@ -144,7 +144,7 @@ local function loadbox()
 
 		
 		--]]
-	obj2:move(0,2,0,2000);
+	--obj2:move(0,2,0,2000);
 		
 	--[[
 	local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
@@ -324,6 +324,15 @@ end
 local function f_cpmlete(skin)
 	local sc = skin_find(skin,"sc");
 	sc:bindCallback(f_rx_handle);
+	
+	local tbtn = skin_find(skin,"tbtn");
+	tbtn:bind_click(function ()
+			if(model) then
+				model:set_pos(0,0,0);
+				model:move(0,2,0,2000);
+			end
+		end
+	);
 end
 local nskin = NSkin:new();
 evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);

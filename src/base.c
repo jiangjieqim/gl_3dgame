@@ -54,7 +54,8 @@ f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
 	//生成包围盒数据,将数据填充到base->boxVert中,这里的顶点会自己变化
 	dataLength=tlgl_aabb(vertices,vertCount,base->boxVertPtr);
 
-	tlgl_drawColorLine(base->m,base->tmat,base->boxVertPtr,dataLength,base->boxR,base->boxG,base->boxB);
+	tlgl_drawColorLine(base->m,base->tmat,base->boxVertPtr,dataLength,
+		BOX_R,0,0);
 }
 
 void
@@ -164,26 +165,26 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 	//base->custframe = -1;
 
 	//设置默认的拾取框颜色
-	base->boxR = 1.0f;
+	//base->boxR = 1.0f;
 
 	//初始化四元数矩阵
 	//mat4x4_identity(base->quat_m);
 
 	return base;
 }
-
-void base_setLuaPick(struct HeadInfo* base,const char* luaFunctionName){
-	char* str;
-	int len;
-	if(base->luaPickCallBack){
-		tl_free(base->luaPickCallBack);
-	}
-	len = strlen(luaFunctionName) + 1;
-	str = tl_malloc(len);
-	memset(str,0,len);
-	memcpy(str,luaFunctionName,len - 1);
-	base->luaPickCallBack = str;
-}
+//
+//void base_setLuaPick(struct HeadInfo* base,const char* luaFunctionName){
+//	char* str;
+//	int len;
+//	if(base->luaPickCallBack){
+//		tl_free(base->luaPickCallBack);
+//	}
+//	len = strlen(luaFunctionName) + 1;
+//	str = tl_malloc(len);
+//	memset(str,0,len);
+//	memcpy(str,luaFunctionName,len - 1);
+//	base->luaPickCallBack = str;
+//}
 
 void base_dispose(struct HeadInfo* base){
 
@@ -217,10 +218,10 @@ void base_dispose(struct HeadInfo* base){
 	//	base->frameAnim = NULL;
 	//}
 
-	//清理Lua回调
-	if(base->luaPickCallBack){
-		tl_free(base->luaPickCallBack);
-	}
+	////清理Lua回调
+	//if(base->luaPickCallBack){
+	//	tl_free(base->luaPickCallBack);
+	//}
 
 	if(base->name){
 		tl_free(base->name);
@@ -237,7 +238,8 @@ f_base_staticBox(struct HeadInfo* base){
 	if(!getv(&base->flags,FLAGS_DRAW_RAY_COLLISION) || !ray->vertex || !ray->vertLen){
 		return;
 	}
-	tlgl_drawColorLine(base->m,base->tmat,ray->vertex,ray->vertLen,base->boxR,base->boxG,base->boxB);
+	tlgl_drawColorLine(base->m,base->tmat,ray->vertex,ray->vertLen,
+		BOX_R,0,0);
 }
 
 void base_renderFill(struct HeadInfo* base){
@@ -689,7 +691,7 @@ base_move(HeadInfo* bp,int ms,
 		bp->_move_tp = 0;
 	}
 	bp->_move_tp=tween_to(bp,ms,endCallBack,updateCallBack,
-		6,
+		6,//参数个数
 		&(bp->x),x,
 		&(bp->y),y,
 		&(bp->z),z

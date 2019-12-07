@@ -2085,25 +2085,24 @@ REG_change_attr(lua_State *L)
 	/************************************************************************/
 	/* 设置静态盒子颜色                                                                     */
 	/************************************************************************/
-	if(!strcmp(attrKey,"set_box_color")){
-		float r,g,b;
-		sscanf_s(str,"%f,%f,%f",&r,&g,&b);
-		//sprite_setpos((struct Sprite*)ptr,x,y);
-		base->boxR = r;
-		base->boxG = g;
-		base->boxB = b;
-	}
+	//if(!strcmp(attrKey,"set_box_color")){
+	//	float r,g,b;
+	//	sscanf_s(str,"%f,%f,%f",&r,&g,&b);
+	//	//sprite_setpos((struct Sprite*)ptr,x,y);
+	//	base->boxR = r;
+	//	base->boxG = g;
+	//	base->boxB = b;
+	//}
 
-	//绑定拾取回调
-	if(!strcmp(attrKey,"set_pickBind"))
-	{
-		if(!getv(&(base->flags),FLAGS_RAY)){
-			log_code(ERROR_FLAGS);
-			assert(0);
-		}
-
-		base_setLuaPick(base,str);
-	}
+	////绑定拾取回调
+	//if(!strcmp(attrKey,"set_pickBind"))
+	//{
+	//	if(!getv(&(base->flags),FLAGS_RAY)){
+	//		log_code(ERROR_FLAGS);
+	//		assert(0);
+	//	}
+	//	base_setLuaPick(base,str);
+	//}
 	//设置xyz
 	if(!strcmp(attrKey,"setModelPos"))
 	{
@@ -2900,7 +2899,6 @@ void main(int argc,char** argv){
 
 	//ex->loopCallBack = loopCallBack;
 
-	//evt_on(ex_getInstance(),EVENT_RAY_PICK,f_rayPickCallBack);
 
 	//加载角色模型配置	
 	//scene_loadAvtCfg(scene,"//resource//monster.xml");

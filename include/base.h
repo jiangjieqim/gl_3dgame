@@ -1,6 +1,8 @@
 #ifndef _BASE_H_
 #define _BASE_H_
 
+#define BOX_R 1.0 //碰撞盒的r值
+
 /*
 	基础结构体,用于ent3d和md2继承
 */
@@ -108,11 +110,11 @@ typedef struct HeadInfo{
 	/*
 		lua拾取回调
 	*/
-	char* luaPickCallBack;
+	//char* luaPickCallBack;
 	/*
 		拾取框颜色
 	*/
-	float boxR,boxG,boxB;
+	//float boxR,boxG,boxB;
 	/*是否是一个Node*结构*/
 	//GLbyte isNode;
 	
@@ -121,7 +123,7 @@ typedef struct HeadInfo{
 	*/
 	//void* parent;
 	void* _move_tp;
-	void* _ry_tp;
+	//void* _ry_tp;
 
 	//矩阵发生变化的时候设置为1
 	GLbyte changed;
@@ -240,7 +242,7 @@ void base_trace(struct HeadInfo* base,float x,float y,float z,float ms);
 /*
 	设置一个点击拾取的lua函数回调
 */
-void base_setLuaPick(struct HeadInfo* base,const char* luaFunctionName);
+//void base_setLuaPick(struct HeadInfo* base,const char* luaFunctionName);
 
 /************************************************************************/
 /* 设置后缀                                                    */

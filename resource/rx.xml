@@ -1,2 +1,3 @@
 <ui name="1" type="NPanel" drag="1" center="0" width="128" height="64"/>
 <ui name="sc" type="NScrollBar" x="0" y="0" parent="1"/>
+<ui name="tbtn" type="NButton" x="0" y="20" w="30" h="20" url="smallbtn.png" label="test" parent="1"/>
