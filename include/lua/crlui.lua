@@ -213,7 +213,7 @@ function CrlUI:bind(o)
     end
 
     self.o = o;
-    local str = string.format("%#x,%s,%s", tonumber(o), func_get_name(o), func_get_suffix(o))
+    local str = string.format("%#x,%s", tonumber(o), func_get_name(o))
     ftext_reset(self.nameTf, str);
     --    self.stat = not self.stat;
     --    print(self.stat);

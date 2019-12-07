@@ -124,15 +124,15 @@ base_set_scale(void* p,float scale){
 	struct HeadInfo* b = (struct HeadInfo*)p;
 	b->scale = scale;
 }
-/************************************************************************/
-/* 设置后缀                                                    */
-/************************************************************************/
-void base_set_suffix(struct HeadInfo* base,const char* str){
-	int pos = str_pos(str,".",1);
-	int n = strlen(".");
-	tl_strsub(str,base->suffix,pos + n,strlen(str) - n);
-	//printf("[%s]\n",base->suffix);
-}
+///************************************************************************/
+///* 设置后缀                                                    */
+///************************************************************************/
+//void base_set_suffix(struct HeadInfo* base,const char* str){
+//	int pos = str_pos(str,".",1);
+//	int n = strlen(".");
+//	tl_strsub(str,base->suffix,pos + n,strlen(str) - n);
+//	//printf("[%s]\n",base->suffix);
+//}
 
 struct HeadInfo* base_create(int curType,const char* name,float x,float y,float z)
 {

@@ -1707,7 +1707,7 @@ vbo_md2Load(const char* name,const char* url)
 	
 	int dataType = OBJ_UV_VERTEX_NORMAL;//uv,顶点,法线
 	node = node_create(name);
-	base_set_suffix(node->base,url);
+	//base_set_suffix(node->base,url);
 
 	node->ptrVBO = objVBO_create(name,dataType);
 	_objStr=tl_loadfile((char*)url,&fileSize);
@@ -1753,7 +1753,7 @@ vbo_loadObj3d(char* name,const char* url)
 	_objStr=tl_loadfile(url,0);
 	
 	//设置后缀
-	base_set_suffix(node->base,url);
+	//base_set_suffix(node->base,url);
 
 	//数据的组织方式
 	parseType =	OBJ_UV_VERTEX_NORMAL;

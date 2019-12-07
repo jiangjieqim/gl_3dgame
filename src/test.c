@@ -1385,12 +1385,12 @@ REG_get_attr(lua_State *L)
 		return 3;
 	}
 
-	if(!strcmp(attrKey,"suffix"))
-	{
-		//获取文件后缀
-		lua_pushstring(L,base->suffix);
-		return 1;
-	}
+	//if(!strcmp(attrKey,"suffix"))
+	//{
+	//	//获取文件后缀
+	//	lua_pushstring(L,base->suffix);
+	//	return 1;
+	//}
 	if(!strcmp(attrKey,"campos"))
 	{
 		void* c = ex_getIns()->_3dcam;

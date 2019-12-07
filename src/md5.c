@@ -1047,7 +1047,7 @@ void md5_loadMesh(struct MD5* p,const char* path){
 		
 		//tl_typeStr(FILE_FORMAT_STR,suffix);
 
-	base_set_suffix((struct HeadInfo*)p->base,path);
+	//base_set_suffix((struct HeadInfo*)p->base,path);
 
 	//=========´´½¨mesh
 	_md5MeshData=tl_loadfile(path,&length);

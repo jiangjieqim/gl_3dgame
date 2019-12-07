@@ -13,7 +13,7 @@ typedef struct HeadInfo{
 	/*名字,可用于查询,作为唯一实例*/
 	char* name;//[G_BUFFER_32_SIZE];
 	/*文件后缀*/
-	char suffix[G_BUFFER_16_SIZE];
+	//char suffix[G_BUFFER_16_SIZE];
 
 	/*坐标*/
 	double x,y,z;
@@ -245,7 +245,7 @@ void base_setLuaPick(struct HeadInfo* base,const char* luaFunctionName);
 /************************************************************************/
 /* 设置后缀                                                    */
 /************************************************************************/
-void base_set_suffix(struct HeadInfo* base,const char* str);
+//void base_set_suffix(struct HeadInfo* base,const char* str);
 /*
 	双面绘制
 */

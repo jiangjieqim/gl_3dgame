@@ -532,10 +532,10 @@ function func_get_name(o)
 	return get_attr(o,"get_name")
 end
 
---获取对象的后缀类型字符串
-function func_get_suffix(o)
-	return get_attr(o,"suffix")
-end
+----获取对象的后缀类型字符串
+--function func_get_suffix(o)
+--	return get_attr(o,"suffix")
+--end
 
 --加载一个固定管线模型数据md2,obj
 function func_fixed_load(url,scale,texpath)
