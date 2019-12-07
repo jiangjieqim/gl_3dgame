@@ -157,13 +157,13 @@ f_pa1rse_key_value(const char*str,char*key,char*v){
 void onSpecialKeys(int key, int x, int y) {
 	scene_specialKeys(key,x,y);
 }
-static void 
-playCallBack(void* data){
-	struct HeadInfo* _pObj = (struct HeadInfo*)data;
-	frame_set(_pObj->frameAnim,"stand");
-	//base_playOnce(_pObj->frameAnim,"stand");
-	//printf("处理完成 %s 设置动作 %ld\n",_pObj->name,get_longTime());
-}
+//static void 
+//playCallBack(void* data){
+//	struct HeadInfo* _pObj = (struct HeadInfo*)data;
+//	frame_set(_pObj->frameAnim,"stand");
+//	//base_playOnce(_pObj->frameAnim,"stand");
+//	//printf("处理完成 %s 设置动作 %ld\n",_pObj->name,get_longTime());
+//}
 
 /*
 *	鼠标2D转3D

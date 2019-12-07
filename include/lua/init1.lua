@@ -165,6 +165,7 @@ local function loadmd2()
 	unit_split_anim(obj2);
 end
 
+--loadmd2();
 
 
 

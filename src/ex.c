@@ -52,6 +52,11 @@ struct MD2_Object
 	*/
 	//struct MD2_ParseObj* parseHandle;
 	void* parseHandle;
+
+	/*
+	*	动作管理器
+	*/
+	struct FrameAnim* frameAnim;
 };
 
 struct ClickInfo{
@@ -254,7 +259,7 @@ f_get_fps(){
 static void 
 md2_render(struct MD2_Object* _md2){
 
-	struct FrameAnim* frameAnim = _md2->base->frameAnim;
+	struct FrameAnim* frameAnim = _md2->frameAnim;
 	struct HeadInfo* base =(struct HeadInfo*)_md2->base;
 	struct MD2_Frame* frame;
 	struct VertexData* p;
@@ -458,8 +463,8 @@ md2_load(struct MD2_Object* _md2,const char* str,int len,const char* name)
 	base = _md2->base;
 	base->parent = _md2;
 	//关键帧管理器
-	base->frameAnim = (struct FrameAnim*)tl_malloc(sizeof(struct FrameAnim));
-	frameAnim = base->frameAnim;
+	_md2->frameAnim = (struct FrameAnim*)tl_malloc(sizeof(struct FrameAnim));
+	frameAnim = _md2->frameAnim;
 	memset(frameAnim,0,sizeof(struct FrameAnim));
 
 	frameAnim->frameStart = 0;
@@ -735,7 +740,7 @@ load_md2(const char* name,const char* model,float x,float y,float z,float scale)
 	frame =	md2parse_getFrame(md2->parseHandle,0);	// &(md2->parseHandle->pframe[0]);//取第1帧为射线拾取的索引
 	tlgl_createRay(&base->rayVertexData,frame->vertices,frame->vertCount);
 
-	printf("创建md2 [%s],每%ld毫秒切换一帧, 坐标x:%.3f,y:%.3f,z:%.3f 当前动作:%s\n",name,base->frameAnim->fpsInterval,x,y,z,base->frameAnim->curAnim);
+	printf("创建md2 [%s],每%ld毫秒切换一帧, 坐标x:%.3f,y:%.3f,z:%.3f 当前动作:%s\n",name,md2->frameAnim->fpsInterval,x,y,z,md2->frameAnim->curAnim);
 
 	//默认设置为跑步状态
 	//base_curAnim(base->frameAnim,defaultAnim);
@@ -767,11 +772,14 @@ f_ent_dispose(struct Ent3D* p){
 static void 
 md2_dispose(struct MD2_Object* _md2)
 {
+	//销毁动作管理器
+	if(_md2->frameAnim){
+		tl_free(_md2->frameAnim);
+	}
+
 	md2parse_dispose(_md2->parseHandle);
-	_md2->parseHandle = NULL;
 
 	base_dispose(_md2->base);
-	_md2->base = NULL;
 
 	LStack_delNode(ex_getIns()->renderList,(int)_md2);
 
@@ -1849,10 +1857,9 @@ ex_load_anim_config(void* ptr,char* animConf,long fps)
 			assert(0);
 			return 0;
 		}
-		memcpy(base->frameAnim->animConfig,animConf,strlen(animConf));
+		memcpy(md2->frameAnim->animConfig,animConf,strlen(animConf));
 
-
-		base->frameAnim->fpsInterval = 1000 / fps;
+		md2->frameAnim->fpsInterval = 1000 / fps;
 		//base_curAnim(base->frameAnim,defaultAnim);
 	}
 	else if(base->curType == TYPE_MD5_FILE)
@@ -1871,7 +1878,8 @@ ex_set_anim(void* ptr,const char* animKey)
 	struct HeadInfo* base = base_get(ptr);
 	if(base->curType == TYPE_MD2_FILE)
 	{
-		frame_set(base->frameAnim,animKey);
+		struct MD2_Object* md2 = (struct MD2_Object*)ptr;
+		frame_set(md2->frameAnim,animKey);
 	}
 	else if(base->curType == TYPE_MD5_FILE)
 	{

@@ -210,11 +210,11 @@ void base_dispose(struct HeadInfo* base){
 		base->rayVertexData.vertex=NULL;
 	}
 
-	//销毁动作管理器
-	if(base->frameAnim){
-		tl_free(base->frameAnim);
-		base->frameAnim = NULL;
-	}
+	////销毁动作管理器
+	//if(base->frameAnim){
+	//	tl_free(base->frameAnim);
+	//	base->frameAnim = NULL;
+	//}
 
 	//清理Lua回调
 	if(base->luaPickCallBack){

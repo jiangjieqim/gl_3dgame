@@ -63,7 +63,7 @@ typedef struct HeadInfo{
 	/*
 	*	动作管理器
 	*/
-	struct FrameAnim* frameAnim;
+	//struct FrameAnim* frameAnim;
 
 	///*
 	//*	渲染回调
