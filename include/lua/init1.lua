@@ -163,6 +163,8 @@ local function loadmd2()
 	unit_scale(obj2,0.02);
 	unit_rx(obj2,PI/2);
 	unit_split_anim(obj2);
+	unit_set_pos(obj2,1,0,0);
+	setv(obj2.p,FLAGS_RENDER_BOUND_BOX);
 end
 
 local function loadmd5(name)
@@ -196,10 +198,40 @@ local function loadmd5(name)
 	
 	return model
 end
+local function loadObj(model)
+	
+	local name = func_create_name();
+	model = model or 'tri'--'box'--'torus'
+	--local obj = func_loadobj(model)--box	'torus'
+	local obj = load_model(name,string.format("\\resource\\obj\\%s.obj",model));	
+	setMaterial(obj,func_load("//resource//material//wolf.mat"));
+	setv(obj,FLAGS_VISIBLE);
+	---[[
+	func_changeFlags(obj,FLAGS_RAY)					--设置为可拾取状态
+	--func_changeFlags(obj,FLAGS_DRAW_RAY_COLLISION)	--绘制射线盒子
+	func_changeFlags(obj,FLAGS_DISABLE_CULL_FACE)		--显示双面显示
+	--func_changeFlags(obj,FLAGS_GLSL_OUTLINE)
+	--func_changeFlags(obj,FLAGS_DRAW_PLOYGON_LINE)
+	
+	func_changeFlags(obj,FLAGS_RENDER_BOUND_BOX);
+	
+
+	func_bind_collide(obj)
+	--moduleUI_bind(obj)
+	--f_add_model(obj)
+
+	--func_set_pick(obj,"f_pick")
+	--]]
+	ex_set_cam(obj);
+	
+	func_set_x(obj,1);
+
+	return obj
+end
+
 --loadmd2();
 --loadmd5();
-
-
+loadObj();
 
 
 

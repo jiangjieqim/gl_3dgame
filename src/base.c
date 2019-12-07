@@ -46,16 +46,17 @@ f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
 	if(!getv(&base->flags,FLAGS_RENDER_BOUND_BOX)){
 		return;
 	}
-
-	if(!base->boxVertPtr)//这里把boxVertPtr剥离出去
 	{
-		base->boxVertPtr = tl_malloc(sizeof(float)*BOX_SIZE);
+		GLfloat boxVertPtr[BOX_SIZE*sizeof(GLfloat)];
+		//if(!base->boxVertPtr)//这里把boxVertPtr剥离出去
+		//{
+		//	base->boxVertPtr = tl_malloc(sizeof(float)*BOX_SIZE);
+		//}
+		//生成包围盒数据,将数据填充到boxVert中,这里的顶点会自己变化
+		dataLength=tlgl_aabb(vertices,vertCount,boxVertPtr);
+		tlgl_drawColorLine(base->m,base->tmat,boxVertPtr,dataLength,
+			BOX_R,0,0);
 	}
-	//生成包围盒数据,将数据填充到base->boxVert中,这里的顶点会自己变化
-	dataLength=tlgl_aabb(vertices,vertCount,base->boxVertPtr);
-
-	tlgl_drawColorLine(base->m,base->tmat,base->boxVertPtr,dataLength,
-		BOX_R,0,0);
 }
 
 void
@@ -215,10 +216,10 @@ void base_dispose(struct HeadInfo* base){
 	evt_dispose(base);
 
 	//销毁包围盒
-	if(base->boxVertPtr){
-		tl_free(base->boxVertPtr);
-		base->boxVertPtr = NULL;
-	}
+	//if(base->boxVertPtr){
+	//	tl_free(base->boxVertPtr);
+	//	base->boxVertPtr = NULL;
+	//}
 	////销毁静态包围盒
 	//if(base->staticBoxVert){
 	//	tl_free(base->staticBoxVert);

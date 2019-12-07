@@ -40,7 +40,7 @@ typedef struct HeadInfo{
 	/*
 	*	动态包围盒顶点数组引用
 	*/
-	float* boxVertPtr;
+	//float* boxVertPtr;
 
 	///*
 	//*	静态包围盒顶点数组,用来做射线拾取的

@@ -75,7 +75,11 @@ function unit_ry(self,v)
     func_setRotateY(self.p,v)
 end
 
-
+function unit_set_pos(self,x,y,z)
+   	func_set_x(self.p,x);
+	func_set_y(self.p,y);
+	func_set_z(self.p,z);
+end
 local function f_endCall(data)
     local p = func_find_obj(data);
 --    local u = allUnits[data];
