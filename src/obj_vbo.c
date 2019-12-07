@@ -43,8 +43,9 @@ vbo_dispose(struct ObjVBO* p)
 
 	if(p->indexID)
 		glDeleteBuffers(1,&p->indexID);
-
+#ifdef CALCULATE_VBO_SIZE
 	tlgl_setVboSize(p->byteSize,0);
+#endif
 }
 
 /************************************************************************/
@@ -221,11 +222,12 @@ initVBO(struct ExportOBJ_Data* _ptr,struct ObjVBO* vbo,int type,int renderVertCo
 
 	//计算VBO的占用的内存数
 	//printf("VBO缓冲区申请的大小 %d bytes\n",dataByteSize);
-	
+#ifdef CALCULATE_VBO_SIZE
 	{
 		vbo->byteSize = dataByteSize;
 		tlgl_setVboSize(dataByteSize,1);
 	}
+#endif
 
 }
 
