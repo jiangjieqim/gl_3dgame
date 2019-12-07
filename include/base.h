@@ -119,12 +119,12 @@ typedef struct HeadInfo{
 	/*
 		所属的父对象
 	*/
-	void* parent;
+	//void* parent;
 	void* _move_tp;
 	void* _ry_tp;
 
 	//矩阵发生变化的时候设置为1
-	int changed;
+	GLbyte changed;
 	/*
 	当前是2dcam的时候就是2dcam(sprite)
 	用接口sprite_set2dCam来设置

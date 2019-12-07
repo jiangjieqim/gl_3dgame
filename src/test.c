@@ -1646,7 +1646,8 @@ f_updateCallBack(void* p){
 static void
 f_endCallBack(void* p){
 	HeadInfo* ptr = (HeadInfo*)p;
-	ex_lua_evt_dispatch(ptr->parent,EVENT_ENGINE_BASE_END,ptr->name);
+	//printf("%d\n",ex_find(ptr->name));
+	ex_lua_evt_dispatch(ex_find(ptr->name),EVENT_ENGINE_BASE_END,ptr->name);
 	//printf("f_endCallBack\n");
 }
 

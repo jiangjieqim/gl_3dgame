@@ -461,7 +461,7 @@ md2_load(struct MD2_Object* _md2,const char* str,int len,const char* name)
 
 	_md2->base = base_create(TYPE_MD2_FILE,name,0.0,0.0,0.0);
 	base = _md2->base;
-	base->parent = _md2;
+	//base->parent = _md2;
 	//关键帧管理器
 	_md2->frameAnim = (struct FrameAnim*)tl_malloc(sizeof(struct FrameAnim));
 	frameAnim = _md2->frameAnim;
@@ -1542,7 +1542,7 @@ load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
 	memset(md5,0,sizeof(struct MD5));
 	md5->custframe = -1;
 	_base=base_create(TYPE_MD5_FILE,_name,x,y,z);
-	_base->parent = md5;
+	//_base->parent = md5;
 	md5->base = _base;
 	
 	_base->rayVertexData.vertex = 0;
@@ -1609,7 +1609,7 @@ load_obj(const char* name,const char* mesh_s,
 	ent->base = base_create(TYPE_OBJ_FILE,name,x,y,z);
 	
 	base  = (struct HeadInfo*)ent->base;
-	base->parent = ent;
+	//base->parent = ent;
 
 	//设置缩放
 	base->scale = scale;

@@ -220,3 +220,17 @@ end
 function Unit:set_rz(value)
 	func_setRotateZ(self.m,value)
 end
+
+local function f_endCall(data)
+    local p = func_find_obj(data);
+	print("ÒÆ¶¯½áÊø",p,data);
+--    local u = allUnits[data];
+--    func_set_anim(p,"stand");
+	
+    --evt_dispatch(p,UnitBaseEvent,UnitBaseEndMsg);
+    --print(data);
+end
+function Unit:move(x,y,z,usetime)
+	evt_once(self.m,EVENT_ENGINE_BASE_END,f_endCall);
+	func_move(self.m,usetime,x,y,z);
+end

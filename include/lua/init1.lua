@@ -144,7 +144,7 @@ local function loadbox()
 
 		
 		--]]
-		
+	obj2:move(0,2,0,2000);
 		
 	--[[
 	local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
@@ -197,7 +197,7 @@ local function loadmd5(name)
 	return model
 end
 --loadmd2();
-loadmd5();
+--loadmd5();
 
 
 
@@ -332,7 +332,7 @@ nskin:load("\\resource\\rx.xml","gundi.png;checkbox.png;smallbtn.png");
 local function f_fps_timer(data)
 	--print(data);
 	if(model) then
-		model:set_rx(data*PI/1000);
+	--	model:set_rx(data*PI/1000);
 	end
 end
 local timer = timelater_new(10);
