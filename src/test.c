@@ -1813,12 +1813,12 @@ REG_change_attr(lua_State *L)
 			setBgColor(r,g,b);
 		}
 
-		//改变sprite渲染方式
-		if(!strcmp(attrKey,"g_sprite_line")){
-			g_sprite_line = toInt(str);
-			lua_pushnumber(L,g_sprite_line);
-			return 1;
-		}
+		////改变sprite渲染方式
+		//if(!strcmp(attrKey,"g_sprite_line")){
+		//	g_sprite_line = toInt(str);
+		//	lua_pushnumber(L,g_sprite_line);
+		//	return 1;
+		//}
 		if(!strcmp(attrKey,"cam_refreshModel")){
 			cam_refreshModel((void*)toInt(str));
 			return 0;

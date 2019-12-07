@@ -819,25 +819,18 @@ renderSprite(struct Sprite* p)
 			
 
 
-//#ifdef _SPRITE_RENDER_LINE_
-			if(g_sprite_line){
-			//if(getv(&base->flags,FLAGS_SPRITE_RENDER_LINE)){
-				//添加线框渲染
-				objVBO_renderNode(getvbo(p),material,
-					"spritevbo1",
-					p->mat4x4,
-					GL_LINE,base,0,p->grid9);
-			//}
-			}else{
-//#else
+			//if(g_sprite_line){
+			//	objVBO_renderNode(getvbo(p),material,
+			//		"spritevbo1",
+			//		p->mat4x4,
+			//		GL_LINE,base,0,p->grid9);
+			//}else{
 			objVBO_renderNode(getvbo(p),material,
-				//"spritevbo",
 				shaderName,
 				p->mat4x4,
 				base_get_ploygonLineMode(base),base,0,p->grid9);
-			}
+			//}
 
-//#endif
 		}else
 			//采用固定管线方式
 			tmat_renderSprite(material,

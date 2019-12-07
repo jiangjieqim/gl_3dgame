@@ -35,7 +35,7 @@
 #include "timelater.h"
 //#define DEBUG_PRINT_HIT	//打印拾取日志
 
-int g_sprite_line;
+//int g_sprite_line;
 long g_delayTime;
 int  g_fps=-1;
 static struct EX* g_ex;
