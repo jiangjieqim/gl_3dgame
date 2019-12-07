@@ -155,7 +155,8 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 	base->z = z;
 
 	//设置模型名字
-	memset(base->name,0,G_BUFFER_32_SIZE);
+	base->name = tl_malloc(strlen(name)+1);
+	memset(base->name,0,strlen(name)+1);
 	memcpy(base->name,name,strlen(name));
 
 	base->scale = 1.0;
@@ -219,12 +220,11 @@ void base_dispose(struct HeadInfo* base){
 	//清理Lua回调
 	if(base->luaPickCallBack){
 		tl_free(base->luaPickCallBack);
-		base->luaPickCallBack = NULL;
 	}
 
-	//销毁VBO 
-	//base->vboPtr
-
+	if(base->name){
+		tl_free(base->name);
+	}
 	tl_free(base);
 }
 /*
