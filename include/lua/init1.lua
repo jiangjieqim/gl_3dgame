@@ -237,7 +237,7 @@ local function loadObj(model)
 end
 
 --loadmd2();
-loadmd5();
+--loadmd5();
 --loadObj();
 
 
