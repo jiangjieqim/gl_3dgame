@@ -96,7 +96,7 @@ typedef struct HeadInfo{
 	long time;
 	
 	/*单个对象的关键帧帧率*/
-	int fpsInterval;
+	//int fpsInterval;
 	
 
 	/*

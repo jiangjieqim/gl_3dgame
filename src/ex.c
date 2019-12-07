@@ -880,9 +880,9 @@ ex_render3dNode(int data)
 	}
 	else if(objType == TYPE_MD5_FILE)
 	{
-		
-		float f = base->fpsInterval <= 0 ? 0.0f : (1000.0f/base->fpsInterval);//f代表 f毫秒播放一个关键帧,f = 0的时候停止在当前关键帧
-		md5_render((struct MD5*)data,f);//ex->fps	
+		struct MD5* md5 = (struct MD5*)data;
+		float f = md5->fpsInterval <= 0 ? 0.0f : (1000.0f/md5->fpsInterval);//f代表 f毫秒播放一个关键帧,f = 0的时候停止在当前关键帧
+		md5_render(md5,f);//ex->fps	
 
 		if(getv(&base->flags,FLAGS_RENDER_DRAWSKELETON)){
 			md5_drawSkeleton((void*)data);//绘制骨骼

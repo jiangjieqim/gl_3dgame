@@ -165,8 +165,37 @@ local function loadmd2()
 	unit_split_anim(obj2);
 end
 
---loadmd2();
+local function loadmd5(name)
+	local model
+	--x = x or 0
+	--scale = scale or 0.015
+	
+	--[[
+	if(name == 'wolf') then
+		model = func_loadmd5('wolf',scale,"\\resource\\texture\\wolf.tga")		
+		func_set_rayRadius(model,30)--设置静态碰撞检测盒
+	else
+		model  = func_loadmd5('cube',1.0,"\\resource\\texture\\wolf.tga","pCube.md5mesh","pCube_a7.md5anim")
+	end
+	--]]
+	model=load_model(name or "md5test","\\resource\\md5\\wolf\\body.md5mesh");	
+	setMaterial(model,func_load("//resource//material//wolf.mat"));
+	md5_loadAnim(model, "\\resource\\md5\\wolf\\walk.md5anim","walk");
 
+	setv(model,FLAGS_VISIBLE);
+	--func_set_x(model,x)
+	func_set_scale(model,0.02)
+
+	--f_init(model)
+	ex_set_cam(model);
+	
+	func_changeFlags(model,FLAGS_ANIM_ADAPTIVE)			--设置固定的fps模式,另一种自适应的有BUG
+	func_set_ptr_fps(model,60);
+	
+	return model
+end
+--loadmd2();
+loadmd5();
 
 
 

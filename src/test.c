@@ -2149,7 +2149,9 @@ REG_change_attr(lua_State *L)
 
 		if(node){
 			if(node->base->curType ==TYPE_MD5_FILE){
-				node->base->fpsInterval = v;
+				struct MD5* md5 = (struct MD5*)node;
+				//node->base->fpsInterval = v;
+				md5->fpsInterval = v;
 			}
 			else if(node->base->curType ==TYPE_OBJ_VBO_FILE && node->anim){
 				anim_set_fps(node->anim,v);

@@ -8,6 +8,8 @@
 struct MD5{
 	void* base;
 	//========================================
+	/*单个对象的关键帧帧率*/
+	int fpsInterval;
 	int frameTicket;				/*关键帧计数器*/
 	void* model;					/*md5结构体数据*/
 	Vec3_t *vertexArray;			/*顶点数据*/
