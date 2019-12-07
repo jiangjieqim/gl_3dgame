@@ -186,7 +186,7 @@ local function loadmd5(name)
 
 	setv(model,FLAGS_VISIBLE);
 	--func_set_x(model,x)
-	--func_set_scale(model,0.02)--设置模型的缩放
+	func_set_scale(model,0.02)--设置模型的缩放
 
 	--f_init(model)
 	ex_set_cam(model);
