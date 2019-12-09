@@ -36,7 +36,7 @@ typedef struct HeadInfo{
 	/*
 	*	被渲染数据(顶点数据) 非VBO数据
 	*/
-	struct VertexData rData;
+	struct VertexData* rData;
 	
 	/*
 		输入的变换矩阵

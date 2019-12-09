@@ -16,9 +16,10 @@ struct ObjVBO
 	GLuint normalID;
 	GLuint indexID;
 	int renderVertCount;//需要渲染的顶点个数
-
+#ifdef CALCULATE_VBO_SIZE
 	//VBO所占用的尺寸
 	int byteSize;
+#endif
 };
 /*
 	使用VBO模式

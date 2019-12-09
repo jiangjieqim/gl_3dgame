@@ -1145,7 +1145,7 @@ void md5_render(struct MD5* md5,int fps){
 		struct md5_joint_t* _md5_joint_t = (struct md5_joint_t*)md5->skeleton;
 		struct md5_mesh_t* _mesh = &(_model->meshes[i]);
 
-		struct VertexData* p=&(base->rData);
+		struct VertexData* p=(base->rData);
 
 		if(_md5_joint_t)
 		{

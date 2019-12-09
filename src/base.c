@@ -140,7 +140,8 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 {
 	struct HeadInfo* base = (struct HeadInfo*)tl_malloc(sizeof(struct HeadInfo));
 	memset(base,0,sizeof(struct HeadInfo));
-	memset(&base->rData,0,sizeof(struct VertexData));
+	base->rData = (struct VertexData*)tl_malloc(sizeof(struct VertexData));
+	memset(base->rData,0,sizeof(struct VertexData));
 	base->m = (Matrix44f*)tl_malloc(sizeof(Matrix44f));
 	//base->changed = 1;//强制计算第一帧的矩阵
 
@@ -215,6 +216,10 @@ void base_dispose(struct HeadInfo* base){
 		tmat_dispose(base->tmat);
 	}
 
+	if(base->rData){
+		tl_free(base->rData);
+	}
+
 	evt_dispose(base);
 
 	//销毁包围盒
@@ -265,7 +270,7 @@ void base_dispose(struct HeadInfo* base){
 //}
 
 void base_renderFill(struct HeadInfo* base){
-	struct VertexData* node=&base->rData;
+	struct VertexData* node=base->rData;
 
 	//绘制静态包围盒
 	//f_base_staticBox(base);
@@ -283,7 +288,7 @@ void base_renderFill(struct HeadInfo* base){
 
 	if(getv(&(base->flags),FLAGS_DRAW_NORMAL))
 	{
-		tlgl_drawNormal(&base->rData,1.0f);//绘制多边形法线
+		tlgl_drawNormal(base->rData,1.0f);//绘制多边形法线
 	}
 
 	//渲染轮廓
@@ -314,7 +319,7 @@ void base_renderFill(struct HeadInfo* base){
 */
 static void f_drawTriangles(struct HeadInfo* base)
 {
-	tlgl_render_triangles(base->rData.vertex,base->rData.vertLen);
+	tlgl_render_triangles(base->rData->vertex,base->rData->vertLen);
 }
 /*
 *	轮廓渲染(有待优化)
@@ -355,7 +360,7 @@ static void f_renderLine(struct HeadInfo* base){
 		return;
 	}
 
-	node=&base->rData;
+	node=base->rData;
 
 	glPushMatrix();
 	glLoadIdentity();

@@ -132,7 +132,7 @@ local function loadbox()
 	----[[
 	local obj2 = Unit:new();
 	obj2:load("\\resource\\obj\\tri.obj",--triangle,bauul,box,o1
-	"//resource//material//triangle.mat","obj2");
+	"//resource//material//bauul.mat","obj2");
 	--unit_scale(obj2,20);
 	
 		--setv(obj2.m,FLAGS_REVERSE_FACE);
@@ -223,7 +223,7 @@ local function loadObj(model)
 	func_changeFlags(obj,FLAGS_RENDER_BOUND_BOX);
 	
 
-	func_bind_collide(obj)
+	--func_bind_collide(obj)
 	--moduleUI_bind(obj)
 	--f_add_model(obj)
 
@@ -237,8 +237,8 @@ local function loadObj(model)
 end
 
 --loadmd2();
---loadmd5();
---loadObj();
+loadmd5();
+loadObj();
 
 
 

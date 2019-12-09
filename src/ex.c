@@ -271,7 +271,7 @@ md2_render(struct MD2_Object* _md2){
 	//frame = &(_md2->parseHandle->pframe[0]);//只读取第一帧
 
 	//设置数据
-	p=&(base->rData);
+	p=(base->rData);
 	p->vertex = frame->vertices;
 	p->vertLen= frame->vertCount;
 	//md2parse_getFrameVertex(frame,&p->vertex,&p->vertLen);
@@ -802,7 +802,7 @@ static void
 f_ent_render(struct Ent3D* ent){
 	struct HeadInfo* base =(struct HeadInfo*)ent->base;
 
-	struct VertexData* p=&(base->rData);
+	struct VertexData* p=(base->rData);
 	//设置数据
 	p->vertex = ent->vertex;
 	p->vertLen= ent->vertexCount;
