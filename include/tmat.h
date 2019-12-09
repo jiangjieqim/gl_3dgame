@@ -166,4 +166,5 @@ void
 tmat_print_tex(void* mat);
 //创建一个九宫格材质
 void* tmat_create_9grid(struct Atals* atals,const char* icon);
+
 #endif

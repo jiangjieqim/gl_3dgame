@@ -22,10 +22,26 @@ void* linenode_create(const char* name,int vertcnt,void* cam){
 	//setv(&line->base->flags,FLAGS_DISABLE_CULL_FACE);
 	base_set_cam(line,cam);
 	tmat = tmat_create_empty("linenode");
+
 	tmat->rendermode = GL_LINE_STRIP;
+
+	//tmat->rendermode = GL_POINT;
+	//glPointSize(3);
+	
 	line->base->tmat = tmat;
 	return line;
 }
+
+void linenode_set_color(void* p,float r,float g,float b){
+	struct LineNode* line = (struct LineNode*)p;
+	struct GMaterial* tmat = line->base->tmat;
+	struct Vec4* color = &tmat->_lineColor;
+	color->x = r;
+	color->y = g;
+	color->z = b;
+	color->w = 1;
+}
+
 void linenode_push(void* p,float x,float y,float z){
 	struct LineNode* line = (struct LineNode*)p;
 	struct Vec3 pos;

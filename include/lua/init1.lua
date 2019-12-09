@@ -136,7 +136,7 @@ local function loadbox()
 	--unit_scale(obj2,20);
 	
 		--setv(obj2.m,FLAGS_REVERSE_FACE);
-		--setv(obj2.m,FLAGS_DISABLE_CULL_FACE);--Ë«ÃæäÖÈ¾
+		setv(obj2.m,FLAGS_DISABLE_CULL_FACE);--Ë«ÃæäÖÈ¾
 		--setv(obj2.m,FLAGS_DRAW_PLOYGON_LINE);
 		func_bind_collide(obj2.m);
 		--setv(obj2.m,FLAGS_DRAW_RAY_COLLISION);
@@ -391,25 +391,22 @@ nskin:load("\\resource\\rx.xml","gundi.png;checkbox.png;smallbtn.png");
 local function f_fps_timer(data)
 	--print(data);
 	if(model) then
-	--	model:set_rx(data*PI/1000);
+		model:set_ry(data*PI/1000);
 	end
 end
 local timer = timelater_new(10);
 evt_on(timer,EVENT_TIMER,f_fps_timer);
 
-if(model) then
-	model:set_pos(0,1,0);
-end
+--if(model) then
+--	model:set_pos(0,1,0);
+--end
 
 
-local s= LineNode:new(3);
-s:push(-0.5,0.4,0.5);
-s:push( 0.5, 0.0, 0.5);
-s:push( -0.5, -0.49, -0.5);
+local s= LineNode:new(2);
+s:push(0,0,0);
+s:push(0,1,0);
+
 s:pushend();
-s:dispose();
-
-
 
 
 engine_refreshCam3d();

@@ -1053,6 +1053,13 @@ REG_linenode(lua_State *L){
 		float z =  lua_tonumber(L,5);
 		linenode_push(ptr,x,y,z);
 		return 0;
+	}else if(!strcmp(funcName,"setcolor")){
+		void* ptr = (void*)lua_tointeger(L,2);
+		float r =  lua_tonumber(L,3);
+		float g =  lua_tonumber(L,4);
+		float b =  lua_tonumber(L,5);
+		linenode_set_color(ptr,r,g,b);
+		return 0;
 	}else if(!strcmp(funcName,"end")){
 		void* ptr = (void*)lua_tointeger(L,2);
 		linenode_end(ptr);
