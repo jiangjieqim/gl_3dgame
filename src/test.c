@@ -1056,6 +1056,7 @@ REG_linenode(lua_State *L){
 	}else if(!strcmp(funcName,"end")){
 		void* ptr = (void*)lua_tointeger(L,2);
 		linenode_end(ptr);
+		ex_add(ptr);
 		return 0;
 	}else if(!strcmp(funcName,"dispose")){
 		void* ptr = (void*)lua_tointeger(L,2);
@@ -2582,13 +2583,13 @@ f_init(int id,void* p,void* thisObj){
 			//void* t= timelater_new(1000,0,0);
 			//timelater_remove(t);
 			// 
-			void* s = linenode_create("line1",3,ex_getIns()->_3dcam);
+			/*void* s = linenode_create("line1",3,ex_getIns()->_3dcam);
 			linenode_push(s, -0.5,0.4,0.5);
 			linenode_push(s, 0.5, 0.0, 0.5);
 			linenode_push(s, -0.5, -0.49, -0.5);
-			//linenode_push(s, 0, 0, 0);
+			
 			linenode_end(s);
-			ex_add(s);
+			ex_add(s);*/
 			//ex_ptr_remove(s);
 			
 			printf("headinfo = %d bytes \n",sizeof(struct HeadInfo));

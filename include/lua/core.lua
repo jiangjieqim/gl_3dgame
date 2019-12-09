@@ -1009,6 +1009,8 @@ function func_dispose(n)
 end
 
 dofile("..\\include\\lua\\base.lua");
+dofile("..\\include\\lua\\linenode.lua");
+
 dofile("..\\include\\lua\\label.lua");--label是对ftext进行的一次封装
 
 dofile("..\\include\\lua\\input.lua");

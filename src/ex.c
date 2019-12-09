@@ -540,7 +540,9 @@ static char* f_getFileName(int type){
 		case TYPE_OBJ_VBO_FILE:
 			return "obj_vbo";
 		case TYPE_FONT_TXT:
-			return "font_txt";		
+			return "font_txt";
+		case TYPE_LINENODE:
+			return "linenode";
 	}
 	return "errorType";
 }
