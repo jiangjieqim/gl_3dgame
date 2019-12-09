@@ -26,10 +26,8 @@ objData_dispose(struct ExportOBJ_Data* obj)
 }
 //Ïú»Ùvbo
 static void 
-vbo_dispose(struct ObjVBO* p)
-{
-	if(!p)
-	{
+vbo_dispose(struct ObjVBO* p){
+	if(!p){
 		return;
 	}
 	if(p->vertexID)
@@ -46,6 +44,8 @@ vbo_dispose(struct ObjVBO* p)
 #ifdef CALCULATE_VBO_SIZE
 	tlgl_setVboSize(p->byteSize,0);
 #endif
+
+	tl_free(p);
 }
 
 /************************************************************************/
@@ -242,7 +242,6 @@ delVBOList(int data,int parms)
 {
 	struct ObjVBO* vbo=(struct ObjVBO*)data;
 	vbo_dispose(vbo);
-	tl_free(vbo);
 }
 
 void objVBO_dispose(struct Obj_vbo_model* p)
