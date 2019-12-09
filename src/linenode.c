@@ -7,13 +7,15 @@
 #include "obj_vbo.h"
 #include "tmat.h"
 
+#define POINT_SIZE 2 //点绘制的时候的点的尺寸
+
 struct LineNode{
 	struct HeadInfo* base;
 	struct ObjVBO* vbo;
 	GLfloat* verts;
 	unsigned short index;//GLfloat的数量
 };
-void* linenode_create(const char* name,int vertcnt,void* cam){
+void* linenode_create(const char* name,int vertcnt,void* cam,int point){
 	struct GMaterial* tmat;
 	struct LineNode* line = (struct LineNode*)tl_malloc(sizeof(struct LineNode));
 	memset(line,0,sizeof(struct LineNode));
@@ -23,11 +25,12 @@ void* linenode_create(const char* name,int vertcnt,void* cam){
 	base_set_cam(line,cam);
 	tmat = tmat_create_empty("linenode");
 
-	tmat->rendermode = GL_LINE_STRIP;
-
-	//tmat->rendermode = GL_POINT;
-	//glPointSize(3);
-	
+	if(point){
+		tmat->rendermode = GL_POINT;
+		glPointSize(POINT_SIZE);
+	}else{
+		tmat->rendermode = GL_LINE_STRIP;
+	}
 	line->base->tmat = tmat;
 	return line;
 }

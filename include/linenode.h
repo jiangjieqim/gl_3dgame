@@ -2,7 +2,8 @@
 #define _LINE_NODE_H_
 
 //vertcnt 顶点数量
-void* linenode_create(const char* name,int vertcnt,void* cam);
+//int point 1:是点模式 0:是线模式
+void* linenode_create(const char* name,int vertcnt,void* cam,int point);
 
 void linenode_push(void* p,float x,float y,float z);
 void linenode_end(void* p);

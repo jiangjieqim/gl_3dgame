@@ -18,11 +18,22 @@ LineNode = {
 }
 LineNode.__index = LineNode;
 
-function LineNode:new(cnt,name)
+--isPoint = true 使用点模式渲染
+function LineNode:new(cnt,isPoint,name)
 	local self = {};
 	setmetatable(self, LineNode);
-	self.p=linenode("create",name or func_create_name(),cnt);
-	self:setcolor(1,0,0);--默认设置line的颜色为红色
+	local _type = 0;
+	if(isPoint) then
+		_type = 1;
+	end
+	
+	self.p=linenode("create",name or func_create_name(),cnt,_type);
+	
+	if(isPoint) then
+		self:setcolor(1,1,0);
+	else
+		self:setcolor(1,0,0);
+	end
 	return self;
 end
 

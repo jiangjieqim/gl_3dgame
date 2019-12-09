@@ -1037,13 +1037,14 @@ REG_linenode(lua_State *L){
 	if(!strcmp(funcName,"create")){
 		const char* name = lua_tostring(L,2);
 		int cnt = lua_tointeger(L,3);
+		int ispoint =  lua_tointeger(L,4);
 		/*
 		const char* size = lua_tostring(L,4);
 		float w,h,fw,fh;
 		int cam;
 		sscanf_s(size,"%f,%f,%f,%f,%d",&w,&h,&fw,&fh,&cam);
 		lua_pushinteger(L,(int)ftext_create((char*)name,w,h,fw,fh,(void*)cam));*/
-		void* p = linenode_create(name,cnt,ex_getIns()->_3dcam);
+		void* p = linenode_create(name,cnt,ex_getIns()->_3dcam,ispoint);
 		lua_pushinteger(L,(int)p);
 		return 1;
 	}else if(!strcmp(funcName,"push")){
