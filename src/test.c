@@ -56,6 +56,7 @@
 #include "map.h"
 #include "resload.h"
 #include "timelater.h"
+#include "linenode.h"
 /*
  *主目录路径 处理成动态自适应，如果找不到第一个路径就找第二个路径
  */
@@ -1026,6 +1027,42 @@ REG_input(lua_State *L){
 		input_clear(ptr);
 		return 0;
 	}
+	return 0;
+}
+
+static int
+REG_linenode(lua_State *L){
+	//void* ptr = (void*)lua_tointeger(L,1);
+	const char* funcName = lua_tostring(L,1);
+	if(!strcmp(funcName,"create")){
+		const char* name = lua_tostring(L,2);
+		int cnt = lua_tointeger(L,3);
+		/*
+		const char* size = lua_tostring(L,4);
+		float w,h,fw,fh;
+		int cam;
+		sscanf_s(size,"%f,%f,%f,%f,%d",&w,&h,&fw,&fh,&cam);
+		lua_pushinteger(L,(int)ftext_create((char*)name,w,h,fw,fh,(void*)cam));*/
+		void* p = linenode_create(name,cnt,ex_getIns()->_3dcam);
+		lua_pushinteger(L,(int)p);
+		return 1;
+	}else if(!strcmp(funcName,"push")){
+		void* ptr = (void*)lua_tointeger(L,2);
+		float x =  lua_tonumber(L,3);
+		float y =  lua_tonumber(L,4);
+		float z =  lua_tonumber(L,5);
+		linenode_push(ptr,x,y,z);
+		return 0;
+	}else if(!strcmp(funcName,"end")){
+		void* ptr = (void*)lua_tointeger(L,2);
+		linenode_end(ptr);
+		return 0;
+	}else if(!strcmp(funcName,"dispose")){
+		void* ptr = (void*)lua_tointeger(L,2);
+		linenode_dispose(ptr);
+		return 0;
+	}
+
 	return 0;
 }
 
@@ -2455,6 +2492,9 @@ runhelloTest(const char* script){
 	lua_register(lua_state,"tf_setText",REG_tf_setText);
 	//lua_register(lua_state,"tf_get_container",REG_tf_get_container);
 	
+	lua_register(lua_state,"linenode",REG_linenode);
+
+
 	lua_register(lua_state,"load_VBO_model",REG_load_VBO_model);
 	lua_register(lua_state,"tl_showCurMemery512",REG_tl_showCurMemery512);
 	
@@ -2542,7 +2582,17 @@ f_init(int id,void* p,void* thisObj){
 			//void* t= timelater_new(1000,0,0);
 			//timelater_remove(t);
 			// 
+			void* s = linenode_create("line1",3,ex_getIns()->_3dcam);
+			linenode_push(s, -0.5,0.4,0.5);
+			linenode_push(s, 0.5, 0.0, 0.5);
+			linenode_push(s, -0.5, -0.49, -0.5);
+			//linenode_push(s, 0, 0, 0);
+			linenode_end(s);
+			ex_add(s);
+			//ex_ptr_remove(s);
+			
 			printf("headinfo = %d bytes \n",sizeof(struct HeadInfo));
+
 		}
 
 	}

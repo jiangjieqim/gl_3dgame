@@ -815,7 +815,7 @@ renderSprite(struct Sprite* p)
 			objVBO_renderNode(
 				getvbo(p),
 				material,
-				p->mat4x4,
+				&p->mat4x4,
 				base->flags,
 				0);
 

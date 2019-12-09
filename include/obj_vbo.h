@@ -9,8 +9,7 @@
 /*
  *VBO结构体
  */
-struct ObjVBO
-{
+struct ObjVBO{
 	GLuint vertexID;
 	GLuint uvID;
 	GLuint normalID;
@@ -72,8 +71,9 @@ void objVBO_render(int data,int parms);
 void objVBO_renderNode(
 						struct ObjVBO* vbo,
 						struct GMaterial* tmat,
-						Matrix44f m,//当前模型的矩阵
+						Matrix44f* m,//当前模型的矩阵
 						int flag,
 						void (*renderCallBack)(int,struct ObjVBO*));
-
+//销毁vbo
+void vbo_dispose(struct ObjVBO* p);
 #endif

@@ -33,6 +33,7 @@
 #include "map.h"
 #include "line.h"
 #include "timelater.h"
+#include "linenode.h"
 //#define DEBUG_PRINT_HIT	//打印拾取日志
 
 //int g_sprite_line;
@@ -860,10 +861,7 @@ ex_render3dNode(int data)
 	//if(!targetCam && ex->_2dCurCam == ex->_2dcam){
 	if(!targetCam){
 		//没有指定任何cam
-		
-		//log_color(0,"************name = (%s) type=%d 没有指定任何cam\n",base->name,base->curType);
-		
-		
+		log_color(0,"************name = (%s) type=%d 没有指定任何cam\n",base->name,base->curType);		
 		//getchar();
 		return;
 	} 
@@ -901,7 +899,10 @@ ex_render3dNode(int data)
 	else if(objType == TYPE_SPRITE_FLIE)
 	{
 		sprite_drawRender(data);
+	}else if(objType == TYPE_LINENODE){
+		linenode_render((void*)data);
 	}
+	
 }
 /*
 	回调
@@ -1274,8 +1275,6 @@ _new(){
 	
 	f_defaultRenderFrame();
 	//fbo_render(p->fbo);	
-
-	
 
 	f_renderFBOs();
 
@@ -2471,6 +2470,9 @@ void ex_ptr_remove(void* ptr){
 			break;
 		case TYPE_MD5_FILE:
 			md5Model_dispose((struct MD5*)ptr);
+			break;
+		case TYPE_LINENODE:
+			linenode_dispose(ptr);
 			break;
 	}
 }

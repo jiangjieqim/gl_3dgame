@@ -139,7 +139,7 @@ local function loadbox()
 		--setv(obj2.m,FLAGS_DISABLE_CULL_FACE);--Ë«ÃæäÖÈ¾
 		--setv(obj2.m,FLAGS_DRAW_PLOYGON_LINE);
 		func_bind_collide(obj2.m);
-		setv(obj2.m,FLAGS_DRAW_RAY_COLLISION);
+		--setv(obj2.m,FLAGS_DRAW_RAY_COLLISION);
 		setv(obj2.m,FLAGS_RAY);
 
 		
@@ -236,9 +236,9 @@ local function loadObj(model)
 	return obj
 end
 
-loadmd2();
-loadmd5();
-loadObj();
+--loadmd2();
+--loadmd5();
+--loadObj();
 
 
 
@@ -397,8 +397,9 @@ end
 local timer = timelater_new(10);
 evt_on(timer,EVENT_TIMER,f_fps_timer);
 
-
-
+if(model) then
+	model:set_pos(0,1,0);
+end
 engine_refreshCam3d();
 
 --print(_VERSION) ;

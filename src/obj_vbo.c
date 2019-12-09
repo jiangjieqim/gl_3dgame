@@ -25,7 +25,7 @@ objData_dispose(struct ExportOBJ_Data* obj)
 	tl_free(obj);
 }
 //销毁vbo
-static void 
+void 
 vbo_dispose(struct ObjVBO* p){
 	if(!p){
 		return;
@@ -55,7 +55,7 @@ void
 objVBO_renderNode(
 				struct ObjVBO* vbo,
 				struct GMaterial* tmat,
-				Matrix44f m,
+				Matrix44f* m,
 				int flag,
 				void (*renderCallBack)(int,struct ObjVBO*))
 {
@@ -69,7 +69,7 @@ objVBO_renderNode(
 		//uv
 		glEnableVertexAttribArray(1);
 		glBindBuffer(GL_ARRAY_BUFFER,vbo->uvID);
-		glVertexAttribPointer( 1, 2, GL_FLOAT, GL_FALSE, 0, 0 );
+		glVertexAttribPointer( 1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	}
 	if(vbo->normalID)
 	{
@@ -90,7 +90,7 @@ objVBO_renderNode(
 	//双面绘制
 	cull = base_cullface(flag);
 	//printf("***%s\n",base->name);
-	tmat_render(tmat,tmat->glslType,m);
+	tmat_render(tmat,tmat->glslType,*m);
 
 	//设置状态
 	if(renderCallBack!=NULL)
@@ -151,7 +151,7 @@ objVBO_render(int data,int parms)
 		objVBO_renderNode(
 			(struct ObjVBO*)data,
 			(struct GMaterial*)base->tmat,
-			*base->m,
+			base->m,
 			base->flags,
 			ptr->renderCallBack);
 	}else{
@@ -300,17 +300,22 @@ copyData(struct ExportOBJ_Data* ptr,int* ptri,int* ptrk,float* ptrVerts,int vert
 	int i = *ptri;
 	int k = *ptrk;
 
-	pUV = &(ptrVerts[i]);
 
-	//设置uv数据
-	memcpy(&(ptr->ptrUV[k*UV_GAP]),pUV,sizeof(GLfloat)*UV_GAP);
+	
 
 	if(vertsType == OBJ_UV_VERTEX)
 	{
+		pUV = &(ptrVerts[i]);
+		//设置uv数据
+		memcpy(&(ptr->ptrUV[k*UV_GAP]),pUV,sizeof(GLfloat)*UV_GAP);
 		pVertex = &(ptrVerts[i+UV_GAP]);
 	}
-	else
+	else if(vertsType == OBJ_UV_VERTEX_NORMAL)
 	{
+
+		pUV = &(ptrVerts[i]);
+		//设置uv数据
+		memcpy(&(ptr->ptrUV[k*UV_GAP]),pUV,sizeof(GLfloat)*UV_GAP);
 		pNormal = &(ptrVerts[i+UV_GAP]);
 
 		//设置法线数据
@@ -321,6 +326,9 @@ copyData(struct ExportOBJ_Data* ptr,int* ptri,int* ptrk,float* ptrVerts,int vert
 			//	printf("%f,%f,%f\n",pNormal[n],pNormal[n+1],pNormal[n+2]);
 		}
 		pVertex = &(ptrVerts[i+UV_GAP+NORMAL_GAP]);
+	}else if(vertsType == OBJ_VERTEX){
+			pVertex = &(ptrVerts[i]);
+			printf("%.3f\n",pVertex);
 	}
 
 	//设置顶点数据
@@ -428,11 +436,10 @@ objVBO_createNode(int vertsType,GLfloat* verts,int size)
 	return vboPtr;
 }
 /*
-	添加一个VBO节点
+	添加一个VBO节点到struct Obj_vbo_model*的ptrList
 */
 void
-objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _glFloatCnt)
-{
+objVBO_pushNode(struct Obj_vbo_model* _pvboModel,GLfloat* verts,int _glFloatCnt){
 	void* vboPtr = objVBO_createNode(_pvboModel->dataType,verts,_glFloatCnt*sizeof(GLfloat));
 	LStack_push((void*)_pvboModel->ptrList,vboPtr);	
 }

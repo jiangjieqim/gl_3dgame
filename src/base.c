@@ -141,6 +141,7 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 	//base->rData = (struct VertexData*)tl_malloc(sizeof(struct VertexData));
 	//memset(base->rData,0,sizeof(struct VertexData));
 	base->m = (Matrix44f*)tl_malloc(sizeof(Matrix44f));
+	mat4x4_identity(*base->m);
 	//base->changed = 1;//强制计算第一帧的矩阵
 
 	//创建事件监听句柄
@@ -434,7 +435,7 @@ int base_get_ploygonLineMode(int flag){
 GLboolean 
 base_cullface(int flag)
 {
-	//int flag = base->flags;
+	
 	if(getv(&flag,FLAGS_DISABLE_CULL_FACE)){
 		glDisable(GL_CULL_FACE);
 	}else{
