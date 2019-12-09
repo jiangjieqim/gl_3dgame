@@ -262,7 +262,7 @@ md2_render(struct MD2_Object* _md2){
 	struct FrameAnim* frameAnim = _md2->frameAnim;
 	struct HeadInfo* base =(struct HeadInfo*)_md2->base;
 	struct MD2_Frame* frame;
-	struct VertexData* p;
+	//struct VertexData* p;
 
 	//计算关键帧
 	frame_run(frameAnim);
@@ -271,13 +271,13 @@ md2_render(struct MD2_Object* _md2){
 	//frame = &(_md2->parseHandle->pframe[0]);//只读取第一帧
 
 	//设置数据
-	p=(base->rData);
-	p->vertex = frame->vertices;
-	p->vertLen= frame->vertCount;
+	//p=(base->rData);
+	//p->vertex = frame->vertices;
+	//p->vertLen= frame->vertCount;
 	//md2parse_getFrameVertex(frame,&p->vertex,&p->vertLen);
 
 	//实体绘制
-	base_renderFill(base);
+	base_renderFill(base,frame->vertices,frame->vertCount);
 }
 //static void ex_render3dNode(int data);
 //static void render_uiNode(int data);
@@ -802,14 +802,14 @@ static void
 f_ent_render(struct Ent3D* ent){
 	struct HeadInfo* base =(struct HeadInfo*)ent->base;
 
-	struct VertexData* p=(base->rData);
-	//设置数据
-	p->vertex = ent->vertex;
-	p->vertLen= ent->vertexCount;
+	//struct VertexData* p=(base->rData);
+	////设置数据
+	//p->vertex = ent->vertex;
+	//p->vertLen= ent->vertexCount;
 	//p->vbo = ent->vbo;
 	
 	//实体渲染
-	base_renderFill(base);
+	base_renderFill(base,ent->vertex,ent->vertexCount);
 }
 
 //static void

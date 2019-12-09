@@ -227,7 +227,7 @@ tlgl_UnProject(GLfloat winx, GLfloat winy, GLfloat winz,
 	float normalSize  法线的长度
 */
 void 
-tlgl_drawNormal(struct VertexData* rData,float normalSize);
+tlgl_drawNormal(GLfloat* vertex,int vertLen,float normalSize);
 
 /*
 	创建射线拾取盒子

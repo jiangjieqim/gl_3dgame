@@ -1145,12 +1145,12 @@ void md5_render(struct MD5* md5,int fps){
 		struct md5_joint_t* _md5_joint_t = (struct md5_joint_t*)md5->skeleton;
 		struct md5_mesh_t* _mesh = &(_model->meshes[i]);
 
-		struct VertexData* p=(base->rData);
+		//struct VertexData* p=(base->rData);
 
 		if(_md5_joint_t)
 		{
-			p->vertex = (GLfloat*)md5->trianglesArray;
-			p->vertLen= _mesh->vertexCount;
+			//p->vertex = (GLfloat*)md5->trianglesArray;
+			//p->vertLen= _mesh->vertexCount;
 
 			//获取节点mesh 顶点数据,可能有多个mesh
 			buildArrays(md5,_mesh,_md5_joint_t);
@@ -1162,7 +1162,7 @@ void md5_render(struct MD5* md5,int fps){
 			//}
 
 			//==================================
-			base_renderFill(base);
+			base_renderFill(base,(GLfloat*)md5->trianglesArray,_mesh->vertexCount);
 			//==================================
 		}
 	}

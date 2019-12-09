@@ -32,11 +32,6 @@ typedef struct HeadInfo{
 		标识位,标识各种状态
 	*/
 	int flags;
-
-	/*
-	*	被渲染数据(顶点数据) 非VBO数据
-	*/
-	struct VertexData* rData;
 	
 	/*
 		输入的变换矩阵
@@ -58,7 +53,7 @@ typedef struct HeadInfo{
 /*
 	渲染一个带材质的模型
 */
-void base_renderByMaterial(struct HeadInfo* base);
+void base_renderByMaterial(struct HeadInfo* base,GLfloat* vertex,int vertLen);
 
 
 
@@ -140,7 +135,7 @@ struct HeadInfo* base_get(void* p);
 //void base_get(void* point,struct HeadInfo* base);
 
 //实心渲染
-void base_renderFill(struct HeadInfo* node);
+void base_renderFill(struct HeadInfo* node,GLfloat* vertex,int vertLen);
 
 /*
 	使用ms毫秒移动到x,y,z坐标

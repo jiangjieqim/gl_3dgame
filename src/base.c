@@ -33,11 +33,9 @@ base_get(void* p){
 	return b->base;
 }
 
-static void f_outline(struct HeadInfo* base);
-
-static void f_renderLine(struct HeadInfo* base);
-
-static void f_outlineByGLSL(struct HeadInfo* base,float r,float g,float b);
+//static void f_outline(struct HeadInfo* base,GLfloat* vertex,int vertLen);
+//static void f_renderLine(struct HeadInfo* base,GLfloat* vertex,int vertLen);
+//static void f_outlineByGLSL(struct HeadInfo* base, GLfloat* vertex,int vertLen,float r,float g,float b);
 
 static void 
 f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
@@ -140,8 +138,8 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 {
 	struct HeadInfo* base = (struct HeadInfo*)tl_malloc(sizeof(struct HeadInfo));
 	memset(base,0,sizeof(struct HeadInfo));
-	base->rData = (struct VertexData*)tl_malloc(sizeof(struct VertexData));
-	memset(base->rData,0,sizeof(struct VertexData));
+	//base->rData = (struct VertexData*)tl_malloc(sizeof(struct VertexData));
+	//memset(base->rData,0,sizeof(struct VertexData));
 	base->m = (Matrix44f*)tl_malloc(sizeof(Matrix44f));
 	//base->changed = 1;//强制计算第一帧的矩阵
 
@@ -216,9 +214,9 @@ void base_dispose(struct HeadInfo* base){
 		tmat_dispose(base->tmat);
 	}
 
-	if(base->rData){
-		tl_free(base->rData);
-	}
+	//if(base->rData){
+	//	tl_free(base->rData);
+	//}
 
 	evt_dispose(base);
 
@@ -269,62 +267,17 @@ void base_dispose(struct HeadInfo* base){
 //		BOX_R,0,0);
 //}
 
-void base_renderFill(struct HeadInfo* base){
-	struct VertexData* node=base->rData;
-
-	//绘制静态包围盒
-	//f_base_staticBox(base);
-
-	if(!getv(&(base->flags),FLAGS_VISIBLE))
-	{
-		//是否隐藏mesh
-		return;
-	}
-
-	/***这里是各种渲染模式集合	***/
-
-	//渲染模型
-	base_renderByMaterial(base);
-
-	if(getv(&(base->flags),FLAGS_DRAW_NORMAL))
-	{
-		tlgl_drawNormal(base->rData,1.0f);//绘制多边形法线
-	}
-
-	//渲染轮廓
-	f_outlineByGLSL(base,1.0f,0.0f,1.0f);
-
-	//====================================================
-
-	//动态包围盒,该包围盒会随着顶点动画变化而变化
-	f_base_drawBoundBox(base,node->vertex,node->vertLen);
-
-	//线框渲染
-	f_renderLine(base);
-
-	//轮廓渲染
-	f_outline(base);
-
-	//自定义的回调渲染方式
-	//f_base_custRender(base);
-	//if(base->renderCallBack!=NULL)	base->renderCallBack(base);
-
-	//这里需要关闭所有着色器中的状态...
-
-}
-
-
 /*
 	渲染混合三角形
 */
-static void f_drawTriangles(struct HeadInfo* base)
-{
-	tlgl_render_triangles(base->rData->vertex,base->rData->vertLen);
-}
+//static void f_drawTriangles(struct HeadInfo* base){
+	//tlgl_render_triangles(base->rData->vertex,base->rData->vertLen);
+//}
 /*
 *	轮廓渲染(有待优化)
 */
-static void f_outline(struct HeadInfo* base){
+static void 
+f_outline(struct HeadInfo* base,GLfloat* vertex,int vertLen){
 	if(!getv(&base->flags,FLAGS_OUTLINE)){
 		return;
 	}
@@ -344,7 +297,8 @@ static void f_outline(struct HeadInfo* base){
 	glColor3f(0.0,0.0,1.0);
 	glUseProgram(0);
 
-	f_drawTriangles(base);
+	//f_drawTriangles(base);
+	tlgl_render_triangles(vertex,vertLen);
 
 	glPopMatrix();
 	glDisable(GL_CULL_FACE);
@@ -352,15 +306,15 @@ static void f_outline(struct HeadInfo* base){
 }
 
 //线框渲染
-static void f_renderLine(struct HeadInfo* base){
-	struct VertexData* node = NULL;
+static void f_renderLine(struct HeadInfo* base,GLfloat* vertex,int vertLen){
+	//struct VertexData* node = NULL;
 	//if(!base->isLineMode)
 	//	return;
 	if(!getv(&base->flags,FLAGS_LINE_RENDER)){
 		return;
 	}
 
-	node=base->rData;
+	//node=base->rData;
 
 	glPushMatrix();
 	glLoadIdentity();
@@ -372,7 +326,8 @@ static void f_renderLine(struct HeadInfo* base){
 
 	//f_xrender(e);
 	//tlgl_renderMode(NULL,node->vertex,node->vertLen);
-	f_drawTriangles(base);
+	//f_drawTriangles(base);
+	 tlgl_render_triangles(vertex,vertLen);
 
 	glPopMatrix();
 }
@@ -495,7 +450,7 @@ base_cullface(int flag)
 /*
 	渲染一个带材质的模型
 */
-void base_renderByMaterial(struct HeadInfo* base)
+void base_renderByMaterial(struct HeadInfo* base,GLfloat* vertex,int vertLen)
 {	
 	//char _shaderName[G_BUFFER_32_SIZE];
 
@@ -516,9 +471,9 @@ void base_renderByMaterial(struct HeadInfo* base)
 	//设置渲染模式
 	glPolygonMode (GL_FRONT_AND_BACK,mode);
 
-
 	//非VBO,直接从cpu中来回切换数据
-	f_drawTriangles(base);
+	//f_drawTriangles(base);
+	tlgl_render_triangles(vertex,vertLen);
 
 	if(_cull){
 		glDisable(GL_CULL_FACE);
@@ -529,7 +484,7 @@ void base_renderByMaterial(struct HeadInfo* base)
 /*
 	绘制轮廓
 */
-static void f_outlineByGLSL(struct HeadInfo* base,float r,float g,float b)
+static void f_outlineByGLSL(struct HeadInfo* base, GLfloat* vertex,int vertLen,float r,float g,float b)
 {
 	if(!getv(&(base->flags),FLAGS_GLSL_OUTLINE))
 	{
@@ -561,7 +516,8 @@ static void f_outlineByGLSL(struct HeadInfo* base,float r,float g,float b)
 	glPolygonMode (GL_FRONT_AND_BACK,GL_FILL);
 
 	//非VBO,直接从cpu中来回切换数据
-	f_drawTriangles(base);	
+	//f_drawTriangles(base);	
+	tlgl_render_triangles(vertex,vertLen);
 }
 
 
@@ -798,4 +754,51 @@ void* base_findByName(void* list,const char* name){
 		}
 	}
 	return 0;
+}
+
+
+void base_renderFill(struct HeadInfo* base,
+					 GLfloat* vertex,int vertLen)
+{
+	//struct VertexData* node=base->rData;
+
+	//绘制静态包围盒
+	//f_base_staticBox(base);
+
+	if(!getv(&(base->flags),FLAGS_VISIBLE))
+	{
+		//是否隐藏mesh
+		return;
+	}
+
+	/***这里是各种渲染模式集合	***/
+
+	//渲染模型
+	base_renderByMaterial(base,vertex,vertLen);
+
+	if(getv(&(base->flags),FLAGS_DRAW_NORMAL))
+	{
+		tlgl_drawNormal(vertex,vertLen,1.0f);//绘制多边形法线
+	}
+
+	//渲染轮廓
+	f_outlineByGLSL(base,vertex,vertLen,1.0f,0.0f,1.0f);
+
+	//====================================================
+
+	//动态包围盒,该包围盒会随着顶点动画变化而变化
+	f_base_drawBoundBox(base,vertex,vertLen);
+
+	//线框渲染
+	f_renderLine(base,vertex,vertLen);
+
+	//轮廓渲染
+	f_outline(base,vertex,vertLen);
+
+	//自定义的回调渲染方式
+	//f_base_custRender(base);
+	//if(base->renderCallBack!=NULL)	base->renderCallBack(base);
+
+	//这里需要关闭所有着色器中的状态...
+
 }

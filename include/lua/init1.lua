@@ -208,20 +208,20 @@ end
 local function loadObj(model)
 	
 	local name = func_create_name();
-	model = model or 'tri'--'box'--'torus'
+	model = model or 'torus'--'box'--'torus'
 	--local obj = func_loadobj(model)--box	'torus'
 	local obj = load_model(name,string.format("\\resource\\obj\\%s.obj",model));	
 	setMaterial(obj,func_load("//resource//material//wolf.mat"));
 	setv(obj,FLAGS_VISIBLE);
 	---[[
-	func_changeFlags(obj,FLAGS_RAY)					--设置为可拾取状态
-	--func_changeFlags(obj,FLAGS_DRAW_RAY_COLLISION)	--绘制射线盒子
-	func_changeFlags(obj,FLAGS_DISABLE_CULL_FACE)		--显示双面显示
-	--func_changeFlags(obj,FLAGS_GLSL_OUTLINE)
-	--func_changeFlags(obj,FLAGS_DRAW_PLOYGON_LINE)
+	setv(obj,FLAGS_RAY)					--设置为可拾取状态
+	--setv(obj,FLAGS_DRAW_RAY_COLLISION)	--绘制射线盒子
+	setv(obj,FLAGS_DISABLE_CULL_FACE)		--显示双面显示
+	--setv(obj,FLAGS_GLSL_OUTLINE)
+	--setv(obj,FLAGS_DRAW_PLOYGON_LINE)
 	
-	func_changeFlags(obj,FLAGS_RENDER_BOUND_BOX);
-	
+	setv(obj,FLAGS_RENDER_BOUND_BOX);
+	setv(obj,FLAGS_DRAW_NORMAL);
 
 	--func_bind_collide(obj)
 	--moduleUI_bind(obj)
@@ -231,12 +231,12 @@ local function loadObj(model)
 	--]]
 	ex_set_cam(obj);
 	
-	func_set_x(obj,1);
+	func_set_x(obj,-3);
 
 	return obj
 end
 
---loadmd2();
+loadmd2();
 loadmd5();
 loadObj();
 
