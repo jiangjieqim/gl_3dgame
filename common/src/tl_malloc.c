@@ -13,11 +13,20 @@
 
 #include "tools.h"
 #include "gettime.h"
+//*************************************
+//日志相关的宏
+//显示内存池中内存节点的真实使用大小
+#define LOG_USE_SIZE
+//显示内存节点的信息
+#define LOG_NODE_DETAIL_INFO
+//*************************************
 
 #define EMemoryDisable  0//未使用
 #define	EMemoryEnable   1//已经使用
 
 struct LStackNode* memList;//内存节点列表
+
+
 
 struct MemoryNode{
 	/**
@@ -32,6 +41,10 @@ struct MemoryNode{
 	* 是否使用了                                                                    
 	*/
 	int bUse;
+
+	#ifdef LOG_USE_SIZE
+	int realsize;
+	#endif
 };
 
 //	总字节长度
@@ -59,10 +72,15 @@ f_getInfo(int data,int parm){
 	if(node->bUse == EMemoryDisable){
 		g_disable_cnt++;
 		g_disable_bytes+=node->length;
-		//log_color(0xffff00,"0x%x \t%d bytes \t未使用\n",node,node->length);
+		#ifdef LOG_NODE_DETAIL_INFO
+			log_color(0xffff00,"0x%x \t%d bytes \t未使用\n",node,node->length);
+		#endif
 	}
 	else{
-		//log_color(0x00ff00,"0x%x \t%d bytes \t使用中\n",node,node->length);
+		#ifdef LOG_NODE_DETAIL_INFO
+			int status = node->length!=node->realsize ? 1 : 0;
+			log_color(0x00ff00,"0x%x \t%d bytes \t使用中\trealsize = %d\t%s\n",node,node->length,node->realsize,status==1?"复用":"");
+		#endif
 	}
 	return 1;
 }
@@ -100,6 +118,11 @@ f_findnew(int data,int parm)
 			g_node = node->p;
 			//memset(node->p,0,node->length);
 			node->bUse = EMemoryEnable;
+			
+			#ifdef LOG_USE_SIZE
+				node->realsize = g_size;
+			#endif
+
 			//log_color(0xff0000,"%d 取内存池中的数据:0x%x  %d bytes \ttotal = %.3f kb\n",g_cnt,node->p,node->length,f_getTotalKB());
 			//g_cnt++;
 			return 0;
@@ -117,13 +140,12 @@ memory_new(int size)
 	}
 	
 	//多一个字节,处理\0情况,字符数串的结束标志
-	size += 1;
+	//size += 1;
 
 	g_size = size;
 	g_node = 0;
 
 	LStack_ergodic(memList,f_findnew,0);
-
 
 	if(g_node){
 		return g_node;
@@ -137,6 +159,11 @@ memory_new(int size)
 	node->length = size;
 	g_total += size;
 	node->p = MALLOC(size);
+
+	#ifdef LOG_USE_SIZE
+		node->realsize = size;
+	#endif
+
 	memset(node->p,0,size);
 
 	LStack_push(memList,node);
