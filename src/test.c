@@ -2533,6 +2533,17 @@ runhelloTest(const char* script){
 	return lua_state;
 }
 
+static int f_sortHandler(void* a,void* b){
+	int a1 = (int)a;
+	int b1 = (int)b;
+	if(a1  > b1){
+		return 1;
+	}else if(a1 < b1){
+		return -1;
+	}
+	return 0;
+}
+
 static void
 f_init(int id,void* p,void* thisObj){
 
@@ -2600,6 +2611,18 @@ f_init(int id,void* p,void* thisObj){
 			ex_add(s);*/
 			//ex_ptr_remove(s);
 			
+
+			void* l = LStack_create();
+			LStack_push(l,(void*)21);
+			LStack_push(l,(void*)1);
+			LStack_push(l,(void*)5);
+			LStack_push(l,(void*)25);
+			LStack_sort_func(l,f_sortHandler);
+
+
+
+
+
 			printf("headinfo = %d bytes \n",sizeof(struct HeadInfo));
 
 		}

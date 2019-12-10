@@ -98,10 +98,9 @@ local function f_sort(cnt,l,func,newlist)
 	end	
 end
 
---排序
+--排序,返回一个新的链表引用
 function stack_sort(l,func)
 	local newlist = stack_new();
-	local i;
 	f_sort(l.cnt,l,func,newlist);
 	stack_del(l);
 	return newlist;	
