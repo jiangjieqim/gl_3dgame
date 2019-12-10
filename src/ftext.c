@@ -21,7 +21,7 @@
 #define DEBUG
 
 #define _Font_Size_ 512
-static GLbyte* g_bytes;//预制缓冲区(预制1mb缓冲区)
+//static GLbyte* g_bytes;//预制缓冲区(预制1mb缓冲区)
 typedef struct Rect{
 	unsigned short x,y,w,h;
 	char word;
@@ -71,6 +71,8 @@ typedef struct FText
 
 	//文本是否换行
 	int wordWrap;
+
+	GLbyte* bufferbytes;
 }FText;
 /************************************************************************/
 /* 填充像素数据到贴图
@@ -93,16 +95,16 @@ f_nextLne(struct FText* txt){
 /************************************************************************/
 static void
 f_init_buffer(int w,int h){
-	int length =sizeof(struct RGBA) *w * h;
-	int _maxSize = _Font_Size_*_Font_Size_*sizeof(struct RGBA);
-	if(length > _maxSize){
-		//printf("缓冲区太小\n");
-		log_code(ERROR_BUFFER_NOT_ENOUGH);
-		assert(0);
-	}
-	if(!g_bytes){
-		g_bytes = (GLbyte*)tl_malloc(_maxSize);
-	}
+	//int length =sizeof(struct RGBA) *w * h;
+	//int _maxSize = _Font_Size_*_Font_Size_*sizeof(struct RGBA);
+	//if(length > _maxSize){
+	//	//printf("缓冲区太小\n");
+	//	log_code(ERROR_BUFFER_NOT_ENOUGH);
+	//	assert(0);
+	//}
+	//if(!g_bytes){
+	//	g_bytes = (GLbyte*)tl_malloc(_maxSize);
+	//}
 }
 //将wordlist转化为一个str数据
 char* 
@@ -244,7 +246,9 @@ ftext_clear(void* p){
 		//jsl_sub(tmat_getTextureByIndex(mat,0),txt->_buffer,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);//txt->w,txt->h	txt->spr->mWidth,txt->spr->mHeight
 		length =sizeof(struct RGBA) *txt->w * txt->h;
 		
-		bytes = g_bytes;
+		txt->bufferbytes = tl_malloc(length);
+		
+		bytes = txt->bufferbytes;
 		memset(bytes,0x00,length);
 
 		//jsl_sub(tmat_getTextureByIndex(mat,0),bytes,GL_BGRA,GL_UNSIGNED_BYTE,0,0,txt->w,txt->h);
@@ -520,6 +524,9 @@ ftext_set_hit(void* p,
 void
 ftext_dispose(void* p){
 	FText* txt = (FText*)p;
+	if(txt->bufferbytes){
+		tl_free(txt->bufferbytes);
+	}
 	if(txt->wordList)
 		f_del_wordlist(txt);
 	if(txt->words){

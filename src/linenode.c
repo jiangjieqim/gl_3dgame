@@ -7,7 +7,11 @@
 #include "obj_vbo.h"
 #include "tmat.h"
 
-#define POINT_SIZE 2 //点绘制的时候的点的尺寸
+
+/*
+ * 点绘制的时候的点的尺寸
+ */
+#define POINT_SIZE 2
 
 struct LineNode{
 	struct HeadInfo* base;
