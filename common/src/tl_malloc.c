@@ -26,8 +26,6 @@
 
 struct LStackNode* memList;//内存节点列表
 
-
-
 struct MemoryNode{
 	/**
 	* 字节长度
@@ -46,7 +44,10 @@ struct MemoryNode{
 	int realsize;
 	#endif
 };
-
+struct MemFind{
+	void* p;
+	int size;
+};
 //	总字节长度
 static int g_total;
 
@@ -54,7 +55,7 @@ static int g_total;
 //static int g_size;
 
 //临时节点
-static void* g_node;
+//static void* g_node;
 
 //未使用的节点个数
 static int g_disable_cnt;
@@ -109,13 +110,14 @@ memory_get_info(int* pDisable_bytes,int* pDisable_cnt,int* pg_total){
 
 static int
 f_findnew(int data,int parm){
-	int _size = parm;
+	struct MemFind* ptr = (struct MemFind*)parm;
+	int _size = ptr->size;
 	struct MemoryNode* node = (struct MemoryNode*)data;
 	if(node->bUse == EMemoryDisable){
 		g_disable_cnt++;
 		g_disable_bytes+=node->length;
 		if(node->length >= _size){
-			g_node = node->p;
+			ptr->p = node->p;
 
 			{
 				/*void *p1,*p2;
@@ -147,6 +149,7 @@ static void*
 memory_new(int size)
 {
 	struct MemoryNode* node;
+	struct MemFind mf;
 	if(!memList){
 		memList =	LStack_create();
 	}
@@ -155,12 +158,13 @@ memory_new(int size)
 	//size += 1;
 
 	//g_size = size;
-	g_node = 0;
+	//g_node = 0;
+	mf.p = 0;
+	mf.size = size;
+	LStack_ergodic(memList,f_findnew,(int)&mf);
 
-	LStack_ergodic(memList,f_findnew,size);
-
-	if(g_node){
-		return g_node;
+	if(mf.p){
+		return mf.p;
 	}
 
 	///////////////////////////////////////////////////
@@ -196,8 +200,9 @@ f_freeNode(struct MemoryNode* node){
 //遍历删除
 static int 
 f_findfree(int data,int parm){
+	struct MemFind* ptr = (struct MemFind*)parm;
 	struct MemoryNode* node = (struct MemoryNode*)data;
-	if(node->p == g_node){
+	if(node->p == ptr->p){
 		node->bUse = EMemoryDisable;
 		if(g_bFreeClear){
 			f_freeNode(node);
@@ -237,9 +242,11 @@ void memory_gc(){
 
 static void 
 f_free(void *p,int _stat){
+	struct MemFind mf;
 	g_bFreeClear = _stat;
-	g_node = p;
-	LStack_ergodic(memList,f_findfree,0);
+	mf.p = p;
+	//g_node = p;
+	LStack_ergodic(memList,f_findfree,(int)&mf);
 }
 
 static void 
