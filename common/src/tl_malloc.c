@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <memory.h>    
 #include <stdlib.h>
-
+#include <assert.h>
 //#define DEBUG
 
 #define BUILDING_DLL
@@ -51,7 +51,7 @@ struct MemoryNode{
 static int g_total;
 
 //存储需要申请的内存块大小
-static int g_size;
+//static int g_size;
 
 //临时节点
 static void* g_node;
@@ -108,19 +108,31 @@ memory_get_info(int* pDisable_bytes,int* pDisable_cnt,int* pg_total){
 }
 
 static int
-f_findnew(int data,int parm)
-{
+f_findnew(int data,int parm){
+	int _size = parm;
 	struct MemoryNode* node = (struct MemoryNode*)data;
 	if(node->bUse == EMemoryDisable){
 		g_disable_cnt++;
 		g_disable_bytes+=node->length;
-		if(node->length >= g_size){
+		if(node->length >= _size){
 			g_node = node->p;
+
+			{
+				/*void *p1,*p2;
+				p2 = node->p;
+				p1 =realloc(node->p,_size);
+				if(p1!=p2){
+					log_color(0,"size=%d,node->length=%d,*%0x,*%0x\n",_size,p1,p2);
+					assert(0);
+				}
+				printf("%0x\n%0x\n",p1,p2);
+				node->length = _size;*/
+			}
 			//memset(node->p,0,node->length);
 			node->bUse = EMemoryEnable;
 			
 			#ifdef LOG_USE_SIZE
-				node->realsize = g_size;
+				node->realsize = _size;
 			#endif
 
 			//log_color(0xff0000,"%d 取内存池中的数据:0x%x  %d bytes \ttotal = %.3f kb\n",g_cnt,node->p,node->length,f_getTotalKB());
@@ -142,10 +154,10 @@ memory_new(int size)
 	//多一个字节,处理\0情况,字符数串的结束标志
 	//size += 1;
 
-	g_size = size;
+	//g_size = size;
 	g_node = 0;
 
-	LStack_ergodic(memList,f_findnew,0);
+	LStack_ergodic(memList,f_findnew,size);
 
 	if(g_node){
 		return g_node;
