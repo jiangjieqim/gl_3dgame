@@ -642,11 +642,13 @@ REG_sprite_setDragScope(lua_State *L)
 //获取内存池的大小和节点数
 static int 
 REG_memory_get_info(lua_State *L){
-	int totleByte,nodeCnt,pg_total;
-	memory_get_info(&totleByte,&nodeCnt,&pg_total);
-	lua_pushinteger(L,totleByte);
-	lua_pushinteger(L,nodeCnt);
-	lua_pushinteger(L,pg_total);
+	//int totleByte,nodeCnt,pg_total;
+	//memory_get_info(&totleByte,&nodeCnt,&pg_total);
+	struct MemInfo info;
+	memory_info(&info);
+	lua_pushinteger(L,info.disable_bytes);
+	lua_pushinteger(L,info.disable_cnt);
+	lua_pushinteger(L,info.total);
 	return 3;
 }
 //void sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h);
@@ -949,14 +951,15 @@ static void
 f_showCurMemery512(const char* str){
 	//if(tl_memGetStat()){
 
-	int totleByte;
-
+	//int totleByte;
+	struct MemInfo info;
 	char buffer[G_BUFFER_512_SIZE];
-
-	memory_get_info(&totleByte,0,0);
-
+	
+	//memory_get_info(&totleByte,0,0);
+	memory_info(&info);
+	
 	memset(buffer,0,G_BUFFER_512_SIZE);
-	sprintf_s(buffer,G_BUFFER_512_SIZE,"%s -->%d bytes",str,totleByte);
+	sprintf_s(buffer,G_BUFFER_512_SIZE,"%s -->%d bytes",str,info.disable_bytes);
 	printf("%s\n",buffer);
 	//}
 }
@@ -1878,9 +1881,7 @@ REG_change_attr(lua_State *L)
 		if(!strcmp(attrKey,"gc"))
 		{
 			//内存池gc
-			//memory_get_info();
 			memory_gc();
-			//memory_get_info();
 		}
 
 		if(!strcmp(attrKey,"exit")){

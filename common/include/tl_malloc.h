@@ -5,6 +5,17 @@
 /************************************************************************/
 
 #include "def.h"
+
+//内存池信息
+struct MemInfo{
+	//总字节长度
+	int total;
+	//未使用的节点个数
+	int disable_cnt;
+	//未使用的节点数据字节总大小
+	int disable_bytes;
+};
+
 /*
 	申请内存
 */
@@ -22,7 +33,8 @@
 /*
 	获取信息
 */
-DLLIMPORT void memory_get_info(int* pDisable_bytes,int* pDisable_cnt,int* pg_total);
+//DLLIMPORT void memory_get_info(int* pDisable_bytes,int* pDisable_cnt,int* pg_total);
+DLLIMPORT void memory_info(struct MemInfo* info);
 
 /*
 	Garbage Collection	垃圾回收

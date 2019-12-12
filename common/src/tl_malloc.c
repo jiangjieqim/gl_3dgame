@@ -51,28 +51,30 @@ struct MemFind{
 //	总字节长度
 static int g_total;
 
-//存储需要申请的内存块大小
-//static int g_size;
-
-//临时节点
-//static void* g_node;
-
 //未使用的节点个数
-static int g_disable_cnt;
+//static int g_disable_cnt;
 
 //未使用的节点数据字节总大小
-static int g_disable_bytes;
+//static int g_disable_bytes;
 /************************************************************************/
-/* 是否在memory_free之后直接free系统回收                         */
+/* 是否在memory_free之后直接free系统回收								*/
 /************************************************************************/
 static int g_bFreeClear = 1;
 
 static int
 f_getInfo(int data,int parm){
+	struct MemInfo* info = (struct MemInfo*)parm;
+	
 	struct MemoryNode* node = (struct MemoryNode*)data;
 	if(node->bUse == EMemoryDisable){
-		g_disable_cnt++;
-		g_disable_bytes+=node->length;
+		//g_disable_cnt++;
+		//g_disable_bytes+=node->length;
+
+		if(info){
+			info->disable_bytes += node->length;
+			info->disable_cnt++;
+		}
+
 		#ifdef LOG_NODE_DETAIL_INFO
 			log_color(0xffff00,"0x%x \t%d bytes \t未使用\n",node,node->length);
 		#endif
@@ -83,30 +85,44 @@ f_getInfo(int data,int parm){
 			log_color(0x00ff00,"0x%x \t%d bytes \t使用中\trealsize = %d\t%s\n",node,node->length,node->realsize,status==1?"复用":"");
 		#endif
 	}
+
+	/*if(info){
+		info->total+=node->length;
+	}*/
+
 	return 1;
 }
 /*
 	节点信息计算
 */
 static void
-f_calculate_mem(){
-	g_disable_bytes = 0;
-	g_disable_cnt = 0;
+f_calculate_mem(struct MemInfo* info){
+	//g_disable_bytes = 0;
+	//g_disable_cnt = 0;
+	
 	if(memList){
-		LStack_ergodic(memList,f_getInfo,0);
+		LStack_ergodic(memList,f_getInfo,(int)info);
 	}
 }
-void
-memory_get_info(int* pDisable_bytes,int* pDisable_cnt,int* pg_total){
-	f_calculate_mem();
-	//log_color(0xffff00,"空置节点总数:%d,总大小:%d字节,内存池总占用:%d字节\n",g_disable_cnt,g_disable_bytes,g_total);
-	if(pDisable_cnt)*pDisable_cnt = g_disable_cnt;
 
-	if(pDisable_bytes)*pDisable_bytes = g_disable_bytes;
-
-	if(pg_total)
-		*pg_total = g_total;
+void memory_info(struct MemInfo* info){
+	info->disable_bytes = 0;
+	info->disable_cnt = 0;
+	info->total = g_total;
+	f_calculate_mem(info);
 }
+//
+//void
+//memory_get_info(int* pDisable_bytes,int* pDisable_cnt,int* pg_total){
+//	f_calculate_mem(0);
+//	//log_color(0xffff00,"空置节点总数:%d,总大小:%d字节,内存池总占用:%d字节\n",g_disable_cnt,g_disable_bytes,g_total);
+//	//if(pDisable_cnt)*pDisable_cnt = g_disable_cnt;
+//
+//	//if(pDisable_bytes)*pDisable_bytes = g_disable_bytes;
+//
+//	if(pg_total)
+//		*pg_total = g_total;
+//}
 
 static int
 f_findnew(int data,int parm){
@@ -114,8 +130,8 @@ f_findnew(int data,int parm){
 	int _size = ptr->size;
 	struct MemoryNode* node = (struct MemoryNode*)data;
 	if(node->bUse == EMemoryDisable){
-		g_disable_cnt++;
-		g_disable_bytes+=node->length;
+		//g_disable_cnt++;
+		//g_disable_bytes+=node->length;
 		if(node->length >= _size){
 			ptr->p = node->p;
 
@@ -221,13 +237,6 @@ f_gc(int data,int parm){
 	}
 	return 1;
 }
-
-/*
-int memory_get_total(){
-	return g_total;
-}
-*/
-
 //Garbage Collection
 void memory_gc(){
 	int n = g_total;
@@ -256,14 +265,6 @@ memory_retrieve(void* p){
 
 static void  
 memory_free(void* p){
-/*
-	int stat;
-	va_list ap; 
-	va_start(ap, p);
-	stat = va_arg(ap, int);
-	g_bFreeClear = stat == TRUE ? TRUE : FALSE;
-	log_color(0xff0000,"%d %d\n",stat,g_bFreeClear);
-*/
 	f_free(p,0);
 }
 

@@ -565,11 +565,20 @@ ex_get_info(){
 	//EngineX* p = this;
 	//struct ECamera cam = ex->cam;
 
+	struct MemInfo memInfo;
+
 	void* _cam = ex->_3dcam;
 	int totleByte,nodeCnt,pg_total;
 	int j=0;
+
 	int fps = f_get_fps();
-	memory_get_info(&totleByte,&nodeCnt,&pg_total);
+	
+	memory_info(&memInfo);
+	//memory_get_info(&totleByte,&nodeCnt,&pg_total);
+	totleByte = memInfo.disable_bytes;
+	nodeCnt = memInfo.disable_cnt;
+	pg_total = memInfo.total;
+
 	log_color(0,"**********************************************\n");
 	//j+=sprintf_s(buffer+j,buffer_size, "FPS	: %d\n",fps);
 	log_color(0xffff00,"fps:%ld,ui_z:%.2f\n",fps,ex->ui_pos_z);
@@ -622,39 +631,6 @@ f_drawFps(){
 	sprintf_s(_str, G_BUFFER_64_SIZE,"%d %ld",f_get_fps(),g_delayTime);
 	ex_showLog(_str);
 }
-
-static void
-f_show_all_info(){
-	struct EX* p = ex_getIns();
-	//struct ECamera cam = p->cam;
-	char buffer[G_BUFFER_256_SIZE];
-	int vbo = tlgl_getVboSize();
-	int j;
-	int size=-1;
-	GLint total_mem_kb,cur_avail_mem_kb;
-	int fps = f_get_fps();
-	memset(buffer,0,G_BUFFER_256_SIZE);
-
-	tlgl_getGPU_memery(&total_mem_kb,&cur_avail_mem_kb);
-
-	//if(tl_memGetStat())
-	{
-		//size = (int)tl_memByteSize();
-		memory_get_info(&size,0,0);
-	}
-
-	j = sprintf_s(buffer, G_BUFFER_256_SIZE,"fps:%d total %d bytes ",fps,size);
-	sprintf_s(buffer + j,G_BUFFER_256_SIZE,"vbo:%d bytes (%.3f kb)  cur_avail_mem_kb=%d total_mem_kb=%d,is running %.3f second",
-		vbo,
-		(float)vbo/1024.0
-		/*,cam.x,cam.y,cam.z*/   
-		/*,p->allVertexTotal*/
-		/*,p->allVertexTotal/3*/
-		,cur_avail_mem_kb,total_mem_kb,get_longTime()*0.001);
-
-	ex_showLog(buffer);
-}
-
 /*
 绘制文本
 */
