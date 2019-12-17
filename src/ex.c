@@ -575,7 +575,7 @@ ex_get_info(){
 	
 	memory_info(&memInfo);
 	//memory_get_info(&totleByte,&nodeCnt,&pg_total);
-	totleByte = memInfo.disable_bytes;
+	totleByte = memInfo.total - memInfo.disable_bytes;
 	nodeCnt = memInfo.disable_cnt;
 	pg_total = memInfo.total;
 

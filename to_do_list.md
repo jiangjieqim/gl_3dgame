@@ -39,3 +39,15 @@ localToGlobal
 ### scrollview使用对象池优化之(已解决)
 
 ### list.sort 其实是冒泡排序,实现一个LStackNode的.sort回调接口
+
+### 用xml配置实现界面的组合!!!
+
+21:15 2019/11/22
+
+### lua里面 try catch异常
+
+### LStack_ergodic修改为实现变参的接口
+
+### 如果input的文本发生变化 就立即更新input的游标坐标
+
+### 实现一个类似魔兽争霸3的地图编辑器
