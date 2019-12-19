@@ -328,7 +328,7 @@ copyData(struct ExportOBJ_Data* ptr,int* ptri,int* ptrk,float* ptrVerts,int vert
 		pVertex = &(ptrVerts[i+UV_GAP+NORMAL_GAP]);
 	}else if(vertsType == OBJ_VERTEX){
 			pVertex = &(ptrVerts[i]);
-			printf("%.3f\n",pVertex);
+			//printf("%.3f\n",pVertex);
 	}
 
 	//设置顶点数据
