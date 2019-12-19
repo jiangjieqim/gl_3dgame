@@ -38,6 +38,13 @@ struct FBOTexNode{
 //	// 
 //	printf("f_callLater 构造纹理[%d]结束\n",fbo->tex);	
 //}
+
+static void 
+fbo_resize(void*p){
+	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+	cam_setOrtho(fbo->_2dcam,fbo->texw,fbo->texh,-ex_getIns()->allzBuffer);
+}
+
 void
 fbo_render(void* ptr){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
@@ -176,12 +183,6 @@ fbo_init(int texW,int texH){
 		//printf("****fbo_resize %0x\n",fbo);
 	}
 	return fbo;
-}
-
-static void 
-fbo_resize(void*p){
-	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-	cam_setOrtho(fbo->_2dcam,fbo->texw,fbo->texh,-ex_getIns()->allzBuffer);
 }
 
 //销毁fbo对象
