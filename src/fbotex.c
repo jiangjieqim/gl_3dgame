@@ -178,7 +178,7 @@ fbo_init(int texW,int texH){
 	return fbo;
 }
 
-void 
+static void 
 fbo_resize(void*p){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 	cam_setOrtho(fbo->_2dcam,fbo->texw,fbo->texh,-ex_getIns()->allzBuffer);
