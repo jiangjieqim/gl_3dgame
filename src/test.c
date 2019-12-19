@@ -322,7 +322,11 @@ REG_load_tex_start(lua_State *L){
 //设置3dcam的初始值
 static void
 f_initCam3d(void* fbo){
-	void* cam = fbo_get3dCam(fbo);
+	struct FboInfo info;
+	void* cam;
+	fbo_info(fbo,&info);
+
+	cam = info.cam3d;//fbo_get3dCam(fbo);
 	cam_setZ(cam,-3);
 	cam_setRX(cam,PI*1.8);
 	cam_refreshModel(cam);
@@ -427,10 +431,13 @@ REG_fbo_init(lua_State *L){
 	int tw = lua_tointeger(L,1);
 	int th = lua_tointeger(L,2);
 	void* fbo = fbo_init(tw,th);
+	struct FboInfo info;
+	fbo_info(fbo,&info);
+
 	lua_pushinteger(L,(int)fbo);
-	lua_pushinteger(L,(int)fbo_get3dCam(fbo));
-	lua_pushinteger(L,(int)fbo_get2dCam(fbo));
-	lua_pushinteger(L,(int)fbo_getTex(fbo));
+	lua_pushinteger(L,(int)info.cam3d);
+	lua_pushinteger(L,(int)info.cam2d);
+	lua_pushinteger(L,(int)info.tex);
 	f_initCam3d(fbo);
 	return 4;
 }
@@ -600,7 +607,9 @@ static int
 REG_sprite_set2dCam(lua_State *L){
 	int sprite = lua_tointeger(L,1);
 	int fbo = lua_tointeger(L,2);
-	sprite_set2dCam((void*)sprite,fbo_get2dCam((void*)fbo));
+	struct FboInfo info;
+	fbo_info((void*)fbo,&info);
+	sprite_set2dCam((void*)sprite,info.cam2d);//fbo_get2dCam((void*)fbo)
 	return 0;
 }
 

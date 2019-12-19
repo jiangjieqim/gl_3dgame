@@ -213,21 +213,28 @@ fbo_dispose(void* p ,int deltex){
 	//}
 }
 
-void* fbo_get3dCam(void* p){
-	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-	return fbo->_3dcam;
-}
-void* fbo_get2dCam(void* p){
-	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-	return fbo->_2dcam;
-}
-void* fbo_getTex(void* p){
-	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-	return (void*)fbo->tex;
-}
+//void* fbo_get3dCam(void* p){
+//	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+//	return fbo->_3dcam;
+//}
+//void* fbo_get2dCam(void* p){
+//	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+//	return fbo->_2dcam;
+//}
+//void* fbo_getTex(void* p){
+//	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
+//	return (void*)fbo->tex;
+//}
 
 void
 fbo_enable(void*p,int v){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 	fbo->enable = v;
+}
+
+void fbo_info(void* ptr,struct FboInfo* info){
+	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
+	info->cam2d = fbo->_2dcam;
+	info->cam3d = fbo->_3dcam;
+	info->tex = fbo->tex;
 }

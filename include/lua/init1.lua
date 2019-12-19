@@ -401,7 +401,7 @@ evt_on(timer,EVENT_TIMER,f_fps_timer);
 --	model:set_pos(0,1,0);
 --end
 
-
+--[[
 local s= LineNode:new(2);
 s:push(0,-1,0);
 s:push(0,1,0);
@@ -410,7 +410,7 @@ s:pushend();
 local s= LineNode:new(1,true);
 s:push(0,0,0);
 s:pushend();
-
+--]]
 engine_refreshCam3d();
 
 --print(_VERSION) ;

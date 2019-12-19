@@ -197,6 +197,7 @@ atals_new_tex(struct Atals* atals,const char* icon,
 		struct AtlasNode* pnode;
 		void* sprite;//用于在frame buffer object中渲染
 		
+		struct FboInfo info;
 		
 		char tname[32];
 		
@@ -216,14 +217,14 @@ atals_new_tex(struct Atals* atals,const char* icon,
 		//printf("p = %0x %.3f %.3f\n",pnode,pnode->width,pnode->height);
 		fbo = fbo_init(pnode->width,pnode->height);
 		//printf("fbo = %0x  %.3f %.3f\n",fbo,pnode->width,pnode->height);
-		
-		tex = (GLuint)fbo_getTex(fbo);
+		fbo_info(fbo,&info);
+		tex = (GLuint)info.tex; //fbo_getTex(fbo);
 		
 		//printf("tex = %0x\n",tex);
 
 		tl_newName(tname,32,0);
 
-		_2dfbo = fbo_get2dCam(fbo);
+		_2dfbo = info.cam2d;//fbo_get2dCam(fbo);
 		//printf("tname = %s _2dfbo = %d\n",tname,_2dfbo);
 
 		sprite = (void*)sprite_create(tname,0,0,pnode->width,pnode->height,0,_2dfbo);

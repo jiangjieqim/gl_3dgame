@@ -1,5 +1,13 @@
 #ifndef _FBO_TEX_
 #define _FBO_TEX_
+#include <gl/glew.h>
+struct FboInfo{
+	void* cam2d;
+	void* cam3d;
+	GLuint tex;
+};
+//获取fbo的信息
+void fbo_info(void* ptr,struct FboInfo* info);
 //初始化
 void* fbo_init(int texW,int texH);
 
@@ -10,18 +18,9 @@ void fbo_render(void* ptr);
 // deltex 1 销毁纹理对象 0 不销毁纹理对象
 void fbo_dispose(void* p,int deltex);
 
-//获取当前的3d cam
-void* fbo_get3dCam(void* p);
-//获取2d cam
-void* fbo_get2dCam(void* p);
-
-//获取fbo创建的texture句柄
-void* fbo_getTex(void* p);
-
 //当fbo所在的帧缓冲区发生该变的时候调用
 void 
 fbo_resize(void*p);
-
 
 /*
  *	激活或者关闭当前的FBO,在FBO关闭状态下的时候,FBO绑定的渲染节点是不渲染的
