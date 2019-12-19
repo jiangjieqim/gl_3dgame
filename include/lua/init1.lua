@@ -2,6 +2,10 @@ dofile("..\\include\\lua\\core.lua");
 
 dofile("..\\include\\lua\\modelControl.lua");
 
+dofile("..\\include\\lua\\editor.lua");
+
+
+
 --func_enable_debug(false);--关闭调试日志
 
 --example_stack();
@@ -237,7 +241,7 @@ local function loadObj(model)
 end
 
 --loadmd2();
---loadmd5();
+loadmd5();
 --loadObj();
 
 
@@ -257,7 +261,8 @@ setv(obj.m,FLAGS_DRAW_PLOYGON_LINE);
 
 
 
-cam_setPosition(0,0,-10);
+--cam_setPosition(0,0,-10);
+cam_setPosition(0,-4,-12);
 
 
 --添加fps显示视图
@@ -360,6 +365,7 @@ local function f_rx_handle(progress,p)
 	end
 end
 
+
 local function f_cpmlete(skin)
 	local sc = skin_find(skin,"sc");
 	sc:bindCallback(f_rx_handle);
@@ -376,13 +382,22 @@ local function f_cpmlete(skin)
 	local tbtn1 = skin_find(skin,"tbtn1");
 
 	tbtn1:bind_click(function ()
-			if(model) then
+			--[[if(model) then
 				model:dispose();
-			end
+			end--]]
+			
+			
 		end
 	);
 	
 	
+	
+	--local list = f_createLines(10,1);
+	--print(stack_length(list));
+	
+	local e1 = Editor:new();
+	--e1:dispose();
+
 end
 local nskin = NSkin:new();
 evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
@@ -402,15 +417,23 @@ evt_on(timer,EVENT_TIMER,f_fps_timer);
 --end
 
 --[[
+
 local s= LineNode:new(2);
 s:push(0,-1,0);
 s:push(0,1,0);
-
 s:pushend();
+
 local s= LineNode:new(1,true);
 s:push(0,0,0);
 s:pushend();
 --]]
+
+
+
+
+--f_createLines();
+
+
 engine_refreshCam3d();
 
 --print(_VERSION) ;

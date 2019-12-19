@@ -18,7 +18,7 @@
 //显示内存池中内存节点的真实使用大小
 #define LOG_USE_SIZE
 //显示内存节点的信息
-#define LOG_NODE_DETAIL_INFO
+//#define LOG_NODE_DETAIL_INFO
 //*************************************
 
 #define EMemoryDisable  0//未使用

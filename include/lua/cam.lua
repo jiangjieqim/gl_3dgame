@@ -37,7 +37,7 @@ function cam_setPosition(x,y,z)
 end
 
 function cam_setRotateX(rx)
-	print(rx);
+	--print(rx);
 	change_attr(nil,"camRX",rx);
 end
 
