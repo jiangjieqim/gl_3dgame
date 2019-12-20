@@ -44,15 +44,22 @@ end
 function Editor:new()
 	local self = {};
 	setmetatable(self, Editor);
-	self.linelist = f_createLines(10,1);
+	self:createLine();
 	return self;
 end
+
+function Editor:createLine()
+	self.linelist = f_createLines(10,1);
+end
+
 local function f_delLines(node,index,p)
 	--print(node,index,p);
 	node:dispose();
 end
 function Editor:dispose()
 	--print(self);
-	stack_foreach(self.linelist,f_delLines);
+	if(self.linelist) then
+		stack_foreach(self.linelist,f_delLines);
+	end
 	func_clearTableItem(self);
 end

@@ -94,7 +94,9 @@ fbo_render(void* ptr){
 		glEnable(GL_MULTISAMPLE);
 
 		//LStack_ergodic_t(fbo->nodelist,f_renderList,0);
-		ex_renderlistCall(ex_render3dNode);//渲染节点
+		//ex_renderlistCall(ex_render3dNode);//渲染节点
+		ex_renderAll3dNode();
+
 
 		glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, 0);//glBindFramebuffer
 	}

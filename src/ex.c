@@ -31,7 +31,7 @@
 #include "fbotex.h"
 #include "atlas.h"
 #include "map.h"
-#include "line.h"
+//#include "line.h"
 #include "timelater.h"
 #include "linenode.h"
 //#define DEBUG_PRINT_HIT	//打印拾取日志
@@ -72,7 +72,22 @@ struct CallLaterNode
 	void (*callBack)(void*);
 	int i;
 };
-
+/*
+	回调
+*/
+static void f_renderlistCall(void _callBack(int)){
+	struct EX* ex = ex_getIns();
+	struct LStackNode* s = (struct LStackNode* )ex->renderList;
+	void* top,*p;
+	top = s;
+	p=top;
+	while((int)LStack_next(p)){
+		int data;
+		p=(void*)LStack_next(p);
+		data = LStack_data(p);
+		_callBack(data);
+	}
+}
 //在drawcall的最后回调
 void
 callLater(void _callBack(void*),void* parms){
@@ -598,7 +613,7 @@ ex_get_info(){
 		/*void* _cam = fbo_get2dCam(ex->fbo);
 		mat4x4_printf("fbo->2dcam",cam_getPerctive(_cam));*/
 	}
-	ex_renderlistCall(f_infoNode);
+	f_renderlistCall(f_infoNode);
 	
 	log_color(0,"屏幕尺寸:%.1f,%.1f ex->3dcam=%0x ex->2dcam=%0x\n",ex->_screenWidth,ex->_screenHeight,ex->_3dcam,ex->_2dcam);
 	log_color(0,"程序已执行:%.3f 秒\n",get_longTime()*0.001);
@@ -877,29 +892,14 @@ ex_render3dNode(int data)
 	else if(objType == TYPE_SPRITE_FLIE)
 	{
 		sprite_drawRender(data);
-	}else if(objType == TYPE_LINENODE){
+	}
+	else if(objType == TYPE_LINENODE)
+	{
 		linenode_render((void*)data);
 	}
 	
 }
-/*
-	回调
-*/
-void 
-ex_renderlistCall(void _callBack(int))
-{
-	struct EX* ex = ex_getIns();
-	struct LStackNode* s = (struct LStackNode* )ex->renderList;
-	void* top,*p;
-	top = s;
-	p=top;
-	while((int)LStack_next(p)){
-		int data;
-		p=(void*)LStack_next(p);
-		data = LStack_data(p);
-		_callBack(data);
-	}
-}
+
 
 //===========================================================
 struct AnimCheck
@@ -1183,7 +1183,9 @@ f_static_calculat(){
 	mat4x4_transpose(p->ui_perspectiveMatrix);
 	*/
 }
-
+void ex_renderAll3dNode(){
+	f_renderlistCall(ex_render3dNode);
+}
 //默认的帧缓冲区
 static void
 f_defaultRenderFrame(){
@@ -1207,8 +1209,8 @@ f_defaultRenderFrame(){
 
 	//ex_updatePerspctiveModelView();
 	//p->allVertexTotal = 0;
-	ex_renderlistCall(ex_render3dNode);//渲染节点
-	
+	//ex_renderlistCall(ex_render3dNode);//渲染节点
+	ex_renderAll3dNode();
 	//drawLine(200);
 
 	//drawLine(2000);
@@ -1219,7 +1221,7 @@ f_defaultRenderFrame(){
 	//f_renderlistCall(sprite_drawRender);//渲染2d节点
 
 	//废弃此字体的渲染,一律采用将文本数据copy到Sprite渲染出来
-	ex_renderlistCall(tf_render);
+	//ex_renderlistCall(tf_render);
 
 	//渲染文本(非常耗费性能,待优化)
 	// 2019.8.26 此处已经优化成Sprite模式的字体渲染
@@ -1284,7 +1286,7 @@ struct HeadInfo* ex_find_headinfo(struct EX* p,const char* name){
 void 
 ex_update_uiPos()
 {
-	ex_renderlistCall(sprite_updatePos);	
+	f_renderlistCall(sprite_updatePos);	
 }
 //
 ///*
@@ -2042,7 +2044,7 @@ void mouseMove(int x,int y)
 	}*/
 	
 	//只有当鼠标移动的时候才会更新Sprite
-	ex_renderlistCall(sprite_mouseMove);	
+	f_renderlistCall(sprite_mouseMove);	
 }
 
 /************************************************************************/
@@ -2115,7 +2117,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 
 		
 		//界面射线拾取检测,执行一个可以处理的点击回调
-		ex_renderlistCall(render_hitUiNode);
+		f_renderlistCall(render_hitUiNode);
 		if(_clickInfo->sprite){
 			struct HeadInfo* base = base_get((void*)_clickInfo->sprite);
 
@@ -2187,7 +2189,7 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 	//ui鼠标事件
 	//uimouse(button,action,xMouse,yMouse);
 	
-	ex_renderlistCall(sprite_action);
+	f_renderlistCall(sprite_action);
 	glutPostRedisplay();
 
 }
@@ -2317,7 +2319,7 @@ void ex_callParmLuaFun(const char* luaFunName,const char* parm)
 		}
 	}
 }
-
+/*
 #define __BUFFER_SIZE_ 1024	//缓冲区大小
 
 void ex_alert(const char* format,...){	
@@ -2331,7 +2333,7 @@ void ex_alert(const char* format,...){
 	ex_callParmLuaFun("alert",s);
 	va_end(vArgList);
 }
-
+*/
 	
 
 void ex_callIntLuaFun(const char* luaFunName,int value)

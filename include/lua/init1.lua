@@ -364,7 +364,7 @@ local function f_rx_handle(progress,p)
 
 	--print(progress,p);
 	if(model) then
-		model:set_ry(progress*PI);
+		model:set_rx(progress*PI);
 	end
 end
 

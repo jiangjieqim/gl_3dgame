@@ -250,9 +250,9 @@ struct EX
 *	渲染循环
 */
 void ex_render(void);
-
-void 
-ex_renderlistCall(void _callBack(int));
+//渲染renderlist所有的3d节点
+void ex_renderAll3dNode();
+//void f_renderlistCall(void _callBack(int));
 
 /*
 *	初始化
@@ -453,7 +453,7 @@ int ex_get_gap(int type);
 /*
 	弹出一个窗口
 */
-void ex_alert(const char* format,...);
+//void ex_alert(const char* format,...);
 /*
 	向lua发送一个事件
 */
