@@ -1418,17 +1418,18 @@ ex_reshape(int w,int h){
 
 	p->_screenWidth = w;
 	p->_screenHeight = h;
-
-	ex_update_uiPos();
-
+	//printf("screen w h = %.3f %.3f\n",p->_screenWidth,p->_screenHeight);
+	
 	glViewport (0, 0, (GLsizei)w, (GLsizei)h);
-
+	
 	//刷新3d齐次坐标矩阵,只会在渲染帧缓冲区尺寸发生变化的时候会调用该接口
 	cam_setPerspect(p->_3dcam,45.0, (GLdouble)p->_screenWidth/(GLdouble)p->_screenHeight, 0.1, p->zFar);
 
 	//计算正交透视矩阵,用于2d界面,计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
 	cam_setOrtho(_2dcam,p->_screenWidth,p->_screenHeight,-p->allzBuffer);
 	
+	ex_update_uiPos();
+
 	//fbo_resize(p->fbo);
 
 	ex_resize_stage2d();

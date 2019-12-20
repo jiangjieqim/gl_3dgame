@@ -207,6 +207,9 @@ local function loadmd5(name)
 	func_set_x(model,2);
 	--func_bind_collide(model);
 
+	func_setRotateX(model,PI/2);
+
+
 	return model
 end
 local function loadObj(model)
@@ -241,7 +244,7 @@ local function loadObj(model)
 end
 
 --loadmd2();
-loadmd5();
+--loadmd5();
 --loadObj();
 
 
@@ -367,6 +370,9 @@ end
 
 
 local function f_cpmlete(skin)
+	
+	skin:set_pos(0,15);
+	
 	local sc = skin_find(skin,"sc");
 	sc:bindCallback(f_rx_handle);
 	
