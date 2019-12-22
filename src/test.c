@@ -446,7 +446,7 @@ REG_fbo_init(lua_State *L){
 	lua_pushinteger(L,(int)info.cam3d);
 	lua_pushinteger(L,(int)info.cam2d);
 	lua_pushinteger(L,(int)info.tex);
-	f_initCam3d(fbo);
+	//f_initCam3d(fbo);
 	return 4;
 }
 static int

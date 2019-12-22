@@ -86,7 +86,9 @@ end
 function FboRender:get_cam3d()
 	return self.cam3d;
 end
-
+function FboRender:get_cam2d()
+	return self.cam2d;
+end
 function FboRender:set_pos(x,y)
 	local fbo = self;
 	local spr = fbo.spr;

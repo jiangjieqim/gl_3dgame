@@ -90,7 +90,9 @@ function JEngine:new()
     self.atals = uiAtals;
 	return self;
 end
-
+function JEngine:get_cam()
+    return  getEngine();
+end
 function JEngine:get_atals()
     return self.atals;
 end

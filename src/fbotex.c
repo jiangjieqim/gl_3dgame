@@ -39,8 +39,7 @@ struct FBOTexNode{
 //	printf("f_callLater 构造纹理[%d]结束\n",fbo->tex);	
 //}
 
-static void 
-fbo_resize(void*p){
+static void fbo_resize(void*p){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
 	cam_setOrtho(fbo->_2dcam,fbo->texw,fbo->texh,-ex_getIns()->allzBuffer);
 }

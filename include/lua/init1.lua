@@ -2,9 +2,9 @@ dofile("..\\include\\lua\\core.lua");
 dofile("..\\include\\lua\\modelControl.lua");
 dofile("..\\include\\lua\\editor.lua");
 
-local e = JEngine:getIns();
+--local e = JEngine:getIns();
 
-print(JEngine:getIns():get_atals());
+--print(JEngine:getIns():get_atals());
 
 --e:dispose();
 
@@ -13,7 +13,7 @@ print(JEngine:getIns():get_atals());
 --example_stack();
 
 --########################################
---node_fbo(1);
+--node_fbo();
 --example_srollView();
 
 --btn_create(200,50,60,20,"smallbtn.png");
@@ -440,6 +440,48 @@ s:pushend();
 
 
 --f_createLines();
+
+
+local function addbtn_fbo(fbo)
+
+	local x = 0;
+	local y = 0;
+	local w = 50;
+	local h = 20;
+	local url = "smallbtn.png";
+
+	local sprite = sprite_create_typical(nil,x,y,w,h,fbo:get_cam2d());--string.format("sv%d",cnt)
+	--set_cam(sprite,fbo:get_cam2d());
+
+	engine_addNode(sprite);
+	loadtexs(url,func_texloadend, { sprite=sprite;url=url});
+	--sprite_set_hit_rect(sprite,x,y,w,h);
+	--set_cam(sprite,cam2d);
+
+	--print(fbo:get_cam2d());
+end
+
+local function addmd2_fbo(fbo)
+	local cam2d,cam3d = JEngine:getIns():get_cam();
+
+	local n =func_ex_loadVBO(func_create_name(),"\\resource\\md2\\bauul.md2");
+	local material = func_load("//resource//material//bauul.mat");
+	setMaterial(n,material);
+	setv(n,FLAGS_VISIBLE);
+	engine_addNode(n);
+	--setv(n,FLAGS_DRAW_PLOYGON_LINE);
+	func_set_position(n,0,0,-100);
+	
+	func_setRotateX(n,PI/2)
+	func_setRotateY(n,PI/2)
+	set_cam(n,fbo:get_cam3d());
+	--set_cam(n,cam3d);
+end
+local fbo = FboRender:new(128,128);
+fbo:set_pos(128,128);
+
+addmd2_fbo(fbo);
+addbtn_fbo(fbo);
 
 
 engine_refreshCam3d();
