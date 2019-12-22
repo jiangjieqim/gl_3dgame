@@ -714,15 +714,15 @@ end
 local uiAtals
 
 --获取一个界面图集(没有就创建,在调用的时候创建)
-local function get_ui_atals()
-	--print(uiAtals)
-	
---	if(uiAtals == nil) then		
---		uiAtals=atals_load("//resource//texture//","1")--构造界面图集	
---	end
---	return uiAtals;
-    return get_attr(nil,"ex_get_ui_atals");
-end
+--local function get_ui_atals()
+--	--print(uiAtals)
+
+----	if(uiAtals == nil) then		
+----		uiAtals=atals_load("//resource//texture//","1")--构造界面图集	
+----	end
+----	return uiAtals;
+--    return get_attr(nil,"ex_get_ui_atals");
+--end
 --获取当前的焦点
 function func_get_curFocus()
     return get_attr(nil,"curFocus");
@@ -731,7 +731,7 @@ end
 --为sprite设置贴图
 function func_setIcon(sprite,url)
 	--获取一个atals图集,没有图集的界面是黑色的
-	local atals = get_ui_atals();
+	local atals = JEngine:getIns():get_atals();--get_ui_atals();
 	if(atals) then
 		sprite_bindAtals(sprite,atals);
 
@@ -903,7 +903,7 @@ end
 
 --加载完tex之后的回调方法
 function func_texloadend(n)
-	sprite_set_9grid(n.sprite,n.url,n.l or 3,n.r or 3,n.t or 3,n.b or 3);
+	sprite_set_9grid(n.sprite,n.url,n.l or 3,n.r or 3,n.t or 3,n.b or 3,JEngine:getIns():get_atals());
 end
 
 --创建一个支持九宫格的的sprite

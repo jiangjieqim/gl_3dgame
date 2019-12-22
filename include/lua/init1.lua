@@ -1,10 +1,12 @@
 dofile("..\\include\\lua\\core.lua");
-
 dofile("..\\include\\lua\\modelControl.lua");
-
 dofile("..\\include\\lua\\editor.lua");
 
+local e = JEngine:getIns();
 
+print(JEngine:getIns():get_atals());
+
+--e:dispose();
 
 --func_enable_debug(false);--关闭调试日志
 

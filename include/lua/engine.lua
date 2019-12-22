@@ -75,3 +75,27 @@ function ex_set_cam(self)
 end
 
 _engine=engine_init();
+-------------------------------------------------
+JEngine ={
+	atals,
+};
+
+JEngine.__index = JEngine;
+setmetatable(JEngine, Instance);--¼Ì³Ð×Ôµ¥Àý
+
+function JEngine:new()
+	local self =  Instance:new();
+	setmetatable(self, JEngine);
+	local uiAtals=atals_load("//resource//texture//","1");
+    self.atals = uiAtals;
+	return self;
+end
+
+function JEngine:get_atals()
+    return self.atals;
+end
+
+function JEngine:dispose()
+	atals_dispose(self.atals);
+	func_clearTableItem(self);
+end

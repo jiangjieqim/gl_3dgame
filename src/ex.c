@@ -65,13 +65,13 @@ struct ClickInfo{
 	int local_click_x,local_click_y;	//临时点击相对于sprite的坐标
 	float pos_z;
 };
-
-struct CallLaterNode
-{
-	void* parms;
-	void (*callBack)(void*);
-	int i;
-};
+//
+//struct CallLaterNode
+//{
+//	void* parms;
+//	void (*callBack)(void*);
+//	int i;
+//};
 /*
 	回调
 */
@@ -89,57 +89,57 @@ static void f_renderlistCall(void _callBack(int)){
 	}
 }
 //在drawcall的最后回调
-void
-callLater(void _callBack(void*),void* parms){
-	
-	struct CallLaterNode* node = (struct CallLaterNode*)tl_malloc(sizeof(struct CallLaterNode));
-	
-	{
-		printf("push parms 0x%0x\n",parms);
-	}
-	node->callBack = _callBack;
-	node->parms = parms;
-	//ex_getIns()->lastList;
-	node->i = ex_getIns()->index;
-	LStack_push(ex_getIns()->lastList,(void*)node);
-	printf("push node 0x%0x\n",node);
-}
+//void
+//callLater(void _callBack(void*),void* parms){
+//	
+//	struct CallLaterNode* node = (struct CallLaterNode*)tl_malloc(sizeof(struct CallLaterNode));
+//	
+//	{
+//		printf("push parms 0x%0x\n",parms);
+//	}
+//	node->callBack = _callBack;
+//	node->parms = parms;
+//	//ex_getIns()->lastList;
+//	node->i = ex_getIns()->index;
+//	LStack_push(ex_getIns()->lastList,(void*)node);
+//	printf("push node 0x%0x\n",node);
+//}
 
 
 
 
+//
+//static void
+//f_pop(){
+//	void* p = ex_getIns()->lastList;
+//
+//	//struct CallLaterNode* n = 0;
+//	if(LStack_length((struct LStackNode*)p)>0){
+//		int data;
+//		int status = LStack_pop(p,&data);
+//		if (status)
+//		{
+//			struct CallLaterNode* _node = (struct CallLaterNode*)data;
+//			_node->callBack(_node->parms);//这里有问题
+//			//n = _node;
+//			tl_free(_node);
+//
+//			
+//		}
+//
+//	}
+//
+//	//if(n){
+//	//	n->callBack(n->parms);//这里有问题
+//	//	tl_free(n);
+//	//}
+//
+//	//printf("pop\n");
+//}
+//static void 
+//runLastList(){
 
-static void
-f_pop(){
-	void* p = ex_getIns()->lastList;
-
-	//struct CallLaterNode* n = 0;
-	if(LStack_length((struct LStackNode*)p)>0){
-		int data;
-		int status = LStack_pop(p,&data);
-		if (status)
-		{
-			struct CallLaterNode* _node = (struct CallLaterNode*)data;
-			_node->callBack(_node->parms);//这里有问题
-			//n = _node;
-			tl_free(_node);
-
-			
-		}
-
-	}
-
-	//if(n){
-	//	n->callBack(n->parms);//这里有问题
-	//	tl_free(n);
-	//}
-
-	//printf("pop\n");
-}
-static void 
-runLastList(){
-
-	f_pop();
+	//f_pop();
 	//struct LStackNode* s = ex_getIns()->lastList;
 	//struct CallLaterNode* _node;
 	//int cnt = 0;
@@ -180,7 +180,7 @@ runLastList(){
 	//	printf("清除栈的时候栈的长度 = %d\n",LStack_length(s));
 	//
 	////LStack_clear(s);
-}
+//}
 
 struct Ent3D{
 	struct HeadInfo* base;
@@ -1268,8 +1268,8 @@ _new(){
 
 	tween_run(_longTime,g_delayTime);
 	
-	runLastList();
-	p->index++;
+	//runLastList();
+	//p->index++;
 	
 	evt_dispatch(ex_getIns(),EVENT_ENGINE_RENDER_3D,0);
 	timelater_run();
@@ -1468,7 +1468,7 @@ ex_init(struct EX* p,GLdouble zfar,float sw,float sh){
 	p->renderList = LStack_create();
 
 	p->fboList = LStack_create();
-	p->lastList = LStack_create();
+	//p->lastList = LStack_create();
 	/*p->hit=hit_create(p->renderList,p->viewport,p->hitModelView,p->hitPerspectProjection);*/
 	
 	//==========================================
@@ -1489,8 +1489,8 @@ void ex_dispose(struct EX* p){
 	tl_free(p->clickInfo);
 	p->clickInfo = 0;
 
-	atals_dispose(p->atals);
-	p->atals = 0;
+	/*atals_dispose(p->atals);
+	p->atals = 0;*/
 
 	LStack_delete(p->renderList);
 	p->renderList = 0;
@@ -2485,13 +2485,13 @@ int ex_get_gap(int type)
 	}
 	return UV_GAP + VERTEX_GAP + NORMAL_GAP;
 }
-void* ex_get_ui_atals(){
-	if(!ex_getIns()->atals){
-		struct Atals* ptr = atals_load("//resource//texture//","1");
-		ex_getIns()->atals = (void*)ptr;
-	}
-	return ex_getIns()->atals;
-}
+//void* ex_get_ui_atals(){
+//	if(!ex_getIns()->atals){
+//		struct Atals* ptr = atals_load("//resource//texture//","1");
+//		ex_getIns()->atals = (void*)ptr;
+//	}
+//	return ex_getIns()->atals;
+//}
 
 void ex_switch3dCam(void* cam){
 	ex_getIns()->_3dCurCam=cam;

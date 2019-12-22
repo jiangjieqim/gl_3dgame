@@ -12,13 +12,15 @@
 struct RES_Load{
 	struct LStackNode* list;
 	void(*endCallBack)(void* pResload,void* param);
+	struct Atals* alals;
 	void* param;
 };
-//void resload_tex(const char* tex, void(*endCallBack)(void*,void* param){
-void* resload_create(void(*endCallBack)(void*,void*),void* param){
+
+void* resload_create(void(*endCallBack)(void*,void*),void* alals,void* param){
 	struct RES_Load* res = tl_malloc(sizeof(struct RES_Load));
 	res->endCallBack = endCallBack;
 	res->param = param;
+	res->alals = (struct Atals*)alals;
 	res->list = LStack_create();
 	return (void*)res;
 }
@@ -58,7 +60,7 @@ f_render(int id,void* p,void* thisObj){
 		icon = (char*)data;
 		//printf("¼ÓÔØµÄicon=%s\n",icon);
 		
-		atals_new_tex(ex_get_ui_atals(),icon,f_load_textCallBack,thisObj);
+		atals_new_tex(res->alals,icon,f_load_textCallBack,thisObj);
 		//printf("free %d\n",icon);
 		tl_free(icon);
 		

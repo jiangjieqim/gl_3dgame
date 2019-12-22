@@ -35,7 +35,7 @@ local function f_callback(data,param)
 end
 local function f_load(node)
 	--print("开始加载,加载状态:",loadman.isload);
-	local r =  load_tex(node.res);
+	local r =  load_tex(node.res,JEngine:getIns():get_atals());
 	evt_once(r,EVENT_ENGINE_TEX_LOAD_COMPLETE,f_callback,node);
     load_tex_start(r);
 end

@@ -21,22 +21,12 @@ function ProgressBar:new(x,y,w,h)
 	
 	local gap = 4;	
 	
-	--local url = "checkbox.png";
-	--local sprite = sprite_create_typical(nil,x,y,w,h);
-	--engine_addNode(sprite);
-	--loadtexs(url,func_texloadend, { sprite=sprite;url=url});
-	
-	--func_texloadend({ sprite=sprite;url=url});
-	
 	local sprite = Shape:new(true,w,h);
 	--sprite:seticon("checkbox.png");
 	self.container = sprite;
 	
 	self.barwidth = w - gap;
 	self.barheight= h - gap;
-	--local bar1 =  sprite_create_typical(nil,0,0,self.barwidth,self.barheight);
-	--engine_addNode(bar1);
-	--func_texloadend({sprite=bar1;url="gundi.png"});--gundi
 	
 	local bar1 = Shape:new(true,self.barwidth,self.barheight);
 	bar1:setcolor(0,1,0);

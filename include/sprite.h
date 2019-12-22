@@ -202,8 +202,7 @@ sprite_isCanClick(void* p);
 //sprite_set_render(void* p,int v);
 
 //为Sprite设置一个默认的图集
-void
-sprite_set_default_tex(void* p);
+//void sprite_set_default_tex(void* p);
 
 /*
  *设置一个点击区域的范围

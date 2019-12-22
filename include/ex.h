@@ -198,8 +198,7 @@ struct EX
 	//Matrix44f ui_modelViewMatrix;
 	//struct Atals* myAtals;//废弃
 	
-	//int _isinit;//引擎是否已经初始化 
-	void* atals;
+	//void* atals;
 	
 	//2d舞台
 	void* stage2d;
@@ -232,11 +231,11 @@ struct EX
 
 	//int lock;
 	//drawcall调用完成之后的回调列表
-	struct LStackNode* lastList;
+	//struct LStackNode* lastList;
 
 	struct LStackNode* timelaterList;
 
-	int index;
+	//int index;
 };
 
 //接口定义
@@ -259,8 +258,7 @@ void ex_renderAll3dNode();
 */
 void ex_init(struct EX* p,GLdouble zfar,float sw,float sh);
 
-void 
-ex_reshape(int w,int h);
+void ex_reshape(int w,int h);
 
 /*
 *	销毁引擎
@@ -376,7 +374,7 @@ void ex_callParmLuaFun(const char* luaFunName,const char* parm);
 */
 void ex_callIntLuaFun(const char* luaFunName,int value);
 //获取一个默认的ui图集
-void* ex_get_ui_atals();
+//void* ex_get_ui_atals();
 /*
 	获取zBuffer
 */
@@ -501,8 +499,7 @@ void ex_remove_fbo(void* fbo);
 GLuint ex_getProgrom3D(const char* glslType);
 
 //在drawcall的最后回调
-void
-callLater(void _callBack(void*),void* parms);
+//void callLater(void _callBack(void*),void* parms);
 
 //向指定的事件发送一个浮点型数据
 void 

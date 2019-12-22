@@ -743,13 +743,13 @@ updateSpriteMat4x4(struct Sprite* p,
 	
 	multi2(p->mat4x4,xyz,result);//位移矩阵
 }
-void
-sprite_set_default_tex(void* ptr){
-	struct Sprite* p = (struct Sprite*)ptr;
-	//ex_setv(p,FLAGS_DRAW_PLOYGON_LINE);
-	p->atals = ex_get_ui_atals();
-	sprite_texName(p,"gundi.png",0);
-}
+//void
+//sprite_set_default_tex(void* ptr){
+//	struct Sprite* p = (struct Sprite*)ptr;
+//	//ex_setv(p,FLAGS_DRAW_PLOYGON_LINE);
+//	p->atals = ex_get_ui_atals();
+//	sprite_texName(p,"gundi.png",0);
+//}
 //获取Sprite引用的材质引用,
 //可以从图集中获取,也可以自定义材质引用(有图集用图集,无图集用自身的材质)
 static void* 

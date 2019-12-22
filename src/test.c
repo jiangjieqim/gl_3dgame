@@ -274,6 +274,12 @@ REG_atals_load(lua_State *L){
 	lua_pushinteger(L,(int)ptr);
 	return 1;
 }
+static int
+RES_atals_dispose(lua_State *L){
+	int atals = lua_tointeger(L,1);
+	atals_dispose((struct Atals*)atals);
+	return 0;
+}
 
 static int 
 REG_sprite_createEmptyTex(lua_State *L){
@@ -305,7 +311,8 @@ static void fSplitHandler(int* parms,char* str){
 static int
 REG_load_tex(lua_State *L){
 	const char* icon = lua_tostring(L,1);
-	void* res = resload_create(f_res_endCallBack,(void*)icon);
+	int atals = lua_tointeger(L,2);
+	void* res = resload_create(f_res_endCallBack,(void*)atals,(void*)icon);
 	str_split(icon,';',fSplitHandler,(int*)res);
 	//resload_start(res);
 	lua_pushinteger(L,(int)res);
@@ -415,13 +422,14 @@ REG_sprite_set_9grid(lua_State *L){
 	int r = lua_tointeger(L,4);
 	int t = lua_tointeger(L,5);
 	int b = lua_tointeger(L,6);
+	int atals = lua_tointeger(L,7);
 
 	struct AtlasNode ptrOut;
 	struct Sprite* grid9 = (struct Sprite*)spr;
-	void* atals = ex_get_ui_atals();
-	atals_tex(atals,icon,&ptrOut);
+	//void* atals = ex_get_ui_atals();
+	atals_tex((struct Atals*)atals,icon,&ptrOut);
 
-	grid9->material = tmat_create_9grid(atals,icon);
+	grid9->material = tmat_create_9grid((struct Atals*)atals,icon);
 	sprite_set_grid9(grid9,l,r,t,b,ptrOut.width,ptrOut.height);
 	return 0;
 }
@@ -1475,10 +1483,10 @@ REG_get_attr(lua_State *L)
 		lua_pushnumber(L,ex_newPosZ());
 		return 1;
 	}
-	if(!strcmp(attrKey,"ex_get_ui_atals")){
+	/*if(!strcmp(attrKey,"ex_get_ui_atals")){
 		lua_pushnumber(L,(int)ex_get_ui_atals());
 		return 1;
-	}
+	}*/
 	
 	if(!strcmp(attrKey,"curFocus")){
 		lua_pushnumber(L,(int)ex_getIns()->curFocus);
@@ -2503,6 +2511,7 @@ runhelloTest(const char* script){
 	
 	//图集
 	lua_register(lua_state,"atals_load",REG_atals_load);
+	lua_register(lua_state,"atals_dispose",RES_atals_dispose);
 
 	//文本
 	lua_register(lua_state,"tf_create",REG_tf_create);
