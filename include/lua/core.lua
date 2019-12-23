@@ -790,9 +790,9 @@ function func_loadfile(url)
 end
 
 --只是加载,并不会加载到渲染列表
-function func_ex_loadVBO(name,url)
-	return change_attr(nil,"ex_loadVBO",name,url);
-end
+--function func_ex_loadVBO(name,url)
+--	return change_attr(nil,"ex_loadVBO",name,url);
+--end
 
 --获取屏幕的尺寸
 function func_screenSize()
@@ -1016,7 +1016,6 @@ dofile("..\\include\\lua\\label.lua");--label是对ftext进行的一次封装
 dofile("..\\include\\lua\\input.lua");
 
 dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器
-dofile("..\\include\\lua\\ex.lua")	--引擎
 
 dofile("..\\include\\lua\\engine.lua")	--引擎1
 
@@ -1057,6 +1056,5 @@ dofile("..\\include\\lua\\arrow.lua")		--箭头组件
 
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位
 dofile("..\\include\\lua\\scrollview.lua")	--scrollview
-dofile("..\\include\\lua\\node.lua")		--角色单位2
 
 dofile("..\\include\\lua\\unit.lua")		--角色单位

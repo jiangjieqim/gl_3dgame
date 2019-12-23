@@ -66,3 +66,10 @@ end
 function JEngine:add(n)
 	change_attr(nil,"ex_add",n);
 end
+
+--加载一个资源,只是加载,并不会加载到渲染列表
+--默认都是加载vbo类型的数据
+function JEngine:load(url,name)
+	name = name or func_create_name();
+	return change_attr(nil,"ex_loadVBO",name,url);
+end

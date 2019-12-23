@@ -59,9 +59,6 @@ local function f_select(self,index,param)
 		
     elseif (index == 1) then
         func_gc();
---    elseif (index == 2) then
---        ex:switch_spriteline()
---        print("ÇÐ»»ÎªSpriteÏß¿ò×´Ì¬:" .. ex:get_spriteline());
     elseif (index == 2) then
         --fps();
     elseif (index == 3) then

@@ -13,7 +13,6 @@ dofile("..\\include\\lua\\editor.lua");
 --example_stack();
 
 --########################################
---node_fbo();
 --example_srollView();
 
 --btn_create(200,50,60,20,"smallbtn.png");
@@ -411,9 +410,8 @@ local function f_fps_timer(data)
 end
 local timer = timelater_new(10);
 evt_on(timer,EVENT_TIMER,f_fps_timer);
-
+--增加一个sprite到fbo渲染列表中
 local function addbtn_fbo(fbo)
-
 	local x = 0;
 	local y = 0;
 	local w = 50;
@@ -431,10 +429,11 @@ local function addbtn_fbo(fbo)
 	--print(fbo:get_cam2d());
 end
 
+--增加一个md2渲染对象到fbo对象引用中
 local function addmd2_fbo(fbo)
 	local cam2d,cam3d = JEngine:getIns():get_cam();
 
-	local n =func_ex_loadVBO(func_create_name(),"\\resource\\md2\\bauul.md2");
+	local n = JEngine:getIns():load("\\resource\\md2\\bauul.md2");--"\\resource\\md2\\bauul.md2"
 	local material = func_load("//resource//material//bauul.mat");
 	setMaterial(n,material);
 	setv(n,FLAGS_VISIBLE);
@@ -447,11 +446,14 @@ local function addmd2_fbo(fbo)
 	set_cam(n,fbo:get_cam3d());
 	--set_cam(n,cam3d);
 end
+--创建一个fbo对象
 local fbo = FboRender:new(128,128);
 fbo:set_pos(128,128);
 
 addmd2_fbo(fbo);
 addbtn_fbo(fbo);
+
+
 
 
 --engine_refreshCam3d();
