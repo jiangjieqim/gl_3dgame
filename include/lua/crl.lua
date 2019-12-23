@@ -15,7 +15,6 @@ local function loadCallBack(obj,param)
 	local self = param.alert;
 	
 	local labelStack = param.labelStack;
-	--print("alert初始化完成",obj,self);
 	
 	local container = alert_get_container(self);
 	

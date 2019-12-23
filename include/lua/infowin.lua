@@ -50,7 +50,6 @@ local function f_select(self,index,param)
         --func_ex_info();
 
 
---	    alert("窗口测试:引擎信息");
 		print("windows test!");
 		
 		FpsView:getIns():show();--显示fps

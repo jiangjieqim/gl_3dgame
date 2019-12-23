@@ -67,7 +67,6 @@ local function uiinit()
 	example_input(0,80);
 	infowin(150,50);
 	example_srollView();
-	--alert("aa");
 	--dofile("..\\include\\lua\\1.lua");--md2动作控制
 	dofile("..\\include\\lua\\5.lua");--材质测试
 end
@@ -88,7 +87,6 @@ infowin(150,50);
 
 --dofile("..\\include\\lua\\3.lua");
 
---alert("aa");
 
 --example_unit();
 

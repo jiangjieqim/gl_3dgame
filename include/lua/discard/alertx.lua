@@ -1,7 +1,6 @@
 local function loadCallBack(obj,param)
 	
 	local self = param.self;
-	--print("alert初始化完成",obj,self);
 	
 	alert_set_drag(self,true);
 	alert_enable_resize(self,true);
