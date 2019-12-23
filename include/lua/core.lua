@@ -1050,9 +1050,6 @@ dofile("..\\include\\lua\\progrossbar.lua")
 dofile("..\\include\\lua\\skin.lua");--skin皮肤组件
 dofile("..\\include\\lua\\NSkin.lua");--NSkin皮肤组件
 
-
-dofile("..\\include\\lua\\arrow.lua")		--箭头组件
-
 dofile("..\\include\\lua\\UnitBase.lua")		--角色单位
 dofile("..\\include\\lua\\scrollview.lua")	--scrollview
 
