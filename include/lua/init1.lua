@@ -81,7 +81,6 @@ end
 
 infowin(150,50);
 
---crl_init();
 
 --		uiinit();
 

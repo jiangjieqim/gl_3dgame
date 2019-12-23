@@ -1041,7 +1041,6 @@ dofile("..\\include\\lua\\crlui.lua")
 dofile("..\\include\\lua\\infowin.lua")	--fps组件
 
 dofile("..\\include\\lua\\alert.lua")
-dofile("..\\include\\lua\\crl.lua")
 
 dofile("..\\include\\lua\\image.lua")	--image组件
 
