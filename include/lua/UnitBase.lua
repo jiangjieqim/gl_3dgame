@@ -17,8 +17,6 @@ end
 
 --设置对象的cam的矩阵空间
 local function f_set_cam(self)
---	local e = engine_get();
---	set_cam(self.p,e.cam3d);
 	JEngine:getIns():bind_3dcam(self.p);
 end
 --获取句柄

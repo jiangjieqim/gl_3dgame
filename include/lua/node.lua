@@ -59,7 +59,6 @@ local function f_split_init(md2)
 	func_play(md2);
 end
 
-
 local function add_small_node(parent)
    local cam = get_cam(parent);
     local sprite = sprite_create(nil,0,0,64,64,0,1,cam);
@@ -67,49 +66,4 @@ local function add_small_node(parent)
     func_setIcon(sprite, "smallbtn.png");
     func_addchild(parent,sprite);
     JEngine:getIns():add(sprite);
-end
-
-
-
-
-
-
-
-
-
-function node_fbo(avtar)
-	
-	--local fbo = fboobj_init(256,256);
-	--fboobj_set_pos(fbo,220,0);
-	local fbo = FboRender:new(128,128);
-	fbo:set_pos(0,128);
-	
-	
-	
-	
-	local n = node_new();
-
-	local useAvtar = avtar or 0;
-	local e = engine_get();
-	if(useAvtar == 1) then
-    --加载一个角色模型
-		node_loadModel(n,"\\resource\\md2\\bauul.md2");  node_setScale(n,0.02);
-		node_loadMaterial(n,"//resource//material//bauul.mat");
-	else
-		node_loadModel(n);
-		node_loadMaterial(n,"//resource//material//triangle.mat");--bauul.mat
-		setv(node_getNode(n),FLAGS_DRAW_PLOYGON_LINE);
-		setv(node_getNode(n),FLAGS_REVERSE_FACE);--反转三角面
-	end
-
-	
-	node_setRX(n,PI/2);
-	f_split_init(n.node);
-		--setv(node_getNode(n),FLAGS_REVERSE_FACE);--反转三角面
-	
-	--print("name="..node_getName(n));
-	node_setCam(n,fbo:get_cam3d());
-	
-    JEngine:getIns():add(n.node);
-
 end

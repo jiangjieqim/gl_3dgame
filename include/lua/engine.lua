@@ -1,3 +1,4 @@
+--[[
 local _engine;
 
 function engine_init()
@@ -8,16 +9,10 @@ function engine_init()
 	local cam2d,cam3d= getEngine();
 	e.cam2d = cam2d;
 	e.cam3d = cam3d;
-	--[[e.fbo2dcam = fbo2dcam;
-	e.fbo3dcam = fbo3dcam;
-    e.fboTexture = fboTexture;
-	e.fbo = fbo;
-	--]]
-	--cam_set_2dxy(e.fbo2dcam,50,100);
 	
 	return e;
 end
-
+--]]
 --[[--构造一个新的层级
 function engine_newPosZ()
     return get_attr(nil,"newPosZ");
@@ -67,10 +62,12 @@ function engine_setBg(r,g,b)
     change_attr(nil,"setBgColor",string.format("%s,%s,%s",r or 0,g or 0,b or 0));
 end
 --]]
+
+--[[
 function engine_get()
     return _engine;
 end
-
+--]]
 --[[
 --设置一个默认的3dcam给对象
 function engine_bind_default_3dcam(self)
@@ -82,8 +79,11 @@ end
 function ex_set_cam(self)
 	JEngine:getIns():bind_3dcam(self);
 end
---]]
+
+
 _engine=engine_init();
+--]]
+
 -------------------------------------------------
 JEngine ={
 	atals,
