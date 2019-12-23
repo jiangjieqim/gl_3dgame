@@ -67,7 +67,8 @@ local function f_camx_handle(sc)
 	local cur = sc.value * 1;
 	--print(cur);
 	cam_setPosition(cur*5,0,-10);
-	engine_refreshCam3d();
+	--engine_refreshCam3d();
+    JEngine:getIns():refresh_cam3d();
 end
 
 local function fc(progress,p)

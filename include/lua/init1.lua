@@ -23,7 +23,7 @@ dofile("..\\include\\lua\\editor.lua");
 local function f_callback2(data,obj)
 	print("******************************加载结束2",data,obj);	
 	local spr = sprite_create_9grid(data,100,50,200,50,0,3,3,3,3);
-	engine_addNode(spr);
+	JEngine:getIns():add(spr);
 end--]]
 
 --print(string.format("res = %d",res));
@@ -36,7 +36,7 @@ function f_onkey(data)
 	local key = tonumber(data);
 	--print("key = "..key);
 	if(key == KEY_ESC) then
-         engine_exit();
+        JEngine:getIns():exit();
 	elseif(key == 13) then
 	--回车
 	--	func_ex_info();
@@ -45,13 +45,10 @@ function f_onkey(data)
 	
 		--setv(btnspr,FLAGS_DRAW_PLOYGON_LINE );
 		--setv(btnspr,FLAGS_DISABLE_CULL_FACE );
-		if(btnspr) then
-			if(getv(btnspr,FLAGS_REVERSE_FACE) == 1) then
-				resetv(btnspr,FLAGS_REVERSE_FACE );
-			else
-				setv(btnspr,FLAGS_REVERSE_FACE );
-			end
-		end
+		
+		
+		--local dt = JEngine:getIns():get_delayTime();
+		--print(dt);
 	elseif(key == 50) then
 		--[[if(btnspr) then
 			setv(btnspr,FLAGS_DRAW_PLOYGON_LINE );
@@ -63,7 +60,7 @@ function f_onkey(data)
 end
 evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 
-engine_setBg(0.3,0.3,0.3);
+JEngine:getIns():setbg(0.3,0.3,0.3);
 --********************************************
 local function uiinit()
 	fps();
@@ -195,7 +192,7 @@ local function loadmd5(name)
 	func_set_scale(model,0.02)--设置模型的缩放
 
 	--f_init(model)
-	ex_set_cam(model);
+	JEngine:getIns():bind_3dcam(model);
 	
 	func_changeFlags(model,FLAGS_ANIM_ADAPTIVE)			--设置固定的fps模式,另一种自适应的有BUG
 	
@@ -238,7 +235,7 @@ local function loadObj(model)
 
 	--func_set_pick(obj,"f_pick")
 	--]]
-	ex_set_cam(obj);
+	JEngine:getIns():bind_3dcam(obj);
 	
 	func_set_x(obj,-3);
 
@@ -360,11 +357,6 @@ nskin:load("\\resource\\crl.xml","gundi.png;checkbox.png;smallbtn.png");
 --*************************************************************
 local model = u;
 local function f_rx_handle(progress,p)
-	
-	--cam_setRotateX(2*PI*(1-progress));
-	--engine_refreshCam3d();
-
-	--print(progress,p);
 	if(model) then
 		model:set_rx(progress*PI);
 	end
@@ -420,28 +412,6 @@ end
 local timer = timelater_new(10);
 evt_on(timer,EVENT_TIMER,f_fps_timer);
 
---if(model) then
---	model:set_pos(0,1,0);
---end
-
---[[
-
-local s= LineNode:new(2);
-s:push(0,-1,0);
-s:push(0,1,0);
-s:pushend();
-
-local s= LineNode:new(1,true);
-s:push(0,0,0);
-s:pushend();
---]]
-
-
-
-
---f_createLines();
-
-
 local function addbtn_fbo(fbo)
 
 	local x = 0;
@@ -453,7 +423,7 @@ local function addbtn_fbo(fbo)
 	local sprite = sprite_create_typical(nil,x,y,w,h,fbo:get_cam2d());--string.format("sv%d",cnt)
 	--set_cam(sprite,fbo:get_cam2d());
 
-	engine_addNode(sprite);
+	JEngine:getIns():add(sprite);
 	loadtexs(url,func_texloadend, { sprite=sprite;url=url});
 	--sprite_set_hit_rect(sprite,x,y,w,h);
 	--set_cam(sprite,cam2d);
@@ -468,7 +438,7 @@ local function addmd2_fbo(fbo)
 	local material = func_load("//resource//material//bauul.mat");
 	setMaterial(n,material);
 	setv(n,FLAGS_VISIBLE);
-	engine_addNode(n);
+	JEngine:getIns():add(n);
 	--setv(n,FLAGS_DRAW_PLOYGON_LINE);
 	func_set_position(n,0,0,-100);
 	
@@ -484,6 +454,6 @@ addmd2_fbo(fbo);
 addbtn_fbo(fbo);
 
 
-engine_refreshCam3d();
-
+--engine_refreshCam3d();
+JEngine:getIns():refresh_cam3d();
 --print(_VERSION) ;

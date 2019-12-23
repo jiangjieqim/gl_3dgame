@@ -25,7 +25,7 @@ function Image:init()
 	local sw,sh = self:get_size();
 	local img = sprite_create_typical(nil,0,0,sw,sh);
 	self.container = img;
-	engine_addNode(img);
+	JEngine:getIns():add(img);
 end
 
 function Image:seticon(url)

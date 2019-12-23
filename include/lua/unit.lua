@@ -62,7 +62,7 @@ function unit_load(modelURL,maturl)
 	
     self.p = md2;
 	--f_set_cam(self);
-	engine_bind_default_3dcam(self.p);--设置默认的cam矩阵空间
+	JEngine:getIns():bind_3dcam(self.p);--设置默认的cam矩阵空间
 	return self;
 end
 function unit_scale(self,value)
@@ -174,8 +174,6 @@ function example_unit()
 			--print("get curFocus point = "..func_get_curFocus());	
 		elseif(key == KEY_B)then
 			func_changeFlags(floor.p,FLAGS_DRAW_PLOYGON_LINE);
-		elseif(key == KEY_ESC) then
-		--	engine_exit();
 		end
 	end
 --if(obj2) then
@@ -205,7 +203,7 @@ function Unit:load(url,maturl,mname)
 	self.material = func_load(maturl);
     setMaterial(m,self.material);
 	setv(m,FLAGS_VISIBLE);
-	engine_bind_default_3dcam(m);
+	JEngine:getIns():bind_3dcam(m);
 --	print(m);
 end
 

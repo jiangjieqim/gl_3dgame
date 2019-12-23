@@ -66,7 +66,7 @@ local function add_small_node(parent)
 --	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
     func_setIcon(sprite, "smallbtn.png");
     func_addchild(parent,sprite);
-    engine_addNode(sprite);
+    JEngine:getIns():add(sprite);
 end
 
 
@@ -110,54 +110,6 @@ function node_fbo(avtar)
 	--print("name="..node_getName(n));
 	node_setCam(n,fbo:get_cam3d());
 	
-    engine_addNode(n.node);
-	
-	--[[
-	local ch = 500;--容器的高度
-    local sprite = sprite_create(nil,0,0,100,ch,0,1,fbo.cam2d);
-	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
-    func_setIcon(sprite, "smallbtn.png");
-    
-    --setv(sprite,FLAGS_VISIBLE);
-    local z = engine_newPosZ();
-    --print(z);
-    func_sprite_set_z(sprite,z);
-	engine_addNode(sprite);
-	--]]
+    JEngine:getIns():add(n.node);
 
-    --add_small_node(sprite);
-    --setv(sprite,FLAGS_REVERSE_FACE);--反转三角面 
-    --setv(sprite,FLAGS_DISABLE_CULL_FACE);
-    
-    --engine_addNode(sprite);--增加到主舞台
-	
-	
-	
-	
-	--[[local cy = 0;--当前的坐标
-	local ox = 1;
-	local h = fbo.size;
-	--滑动
-    local function f_scHandle(sc)
-		
-		if(h >= ch) then
-			
-			return;
-		end
-		local v = sc.value;
-        --print(v);
-        func_setPos(sprite,0,(h-ch)*v);--具有矩形遮罩区域的滚动条
-    end--]]
-    --local sc = scrollBar_new(200,0,nil,15,256);
-    --scrollBar_bind(sc,f_scHandle);
-
-
-
---[[	
-	--################
-	local sprite1 = sprite_create("defaultname2",20,10,100,50,0,1);
-    func_setIcon(sprite1, "smallbtn.png");
-	engine_addNode(sprite1);
---]]
-	
 end

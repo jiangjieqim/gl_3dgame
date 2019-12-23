@@ -19,7 +19,7 @@ f_load(line)
 	--vbo
 	md2=load_VBO_model(name,getPath(name));
 	
-	ex_set_cam(md2);
+	JEngine:getIns():bind_3dcam(md2);
 	
 	--非vbo要去检查mat是否是支持非vbo的材质
 	--md2 = load_model(name,getPath(name));	

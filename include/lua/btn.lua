@@ -67,7 +67,7 @@ function btn_create(x,y,w,h,url,use9grid,useeffect)
 	---------------------------------------
 
 	local sprite = sprite_create_typical(nil,x,y,w,h);
-	engine_addNode(sprite);
+	JEngine:getIns():add(sprite);
 	
 	use9grid = use9grid or 1;--是否使用9宫格
 	if(use9grid == 1) then

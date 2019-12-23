@@ -339,7 +339,7 @@ function example_srollView()
 		local url = "smallbtn.png";
 		
 		local sprite = sprite_create_typical(nil,x,y,w,h);--string.format("sv%d",cnt)
-		engine_addNode(sprite);
+		JEngine:getIns():add(sprite);
 		loadtexs(url,func_texloadend, { sprite=sprite;url=url});
 		sprite_set_hit_rect(sprite,x,y,w,h);
 		set_cam(sprite,cam);
@@ -349,7 +349,7 @@ function example_srollView()
 		local node ={};
 	--	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
 		
-		--engine_addNode(sprite);
+		--JEngine:getIns():add(sprite);
 
 
 		if(true) then

@@ -54,7 +54,7 @@ local function loadMD5(name)
 	--func_set_x(model,x)
 	
 	f_init(model)
-	ex_set_cam(model);
+	JEngine:getIns():bind_3dcam(model);
 	return model
 end
 --local model = func_loadobj()--加载一个obj模型
@@ -80,7 +80,7 @@ local function loadObj(model)
 
 	func_set_pick(obj,"f_pick")
 	--]]
-	ex_set_cam(obj);
+	JEngine:getIns():bind_3dcam(obj);
 	return obj
 end
 
@@ -100,7 +100,7 @@ local function loadMd2(x)
 	func_bind_collide(obj,"\\resource\\md2\\horse.md2")
 	f_add_model(obj)
 	func_set_pick(obj,"f_pick")
-	ex_set_cam(obj)
+	JEngine:getIns():bind_3dcam(obj)
 	return obj
 end 
 

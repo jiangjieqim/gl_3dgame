@@ -119,7 +119,7 @@ local function f_listCallBack(list)
 	-- local obj =func_loadobj("torus")
 	local t = func_get_longTime();
 	local obj = func_fixed_load()
-	ex_set_cam(obj);
+	JEngine:getIns():bind_3dcam(obj);
 
 
 

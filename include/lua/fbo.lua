@@ -27,7 +27,7 @@ function fboobj_init(tw,th)
 	
 	fbo.spr = f_createSprite(tw,tex);
 	
-	engine_addNode(fbo.spr);--将spr添加到渲染列表
+	JEngine:getIns():add(fbo.spr);--将spr添加到渲染列表
 	
 	add_fbo(ptr);--添加到引擎的fbolist中
 		
@@ -69,7 +69,7 @@ function FboRender:new(tw,th)
 	
 	fbo.spr = f_createSprite(tw,tex);
 	
-	engine_addNode(fbo.spr);--将spr添加到渲染列表
+	JEngine:getIns():add(fbo.spr);--将spr添加到渲染列表
 	
 	add_fbo(ptr);--添加到引擎的fbolist中
 	return fbo;

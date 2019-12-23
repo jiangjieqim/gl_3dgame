@@ -26,7 +26,7 @@ function Shape:init()
 	self:settype(11);
 	local sprite = sprite_create_typical(nil,0,0,self.w,self.h);
 	self.container = sprite;
-	engine_addNode(sprite);	
+	JEngine:getIns():add(sprite);	
 	local material = func_load("//resource//material//shape.mat");
 	setMaterial(self.container,material);
 	self:mouseEnable(false);--默认关闭鼠标事件

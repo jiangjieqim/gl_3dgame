@@ -216,11 +216,7 @@ local function btnClick(self)
 	self:hide();
 end
 local function f_rx_handle(progress,p)
-	
-	--cam_setRotateX(2*PI*(1-progress));
-	--engine_refreshCam3d();
 
-	--print(progress);
 end
 
 local function f_cpmlete(skin,self)

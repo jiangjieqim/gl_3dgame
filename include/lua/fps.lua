@@ -1,9 +1,3 @@
---[[local bytes ,emptycnt,allbytes= memory_get_info();
-		local s = string.format("fps=%d—”≥Ÿ%d-%d-%d-[%d,%d,(_%.0f_kb)]",curFbs,engine_getDelayTime(),maxValue,_time/1000,
-					bytes,emptycnt,allbytes / 1024);
---]]
---##################################################################
-
 --Fps ”Õº¿‡
 FpsView = {
 	label,
@@ -26,7 +20,7 @@ function FpsView:new()
 end
 local function f_fps_timer(data,param)
 	local self = param;
-	local _fps = engine_get_fps();
+	local _fps = JEngine:getIns():get_fps();--engine_get_fps();
 	local str = _fps;
 	if(self.formatstr) then
 		str = string.format(self.formatstr,_fps);

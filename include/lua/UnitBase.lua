@@ -19,7 +19,7 @@ end
 local function f_set_cam(self)
 --	local e = engine_get();
 --	set_cam(self.p,e.cam3d);
-	engine_bind_default_3dcam(self.p);
+	JEngine:getIns():bind_3dcam(self.p);
 end
 --»ñÈ¡¾ä±ú
 function UnitBase:get_p()

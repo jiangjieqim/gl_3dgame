@@ -13,7 +13,7 @@ local function f_loadObj(model)
 	--local obj = func_loadobj(model)--box	'torus'
 	local obj = load_model(name,string.format("\\resource\\obj\\%s.obj",model));	
 
-	engine_bind_default_3dcam(obj);
+	JEngine:getIns():bind_3dcam(obj);
 	
 	setMaterial(obj,func_load("//resource//material//wolf.mat"));
 	setv(obj,FLAGS_VISIBLE);
@@ -69,9 +69,9 @@ local function f_select(self,index,param)
 --        print(_stat);
 
         if(_stat) then
-            engine_setBg(0.1,0.1,0.1);
+            JEngine:getIns():setbg(0.1,0.1,0.1);
         else
-            engine_setBg(0.4,0.4,0.4);
+            JEngine:getIns():setbg(0.4,0.4,0.4);
         end
 	elseif (index == 4) then
 		--创建一个mesh

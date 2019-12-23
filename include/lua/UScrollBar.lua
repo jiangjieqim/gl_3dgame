@@ -206,13 +206,13 @@ scrollBar_new(x,y,parent,cw,ch)
 	
 	local bg = sprite_create_typical(nil,x,y,sc.defaultBg_width,sc.defaultBg_height);
     local url = "checkbox.png";
-	engine_addNode(bg);
+	JEngine:getIns():add(bg);
 	loadtexs(url,func_texloadend, { sprite=bg;url=url});
 	
 	--创建小按钮
 	url = "smallbtn.png";--"checkbox.png";--"gundi.png";
 	local btn = sprite_create_typical(nil,x,y,barSize,barSize);
-	engine_addNode(btn);
+	JEngine:getIns():add(btn);
 	
 	func_addchild(bg,btn);
 

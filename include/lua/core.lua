@@ -911,7 +911,7 @@ function func_create_grid_sprite(x,y,w,h,url,name)
 	url = url or "gundi.png";
 	local sprite = sprite_create_typical(name,x,y,w,h);
 	loadtexs(url,func_texloadend, { sprite=sprite;url=url});
-	engine_addNode(sprite);
+	JEngine:getIns():add(sprite);
 	return sprite;
 end
 --Ïàµ±ÓÚaddchild
