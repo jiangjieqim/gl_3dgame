@@ -37,14 +37,15 @@ end
 
 --当前的2dcam句柄,指定sprite必须指定对应的cam引用
 function scrollView_get_cam(sv)
-	return sv.fbo.cam2d;
+	return sv.fbo:get_cam2d();--sv.fbo.cam2d;
 end
 
 --设置滚动条组件的坐标
 function scrollView_set_pos(sv,x,y)
 	sv.x = x;
 	sv.y = y;
-	fboobj_set_pos(sv.fbo,x,y);
+	--fboobj_set_pos(sv.fbo,x,y);
+	sv.fbo:set_pos(x,y);
 end
 --从对象池中释放一个节点
 local function f_pool_recycs(sv,targetObj)
@@ -250,7 +251,8 @@ function scrollView_dispose(sv)
 	end
 	
 	if(sv.fbo) then
-		fboobj_dispose(sv.fbo);
+		--fboobj_dispose(sv.fbo);
+		sv.fbo:dispose();
 	end
 	
 	if(sv.sc) then
@@ -306,7 +308,7 @@ function scrollView_init(sw,sh,x,y,gap)
 	
 	sv.dir = dir;
 	
-	sv.fbo = fboobj_init(maxSize,maxSize);
+	sv.fbo = FboRender:new(maxSize,maxSize);--fboobj_init(maxSize,maxSize);
     
 	x = x or 0;
 	y = y or 0;
@@ -320,10 +322,15 @@ function scrollView_init(sw,sh,x,y,gap)
 end
 
 --遮罩滚动条使用案例
-function example_srollView()
+function example_srollView(posx,posy)
+	posx = posx or 0;
+	posy = posy or 0;
 	--*********************************************************************************
 	local itemHeight = 30;
 	local cam;
+	
+	local sv;
+	
 	--local cnt = 0;
 	local function f_create()
 		--local sprite = sprite_create(nil,0,0,90,itemHeight,0,1,cam);	func_setIcon(sprite, "smallbtn.png");
@@ -368,6 +375,8 @@ function example_srollView()
 		node.index = nil;
 		local function clickEvt()
 			print("点击的节点index = ",node.index,"data = ",node.data);
+			
+			--scrollView_dispose(sv);
 		end
 		
 		evt_on(sprite,EVENT_ENGINE_SPRITE_CLICK,clickEvt);
@@ -404,7 +413,7 @@ function example_srollView()
 	
 	--*************************************************************************************
 	--初始化
-	local sv = scrollView_init(100,itemHeight*4,10,0);
+	sv = scrollView_init(100,itemHeight*4,posx,posy);
 	sv.itemFunc = f_create;				--设置itemRende的创建回调
 	sv.itemRefreshFunc = itemRefreshFunc;	--设置刷新视图的回调
 	sv.itemDisposeFunc = f_dispose;		--设置itemRender销毁回调函数

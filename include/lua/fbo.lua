@@ -11,7 +11,7 @@ local function f_createSprite(size,tex)
     return spr;
 end
 --初始化FBO对象
-function fboobj_init(tw,th)
+local function fboobj_init(tw,th)
     local fbo = {};
     local ptr,cam3d,cam2d,tex = fbo_init(tw,th);--构建fbo对象
 	
@@ -35,14 +35,14 @@ function fboobj_init(tw,th)
 end
 
 --销毁fbo对象
-function fboobj_dispose(fbo)
+local function fboobj_dispose(fbo)
 	fbo_dispose(fbo.ptr);
 	remove_fbo(fbo.ptr);--将fbo从引擎的fbolist移除
 
 	ptr_remove(fbo.spr);
 end
 
-function fboobj_set_pos(fbo,x,y)
+local function fboobj_set_pos(fbo,x,y)
 	local spr = fbo.spr;
 	func_setPos(spr,x,y);
 	cam_set_2dxy(fbo.cam2d,x,y);
@@ -80,7 +80,7 @@ function FboRender:dispose()
 
 	fbo_dispose(self.ptr);
 	remove_fbo(self.ptr);--将fbo从引擎的fbolist移除
-	ptr_remove(self.spr);
+	ptr_remove(self.spr);--销毁fbo占用的sprite对象
 end
 
 function FboRender:get_cam3d()

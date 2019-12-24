@@ -10,10 +10,10 @@ dofile("..\\include\\lua\\editor.lua");
 
 --func_enable_debug(false);--关闭调试日志
 
---example_stack();
+--	example_stack();
 
 --########################################
---example_srollView();
+example_srollView(200,0);
 
 --btn_create(200,50,60,20,"smallbtn.png");
 --btn_create(200,70,120,40,"smallbtn.png");
@@ -285,7 +285,7 @@ p1:enable_center(true);
 p1:setDrag(true);
 p1:center();--]]
 
---local mc = ModelControl:new(30,30);
+--local mc = ModelControl:new(300,30);
 local u = loadbox();
 --mc:bind(u);
 
