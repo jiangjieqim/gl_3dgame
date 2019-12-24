@@ -66,9 +66,9 @@ end
 
 --当滚动游标移动的时候触发
 local function f_luaDrag_move(progress,self)    
-	--print(data,p);
-	--print(data);;
+	
 	if(self.callBack) then
+		--print(progress,self);
 		self.callBack(progress,self.callBackParam);
 	end
 end

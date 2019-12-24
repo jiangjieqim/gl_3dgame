@@ -31,7 +31,8 @@ tf_create(int bufferSize,int x,int y,
 	tf->base = base_create(TYPE_TEXT_FILE,buffer,0,0,0);
 	base = (struct HeadInfo*)tf->base;
 	//base->parent = tf;
-	setv(&(base->flags),FLAGS_VISIBLE);
+	//setv(&(base->flags),FLAGS_VISIBLE);
+	base_set_visible(base,1);
 
 	//构建文本缓冲区
 	tf->textPtr = tl_malloc(bufferSize);
@@ -99,7 +100,7 @@ tf_dispose(struct TextField* tf){
 void tf_render(int data)
 {
 	struct HeadInfo* base = base_get((void*)data);
-	if(getv(&base->flags,FLAGS_VISIBLE) && base->curType == TYPE_TEXT_FILE)
+	if(/*getv(&base->flags,FLAGS_VISIBLE) && */ base->curType == TYPE_TEXT_FILE)
 	{
 		struct EX* e = ex_getIns();
 		struct TextField* tf = (struct TextField*)data;

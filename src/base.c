@@ -757,7 +757,14 @@ void* base_findByName(void* list,const char* name){
 	return 0;
 }
 
-
+void base_set_visible(struct HeadInfo* base,int v){
+	int flag = FLAGS_VISIBLE;
+	if(v){
+		setv(&base->flags,flag);
+	}else{
+		resetv(&base->flags,flag);
+	}
+}
 void base_renderFill(struct HeadInfo* base,
 					 GLfloat* vertex,int vertLen)
 {
@@ -766,11 +773,11 @@ void base_renderFill(struct HeadInfo* base,
 	//绘制静态包围盒
 	//f_base_staticBox(base);
 
-	if(!getv(&(base->flags),FLAGS_VISIBLE))
-	{
-		//是否隐藏mesh
-		return;
-	}
+	//if(!getv(&(base->flags),FLAGS_VISIBLE))
+	//{
+	//	//是否隐藏mesh
+	//	return;
+	//}
 
 	/***这里是各种渲染模式集合	***/
 

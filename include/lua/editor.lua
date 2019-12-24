@@ -1,14 +1,61 @@
-ModleShow = {
+local ModleShow = {
 	nskin,
 	fbo,
+	
+	u,--UnitBase
 };
 ModleShow.__index = ModleShow;
 
+
+--增加一个md2渲染对象到fbo对象引用中
+local function addmd2_fbo(fbo)
+	local cam2d,cam3d = JEngine:getIns():get_cam();
+
+
+--[[
+	local n = JEngine:getIns():load("\\resource\\md2\\bauul.md2");--"\\resource\\md2\\bauul.md2"
+	local material = func_load("//resource//material//bauul.mat");
+	setMaterial(n,material);
+	setv(n,FLAGS_VISIBLE);
+	JEngine:getIns():add(n);
+	--setv(n,FLAGS_DRAW_PLOYGON_LINE);
+	func_set_position(n,0,0,-100);
+	
+	func_setRotateX(n,PI/2)
+	func_setRotateY(n,PI/2)
+	set_cam(n,fbo:get_cam3d());
+--]]
+	local cam = fbo:get_cam3d();
+	--cam = nil;
+
+	local n = UnitBase:new();
+	n:loadvbo("\\resource\\md2\\bauul.md2",--bauul,triangle
+				"//resource//material//bauul.mat",
+				cam);
+	
+	--n:scale(0.5);
+	
+	n:set_position(0,0,-100);
+	
+	--self.u = u;
+	--set_cam(n,cam3d); 
+	
+	return n;
+end
+
+local function f_scale_handle(progress,self)
+	--local self = scrollBar_get_param(sc);
+	--func_rotate(unit_get_model(self.obj), "ry", sc.value*PI);
+
+	self.u:scale(progress);
+	--print(progress,self);
+end
+
 local function btnClick(self)
-	--print("p=",self);
+	print("u name =",self.u:get_name());
 	--m_dispose(self);
 
-	self:dispose();
+	--self:dispose();
 end
 local function f_cpmlete(self)
 	local skin = self.nskin;
@@ -17,6 +64,15 @@ local function f_cpmlete(self)
 	local fbo = FboRender:new(128,128);
 	fbo:set_pos(x,y);
 	self.fbo = fbo;
+	
+	self.u = addmd2_fbo(fbo);--增加一个vbo模型
+	
+	local scale = skin:find("scale");
+	--print(scale);
+	scale:bindCallback(f_scale_handle,self);
+	--scrollBar_bind(f_scale_handle,self);
+
+	
 	--self.fbo:dispose();
 	--print(x,y);
 	--self:dispose();

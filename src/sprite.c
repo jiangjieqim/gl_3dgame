@@ -643,7 +643,8 @@ sprite_create(char* _spriteName,
 	base = pSpr->base;
 	//base->parent = pSpr;
 	if(base){
-		setv(&base->flags,FLAGS_VISIBLE);//FLAGS_RAY
+		//setv(&base->flags,FLAGS_VISIBLE);
+		base_set_visible(base,1);
 		pSpr->clickCallBack = clickCallBack;
 		//ex_add(pSpr);
 	}
@@ -694,7 +695,7 @@ sprite_isEnable(int data)
 	
 	objType = base->curType;
 
-	if(objType == TYPE_SPRITE_FLIE && getv(&(base->flags),FLAGS_VISIBLE))
+	if(objType == TYPE_SPRITE_FLIE /*&& getv(&(base->flags),FLAGS_VISIBLE)*/)
 	{
 		return 1;
 	}

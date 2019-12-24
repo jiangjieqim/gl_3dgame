@@ -36,6 +36,7 @@ void* linenode_create(const char* name,int vertcnt,void* cam,int point){
 		tmat->rendermode = GL_LINE_STRIP;
 	}
 	line->base->tmat = tmat;
+	base_set_visible(line->base,1);
 	return line;
 }
 

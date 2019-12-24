@@ -1,7 +1,7 @@
 --md2动作控制器管理
 --dofile("..\\include\\lua\\core.lua")
 
-func_print('md2动作控制')
+--func_print('md2动作控制')
 
 local function getPath(name)
 	return "\\resource\\md2\\"..name..".md2"
@@ -86,5 +86,5 @@ f_anim_control_ui(m,x,y)
 	listbox_bind(list,f_listSelect,m);
 end
 ---------------------------------------------------------------------------
-cam_setPosition(0,0,-90);
+--cam_setPosition(0,0,-90);
 f_anim_control_ui(f_load(),0,120);

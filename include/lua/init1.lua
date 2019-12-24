@@ -79,7 +79,7 @@ end
 
 --arrow();
 
-infowin(150,50);
+infowin(150,0);
 
 
 --		uiinit();
@@ -156,15 +156,6 @@ local function loadbox()
 end
 
 
-local function loadmd2()
-	local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
-		"//resource//material//bauul.mat");
-	unit_scale(obj2,0.02);
-	unit_rx(obj2,PI/2);
-	unit_split_anim(obj2);
-	unit_set_pos(obj2,1,0,0);
-	setv(obj2.p,FLAGS_RENDER_BOUND_BOX);
-end
 
 local function loadmd5(name)
 	local model

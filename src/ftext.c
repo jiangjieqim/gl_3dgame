@@ -160,7 +160,11 @@ f_pCallBack(void* inParam,char* str){
 void
 ftext_vis(void* p,int vis){
 	FText* txt = (FText*)p;
-	vis ? base_setv(txt->spr,FLAGS_VISIBLE) : base_resetv(txt->spr,FLAGS_VISIBLE);
+	/*int flag = FLAGS_VISIBLE;
+	vis ? base_setv(txt->spr,flag) : base_resetv(txt->spr,flag);*/
+
+	struct HeadInfo* base =	(struct HeadInfo*)txt->spr->base;
+	base_set_visible(base,vis);
 }
 void 
 ftext_set_wordWrap(void* p,int v){

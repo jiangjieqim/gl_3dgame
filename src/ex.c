@@ -844,6 +844,11 @@ ex_render3dNode(int data)
 	struct HeadInfo* base = base_get((void*)data);
 	int objType = base->curType;
 	void* targetCam = base->cam;
+	
+	if(!getv(&(base->flags),FLAGS_VISIBLE))
+	{
+		return;
+	}
 
 	if(objType == TYPE_SPRITE_FLIE){
 		checkcam = ex->_2dCurCam;
@@ -1339,47 +1344,6 @@ static void
 f_stage_click_callback(struct Sprite* self,int x,int y){
 	//printf("f_stage_click_callback %d,%d\n",x,y);
 }
-
-////初始化一个设置坐标和cam角度的fbo
-//static void
-//f_init_fbo(void* fbo){
-//	void* cam = fbo_get3dCam(fbo);
-//	//void* spr = sprite_createEmptyTex(256,256);
-//
-//	//void* mat = sprite_get_material(spr);
-//	//tmat_pushTex(mat,(GLuint)fbo_getTex(fbo));
-//
-//	//base_resetv(spr,FLAGS_VISIBLE);
-//	//sprite_setpos((struct Sprite*)spr,100,100);
-//	//ex_getIns()->fboTexSprite = spr;
-//
-//	//ex_getIns()->fboTexture = fbo_getTex(fbo);
-//
-//	cam_setZ(cam,-3);
-//	cam_setRX(cam,PI*1.8);
-//	cam_refreshModel(cam);
-//	
-//	{
-//		/*void*	ptr = sprite_create("a",0,0,50,50,0);
-//		sprite_
-//		fbo_pushNode(fbo,ptr);*/
-//	}
-//}
-
-////初始化场景,舞台和设备上下文设备都处理完成了
-//static void
-//f_initScene(){
-//	struct EX* p = ex_getIns();
-//	//**************************************************
-//	//初始化一个fbo texture对象
-//	//p->fbo = fbo_init(256,256);
-//	//f_init_fbo(p->fbo);
-//	
-//	//ex_reshape(sw,sh);
-//
-//	//在这里可以初始化一些 引擎需要的配置等文件
-//	evt_dispatch(ex_getIns(),EVENT_ENGING_INIT,0);
-//}
 
 //构造stage2d舞台
 static int 

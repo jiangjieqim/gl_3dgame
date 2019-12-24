@@ -32,21 +32,39 @@ local function f_split_init(md2)
 	func_set_anim(md2,"stand");
 	func_play(md2);
 end
-function UnitBase:loadvbo(modelURL,maturl)
-    local name = func_create_name();--f_createName(self);
+
+--设置当前的对象的cam
+function UnitBase:set_cam(cam)
+	if(cam) then
+		set_cam(self.p,cam);--使用指定的cam
+	else
+		JEngine:getIns():bind_3dcam(self.p);--使用默认的cam
+	end
+end
+
+--加载VBO模型
+function UnitBase:loadvbo(modelURL,maturl,cam)
             
     --print("**创建角色",modelURL,name);
 
-    local md2=load_VBO_model(name,modelURL);
+    local md2=JEngine:getIns():load(modelURL);
+	
+	--load_VBO_model(name,modelURL);
     self.material = func_load(maturl);
     setMaterial(md2,self.material);
-	setv(md2,FLAGS_VISIBLE);
-    f_split_init(md2);
+	setv(md2,FLAGS_VISIBLE);--显示模型对象
+    
+	--f_split_init(md2);
+	
+	
     --setv(md2,FLAGS_DISABLE_CULL_FACE)--设置双面都能渲染
     --local ss =new_sharp;
    
     self.p = md2;
-	f_set_cam(self);
+	
+	JEngine:getIns():add(self.p);
+	self:set_cam(cam);
+	--f_set_cam(self);
 end;
 --加载一个测试立方体
 function UnitBase:loadbox()

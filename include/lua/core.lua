@@ -886,21 +886,6 @@ function func_split(str, delimiter)
     return result
 end
 
-----xml转化为table结构体数据
---function func_xml_to_tb(data)
---    local xml = xml_load_str(data);
---	local node = xml_get_node_by_index(xml,0);
---	local x = xml_get_float(node,"x")
---	local y = xml_get_float(node,"y")
---	local z = xml_get_float(node,"z")
---	xml_del(xml);
---    local tb = {};
---    tb.x = x;
---    tb.y = y;
---    tb.z = z;
---    return tb;
---end
-
 --加载完tex之后的回调方法
 function func_texloadend(n)
 	sprite_set_9grid(n.sprite,n.url,n.l or 3,n.r or 3,n.t or 3,n.b or 3,JEngine:getIns():get_atals());

@@ -215,4 +215,8 @@ base_set_cam(void* p,void*cam);
 //»ñÈ¡cam¾ä±ú
 void*
 base_get_cam(void* p);
+/*
+	v:1 ÏÔÊ¾ 0 Òş²Ø
+*/
+void base_set_visible(struct HeadInfo* base,int v);
 #endif

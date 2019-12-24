@@ -135,8 +135,8 @@ void
 node_render(struct Node* p){
 	struct HeadInfo* base =	base_get(p);
 
-	if(!getv(&(base->flags),FLAGS_VISIBLE))
-		return;
+	/*if(!getv(&(base->flags),FLAGS_VISIBLE))
+		return;*/
 
 	//////////////////////////////////////////////////////////////////////////
 	//objVBO_render作为节点渲染代理接口
