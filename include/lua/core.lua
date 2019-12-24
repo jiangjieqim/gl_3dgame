@@ -975,6 +975,7 @@ end
 
 --销毁组件
 function func_dispose(n)
+   
 	local _type = n.type;
 	if(_type == UI_TYPE.Label) then
 		label_dispose(n);
@@ -1000,6 +1001,7 @@ function func_dispose(n)
 										)then
 		
 		n:dispose();--删除组件
+        
 		
 	elseif(_type == UI_TYPE.ListBox) then	
 		listbox_del(n);

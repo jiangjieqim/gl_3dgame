@@ -108,7 +108,7 @@ end
 --dofile("..\\include\\lua\\modelUI.lua")
 
 --func_set_camera_pos(0,0,-5)-- -10
-JEngine:getIns():set_cam_pos(0,0,-5);
+cam_setPosition(0,0,-5);
 --初始化界面控制器
 --modelUI_init()
 

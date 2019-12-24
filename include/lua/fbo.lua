@@ -75,6 +75,11 @@ function FboRender:new(tw,th)
 	return fbo;
 end
 
+--装载fbo的sprite容器句柄
+function FboRender:get_container()
+	return self.spr;
+end
+
 function FboRender:dispose()
 --还需要将添加进来的渲染对象删除掉
 
@@ -89,6 +94,7 @@ end
 function FboRender:get_cam2d()
 	return self.cam2d;
 end
+--设置fbo所在的屏幕坐标
 function FboRender:set_pos(x,y)
 	local fbo = self;
 	local spr = fbo.spr;

@@ -13,7 +13,7 @@ dofile("..\\include\\lua\\editor.lua");
 --	example_stack();
 
 --########################################
-example_srollView(200,0);
+--example_srollView(200,0);
 
 --btn_create(200,50,60,20,"smallbtn.png");
 --btn_create(200,70,120,40,"smallbtn.png");
@@ -443,11 +443,11 @@ local function addmd2_fbo(fbo)
 	--set_cam(n,cam3d);
 end
 --创建一个fbo对象
-local fbo = FboRender:new(128,128);
-fbo:set_pos(0,200);
+--local fbo = FboRender:new(128,128);
+--fbo:set_pos(0,200);
 
-addmd2_fbo(fbo);
-addbtn_fbo(fbo);
+--addmd2_fbo(fbo);
+--addbtn_fbo(fbo);
 
 
 

@@ -1,0 +1,3 @@
+<ui name="1" type="NPanel" drag="1" center="0" width="200" height="250" x="0" y="70"/>
+<ui name="rx_sc" type="ScrollBar" x="0" y="128" parent="1"/>
+<ui name="btn0" type="NButton" x="0" y="140" parent="1" label="del" url="smallbtn.png" w="50" h="20"/>

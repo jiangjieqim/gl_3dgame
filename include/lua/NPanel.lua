@@ -45,6 +45,10 @@ function NPanel:set_pos(x,y)
 	bg:set_pos(x,y);
 end
 
+--获取NPanel的坐标
+function NPanel:get_pos()
+	return self.bg:get_pos();
+end
 --获取Shape当前容器
 function NPanel:get_container()
 	return self.bg:get_container();
@@ -89,10 +93,12 @@ end
 function NPanel:dispose()
 	local bg = self.bg;
 	--self:set_click_close(false);
+	print("NPanel:dispose()");
 	self:enable_center(false);
 	--func_error(0);
 	bg:dispose();
 	func_clearTableItem(self);
+
 end
 
 --[[local function f_click(name,self)

@@ -124,8 +124,12 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 			np:enable_center(true);
 			np:setDrag(true);
 			np:center();
+		else
+			np:set_pos(x,y);
 		end
 		stack_push(list,np);
+		
+		
 	
 	elseif(_type == "Label") then
 		local label =  label_create();
@@ -360,6 +364,14 @@ function NSkin:set_pos(x,y)
 	local node = stack_find_by_index(list,0);--默认取栈中0号索引中的数据
 	node:set_pos(x,y);
 end
+
+--获取坐标
+function NSkin:get_pos(x,y)
+	local list = self.list;
+	local node = stack_find_by_index(list,0);--默认取栈中0号索引中的数据
+	return node:get_pos(x,y);
+end
+
 
 --根据名字找到组件引用
 function NSkin:find(name)
