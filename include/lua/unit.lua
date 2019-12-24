@@ -132,7 +132,7 @@ function example_unit()
 		return obj2;
 	end
 	cam_setRotateX(PI * 1.8);
-	cam_setPosition(0,0,-6);
+	JEngine:getIns():set_cam_pos(0,0,-6);
 	
 	local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
 		"//resource//material//bauul.mat");

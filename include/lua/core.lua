@@ -1019,7 +1019,6 @@ dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器
 
 dofile("..\\include\\lua\\engine.lua")	--引擎1
 
-dofile("..\\include\\lua\\cam.lua")	--cam
 dofile("..\\include\\lua\\fbo.lua")	--fbo
 
 dofile("..\\include\\lua\\fps.lua")	--fps组件

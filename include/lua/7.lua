@@ -3,7 +3,7 @@
 --…Ë÷√cam
 
 cam_setRotateX(PI * 1.8);
-cam_setPosition(0,0,-6);
+JEngine:getIns():set_cam_pos(0,0,-6);
 --cam:rx(PI * 1.8);
 ----------------------------------------------------------------------------
 --local obj = UnitBase:new();
@@ -60,7 +60,6 @@ local function f_animscHandle(sc)
 		select:ry(v);
     end
 
- --  cam_setRotateX(v);
 end
 scrollBar_setRange(animsc,0,1)
 ----animscTf = scrollBar_add_text(animsc,'animsc')

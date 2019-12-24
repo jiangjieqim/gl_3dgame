@@ -170,7 +170,7 @@ end
 -- cam:position(0,0,-2)
 -- load_alpha_model()
 
-cam_setPosition(0, 0, -10);
+JEngine:getIns():set_cam_pos(0, 0, -10);
 local list = f_shader_init();
 
 -- listbox_select(list,0)--默认选择一个

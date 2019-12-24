@@ -86,5 +86,5 @@ f_anim_control_ui(m,x,y)
 	listbox_bind(list,f_listSelect,m);
 end
 ---------------------------------------------------------------------------
-cam_setPosition(0,0,-90);
+JEngine:getIns():set_cam_pos(0,0,-90);
 f_anim_control_ui(f_load(),0,120);

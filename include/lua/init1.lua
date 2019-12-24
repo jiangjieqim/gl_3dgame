@@ -259,8 +259,7 @@ setv(obj.m,FLAGS_DRAW_PLOYGON_LINE);
 
 
 
---cam_setPosition(0,0,-10);
-cam_setPosition(0,-4,-12);
+JEngine:getIns():set_cam_pos(0,-4,-12);
 
 
 --添加fps显示视图
@@ -445,7 +444,7 @@ local function addmd2_fbo(fbo)
 end
 --创建一个fbo对象
 local fbo = FboRender:new(128,128);
-fbo:set_pos(128,128);
+fbo:set_pos(0,200);
 
 addmd2_fbo(fbo);
 addbtn_fbo(fbo);
