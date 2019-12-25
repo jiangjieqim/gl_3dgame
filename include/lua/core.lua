@@ -779,6 +779,8 @@ function func_set_anim(o,anim)
 	change_attr(o,"animtor_setcur",anim);
 end
 
+
+
 --获取文本
 function func_get_tf_text(tf)
 	return dofunc("tf_get_str",tf);

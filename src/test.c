@@ -2249,7 +2249,7 @@ REG_change_attr(lua_State *L)
 		}
 		*/
 		//int len = node->anim->allLength;
-		int total = anim_total(node->anim);
+		int total = anim_total(node->anim);//当前的关键帧数量
 		
 		sscanf_s(str2,"%d,%d",&s,&e);
 		if(total < e  + 1 || total < e + 1){
@@ -2261,8 +2261,14 @@ REG_change_attr(lua_State *L)
 		}
 		animtor_push(animtor,str,s,e);
 	}
+	else if(!strcmp(attrKey,"animtor_total"))
+	{
+		int total = anim_total(node->anim);
+		lua_pushinteger(L,total);
+		return 1;	
+	}
 	//设置当前动作
-	if(!strcmp(attrKey,"animtor_setcur"))
+	else if(!strcmp(attrKey,"animtor_setcur"))
 	{
 		/*
 		struct Animtor* animtor=anim_get_animtor(node->anim);
@@ -2287,16 +2293,22 @@ REG_change_attr(lua_State *L)
 		struct Animtor* animtor=anim_get_animtor(node->anim);
 		animtor_play(animtor);
 	}
-	
+	//是否在播放
+	else if(!strcmp(attrKey,"animtor_isPlaying"))
+	{
+		struct Animtor* animtor=anim_get_animtor(node->anim);
+		int status = animtor_isPlaying(animtor);
+		lua_pushinteger(L,status);
+		return 1;
+	}
 	//暂停播放当前动作
-	if(!strcmp(attrKey,"animtor_pause"))
+	else if(!strcmp(attrKey,"animtor_pause"))
 	{
 		struct Animtor* animtor=anim_get_animtor(node->anim);
 		animtor_pause(animtor);
 	}
-
 	//指定区间播放动画
-	if(!strcmp(attrKey,"animtor_play_start_end"))
+	else if(!strcmp(attrKey,"animtor_play_start_end"))
 	{
 		struct Animtor* animtor=anim_get_animtor(node->anim);
 		int s,e;

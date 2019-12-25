@@ -1,11 +1,14 @@
 UnitBaseEvent = 10000;
 UnitBaseEndMsg = "UnitBaseEndMsg";--移动结束
 
+--只实现 p = TYPE_OBJ_VBO_FILE 类型的对象
 UnitBase = {
 
     p,--角色句柄,是引擎中的md2,obj,md5引用的值
     material,--材质引用
     speed,--移动速度
+	
+	
 };
 UnitBase.__index = UnitBase;
 function UnitBase:new()
@@ -24,15 +27,38 @@ function UnitBase:get_p()
     return self.p;
 end
 
---初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
-local function f_split_init(md2)
-	func_anim_push(md2,"stand",0,39);
-	func_anim_push(md2,"run",40,45);
-	func_anim_push(md2,"jump",66,71);
-	func_set_anim(md2,"stand");
-	func_play(md2);
+--获取模型的类型
+function UnitBase:get_type()
+	return JEngine:getIns():get_type(self.p);
 end
 
+--分割动画
+function UnitBase:anim_push(animname,s,e)
+	change_attr(self.p,"animtor_push",animname,string.format('%s,%s',s,e));
+end
+--是否在播放
+function UnitBase:isPlaying()
+	if(change_attr(self.p,"animtor_isPlaying") == 1) then
+		return true;
+	end
+end
+
+--[[
+	初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
+	播放指定的动画
+	"stand",0,39
+	"run",40,45
+	"jump",66,71
+--]]
+function UnitBase:play(anim)
+	local o = self.p;
+	change_attr(o,"animtor_setcur",anim);
+	change_attr(o,"animtor_play");
+end
+--暂停
+function UnitBase:pause()
+	change_attr(self.p,"animtor_pause");
+end
 --设置当前的对象的cam
 function UnitBase:set_cam(cam)
 	if(cam) then
@@ -115,6 +141,17 @@ function UnitBase:scale(value)
 end
 function UnitBase:get_scale()
     return func_get_scale(self.p);
+end
+
+--获取动作总数
+function UnitBase:anim_total()
+	local p = self:get_p();
+	--if(self:get_type() == TYPE_OBJ_VBO_FILE) then
+	local total = change_attr(p,"animtor_total");
+	return total;
+	--else
+	--	func_error("类型未实现get_anim_total");
+	--end
 end
 
 function UnitBase:rx(v)

@@ -22,6 +22,9 @@ local function addmd2_fbo(fbo)
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-100);
 	
+	--n:anim_push("stand",0,39);
+	n:anim_push("jump",66,71);
+	n:play("jump");
 	return n;
 end
 
@@ -34,10 +37,19 @@ local function f_scale_handle(progress,self)
 end
 
 local function btnClick(self)
-	print("u name =",self.u:get_name(),
-		JEngine:getIns():get_type_str(self.u:get_p())
+	local u = self.u;
 	
+	print("u name =",u:get_name(),
+		--JEngine:getIns():get_type_str(self.u:get_p())
+		"type",u:get_type(),
+		"total",u:anim_total()
+		
 	);
+	if(u:isPlaying()) then
+		u:pause();
+	else
+		u:play("jump");
+	end
 	--m_dispose(self);
 
 	--self:dispose();
