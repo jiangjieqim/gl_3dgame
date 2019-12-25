@@ -79,6 +79,41 @@ function JEngine:set_cam_pos(x,y,z)
 end
 
 
+--[[
+	获取对象的类型
+#define TYPE_OBJ_FILE 0	//obj类型
+#define TYPE_MD5_FILE 1 //md5类型
+#define TYPE_MD2_FILE 2 //md2类型
+#define TYPE_SPRITE_FLIE 3//UI界面类型中的sprite
+#define TYPE_TEXT_FILE	4	//文本类型
+#define TYPE_OBJ_VBO_FILE	5//VBO文件数据
+
+--]]
+--function func_get_type(p)--func_getGameObjectType
+	--func_error();
+--	return	get_attr(p,"type")
+--end
+function JEngine:get_type(p)
+	return	get_attr(p,"type");
+end
+
+function JEngine:get_type_str(p)
+	local t = self:get_type(p);
+	if(t == 0) then
+		return 'obj'
+	elseif(t == 1)then
+		return 'md5'
+	elseif(t == 2)then
+		return 'md2'
+	elseif(t == 3)then
+		return 'sprite'
+	elseif(t == 4)then
+		return 'text'
+	elseif(t == 5)then
+		return 'vbo'
+	end
+end
+
 function cam_setRotateX(rx)
 	--print(rx);
 	change_attr(nil,"camRX",rx);

@@ -50,7 +50,7 @@ function unit_load(modelURL,maturl)
 		print("未实现该格式的文件解析"..modelURL);
 		return;
 	end
-	self.type = func_get_type(md2);
+	self.type = JEngine:getIns():get_type(md2);
     self.material = func_load(maturl);
     setMaterial(md2,self.material);
 	setv(md2,FLAGS_VISIBLE);

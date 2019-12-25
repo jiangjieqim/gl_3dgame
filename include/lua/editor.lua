@@ -9,36 +9,18 @@ ModleShow.__index = ModleShow;
 
 --增加一个md2渲染对象到fbo对象引用中
 local function addmd2_fbo(fbo)
-	local cam2d,cam3d = JEngine:getIns():get_cam();
 
-
---[[
-	local n = JEngine:getIns():load("\\resource\\md2\\bauul.md2");--"\\resource\\md2\\bauul.md2"
-	local material = func_load("//resource//material//bauul.mat");
-	setMaterial(n,material);
-	setv(n,FLAGS_VISIBLE);
-	JEngine:getIns():add(n);
-	--setv(n,FLAGS_DRAW_PLOYGON_LINE);
-	func_set_position(n,0,0,-100);
-	
-	func_setRotateX(n,PI/2)
-	func_setRotateY(n,PI/2)
-	set_cam(n,fbo:get_cam3d());
---]]
 	local cam = fbo:get_cam3d();
 	--cam = nil;
-
+	
+	
+	----bauul,triangle
 	local n = UnitBase:new();
-	n:loadvbo("\\resource\\md2\\bauul.md2",--bauul,triangle
-				"//resource//material//bauul.mat",
-				cam);
-	
-	--n:scale(0.5);
-	
+	--n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
+	--n:set_position(0,0,-2);
+
+	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-100);
-	
-	--self.u = u;
-	--set_cam(n,cam3d); 
 	
 	return n;
 end
@@ -52,7 +34,10 @@ local function f_scale_handle(progress,self)
 end
 
 local function btnClick(self)
-	print("u name =",self.u:get_name());
+	print("u name =",self.u:get_name(),
+		JEngine:getIns():get_type_str(self.u:get_p())
+	
+	);
 	--m_dispose(self);
 
 	--self:dispose();
@@ -68,9 +53,7 @@ local function f_cpmlete(self)
 	self.u = addmd2_fbo(fbo);--增加一个vbo模型
 	
 	local scale = skin:find("scale");
-	--print(scale);
 	scale:bindCallback(f_scale_handle,self);
-	--scrollBar_bind(f_scale_handle,self);
 
 	
 	--self.fbo:dispose();
