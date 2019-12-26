@@ -359,7 +359,7 @@ f_addNode(struct EX* p, void* _node){
 }
 void ex_add(void* ptr){
 	struct HeadInfo* b = base_get(ptr);
-	log_color(0,"*** ex_add 0x%0x name=(%s)\n",ptr,b->name);
+	//log_color(0,"*** ex_add 0x%0x name=(%s)\n",ptr,b->name);
 	f_addNode(ex_getIns(),ptr);
 }
 

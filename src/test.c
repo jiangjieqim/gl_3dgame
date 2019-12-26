@@ -2253,11 +2253,9 @@ REG_change_attr(lua_State *L)
 		
 		sscanf_s(str2,"%d,%d",&s,&e);
 		if(total < e  + 1 || total < e + 1){
-
-			//log_color(0xff0000,"总关键帧数%d s=%d e=%d\n",total,s,e);
-			
 			s = 0;
 			e = total - 1;
+			log_color(0xff0000,"总关键帧数%d s=%d e=%d\n",total,s,e);
 		}
 		animtor_push(animtor,str,s,e);
 	}
@@ -2265,6 +2263,12 @@ REG_change_attr(lua_State *L)
 	{
 		int total = anim_total(node->anim);
 		lua_pushinteger(L,total);
+		return 1;	
+	}
+	else if(!strcmp(attrKey,"animtor_curFrame"))
+	{
+		int cur = anim_curFrame(node->anim);
+		lua_pushinteger(L,cur);
 		return 1;	
 	}
 	//设置当前动作

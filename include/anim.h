@@ -32,8 +32,14 @@ void anim_set_fps(void* p,int fps);
 */
 struct Animtor* anim_get_animtor(void* p);
 /*
-	获取关键帧的数量
+	获取关键帧的总数量
 */
 int
 anim_total(void* p);
+
+/*
+	获取当前的关键帧索引号 0开始
+*/
+int
+anim_curFrame(void* p);
 #endif

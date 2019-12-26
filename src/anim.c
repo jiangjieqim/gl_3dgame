@@ -60,6 +60,13 @@ anim_total(void* p){
 	struct VBOAnim* ptr=(struct VBOAnim*)(p);
 	return ptr->allLength;
 }
+
+int
+anim_curFrame(void* p){
+	struct VBOAnim* ptr=(struct VBOAnim*)(p);
+	return ptr->curIndex;
+}
+
 /*
 	Ïú»Ù
 */
@@ -100,8 +107,13 @@ anim_create(struct LStackNode* list)
 void
 anim_play(void* p,int index,void (*callBack)(int,int),int param){
 	struct VBOAnim* anim = (struct VBOAnim*)p;
-	int data=anim->nodeList[index];
+	int data;
+	if(index < 0){
+		index = 0;
+	}
+	data=anim->nodeList[index];
 	callBack(data,param);
+	//log_color(0xff0000,"anim_play index = %d\n",index);
 }
 
 /*

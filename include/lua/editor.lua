@@ -19,19 +19,23 @@ local function addmd2_fbo(fbo)
 	local n = UnitBase:new();
 	
 	
-----[[
+--[[
 	--md2¼òÄ£
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);
 	local anim = n:get_anim();
-	anim:push("jump",1,2);
+	anim:push("jump",0,3);
 	anim:play("jump");
+	
+	anim:set_fps(1);
+	
 	--]]
---[[
+----[[
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-100);
-	n:anim_push("jump",0,37);
-	n:play("jump");
+	local anim = n:get_anim();
+	anim:push("jump",0,37);
+	anim:play("jump");
 --]]
 	
 	return n;
@@ -51,8 +55,7 @@ local function btnClick(self)
 	print("u name =",u:get_name(),
 		--JEngine:getIns():get_type_str(self.u:get_p())
 		"type",u:get_type(),
-		"total",anim:total()
-		
+		anim:cur_frame().."/"..anim:total()
 	);
 	
 	local anim = u:get_anim();
@@ -66,6 +69,16 @@ local function btnClick(self)
 	--self:dispose();
 	--u:dispose();
 end
+
+local function ef(data,self)
+	local skin = self.nskin;
+	local label = skin_find(skin,"label1");
+
+	local a = self.u:get_anim();
+	
+	label:set_text(a:cur_frame());
+end
+
 local function f_cpmlete(self)
 	local skin = self.nskin;
 	local x,y = skin:get_pos();
@@ -90,6 +103,12 @@ local function f_cpmlete(self)
 	
 	local btn0 = skin_find(skin,"btn0");
 	btn0:bind_click(btnClick,self);
+	
+	local timer = timelater_new(1);
+	
+	evt_on(timer,EVENT_TIMER,ef,self);
+
+	
 end
 
 function ModleShow:new()

@@ -20,13 +20,11 @@ end
 
 --获取动作总数
 function Animator:total()
-	local p = self.p;
-	--if(self:get_type() == TYPE_OBJ_VBO_FILE) then
-	local total = change_attr(p,"animtor_total");
-	return total;
-	--else
-	--	func_error("类型未实现get_anim_total");
-	--end
+	return change_attr(self.p,"animtor_total");
+end
+
+function Animator:cur_frame()
+	return change_attr(self.p,"animtor_curFrame");
 end
 
 --是否在播放
@@ -34,6 +32,10 @@ function Animator:isPlaying()
 	if(change_attr(self.p,"animtor_isPlaying") == 1) then
 		return true;
 	end
+end
+--设置fbs
+function Animator:set_fps(v)
+	change_attr(self.p,"fps",tostring(v))
 end
 
 --[[
@@ -62,7 +64,6 @@ function Animator:play_to(s,e)
 	change_attr(self.p,"animtor_play_start_end",string.format('%d,%d',s,e));
 	self:play();
 end
-
 
 --暂停
 function Animator:pause()

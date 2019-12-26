@@ -155,6 +155,9 @@ animtor_calculateFrame(struct Animtor* p,int* const pCurIndex)
 			return;
 		}
 		*pCurIndex=p->cur_start-1;
+		/*if(*pCurIndex < 0){
+			*pCurIndex = 0;
+		}*/
 	}
 	if(p->isPlaying)
 	{

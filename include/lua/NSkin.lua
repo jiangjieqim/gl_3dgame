@@ -146,7 +146,9 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 	elseif(_type == "NLabel") then
 		local str = xml_get_str(node,"label");
 		local label = NLabel:new();
-		label:set_text(str);
+
+		label:set_text(str or "label");
+		
 		label:setname(name);
 		child = label;
 		
