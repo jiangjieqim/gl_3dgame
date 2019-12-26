@@ -18,6 +18,17 @@ function Animator:dispose()
 	func_clearTableItem(self);
 end
 
+--获取动作总数
+function Animator:total()
+	local p = self.p;
+	--if(self:get_type() == TYPE_OBJ_VBO_FILE) then
+	local total = change_attr(p,"animtor_total");
+	return total;
+	--else
+	--	func_error("类型未实现get_anim_total");
+	--end
+end
+
 --是否在播放
 function Animator:isPlaying()
 	if(change_attr(self.p,"animtor_isPlaying") == 1) then
@@ -35,14 +46,23 @@ end
 function Animator:play(anim)
 	local o = self.p;
 	--self:pause();
-	change_attr(o,"animtor_setcur",anim);--指定当前的动作
+	if(anim) then
+		change_attr(o,"animtor_setcur",anim);--指定当前的动作
+	end
 	change_attr(o,"animtor_play");
 end
 
 --分割动画
-function Animator:anim_push(animname,s,e)
+function Animator:push(animname,s,e)
 	change_attr(self.p,"animtor_push",animname,string.format('%s,%s',s,e));
 end
+
+--根据区间播放动画
+function Animator:play_to(s,e)
+	change_attr(self.p,"animtor_play_start_end",string.format('%d,%d',s,e));
+	self:play();
+end
+
 
 --暂停
 function Animator:pause()
@@ -174,17 +194,6 @@ function UnitBase:scale(value)
 end
 function UnitBase:get_scale()
     return func_get_scale(self.p);
-end
-
---获取动作总数
-function UnitBase:anim_total()
-	local p = self:get_p();
-	--if(self:get_type() == TYPE_OBJ_VBO_FILE) then
-	local total = change_attr(p,"animtor_total");
-	return total;
-	--else
-	--	func_error("类型未实现get_anim_total");
-	--end
 end
 
 function UnitBase:rx(v)

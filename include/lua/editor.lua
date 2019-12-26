@@ -24,7 +24,7 @@ local function addmd2_fbo(fbo)
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);
 	local anim = n:get_anim();
-	anim:anim_push("jump",1,2);
+	anim:push("jump",1,2);
 	anim:play("jump");
 	--]]
 --[[
@@ -47,11 +47,11 @@ end
 
 local function btnClick(self)
 	local u = self.u;
-	
+	local anim = u:get_anim();
 	print("u name =",u:get_name(),
 		--JEngine:getIns():get_type_str(self.u:get_p())
 		"type",u:get_type(),
-		"total",u:anim_total()
+		"total",anim:total()
 		
 	);
 	
@@ -60,6 +60,7 @@ local function btnClick(self)
 		anim:pause();
 	else
 		anim:play("jump");
+		--anim:play_to(2,3);
 	end
 	--m_dispose(self);
 	--self:dispose();
