@@ -15,16 +15,25 @@ local function addmd2_fbo(fbo)
 	
 	
 	----bauul,triangle
+	
 	local n = UnitBase:new();
-	--n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
-	--n:set_position(0,0,-2);
-
+	
+	
+----[[
+	--md2¼òÄ£
+	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
+	n:set_position(0,0,-2);
+	local anim = n:get_anim();
+	anim:anim_push("jump",1,2);
+	anim:play("jump");
+	--]]
+--[[
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-100);
-	
-	--n:anim_push("stand",0,39);
-	n:anim_push("jump",66,71);
+	n:anim_push("jump",0,37);
 	n:play("jump");
+--]]
+	
 	return n;
 end
 
@@ -45,14 +54,16 @@ local function btnClick(self)
 		"total",u:anim_total()
 		
 	);
-	if(u:isPlaying()) then
-		u:pause();
+	
+	local anim = u:get_anim();
+	if(anim:isPlaying()) then
+		anim:pause();
 	else
-		u:play("jump");
+		anim:play("jump");
 	end
 	--m_dispose(self);
-
 	--self:dispose();
+	--u:dispose();
 end
 local function f_cpmlete(self)
 	local skin = self.nskin;

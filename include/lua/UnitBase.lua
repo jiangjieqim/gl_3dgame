@@ -1,43 +1,25 @@
 UnitBaseEvent = 10000;
 UnitBaseEndMsg = "UnitBaseEndMsg";--移动结束
 
---只实现 p = TYPE_OBJ_VBO_FILE 类型的对象
-UnitBase = {
 
-    p,--角色句柄,是引擎中的md2,obj,md5引用的值
-    material,--材质引用
-    speed,--移动速度
-	
-	
+--动作管理器
+local Animator = {
+	p,--	TYPE_OBJ_VBO_FILE引用
 };
-UnitBase.__index = UnitBase;
-function UnitBase:new()
-    local s = {};
-    setmetatable(s,UnitBase);
-   --s.speed = 1000;
+Animator.__index = Animator;
+function Animator:new(p)
+	local s = {};
+    setmetatable(s,Animator);
+	s.p = p;
     return s;
 end
 
---设置对象的cam的矩阵空间
-local function f_set_cam(self)
-	JEngine:getIns():bind_3dcam(self.p);
-end
---获取句柄
-function UnitBase:get_p()
-    return self.p;
+function Animator:dispose()
+	func_clearTableItem(self);
 end
 
---获取模型的类型
-function UnitBase:get_type()
-	return JEngine:getIns():get_type(self.p);
-end
-
---分割动画
-function UnitBase:anim_push(animname,s,e)
-	change_attr(self.p,"animtor_push",animname,string.format('%s,%s',s,e));
-end
 --是否在播放
-function UnitBase:isPlaying()
+function Animator:isPlaying()
 	if(change_attr(self.p,"animtor_isPlaying") == 1) then
 		return true;
 	end
@@ -50,15 +32,64 @@ end
 	"run",40,45
 	"jump",66,71
 --]]
-function UnitBase:play(anim)
+function Animator:play(anim)
 	local o = self.p;
-	change_attr(o,"animtor_setcur",anim);
+	--self:pause();
+	change_attr(o,"animtor_setcur",anim);--指定当前的动作
 	change_attr(o,"animtor_play");
 end
+
+--分割动画
+function Animator:anim_push(animname,s,e)
+	change_attr(self.p,"animtor_push",animname,string.format('%s,%s',s,e));
+end
+
 --暂停
-function UnitBase:pause()
+function Animator:pause()
 	change_attr(self.p,"animtor_pause");
 end
+
+--*************************************************************
+--只实现 p = TYPE_OBJ_VBO_FILE 类型的对象
+UnitBase = {
+
+    p,--角色句柄,是引擎中的md2,obj,md5引用的值
+    speed,--移动速度	
+	anim,--动作管理器句柄
+};
+UnitBase.__index = UnitBase;
+function UnitBase:new()
+    local s = {};
+    setmetatable(s,UnitBase);
+   --s.speed = 1000;
+    return s;
+end
+
+function UnitBase:dispose()
+	self.anim:dispose();
+	ptr_remove(self.p);
+	func_clearTableItem(self);
+end
+
+--设置对象的cam的矩阵空间
+local function f_set_cam(self)
+	JEngine:getIns():bind_3dcam(self.p);
+end
+--获取句柄
+function UnitBase:get_p()
+    return self.p;
+end
+
+--动作管理器句柄
+function UnitBase:get_anim()
+	return self.anim;
+end
+
+--获取模型的类型
+function UnitBase:get_type()
+	return JEngine:getIns():get_type(self.p);
+end
+
 --设置当前的对象的cam
 function UnitBase:set_cam(cam)
 	if(cam) then
@@ -76,8 +107,8 @@ function UnitBase:loadvbo(modelURL,maturl,cam)
     local md2=JEngine:getIns():load(modelURL);
 	
 	--load_VBO_model(name,modelURL);
-    self.material = func_load(maturl);
-    setMaterial(md2,self.material);
+    local material = func_load(maturl);
+    setMaterial(md2,material);
 	setv(md2,FLAGS_VISIBLE);--显示模型对象
     
 	--f_split_init(md2);
@@ -91,7 +122,9 @@ function UnitBase:loadvbo(modelURL,maturl,cam)
 	JEngine:getIns():add(self.p);
 	self:set_cam(cam);
 	--f_set_cam(self);
-end;
+	
+	self.anim = Animator:new(self.p);
+end
 --加载一个测试立方体
 function UnitBase:loadbox()
     local url = "\\resource\\obj\\box.obj";--tri
@@ -100,7 +133,7 @@ function UnitBase:loadbox()
     local obj=load_VBO_model(name,url);--box	arrow
    
     local mat = func_load(maturl);
-    self.material = mat;
+    --self.material = mat;
 	setMaterial(obj,mat);
     setv(obj,FLAGS_DRAW_PLOYGON_LINE)--线框
     --setv(obj,FLAGS_DISABLE_CULL_FACE);--设置双面都能渲染
@@ -115,7 +148,7 @@ function UnitBase:load_model(url,maturl)
     maturl = maturl or "//resource//material//triangle.mat"
     local _floor = load_model(func_create_name(),url)		-- func_loadobj('quad',nil,'myObj1',false)--quad
 	local mat = func_load(maturl);
-    self.material = mat;
+    --self.material = mat;
     setMaterial(_floor,mat);
     --glsl_set(mat,string.format("_lineColor,%s","0.5,0.5,0.5"));
 	
