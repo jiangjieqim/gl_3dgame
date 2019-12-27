@@ -77,7 +77,7 @@
 #define EVENT_ENGING_INIT 200	
 
 /**
- * 计时器
+ * 计时器事件
  */
 #define EVENT_TIMER 201
 
@@ -93,23 +93,13 @@ struct MouseState
 {
 	GLint button;
 	GLint action;
-	
+
 	GLint xMouse,yMouse;//点击下的鼠标状态
-	
+
 	int moveX,moveY;//当前移动的位置
 	// 中键方向 -1:向上,1:向下 0:的时候 说明没有滚动
 	int midDirection;
 };
-//struct ECamera{
-//	/*
-//	*	摄影机坐标
-//	*/
-//	float x,y,z;
-//	double rx,ry,rz;
-//	//void* ptrFollow;//跟随的引用对象
-//	//float followDistance;//距离跟随对象的距离
-//	//Vec3 followOffset;//相对于跟随角色的偏移值
-//};
 //=============================================================================================================
 struct EX
 {	 
@@ -161,11 +151,6 @@ struct EX
 	*/
 	struct MouseState mouseState;
 
-	/*
-		日志文本
-	*/
-	//struct TextField* logTf;
-
 	lua_State* mylua;
 
 	/*
@@ -181,26 +166,6 @@ struct EX
 	*/
 	int allzBuffer;
 
-	/*
-		顶点总数
-	*/
-	//int allVertexTotal;
-
-	/*
-		透视矩阵
-	*/
-	//Matrix44f perspectiveMatrix;
-	/*
-		模型视图矩阵
-	*/
-	//Matrix44f modelViewMatrix;
-
-	//Matrix44f ui_perspectiveMatrix;
-	//Matrix44f ui_modelViewMatrix;
-	//struct Atals* myAtals;//废弃
-	
-	//void* atals;
-	
 	//2d舞台
 	void* stage2d;
 	
@@ -230,26 +195,17 @@ struct EX
 	//键值对象句柄
 	void* mapptr;
 
-	//int lock;
-	//drawcall调用完成之后的回调列表
-	//struct LStackNode* lastList;
-
 	struct LStackNode* timelaterList;
 
-	//int index;
 };
 
 //接口定义
 //=====================================================
 /*
-*	创建引擎设备上下文
-*/
-//struct EX* ex_create();
-
-/*
 *	渲染循环
 */
 void ex_render(void);
+
 //渲染renderlist所有的3d节点
 void ex_renderAll3dNode();
 //void f_renderlistCall(void _callBack(int));
@@ -259,17 +215,13 @@ void ex_renderAll3dNode();
 */
 void ex_init(struct EX* p,GLdouble zfar,float sw,float sh);
 
+//重绘回调
 void ex_reshape(int w,int h);
 
 /*
 *	销毁引擎
 */
 void ex_dispose(struct EX* p);
-
-/*
-	加载动作配置,设置
-*/
-int ex_load_anim_config(void* ptr,char* animConf,long fps);
 
 /*
 gluUnProject -- map window coordinates to object coordinates 
@@ -297,13 +249,6 @@ void mouseMove(int x,int y);
 void onKeyboardCallBack(unsigned char key, int x, int y);
 
 /*
-设置摄影机的坐标
-*/
-void ex_cam_set_pos(float x,float y,float z);
-
-//绑定camera对象的引用
-//void ex_cam_bind(void* ptr);
-/*
 设置渲染的背景颜色
 */
 void setBgColor(float r,float g,float b);
@@ -312,11 +257,6 @@ void setBgColor(float r,float g,float b);
 	打印引擎当前信息
 */
 void ex_get_info();
-
-/*
-	更新场景中的界面坐标
-*/
-void ex_update_uiPos();
 
 /*
 	添加一个渲染节点
@@ -337,20 +277,11 @@ ex_load_model(char* name,const char* url,int mode);
 	设置动作
 */
 void ex_set_anim(void* ptr,const char* animKey);
-/*
- *	设置动作
- *	playend:当前动作关键帧播放完成之后回调该函数引用
- */
-int 
-ex_animtor_ptr_setcur(void* ptr,const char* animKey,void (*playend)(void*));
+
 /*
 	在屏幕左上角显示日志文本
 */
 void ex_showLog(const char* buffer);
-///*
-// *	显示一个数字日志
-// */
-//void ex_showLogFloat(float v);
 
 /*
 	回调lua函数
@@ -374,24 +305,6 @@ void ex_callParmLuaFun(const char* luaFunName,const char* parm);
 	调用lua方法luaFunName(lua函数必须是lua全局函数),传递一个int型的参数
 */
 void ex_callIntLuaFun(const char* luaFunName,int value);
-//获取一个默认的ui图集
-//void* ex_get_ui_atals();
-/*
-	获取zBuffer
-*/
-float ex_newPosZ();
-
-
-//void updatePerspectiveMatrix( GLdouble fov, GLdouble aspectRatio, GLdouble zNear, GLdouble zFar);
-//void ex_refresh3dModelView();
-
-
-
-/*
-	寻找md2,md5,obj,sprite节点
-*/
-void* 
-ex_find_ptr(struct EX* ptr,const char* name);
 /*
 *	根据name获取HeadInfo;
 */
@@ -408,12 +321,6 @@ ex_find(const char* name);
 */
 void ex_ptr_remove(void* ptr);
 
-/*
- *设置对象的朝向目标
- */
-//void setLookTarget(void* ptr,float x,float y,float z);
-
-
 /************************************************************************/
 /* 重命名                                                               */
 /************************************************************************/
@@ -425,10 +332,6 @@ int ex_rename(void* p,const char* name);
 void 
 ex_set_material(void* ptr,void* material);
 
-//获取引擎对象的标识位
-//void ex_setv(void* p,int flag);
-//void ex_resetv(void* ptr,int flag);
-//int ex_getv(void* ptr,int flag);
 /************************************************************************
 	当前的FPS                                                                  
 	frame per second 每一关键帧需要的毫秒
@@ -449,41 +352,14 @@ extern long g_delayTime;
  *获取偏移值
  */
 int ex_get_gap(int type);
-/*
-	弹出一个窗口
-*/
-//void ex_alert(const char* format,...);
-/*
-	向lua发送一个事件
-*/
-void 
-ex_lua_evt_dispatch(void* obj,int evtid,const char* data);
 
-/*
-	向lua发送一个全局事件
-*/
-void 
-ex_lua_global_evt_dispatch(int evtid);
-//重置2d舞台尺寸
-void 
-ex_resize_stage2d();
-
-/*
- *计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
- */
-//void ex_calculat_ortho();
 
 //切换到当前camera,场景中可能会有多个camera,我们可以用用这个函数进行切换到当前的cam
 //比如从默认的cam切换到fbo的cam,其实cam就是一个齐次透视矩阵和一个模型矩阵
 void ex_switch3dCam(void* cam);
 
-//渲染一个3D节点
-void 
-ex_render3dNode(int data);
-
 //加载VBO模式的模型
-void* 
-ex_loadVBO(char* name,const char* url);
+void* ex_loadVBO(char* name,const char* url);
 
 //切换到2d camera
 void ex_switch2dCam(void* cam);
@@ -494,16 +370,29 @@ void ex_add_fbo(void* fbo);
 //从引擎列表中移除fbo
 void ex_remove_fbo(void* fbo);
 
-/*
-	根据shader类型获取一个
-*/
+//根据shader类型获取一个
 GLuint ex_getProgrom3D(const char* glslType);
 
-//在drawcall的最后回调
-//void callLater(void _callBack(void*),void* parms);
-
 //向指定的事件发送一个浮点型数据
-void 
-ex_lua_evt_dispatch_f(void* obj,int evtid,float data);
+void ex_lua_evt_dispatch_f(void* obj,int evtid,float data);
 
+//向lua发送一个事件
+void ex_lua_evt_dispatch(void* obj,int evtid,const char* data);
+//*******************************************************************
+/*
+	加载动作配置,设置
+*/
+int ex_load_anim_config(void* ptr,char* animConf,long fps);
+
+/*
+ *	设置动作
+ *	playend:当前动作关键帧播放完成之后回调该函数引用
+ */
+int 
+ex_animtor_ptr_setcur(void* ptr,const char* animKey,void (*playend)(void*));
+
+/*
+设置摄影机的坐标
+*/
+void ex_cam_set_pos(float x,float y,float z);
 #endif

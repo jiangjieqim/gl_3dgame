@@ -936,7 +936,7 @@ static int
 REG_test_unit_02(lua_State *L){
 	const char* name=lua_tostring(L,1);
 	float value = lua_tonumber(L,2);
-	int n = (int)ex_find_ptr(ex,name);
+	int n = (int)ex_find(name);
 	struct HeadInfo* h = ex_find_headinfo(ex,name);
 	
 
@@ -1475,20 +1475,11 @@ REG_get_attr(lua_State *L)
 		lua_pushnumber(L,ex->_screenHeight);
 		return 2;
 	}
-	if(!strcmp(attrKey,"get_longTime")){
+	else if(!strcmp(attrKey,"get_longTime")){
 		lua_pushnumber(L,get_longTime());
 		return 1;
 	}
-	if(!strcmp(attrKey,"newPosZ")){
-		lua_pushnumber(L,ex_newPosZ());
-		return 1;
-	}
-	/*if(!strcmp(attrKey,"ex_get_ui_atals")){
-		lua_pushnumber(L,(int)ex_get_ui_atals());
-		return 1;
-	}*/
-	
-	if(!strcmp(attrKey,"curFocus")){
+	else if(!strcmp(attrKey,"curFocus")){
 		lua_pushnumber(L,(int)ex_getIns()->curFocus);
 		return 1;	
 	}
@@ -1581,7 +1572,7 @@ SetScale(lua_State* L)
 static int 
 L_FindNode(lua_State* L)
 {
-	void* node = ex_find_ptr(ex,lua_tostring(L,2));
+	void* node = ex_find(lua_tostring(L,2));
 	lua_pushinteger(L,(int)node);
 	return 1;
 }

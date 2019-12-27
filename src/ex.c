@@ -60,6 +60,7 @@ struct MD2_Object
 	struct FrameAnim* frameAnim;
 };
 
+
 struct ClickInfo{
 	struct Sprite* sprite;				//当前点击的sprite
 	int local_click_x,local_click_y;	//临时点击相对于sprite的坐标
@@ -199,15 +200,24 @@ md2_render(struct MD2_Object* _md2){
 
 /*
 根据name寻找对象(name为一个字符串)
+寻找md2,md5,obj,sprite节点
 */
-void* ex_find_ptr(struct EX* ptr,const char* name){
+static void* f_find_ptr(struct EX* ptr,const char* name){
 	return base_findByName(ptr->renderList,name);
 }
 
 void* ex_find(const char* name){
-	return ex_find_ptr((void*)ex_getIns(),name);
+	return f_find_ptr((void*)ex_getIns(),name);
 }
+//获取zBuffer
+static float f_newPosZ(){
+	struct EX* p = ex_getIns();
+	//return p->zBuffer++;//这里存疑,UI正交zbuffer叠加的影响
+	p->ui_pos_z+=0.01;
 
+	//printf("==>%f\n",p->ui_pos_z);
+	return p->ui_pos_z;
+}
 /*
 添加一个渲染节点
 */
@@ -219,12 +229,12 @@ f_addNode(struct EX* p, void* _node){
 		struct HeadInfo* b;
 		//base_get(_node,&base);
 		b = base_get(_node);
-		if( ex_find_ptr(p,b->name) != NULL){
+		if( ex_find(b->name) != NULL){
 			log_color(0xff0000,"error! 重名的对象 :%s\n",b->name);
 			assert(0);
 		}else{
 			if(b->curType == TYPE_SPRITE_FLIE){
-				sprite_set_z(_node,ex_newPosZ());//设置sprite的z轴坐标
+				sprite_set_z(_node,f_newPosZ());//设置sprite的z轴坐标
 			}
 			LStack_push(p->renderList,_node);
 		}
@@ -648,10 +658,10 @@ getAllVertex(int data)
 }
 
 /*
-渲染一个节点
+渲染一个3d节点
 */
 void 
-ex_render3dNode(int data)
+f_render3dNode(int data)
 {
 	struct EX*ex = ex_getIns();
 	void* checkcam = ex->_3dCurCam;
@@ -785,7 +795,7 @@ f_static_calculat(){
 	*/
 }
 void ex_renderAll3dNode(){
-	f_renderlistCall(ex_render3dNode);
+	f_renderlistCall(f_render3dNode);
 }
 //默认的帧缓冲区
 static void
@@ -881,24 +891,12 @@ void ex_render(void)
 }
 
 struct HeadInfo* ex_find_headinfo(struct EX* p,const char* name){
-	return base_get(ex_find_ptr(p,name));
+	return base_get(ex_find(name));
 }
-
-void 
-ex_update_uiPos()
-{
+//更新场景中的界面坐标
+static void 
+f_update_uiPos(){
 	f_renderlistCall(sprite_updatePos);	
-}
-
-//static float _g_pos_z;
-float ex_newPosZ()
-{
-	struct EX* p = ex_getIns();
-	//return p->zBuffer++;//这里存疑,UI正交zbuffer叠加的影响
-	 p->ui_pos_z+=0.01;
-
-	//printf("==>%f\n",p->ui_pos_z);
-	return p->ui_pos_z;
 }
 
 static void
@@ -946,8 +944,11 @@ f_init_stage2d(struct EX* p,float w,float h){
 	}
 	return 0;
 }
-void 
-ex_resize_stage2d(){
+
+
+//重置2d舞台尺寸
+static void 
+f_resize_stage2d(){
 	struct EX* p = ex_getIns();
 	if(!f_init_stage2d(p,p->_screenWidth,p->_screenHeight)){
 		sprite_resize(p->stage2d,p->_screenWidth,p->_screenHeight);
@@ -955,6 +956,10 @@ ex_resize_stage2d(){
 	sprite_set_hit_rect(p->stage2d,0,0,p->_screenWidth,p->_screenHeight);
 }
 
+static void 
+f_lua_global_evt_dispatch(int evtid){
+	ex_lua_evt_dispatch(0,evtid,0);
+}
 void 
 ex_reshape(int w,int h){
 	struct EX* p = ex_getIns();
@@ -975,15 +980,15 @@ ex_reshape(int w,int h){
 	//计算正交透视矩阵,用于2d界面,计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
 	cam_setOrtho(_2dcam,p->_screenWidth,p->_screenHeight,-p->allzBuffer);
 	
-	ex_update_uiPos();
+	f_update_uiPos();
 
 	//fbo_resize(p->fbo);
 
-	ex_resize_stage2d();
+	f_resize_stage2d();
 	
 	//printf("%d,%d\n",sizeof(struct HeadInfo),sizeof(struct LStackNode));
 
-	ex_lua_global_evt_dispatch(EVENT_ENGINE_RESIZE);
+	f_lua_global_evt_dispatch(EVENT_ENGINE_RESIZE);
 	//printf("============> %d,%d\n",w,h);
 
 	evt_dispatch(ex_getIns(),EVENT_ENGING_INIT,0);
@@ -1758,10 +1763,7 @@ void ex_callIntLuaFun(const char* luaFunName,int value)
 		}
 	}
 }
-void 
-ex_lua_global_evt_dispatch(int evtid){
-	ex_lua_evt_dispatch(0,evtid,0);
-}
+
 
 void 
 ex_lua_evt_dispatch_f(void* obj,int evtid,float data){

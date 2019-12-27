@@ -76,16 +76,12 @@ function UnitBase:loadvbo(modelURL,maturl,cam)
     local material = func_load(maturl);
     setMaterial(m,material);
 	--setv(m,FLAGS_VISIBLE);--显示模型对象
-    
-	
 	
 	--f_split_init(md2);
-	
 	
     --setv(md2,FLAGS_DISABLE_CULL_FACE)--设置双面都能渲染
     --local ss =new_sharp;
    
-
     self.p = m;
 	
 	JEngine:getIns():add(self.p);
@@ -197,10 +193,10 @@ local function f_endCall(data)
     --print(data);
 end
 --[[
-	加载碰撞盒
+	加载碰撞盒指定一个.obj 或者是.md2作为生成碰撞盒子的基础模型
 	drawbox : 是否显示碰撞盒
 	
-	bug:fbo拾取无效
+	此接口在fbo模式的渲染窗口中鼠标拾取是无效的
 --]]
 function UnitBase:load_collide(model,drawbox)
 	change_attr(self.p,"collide_load",model or "\\resource\\obj\\box.obj",frame or 0);--torus

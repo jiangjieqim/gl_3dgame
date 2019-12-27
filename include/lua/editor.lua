@@ -13,12 +13,9 @@ local function addmd2_fbo(fbo)
 	local cam = fbo:get_cam3d();
 	--cam = nil;
 	
-	
-	
 	----bauul,triangle
 	
 	local n = UnitBase:new();
-	
 	
 ----[[
 	--md2¼òÄ£

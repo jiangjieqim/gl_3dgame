@@ -32,10 +32,6 @@ function JEngine:dispose()
 	func_clearTableItem(self);
 end
 
-function JEngine:new_z()
-	 return get_attr(nil,"newPosZ");
-end
-
 function JEngine:rename(o,value)
 	change_attr(o,"rename",tostring(value));
 end

@@ -13,8 +13,6 @@
 #include "camera.h"
 #include "ex.h"
 
-//#define _2D_Z_POS -90000
-
 struct FBOTexNode{
 	void* _3dcam;			//3d透视camera
 	void* _2dcam;			//2d透视camera
@@ -22,22 +20,8 @@ struct FBOTexNode{
 	GLuint				tex;				//贴图对象句柄,fbo渲染的帧缓冲会输出到此纹理句柄上
 	GLuint              depthBufferName;	//深度缓冲区
 	int					texw,texh;			//贴图的宽高
-	int enable;								//是否处于激活状态
-	//int once;								//是否只渲染回调一次
-	//int disposeTexStatus;							//是否销毁纹理对象
-	//void (*onceCallBack)(void*,void*);
-	void* parms;
+	GLbyte enable;								//是否处于激活状态
 };
-//static void
-//f_callLater(void*p){
-//	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-//	//fbo->enable=0;          parms);
-//	fbo->onceCallBack(fbo,fbo->parms);
-//	ex_remove_fbo(fbo);
-//	fbo_dispose(fbo,0);
-//	// 
-//	printf("f_callLater 构造纹理[%d]结束\n",fbo->tex);	
-//}
 
 static void fbo_resize(void*p){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
@@ -52,26 +36,7 @@ fbo_render(void* ptr){
 		const GLenum fboBuffs[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
 
 		ex_switch3dCam(fbo->_3dcam);
-
-		{
-			//This is Test code for debug to equal 2 mat4x4
-			/*struct EX* p = ex_getIns();
-			cam_setOrtho(p->_2dcam,256,256,-p->allzBuffer);*/
-
-			//void* a= cam_getPerctive(fbo->_2dcam);
-			//void* b= cam_getPerctive(ex_getIns()->_2dCurCam);
-
-			//mat4x4_copy(b,a);//将_2dCurCam矩阵的值赋值给fbo->_2dcam
-
-			//printf("比较:%d\n",mat4x4_equal(a,b));
-			//if(!mat4x4_equal(a,b,1)){
-			//	mat4x4_printf("_2dCurCam",b);
-			//	mat4x4_printf("fbocam",a);
-			//	getchar();
-			//}
-		}
 		ex_switch2dCam(fbo->_2dcam);
-
 
 		glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, fbo->fboName);//glBindFramebuffer
 		glDrawBuffers(1, fboBuffs);
@@ -99,23 +64,11 @@ fbo_render(void* ptr){
 
 		glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, 0);//glBindFramebuffer
 	}
-
-	//printf("%d,",fbo->wait);
-	/*if(fbo->onceCallBack){
-		callLater(f_callLater,fbo);
-	}*/
 }
-//void 
-//fbo_set_once(void* ptr,void (*onceCallBack)(void*,void*),void* parms){
-//	struct FBOTexNode* fbo = (struct FBOTexNode*)ptr;
-//	//fbo->once = 1;
-//	fbo->onceCallBack= onceCallBack;
-//	fbo->parms = parms;
-//}
+
 void* 
 fbo_init(int texW,int texH){
 	struct FBOTexNode* fbo = (struct FBOTexNode*)tl_malloc(sizeof(struct FBOTexNode));
-	//printf("tl_malloc %0x\n",fbo);
 	if(!fbo){
 		printf("fbo 创建失败 %0x\n",fbo);
 		return 0;
@@ -131,8 +84,6 @@ fbo_init(int texW,int texH){
 		memset(fbo,0,sizeof(struct FBOTexNode));
 		
 		fbo->enable = 1;//默认处于激活状态
-
-		//fbo->nodelist = LStack_create();
 
 		fbo->texw = mirrorTexWidth;
 		fbo->texh = mirrorTexHeight;
@@ -163,14 +114,10 @@ fbo_init(int texW,int texH){
 		fbo->depthBufferName = depthBufferName;
 		fbo->fboName = fboName;
 		fbo->tex = mirrorTexture;
-		//printf("****fbo %0x\n",fbo);
-
 
 		// Make sure all went well
 		//gltCheckErrors();
 		
-		//fbo->_2dspr=f_createSprite(mirrorTexture,texW,texH);
-		//fbo->tex = mirrorTexture;
 		// Reset framebuffer binding
 		glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, 0);//glBindFramebuffer
 
@@ -205,28 +152,7 @@ fbo_dispose(void* p ,int deltex){
 	glDeleteFramebuffersEXT(1, &fbo->fboName);//glDeleteFramebuffers
 
 	tl_free(fbo);
-
-	//{
-	//	struct EX* p = ex_getIns();
-
-	//	//切换对应的cam的矩阵空间
-	//	ex_switch3dCam(p->_3dcam);
-	//	ex_switch2dCam(p->_2dcam);
-	//}
 }
-
-//void* fbo_get3dCam(void* p){
-//	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-//	return fbo->_3dcam;
-//}
-//void* fbo_get2dCam(void* p){
-//	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-//	return fbo->_2dcam;
-//}
-//void* fbo_getTex(void* p){
-//	struct FBOTexNode* fbo = (struct FBOTexNode*)p;
-//	return (void*)fbo->tex;
-//}
 
 void
 fbo_enable(void*p,int v){
