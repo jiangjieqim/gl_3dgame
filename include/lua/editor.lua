@@ -19,7 +19,7 @@ local function addmd2_fbo(fbo)
 	local n = UnitBase:new();
 	
 	
---[[
+----[[
 	--md2¼òÄ£
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);
@@ -27,15 +27,16 @@ local function addmd2_fbo(fbo)
 	anim:push("jump",0,3);
 	anim:play("jump");
 	
-	anim:set_fps(1);
+	--anim:set_fps(1);
 	
 	--]]
-----[[
+--[[
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-100);
 	local anim = n:get_anim();
 	anim:push("jump",0,37);
 	anim:play("jump");
+	--anim:set_fps(1);
 --]]
 	
 	return n;
@@ -52,9 +53,9 @@ end
 local function btnClick(self)
 	local u = self.u;
 	local anim = u:get_anim();
-	print("u name =",u:get_name(),
+	print("u name ="..u:get_name(),
 		--JEngine:getIns():get_type_str(self.u:get_p())
-		"type",u:get_type(),
+		"type:"..u:get_type(),
 		anim:cur_frame().."/"..anim:total()
 	);
 	

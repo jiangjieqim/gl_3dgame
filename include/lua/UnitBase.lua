@@ -1,74 +1,6 @@
 UnitBaseEvent = 10000;
 UnitBaseEndMsg = "UnitBaseEndMsg";--移动结束
-
-
---动作管理器
-local Animator = {
-	p,--	TYPE_OBJ_VBO_FILE引用
-};
-Animator.__index = Animator;
-function Animator:new(p)
-	local s = {};
-    setmetatable(s,Animator);
-	s.p = p;
-    return s;
-end
-
-function Animator:dispose()
-	func_clearTableItem(self);
-end
-
---获取动作总数
-function Animator:total()
-	return change_attr(self.p,"animtor_total");
-end
-
-function Animator:cur_frame()
-	return change_attr(self.p,"animtor_curFrame");
-end
-
---是否在播放
-function Animator:isPlaying()
-	if(change_attr(self.p,"animtor_isPlaying") == 1) then
-		return true;
-	end
-end
---设置fbs
-function Animator:set_fps(v)
-	change_attr(self.p,"fps",tostring(v))
-end
-
---[[
-	初始化动作(处理成动态加载配置文件,可以做一个编辑器编辑这些缩放和偏移有问题的md2文件)
-	播放指定的动画
-	"stand",0,39
-	"run",40,45
-	"jump",66,71
---]]
-function Animator:play(anim)
-	local o = self.p;
-	--self:pause();
-	if(anim) then
-		change_attr(o,"animtor_setcur",anim);--指定当前的动作
-	end
-	change_attr(o,"animtor_play");
-end
-
---分割动画
-function Animator:push(animname,s,e)
-	change_attr(self.p,"animtor_push",animname,string.format('%s,%s',s,e));
-end
-
---根据区间播放动画
-function Animator:play_to(s,e)
-	change_attr(self.p,"animtor_play_start_end",string.format('%d,%d',s,e));
-	self:play();
-end
-
---暂停
-function Animator:pause()
-	change_attr(self.p,"animtor_pause");
-end
+dofile("..\\include\\lua\\animator.lua")
 
 --*************************************************************
 --只实现 p = TYPE_OBJ_VBO_FILE 类型的对象
@@ -125,12 +57,12 @@ function UnitBase:loadvbo(modelURL,maturl,cam)
             
     --print("**创建角色",modelURL,name);
 
-    local md2=JEngine:getIns():load(modelURL);
+    local m=JEngine:getIns():load(modelURL);
 	
 	--load_VBO_model(name,modelURL);
     local material = func_load(maturl);
-    setMaterial(md2,material);
-	setv(md2,FLAGS_VISIBLE);--显示模型对象
+    setMaterial(m,material);
+	setv(m,FLAGS_VISIBLE);--显示模型对象
     
 	--f_split_init(md2);
 	
@@ -138,7 +70,8 @@ function UnitBase:loadvbo(modelURL,maturl,cam)
     --setv(md2,FLAGS_DISABLE_CULL_FACE)--设置双面都能渲染
     --local ss =new_sharp;
    
-    self.p = md2;
+
+    self.p = m;
 	
 	JEngine:getIns():add(self.p);
 	self:set_cam(cam);
