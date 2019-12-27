@@ -52,6 +52,19 @@ function UnitBase:set_cam(cam)
 	end
 end
 
+function UnitBase:visible(v)
+	if(v) then
+		setv(self.p,FLAGS_VISIBLE);--显示
+	else	
+		resetv(self.p,FLAGS_VISIBLE);--隐藏
+	end
+end
+
+function UnitBase:is_visible()
+	return getv(self.p,FLAGS_VISIBLE) == 1;
+end
+
+
 --加载VBO模型
 function UnitBase:loadvbo(modelURL,maturl,cam)
             
@@ -62,8 +75,10 @@ function UnitBase:loadvbo(modelURL,maturl,cam)
 	--load_VBO_model(name,modelURL);
     local material = func_load(maturl);
     setMaterial(m,material);
-	setv(m,FLAGS_VISIBLE);--显示模型对象
+	--setv(m,FLAGS_VISIBLE);--显示模型对象
     
+	
+	
 	--f_split_init(md2);
 	
 	
@@ -76,6 +91,8 @@ function UnitBase:loadvbo(modelURL,maturl,cam)
 	JEngine:getIns():add(self.p);
 	self:set_cam(cam);
 	--f_set_cam(self);
+	
+	self:visible(true);
 	
 	self.anim = Animator:new(self.p);
 end

@@ -51,15 +51,23 @@ local function f_scale_handle(progress,self)
 end
 
 local function btnClick(self)
-	local u = self.u;
-	local anim = u:get_anim();
-	print("u name ="..u:get_name(),
+	local n = self.u;
+	local anim = n:get_anim();
+	print("u name ="..n:get_name(),
 		--JEngine:getIns():get_type_str(self.u:get_p())
-		"type:"..u:get_type(),
+		"type:"..n:get_type(),
 		anim:cur_frame().."/"..anim:total()
 	);
 	
-	local anim = u:get_anim();
+	--[[
+	if(n:is_visible()) then
+		n:visible(false);
+	else
+		n:visible(true);
+	end
+	--]]
+	
+	local anim = n:get_anim();
 	if(anim:isPlaying()) then
 		anim:pause();
 	else
