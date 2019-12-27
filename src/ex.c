@@ -65,13 +65,7 @@ struct ClickInfo{
 	int local_click_x,local_click_y;	//临时点击相对于sprite的坐标
 	float pos_z;
 };
-//
-//struct CallLaterNode
-//{
-//	void* parms;
-//	void (*callBack)(void*);
-//	int i;
-//};
+
 /*
 	回调
 */
@@ -88,99 +82,6 @@ static void f_renderlistCall(void _callBack(int)){
 		_callBack(data);
 	}
 }
-//在drawcall的最后回调
-//void
-//callLater(void _callBack(void*),void* parms){
-//	
-//	struct CallLaterNode* node = (struct CallLaterNode*)tl_malloc(sizeof(struct CallLaterNode));
-//	
-//	{
-//		printf("push parms 0x%0x\n",parms);
-//	}
-//	node->callBack = _callBack;
-//	node->parms = parms;
-//	//ex_getIns()->lastList;
-//	node->i = ex_getIns()->index;
-//	LStack_push(ex_getIns()->lastList,(void*)node);
-//	printf("push node 0x%0x\n",node);
-//}
-
-
-
-
-//
-//static void
-//f_pop(){
-//	void* p = ex_getIns()->lastList;
-//
-//	//struct CallLaterNode* n = 0;
-//	if(LStack_length((struct LStackNode*)p)>0){
-//		int data;
-//		int status = LStack_pop(p,&data);
-//		if (status)
-//		{
-//			struct CallLaterNode* _node = (struct CallLaterNode*)data;
-//			_node->callBack(_node->parms);//这里有问题
-//			//n = _node;
-//			tl_free(_node);
-//
-//			
-//		}
-//
-//	}
-//
-//	//if(n){
-//	//	n->callBack(n->parms);//这里有问题
-//	//	tl_free(n);
-//	//}
-//
-//	//printf("pop\n");
-//}
-//static void 
-//runLastList(){
-
-	//f_pop();
-	//struct LStackNode* s = ex_getIns()->lastList;
-	//struct CallLaterNode* _node;
-	//int cnt = 0;
-	//void* top,*p;
-
-	////printf("lstack length = %d\n",LStack_length(s));
-
-	//top = s;
-	//p=top;
-	//while((int)LStack_next(p)){
-	//	int data;
-	//	p=(void*)LStack_next(p);
-	//	data = LStack_data(p);
-	//	if(data){
-	//		
-	//		if(!LStack_delNode(s,data)){
-	//			printf("删除失败!\n");
-	//		}else{
-	//			printf("%0x删除成功\n",p);
-	//		}
-	//		
-	//		_node = (struct CallLaterNode*)data;
-	//		printf("** lstack length = %d,0x%0x,执行回调\n",LStack_length(s),_node);
-	//		
-	//		_node->callBack(_node->parms);//这里有问题
-
-	//		tl_free(_node);
-
-	//		{
-	//			struct LStackNode* cn = p;
-	//			cn->data = 0;
-	//		}
-	//	}
-
-	//	
-	//}
-	//if(LStack_length(s) > 0)
-	//	printf("清除栈的时候栈的长度 = %d\n",LStack_length(s));
-	//
-	////LStack_clear(s);
-//}
 
 struct Ent3D{
 	struct HeadInfo* base;
@@ -295,39 +196,11 @@ md2_render(struct MD2_Object* _md2){
 	//实体绘制
 	base_renderFill(base,frame->vertices,frame->vertCount);
 }
-//static void ex_render3dNode(int data);
-//static void render_uiNode(int data);
-//int ex_mouseIsLeftDown()
-//{
-//	return isLeftDown;
-//}
-//void* ex_find_node(const char* name){
-//	return ex_findNodeByName(ex_getInstance(),name);
-//}
+
 /*
 根据name寻找对象(name为一个字符串)
 */
 void* ex_find_ptr(struct EX* ptr,const char* name){
-	//struct LStackNode* s = (struct LStackNode* )ptr->renderList;
-	//void* top,*p;
-	//top = s;
-	//p=top;
-	//while((int)LStack_next(p)){
-	//	int data;
-	//	struct HeadInfo* base = NULL;
-	//	void* n;
-
-	//	p=(void*)LStack_next(p);
-	//	data = LStack_data(p);
-
-	//	n = (void*)data;
-	//	//base_get(n,&base);
-	//	base = base_get(n);
-	//	if(base!= NULL && !strcmp((const char*)base->name,name)){
-	//		return n;
-	//	}
-	//}
-	//return NULL;
 	return base_findByName(ptr->renderList,name);
 }
 
@@ -392,54 +265,6 @@ GLuint ex_getProgrom3D(const char* glslType){
 	}
 	return (GLuint)progrom3d_get(ex_getIns()->pro3d,glslType);
 }
-
-///*
-//获取模型类型
-//*/
-//int getType(void* p){
-//	struct HeadInfo base;
-//	base_get(p,&base);	
-//	return base.curType;
-//}
-
-///*
-//*	与引擎绑定headInfo属性
-//*/
-//void linkBase(struct EX*ex,struct HeadInfo* base){
-//
-//	//包围盒数据(float*)的数组长度
-//	base->boxVertLength = BOX_SIZE;
-//}
-///*
-//	为材质创建贴图
-//*/
-//static void f_createMaterialTexture(struct GMaterial *p)
-//{
-//	int i;
-//	for(i = 0;i< p->curTexIndex;i++){
-//		tmat_bindTex(p,i,(const char*)p->texArray[i]);
-//	}
-//}
-///*
-//创建材质
-//*/
-//static void f_createShader(struct GMaterial *tmat,char* glslType)
-//{
-//	/*struct GMaterial *tmat=base->tmat;
-//     
-//	if(!base){
-//		printf("创建材质失败!\n");
-//		return;
-//	}*/
-//	//========================
-//
-//	tmat->glslType = glslType;//base->glslType;
-//	
-//	//创建材质
-//	//加载贴图,贴图要垂直翻转一下,否则要调整uv值
-//	
-//	f_createMaterialTexture(tmat);
-//}
 
 //=================================================================
 /*
@@ -531,15 +356,6 @@ void renderUI(GLenum mode){
 	}
 }
 
-///*
-//设置名字
-//*/
-//void setName(char* name,const char* targetName,int len){
-//	memset(name,0,len);
-//	memcpy(name,targetName,strlen(targetName));
-//}
-
-
 static char* f_getFileName(int type){
 	switch(type){
 		case TYPE_OBJ_FILE:
@@ -567,8 +383,6 @@ static void
 f_infoNode(int data){
 	//struct EX*e = ex_getIns();	
 	struct HeadInfo* base = base_get((void*)data);
-
-
 	log_color(0xff00ff,"[cam=%0x,curType=%d(%s),(name=%s),visible:%d]\n",base->cam,base->curType,f_getFileName(base->curType),base->name,base_getv((void*)data,FLAGS_VISIBLE));
 }
 /*
@@ -947,224 +761,6 @@ static int check_md2AnimConf(int allFrameCount,const char* animConf)
 	return anim.isCorrect;
 }
 
-//void mat4x4_zero_d(GLdouble m[16]){
-//	int i;
-//	for(i= 0; i <16; i++)
-//		m[i] =0;
-//}
-//void mat4x4_identity_d(GLdouble m[16]){
-//	mat4x4_zero_d(m);
-//	m[0] =1.0;
-//	m[5]  =1.0;
-//	m[10] =1.0;
-//	m[15] =1.0;
-//}
-
-//GLdouble outModel[16];
-/*
-static void
-changeCam()
-{
-
-	struct EX* p = ex_getInstance();
-	Matrix44f rx,ry,rz,temp1,temp2;
-	Matrix44f pos;
-	struct ECamera cam = p->cam;
-	
-	mat4x4_zero(temp1);
-	mat4x4_zero(temp2);
-
-	mat4x4_identity(pos);
-	mat4x4_translate(pos,cam.x,cam.y,cam.z);
-
-	mat4x4_zero(p->modelViewMatrix);
-
-	//rx
-	mat4x4_identity(rx);
-	mat4x4_rotateX(rx,p->camRotateX);
-
-	//ry
-	mat4x4_identity(ry);
-	mat4x4_rotateY(ry,p->camRotateY);
-
-	//rz
-	mat4x4_identity(rz);
-	mat4x4_rotateZ(rz,p->camRotateZ);
-	
-	multi2(temp1,rx,ry);
-	multi2(temp2,rz,temp1);
-	//multi2(temp1,rx,rz);
-	//multi2(temp2,ry,temp1);
-
-
-	multi2(p->modelViewMatrix,pos,temp2);
-}
-*/
-
-/*
-//构造模型矩阵,将cam矩阵左乘到模型矩阵
-static void
-f_get_custom_modelMatrix(Matrix44f m,struct ECamera* pcam){
-	//struct EX* p = ex_getIns();
-	//struct ECamera cam = *pcam;//p->cam;
-	void* _cam = ex_getIns()->_3dcam;
-
-
-	Matrix44f xyz,rx,ry,rz;
-	//x,y,z坐标
-	mat4x4_identity(xyz);
-	mat4x4_translate(
-		xyz,
-		cam_getX(_cam),
-		cam_getY(_cam),
-		cam_getY(_cam));
-
-	//旋转===================================================
-	//rx
-	mat4x4_identity(rx);
-	mat4x4_rotateX(rx,-cam_getRX(_cam));
-
-	//ry
-	mat4x4_identity(ry);
-	mat4x4_rotateY(ry,-cam_getRY(_cam));
-
-	//rz
-	mat4x4_identity(rz);
-	mat4x4_rotateZ(rz,-cam_getRZ(_cam));
-
-	mat4x4_identity(m);
-	
-	mat4x4_mult(4,m,rx,ry,rz,xyz);
-
-	//################################
-	//tmp = m[7];
-	//m[7] = m[14];
-	//m[14] = tmp;
-
-	//tmp = m[11];
-	//m[11] = m[13];
-	//m[13] = tmp;
-
-	mat4x4_transpose(m);
-}
-*/
-//static void
-//f_getModelMat4x4(){
-//	struct EX* p = ex_getIns();
-//	//struct ECamera cam = p->cam;
-///*
-//	glMatrixMode (GL_MODELVIEW);
-//	//glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
-//	glLoadIdentity ();
-//	
-//	glRotatef(-180/PI*p->cam.rx,1,0,0);
-//	glRotatef(-180/PI*p->cam.ry,0,1,0);
-//	glRotatef(-180/PI*p->cam.rz,0,0,1);
-//	glTranslatef(cam.x,cam.y,cam.z);
-//	
-//	mat4x4_zero(p->modelViewMatrix);
-//	glGetFloatv(GL_MODELVIEW_MATRIX,p->modelViewMatrix);
-//	mat4x4_transpose(p->modelViewMatrix);
-//*/
-//	//tlgl_get_matrix(p->modelViewMatrix,
-//		//cam.x,cam.y,cam.z,
-//		//cam.rx,cam.ry,cam.rz);
-//
-//	cam_refreshModdel(p->_3dcam);
-//}
-
-//用固定管线计算的透视矩阵和模型矩阵
-//static void
-//f_used_normal_perctive(GLdouble fov, GLdouble aspectRatio,
-//					   GLdouble zNear, GLdouble zFar){
-//	struct EX* p = ex_getIns();
-//	Matrix44f _out;
-//
-//
-//	//struct ECamera cam = p->cam;
-//	//只是处理鼠标拾取操作用来获取坐标使用gluUnProject,3d物体 不使用该方式(使用用户自定义的透视矩阵,视图矩阵,模型矩阵)
-//	glMatrixMode (GL_PROJECTION);
-//	glLoadIdentity ();
-//	gluPerspective (fov,aspectRatio,zNear,zFar);
-//
-//	mat4x4_identity(_out);
-//	glGetFloatv(GL_PROJECTION_MATRIX,_out);
-//	mat4x4_transpose(_out);	
-//	
-//	//mat4x4_copy(_out,p->perspectiveMatrix);
-//
-//	//f_getModelMat4x4();
-//	ex_refresh3dModelView();
-//}
-//
-//static void
-//updatePerspectiveMatrix( 
-//						GLdouble fov, GLdouble aspectRatio,
-//						GLdouble zNear, GLdouble zFar){
-//	struct EX* p = ex_getIns();
-//
-//	//struct ECamera cam = p->cam;
-//	
-//	//f_used_normal_perctive(fov,aspectRatio,zNear,zFar);return;//使用固定管线计算出透视矩阵和模型矩阵
-//
-//	//模型矩阵
-//	//f_get_custom_modelMatrix(p->modelViewMatrix,&p->cam);//使用自定义计算出模型矩阵	
-//	f_getModelMat4x4();
-//
-//	//透视矩阵
-//	/*
-//	mat4x4_identity(p->perspectiveMatrix);
-//	mat4x4_perspective(p->perspectiveMatrix,fov,aspectRatio,zNear,zFar);
-//	mat4x4_transpose(p->perspectiveMatrix);	
-//	*/
-//	//cam_setPerspect(p->_3dcam,fov,aspectRatio,zNear,zFar);
-//}
-
-///*
-//	计算透视和矩阵索引
-//*/
-//void 
-//ex_refresh3dModelView(){
-//	cam_refreshModdel(ex_getIns()->_3dcam);
-//}
-
-/*
-	绘制线段
-*/
-//static void 
-//f_drawline(){
-
-	/*
-	glLineWidth(1.0f);//直线的宽度。
-
-	//for(i = 0;i < count;i++){
-		glBegin(GL_LINES); 
-		//glVertex3f(-h/2, 0,gap*i);
-		glVertex3f(0.0, 0.0f ,0.0f);
-		glVertex3f(1.0, 0.0f ,0.0f);
-		glEnd();
-	//} 
-	*/
-	//if(ex_getInstance()->drawLine_callBack)
-	//	ex_getInstance()->drawLinhe_callBack();
-//}
-
-///*
-// *计算正交矩阵,只需要在渲染窗口发生尺寸变化的重新计算一次即可
-// */
-//void ex_calculat_ortho(){
-//	struct EX* p = ex_getIns();
-//	//mat4x4_identity(p->ui_perspectiveMatrix);
-//	//mat4x4_orthoPerspect(p->ui_perspectiveMatrix,0,p->_screenWidth,0,p->_screenHeight,0,-p->allzBuffer);
-//	void* _2dCam = p->_2dcam;
-//	cam_setOrtho(_2dcam,0,p->_screenWidth,0,p->_screenHeight,0,-p->allzBuffer);
-//
-//
-//	//mat4x4_identity(p->ui_modelViewMatrix);
-//	//mat4x4_transpose(p->ui_modelViewMatrix);
-//	//printf("ex_calculat_ortho===>\n");
-//}
-
 //固定管线计算正交矩阵
 static void
 f_static_calculat(){
@@ -1293,22 +889,7 @@ ex_update_uiPos()
 {
 	f_renderlistCall(sprite_updatePos);	
 }
-//
-///*
-//	加载一个四边形用于sprite面片
-//*/
-//static void 
-//loadSpriteVert(struct EX* p)
-//{
-//	char* _objStr;
-//	int _dataCount,verts;
-//	_objStr=tl_loadfile("\\resource\\obj\\quad.obj",0);
-//	obj_parse(_objStr,&_dataCount,&verts,OBJ_UV_VERTEX);
-//	p->spriteVert.vertLen = _dataCount;
-//	p->spriteVert.vertex = (GLfloat*)verts;
-//
-//	tl_free(_objStr);
-//}
+
 //static float _g_pos_z;
 float ex_newPosZ()
 {
@@ -1466,9 +1047,6 @@ void ex_dispose(struct EX* p){
 	evt_dispose(p);
 	memory_gc();
 	
-	/*if(p->spriteVert.vertex){
-		tl_free(p->spriteVert.vertex);
-	}*/
 }
 
 /*
@@ -1493,18 +1071,6 @@ load_md5(const char* _name,const char* url,float x,float y,float z,float scale)
 	//_base->rayVertexData.vertLen = 0;
 
 	_base->scale = scale;//缩放值
-
-	////静态拾取盒子
-	//_base->boundLength = 30.0f * scale;
-	//_base->boundHeight = 40.0f * scale;
-	//_base->boundWidth = 60.0f *  scale;
-
-	/*base_boxStaticVert_init(_base);
-	tl_createAbsBoundBox(_base->boundLength,_base->boundHeight,_base->boundWidth,_base->staticBoxVert);*/
-	
-	//_base->rayVertexData.vertLen = BOX_SIZE;
-	//_base->rayVertexData.vertex = tl_malloc(sizeof(float)*_base->rayVertexData.vertLen);
-	//tlgl_setAbsBoundBox(1,1,1,_base->rayVertexData.vertex);//默认一个半径0.5的立方体
 	
 	//======================================================================================
 	//加载md5模型
@@ -1762,21 +1328,6 @@ ex_loadVBO(char* name,const char* url){
 	return 0;
 }
 
-
-//void 
-//setv_ptr(void* ptr,int flags)
-//{
-//	struct HeadInfo* b = base_get(ptr);
-//	//setv(&((struct HeadInfo*)base_get2(ptr)->flags),flags);
-//	setv(&b->flags,flags);
-//}
-//为ptr设置材质material
-//void 
-//setMaterial(void* ptr,void* material)
-//{
-//	(struct HeadInfo*)base_get(ptr)->tmat = material;
-//}
-
 /*
 	加载md2动作配置
 */
@@ -1851,23 +1402,6 @@ ex_animtor_ptr_setcur(void* ptr,const char* str,void (*playend)(void*)){
 	}
 	return 1;
 }
-//static int 
-//OnMouseDown(struct Sprite* pBtn,int mousex, int mousey)
-//{
-//	struct EX* ex = f_getEx();
-//	//鼠标的位置：mousex，mousey坐标系是原点位于左上角
-//	//必须将mousey变换到原点位于左下角的坐标系中
-//	mousey = ex->_screenHeight-mousey;
-//	if( mousex > pBtn->m_fPosX && mousex < pBtn->m_fPosX+pBtn->m_fWidth &&
-//		mousey > pBtn->m_fPosY && mousey < pBtn->m_fPosY+pBtn->m_fHeight )
-//	{
-//		//printf("button is pressed .... 激活一些按钮特效或者处理一些业务逻辑\n");
-//		pBtn->m_bPressed = 1;
-//
-//		return 1;
-//	}
-//	return 0;
-//}
 
 /*
 	界面拾取获取的信息
@@ -2010,27 +1544,6 @@ void mouseMove(int x,int y)
 	//只有当鼠标移动的时候才会更新Sprite
 	f_renderlistCall(sprite_mouseMove);	
 }
-
-/************************************************************************/
-/* 点击回调                                                             */
-/************************************************************************/
-//static void
-//f_raySome(struct HitResultObject* hit){
-//	struct EX* ex = ex_getIns();
-//	struct HitResultObject* last = hit;
-//	struct HeadInfo* _node = ex_find_headinfo(ex,last->name);
-//
-//	if(_node){		
-//		if(_node->luaPickCallBack){
-//			int n = (int)ex_find_ptr(ex,(const char*)_node->name);
-//			ex_callIntLuaFun(_node->luaPickCallBack,n);//lua拾取回调	
-//		}
-//		//printf("-->%s,%0x\n",_node->name,_node->luaPickCallBack);
-//		//printf("(%s)射线拾取到的3D坐标:\t%.3f\t%.3f\t%.3f\t%s\tcurType=%d\n",last->name,last->x,last->y,last->z,_node->suffix,_node->curType);
-//	}else{
-//		printf("can`t find f_rayPickCallBack\n");
-//	}
-//}
 
 static void
 f_rayPick(struct HitResultObject* hit){
@@ -2177,11 +1690,6 @@ void onKeyboardCallBack(unsigned char key, int x, int y){
 	ex_lua_evt_dispatch_f(0,EVENT_ENGINE_KEYBOARD,key);
 }
 
-//static void 
-//update3DNode(int data){
-//	base_updateMat4x4(base_get((void*)data));
-//}
-
 void 
 ex_cam_set_pos(float x,float y,float z){
 	struct EX* ex = ex_getIns();	
@@ -2207,38 +1715,6 @@ void setBgColor(float r,float g,float b){
 #endif
 }
 
-//int getState(int t){
-//	struct EX* e = f_getEx();
-//	return (e->_st & t)>>tl_bintree(t);
-//}
-
-//void set(int t){
-//	struct EX* e = f_getEx();
-//	e->_st = e->_st | t;
-//}
-
-//void reset(int t ){
-//	struct EX* e = f_getEx();
-//	e->_st = (~t)&e->_st; 
-//}
-
-/*
-	切换标识
-*/
-/*
-void ex_switch_baseFlags(struct HeadInfo* _node,int flag){
-	//选择切换模式//int flag =  FLAGS_GLSL_OUTLINE;
-	int *v = &_node->flags;
-	if(getv(v,flag))
-	{
-		resetv(v,flag);
-	}
-	else
-	{
-		setv(v,flag);
-	}
-}
-*/
 /*
  *初始化日志tf句柄
  */
@@ -2257,16 +1733,6 @@ ex_showLog(const char* buffer){
 	//tf_setText(e->logTf,buffer);
 }
 
-//void
-//ex_showLogFloat(float v)
-//{
-//	char buffer[G_BUFFER_1024_SIZE];
-//	struct EX* e = ex_getInstance();
-//	getLog();
-//	sprintf_s(buffer,G_BUFFER_1024_SIZE,"%f",v);
-//	tf_setText(e->logTf,buffer);
-//}
-
 void ex_callParmLuaFun(const char* luaFunName,const char* parm)
 {
 	if((size_t)strlen(luaFunName))
@@ -2283,22 +1749,6 @@ void ex_callParmLuaFun(const char* luaFunName,const char* parm)
 		}
 	}
 }
-/*
-#define __BUFFER_SIZE_ 1024	//缓冲区大小
-
-void ex_alert(const char* format,...){	
-	char str_tmp[__BUFFER_SIZE_];
-	int i;
-	char s[__BUFFER_SIZE_];
-	va_list vArgList;                          
-	va_start (vArgList, format);	
-	i = _vsnprintf_s(str_tmp, __BUFFER_SIZE_,__BUFFER_SIZE_, format, vArgList);
-	sprintf_s(s,__BUFFER_SIZE_,"%s",str_tmp);
-	ex_callParmLuaFun("alert",s);
-	va_end(vArgList);
-}
-*/
-	
 
 void ex_callIntLuaFun(const char* luaFunName,int value)
 {
@@ -2350,25 +1800,7 @@ ex_lua_evt_dispatch(void* obj,int evtid,const char* data){
 #endif
 	}
 }
-//
-//void 
-//setLookTarget(void* ptr,float x,float y,float z)
-//{
-//	struct HeadInfo* b = base_get(ptr);
-//	b->lookat = 1;
-//	b->target.x = x;
-//	b->target.y = y;
-//	b->target.z = z;
-//	vec3Normalize(&b->target);
-//	//printf("%f.%f,%f\n",x,y,z);
-//
-//	if(vec3IsZero(&b->target)){
-//		printf("不能是0向量\n");
-//		assert(0);
-//	}
-//	else
-//		base_updateMat4x4(b);
-//}
+
 void
 ex_set_material(void* ptr,void* material){
 	struct HeadInfo*  base = base_get(ptr);
@@ -2422,25 +1854,6 @@ void ex_ptr_remove(void* ptr){
 	}
 }
 
-//void 
-//ex_setv(void* ptr,int flag){
-//	struct HeadInfo* base=base_get((void*)ptr);
-//	setv(&base->flags,flag);
-//}
-
-//void
-//ex_resetv(void* ptr,int flag){
-//	struct HeadInfo* base=base_get((void*)ptr);
-//	resetv(&base->flags,flag);
-//}
-
-//int 
-//ex_getv(void* ptr,int flag){
-//	struct HeadInfo* base=base_get((void*)ptr);
-//	return getv(&base->flags,flag);
-//}
-
-
 int ex_get_gap(int type)
 {
 	if(type == OBJ_UV_VERTEX)
@@ -2449,13 +1862,6 @@ int ex_get_gap(int type)
 	}
 	return UV_GAP + VERTEX_GAP + NORMAL_GAP;
 }
-//void* ex_get_ui_atals(){
-//	if(!ex_getIns()->atals){
-//		struct Atals* ptr = atals_load("//resource//texture//","1");
-//		ex_getIns()->atals = (void*)ptr;
-//	}
-//	return ex_getIns()->atals;
-//}
 
 void ex_switch3dCam(void* cam){
 	ex_getIns()->_3dCurCam=cam;
@@ -2464,21 +1870,3 @@ void ex_switch3dCam(void* cam){
 void ex_switch2dCam(void* cam){
 	ex_getIns()->_2dCurCam = cam;
 }
-
-//########################################
-
-//void
-//fbo_render(void* ptr){
-//	struct FBOTex* fbo = (struct FBOTex*)ptr;
-//
-//	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo->fboName);
-//	glDrawBuffers(1, fboBuffs);
-//
-//	glViewport(0, 0, fbo->texw, fbo->texh);
-//
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//清除当前的缓冲区
-//
-//	f_renderlistCall(render_3dNode);//渲染3d节点
-//
-//	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-//}

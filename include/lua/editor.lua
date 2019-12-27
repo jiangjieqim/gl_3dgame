@@ -11,7 +11,7 @@ ModleShow.__index = ModleShow;
 local function addmd2_fbo(fbo)
 
 	local cam = fbo:get_cam3d();
-	cam = nil;
+	--cam = nil;
 	
 	
 	
