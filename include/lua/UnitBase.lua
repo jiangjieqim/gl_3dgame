@@ -196,9 +196,18 @@ local function f_endCall(data)
     evt_dispatch(p,UnitBaseEvent,UnitBaseEndMsg);
     --print(data);
 end
---加载碰撞盒
-function UnitBase:load_collide(model)
-    func_bind_collide(self.p,model or "\\resource\\obj\\box.obj",frame);
+--[[
+	加载碰撞盒
+	drawbox : 是否显示碰撞盒
+	
+	bug:fbo拾取无效
+--]]
+function UnitBase:load_collide(model,drawbox)
+	change_attr(self.p,"collide_load",model or "\\resource\\obj\\box.obj",frame or 0);--torus
+	setv(self.p,FLAGS_RAY);
+	if(drawbox) then
+		setv(self.p,FLAGS_DRAW_RAY_COLLISION);
+	end
 end
 
 function UnitBase:move(x,y,z)

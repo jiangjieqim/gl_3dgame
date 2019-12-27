@@ -11,7 +11,8 @@ ModleShow.__index = ModleShow;
 local function addmd2_fbo(fbo)
 
 	local cam = fbo:get_cam3d();
-	--cam = nil;
+	cam = nil;
+	
 	
 	
 	----bauul,triangle
@@ -26,6 +27,7 @@ local function addmd2_fbo(fbo)
 	local anim = n:get_anim();
 	anim:push("jump",0,3);
 	anim:play("jump");
+	n:load_collide(nil,true);
 	
 	--anim:set_fps(1);
 	
@@ -36,6 +38,7 @@ local function addmd2_fbo(fbo)
 	local anim = n:get_anim();
 	anim:push("jump",0,37);
 	anim:play("jump");
+	n:load_collide(nil,true);
 	--anim:set_fps(1);
 --]]
 	
@@ -59,7 +62,7 @@ local function btnClick(self)
 		anim:cur_frame().."/"..anim:total()
 	);
 	
-	--[[
+	----[[
 	if(n:is_visible()) then
 		n:visible(false);
 	else

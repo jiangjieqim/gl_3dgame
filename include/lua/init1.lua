@@ -191,7 +191,7 @@ local function loadmd5(name)
 	
 	--change_attr(model, "setframe", 10);--设置当前的关键帧
 	func_set_x(model,2);
-	--func_bind_collide(model);
+	
 
 	func_setRotateX(model,PI/2);
 
@@ -216,7 +216,7 @@ local function loadObj(model)
 	setv(obj,FLAGS_RENDER_BOUND_BOX);
 	setv(obj,FLAGS_DRAW_NORMAL);
 
-	--func_bind_collide(obj)
+	
 	--moduleUI_bind(obj)
 	--f_add_model(obj)
 
@@ -276,7 +276,9 @@ p1:setDrag(true);
 p1:center();--]]
 
 --local mc = ModelControl:new(300,30);
-local u = loadbox();
+
+--local u = loadbox();
+
 --mc:bind(u);
 
 
