@@ -333,8 +333,6 @@ static void f_renderLine(struct HeadInfo* base,GLfloat* vertex,int vertLen){
 	glPopMatrix();
 }
 
-
-
 void 
 base_seachPick(struct LStackNode* s,struct Vec3* nearPoint,struct Vec3* farPoint,struct HitResultObject* last){
 

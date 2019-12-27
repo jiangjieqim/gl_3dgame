@@ -97,11 +97,11 @@ void scene_specialKeys(int key, int x, int y){
 		//ex_info()
 		break;
 	case GLUT_KEY_F2:
-		setv(&(ex->flags),EX_FLAGS_RAY);
+		//setv(&(ex->flags),EX_FLAGS_RAY);
 		break;
 
 	case GLUT_KEY_F3:
-		resetv(&(ex->flags),EX_FLAGS_RAY);
+		//resetv(&(ex->flags),EX_FLAGS_RAY);
 		break;
 
 	case GLUT_KEY_F11:
@@ -2940,7 +2940,7 @@ void main(int argc,char** argv){
 
 	//启用射线拾取碰撞检测
 	//setRayCollision(ex,TRUE);
-	setv(&(ex->flags),EX_FLAGS_RAY);
+	//setv(&(ex->flags),EX_FLAGS_RAY);
 
 	//设置背景
 	//setBgColor(1.0f,1.0f,1.0f);

@@ -18,7 +18,8 @@
 	射线拾取开关枚举,这是一个总开关
 	设置静态碰撞盒子,设置成TRUE就可以射线检测,不检测射线拾取,这是一个整体开关,单个模型可以单独设置
 */
-#define EX_FLAGS_RAY 0x01
+//#define EX_FLAGS_RAY 0x01
+
 //#define EX_FLAGS_DRAW_DEBUG_TEXT 0x02	/*是否显示调试信息的文本在标题处*/
 #define EX_FLAGS_RAY_TO_UI 0x04			/*是否点击到了界面元素*/
 #define EX_FLAGS_LEFT_DOWN 0x08			/*鼠标是否左键常按着*/

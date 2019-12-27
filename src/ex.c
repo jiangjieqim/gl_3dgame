@@ -436,7 +436,7 @@ ex_get_info(){
 	//printf( "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
 	
 	log_color(0, "vbo使用:%d bytes\n",tlgl_getVboSize());
-	log_color(0, "当前(射线检测)状态:%d\n",getv(&(ex_getIns()->flags),EX_FLAGS_RAY));
+	//log_color(0, "当前(射线检测)状态:%d\n",getv(&(ex_getIns()->flags),EX_FLAGS_RAY));
 
 	//mat4x4_printf("perspectiveMatrix",ex->perspectiveMatrix);
 	//mat4x4_printf("modelViewMatrix",ex->modelViewMatrix);
@@ -1619,23 +1619,15 @@ void mousePlot(GLint button, GLint action, GLint xMouse, GLint yMouse){
 #endif
 		}
 
-
 		setv(&(ex->flags),EX_FLAGS_LEFT_DOWN);//isLeftDown = 1;
-
 		if(_clickInfo->sprite!=ex->stage2d && getv(&(ex->flags),EX_FLAGS_RAY_TO_UI)){
 			//点击到了不是舞台,并且是界面层
-
 			//printf("点击了界面就忽略掉3d场景中的模型\n");
 		}else{
 			//3D世界拾取
-			if(getv(&(ex->flags),EX_FLAGS_RAY)){
-				base_hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,
-					
-					//ex->perspectiveMatrix
-					cam_getPerctive(ex->_3dcam)
-					,cam_getModel(ex->_3dcam)/*ex->modelViewMatrix*/,f_rayPick);
-				//f_3d_pick();
-			}
+			//if(getv(&(ex->flags),EX_FLAGS_RAY)){
+			base_hit_mouse(xMouse,yMouse,ex->_screenWidth,ex->_screenHeight,ex->renderList,cam_getPerctive(ex->_3dcam),cam_getModel(ex->_3dcam),f_rayPick);
+			//}
 			
 		}
 	}
