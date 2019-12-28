@@ -248,15 +248,7 @@ void mouseMove(int x,int y);
 */
 void onKeyboardCallBack(unsigned char key, int x, int y);
 
-/*
-设置渲染的背景颜色
-*/
-void setBgColor(float r,float g,float b);
 
-/*
-	打印引擎当前信息
-*/
-void ex_get_info();
 
 /*
 	添加一个渲染节点
@@ -395,4 +387,14 @@ ex_animtor_ptr_setcur(void* ptr,const char* animKey,void (*playend)(void*));
 设置摄影机的坐标
 */
 void ex_cam_set_pos(float x,float y,float z);
+
+/*
+设置渲染的背景颜色
+*/
+void setBgColor(float r,float g,float b);
+
+/*
+	打印引擎当前信息
+*/
+void ex_get_info();
 #endif

@@ -63,7 +63,7 @@ end
 local function f_bar(sc)
 	local v = string.format('%.0f',sc.value);
 	local m = scrollBar_get_param(sc);
-	func_play_anim(m,v,v);
+	--func_play_anim(m,v,v);
 	--func_setRotateX(func_find_obj(ModelName),sc.value)
 	--tf_setText(animTF,'anim '..v)
 end

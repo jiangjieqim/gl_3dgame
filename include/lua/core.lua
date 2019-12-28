@@ -712,10 +712,11 @@ end
 function func_find_obj(name)--func_getObj_ByName_EG
 	return dofunc("FindNode",name);
 end
---根据区间播放动画
+--[[根据区间播放动画
 function func_play_anim(o,s,e)
 	change_attr(o,"animtor_play_start_end",string.format('%d,%d',s,e))
 end
+--]]
 
 --播放动画
 function func_play(o)

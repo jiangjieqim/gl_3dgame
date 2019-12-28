@@ -17,7 +17,7 @@ local function addmd2_fbo(fbo)
 	
 	local n = UnitBase:new();
 	
-----[[
+--[[
 	--md2¼òÄ£
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);
@@ -29,7 +29,7 @@ local function addmd2_fbo(fbo)
 	--anim:set_fps(1);
 	
 	--]]
---[[
+----[[
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-100);
 	local anim = n:get_anim();
@@ -45,9 +45,19 @@ end
 local function f_scale_handle(progress,self)
 	--local self = scrollBar_get_param(sc);
 	--func_rotate(unit_get_model(self.obj), "ry", sc.value*PI);
-
 	self.u:scale(progress);
 	--print(progress,self);
+end
+
+local function f_set_anim(progress,self)
+	local n = self.u;
+	local anim = n:get_anim();
+	local v = math.floor(anim:total()*progress)-1;
+	if(v < 0) then
+		v = 0;
+		
+	end
+	anim:play_to(v,v);
 end
 
 local function btnClick(self)
@@ -100,6 +110,9 @@ local function f_cpmlete(self)
 	
 	local scale = skin:find("scale");
 	scale:bindCallback(f_scale_handle,self);
+
+	local anim = skin:find("anim");
+	anim:bindCallback(f_set_anim,self);
 
 	
 	--self.fbo:dispose();

@@ -93,6 +93,8 @@ function NScrollBar:new(x,y,cw,ch)
 	self:settype(12);
 
 	setmetatable(self, NScrollBar);
+	
+	--设置默认的宽高
 	cw = cw or 100;
 	ch = ch or 15;
 	
