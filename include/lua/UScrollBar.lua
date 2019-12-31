@@ -194,13 +194,7 @@ scrollBar_new(x,y,parent,cw,ch)
 		_dragDirection=CONST_DIRECTION_VERTICAL;
 		barSize = cw;
 	end	
-	--local name = func_getTableName(sc)--获取btn引用名
 
-	--背景
-	--local bg = sprite_create(string.format("%s%s",name,"_bg"),x,y,sc.defaultBg_width,sc.defaultBg_height)
-	--func_setIcon(bg,"gundi.png");
-	--string.format("%s%s",name,"_bg")
-	
 	local bg = sprite_create_typical(nil,x,y,sc.defaultBg_width,sc.defaultBg_height);
     local url = "checkbox.png";
 	JEngine:getIns():add(bg);

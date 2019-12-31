@@ -489,11 +489,7 @@ end
 
 
 --创建名字
-function 
-func_create_name(suffix)
---	if(name) then
---		return name;
---	end
+function func_create_name(suffix)
 	return getName(suffix);
 end
 
@@ -610,18 +606,6 @@ function func_changeFlags(_o,_flag)
 	return getv(_o,_flag) == 1
 end
 
-local uiAtals
-
---获取一个界面图集(没有就创建,在调用的时候创建)
---local function get_ui_atals()
---	--print(uiAtals)
-
-----	if(uiAtals == nil) then		
-----		uiAtals=atals_load("//resource//texture//","1")--构造界面图集	
-----	end
-----	return uiAtals;
---    return get_attr(nil,"ex_get_ui_atals");
---end
 --获取当前的焦点
 function func_get_curFocus()
     return get_attr(nil,"curFocus");
@@ -630,7 +614,7 @@ end
 --为sprite设置贴图
 function func_setIcon(sprite,url)
 	--获取一个atals图集,没有图集的界面是黑色的
-	local atals = JEngine:getIns():get_atals();--get_ui_atals();
+	local atals = JEngine:getIns():get_atals();
 	if(atals) then
 		sprite_bindAtals(sprite,atals);
 
@@ -687,11 +671,6 @@ end
 function func_loadfile(url)
     return change_attr(nil,"loadfile",url);
 end
-
---只是加载,并不会加载到渲染列表
---function func_ex_loadVBO(name,url)
---	return change_attr(nil,"ex_loadVBO",name,url);
---end
 
 --获取屏幕的尺寸
 function func_screenSize()

@@ -46,9 +46,6 @@ end
 --创建一个输入组件
 local function example_input(x,y)
 	--作为输入框的背景
-	--local sprite =sprite_create("bg11",100,50,128,14);
-	--func_setIcon(sprite,"gundi.png");
-	
 	x = x or 0;
 	y = y or 0;
 	

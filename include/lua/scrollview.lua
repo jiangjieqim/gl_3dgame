@@ -333,7 +333,6 @@ function example_srollView(posx,posy)
 	
 	--local cnt = 0;
 	local function f_create()
-		--local sprite = sprite_create(nil,0,0,90,itemHeight,0,1,cam);	func_setIcon(sprite, "smallbtn.png");
 		
 		--local sprite = sprite_create_9grid("smallbtn.png",0,0,90,itemHeight,cam,3,3,3,3);	
 		--sprite_set_hit_rect(sprite,0,0,90,itemHeight);
