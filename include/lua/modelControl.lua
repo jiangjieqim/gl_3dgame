@@ -61,14 +61,11 @@ et_index(list);
 	--listbox_set_title(list,label);
 end
 
-
-
 local function f_camx_handle(sc)
 	local cur = sc.value * 1;
 	--print(cur);
-	JEngine:getIns():set_cam_pos(cur*5,0,-10);
-	--engine_refreshCam3d();
-    JEngine:getIns():refresh_cam3d();
+    JEngine:getIns():get_cam():set_pos(cur*5,0,-10);
+    JEngine:getIns():get_cam():refresh();
 end
 
 local function fc(progress,p)

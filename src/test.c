@@ -1780,6 +1780,28 @@ REG_cam_set_2dxy(lua_State *L){
 	cam_set_2dxy((void*)cam,x,y);
 	return 0;
 }
+
+static int REG_cam(lua_State* L){
+	int c = lua_tointeger(L,1);
+	const char* attrKey = lua_tostring(L,2);
+	void* cam = (void*)c;
+	if(!strcmp(attrKey,"set_xyz")){
+		cam_setX(cam,lua_tonumber(L,3));
+		cam_setY(cam,lua_tonumber(L,4));
+		cam_setZ(cam,lua_tonumber(L,5));
+		return 0;
+	}
+	else if(!strcmp(attrKey,"reset")){
+		cam_reset(cam);
+		cam_refreshModel(cam);
+		return 0;
+	}
+	else if(!strcmp(attrKey,"refresh")){
+		cam_refreshModel(cam);
+		return 0;
+	}
+	return 0;
+}
 /*
 	更新3D对象的属性
 */
@@ -1855,14 +1877,14 @@ REG_change_attr(lua_State *L)
 			return 1;
 		}
 		//=======================================
-		//设置camera的坐标
-		if(!strcmp(attrKey,"setCamPos"))
-		{
-			float x,y,z;
-			sscanf_s(str,"%f,%f,%f",&x,&y,&z);
-			ex_cam_set_pos(x,y,z);
-			change = 1;
-		}
+		////设置camera的坐标
+		//if(!strcmp(attrKey,"setCamPos"))
+		//{
+		//	float x,y,z;
+		//	sscanf_s(str,"%f,%f,%f",&x,&y,&z);
+		//	ex_cam_set_pos(x,y,z);
+		//	change = 1;
+		//}
 
 		if(!strcmp(attrKey,"setBgColor")){
 			float r,g,b;
@@ -1877,10 +1899,10 @@ REG_change_attr(lua_State *L)
 		//	lua_pushnumber(L,g_sprite_line);
 		//	return 1;
 		//}
-		if(!strcmp(attrKey,"cam_refreshModel")){
-			cam_refreshModel((void*)toInt(str));
-			return 0;
-		}
+		//if(!strcmp(attrKey,"cam_refreshModel")){
+		//	cam_refreshModel((void*)toInt(str));
+		//	return 0;
+		//}
 		if(!strcmp(attrKey,"ex_add")){
 			ex_add((void*)toInt(str));
 			return 0;
@@ -2467,6 +2489,7 @@ runhelloTest(const char* script){
 	lua_register(lua_state,"get_attr",REG_get_attr);
 	//设置属性
 	lua_register(lua_state,"change_attr",REG_change_attr);
+	lua_register(lua_state,"cam",REG_cam);
 
 	lua_register(lua_state,"glsl_set",REG_glsl_set);
 	//执行函数

@@ -2,7 +2,7 @@
 JEngine ={
 	atals,
 	cam2d,
-	cam3d,
+	m_cam3d,
 };
 
 JEngine.__index = JEngine;
@@ -17,11 +17,13 @@ function JEngine:new()
 	
 	local cam2d,cam3d = getEngine();
 	self.cam2d = cam2d;
-	self.cam3d = cam3d;
+	
+	self.m_cam3d = Camera:new(cam3d);
+
 	return self;
 end
 function JEngine:get_cam()
-    return  self.cam2d,self.cam3d;
+    return self.m_cam3d;
 end
 function JEngine:get_atals()
     return self.atals;
@@ -36,9 +38,6 @@ function JEngine:rename(o,value)
 	change_attr(o,"rename",tostring(value));
 end
 
-function JEngine:refresh_cam3d()
-	change_attr(nil,"cam_refreshModel",self.cam3d);
-end
 function JEngine:get_fps()
     return get_attr(nil,"fps");
 end
@@ -55,10 +54,11 @@ function JEngine:setbg(r,g,b)
     change_attr(nil,"setBgColor",string.format("%s,%s,%s",r or 0,g or 0,b or 0));
 end
 
+--将对象o绑定到引擎默认的3dcam空间
 function JEngine:bind_3dcam(o)
-	set_cam(o,self.cam3d);
+	self:get_cam():bind(o);
 end
-
+--添加一个对象到引擎
 function JEngine:add(n)
 	change_attr(nil,"ex_add",n);
 end
@@ -69,11 +69,6 @@ function JEngine:load(url,name)
 	name = name or func_create_name();
 	return change_attr(nil,"ex_loadVBO",name,url);
 end
---设置3dcamera的坐标
-function JEngine:set_cam_pos(x,y,z)
-	change_attr(nil,"cam_xyz",string.format("%.3f,%.3f,%.3f",x,y,z));
-end
-
 
 --[[
 	获取对象的类型
@@ -113,14 +108,6 @@ end
 function cam_setRotateX(rx)
 	--print(rx);
 	change_attr(nil,"camRX",rx);
-end
-
---重置camera
-function cam_reset()
-    change_attr(nil,"cam_xyz",string.format("%.3f,%.3f,%.3f",0,0,0));
-    change_attr(nil,"camRX",0);
-    change_attr(nil,"camRY",0);
-    change_attr(nil,"camRZ",0);
 end
 
 

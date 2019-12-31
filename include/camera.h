@@ -37,6 +37,9 @@ void cam_get_2dxy(void* p,int* px,int* py);
 //刷新cam的模型视图矩阵,在设置完x,y,z,rx,ry,rz需更新
 void cam_refreshModel(void *p);
 
+//重置camera的坐标和旋转
+void cam_reset(void* p);
+
 //void cam_refreshPerspect(void* cam);
 /************************************************************************/
 /* 构造齐次矩阵                                                          

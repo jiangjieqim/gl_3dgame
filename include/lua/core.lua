@@ -712,11 +712,10 @@ end
 function func_find_obj(name)--func_getObj_ByName_EG
 	return dofunc("FindNode",name);
 end
---[[根据区间播放动画
+--根据区间播放动画
 function func_play_anim(o,s,e)
 	change_attr(o,"animtor_play_start_end",string.format('%d,%d',s,e))
 end
---]]
 
 --播放动画
 function func_play(o)
@@ -978,6 +977,7 @@ dofile("..\\include\\lua\\input.lua");
 
 dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器
 
+dofile("..\\include\\lua\\cam.lua");
 dofile("..\\include\\lua\\engine.lua")	--引擎1
 
 dofile("..\\include\\lua\\fbo.lua")	--fbo

@@ -73,7 +73,8 @@ local function f_select(self,index,param)
 		--创建一个mesh
 		f_loadObj();
     elseif(index == 5) then
-        cam_reset();
+        local cam3d = JEngine:getIns():get_cam();
+        cam3d:reset();
     end
 	--]]
 end

@@ -249,8 +249,8 @@ setv(obj.m,FLAGS_DRAW_PLOYGON_LINE);
 --obj:set_pos(1,1,1)
 
 
-
-JEngine:getIns():set_cam_pos(0,-4,-12);
+local cam3d = JEngine:getIns():get_cam();
+cam3d:set_pos(0,-4,-12);
 
 
 --添加fps显示视图
@@ -420,7 +420,6 @@ end
 
 --增加一个md2渲染对象到fbo对象引用中
 local function addmd2_fbo(fbo)
-	local cam2d,cam3d = JEngine:getIns():get_cam();
 
 	local n = JEngine:getIns():load("\\resource\\md2\\bauul.md2");--"\\resource\\md2\\bauul.md2"
 	local material = func_load("//resource//material//bauul.mat");
@@ -445,6 +444,5 @@ end
 
 
 
---engine_refreshCam3d();
-JEngine:getIns():refresh_cam3d();
+JEngine:getIns():get_cam():refresh();
 --print(_VERSION) ;

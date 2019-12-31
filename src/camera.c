@@ -84,6 +84,17 @@ void cam_setX(void* p,float x){
 	struct Camera* c = (struct Camera*)p;
 	c->x = x;
 }
+
+void cam_reset(void* p){
+	struct Camera* c = (struct Camera*)p;
+	c->x = 0;
+	c->y = 0;
+	c->z = 0;
+	c->rx = 0;
+	c->ry = 0;
+	c->rz = 0;
+}
+
 void cam_setY(void* p,float y){
 	struct Camera* c = (struct Camera*)p;
 	c->y = y;
