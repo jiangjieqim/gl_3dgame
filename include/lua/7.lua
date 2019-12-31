@@ -1,8 +1,8 @@
 --加载两个角色模型,点击地面实现移动行走
 
 --设置cam
+JEngine:getIns():get_cam():rx(PI * 1.8);
 
-cam_setRotateX(PI * 1.8);
 cam_setPosition(0,0,-6);
 --cam:rx(PI * 1.8);
 ----------------------------------------------------------------------------
@@ -60,7 +60,6 @@ local function f_animscHandle(sc)
 		select:ry(v);
     end
 
- --  cam_setRotateX(v);
 end
 scrollBar_setRange(animsc,0,1)
 ----animscTf = scrollBar_add_text(animsc,'animsc')

@@ -443,6 +443,5 @@ end
 
 
 
-
 JEngine:getIns():get_cam():refresh();
 --print(_VERSION) ;

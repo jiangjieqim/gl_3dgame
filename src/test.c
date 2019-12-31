@@ -1800,6 +1800,10 @@ static int REG_cam(lua_State* L){
 		cam_refreshModel(cam);
 		return 0;
 	}
+	else if(!strcmp(attrKey,"rx")){
+		cam_setRX(cam,lua_tonumber(L,3));
+		return 0;
+	}
 	return 0;
 }
 /*

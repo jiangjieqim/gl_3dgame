@@ -131,7 +131,8 @@ function example_unit()
 			setv(obj2.p,FLAGS_DRAW_PLOYGON_LINE);
 		return obj2;
 	end
-	cam_setRotateX(PI * 1.8);
+    JEngine:getIns():get_cam():rx(PI * 1.8);
+
 	cam_setPosition(0,0,-6);
 	
 	local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul

@@ -75,6 +75,8 @@ local function btnClick(self)
 	----[[
 	if(n:is_visible()) then
 		n:visible(false);
+		
+		JEngine:getIns():get_cam():rx(PI * 1.8);	
 	else
 		n:visible(true);
 	end
@@ -90,6 +92,8 @@ local function btnClick(self)
 	--m_dispose(self);
 	--self:dispose();
 	--u:dispose();
+	
+	
 end
 
 local function ef(data,self)

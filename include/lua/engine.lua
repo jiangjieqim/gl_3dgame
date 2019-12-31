@@ -107,10 +107,5 @@ function JEngine:get_type_str(p)
 	end
 end
 
-function cam_setRotateX(rx)
-	--print(rx);
-	change_attr(nil,"camRX",rx);
-end
-
 
 
