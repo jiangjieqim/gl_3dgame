@@ -219,8 +219,6 @@ function btn_pos(btn,x,y)
 	func_setPos(btn.sprite,x,y)
 	
 	if(btn.label) then
---		func_setPos(btn.label,x,y)
---        ftext_setpos(btn.label,x,y);
          f_reset_label_pos(btn);
 	end
 end

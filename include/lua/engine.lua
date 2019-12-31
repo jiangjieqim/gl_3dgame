@@ -11,6 +11,8 @@ setmetatable(JEngine, Instance);--继承自单例
 function JEngine:new()
 	local self =  Instance:new();
 	setmetatable(self, JEngine);
+	
+	--构造一个图集
 	local uiAtals=atals_load("//resource//texture//","1");
     self.atals = uiAtals;
 	

@@ -148,11 +148,7 @@ function example_stack()
 	--stack_push(_l,4);
 	--stack_pop(_l);
 	
-	
-	--print(func_getTime());
 	_l = stack_sort(_l,test_sort);
-	--print(func_getTime());
-
 	
 	stack_foreach(_l,forEach,"params");
 end

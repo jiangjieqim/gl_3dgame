@@ -1917,12 +1917,6 @@ REG_change_attr(lua_State *L)
 		if(!strcmp(attrKey,"exit")){
 			exit(0);
 		}
-		
-		/*if(!strcmp(attrKey,"ft_test")){
-			ftext_create("aa");
-			return 0;
-		}*/
-		
 	}
 
 	//########################################################
@@ -2501,7 +2495,7 @@ runhelloTest(const char* script){
 	lua_register(lua_state,"sprite_create", REG_sprite_create);
 	lua_register(lua_state,"sprite_set_direction", REG_sprite_set_direction);
 	
-	lua_register(lua_state,"sprite_createNoHit", REG_spriteCreateClickThough);//创建一个没有点击功能的sprite
+	//lua_register(lua_state,"sprite_createNoHit", REG_spriteCreateClickThough);//创建一个没有点击功能的sprite
 	lua_register(lua_state,"sprite_texName",REG_sprite_texName);
 	//lua_register(lua_state,"setUV",REG_setUV);
 	lua_register(lua_state,"sprite_setpos",REG_sprite_setpos);

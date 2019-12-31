@@ -27,7 +27,7 @@ TYPE_OBJ_FILE = 0--	//obj类型
 TYPE_MD5_FILE =1 --//md5类型
 TYPE_MD2_FILE =2 --//md2类型
 TYPE_SPRITE_FLIE =3--//UI界面类型中的sprite
-TYPE_TEXT_FILE	=4	--//文本类型
+--TYPE_TEXT_FILE	=4	--//文本类型
 TYPE_OBJ_VBO_FILE=	5--//VBO文件数据
 
 SUFFIX_OBJ ="obj"
@@ -97,13 +97,11 @@ dofile("..\\include\\lua\\evt.lua")	--事件管理器
 dofile("..\\include\\lua\\ftext.lua");
 
 local defalutTex = '1.tga'
-local defalutObjModel = 'quad'
 
 local tableInstance={}
 --转化出一个地址
 --"=table: 0082E758"  ===>8578904
-local function 
-getDddress(value)
+local function getDddress(value)
 	local len = string.len("table:  ")
 	local a = string.len(tostring(value))
 	local v = string.sub(tostring(value),len,a)
@@ -130,19 +128,10 @@ function func_is_table_str(value)
 	return string.find(s,"table: ") ~= nil;
 end
 
---获取一个默认的贴图
-function func_get_default_tex()
-	return defalutTex
-end
 --local nameKey = -1;
 --生成一个名字
 local function getName(suffix)
---	nameKey=nameKey+1;
---    local str = suffix or "";
---	return "n"..str..tostring(nameKey);
-
     local str = tl_newName(suffix);
-    --print("lua name("..str..")");
     return str;
 end
 --[[
@@ -196,31 +185,6 @@ function func_load(url)
 	return result;
 end
 
---[[
-	point:tabel引用保存在一个全局tabel中
---]]
-function func_tableSave(point)
-	--point['index'] = getIndex()
-	
-	--local s = tableToInt(point)
-	--instance[s] =  point
-	
-	--print(tostring(point)..','..getDddress(point))
-	--getDddress
-    local s = tostring(point);
-	tableInstance[s]=point
-    return s;
-end
---[[
-	point:删除一个表引用
---]]
-function func_tableDel(point)
-	--清理掉table中的元素
-	func_clearTableItem(point)
-	
-	--清理table的引用
-	tableInstance[tostring(point)] = nil
-end
 --删除table下面的元素(遍历所有的表元素引用)
 function func_clearTableItem(point)
 	for k, v in pairs(point) do
@@ -254,9 +218,9 @@ end
 
 --获取table中的字段数
 function func_get_table_count(t)
-	local n = 0
+	local n = 0;
 	for key, value in pairs(t) do      
-		n = n + 1
+		n = n + 1;
 	end 
 	return n
 end
@@ -266,7 +230,6 @@ end
 --]]
 function func_print_tableInstance()
 	print("####func_print_tableInstance Start...")
---	local size
 	
 	local i = 0
 	for key, value in pairs(tableInstance) do		
@@ -275,30 +238,14 @@ function func_print_tableInstance()
 	--		print("table size = "..(getDddress(value) - size).." bytes\n")
 	--	end
 	
-		
 		print("\n***** index = "..i..",key="..tostring(key)..",value="..tostring(value)..'-->'..getDddress(value).." *****")
 		func_printTable(value)
 		i = i + 1
 		
-	--	size = getDddress(value)
-		
+	--	size = getDddress(value)	
 	end
-	
-	
-	
+		
 	print("####func_print_tableInstance End...")
-end
-
---创建一个Sprite
-function func_sprite_create(name,x,y,w,h)
-	local sprite = sprite_create(name,x,y,w,h);
-	return sprite;
-end
---创建一个没有点击sprite
-function func_sprite_createNoHit(x,y,w,h)
-    local name = getName("sprite");
-    local s = sprite_createNoHit(name,x,y,w,h)
-    return s;
 end
 
 --[[
@@ -319,7 +266,6 @@ function func_getTableName(point)
 --	return tableToInt(point)
 	return tostring(point)
 end
-
 
 --[[
 	获取当前时间 精确到豪秒
@@ -357,11 +303,8 @@ function func_error(msg,func)
 		local info = debug.getinfo(func)
 		for k,v in pairs(info) do
 			
-			
 				--全部打印
 				--print(k, ':', info[k])
-				
-				
 				
 				--linedefined				
 				--short_src
@@ -388,21 +331,13 @@ end
 	设置坐标(兼容模式)
 --]]
 function func_setPos(p,x,y)
-	
-	local t = JEngine:getIns():get_type(p)
-	
-	local pos = x..","..y
-	
-	if(t == TYPE_SPRITE_FLIE) then
-		
-		change_attr(p,"sprite_position",pos)
-	
-	elseif(t == TYPE_TEXT_FILE)	then
-	
-		change_attr(p,"txt_position",pos)
-	
-	end
-	
+	--local t = JEngine:getIns():get_type(p)
+	local pos = x..","..y;
+	--if(t == TYPE_SPRITE_FLIE) then	
+	change_attr(p,"sprite_position",pos)
+	--elseif(t == TYPE_TEXT_FILE)	then
+	--	change_attr(p,"txt_position",pos)
+	--end
 end
 --[[
 	设置sprite对象的相对于父对象的坐标
@@ -426,11 +361,6 @@ function func_addchild(parent,child,x,y)
 	sprite_addChild(parent,child);
 	func_set_local_pos(child,x,y);
 end
-
---[[function func_addchild_scrollBar(parent,sc,x,y)
-	sc.parent = parent;
-	func_addchild(parent,sc.bg,x,y);
-end--]]
 
 --从parent(Sprite)移除掉child(Sprite)对象
 function func_sprite_removechild(parent,child)
@@ -604,8 +534,7 @@ function func_loadobj(objName,tex,nName,vbo)
 	else
 		name = nName
 	end
---	if( objName == nil or objName == "") then objName = defalutObjModel end
-	objName = objName or defalutObjModel
+	objName = objName or 'quad';
 	
 	--func_print(	string.format("[%s]",tostring(objName)),0xff0000)
 	

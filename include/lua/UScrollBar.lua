@@ -193,10 +193,7 @@ scrollBar_new(x,y,parent,cw,ch)
 	else
 		_dragDirection=CONST_DIRECTION_VERTICAL;
 		barSize = cw;
-	end
-
-	--func_tableSave(sc);
-	
+	end	
 	--local name = func_getTableName(sc)--获取btn引用名
 
 	--背景

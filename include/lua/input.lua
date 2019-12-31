@@ -54,15 +54,6 @@ local function example_input(x,y)
 	
 	local sprite = func_create_grid_sprite(x,y,128,14);
 	
-	
-	
-	--setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
-
-
-	--local sprite1 =func_sprite_createNoHit(100,100,256,256);
-	--func_setIcon(sprite1,"gundi.png");
-	--setv(sprite1,FLAGS_DRAW_PLOYGON_LINE);
-
 	local _in = input_create();
 	input_set_pos(_in,x,y);
 	local function f_onkey(data)
