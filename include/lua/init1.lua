@@ -126,112 +126,6 @@ infowin(150,0);
 
 --]]
 
-local function loadbox()
-	
-	----[[
-	local obj2 = Unit:new();
-	obj2:load("\\resource\\obj\\tri.obj",--triangle,bauul,box,o1
-	"//resource//material//bauul.mat","obj2");
-	--unit_scale(obj2,20);
-	
-		--setv(obj2.m,FLAGS_REVERSE_FACE);
-		setv(obj2.m,FLAGS_DISABLE_CULL_FACE);--双面渲染
-		--setv(obj2.m,FLAGS_DRAW_PLOYGON_LINE);
-		func_bind_collide(obj2.m);
-		--setv(obj2.m,FLAGS_DRAW_RAY_COLLISION);
-		setv(obj2.m,FLAGS_RAY);
-
-		
-		--]]
-	--obj2:move(0,2,0,2000);
-		
-	--[[
-	local obj2 = unit_load("\\resource\\md2\\bauul.md2",--triangle,bauul
-		"//resource//material//bauul.mat");
-	unit_scale(obj2,0.02);
-	unit_rx(obj2,PI/2);
-	unit_split_anim(obj2);
-	--]]
-	return obj2;
-end
-
-
-
-local function loadmd5(name)
-	local model
-	--x = x or 0
-	--scale = scale or 0.015
-	
-	--[[
-	if(name == 'wolf') then
-		model = func_loadmd5('wolf',scale,"\\resource\\texture\\wolf.tga")		
-		func_set_rayRadius(model,30)--设置静态碰撞检测盒
-	else
-		model  = func_loadmd5('cube',1.0,"\\resource\\texture\\wolf.tga","pCube.md5mesh","pCube_a7.md5anim")
-	end
-	--]]
-	model=load_model(name or "md5test","\\resource\\md5\\wolf\\body.md5mesh");	
-	setMaterial(model,func_load("//resource//material//wolf.mat"));
-	md5_loadAnim(model, "\\resource\\md5\\wolf\\walk.md5anim","walk");
-
-	setv(model,FLAGS_VISIBLE);
-	--func_set_x(model,x)
-	func_set_scale(model,0.02)--设置模型的缩放
-
-	--f_init(model)
-	JEngine:getIns():bind_3dcam(model);
-	
-	func_changeFlags(model,FLAGS_ANIM_ADAPTIVE)			--设置固定的fps模式,另一种自适应的有BUG
-	
-	
-	func_changeFlags(model,FLAGS_DRAW_RAY_COLLISION);
-	func_changeFlags(model,FLAGS_RAY);
-
-	func_set_ptr_fps(model,260);--设置fps
-	
-	--change_attr(model, "setframe", 10);--设置当前的关键帧
-	func_set_x(model,2);
-	
-
-	func_setRotateX(model,PI/2);
-
-
-	return model
-end
-local function loadObj(model)
-	
-	local name = func_create_name();
-	model = model or 'torus'--'box'--'torus'
-	--local obj = func_loadobj(model)--box	'torus'
-	local obj = load_model(name,string.format("\\resource\\obj\\%s.obj",model));	
-	setMaterial(obj,func_load("//resource//material//wolf.mat"));
-	setv(obj,FLAGS_VISIBLE);
-	---[[
-	setv(obj,FLAGS_RAY)					--设置为可拾取状态
-	--setv(obj,FLAGS_DRAW_RAY_COLLISION)	--绘制射线盒子
-	setv(obj,FLAGS_DISABLE_CULL_FACE)		--显示双面显示
-	--setv(obj,FLAGS_GLSL_OUTLINE)
-	--setv(obj,FLAGS_DRAW_PLOYGON_LINE)
-	
-	setv(obj,FLAGS_RENDER_BOUND_BOX);
-	setv(obj,FLAGS_DRAW_NORMAL);
-
-	
-	--moduleUI_bind(obj)
-	--f_add_model(obj)
-
-	--func_set_pick(obj,"f_pick")
-	--]]
-	JEngine:getIns():bind_3dcam(obj);
-	
-	func_set_x(obj,-3);
-
-	return obj
-end
-
---loadmd2();
---loadmd5();
---loadObj();
 
 
 
@@ -239,18 +133,6 @@ end
 
 
 
---[[
-
-local obj = Unit:new();
-obj:load("\\resource\\obj\\arrow.obj",--triangle,bauul
-	"//resource//material//triangle.mat");
-setv(obj.m,FLAGS_DRAW_PLOYGON_LINE);
---]]
---obj:set_pos(1,1,1)
-
-
-local cam3d = JEngine:getIns():get_cam();
-cam3d:set_pos(0,-4,-12);
 
 
 --添加fps显示视图
@@ -385,6 +267,8 @@ local function f_cpmlete(skin)
 	
 	local e1 = Editor:new();
 	--e1:dispose();
+	
+	
 
 end
 local nskin = NSkin:new();
@@ -442,6 +326,9 @@ end
 --addbtn_fbo(fbo);
 
 
+local cam3d = JEngine:getIns():get_cam();
+--cam3d:set_pos(0,0,-2);
+cam3d:set_pos(0,-4,-12);
 
 JEngine:getIns():get_cam():refresh();
 --print(_VERSION) ;

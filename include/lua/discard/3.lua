@@ -1,3 +1,5 @@
+dofile("..\\include\\lua\\core.lua");
+
 --模型控制器
 
 --local crl = CrlUI:new(0,50);
@@ -108,11 +110,11 @@ end
 --dofile("..\\include\\lua\\modelUI.lua")
 
 --func_set_camera_pos(0,0,-5)-- -10
-cam_setPosition(0,0,-5);
+--cam_setPosition(0,0,-5);
 --初始化界面控制器
 --modelUI_init()
 
-
+JEngine:getIns():get_cam():set_pos(0,0,-5);
 
 --[[
 local _md5 = loadMD5('wolf')

@@ -31,11 +31,13 @@ function Camera:refresh()
 	cam(self.p,"refresh");
 end
 
+--设置camera的rx的值
 function Camera:rx(v)
 	cam(self.p,"rx",v);
 	self:refresh();
 end
 
+--销毁cam
 function Camera:dispose()
 	func_clearTableItem(self);
 end

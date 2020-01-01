@@ -1771,7 +1771,6 @@ REG_get_cam(lua_State *L){
 	return 1;
 }
 
-
 static int
 REG_cam_set_2dxy(lua_State *L){
 	int cam = lua_tointeger(L,1);

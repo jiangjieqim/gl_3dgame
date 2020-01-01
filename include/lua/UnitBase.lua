@@ -11,15 +11,20 @@ UnitBase = {
 	anim,--动作管理器句柄
 };
 UnitBase.__index = UnitBase;
+
+setmetatable(UnitBase, NUnit);
+
 function UnitBase:new()
-    local s = {};
+    local s = NUnit:new();
     setmetatable(s,UnitBase);
    --s.speed = 1000;
     return s;
 end
 
 function UnitBase:dispose()
-	self.anim:dispose();
+	if(self.anim) then
+		self.anim:dispose();
+	end
 	ptr_remove(self.p);
 	func_clearTableItem(self);
 end
@@ -28,42 +33,12 @@ end
 local function f_set_cam(self)
 	JEngine:getIns():bind_3dcam(self.p);
 end
---获取句柄
-function UnitBase:get_p()
-    return self.p;
-end
+
 
 --动作管理器句柄
 function UnitBase:get_anim()
 	return self.anim;
 end
-
---获取模型的类型
-function UnitBase:get_type()
-	return JEngine:getIns():get_type(self.p);
-end
-
---设置当前的对象的cam
-function UnitBase:set_cam(cam)
-	if(cam) then
-		set_cam(self.p,cam);--使用指定的cam
-	else
-		JEngine:getIns():bind_3dcam(self.p);--使用默认的cam
-	end
-end
-
-function UnitBase:visible(v)
-	if(v) then
-		setv(self.p,FLAGS_VISIBLE);--显示
-	else	
-		resetv(self.p,FLAGS_VISIBLE);--隐藏
-	end
-end
-
-function UnitBase:is_visible()
-	return getv(self.p,FLAGS_VISIBLE) == 1;
-end
-
 
 --加载VBO模型
 function UnitBase:loadvbo(modelURL,maturl,cam)
@@ -89,8 +64,13 @@ function UnitBase:loadvbo(modelURL,maturl,cam)
 	--f_set_cam(self);
 	
 	self:visible(true);
-	
-	self.anim = Animator:new(self.p);
+	local suffix = get_suffix(modelURL);
+	--print(suffix);
+	if(suffix~= "obj") then
+		self.anim = Animator:new(self.p);
+	else
+		--func_error(modelURL);
+	end
 end
 --加载一个测试立方体
 function UnitBase:loadbox()
@@ -130,44 +110,6 @@ function UnitBase:load_model(url,maturl)
 	f_set_cam(self);
 end
 
-function UnitBase:setv(v)
-    setv(self.p,v)
-end
-function UnitBase:getv(v)
-    return getv(self.p,v)
-end
-function UnitBase:scale(value)
-    func_set_scale(self.p,value);
-end
-function UnitBase:get_scale()
-    return func_get_scale(self.p);
-end
-
-function UnitBase:rx(v)
-    func_setRotateX(self.p,v)
-end
-function UnitBase:ry(v)
-    func_setRotateY(self.p,v)
-end
-function UnitBase:rz(v)
-    func_setRotateZ(self.p,v)
-end
-function UnitBase:x(v)
-    func_set_x(self.p,v);
-end
-
-function UnitBase:y(v)
-    func_set_y(self.p,v);
-end
-function UnitBase:z(v)
-    func_set_z(self.p,v);
-end
-function UnitBase:set_position(x,y,z)
-    func_set_position(self.p,x,y,z);
-end
-function UnitBase:get_name()
-    return func_get_name(self.p);
-end
 
 function UnitBase:set_speed(v)
     self.speed = v;

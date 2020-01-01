@@ -678,10 +678,8 @@ function func_screenSize()
 	return w,h
 end
 
---设置对象的关键帧帧率
-function func_set_ptr_fps(o,v)
-	change_attr(o,"fps",tostring(v))
-end
+
+
 --设置动作
 function func_set_anim(o,anim)
 	change_attr(o,"animtor_setcur",anim);
@@ -917,7 +915,10 @@ dofile("..\\include\\lua\\progrossbar.lua")
 dofile("..\\include\\lua\\skin.lua");--skin皮肤组件
 dofile("..\\include\\lua\\NSkin.lua");--NSkin皮肤组件
 
-dofile("..\\include\\lua\\UnitBase.lua")		--角色单位
+dofile("..\\include\\lua\\NUnit.lua");
+dofile("..\\include\\lua\\UnitBase.lua");		--角色单位
+dofile("..\\include\\lua\\md5unit.lua");
+
 dofile("..\\include\\lua\\scrollview.lua")	--scrollview
 
 dofile("..\\include\\lua\\unit.lua")		--角色单位

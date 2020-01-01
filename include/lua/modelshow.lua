@@ -1,3 +1,10 @@
+--[[
+
+<ui type="NListBox" x="0" y="180" parent="1"/>
+
+--]]
+
+
 --模型预览
 ModleShow = {
 	nskin,
@@ -10,16 +17,29 @@ ModleShow.__index = ModleShow;
 
 --增加一个md2渲染对象到fbo对象引用中
 local function addmd2_fbo(fbo)
-
+	
+	
 	local cam = fbo:get_cam3d();
 	--cam = nil;
 	
 	----bauul,triangle
-	
-	local n = UnitBase:new();
-	
+
+
+
+
 ----[[
-	--md2简模
+	local n = Md5Unit:new();
+	n:load(cam);
+	n:set_position(0,0,-2);
+	n:scale(0.02);
+	n:drawPloygonLine(true);
+	n:drawSkeleton(true);
+
+--]]
+	
+
+--[[
+	local n = UnitBase:new();--md2简模
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);
 	local anim = n:get_anim();
@@ -29,8 +49,9 @@ local function addmd2_fbo(fbo)
 	
 	--anim:set_fps(1);
 	
-	--]]
+--]]
 --[[
+	local n = UnitBase:new();
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-100);
 	local anim = n:get_anim();
@@ -38,6 +59,16 @@ local function addmd2_fbo(fbo)
 	anim:play("jump");
 	n:load_collide(nil,true);
 	--anim:set_fps(1);
+--]]
+	
+	--n:set_fps(30);
+	
+--[[
+	--加载一个vbo类型的OBJ
+	local n = UnitBase:new();
+	n:loadvbo("\\resource\\obj\\pipe.obj","//resource//material//bauul.mat",cam);
+	n:set_position(0,0,-5);
+	n:load_collide(nil,true);
 --]]
 	
 	return n;
@@ -48,6 +79,13 @@ local function f_scale_handle(progress,self)
 	--func_rotate(unit_get_model(self.obj), "ry", sc.value*PI);
 	self.u:scale(progress);
 	--print(progress,self);
+end
+
+local function f_setfps_handle(progress,self)
+	--print(progress);
+	local v = math.floor(progress*260);
+	self.nskin:find("fpslabel"):set_text(v);
+	self.u:set_fps(v);
 end
 
 local function f_set_anim(progress,self)
@@ -63,32 +101,40 @@ end
 
 local function btnClick(self)
 	local n = self.u;
-	local anim = n:get_anim();
-	print("u name ="..n:get_name(),
-		--JEngine:getIns():get_type_str(self.u:get_p())
-		"type:"..n:get_type(),
-		anim:cur_frame().."/"..anim:total(),
-		"lua总内存数: "..collectgarbage("count").." kb"
-		
-	);
 	
+	
+	local anim = n:get_anim();
+	if(anim) then
+		print("u name ="..n:get_name(),
+			--JEngine:getIns():get_type_str(self.u:get_p())
+			"type:"..n:get_type(),
+			anim:cur_frame().."/"..anim:total(),
+			"lua总内存数: "..collectgarbage("count").." kb"
+			
+		);
+		
+		if(anim:isPlaying()) then
+			anim:pause();
+		else
+			anim:play("jump");
+			--anim:play_to(2,3);
+		end
+	end
 	----[[
+	
+	
 	if(n:is_visible()) then
 		n:visible(false);
 		
-		JEngine:getIns():get_cam():rx(PI * 1.8);	
+		--JEngine:getIns():get_cam():rx(PI * 1.8);	
 	else
 		n:visible(true);
 	end
 	--]]
 	
-	local anim = n:get_anim();
-	if(anim:isPlaying()) then
-		anim:pause();
-	else
-		anim:play("jump");
-		--anim:play_to(2,3);
-	end
+	
+	
+	
 	--m_dispose(self);
 	--self:dispose();
 	--u:dispose();
@@ -120,6 +166,9 @@ local function f_cpmlete(self)
 
 	local anim = skin:find("anim");
 	anim:bindCallback(f_set_anim,self);
+	
+	local setfps = skin:find("setfps");
+	setfps:bindCallback(f_setfps_handle,self);
 
 	
 	--self.fbo:dispose();
@@ -130,7 +179,7 @@ local function f_cpmlete(self)
 	--self.nskin:dispose();
 	
 	
-	local btn0 = skin_find(skin,"btn0");
+	local btn0 =skin:find("btn0");-- skin_find(skin,"btn0");
 	btn0:bind_click(btnClick,self);
 	
 	local timer = timelater_new(1);

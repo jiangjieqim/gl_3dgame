@@ -6,3 +6,6 @@
 
 <ui name="anim" type="NScrollBar" x="0" y="160" parent="1" desc="设置动作"/>
 <ui type="NLabel" x="100" y="160" label="设置动作" parent="1"/>
+
+<ui name="setfps" type="NScrollBar" y="180" parent="1" desc="设置fps"/>
+<ui name="fpslabel" type="NLabel" x="100" y="180" label="设置fps" parent="1"/>

@@ -1,9 +1,11 @@
+dofile("..\\include\\lua\\core.lua");
+
 --加载两个角色模型,点击地面实现移动行走
 
 --设置cam
 JEngine:getIns():get_cam():rx(PI * 1.8);
-
-cam_setPosition(0,0,-6);
+JEngine:getIns():get_cam():set_pos(0,0,-6);
+--cam_setPosition(0,0,-6);
 --cam:rx(PI * 1.8);
 ----------------------------------------------------------------------------
 --local obj = UnitBase:new();
@@ -80,7 +82,9 @@ plane:setv(FLAGS_REVERSE_FACE);
 plane:setv(FLAGS_DRAW_PLOYGON_LINE);
 plane:scale(20);
 glsl_set(plane.material,string.format("_lineColor,%s","0.5,0.5,0.5"));
-glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())));--设置diffuse.vs (uniform float _uvScale)uv重复值
+glsl_set(plane.material,string.format('uvScale,%s',tostring(plane:get_scale())));
+
+
 --plane:set_position(0,-2,0);
 local function f_on_click_floor_handle(data)
     local pos = func_split(data,",");
