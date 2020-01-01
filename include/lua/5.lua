@@ -181,18 +181,6 @@ local function f_shader_init()
 
 	list:bind(f_listCallBack);
 
-	
---[[	
-	listbox_add(list,"diffuse");
-	listbox_add(list,"ploygonLine");
-	listbox_add(list,"outline");
-	listbox_add(list,"point");
-	listbox_add(list,"drawCollison");
-	listbox_add(list,"glslOutline");
-	listbox_add(list,"normal");
-	listbox_set_title(list,"²ÄÖÊ²âÊÔ");
-	listbox_bind(list,f_listCallBack);
-	--]]
     return list;
 end
 
