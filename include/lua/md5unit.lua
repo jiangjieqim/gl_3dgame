@@ -10,7 +10,10 @@ function Md5Unit:new()
 	setmetatable(s,Md5Unit);
 	return s;
 end
-
+--动作管理器句柄
+function Md5Unit:get_anim()
+	
+end
 --加载模型
 function Md5Unit:load(cam,model,material)
 	self.p = load_model(func_create_name(),model  or "\\resource\\md5\\wolf\\body.md5mesh");
@@ -38,4 +41,8 @@ function Md5Unit:drawSkeleton(v)
 	else
 		self:resetv(flag);
 	end
+end
+--设置当前帧
+function Md5Unit:set_frame(v)
+	change_attr(self.p, "setframe", v)
 end

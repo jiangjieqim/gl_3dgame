@@ -36,15 +36,24 @@ function NUnit:visible(v)
 	end
 end
 
---设置为线框渲染
-function NUnit:drawPloygonLine(v)
-	local flag = FLAGS_DRAW_PLOYGON_LINE;
+function NUnit:f_set_flag(flag,v)
 	if(v) then
 		self:setv(flag);
+		--print(v);
 	else
 		self:resetv(flag);
 	end
 end
+--设置为线框渲染
+function NUnit:drawPloygonLine(v)
+	self:f_set_flag(FLAGS_DRAW_PLOYGON_LINE,v);
+end
+--[[
+--背面剔除
+function NUnit:cullFace(v)
+	self:f_set_flag(FLAGS_DISABLE_CULL_FACE,v);
+end--]]
+
 function NUnit:is_visible()
 	return getv(self.p,FLAGS_VISIBLE) == 1;
 end

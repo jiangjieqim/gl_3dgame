@@ -82,10 +82,7 @@ end
 #define TYPE_OBJ_VBO_FILE	5//VBO文件数据
 
 --]]
---function func_get_type(p)--func_getGameObjectType
-	--func_error();
---	return	get_attr(p,"type")
---end
+
 function JEngine:get_type(p)
 	return	get_attr(p,"type");
 end

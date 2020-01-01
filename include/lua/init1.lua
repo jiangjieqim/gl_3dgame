@@ -74,7 +74,6 @@ end
 
 
 --input_dispose(_in);
---func_fixed_load("\\resource\\obj\\torus.obj");
 --dofile("..\\include\\lua\\quaternion.lua");--
 
 --arrow();
@@ -329,6 +328,9 @@ end
 local cam3d = JEngine:getIns():get_cam();
 --cam3d:set_pos(0,0,-2);
 cam3d:set_pos(0,-4,-12);
+
+dofile("..\\include\\lua\\5.lua");
+
 
 JEngine:getIns():get_cam():refresh();
 --print(_VERSION) ;

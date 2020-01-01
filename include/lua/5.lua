@@ -1,8 +1,24 @@
 -- dofile("..\\include\\lua\\core.lua")
 
-func_print('#######################\t材质测试\t#######################')
+print('#######################\t材质测试\t#######################')
 
+--加载一个固定管线模型数据md2,obj
+local function func_fixed_load(url,scale,texpath)
+	local o=load_model(func_create_name(),url or "\\resource\\obj\\torus.obj",0,0,0,scale or 1.0)
+	local mat1=createMaterial("diffuse",texpath or ("\\resource\\texture\\1.tga"),"")
+	setMaterial(o,mat1);
+	setv(o,FLAGS_VISIBLE);
+	return o;
+end
 
+--是否采用的是VBO模式渲染的
+local function func_is_vbo(obj)
+	--if(func_get_type_str(obj)=='vbo') then
+    if(JEngine:getIns():get_type_str(obj)=="vbo") then
+		return true
+	end
+	return false
+end
 
 --local _model_ptr;
 
@@ -105,14 +121,17 @@ local function f_setLabel(label, obj)
 end
 
 local g_model;
-local function f_listCallBack(list)
-	local index = listbox_get_index(list);
+local function f_listCallBack(self,index,param)
+	--	list
+	
+	--local index = listbox_get_index(list);
 	 --local _l = listbox;
 		
 	--print(g_model);
 
 	if (g_model) then
-		func_ptr_remove(g_model)
+		func_ptr_remove(g_model);
+		--return;
 	end
 
 
@@ -126,7 +145,7 @@ local function f_listCallBack(list)
 	--print("&&&",obj);
 
 	-- func_fixed_load()--func_loadmd5('wolf',0.01)--func_loadobj("torus")
-
+	
 	if (obj) then
 
 		g_model = obj;
@@ -135,13 +154,9 @@ local function f_listCallBack(list)
 		
 		--            _model_ptr = g_model
 		--local arr = func_split(config);
-		local label = listbox_get_select_label(list);
+		local label = self:getLabelByIndex(index);--listbox_get_select_label(list);
 		
-		local s = string.format('index = %d\tlabel = [%s]\t	vbo:%s',
-		index,
-		label,
-		tostring(func_is_vbo(obj))
-		)
+		local s = string.format('index = %d\tlabel = [%s]\t	vbo:%s',index,label,tostring(func_is_vbo(obj)))
 
 		print(s..","..(func_get_longTime() - t));
 
@@ -152,7 +167,22 @@ end
 -- ###############################################################
 -- 初始化listbox,用来测试不同的材质
 local function f_shader_init()
-	local list = listbox_new(0,50);
+	--local list = listbox_new(0,50);
+		local list = NListBox:new(200,50,128);
+	list:addItem("diffuse");
+	list:addItem("ploygonLine");
+	list:addItem("outline");
+	list:addItem("point");
+	list:addItem("drawCollison");
+	list:addItem("glslOutline");
+	list:addItem("normal");
+	list:addItem("diffuse");
+	list:addItem("材质测试");
+
+	list:bind(f_listCallBack);
+
+	
+--[[	
 	listbox_add(list,"diffuse");
 	listbox_add(list,"ploygonLine");
 	listbox_add(list,"outline");
@@ -162,6 +192,7 @@ local function f_shader_init()
 	listbox_add(list,"normal");
 	listbox_set_title(list,"材质测试");
 	listbox_bind(list,f_listCallBack);
+	--]]
     return list;
 end
 
@@ -170,7 +201,9 @@ end
 -- cam:position(0,0,-2)
 -- load_alpha_model()
 
-cam_setPosition(0, 0, -10);
+
+local cam3d = JEngine:getIns():get_cam();
+cam3d:set_pos(0,0,-10);
 local list = f_shader_init();
 
 -- listbox_select(list,0)--默认选择一个

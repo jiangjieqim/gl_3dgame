@@ -1,11 +1,15 @@
 <ui name="1" type="NPanel" drag="1" center="0" width="200" height="250" x="0" y="100"/>
-<ui name="scale" type="NScrollBar" x="0" y="128" parent="1"/>
+<ui name="info_label" label="scale" type="NLabel" x="128" y="0" parent="1"/>
 
-<ui name="label1" type="NLabel" x="100" y="128" parent="1"/>
+<ui name="scale" type="NScrollBar" x="0" y="128" parent="1"/>
+<ui name="scale_label" label="scale" type="NLabel" x="100" y="128" parent="1"/>
+
 <ui name="btn0" type="NButton" x="0" y="140" parent="1" label="信息" url="smallbtn.png" w="50" h="20"/>
 
 <ui name="anim" type="NScrollBar" x="0" y="160" parent="1" desc="设置动作"/>
-<ui type="NLabel" x="100" y="160" label="设置动作" parent="1"/>
+<ui name="anim_label" type="NLabel" x="100" y="160" label="设置动作" parent="1"/>
 
 <ui name="setfps" type="NScrollBar" y="180" parent="1" desc="设置fps"/>
 <ui name="fpslabel" type="NLabel" x="100" y="180" label="设置fps" parent="1"/>
+
+

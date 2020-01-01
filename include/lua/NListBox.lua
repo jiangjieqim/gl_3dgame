@@ -34,7 +34,7 @@ local function f_get_label(list,index)
 	end
 	return label;
 end
-
+--根据index获取其label
 function NListBox:getLabelByIndex(index)
 	return f_get_label(self,index);
 end

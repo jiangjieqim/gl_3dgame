@@ -27,18 +27,18 @@ local function addmd2_fbo(fbo)
 
 
 
-----[[
+--[[
 	local n = Md5Unit:new();
 	n:load(cam);
 	n:set_position(0,0,-2);
 	n:scale(0.02);
-	n:drawPloygonLine(true);
+	--n:drawPloygonLine(true);
 	n:drawSkeleton(true);
-
+	
 --]]
 	
 
---[[
+----[[
 	local n = UnitBase:new();--md2¼òÄ£
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);
@@ -69,14 +69,14 @@ local function addmd2_fbo(fbo)
 	n:loadvbo("\\resource\\obj\\pipe.obj","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-5);
 	n:load_collide(nil,true);
+	
 --]]
 	
 	return n;
 end
 
 local function f_scale_handle(progress,self)
-	--local self = scrollBar_get_param(sc);
-	--func_rotate(unit_get_model(self.obj), "ry", sc.value*PI);
+	self.nskin:find("scale_label"):set_text(progress);
 	self.u:scale(progress);
 	--print(progress,self);
 end
@@ -90,19 +90,24 @@ end
 
 local function f_set_anim(progress,self)
 	local n = self.u;
+	--n:set_frame(progress*20);
 	local anim = n:get_anim();
-	local v = math.floor(anim:total()*progress)-1;
-	if(v < 0) then
-		v = 0;
+	if(anim) then
+		local v = math.floor(anim:total()*progress)-1;
+		if(v < 0) then
+			v = 0;
+		end
+		self.nskin:find("anim_label"):set_text(v);
 		
+		anim:play_to(v,v);
+	
 	end
-	anim:play_to(v,v);
 end
 
 local function btnClick(self)
 	local n = self.u;
 	
-	
+----[[	
 	local anim = n:get_anim();
 	if(anim) then
 		print("u name ="..n:get_name(),
@@ -120,6 +125,9 @@ local function btnClick(self)
 			--anim:play_to(2,3);
 		end
 	end
+--]]
+	
+	
 	----[[
 	
 	
@@ -139,12 +147,12 @@ local function btnClick(self)
 	--self:dispose();
 	--u:dispose();
 	
-	
+
 end
 
 local function ef(data,self)
 	local skin = self.nskin;
-	local label = skin_find(skin,"label1");
+	local label = skin:find("info_label");	--skin_find(skin,"label1");
 
 	local a = self.u:get_anim();
 	

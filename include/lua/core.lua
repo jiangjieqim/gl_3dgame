@@ -435,19 +435,6 @@ function func_get_name(o)
 	return get_attr(o,"get_name")
 end
 
-----获取对象的后缀类型字符串
---function func_get_suffix(o)
---	return get_attr(o,"suffix")
---end
-
---加载一个固定管线模型数据md2,obj
-function func_fixed_load(url,scale,texpath)
-	local o=load_model(func_create_name(),url or "\\resource\\obj\\torus.obj",0,0,0,scale or 1.0)
-	local mat1=createMaterial("diffuse",texpath or ("\\resource\\texture\\"..defalutTex),"")
-	setMaterial(o,mat1)
-	setv(o,FLAGS_VISIBLE);
-	return o
-end
 
 --加载一个md5模型
 --"\\resource\\texture\\wolf.bmp"
@@ -703,14 +690,7 @@ function func_set_glsl_parms(o,key,v)
 	change_attr(o,"glslParms",string.format('%s,%s',key,tostring(v)))
 end
 
---是否采用的是VBO模式渲染的
-function func_is_vbo(obj,tips)
-	--if(func_get_type_str(obj)=='vbo') then
-    if(JEngine:getIns():get_type_str("vbo")) then
-		return true
-	end
-	return false
-end
+
 
 --分割配置动画
 function func_anim_push(obj,animname,s,e)
@@ -903,7 +883,6 @@ dofile("..\\include\\lua\\btn.lua");		--按钮组件
 
 dofile("..\\include\\lua\\button.lua");		--按钮组件
 
-dofile("..\\include\\lua\\crlui.lua")
 dofile("..\\include\\lua\\infowin.lua")	--fps组件
 
 dofile("..\\include\\lua\\alert.lua")
