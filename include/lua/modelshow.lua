@@ -27,18 +27,17 @@ local function addmd2_fbo(fbo)
 
 
 
---[[
+----[[
 	local n = Md5Unit:new();
 	n:load(cam);
 	n:set_position(0,0,-2);
 	n:scale(0.02);
 	--n:drawPloygonLine(true);
 	n:drawSkeleton(true);
-	
+	--print(n:frame_count());
 --]]
 	
-
-----[[
+--[[
 	local n = UnitBase:new();--md2¼òÄ£
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);

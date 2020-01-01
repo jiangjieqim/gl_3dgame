@@ -621,10 +621,6 @@ end
 function func_play(o)
 	change_attr(o,"animtor_play");--播放
 end
---获取动作关键帧数(md5)
-function func_get_frame_count(o)
-	return get_attr(o,"frameCount")
-end
 --获取sprite的xy
 function func_get_sprite_xy(o)
 	return get_attr(o,"spritePos")	
@@ -664,15 +660,6 @@ function func_screenSize()
 	local w,h=get_attr(nil,"screenSize");
 	return w,h
 end
-
-
-
---设置动作
-function func_set_anim(o,anim)
-	change_attr(o,"animtor_setcur",anim);
-end
-
-
 
 --获取文本
 function func_get_tf_text(tf)

@@ -46,3 +46,7 @@ end
 function Md5Unit:set_frame(v)
 	change_attr(self.p, "setframe", v)
 end
+--获取动作关键帧数(md5)
+function Md5Unit:frame_count()
+	return get_attr(self.p,"frameCount");
+end
