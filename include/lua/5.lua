@@ -2,6 +2,12 @@
 
 print('#######################\t材质测试\t#######################')
 
+--设置glsl参数
+--有可能当前材质的着色器对象里没有关键字key,那么这时候设置值的时候就会失败
+local function func_set_glsl_parms(o,key,v)
+	change_attr(o,"glslParms",string.format('%s,%s',key,tostring(v)))
+end
+
 --加载一个固定管线模型数据md2,obj
 local function func_fixed_load(url,scale,texpath)
 	local o=load_model(func_create_name(),url or "\\resource\\obj\\torus.obj",0,0,0,scale or 1.0)

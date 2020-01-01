@@ -557,10 +557,6 @@ function func_loadobj(objName,tex,nName,vbo)
 	return o;
 	--]]
 end
---绑定一个碰撞盒
-function func_bind_collide(o,model,frame)
-	change_attr(o,"collide_load",model or "\\resource\\obj\\box.obj",frame or 0);
-end
 ------------------------------------------------------
 --切换状态
 --返回true or false
@@ -671,18 +667,6 @@ function func_ptr_remove(o)
 	return ptr_remove(o)
 end
 
---设置glsl参数
---有可能当前材质的着色器对象里没有关键字key,那么这时候设置值的时候就会失败
-function func_set_glsl_parms(o,key,v)
-	change_attr(o,"glslParms",string.format('%s,%s',key,tostring(v)))
-end
-
-
-
---分割配置动画
-function func_anim_push(obj,animname,s,e)
-	change_attr(obj,"animtor_push",animname,string.format('%s,%s',s,e));
-end
 
 --获取引擎信息
 function func_ex_info()
@@ -886,5 +870,3 @@ dofile("..\\include\\lua\\UnitBase.lua");		--角色单位
 dofile("..\\include\\lua\\md5unit.lua");
 
 dofile("..\\include\\lua\\scrollview.lua")	--scrollview
-
-dofile("..\\include\\lua\\unit.lua")		--角色单位
