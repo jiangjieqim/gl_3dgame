@@ -1407,8 +1407,7 @@ REG_get_attr(lua_State *L)
 		lua_pushnumber(L,sprite->screenY);
 		return 2;
 	}
-	
-	if(!strcmp(attrKey,"dragDirection")){
+	else if(!strcmp(attrKey,"dragDirection")){
 		struct Sprite* sprite = (struct Sprite*)ptr;
 		lua_pushnumber(L,sprite->dragDirection);
 		return 1;

@@ -89,6 +89,10 @@ end
 function Shape:set_pos(x,y)
 	func_set_local_pos(self.container,x,y);
 end
+--设置对象的camera
+function Shape:set_cam(cam)
+	set_cam(self.container,cam);
+end
 
 function Shape:mouseEnable(v)
 	local _status = v == true and 1 or 0;

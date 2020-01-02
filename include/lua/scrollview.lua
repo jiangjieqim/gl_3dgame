@@ -93,7 +93,8 @@ end
 local function f_add_scrollBar(sv)
 	local sc;
 	if(sv.dir == CONST_DIRECTION_VERTICAL) then
-		sc = scrollBar_new(sv.x+sv.sw,sv.y,nil,15,sv.maxSize);
+		--sc = scrollBar_new(sv.x+sv.sw,sv.y,nil,15,sv.maxSize);
+		sc = NScrollBar:new(sv.x+sv.sw,sv.y,15,sv.maxSize);
 	else
 		print("待实现");
 	end
@@ -106,12 +107,12 @@ local function f_add_scrollBar(sv)
 	local _startIndex = 0;--最新的起始索引
 	
 	--滑动回调
-    local function f_scHandle(_sc)
+    local function f_scHandle(progress,param)
 		--*************************纵向
 		if(sv.sh >= sv.dataHeight) then
 			return;
 		end
-		local v = _sc.value;
+		local v = progress;
 		
 		local oy = (sv.dataHeight-sv.sh)*v;
         
@@ -178,7 +179,8 @@ local function f_add_scrollBar(sv)
 		--设计思路:对比起始数据和当前变化的数据,过滤求得需要refresh的itemRender节点重新刷新设置数据,偏移不需要重新刷新设置数据的节点
 		--这样就要两个列表了
     end
-	scrollBar_bind(sc,f_scHandle);	
+	--scrollBar_bind(sc,f_scHandle);
+	sc:bindCallback(f_scHandle,sc);
 end
 
 --获取该滚动组件内需要组件item个数
@@ -256,7 +258,8 @@ function scrollView_dispose(sv)
 	end
 	
 	if(sv.sc) then
-		scrollBar_del(sv.sc);
+		--scrollBar_del(sv.sc);
+		sv.sc:dispose();
 	end
 	
 	func_clearTableItem(sv);--清空sv表
@@ -318,6 +321,15 @@ function scrollView_init(sw,sh,x,y,gap)
 	return sv;
 end
 
+
+
+
+local function clickEvt(name,p)
+	local node = p;
+	print("点击的节点index = ",node.index,"data = ",node.data);
+	--scrollView_dispose(sv);
+end
+
 --遮罩滚动条使用案例
 function example_srollView(posx,posy)
 	posx = posx or 0;
@@ -330,10 +342,7 @@ function example_srollView(posx,posy)
 	
 	--local cnt = 0;
 	local function f_create()
-		
-		--local sprite = sprite_create_9grid("smallbtn.png",0,0,90,itemHeight,cam,3,3,3,3);	
-		--sprite_set_hit_rect(sprite,0,0,90,itemHeight);
-		 
+				 
 		--********************************************************
 		local x = 0;
 		local y = 0;
@@ -341,41 +350,32 @@ function example_srollView(posx,posy)
 		local h = itemHeight;
 		local url = "smallbtn.png";
 		
-		local sprite = sprite_create_typical(nil,x,y,w,h);--string.format("sv%d",cnt)
-		JEngine:getIns():add(sprite);
-		loadtexs(url,func_texloadend, {sprite=sprite;url=url});
-		sprite_set_hit_rect(sprite,x,y,w,h);
-		set_cam(sprite,cam);
+		local sprite =  Image:new(w,h);
+		sprite:set_pos(x,y);
+		sprite:mouseEnable(true);
+		sprite:set_cam(cam);
+		sprite:seticon(url);
 
 		--********************************************************
 		
 		local node ={};
-	--	setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
-		
-		--JEngine:getIns():add(sprite);
-
 
 		if(true) then
 			--节点特别多的时候,这里的渲染绘制会比较卡顿,可以考虑用分帧处理渲染
 			local tf = ftext_create(64,64,13,12,cam);
 			local con = ftext_get_container(tf);
-			func_addchild(sprite,con);
+			func_addchild(sprite:get_container(),con);
 			node.tf = tf;
 		end
-		node.view = sprite;
-		--setv(sprite,FLAGS_DRAW_PLOYGON_LINE);
+		node.view = sprite:get_container();
 
 		node.data = nil;
 		
 		node.used = 1;
 		node.index = nil;
-		local function clickEvt()
-			print("点击的节点index = ",node.index,"data = ",node.data);
-			
-			--scrollView_dispose(sv);
-		end
+	
+		sprite:on(EVENT_ENGINE_SPRITE_CLICK,clickEvt,node);
 		
-		evt_on(sprite,EVENT_ENGINE_SPRITE_CLICK,clickEvt);
 		return node;
 	end
 	--节点销毁回调
@@ -385,7 +385,7 @@ function example_srollView(posx,posy)
 			node.tf = nil;
 		end
 		if(node.view) then
-			ptr_remove(node.view);
+			ptr_remove(node.view);--
 		end
 	end
 

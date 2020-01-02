@@ -16,11 +16,25 @@ evt_on(cam,EVENT_ENGINE_KEYBOARD,f_onkey);
 JEngine:getIns():setbg(0.3,0.3,0.3);
 JEngine:getIns():get_cam():set_pos(0,-4,-12);
 
+
+
+
+
+
+local function f_tex_complete(p)
+	print(p);
+	local sc = example_srollView(100,100);	
+end
+loadtexs("checkbox.png;smallbtn.png",f_tex_complete);
+
+
+
+
+--[[
 infowin(150,0);
-
 local e1 = Editor:new();
-
 dofile("..\\include\\lua\\5.lua");
+--]]
 
 JEngine:getIns():get_cam():refresh();
 --print(_VERSION) ;

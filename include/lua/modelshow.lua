@@ -198,8 +198,7 @@ local function f_cpmlete(self)
 	evt_on(timer,EVENT_TIMER,ef,self);
 	
 	
-	
-	
+
 end
 
 function ModleShow:new()

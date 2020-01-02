@@ -1006,12 +1006,11 @@ f_get_global(struct Sprite* p,int* px,int* py){
 		 
 		struct Sprite* ps = (struct Sprite*)p->parent;
 
-		if(ps->parent){
+		//if(ps->parent){
 			*px = ps->screenX;//-ps->localx;
 			*py = ps->screenY;//-ps->localy;
-		}else{
-			
-		}
+		//}else{
+		//}
 		p->localx = p->screenX - ps->screenX;
 		p->localy = p->screenY - ps->screenY;
 

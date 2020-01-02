@@ -1,7 +1,7 @@
 CONST_DIRECTION_HORIZONTAL = 0	--水平,横
 CONST_DIRECTION_VERTICAL   = 1 	--垂直,竖
 
-PI	= 3.1415929
+PI	= 3.1415929;
 
 FLAGS_RENDER_BOUND_BOX	=	0x01
 FLAGS_DRAW_RAY_COLLISION	=	0x02	--绘制射线盒子	(是否绘制射线静态包围盒,用于测试 查看射线包围盒),即使没有设置FLAGS_RAY,那么也是可以绘制射线盒子的,这样可以用来查看
@@ -91,7 +91,6 @@ local DEBUG = true;
 dofile("..\\include\\lua\\stack.lua")
 dofile("..\\include\\lua\\xml.lua")	--xml组件
 dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
---dofile("..\\include\\lua\\sprite.lua");
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
 dofile("..\\include\\lua\\ftext.lua");
 
@@ -182,7 +181,7 @@ function func_clearTableItem(point)
 	end
 end
 --遍历打印表
-function func_printTable(t)
+local function printTable(t)
 	func_print("start print table: "..tostring(t),0xffff00)
 	--print("start print table: "..tostring(t))
 	for key, value in pairs(t) do      
@@ -257,7 +256,7 @@ function func_error(msg,func)
 		end
 	end
 	print(s)
-	--func_printTable(debug.getinfo(1))
+	--printTable(debug.getinfo(1))
 	print(debug.traceback())
 	
 	--assert(nil,s)
@@ -359,7 +358,7 @@ end
 
 --加载完tex之后的回调方法
 function func_texloadend(n)
-	sprite_set_9grid(n.sprite,n.url,n.l or 3,n.r or 3,n.t or 3,n.b or 3,JEngine:getIns():get_atals());
+	sprite_set_9grid(n.sprite,n.url,3,3,3,3,JEngine:getIns():get_atals());
 end
 
 --创建一个支持九宫格的的sprite
