@@ -54,15 +54,6 @@ local function f_load_c()
     scrollBar_setRange(sc, 0, 1)
 end
 
---local function loadObj()
---    local name = func_create_name();
---    -- model = model or 'tri'--'box'--'torus'
---    -- local obj = func_loadobj(model)--box	'torus'
---    local obj = load_model(name, string.format("\\resource\\obj\\torus.obj", model));
---    setMaterial(obj, func_load("//resource//material//wolf.mat"));
---    setv(obj, FLAGS_VISIBLE);
---    setv(obj, FLAGS_DRAW_PLOYGON_LINE);
---end
 
 --[[
                              (1)y

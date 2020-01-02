@@ -290,33 +290,17 @@ local function addbtn_fbo(fbo)
 	--set_cam(sprite,fbo:get_cam2d());
 
 	JEngine:getIns():add(sprite);
-	loadtexs(url,func_texloadend, { sprite=sprite;url=url});
+	loadtexs(url,func_texloadend, {sprite;url=url});
 	--sprite_set_hit_rect(sprite,x,y,w,h);
 	--set_cam(sprite,cam2d);
 
 	--print(fbo:get_cam2d());
 end
 
---增加一个md2渲染对象到fbo对象引用中
-local function addmd2_fbo(fbo)
-
-	local n = JEngine:getIns():load("\\resource\\md2\\bauul.md2");--"\\resource\\md2\\bauul.md2"
-	local material = func_load("//resource//material//bauul.mat");
-	setMaterial(n,material);
-	setv(n,FLAGS_VISIBLE);
-	JEngine:getIns():add(n);
-	--setv(n,FLAGS_DRAW_PLOYGON_LINE);
-	func_set_position(n,0,0,-100);
-	
-
-	set_cam(n,fbo:get_cam3d());
-	--set_cam(n,cam3d);
-end
 --创建一个fbo对象
 --local fbo = FboRender:new(128,128);
 --fbo:set_pos(0,200);
 
---addmd2_fbo(fbo);
 --addbtn_fbo(fbo);
 
 

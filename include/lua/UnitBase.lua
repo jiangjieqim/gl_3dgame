@@ -47,8 +47,7 @@ function UnitBase:loadvbo(modelURL,maturl,cam)
 
     local m=JEngine:getIns():load(modelURL);
 	
-	--load_VBO_model(name,modelURL);
-    local material = func_load(maturl);
+    local material = self:load_material(maturl);
     setMaterial(m,material);
 	--setv(m,FLAGS_VISIBLE);--显示模型对象
 	
@@ -79,7 +78,7 @@ function UnitBase:loadbox()
     local name = func_create_name();--f_createName(self);
     local obj=load_VBO_model(name,url);--box	arrow
    
-    local mat = func_load(maturl);
+    local mat = self:load_material(maturl);
     --self.material = mat;
 	setMaterial(obj,mat);
     setv(obj,FLAGS_DRAW_PLOYGON_LINE)--线框
@@ -93,8 +92,8 @@ end
 function UnitBase:load_model(url,maturl)
     url =  url or "\\resource\\obj\\plane.obj";
     maturl = maturl or "//resource//material//triangle.mat"
-    local _floor = load_model(func_create_name(),url)		-- func_loadobj('quad',nil,'myObj1',false)--quad
-	local mat = func_load(maturl);
+    local _floor = load_model(func_create_name(),url);
+	local mat = self:load_material(maturl);
     --self.material = mat;
     setMaterial(_floor,mat);
     --glsl_set(mat,string.format("_lineColor,%s","0.5,0.5,0.5"));
@@ -114,11 +113,7 @@ end
 function UnitBase:set_speed(v)
     self.speed = v;
 end
---[[
-function UnitBase:refresh()
-	func_update_mat4x4(self.p);
-end
---]]
+
 --绑定一个点击事件
 function UnitBase:bindRayPick(func)
     --print(self:getv(FLAGS_RAY));
@@ -147,7 +142,16 @@ function UnitBase:load_collide(model,drawbox)
 		setv(self.p,FLAGS_DRAW_RAY_COLLISION);
 	end
 end
+--让角色朝向某个方向
+local function func_move(o,ms,x,y,z)
+	change_attr(o,"move",string.format("%d,%f,%f,%f",ms,x,y,z));
+end
 
+--让角色按照time毫秒转向某个方向
+local function func_look_at(o,x,y,z,time)
+    time = time or 0;
+	change_attr(o,"lookat",string.format("%f,%f,%f,%f",x,y,z,time));
+end
 function UnitBase:move(x,y,z)
     --print(x,y,z);
     x = tonumber(x);
@@ -165,7 +169,7 @@ function UnitBase:move(x,y,z)
 --    end
     self.speed = self.speed or 1000;--默认使用1000毫秒移动一个基本单位的速速
 
-	local px,py,pz = func_get_xyz(o);
+	local px,py,pz = self:get_pos();--func_get_xyz(o);
 	
 	y = py;
 	--print(self.offset_y);

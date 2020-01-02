@@ -1,8 +1,36 @@
+------------------------------------------------------
+--切换状态
+--返回true or false
+------------------------------------------------------
+local function f_changeFlags(_o,_flag)
+	if(_o==nil) then
+		func_error("switchFlags 目标对象 = nil")
+		return;
+	end;
+	
+	if(_flag == nil)then
+		func_error("flag = nil ")
+	else
+		if	getv(_o,_flag) == 1	then
+			resetv(_o,_flag);
+		else
+			setv(_o,_flag);
+		end
+		--print('对象'..string.format("%#x",_o).."设置标示".._flag.."状态为:"..getv(_o,_flag) );
+	end
+	return getv(_o,_flag) == 1;
+end
+
+local function func_set_position(o,x,y,z)
+	change_attr(o,"set_position",string.format("%f,%f,%f",x,y,z));
+end
 --改变对象的Rotate x的值
 local function func_setRotateX(o,value)
 	change_attr(o,"rx",tostring(value));
 end
-
+local function func_get_scale(o)
+	return get_attr(o,"scale");
+end
 --改变对象的Rotate y的值
 local function func_setRotateY(o,value)
 	change_attr(o,"ry",tostring(value));
@@ -101,6 +129,16 @@ function NUnit:get_scale()
     return func_get_scale(self.p);
 end
 
+--获取rx,ry,rz的值
+function NUnit:get_rotate()
+	return get_attr(self.p,"rotate");
+end
+
+--获取其x,y,z坐标
+function NUnit:get_pos()
+	return get_attr(self.p,"xyz");
+end
+
 function NUnit:rx(v)
     func_setRotateX(self.p,v)
 end
@@ -120,6 +158,7 @@ end
 function NUnit:z(v)
     func_set_z(self.p,v);
 end
+
 function NUnit:set_position(x,y,z)
     func_set_position(self.p,x,y,z);
 end
@@ -132,4 +171,14 @@ end
 ----设置对象的关键帧帧率
 function NUnit:set_fps(v)
 	change_attr(self.p,"fps",tostring(v))
+end
+
+--切换flag
+function NUnit:changeFlag(flag)
+	f_changeFlags(self.p,flag);
+end
+
+--加载材质
+function NUnit:load_material(url)
+	return func_load_material(url);
 end

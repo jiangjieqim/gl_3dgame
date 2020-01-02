@@ -64,7 +64,6 @@ function ProgressBar:progress(v)
 			--setv(o,FLAGS_VISIBLE);
 			bar:visible(true);
 			local w = v * self.barwidth;
-			--func_set_sprite_size(self.bar,w,self.barheight);
 			bar:set_width(w);
 		end
 	end

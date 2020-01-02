@@ -2,6 +2,37 @@
 
 print('#######################\t材质测试\t#######################')
 
+--加载一个obj 使用vbo模式
+local function func_loadobj(objName,tex,nName)
+	local name
+	if(nName==nil) then
+		name = getName()
+	else
+		name = nName
+	end
+	objName = objName or 'quad';
+	local defalutTex = '1.tga'
+
+	tex = tex or defalutTex
+
+	local o;
+	local _path = "\\resource\\obj\\"..objName..".obj";
+	local _shader;
+	local _texturePath = "\\resource\\texture\\"..tex;
+
+	
+	_shader = "diffuse";
+	o=load_model(name,_path,0,0,0,1.0);	
+	setv(o,FLAGS_VISIBLE);
+	
+	--print("===============>",_texturePath,string.format("加载得模型(%s),模型名(%s)是否是VBO模式:%s",_path,nName,tostring(vbo)));
+
+	local m=createMaterial(_shader,_texturePath);
+	
+	setMaterial(o,m);
+	return o;
+	--]]
+end
 --设置glsl参数
 --有可能当前材质的着色器对象里没有关键字key,那么这时候设置值的时候就会失败
 local function func_set_glsl_parms(o,key,v)
@@ -46,8 +77,7 @@ local function f_set_obj_flags(o)
 end
 
 -- 加载一个带透明通道的树叶模型
-local function
-    load_alpha_model(objName)
+local function load_alpha_model(objName)
     local time = func_get_longTime()
     objName = objName or "quad"
     local o = func_loadobj(objName)
@@ -119,25 +149,15 @@ local function f_listCallBack(self,index,param)
 	end
 
 
-	-- local obj =func_loadobj("torus")
 	local t = func_get_longTime();
 	local obj = func_fixed_load()
 	JEngine:getIns():bind_3dcam(obj);
-
-
-
-	--print("&&&",obj);
-
-	-- func_fixed_load()--func_loadmd5('wolf',0.01)--func_loadobj("torus")
 	
 	if (obj) then
 
 		g_model = obj;
 		
-		--ex_addnode(obj);
-		
-		--            _model_ptr = g_model
-		--local arr = func_split(config);
+	    
 		local label = self:getLabelByIndex(index);--listbox_get_select_label(list);
 		
 		local s = string.format('index = %d\tlabel = [%s]\t	vbo:%s',index,label,tostring(func_is_vbo(obj)))

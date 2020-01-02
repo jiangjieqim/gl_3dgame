@@ -17,7 +17,7 @@ end
 --º”‘ÿƒ£–Õ
 function Md5Unit:load(cam,model,material)
 	self.p = load_model(func_create_name(),model  or "\\resource\\md5\\wolf\\body.md5mesh");
-	setMaterial(self.p,func_load(material or "//resource//material//wolf.mat"));
+	setMaterial(self.p,self:load_material(material or "//resource//material//wolf.mat"));
 	
 	md5_loadAnim(self.p, "\\resource\\md5\\wolf\\walk.md5anim","walk");
 	

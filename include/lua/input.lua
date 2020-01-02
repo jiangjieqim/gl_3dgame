@@ -31,6 +31,10 @@ local function input_get_ftext(ptr)
 	return c_input(ptr, "get_ftext");
 end
 
+--获取当前的焦点
+local function func_get_curFocus()
+    return get_attr(nil,"curFocus");
+end
 --输入框是否在焦点内
 local function input_isFocusIn(ptr)	
 	if (func_get_curFocus() == input_get_container(ptr))then

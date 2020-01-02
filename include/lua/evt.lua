@@ -1,5 +1,9 @@
 local evtlist = {};
-
+--是否是table字符串
+local function func_is_table_str(value)
+	local s = tostring(value);
+	return string.find(s,"table: ") ~= nil;
+end
 --[[
     params:默认不传递参数
 

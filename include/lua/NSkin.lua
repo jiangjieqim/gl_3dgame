@@ -5,6 +5,40 @@ NSkin = {
 NSkin.__index = NSkin;
 setmetatable(NSkin, Base);
 
+
+--销毁组件
+local function func_dispose(n)
+   
+	local _type = n.type;
+	if(_type == UI_TYPE.Label) then
+		label_dispose(n);
+	elseif(_type == UI_TYPE.ScrollBar) then
+		scrollBar_del(n);
+--	elseif(_type == UI_TYPE.Button)then
+--		btn_dispose(n);
+	elseif(_type == UI_TYPE.CheckBox
+		or _type == UI_TYPE.ProgressBar 
+		or _type == UI_TYPE.Input
+		or _type == UI_TYPE.Image
+		or _type == UI_TYPE.Shape
+		or _type == UI_TYPE.NScrollBar
+		or _type == UI_TYPE.NListBox
+		or _type == UI_TYPE.NPanel
+		or _type == UI_TYPE.Skin
+		or _type == UI_TYPE.NLabel
+		or _type == UI_TYPE.NButton
+										)then
+		
+		n:dispose();--删除组件
+        
+		
+	elseif(_type == UI_TYPE.ListBox) then	
+		listbox_del(n);
+	else
+		func_error();
+	end
+end
+
 function NSkin:new()
 	local self = Base:new();
 	setmetatable(self, NSkin);
@@ -141,8 +175,7 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		
 		child = label;
 		
-		--func_addnode(parent,label,x,y);
-		--stack_push(list,label);	
+
 	elseif(_type == "NLabel") then
 		local str = xml_get_str(node,"label");
 		local label = NLabel:new();
@@ -179,8 +212,7 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		local sc = scrollBar_new();
 		sc.name = name;
 		child = sc;
-		--func_addnode(parent,sc,x,y);
-		--stack_push(list,sc);
+	
 	elseif(_type == "Skin") then
 		--string.format("%s")
 		local url = xml_get_str(node,"url");
@@ -202,9 +234,7 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 	elseif(_type == "ProgressBar") then
 		local pb = ProgressBar:new();
 		pb:setname(name);
-		--pb.name = name;
-		--func_addnode(parent,pb,x,y);
-		--stack_push(list,pb);
+		
 		child = pb;
 	elseif(_type == "ListBox")then	
 		local lb  = listbox_new();
@@ -220,20 +250,14 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 			listbox_add(lb,ls[n+1]);
 		end
 
-		--func_addnode(parent,lb,x,y);
-		--stack_push(list,lb);
+	    
 		
 		child = lb;
 		
 	elseif(_type == "Input") then
 		local _in = Input:new();
 		_in:setname(name);
-
-		--_in.name = name;
-		--_in:setbg();
-		--func_addnode(parent,_in,x,y);
-		--stack_push(list,_in);
-		
+        
 		child = _in;
 	elseif(_type == "Image")then
 	
@@ -252,8 +276,7 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		if(xml_get_float(node,"linestlye") == 1) then
 			img:linestlye();
 		end
-		--func_addnode(parent,img,x,y);
-		--stack_push(list,img);
+	    
 		
 		child = img;
 	elseif(_type == "Shape") then

@@ -27,6 +27,11 @@ end
 function JEngine:get_cam()
     return self.m_cam3d;
 end
+--»ñÈ¡ÆÁÄ»µÄ³ß´ç
+function JEngine:screen_size()
+	return get_attr(nil,"screenSize");
+end
+
 function JEngine:get_atals()
     return self.atals;
 end

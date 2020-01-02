@@ -180,14 +180,6 @@ end
 function 
 listbox_add(list,str)
 
---[[
-	local count =	func_get_table_count(list.tflist) + 1;	
-	local tf = label_create();
-	list.tflist[count - 1] = tf;
-	label_set_visible(tf,0);
-	label_set_text(tf,str);--str
-	func_addnode(list.bg,tf,0,g_gap*(count));
---]]
 	if(list.data==nil)then
 		list.data = {};
 	end

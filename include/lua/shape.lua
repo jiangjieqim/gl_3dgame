@@ -27,7 +27,7 @@ function Shape:init()
 	local sprite = sprite_create_typical(nil,0,0,self.w,self.h);
 	self.container = sprite;
 	JEngine:getIns():add(sprite);	
-	local material = func_load("//resource//material//shape.mat");
+	local material = func_load_material("//resource//material//shape.mat");
 	setMaterial(self.container,material);
 	self:mouseEnable(false);--默认关闭鼠标事件
 	--self.material = material;

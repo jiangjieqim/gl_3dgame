@@ -620,15 +620,15 @@ REG_sprite_set2dCam(lua_State *L){
 	sprite_set2dCam((void*)sprite,info.cam2d);//fbo_get2dCam((void*)fbo)
 	return 0;
 }
-
-static int
-REG_sprite_set_z(lua_State *L){
-	//int n = lua_gettop(L);
-	int p = lua_tointeger(L,1);
-	float v = lua_tonumber(L,2);
-	sprite_set_z((void*)p,v);
-	return 0;
-}
+//
+//static int
+//REG_sprite_set_z(lua_State *L){
+//	//int n = lua_gettop(L);
+//	int p = lua_tointeger(L,1);
+//	float v = lua_tonumber(L,2);
+//	sprite_set_z((void*)p,v);
+//	return 0;
+//}
 
 static int
 REG_sprite_get_material(lua_State *L){
@@ -1401,13 +1401,13 @@ REG_get_attr(lua_State *L)
 		return 2;
 	}
 
-	if(!strcmp(attrKey,"spritePos"))
-	{
-		struct Sprite* sprite = (struct Sprite*)ptr;
-		lua_pushnumber(L,sprite->screenX);
-		lua_pushnumber(L,sprite->screenY);
-		return 2;
-	}
+	//if(!strcmp(attrKey,"spritePos"))
+	//{
+	//	struct Sprite* sprite = (struct Sprite*)ptr;
+	//	lua_pushnumber(L,sprite->screenX);
+	//	lua_pushnumber(L,sprite->screenY);
+	//	return 2;
+	//}
 	
 	if(!strcmp(attrKey,"dragDirection")){
 		struct Sprite* sprite = (struct Sprite*)ptr;
@@ -1587,13 +1587,13 @@ L_GetName(lua_State* L)
 	lua_pushstring(L,base->name);
 	return 1;
 }
-//获取系统时间
-static int
-GetLongTime(lua_State* L)
-{
-	lua_pushnumber(L,get_longTime());
-	return 1;
-}
+////获取系统时间
+//static int
+//GetLongTime(lua_State* L)
+//{
+//	lua_pushnumber(L,get_longTime());
+//	return 1;
+//}
 //输出日志
 static int
 LogPut(lua_State* L){
@@ -1681,10 +1681,10 @@ REG_dofunc(lua_State *L)
 		return L_GetName(L);
 	}
 
-	if(!strcmp(attrKey,"GetLongTime"))
-	{
-		return GetLongTime(L);
-	}
+	//if(!strcmp(attrKey,"GetLongTime"))
+	//{
+	//	return GetLongTime(L);
+	//}
 
 	if(!strcmp(attrKey,"LogPut")){
 		return LogPut(L);
@@ -2081,13 +2081,9 @@ REG_change_attr(lua_State *L)
 		base_move(base,ms,x,y,z,f_endCallBack,f_updateCallBack);
 	}
 	
-	if(!strcmp(attrKey,"base_updateMat4x4")){
-		/*int ms;
-		float x,y,z;
-		sscanf_s(str,"%d,%f,%f,%f",ms,&x,&y,&z);
-		base_move(base,ms,x,y,z,0,0);*/
-		base_updateMat4x4(base);
-	}
+	//if(!strcmp(attrKey,"base_updateMat4x4")){
+	//	base_updateMat4x4(base);
+	//}
 
 	//======================================
 	//x
@@ -2509,7 +2505,7 @@ runhelloTest(const char* script){
 	lua_register(lua_state,"sprite_addChild",REG_sprite_addChild);
 	//lua_register(lua_state,"sprite_removeChild",REG_sprite_removeChild);
 	//lua_register(lua_state,"sprite_removeSelf",REG_sprite_removeSelf);
-	lua_register(lua_state,"sprite_set_z",REG_sprite_set_z);
+	//lua_register(lua_state,"sprite_set_z",REG_sprite_set_z);
 	lua_register(lua_state,"sprite_get_material",REG_sprite_get_material);//获取sprite的材质引用
 	lua_register(lua_state,"sprite_createEmptyTex",REG_sprite_createEmptyTex);
 	lua_register(lua_state,"sprite_set2dCam",REG_sprite_set2dCam);

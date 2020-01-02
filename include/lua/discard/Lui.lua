@@ -211,7 +211,7 @@ end
 --加载md2模型
 function load_md2vbo_byName(objName,tex)
 	
-	local cur = func_get_longTime()
+	local cur = func_getTime()
 	local name =getName();
 	
 	if( objName == nil) then objName = "purgatori" end
@@ -224,7 +224,7 @@ function load_md2vbo_byName(objName,tex)
 	local m=createMaterial("vboDiffuse","\\resource\\texture\\"..tex);
 	setMaterial(o,m);
 	
-	print("["..objName..".md2,"..tex.."]".."耗时("..tostring((func_get_longTime() - cur) / 1000)..")seconds")
+	print("["..objName..".md2,"..tex.."]".."耗时("..tostring((func_getTime() - cur) / 1000)..")seconds")
 	return o;
 end
 

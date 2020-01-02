@@ -23,7 +23,7 @@ end
 
 --舞台尺寸变化事件
 local function f_resize(evtData,self)
-	local sw,sh = func_screenSize();
+	local sw,sh = JEngine:getIns():screen_size();
 	local bg = self.bg;
 	local sx,sy = bg:get_pos();
 	local bgw,bgh = bg:get_size();
@@ -59,7 +59,7 @@ function NPanel:center()
 	local bg = self.bg;
 
 	local x,y;
-	local sx,sy = func_screenSize();
+	local sx,sy = JEngine:getIns():screen_size();
 	local bgw,bgh = bg:get_size();
 	--print(bgw,bgh );
 	x = (sx - bgw)/2;

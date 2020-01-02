@@ -1,7 +1,6 @@
 CONST_DIRECTION_HORIZONTAL = 0	--水平,横
 CONST_DIRECTION_VERTICAL   = 1 	--垂直,竖
 
-CONST_PI	=	3.1415929
 PI	= 3.1415929
 
 FLAGS_RENDER_BOUND_BOX	=	0x01
@@ -96,9 +95,7 @@ dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
 dofile("..\\include\\lua\\ftext.lua");
 
-local defalutTex = '1.tga'
 
-local tableInstance={}
 --转化出一个地址
 --"=table: 0082E758"  ===>8578904
 local function getDddress(value)
@@ -122,11 +119,7 @@ end
 function func_get_address(value)
 	return getDddress(value);
 end
---是否是table字符串
-function func_is_table_str(value)
-	local s = tostring(value);
-	return string.find(s,"table: ") ~= nil;
-end
+
 
 --local nameKey = -1;
 --生成一个名字
@@ -138,7 +131,7 @@ end
 	根据一个配置加载生成一个数据对象
 
 --]]
-function func_load(url)
+function func_load_material(url)
 	
 	local suffix = get_suffix(url);
 	--print(s);
@@ -175,9 +168,6 @@ function func_load(url)
 				glsl_set(result,string.format("_lineColor,%s",_lineColor));
 			end
 		end
-		
-	elseif(suffix == "obj") then
-	
 	end
 	
 	xml_del(xml);
@@ -216,62 +206,9 @@ function func_printTable(t)
 	
 end
 
---获取table中的字段数
-function func_get_table_count(t)
-	local n = 0;
-	for key, value in pairs(t) do      
-		n = n + 1;
-	end 
-	return n
-end
-
---[[
-	打印tabel中的数据项
---]]
-function func_print_tableInstance()
-	print("####func_print_tableInstance Start...")
-	
-	local i = 0
-	for key, value in pairs(tableInstance) do		
-		
-	--	if(size) then
-	--		print("table size = "..(getDddress(value) - size).." bytes\n")
-	--	end
-	
-		print("\n***** index = "..i..",key="..tostring(key)..",value="..tostring(value)..'-->'..getDddress(value).." *****")
-		func_printTable(value)
-		i = i + 1
-		
-	--	size = getDddress(value)	
-	end
-		
-	print("####func_print_tableInstance End...")
-end
-
---[[
-	获取到table引用
---]]
-function func_getTable(name)
-	--return instance[name]
-	
-	--print("func_getTable-->"..name)
-	return tableInstance[name]
-end
-
---[[
-	获取到table名(其实是table的lua空间地址)
-	table:0EA02968
---]]
-function func_getTableName(point)
---	return tableToInt(point)
-	return tostring(point)
-end
-
---[[
-	获取当前时间 精确到豪秒
---]]
-function func_getTime()
-	return  dofunc("GetLongTime");
+--获取进程运行时间
+function func_get_longTime()
+	return get_attr(nil,"get_longTime");
 end
 
 --打印一个有颜色的日志到控制台
@@ -368,164 +305,9 @@ function func_gc()
 	--print('gc')
 end
 
-
-
---加载一个md5模型
---"\\resource\\texture\\wolf.bmp"
-function func_loadmd5(name,scale,texpath,meshName,animName)
-	
-	--if (name == nil or name == '') then name = "wolf" end
-	name = name or 'wolf'
-		
-	--if(scale == nil) then scale = 1.0 end
-	scale = scale or 1.0
-
-	local path = "\\resource\\md5\\"..name
-	
-	if(texpath == nil) then texpath =  "\\resource\\texture\\"..defalutTex end
-	
-	--if(meshName == nil) then meshName = "body.md5mesh" end
-	meshName = meshName or 'body.md5mesh'
-	--if(animName == nil) then animName = "walk.md5anim" end
-	animName = animName or 'walk.md5anim'
-
-	local md5=load_model(name,path.."\\"..meshName,0,0,0,scale);	
-	local mat1=createMaterial("diffuse",texpath,"");
-	setMaterial(md5,mat1);
-	
-	md5_loadAnim(md5, path.."\\"..animName,"walk");
-	setanim(md5,"walk");
-	
---	md5_loadAnim(md5, path.."\\stand.md5anim","stand");
---	setanim(md5,"stand");
-	
-	setv(md5,FLAGS_VISIBLE);
-	return md5;
-	
-	
-	--print('error不存在md5文件:['..name..']')
-	--assert(nil,"my Error!")
-end
-
-
-
 --创建名字
 function func_create_name(suffix)
 	return getName(suffix);
-end
-
-
---加载md2模型
-function func_loadmd2(objName,tex,type,modelName)
-	local time = func_getTime()
-	--if(type == nil) then type = "vbo" end
-	type = type or 'vbo'
-	
-	
-	local name = modelName or getName();
-	
-	--if( objName == nil or objName == "") then objName = "bauul" end
-	objName = objName or "triangle"
-	
-	--if( tex == nil) then tex = defalutTex end
-	tex = tex or defalutTex
-	
-	local o
-	if(type == "vbo") then
-		o=load_VBO_model(name,"\\resource\\md2\\"..objName..".md2");
-		setv(o,FLAGS_VISIBLE);
-		
-		local m=createMaterial("vboDiffuse","\\resource\\texture\\"..tex);
-		setMaterial(o,m);
-	end
-	
-	local s = string.format("[加载解析%s耗时 %d 毫秒]",objName,(func_getTime() - time))
-	--if(DEBUG) then func_print(s) end
-	return o;
-end
---加载一个obj 使用vbo模式
-function func_loadobj(objName,tex,nName,vbo)
-	local name
-	if(nName==nil) then
-		name = getName()
-	else
-		name = nName
-	end
-	objName = objName or 'quad';
-	
-	--func_print(	string.format("[%s]",tostring(objName)),0xff0000)
-	
-	--if( tex == nil) then tex = defalutTex end
-	
-	tex = tex or defalutTex
-	if(vbo == nil) then
-		vbo = true
-	end
-	
-	
-	--vbo = vbo or true
-	
-	---[[
-
-	local o;
-	local _path = "\\resource\\obj\\"..objName..".obj";
-	local _shader;
-	local _texturePath = "\\resource\\texture\\"..tex;
-
-	if(vbo == true) then
-		_shader = "vboDiffuse";
-		o=load_VBO_model(name,_path);
-	else
-		_shader = "diffuse";
-		o=load_model(name,_path,0,0,0,1.0);	
-	end
-	setv(o,FLAGS_VISIBLE);
-	
-	--print("func_loadobj===============>",_texturePath,string.format("加载得模型(%s),模型名(%s)是否是VBO模式:%s",_path,nName,tostring(vbo)));
-
-	local m=createMaterial(_shader,_texturePath);
-	--local m = core_load("//resource//mat1.mat");
-	--local m = func_load("//resource//mat1.mat");
-	
-	setMaterial(o,m);
-	return o;
-	--]]
-end
-------------------------------------------------------
---切换状态
---返回true or false
-------------------------------------------------------
-function func_changeFlags(_o,_flag)
-	if(_o==nil) then
-		func_error("switchFlags 目标对象 = nil")
-		return;
-	end;
-	
-	if(_flag == nil)then
-		func_error("flag = nil ")
-	else
-		
-		if	getv(_o,_flag) == 1	then
-			resetv(_o,_flag);
-		else
-			setv(_o,_flag);
-		end
-		
-		--print('对象'..string.format("%#x",_o).."设置标示".._flag.."状态为:"..getv(_o,_flag) );
-	end
---[[	
-	local _stat = getv(_o,_flag)
-	if (_stat == 1) then 
-		return true
-	end
-	return false
---]]
-	return getv(_o,_flag) == 1
-end
-
---获取当前的焦点
-function func_get_curFocus()
-    return get_attr(nil,"curFocus");
 end
 
 --为sprite设置贴图
@@ -539,10 +321,6 @@ function func_setIcon(sprite,url)
 	end
 end
 
---获取sprite的xy
-function func_get_sprite_xy(o)
-	return get_attr(o,"spritePos")	
-end
 --获取sprite的宽高
 function func_get_sprite_size(o)
 	return get_attr(o,"spriteSize")	
@@ -559,54 +337,11 @@ function func_get_sprite_mouse_xy(o)
 	return x,y
 end
 
-function func_sprite_set_z(s,n)
-    sprite_set_z(s,n);
-end
-
---获取进程运行时间
-function func_get_longTime()
-	return get_attr(nil,"get_longTime");
-end
-
 --加载文件返回一个字符串
 function func_loadfile(url)
     return change_attr(nil,"loadfile",url);
 end
 
---获取屏幕的尺寸
-function func_screenSize()
-	local w,h=get_attr(nil,"screenSize");
-	return w,h
-end
-
-function func_get_xyz(o)
-	return get_attr(o,"xyz");
-end
-function func_get_scale(o)
-	return get_attr(o,"scale");
-end
-function func_get_rotate(o)
-	return get_attr(o,"rotate");
-end
---让角色按照time毫秒转向某个方向
-function func_look_at(o,x,y,z,time)
-    time = time or 0;
-	change_attr(o,"lookat",string.format("%f,%f,%f,%f",x,y,z,time));
-end
-
-function func_set_position(o,x,y,z)
-	change_attr(o,"set_position",string.format("%f,%f,%f",x,y,z));
-end
-
---让角色朝向某个方向
-function func_move(o,ms,x,y,z)
-	change_attr(o,"move",string.format("%d,%f,%f,%f",ms,x,y,z));
-end
-
---更新对象矩阵
-function func_update_mat4x4(o)
-	change_attr(o,"base_updateMat4x4");
-end
 
 --字符串分割成table
 function func_split(str, delimiter)
@@ -674,40 +409,6 @@ function func_addnode(parent,n,x,y)
 		func_addchild(parent,c,x,y);	
 	else
 		func_error(string.format("type = %s未实现",tostring(_type)));
-	end
-end
-
-
---销毁组件
-function func_dispose(n)
-   
-	local _type = n.type;
-	if(_type == UI_TYPE.Label) then
-		label_dispose(n);
-	elseif(_type == UI_TYPE.ScrollBar) then
-		scrollBar_del(n);
---	elseif(_type == UI_TYPE.Button)then
---		btn_dispose(n);
-	elseif(_type == UI_TYPE.CheckBox
-		or _type == UI_TYPE.ProgressBar 
-		or _type == UI_TYPE.Input
-		or _type == UI_TYPE.Image
-		or _type == UI_TYPE.Shape
-		or _type == UI_TYPE.NScrollBar
-		or _type == UI_TYPE.NListBox
-		or _type == UI_TYPE.NPanel
-		or _type == UI_TYPE.Skin
-		or _type == UI_TYPE.NLabel
-		or _type == UI_TYPE.NButton
-										)then
-		
-		n:dispose();--删除组件
-        
-		
-	elseif(_type == UI_TYPE.ListBox) then	
-		listbox_del(n);
-	else
-		func_error();
 	end
 end
 

@@ -262,9 +262,6 @@ function scrollView_dispose(sv)
 	func_clearTableItem(sv);--清空sv表
 end
 
---CONST_DIRECTION_HORIZONTAL = 0	--水平,横
---CONST_DIRECTION_VERTICAL   = 1 	--垂直,竖
-
 --gap 自定义的间隔,默认是取itemRender的容器的高度
 function scrollView_init(sw,sh,x,y,gap)
     local sv = {
@@ -346,7 +343,7 @@ function example_srollView(posx,posy)
 		
 		local sprite = sprite_create_typical(nil,x,y,w,h);--string.format("sv%d",cnt)
 		JEngine:getIns():add(sprite);
-		loadtexs(url,func_texloadend, { sprite=sprite;url=url});
+		loadtexs(url,func_texloadend, {sprite=sprite;url=url});
 		sprite_set_hit_rect(sprite,x,y,w,h);
 		set_cam(sprite,cam);
 
