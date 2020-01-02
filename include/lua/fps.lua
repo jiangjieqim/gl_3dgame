@@ -11,11 +11,7 @@ setmetatable(FpsView, Instance);--¼Ì³Ð×Ôµ¥Àý
 function FpsView:new()
 	local self = Instance:new();
 	setmetatable(self, FpsView);
-		
-	--tf = ftext_create(128,128);
-    --ftext_set_buffer(tf,128);
-	--self.tf = tf;
-	self.label = label_create(64,64);
+	self.label = NLabel:new(64,64);--label_create(64,64);
 	return self;
 end
 local function f_fps_timer(data,param)
@@ -26,7 +22,8 @@ local function f_fps_timer(data,param)
 		str = string.format(self.formatstr,_fps);
 	end
 	
-	label_set_text(self.label,str);
+	--label_set_text(self.label,str);
+    self.label:set_text(str);
 end
 
 function FpsView:dispose()
@@ -34,11 +31,15 @@ function FpsView:dispose()
 		timelater_remove(self.timer);
 	end
 	self:hide();
-	label_dispose(self.label);	
+	--label_dispose(self.label);
+    self.label:dispose();
 end
 function FpsView:show(x,y,formatstr)
-	label_set_pos(self.label,x or 0,y or 0);
-	label_set_visible(self.label,1);
+	--label_set_pos(self.label,x or 0,y or 0);
+--	label_set_visible(self.label,1);
+
+    self.label:set_pos(x or 0,y or 0);
+    self.label:visible(true);
 	--print(self.x);
 	self.formatstr = formatstr;
 	if(self.timer==nil) then
@@ -49,19 +50,8 @@ function FpsView:show(x,y,formatstr)
 end
 function FpsView:hide()
 	--ftext_vis(self.tf,0);
-	label_set_visible(self.label,0);
+--	label_set_visible(self.label,0);
+    self.label:visible(false);
 	local timer = self.timer;
 	evt_off(timer,EVENT_TIMER,f_fps_timer);
 end
-
---FbsµÄÈÝÆ÷
-function FpsView:container()
-	return self.label;
-end
-
---local mc = FpsView:new();
---mc:show();
---mc:hide();
---mc:dispose();
-
---fps();

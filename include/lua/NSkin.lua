@@ -10,9 +10,9 @@ setmetatable(NSkin, Base);
 local function func_dispose(n)
    
 	local _type = n.type;
-	if(_type == UI_TYPE.Label) then
-		label_dispose(n);
-	elseif(_type == UI_TYPE.ScrollBar) then
+--	if(_type == UI_TYPE.Label) then
+--		label_dispose(n);
+	if(_type == UI_TYPE.ScrollBar) then
 		scrollBar_del(n);
 --	elseif(_type == UI_TYPE.Button)then
 --		btn_dispose(n);
@@ -163,19 +163,6 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		end
 		stack_push(list,np);
 		
-		
-	
-	elseif(_type == "Label") then
-		local label =  label_create();
-		
-		--print(string.format("name:[%s]%d",name,#name));
-		label.name = name;
-		local str = xml_get_str(node,"label");
-		label_set_text(label, str);
-		
-		child = label;
-		
-
 	elseif(_type == "NLabel") then
 		local str = xml_get_str(node,"label");
 		local label = NLabel:new();
@@ -413,7 +400,7 @@ local function f_node_visible(n,v)
 		or _type == UI_TYPE.Input
 		or _type == UI_TYPE.Image
 		) then
-		--label_dispose(n);
+		
 		n:visible(v);
 	elseif(_type == UI_TYPE.Button) then
 		btn_visible(n,v);

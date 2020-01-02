@@ -195,28 +195,6 @@ end
 --example_stack();
 
 
---[[
-
-local function f_cpmlete(self)
-	print("加载结束");
-	
-	
-	
-	self:set_pos(10,20);--设置坐标
-
-	local skin1 = self:find("skin1");
-	local label = skin1:find("2");
-	--print(skin1,label);
-	--label_set_text(label, "x*");
-
-	--self:dispose();--销毁
-end
-
-local nskin = NSkin:new();
-evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmlete);
-nskin:load("\\resource\\crl.xml","gundi.png;checkbox.png;smallbtn.png");
---]]
-
 
 
 --*************************************************************
