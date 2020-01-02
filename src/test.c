@@ -594,14 +594,14 @@ REG_sprite_addChild(lua_State *L){
 	sprite_addChild((void*)sprite,(void*)child);
 	return 0;
 }
-static int
-REG_sprite_removeChild(lua_State *L){
-	int n = lua_gettop(L);//获取脚本中的参数个数
-	int sprite = lua_tointeger(L,1);//1
-	int child = lua_tointeger(L,2);//2
-	sprite_removeChild((void*)sprite,(void*)child);
-	return 0;
-}
+//static int
+//REG_sprite_removeChild(lua_State *L){
+//	int n = lua_gettop(L);//获取脚本中的参数个数
+//	int sprite = lua_tointeger(L,1);//1
+//	int child = lua_tointeger(L,2);//2
+//	sprite_removeChild((void*)sprite,(void*)child);
+//	return 0;
+//}
 
 //static int
 //REG_sprite_removeSelf(lua_State *L){
@@ -1621,12 +1621,12 @@ REG_dofunc(lua_State *L)
 		}
 		return 0;
 	}
-	if(!strcmp(attrKey,"tf_get_str"))
-	{
-		struct TextField *tf_source = (struct TextField*)lua_tointeger(L,2);
-		lua_pushstring(L,(const char*)tf_source->textPtr);
-		return 1;
-	}
+	//if(!strcmp(attrKey,"tf_get_str"))
+	//{
+	//	struct TextField *tf_source = (struct TextField*)lua_tointeger(L,2);
+	//	lua_pushstring(L,(const char*)tf_source->textPtr);
+	//	return 1;
+	//}
 /*
 	//设置材质的参数
 	if(!strcmp(attrKey,"materialSetVar"))
@@ -1673,7 +1673,7 @@ REG_dofunc(lua_State *L)
 	if(!strcmp(attrKey,"SetScale"))
 		return SetScale(L);
 
-	if(!strcmp(attrKey,"FindNode"))
+	if(!strcmp(attrKey,"find_node"))
 		return L_FindNode(L);
 
 	if(!strcmp(attrKey,"GetName"))
@@ -2507,7 +2507,7 @@ runhelloTest(const char* script){
 	lua_register(lua_state,"sprite_bindAtals",REG_sprite_bindAtals);
 	//lua_register(lua_state,"sprite_bindMaterial",REG_sprite_bindMaterial);//绑定材质
 	lua_register(lua_state,"sprite_addChild",REG_sprite_addChild);
-	lua_register(lua_state,"sprite_removeChild",REG_sprite_removeChild);
+	//lua_register(lua_state,"sprite_removeChild",REG_sprite_removeChild);
 	//lua_register(lua_state,"sprite_removeSelf",REG_sprite_removeSelf);
 	lua_register(lua_state,"sprite_set_z",REG_sprite_set_z);
 	lua_register(lua_state,"sprite_get_material",REG_sprite_get_material);//获取sprite的材质引用

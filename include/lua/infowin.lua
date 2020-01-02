@@ -21,8 +21,6 @@ local function f_select(self,index,param)
 	--local index =listbox_get_index(list);
 	---[[
     if (index == 0) then
-        --func_ex_info();
-
 
 		print("windows test!");
 		

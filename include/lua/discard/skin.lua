@@ -4,7 +4,23 @@ local function f_set_customParent(skin,parent,x,y)
 	skin.ox = x or 0;
 	skin.oy = y or 0;
 end
-
+--获取当前节点的容器
+local function func_get_container(n)
+	func_error();
+	
+	local _type = n.type;
+	local c;
+	if(_type == UI_TYPE.Panel)then
+		c=  alert_get_container(n);
+	elseif(_type == UI_TYPE.ScrollBar) then
+		c= scrollBar_get_container(n);
+	elseif(_type == UI_TYPE.Button)then
+		c= btn_get_container(n);
+	elseif(_type ==UI_TYPE.NPanel) then
+		c = n:get_container();
+	end
+	return c;
+end
 
 --获取父亲节点
 local function f_get_parent(list,node)

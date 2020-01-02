@@ -136,7 +136,7 @@ local function f_listCallBack(self,index,param)
 	--print(g_model);
 
 	if (g_model) then
-		func_ptr_remove(g_model);
+		ptr_remove(g_model);
 		--return;
 	end
 

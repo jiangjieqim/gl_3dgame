@@ -126,7 +126,7 @@ function UnitBase:bindRayPick(func)
     evt_on(self.p,EVENT_RAY_PICK,func);
 end
 local function f_endCall(data)
-    local p = func_find_obj(data);
+    local p = JEngine:getIns():find(data);
 --    local u = allUnits[data];
     func_set_anim(p,"stand");
     evt_off(p,EVENT_ENGINE_BASE_END,f_endCall);
@@ -155,8 +155,6 @@ function UnitBase:move(x,y,z)
     z = tonumber(z);
     local o = self.p;
     
-    --print("==============>name=",func_get_name(o));
-
 	if(o==nil) then
         func_error("unit.p = nil");
         return;

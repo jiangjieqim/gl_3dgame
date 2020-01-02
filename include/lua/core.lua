@@ -362,29 +362,12 @@ function func_addchild(parent,child,x,y)
 	func_set_local_pos(child,x,y);
 end
 
---从parent(Sprite)移除掉child(Sprite)对象
-function func_sprite_removechild(parent,child)
-	sprite_removeChild(parent,child);
-end
-
 --内存回收
 function func_gc()
 	change_attr(nil,"gc")
 	--print('gc')
 end
 
-
-
---绑定拾取回调
-function func_set_pick(o,func)
-    func_error("set_pickBind未实现");
-	--change_attr(o,"set_pickBind",func);
-end
---设置碰撞盒子颜色
-function func_set_box_color(o,r,g,b)
-    func_error("set_box_color未实现");
-	--change_attr(o,"set_box_color",string.format("%f,%f,%f",r,g,b))
-end
 function func_rotate(o,key,value)
     change_attr(o,key,tostring(value));
 end
@@ -402,12 +385,6 @@ function func_setRotateZ(o,value)
 	change_attr(o,"rz",tostring(value));
 end
 
-
---设置ray拾取半径
-function func_set_rayRadius(o,value)
-    func_error("未实现func_set_rayRadius");
-	--change_attr(o,"set_rayRadius",tostring(value));
-end
 --设置坐标
 function func_set_x(o,x)
 	change_attr(o,"x",x)
@@ -430,10 +407,6 @@ function func_set_camera_pos(x,y,z)
 		dofunc("SetCameraPosition",x,y,z);
 end
 --]]
---获取对象名
-function func_get_name(o)
-	return get_attr(o,"get_name")
-end
 
 
 --加载一个md5模型
@@ -604,19 +577,7 @@ function func_setIcon(sprite,url)
 		sprite_texName(sprite,url);
 	end
 end
---从引擎层获取对对象
-function func_find_obj(name)--func_getObj_ByName_EG
-	return dofunc("FindNode",name);
-end
---根据区间播放动画
-function func_play_anim(o,s,e)
-	change_attr(o,"animtor_play_start_end",string.format('%d,%d',s,e))
-end
 
---播放动画
-function func_play(o)
-	change_attr(o,"animtor_play");--播放
-end
 --获取sprite的xy
 function func_get_sprite_xy(o)
 	return get_attr(o,"spritePos")	
@@ -655,22 +616,6 @@ end
 function func_screenSize()
 	local w,h=get_attr(nil,"screenSize");
 	return w,h
-end
-
---获取文本
-function func_get_tf_text(tf)
-	return dofunc("tf_get_str",tf);
-end
-
---移除引擎对象(md5,md2,textfiled,sprite,obj)
-function func_ptr_remove(o)
-	return ptr_remove(o)
-end
-
-
---获取引擎信息
-function func_ex_info()
-	get_attr(nil,"ex_info");
 end
 
 function func_get_xyz(o)
@@ -770,23 +715,7 @@ function func_addnode(parent,n,x,y)
 		func_error(string.format("type = %s未实现",tostring(_type)));
 	end
 end
---获取当前节点的容器
-function func_get_container(n)
-	func_error();
-	
-	local _type = n.type;
-	local c;
-	if(_type == UI_TYPE.Panel)then
-		c=  alert_get_container(n);
-	elseif(_type == UI_TYPE.ScrollBar) then
-		c= scrollBar_get_container(n);
-	elseif(_type == UI_TYPE.Button)then
-		c= btn_get_container(n);
-	elseif(_type ==UI_TYPE.NPanel) then
-		c = n:get_container();
-	end
-	return c;
-end
+
 
 --销毁组件
 function func_dispose(n)
@@ -798,10 +727,6 @@ function func_dispose(n)
 		scrollBar_del(n);
 	elseif(_type == UI_TYPE.Button)then
 		btn_dispose(n);
-    --elseif(_type == UI_TYPE.Panel)then	
-	--	alert_dispose(n);
-	--elseif(_type == UI_TYPE.Skin) then
-	--	skin_dispose(n);
 	elseif(_type == UI_TYPE.CheckBox
 		or _type == UI_TYPE.ProgressBar 
 		or _type == UI_TYPE.Input
@@ -862,7 +787,6 @@ dofile("..\\include\\lua\\image.lua")	--image组件
 
 dofile("..\\include\\lua\\checkbox.lua")	--checkbox组件
 dofile("..\\include\\lua\\progrossbar.lua")
-dofile("..\\include\\lua\\skin.lua");--skin皮肤组件
 dofile("..\\include\\lua\\NSkin.lua");--NSkin皮肤组件
 
 dofile("..\\include\\lua\\NUnit.lua");

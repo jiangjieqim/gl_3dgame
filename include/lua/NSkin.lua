@@ -331,7 +331,6 @@ local function f_skin_parse(self,myParent,offsetx,offsety)
 	xml_del(xml);
 end
 local function f_tex_complete(self)
-	--skin_parse(param);
 	f_skin_parse(self);
 	--print(self);
 	evt_dispatch(self,ENGINE_EVENT_COMPLETE,self);

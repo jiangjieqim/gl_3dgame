@@ -98,8 +98,10 @@ end
 function NUnit:set_position(x,y,z)
     func_set_position(self.p,x,y,z);
 end
+
+--获取对象名
 function NUnit:get_name()
-    return func_get_name(self.p);
+    return get_attr(self.p,"get_name")
 end
 
 ----设置对象的关键帧帧率

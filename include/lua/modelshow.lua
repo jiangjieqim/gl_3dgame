@@ -105,11 +105,12 @@ end
 
 local function btnClick(self)
 	local n = self.u;
-	
+	print("it`s name = "..n:get_name());
+		
 ----[[	
 	local anim = n:get_anim();
 	if(anim) then
-		print("u name ="..n:get_name(),
+		print(
 			--JEngine:getIns():get_type_str(self.u:get_p())
 			"type:"..n:get_type(),
 			anim:cur_frame().."/"..anim:total(),
@@ -151,7 +152,7 @@ end
 
 local function ef(data,self)
 	local skin = self.nskin;
-	local label = skin:find("info_label");	--skin_find(skin,"label1");
+	local label = skin:find("info_label");
 
 	local a = self.u:get_anim();
 	
@@ -186,7 +187,7 @@ local function f_cpmlete(self)
 	--self.nskin:dispose();
 	
 	
-	local btn0 =skin:find("btn0");-- skin_find(skin,"btn0");
+	local btn0 =skin:find("btn0");
 	btn0:bind_click(btnClick,self);
 	
 	local timer = timelater_new(1);

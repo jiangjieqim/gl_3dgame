@@ -60,7 +60,6 @@ end
 --获取小按钮的拖拽方向
 local function 
 f_Sprite_DragDirection(scrollbtn)
-	--local scrollbtn = func_find_obj(littleName)
 	return get_attr(scrollbtn,"dragDirection")
 end
 
@@ -76,10 +75,7 @@ f_SetBarPostion(sprite,scrollbtn)
 	
 	--滑动的方向
 	local dragDirection=f_Sprite_DragDirection(scrollbtn)
-	
-	--背景sprite引用
-	--local sprite = func_find_obj(bgName)--func_getTable(bgName)
-	
+		
 	--背景局部坐标
 	local local_x,local_y = get_attr(sprite,"spriteLocalXY")
 	
@@ -88,10 +84,7 @@ f_SetBarPostion(sprite,scrollbtn)
 	
 	--进度条的宽高
 	local sprite_w,sprite_h = get_attr(sprite,"spriteSize")
-	
-	--小按钮引用
-	--local scrollbtn = func_find_obj(littleName)
-	
+		
 	--小按钮的宽高
 	local sc_w,sc_h = get_attr(scrollbtn,"spriteSize")
 		
@@ -136,12 +129,12 @@ end
 --]]
 local function 
 f_scrollBarBG_Click2(name,p)
-	local sc = p.sc;--func_getTable(scName)
+	local sc = p.sc;
 
 	
 	--print(name,p);
 	--大背景
-	local sprite = sc.bg;--func_find_obj(name)
+	local sprite = sc.bg;
 	--print('########### '..name)
 	--print(sprite)
 	

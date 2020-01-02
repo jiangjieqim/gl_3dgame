@@ -36,6 +36,11 @@ function JEngine:dispose()
 	func_clearTableItem(self);
 end
 
+--打印信息
+function JEngine:print_info()
+	get_attr(nil,"ex_info");
+end
+
 function JEngine:rename(o,value)
 	change_attr(o,"rename",tostring(value));
 end
@@ -50,6 +55,11 @@ end
 
 function JEngine:exit()
 	change_attr(nil,"exit");
+end
+
+--从引擎层获取对对象
+function JEngine:find(name)
+	return dofunc("find_node",name);
 end
 
 function JEngine:setbg(r,g,b)

@@ -1,5 +1,4 @@
 dofile("..\\include\\lua\\core.lua");
-dofile("..\\include\\lua\\modelControl.lua");
 dofile("..\\include\\lua\\editor.lua");
 
 --local e = JEngine:getIns();
@@ -15,8 +14,7 @@ dofile("..\\include\\lua\\editor.lua");
 --########################################
 --example_srollView(200,0);
 
---btn_create(200,50,60,20,"smallbtn.png");
---btn_create(200,70,120,40,"smallbtn.png");
+
 
 --[[
 local function f_callback2(data,obj)
@@ -27,8 +25,8 @@ end--]]
 
 --print(string.format("res = %d",res));
 
---[[local btn = btn_create(0,50);
-btn_bindClick(btn,f_onClick);--]]
+
+
 --**********************************************************
 
 function f_onkey(data)
@@ -38,9 +36,8 @@ function f_onkey(data)
         JEngine:getIns():exit();
 	elseif(key == 13) then
 	--»Ø³µ
-	--	func_ex_info();
 	elseif(key == 49) then
-		func_ex_info();
+		JEngine:getIns():print_info();
 	
 		--setv(btnspr,FLAGS_DRAW_PLOYGON_LINE );
 		--setv(btnspr,FLAGS_DISABLE_CULL_FACE );
@@ -63,7 +60,6 @@ JEngine:getIns():setbg(0.3,0.3,0.3);
 --********************************************
 local function uiinit()
 	fps();
-	btn_create(150,0,100,45);
 	example_input(0,80);
 	infowin(150,50);
 	example_srollView();
@@ -236,10 +232,10 @@ local function f_cpmlete(skin)
 	
 	skin:set_pos(0,15);
 	
-	local sc = skin_find(skin,"sc");
+	local sc = skin:find("sc");
 	sc:bindCallback(f_rx_handle);
 	
-	local tbtn = skin_find(skin,"tbtn");
+	local tbtn = skin:find("tbtn");
 	tbtn:bind_click(function ()
 			if(model) then
 				model:set_pos(0,0,0);
@@ -248,7 +244,7 @@ local function f_cpmlete(skin)
 		end
 	);
 	
-	local tbtn1 = skin_find(skin,"tbtn1");
+	local tbtn1 = skin:find("tbtn1");
 
 	tbtn1:bind_click(function ()
 			--[[if(model) then

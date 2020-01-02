@@ -224,23 +224,6 @@ local function f_cpmlete(skin,self)
 	local closebtn = skin:find("close");
 	closebtn:bind_click(btnClick,self);
 	f_refresh(self);
-	
-	--[[
-	local nl = skin_find(skin,"nb1");--NListBox:new();
-	nl:addItem("a1");
-	nl:addItem("b2");
-	
-	
-	--btn_bindClick(closebtn,btnClick,self);
-	
-	
-	local pb1 = skin_find(skin,"pb1");--NListBox:new();	
-	pb1:progress(0.7);
-	--pb1:dispose();
-	local sc = skin_find(skin,"sc");
-	sc:bindCallback(f_rx_handle,self);
---]]
-	
 	--self:dispose();
 end
 
