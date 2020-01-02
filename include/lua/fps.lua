@@ -35,9 +35,6 @@ function FpsView:dispose()
     self.label:dispose();
 end
 function FpsView:show(x,y,formatstr)
-	--label_set_pos(self.label,x or 0,y or 0);
---	label_set_visible(self.label,1);
-
     self.label:set_pos(x or 0,y or 0);
     self.label:visible(true);
 	--print(self.x);
@@ -49,8 +46,6 @@ function FpsView:show(x,y,formatstr)
 	end
 end
 function FpsView:hide()
-	--ftext_vis(self.tf,0);
---	label_set_visible(self.label,0);
     self.label:visible(false);
 	local timer = self.timer;
 	evt_off(timer,EVENT_TIMER,f_fps_timer);
