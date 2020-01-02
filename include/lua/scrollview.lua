@@ -365,15 +365,13 @@ function example_srollView(posx,posy)
 
 		if(true) then
 			--节点特别多的时候,这里的渲染绘制会比较卡顿,可以考虑用分帧处理渲染
-			local tf = ftext_create(64,64,13,12,cam);
-			local con = ftext_get_container(tf);
-			func_addchild(sprite:get_container(),con);
+			local tf = NLabel:new(nil,nil,cam);			
+			sprite:addChild(tf:get_container());
 			node.tf = tf;
 		end
 		node.view = sprite:get_container();
 		node.skin = sprite;
-		
-		
+
 		node.data = nil;
 		
 		node.used = 1;
@@ -386,7 +384,8 @@ function example_srollView(posx,posy)
 	--节点销毁回调
 	local function f_dispose(node)
 		if(node.tf) then
-			fext_dispose(node.tf);
+			--fext_dispose(node.tf);
+			node.tf:dispose();
 			node.tf = nil;
 		end
 		
@@ -397,9 +396,10 @@ function example_srollView(posx,posy)
 	local function itemRefreshFunc(node)
 	--    print(node.data);
 		if(node.tf) then
-			fext_clear(node.tf);
+			--fext_clear(node.tf);
 			local str = string.format("i = %d,__%d",node.index,node.data);
-			ftext_parse(node.tf,str);
+			--ftext_parse(node.tf,str);
+			node.tf:set_text(str);
 		end
 		--print("index",node.index,"刷新视图,设置数据",node.data);
 	end

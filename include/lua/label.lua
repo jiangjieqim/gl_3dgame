@@ -6,7 +6,7 @@ local function label_create(w,h,cam)
 		tf = nil;
 	};
 	
-	label.tf = ftext_create(w,h,cam);
+	label.tf = ftext_create(w,h,13,12,cam);
 	return label;
 end
 
@@ -53,7 +53,7 @@ function NLabel:new(w,h,cam)
 	local self = Base:new();
 	setmetatable(self, NLabel);
 	self:settype(14);
-	self.tf = ftext_create(w,h,cam);
+	self.tf = ftext_create(w,h,13,12,cam);
 	return self;
 end
 
