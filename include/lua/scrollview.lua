@@ -249,16 +249,19 @@ function scrollView_dispose(sv)
 	
 	--遍历itemRender对象池,根据itemDispose回调销毁itemRender对象
     for key, node in pairs(sv.pool) do
+		
+		if(node.skin == nil) then
+			func_error("node字段skin没有赋值,无效销毁列表渲染子节点!");
+		end
+		
 		sv.itemDisposeFunc(node);
 	end
 	
 	if(sv.fbo) then
-		--fboobj_dispose(sv.fbo);
 		sv.fbo:dispose();
 	end
 	
 	if(sv.sc) then
-		--scrollBar_del(sv.sc);
 		sv.sc:dispose();
 	end
 	
@@ -368,7 +371,9 @@ function example_srollView(posx,posy)
 			node.tf = tf;
 		end
 		node.view = sprite:get_container();
-
+		node.skin = sprite;
+		
+		
 		node.data = nil;
 		
 		node.used = 1;
@@ -384,9 +389,8 @@ function example_srollView(posx,posy)
 			fext_dispose(node.tf);
 			node.tf = nil;
 		end
-		if(node.view) then
-			ptr_remove(node.view);--
-		end
+		
+		node.skin:dispose();
 	end
 
 	--刷新视图
