@@ -1,3 +1,27 @@
+--改变对象的Rotate x的值
+local function func_setRotateX(o,value)
+	change_attr(o,"rx",tostring(value));
+end
+
+--改变对象的Rotate y的值
+local function func_setRotateY(o,value)
+	change_attr(o,"ry",tostring(value));
+end
+--改变对象的Rotate z的值
+local function func_setRotateZ(o,value)
+	change_attr(o,"rz",tostring(value));
+end
+--设置坐标
+local function func_set_x(o,x)
+	change_attr(o,"x",x)
+end
+local function func_set_y(o,y)
+	change_attr(o,"y",y)
+end
+local function func_set_z(o,z)
+	change_attr(o,"z",z)
+end
+
 NUnit = {
 	p,
 };
@@ -57,9 +81,10 @@ end--]]
 function NUnit:is_visible()
 	return getv(self.p,FLAGS_VISIBLE) == 1;
 end
+--设置缩放比率
 function NUnit:scale(value)
 	--print(value);
-    func_set_scale(self.p,value);
+    change_attr(self.p,"scale",value);
 end
 
 function NUnit:setv(v)
@@ -107,5 +132,4 @@ end
 ----设置对象的关键帧帧率
 function NUnit:set_fps(v)
 	change_attr(self.p,"fps",tostring(v))
-	
 end

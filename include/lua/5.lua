@@ -45,28 +45,6 @@ local function f_set_obj_flags(o)
 
 end
 
----- 创建茶壶列表
--- local function createObjList(cnt)
---    cnt = cnt or 1
---    local offset = 3
-
---    local seedNumber = - offset
-
---    for i = 0, cnt - 1, 1 do
-
---        local time = func_get_longTime()
---        seedNumber = seedNumber + offset;
---        local _m = func_loadobj("torus")
---        -- load_objVBO("torus");	--"teapot"
---        setv(_m, FLAGS_DRAW_PLOYGON_LINE);
-
---        func_set_x(_m, seedNumber)
-
---        func_print(string.format('load_objVBO 消耗%d ms', func_get_longTime() - time))
-
---    end
-
--- end
 -- 加载一个带透明通道的树叶模型
 local function
     load_alpha_model(objName)

@@ -368,45 +368,6 @@ function func_gc()
 	--print('gc')
 end
 
-function func_rotate(o,key,value)
-    change_attr(o,key,tostring(value));
-end
---改变对象的Rotate x的值
-function func_setRotateX(o,value)
-	change_attr(o,"rx",tostring(value));
-end
-
---改变对象的Rotate y的值
-function func_setRotateY(o,value)
-	change_attr(o,"ry",tostring(value));
-end
---改变对象的Rotate z的值
-function func_setRotateZ(o,value)
-	change_attr(o,"rz",tostring(value));
-end
-
---设置坐标
-function func_set_x(o,x)
-	change_attr(o,"x",x)
-end
-function func_set_y(o,y)
-	change_attr(o,"y",y)
-end
-function func_set_z(o,z)
-	change_attr(o,"z",z)
-end
----[[
---设置缩放比率
-function func_set_scale(o,v)
-   -- func_error("***");
-	change_attr(o,"scale",v)
-end
---]]
---[[
-function func_set_camera_pos(x,y,z)
-		dofunc("SetCameraPosition",x,y,z);
-end
---]]
 
 
 --加载一个md5模型

@@ -308,8 +308,7 @@ local function addmd2_fbo(fbo)
 	--setv(n,FLAGS_DRAW_PLOYGON_LINE);
 	func_set_position(n,0,0,-100);
 	
-	func_setRotateX(n,PI/2)
-	func_setRotateY(n,PI/2)
+
 	set_cam(n,fbo:get_cam3d());
 	--set_cam(n,cam3d);
 end
