@@ -69,10 +69,6 @@ end
 --获取Shape的坐标
 function Shape:get_pos()
 	local p = self:get_container();
-	
-	--func_error(1);
-
-	--print("*"..tostring(p));
 	return get_attr(p,"spritePos");
 end
 
