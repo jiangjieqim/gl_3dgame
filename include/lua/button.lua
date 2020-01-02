@@ -22,11 +22,11 @@ function Button:new(w,h,url)
 	return self;
 end
 
-function Button:set_label(str)
+function Button:set_label(str,x,y)
 	if(self.label==nil) then
 		local label = NLabel:new();
 		self.label = label;
-		self.img:addChild(label:get_container());
+		self.img:addChild(label:get_container(),x,y);
 	end
 	local _l = self.label;
 	_l:set_text(str);

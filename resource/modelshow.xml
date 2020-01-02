@@ -12,4 +12,5 @@
 <ui name="setfps" type="NScrollBar" y="180" parent="1" desc="ÉèÖÃfps"/>
 <ui name="fpslabel" type="NLabel" x="100" y="180" label="ÉèÖÃfps" parent="1"/>
 
+<ui name="ck" type="CheckBox" y="200" label="ck" parent="1"/>
 

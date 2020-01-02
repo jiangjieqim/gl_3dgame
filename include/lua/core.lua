@@ -725,8 +725,8 @@ function func_dispose(n)
 		label_dispose(n);
 	elseif(_type == UI_TYPE.ScrollBar) then
 		scrollBar_del(n);
-	elseif(_type == UI_TYPE.Button)then
-		btn_dispose(n);
+--	elseif(_type == UI_TYPE.Button)then
+--		btn_dispose(n);
 	elseif(_type == UI_TYPE.CheckBox
 		or _type == UI_TYPE.ProgressBar 
 		or _type == UI_TYPE.Input
@@ -775,13 +775,9 @@ dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
 
 dofile("..\\include\\lua\\NScrollBar.lua")	--滑动条组件
 
-dofile("..\\include\\lua\\btn.lua");		--按钮组件
-
 dofile("..\\include\\lua\\button.lua");		--按钮组件
 
 dofile("..\\include\\lua\\infowin.lua")	--fps组件
-
-dofile("..\\include\\lua\\alert.lua")
 
 dofile("..\\include\\lua\\image.lua")	--image组件
 

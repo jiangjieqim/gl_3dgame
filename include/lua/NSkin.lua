@@ -153,18 +153,17 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		child = label;
 		
 	elseif(_type == "Button") then
-		local w = xml_get_float(node,"w");
-		local h = xml_get_float(node,"h");
-		local btn = btn_create(0,0,w,h);
-		btn.name = name;
+--		local w = xml_get_float(node,"w");
+--		local h = xml_get_float(node,"h");
+--		local btn = btn_create(0,0,w,h);
+--		btn.name = name;
 
-		local str = xml_get_str(node,"label");
-		if(str~="")then
-			btn_label(btn,str);
-		end
-		child = btn;
-		--func_addnode(parent,btn,x,y);
-		--stack_push(list,btn);
+--		local str = xml_get_str(node,"label");
+--		if(str~="")then
+--			btn_label(btn,str);
+--		end
+--		child = btn;
+	    func_error("²»ÊµÏÖ!");
 	
 	elseif(_type == "NButton") then
 		local w = xml_get_float(node,"w");
@@ -195,12 +194,10 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		ck:setname(name);
 		local label = xml_get_str(node,"label");
 		
-		if(#label > 0) then
+		if(label and #label > 0) then
 			ck:setlabel(label);
 		end
-		
-		--func_addnode(parent,ck,x,y);
-		--stack_push(list,ck);
+	
 		child = ck;
 	elseif(_type == "ProgressBar") then
 		local pb = ProgressBar:new();

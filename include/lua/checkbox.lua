@@ -1,18 +1,17 @@
 CheckBox = {
 	selected = false,
-	btn,
-	container,
+	btn,--Button引用
 	callback,
 	param,
 };
 CheckBox.__index = CheckBox;
 setmetatable(CheckBox, Base);
 
-local function ckfunc(btnName,p)
+local function ckfunc(p)
 	local self= p;
 	self.selected = not self.selected;
 	
-	local s = btn_get_container(self.btn);
+	local s =  self.btn:get_container();--btn_get_container(self.btn);
 	
 	if(self.selected)then
 		func_setIcon(s,"dagou.png");
@@ -25,27 +24,22 @@ local function ckfunc(btnName,p)
 end
 
 function CheckBox:get_container()
-	return  btn_get_container(self.btn);
+	return self.btn:get_container();
 end
 
 function CheckBox:new()
 	local self =  Base:new();
 	self:settype(6);
 	setmetatable(self, CheckBox);
-	self.btn = btn_create(0,0,20,20,"checkbox.png",0,false);
-	self.container = btn_get_container(self.btn);
-	--self.container = self.btn;
-	btn_bindClick(self.btn,ckfunc,self);
+	self.btn =  Button:new(20,20,"checkbox.png");
+	self.btn:bind_click(ckfunc,self);
 	return self;
 end
 
 function CheckBox:setlabel(label)
-	btn_label(self.btn,label,"rightout");
+	self.btn:set_label(label,20,0);
 end
---[[--设置CheckBox的名字
-function CheckBox:setname(name)
-	self.name = name;
-end--]]
+
 function CheckBox:bind(callback,param)
 	self.callback = callback;
 	self.param = param;
@@ -53,12 +47,12 @@ end
 
 function CheckBox:dispose()
 	--print("销毁CheckBox");
-	btn_dispose(self.btn);
+	self.btn:dispose();
 	func_clearTableItem(self);
 end
 
 function CheckBox:visible(v)
-	btn_visible(self.btn,v);
+	self.btn:visible(v);
 end
 
 --[[
