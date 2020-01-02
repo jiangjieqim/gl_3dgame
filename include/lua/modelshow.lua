@@ -165,10 +165,13 @@ local function f_cpmlete(self)
 	
 	local fbo = FboRender:new(128,128);
 	fbo:set_pos(x,y);
+	
 	self.fbo = fbo;
 	
 	self.u = addmd2_fbo(fbo);--增加一个vbo模型
 	
+    
+
 	local scale = skin:find("scale");
 	scale:bindCallback(f_scale_handle,self);
 
@@ -205,7 +208,6 @@ function ModleShow:new()
 	
 	local function f_cpmleteHandler(skin)
 		f_cpmlete(self);
-		--m_dispose(self);
 	end
 	local nskin = NSkin:new();
 	self.nskin = nskin;

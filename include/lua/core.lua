@@ -431,9 +431,6 @@ dofile("..\\include\\lua\\shape.lua")	--shape组件
 dofile("..\\include\\lua\\NPanel.lua");
 
 dofile("..\\include\\lua\\NListbox.lua")
-dofile("..\\include\\lua\\UListBox.lua")	--选项列表组件
-
-dofile("..\\include\\lua\\UScrollBar.lua")	--滑动条组件
 
 dofile("..\\include\\lua\\NScrollBar.lua")	--滑动条组件
 
