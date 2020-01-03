@@ -1521,6 +1521,7 @@ REG_get_attr(lua_State *L)
 /*
 	设置Camera坐标
 */
+/*
 static int 
 f_SetCameraPosition(lua_State *L)
 {
@@ -1534,10 +1535,11 @@ f_SetCameraPosition(lua_State *L)
 	
 	return 0;
 }
-
+*/
 /*
 	设置坐标
 */
+/*
 static int 
 f_SetNodePosition(lua_State* L)
 {
@@ -1553,9 +1555,11 @@ f_SetNodePosition(lua_State* L)
 
 	return 0;
 }
+*/
 /*
 	设置缩放
 */
+/*
 static int 
 SetScale(lua_State* L)
 {
@@ -1572,6 +1576,7 @@ SetScale(lua_State* L)
 	}
 	return 0;
 }
+*/
 /*
 	寻找节点
 */
@@ -1585,6 +1590,7 @@ L_FindNode(lua_State* L)
 /*
 	寻找节点
 */
+/*
 static int 
 L_GetName(lua_State* L)
 {
@@ -1593,6 +1599,7 @@ L_GetName(lua_State* L)
 	lua_pushstring(L,base->name);
 	return 1;
 }
+*/
 ////获取系统时间
 //static int
 //GetLongTime(lua_State* L)
@@ -1669,24 +1676,26 @@ REG_dofunc(lua_State *L)
 		GLuint tex = tmat_getTextureByIndex(m,0);
 		jgl_subImage(tex,texName,0,0,256,256);
 	}
-
+/*
 	if(!strcmp(attrKey,"SetCameraPosition"))
 		return f_SetCameraPosition(L);
-	
+*/	
+/*
 	if(!strcmp(attrKey,"SetNodePosition"))
 		return f_SetNodePosition(L);
-
+*/
+/*
 	if(!strcmp(attrKey,"SetScale"))
 		return SetScale(L);
-
+*/
 	if(!strcmp(attrKey,"find_node"))
 		return L_FindNode(L);
-
+/*
 	if(!strcmp(attrKey,"GetName"))
 	{
 		return L_GetName(L);
 	}
-
+*/
 	//if(!strcmp(attrKey,"GetLongTime"))
 	//{
 	//	return GetLongTime(L);

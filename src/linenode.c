@@ -70,7 +70,7 @@ void linenode_mod(void* p,int index,float x,float y,float z){
 	if(index>line->vbo->renderVertCount-1)
 		assert(0);//指定的 index 索引溢出了
 	else
-		vbo_sub_data(line->vbo->vertexID,index*3*sizeof(GLfloat),&pos,sizeof(struct Vec3));
+		vbo_sub_data(line->vbo->vertexID,index*3*sizeof(GLfloat),(GLfloat*)&pos,sizeof(struct Vec3));
 }
 
 void f_freeVert(struct LineNode* line){
