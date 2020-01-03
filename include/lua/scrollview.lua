@@ -1,3 +1,8 @@
+--当前的2dcam句柄,指定sprite必须指定对应的cam引用
+local function scrollView_get_cam(sv)
+	return sv.fbo:get_cam2d();--sv.fbo.cam2d;
+end
+
 --从itemRender list对象池中获取一个itemRender节点对象,如果对象池中没有就创建一个
 local function f_pool_getItem(sv)
     local data = sv.pool;
@@ -7,7 +12,8 @@ local function f_pool_getItem(sv)
                 return value;
             end
 	end
-    local node = sv.itemFunc();
+	local cam = scrollView_get_cam(sv);
+    local node = sv.itemFunc(cam);
     sv.pool[tostring(node)] = node;    
     return node;
 end
@@ -35,16 +41,10 @@ local function f_checkItemOutside(sv,pos_y)
     return 0;--不在遮罩区域外
 end
 
---当前的2dcam句柄,指定sprite必须指定对应的cam引用
-function scrollView_get_cam(sv)
-	return sv.fbo:get_cam2d();--sv.fbo.cam2d;
-end
-
 --设置滚动条组件的坐标
-function scrollView_set_pos(sv,x,y)
+local function scrollView_set_pos(sv,x,y)
 	sv.x = x;
 	sv.y = y;
-	--fboobj_set_pos(sv.fbo,x,y);
 	sv.fbo:set_pos(x,y);
 end
 --从对象池中释放一个节点
@@ -194,7 +194,7 @@ local function f_need_cnt(sv)
 end
 
 --数据驱动填充srollView中的数据
-function scrollView_set_data(sv,data)
+local function scrollView_set_data(sv,data)
 	sv.dataList = data;
     local _realNeedCnt = f_need_cnt(sv);
     sv.needCnt = _realNeedCnt;
@@ -241,7 +241,7 @@ function scrollView_set_data(sv,data)
 end
 
 --销毁滚动条组件
-function scrollView_dispose(sv)
+local function scrollView_dispose(sv)
 	if(sv.itemDisposeFunc == nil) then
 		--print(sv.itemDisposeFunc);
 		print("itemDisposeFunc = nil");
@@ -269,7 +269,7 @@ function scrollView_dispose(sv)
 end
 
 --gap 自定义的间隔,默认是取itemRender的容器的高度
-function scrollView_init(sw,sh,x,y,gap)
+local function scrollView_init(sw,sh,x,y,gap)
     local sv = {
 		fbo,--FBO句柄对象
 		sc,--滚动条句柄对象
@@ -323,102 +323,37 @@ function scrollView_init(sw,sh,x,y,gap)
 	--]]
 	return sv;
 end
+--**************************************************************
+ScrollView = {
 
+};
+ScrollView.__index = ScrollView;
 
-
-
-local function clickEvt(name,p)
-	local node = p;
-	print("点击的节点index = ",node.index,"data = ",node.data);
-	--scrollView_dispose(sv);
+--注意:skin资源要先加载好,才能初始化
+function ScrollView:new(sw,sh,x,y,gap)
+	local s = scrollView_init(sw,sh,x,y,gap);
+	setmetatable(s,ScrollView);
+	return s;
 end
 
---遮罩滚动条使用案例
-function example_srollView(posx,posy)
-	posx = posx or 0;
-	posy = posy or 0;
-	--*********************************************************************************
-	local itemHeight = 30;
-	local cam;
-	
-	local sv;
-	
-	--local cnt = 0;
-	local function f_create()
-				 
-		--********************************************************
-		local x = 0;
-		local y = 0;
-		local w = 90;
-		local h = itemHeight;
-		local url = "smallbtn.png";
-		
-		local sprite =  Image:new(w,h);
-		sprite:set_pos(x,y);
-		sprite:mouseEnable(true);
-		sprite:set_cam(cam);
-		sprite:seticon(url);
-
-		--********************************************************
-		
-		local node ={};
-
-		if(true) then
-			--节点特别多的时候,这里的渲染绘制会比较卡顿,可以考虑用分帧处理渲染
-			local tf = NLabel:new(nil,nil,cam);			
-			sprite:addChild(tf:get_container());
-			node.tf = tf;
-		end
-		node.view = sprite:get_container();
-		node.skin = sprite;
-
-		node.data = nil;
-		
-		node.used = 1;
-		node.index = nil;
-	
-		sprite:on(EVENT_ENGINE_SPRITE_CLICK,clickEvt,node);
-		
-		return node;
-	end
-	--节点销毁回调
-	local function f_dispose(node)
-		if(node.tf) then
-			--fext_dispose(node.tf);
-			node.tf:dispose();
-			node.tf = nil;
-		end
-		
-		node.skin:dispose();
-	end
-
-	--刷新视图
-	local function itemRefreshFunc(node)
-	--    print(node.data);
-		if(node.tf) then
-			--fext_clear(node.tf);
-			local str = string.format("i = %d,__%d",node.index,node.data);
-			--ftext_parse(node.tf,str);
-			node.tf:set_text(str);
-		end
-		--print("index",node.index,"刷新视图,设置数据",node.data);
-	end
-
-	local t = {}; --{10,20,30,40,50,60,70,80,90,100,110,120};
-
-	for i = 1,10,1 do
-		t[i] = i;
-	end
-	--print(#t);--table的长度
-	
-	--*************************************************************************************
-	--初始化
-	sv = scrollView_init(100,itemHeight*4,posx,posy);
-	sv.itemFunc = f_create;				--设置itemRende的创建回调
+--绑定相关的回调函数
+function ScrollView:bind(f_create,itemRefreshFunc,f_dispose)
+	local sv = self;
+	sv.itemFunc = 	f_create;				--设置itemRende的创建回调
 	sv.itemRefreshFunc = itemRefreshFunc;	--设置刷新视图的回调
 	sv.itemDisposeFunc = f_dispose;		--设置itemRender销毁回调函数
-	cam = scrollView_get_cam(sv);
-	scrollView_set_data(sv,t);
-	--*************************************************************************************
-	return sv;
 end
+
+--设置坐标
+function ScrollView:set_pos(x,y)
+	scrollView_set_pos(self,x,y);
+end
+--设置数据
+function ScrollView:set_data(data)
+	scrollView_set_data(self,data);
+end
+--销毁
+function ScrollView:dispose()
+	scrollView_dispose(self);
+end
+

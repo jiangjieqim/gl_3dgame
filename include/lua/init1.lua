@@ -21,16 +21,6 @@ JEngine:getIns():get_cam():set_pos(0,-4,-12);
 
 
 
-local function f_tex_complete(p)
-	
-	local sc = example_srollView(100,100);
-	--scrollView_dispose(sc);
-
-end
-loadtexs("checkbox.png;smallbtn.png",f_tex_complete);
-
-
-
 
 --[[
 infowin(150,0);
