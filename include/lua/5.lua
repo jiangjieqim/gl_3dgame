@@ -1,5 +1,3 @@
--- dofile("..\\include\\lua\\core.lua")
-
 print('#######################\t材质测试\t#######################')
 
 --加载一个obj 使用vbo模式
@@ -190,12 +188,9 @@ end
 
 -- #########################################################
 
--- cam:position(0,0,-2)
 -- load_alpha_model()
 
-
-local cam3d = JEngine:getIns():get_cam();
-cam3d:set_pos(0,0,-10);
+--JEngine:getIns():get_cam():set_pos(0,0,-10);
 local list = f_shader_init();
 
 -- listbox_select(list,0)--默认选择一个

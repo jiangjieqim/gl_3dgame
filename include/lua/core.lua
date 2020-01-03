@@ -92,7 +92,6 @@ dofile("..\\include\\lua\\stack.lua")
 dofile("..\\include\\lua\\xml.lua")	--xml组件
 dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
-dofile("..\\include\\lua\\ftext.lua");
 
 
 --转化出一个地址
@@ -375,9 +374,9 @@ function func_addnode(parent,n,x,y)
 	y = y or 0;
 	local _type = n.type;
 	
-	if(_type == UI_TYPE.Label) then
-		func_addchild(parent,ftext_get_container(n.tf),x,y);
-	elseif(_type == UI_TYPE.ScrollBar) then
+--	if(_type == UI_TYPE.Label) then
+--		func_addchild(parent,ftext_get_container(n.tf),x,y);
+	if(_type == UI_TYPE.ScrollBar) then
 		func_addchild(parent,scrollBar_get_container(n),x,y);
 	elseif(_type == UI_TYPE.Button)then
 		func_addchild(parent,btn_get_container(n),x,y);
