@@ -37,6 +37,14 @@ function LineNode:new(cnt,isPoint,name)
 	return self;
 end
 
+--[[
+	修改对应索引的坐标
+	index 从0开始
+--]]
+function LineNode:mod(index,x,y,z)
+	linenode("mod",self.p,index,x,y,z);
+end
+
 function LineNode:push(x,y,z)
 	linenode("push",self.p,x,y,z);
 end

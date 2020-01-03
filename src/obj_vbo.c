@@ -24,6 +24,13 @@ objData_dispose(struct ExportOBJ_Data* obj)
 	tl_free(obj->ptrIndex);
 	tl_free(obj);
 }
+
+void
+vbo_sub_data(GLuint p,int offset,GLfloat* v,int size){
+	glBindBuffer(GL_ARRAY_BUFFER,p);
+	glBufferSubData(GL_ARRAY_BUFFER,offset,size,v);
+}
+
 //Ïú»Ùvbo
 void 
 vbo_dispose(struct ObjVBO* p){

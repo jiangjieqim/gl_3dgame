@@ -1,4 +1,5 @@
 #include <memory.h>
+#include <assert.h>
 #include "linenode.h"
 #include "tlgl.h"
 #include "tl_malloc.h"
@@ -59,6 +60,19 @@ void linenode_push(void* p,float x,float y,float z){
 	memcpy(line->verts+line->index,&pos,sizeof(struct Vec3));
 	line->index+=3;
 }
+
+void linenode_mod(void* p,int index,float x,float y,float z){
+	struct LineNode* line = (struct LineNode*)p;
+	struct Vec3 pos;
+	pos.x = x;
+	pos.y = y;
+	pos.z = z;
+	if(index>line->vbo->renderVertCount-1)
+		assert(0);//指定的 index 索引溢出了
+	else
+		vbo_sub_data(line->vbo->vertexID,index*3*sizeof(GLfloat),&pos,sizeof(struct Vec3));
+}
+
 void f_freeVert(struct LineNode* line){
 	if(line->verts){
 		tl_free(line->verts);

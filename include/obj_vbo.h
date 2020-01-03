@@ -76,4 +76,10 @@ void objVBO_renderNode(
 						void (*renderCallBack)(int,struct ObjVBO*));
 //销毁vbo
 void vbo_dispose(struct ObjVBO* p);
+
+//	修改vbo缓冲区中的数据,可以是顶点坐标,顶点uv,顶点方向向量数据,上传数据到GPU
+//	offset:缓冲区偏移值
+//	v:上传的顶点数据客户端地址
+//	size:上传的顶点数据的字节长度
+void vbo_sub_data(GLuint vert,int offset,GLfloat* v,int size);
 #endif

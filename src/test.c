@@ -1074,6 +1074,14 @@ REG_linenode(lua_State *L){
 		float z =  lua_tonumber(L,5);
 		linenode_push(ptr,x,y,z);
 		return 0;
+	}else if(!strcmp(funcName,"mod")){
+		void* ptr = (void*)lua_tointeger(L,2);
+		int index = lua_tointeger(L,3);
+		float x =  lua_tonumber(L,4);
+		float y =  lua_tonumber(L,5);
+		float z =  lua_tonumber(L,6);
+		linenode_mod(ptr,index,x,y,z);
+		return 0;
 	}else if(!strcmp(funcName,"setcolor")){
 		void* ptr = (void*)lua_tointeger(L,2);
 		float r =  lua_tonumber(L,3);

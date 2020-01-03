@@ -18,10 +18,33 @@ JEngine:getIns():get_cam():set_pos(0,-4,-15);
 
 
 --*******************************************
+
 infowin(150,0);
-local e1 = Editor:new();
+--local e1 = Editor:new();
 
 --dofile("..\\include\\lua\\5.lua");
+
+
+
+
+
+
+local s= LineNode:new(3);
+s:push(-0.5,0.4,0.5);
+s:push( 0.5, 0.0, 0.5);
+s:push( -0.5, -0.49, -0.5);
+s:setcolor(1,0,0);
+s:pushend();
+
+s:mod(0,1,0,0);
+s:mod(2,0,0,0);
+--s:dispose();--Ïú»Ù
+
+
+
+
+
+
 
 JEngine:getIns():get_cam():refresh();
 --print(_VERSION) ;

@@ -356,4 +356,3 @@ end
 function ScrollView:dispose()
 	scrollView_dispose(self);
 end
-
