@@ -24,21 +24,11 @@ end
 local function func_set_position(o,x,y,z)
 	change_attr(o,"set_position",string.format("%f,%f,%f",x,y,z));
 end
---改变对象的Rotate x的值
-local function func_setRotateX(o,value)
-	change_attr(o,"rx",tostring(value));
-end
+
 local function func_get_scale(o)
 	return get_attr(o,"scale");
 end
---改变对象的Rotate y的值
-local function func_setRotateY(o,value)
-	change_attr(o,"ry",tostring(value));
-end
---改变对象的Rotate z的值
-local function func_setRotateZ(o,value)
-	change_attr(o,"rz",tostring(value));
-end
+
 --设置坐标
 local function func_set_x(o,x)
 	change_attr(o,"x",x)
@@ -139,9 +129,6 @@ function NUnit:get_pos()
 	return get_attr(self.p,"xyz");
 end
 
-function NUnit:rx(v)
-    func_setRotateX(self.p,v)
-end
 
 --绕自定义轴旋转r欧拉角
 --normal 是否单位化向量
@@ -154,11 +141,19 @@ function NUnit:rotate_vec(r,x,y,z)
 	change_attr(self.p,"rotate_vec",x,y,z,r);
 end
 
+
+function NUnit:rx(v)
+    --func_setRotateX(self.p,v)
+    self:rotate_vec(v,1,0,0);
+end
+
 function NUnit:ry(v)
-    func_setRotateY(self.p,v)
+--    func_setRotateY(self.p,v)
+    self:rotate_vec(v,0,1,0);
 end
 function NUnit:rz(v)
-    func_setRotateZ(self.p,v)
+--    func_setRotateZ(self.p,v)
+    self:rotate_vec(v,0,0,1);
 end
 function NUnit:x(v)
     func_set_x(self.p,v);

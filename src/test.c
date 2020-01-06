@@ -2022,30 +2022,32 @@ REG_change_attr(lua_State *L)
 	}
 
 	//=====================================================
-	//rx
-	if(!strcmp(attrKey,"rx"))
-	{	
-		base->rx=toFloat(str);
-		base_updateMat4x4(base);
-		//updateRotateY(base);
-		change = 1;
-	}
-	//ry
-	if(!strcmp(attrKey,"ry"))
-	{	
-		base->ry=toFloat(str);
-		base_updateMat4x4(base);
-		//updateRotateY(base);
-		change = 1;
-	}
-	//ry
-	if(!strcmp(attrKey,"rz"))
-	{	
-		base->rz=toFloat(str);
-		base_updateMat4x4(base);
-		//updateRotateY(base);
-		change = 1;
-	}
+	
+	////rx
+	//if(!strcmp(attrKey,"rx"))
+	//{	
+	//	base->rx=toFloat(str);
+	//	base_updateMat4x4(base);
+	//	//updateRotateY(base);
+	//	change = 1;
+	//}
+	////ry
+	//if(!strcmp(attrKey,"ry"))
+	//{	
+	//	base->ry=toFloat(str);
+	//	base_updateMat4x4(base);
+	//	//updateRotateY(base);
+	//	change = 1;
+	//}
+	////ry
+	//if(!strcmp(attrKey,"rz"))
+	//{	
+	//	base->rz=toFloat(str);
+	//	base_updateMat4x4(base);
+	//	//updateRotateY(base);
+	//	change = 1;
+	//}
+
 	//scale修改其缩放
 	if(!strcmp(attrKey,"scale"))
 	{

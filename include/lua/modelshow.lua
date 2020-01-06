@@ -22,7 +22,7 @@ local function addmd2_fbo(fbo)
 	----bauul,triangle
 	
 	
---[[
+----[[
 	local n = Md5Unit:new();
 	n:load(cam);
 	n:set_position(0,0,-2);
@@ -57,7 +57,7 @@ local function addmd2_fbo(fbo)
 	
 	--n:set_fps(30);
 	
-----[[
+--[[
 	--加载一个vbo类型的OBJ
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\obj\\pipe.obj","//resource//material//horse.mat",cam);
@@ -147,7 +147,9 @@ end
 
 local function f_set_rotate(progress,self)
 --	print(progress,self);
-	self.u:rotate_vec(PI*progress,1,0,0);
+	--self.u:rotate_vec(PI*progress,1,0,0);
+
+	 --self.u:rx(PI * progress);
 end
 
 local function ef(data,self)
