@@ -14,3 +14,4 @@
 
 <ui name="ck" type="CheckBox" y="200" label="ck" parent="1"/>
 
+<ui name="rotate" type="NScrollBar" y="220" parent="1"/>

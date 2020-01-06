@@ -2,7 +2,6 @@ function vec_distance(x0, y0, z0, x1, y1, z1)
     return math.sqrt(math.pow(x0 - x1, 2) + math.pow(y0 - y1, 2) + math.pow(z0 - z1, 2));
 end
 
-
 -- float vec3Length(struct Vec3* v){
 -- //Æ½·½¸ùx*x + y*y + z*z
 -- return	(float)sqrt(v->x*v->x + v->y*v->y + v->z*v->z );
@@ -32,7 +31,7 @@ function vec3Normalize(x, y, z)
     y = y / length;
 
     z = z / length;
-    return x, y, z
+    return x, y, z;
 end
 
 -- ²æ³Ë

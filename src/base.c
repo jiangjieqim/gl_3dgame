@@ -61,7 +61,7 @@ void
 base_realUpdateMat4x4(void* p){
 
 	struct HeadInfo* base = (struct HeadInfo*)p;
-	Matrix44f xyz,scale,rx,ry,rz;
+	Matrix44f xyz,scale;
 	if(!base->changed){
 		return;
 	}
@@ -78,6 +78,10 @@ base_realUpdateMat4x4(void* p){
 	mat4x4_scale(scale,base->scale,base->scale,base->scale);
 
 	//旋转===================================================
+
+	/*
+	{
+	Matrix44f rx,ry,rz;
 	//rx
 	mat4x4_identity(rx);
 	//mat4x4_rotateX(rx,PI-base->rx);
@@ -92,6 +96,13 @@ base_realUpdateMat4x4(void* p){
 	mat4x4_rotateZ(rz,base->rz);
 
 	mat4x4_mult(5,*base->m,xyz,ry,rx,rz,scale);	//矩阵base->m = xyz * ry * rx * rz * scale
+	}
+	*/
+	{
+		Matrix44f am;
+		mat4x4_rotate_vec(am,base->angle,base->ax,base->ay,base->az);
+		mat4x4_mult(3,*base->m,xyz,am,scale);
+	}
 }
 /*
 	当位置，缩放,旋转发生变化的时候更新矩阵
@@ -111,6 +122,21 @@ base_setPos(struct HeadInfo* base,float x,float y,float z)
 	base->x = x;
 	base->y = y;
 	base->z = z;
+	base_updateMat4x4(base);
+}
+
+void
+base_rotate_vec(struct HeadInfo* base,float ax,float ay,float az,float angle){
+	struct Vec3 pos;
+	pos.x = ax;
+	pos.y = ay;
+	pos.z = az;
+	vec3Normalize(&pos);
+
+	base->angle = angle;
+	base->ax = pos.x;
+	base->ay = pos.y;
+	base->az = pos.z;
 	base_updateMat4x4(base);
 }
 

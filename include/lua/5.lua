@@ -83,7 +83,7 @@ local function load_alpha_model(objName)
     local m = createMaterial("vboDiffuse", "\\resource\\texture\\leaf.tga");
     setMaterial(o, m);
     f_set_obj_flags(o);
-    func_print(string.format('load_alpha_model 消耗 %d ms', func_get_longTime() - time))
+    func_print(string.format('load_alpha_model 消耗 %d ms', func_get_longTime() - time));
     return o;
 end
 local function f_setLabel(label, obj)
@@ -170,7 +170,7 @@ end
 -- 初始化listbox,用来测试不同的材质
 local function f_shader_init()
 	--local list = listbox_new(0,50);
-		local list = NListBox:new(200,50,128);
+	local list = NListBox:new(200,50,128);
 	list:addItem("diffuse");
 	list:addItem("ploygonLine");
 	list:addItem("outline");

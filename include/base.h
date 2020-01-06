@@ -19,6 +19,9 @@ typedef struct HeadInfo{
 	double x,y,z;
 
 	float rx,ry,rz;
+	
+	//旋转轴和角度
+	float ax,ay,az,angle;
 
 	/*缩放值*/
 	float scale;
@@ -219,4 +222,8 @@ base_get_cam(void* p);
 	v:1 显示 0 隐藏
 */
 void base_set_visible(struct HeadInfo* base,int v);
+
+//绕自定义轴旋转
+void base_rotate_vec(struct HeadInfo* base,float ax,float ay,float az,float angle);
+
 #endif

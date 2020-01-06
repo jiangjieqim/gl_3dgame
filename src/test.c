@@ -1827,9 +1827,14 @@ static int
 REG_change_attr(lua_State *L)
 {
 	int ptr = lua_tointeger(L,1);			//对象指针如Sprite,Ent3d,md2,md5
+
 	const char* attrKey = lua_tostring(L,2);//改变的属性关键字
+	
+	//**********************************
 	const char* str = lua_tostring(L,3);	//改变的数据1
 	const char* str2 = lua_tostring(L,4);	//改变的数据2
+
+
 	struct HeadInfo* base =base_get((void*)ptr);
 	struct Node* node = (struct Node*)ptr;
 	int change = 0;
@@ -1946,6 +1951,13 @@ REG_change_attr(lua_State *L)
 		float x,y;
 		sscanf_s(str,"%f,%f",&x,&y);
 		sprite_setpos((struct Sprite*)ptr,x,y);
+	}else if(!strcmp(attrKey,"rotate_vec")){
+		base_rotate_vec(base,
+			lua_tonumber(L,3),
+			lua_tonumber(L,4),
+			lua_tonumber(L,5),
+			lua_tonumber(L,6));
+		return 0;
 	}
 
 	//设置sprite对象的相对于父对象的坐标

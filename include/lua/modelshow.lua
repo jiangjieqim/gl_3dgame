@@ -17,17 +17,12 @@ ModleShow.__index = ModleShow;
 
 --增加一个md2渲染对象到fbo对象引用中
 local function addmd2_fbo(fbo)
-	
-	
 	local cam = fbo:get_cam3d();
-	--cam = nil;
-	
+	cam = nil;
 	----bauul,triangle
-
-
-
-
-----[[
+	
+	
+--[[
 	local n = Md5Unit:new();
 	n:load(cam);
 	n:set_position(0,0,-2);
@@ -62,11 +57,11 @@ local function addmd2_fbo(fbo)
 	
 	--n:set_fps(30);
 	
---[[
+----[[
 	--加载一个vbo类型的OBJ
 	local n = UnitBase:new();
-	n:loadvbo("\\resource\\obj\\pipe.obj","//resource//material//bauul.mat",cam);
-	n:set_position(0,0,-5);
+	n:loadvbo("\\resource\\obj\\pipe.obj","//resource//material//horse.mat",cam);
+	--n:set_position(0,0,-5);
 	n:load_collide(nil,true);
 	
 --]]
@@ -150,6 +145,11 @@ local function btnClick(self)
 
 end
 
+local function f_set_rotate(progress,self)
+--	print(progress,self);
+	self.u:rotate_vec(PI*progress,1,0,0);
+end
+
 local function ef(data,self)
 	local skin = self.nskin;
 	local label = skin:find("info_label");
@@ -198,6 +198,9 @@ local function f_cpmlete(self)
 	evt_on(timer,EVENT_TIMER,ef,self);
 	
 	
+	local rotate = skin:find("rotate");
+	rotate:bindCallback(f_set_rotate,self);
+
 
 end
 

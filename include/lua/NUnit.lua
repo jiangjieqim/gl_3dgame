@@ -142,6 +142,18 @@ end
 function NUnit:rx(v)
     func_setRotateX(self.p,v)
 end
+
+--绕自定义轴旋转r欧拉角
+--normal 是否单位化向量
+function NUnit:rotate_vec(r,x,y,z)
+--[[	if(normal) then
+		local x1,y1,z1 = vec3Normalize(x,y,z);
+		
+		print(x1,y1,z1);
+	end--]]
+	change_attr(self.p,"rotate_vec",x,y,z,r);
+end
+
 function NUnit:ry(v)
     func_setRotateY(self.p,v)
 end
