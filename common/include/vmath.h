@@ -91,6 +91,9 @@ DLLIMPORT void mat4x4_rotateXYZ(Matrix44f M, float radian, float x, float y, flo
 DLLIMPORT void perspectiveFrustum(Matrix44f M, float left, float right, float top, float bottom, float near, float far); //透视投影
 DLLIMPORT void mat4x4_orthoPerspect(Matrix44f M, float left, float right, float top, float bottom, float near, float far);  //正交投影
 
+//绕x,y,z方向向量旋转r度
+DLLIMPORT void mat4x4_rotate_vec(Matrix44f M,float r,float x,float y,float z);
+
 //void matrix_m(float **a_matrix, const float **b_matrix, const float **c_matrix,
 //			  int krow, int kline, int kmiddle, int ktrl);
 /*
