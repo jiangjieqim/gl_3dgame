@@ -330,9 +330,12 @@ void mat4x4_rotateX(Matrix44f M, float radian)
     M[15] =1.0;
 }
 
+//绕自定义轴向量旋转
 void mat4x4_rotate_vec(Matrix44f M,float r,float x,float y,float z){
-	
+	//page 94
+
 	mat4x4_identity(M);
+	//mat4x4_zero(M);
 
 	M[0] = x*x*(1-(float)cos(r))+(float)cos(r);	
 	M[1] = x*y*(1-(float)cos(r))+z*(float)sin(r);
@@ -341,12 +344,14 @@ void mat4x4_rotate_vec(Matrix44f M,float r,float x,float y,float z){
 	
 	M[4] = x*y*(1-(float)cos(r))-z*(float)sin(r);
 	M[5] = y*y*(1-(float)cos(r))+(float)cos(r);
-	M[6] = y*z*(1-(float)cos(r))+z*(float)sin(r);
+	M[6] = y*z*(1-(float)cos(r))+x*(float)sin(r);
 	//M[7] = 0;
 
 	M[8] = x*z*(1-(float)cos(r)) + y*(float)sin(r);
-	M[9] = y*z*(1-(float)cos(r)) + x*(float)sin(r);
+	M[9] = y*z*(1-(float)cos(r)) - x*(float)sin(r);
 	M[10]= z*z*(1-(float)cos(r)) + (float)cos(r);
+
+	mat4x4_transpose(M);//Opengl矩阵需要转置
 }
 
 void mat4x4_rotateY(Matrix44f M, float radian)
