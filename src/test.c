@@ -1449,13 +1449,13 @@ REG_get_attr(lua_State *L)
 		lua_pushnumber(L,base->z);
 		return 3;
 	}
-	if(!strcmp(attrKey,"rotate"))
-	{
-		lua_pushnumber(L,base->rx);
-		lua_pushnumber(L,base->ry);
-		lua_pushnumber(L,base->rz);
-		return 3;
-	}
+	//if(!strcmp(attrKey,"rotate"))
+	//{
+	//	lua_pushnumber(L,base->rx);
+	//	lua_pushnumber(L,base->ry);
+	//	lua_pushnumber(L,base->rz);
+	//	return 3;
+	//}
 
 	//if(!strcmp(attrKey,"suffix"))
 	//{
@@ -2085,7 +2085,7 @@ REG_change_attr(lua_State *L)
 			vec3Normalize(&pos);
 			ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);
 			//ry = abs(ry);
-			printf("%.3f to %.3f\n",base->ry,ry);
+			//printf("%.3f to %.3f\n",base->ry,ry);
 			//base_rotate_to(base,time,ry);
 
 		}
@@ -2843,16 +2843,16 @@ loadXml(int* pLogStat,int* pMemory,
 	xml_del(xml);
 }
 
-static void leftRayPickCallBack(struct HitResultObject* hit)
-{
-	struct HeadInfo* _node = ex_find_headinfo(ex,hit->name);
-	if(_node)
-	{
-		//按着拾取的物体旋转
-		_node->ry	+=	0.01f;
-		base_updateMat4x4(_node);
-	}
-}
+//static void leftRayPickCallBack(struct HitResultObject* hit)
+//{
+//	struct HeadInfo* _node = ex_find_headinfo(ex,hit->name);
+//	if(_node)
+//	{
+//		//按着拾取的物体旋转
+//		_node->ry	+=	0.01f;
+//		base_updateMat4x4(_node);
+//	}
+//}
 
 //static void loopCallBack(void)
 //{

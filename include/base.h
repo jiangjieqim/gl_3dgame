@@ -18,7 +18,8 @@ typedef struct HeadInfo{
 	/*坐标*/
 	double x,y,z;
 
-	float rx,ry,rz;
+	//float rx,ry,rz;
+	float ry;
 	
 	//旋转轴和角度
 	float ax,ay,az,angle;

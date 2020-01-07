@@ -90,6 +90,12 @@ end
 function NUnit:drawPloygonLine(v)
 	self:f_set_flag(FLAGS_DRAW_PLOYGON_LINE,v);
 end
+
+--反转面
+function NUnit:reverse_face(v)
+	self:f_set_flag(FLAGS_REVERSE_FACE,v);
+end
+
 --[[
 --背面剔除
 function NUnit:cullFace(v)
@@ -121,7 +127,8 @@ end
 
 --获取rx,ry,rz的值
 function NUnit:get_rotate()
-	return get_attr(self.p,"rotate");
+	--return get_attr(self.p,"rotate");
+	func_error("未实现!");
 end
 
 --获取其x,y,z坐标

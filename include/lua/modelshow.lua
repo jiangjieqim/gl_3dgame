@@ -11,6 +11,7 @@ ModleShow = {
 	fbo,
 	
 	u,--UnitBase
+	editor,
 };
 ModleShow.__index = ModleShow;
 
@@ -149,7 +150,7 @@ local function f_set_rotate(progress,self)
 --	print(progress,self);
 	--self.u:rotate_vec(PI*progress,1,0,0);
 
-	 --self.u:rx(PI * progress);
+	self.u:rx(PI * progress);
 end
 
 local function ef(data,self)
@@ -203,16 +204,18 @@ local function f_cpmlete(self)
 	local rotate = skin:find("rotate");
 	rotate:bindCallback(f_set_rotate,self);
 
-
+	--self.editor:dispose();
 end
 
-function ModleShow:new()
+function ModleShow:new(editor)
 	local self = {};
 	setmetatable(self, ModleShow);
 	
 	local function f_cpmleteHandler(skin)
 		f_cpmlete(self);
 	end
+	self.editor = editor;
+	
 	local nskin = NSkin:new();
 	self.nskin = nskin;
 	evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmleteHandler);
@@ -226,8 +229,13 @@ function ModleShow:dispose()
 	if(self.fbo) then
 		self.fbo:dispose();
 	end
+	if(self.nskin) then
+		self.nskin:dispose();
+	end
 	
-	self.nskin:dispose();
+	if(self.u) then
+		self.u:dispose();
+	end
 	
 	func_clearTableItem(self);
 end

@@ -96,7 +96,6 @@ getvbo(struct Sprite* p)
 	 ¶¥µã¿ç¶È
 */
 #define  VBO_VERTEX_SPLINE 5	//u v x y z
-static void updateSpriteMat4x4(struct Sprite* b,float x,float y,float z,float scaleX,float scaleY,float scaleZ,float _rx,float _ry,float _rz);
 //´òÓ¡uv GL_T2F_N3F_V3F
 static void 
 printfVertex(GLfloat* vert,int vertLength)
@@ -708,11 +707,11 @@ sprite_isEnable(int data)
 static void
 updateSpriteMat4x4(struct Sprite* p,
 				   float x,float y,float z,
-				   float sx,float sy,float sz,
-				   float rx,float ry,float rz)
+				   float sx,float sy,float sz)
 {
 
-	Matrix44f xyz,m_scale,m_rx,m_ry,m_rz, result,tmp2,tmp3;
+	struct HeadInfo* base = p->base;
+	Matrix44f xyz,m_scale, result,tmp2,tmp3;
 	mat4x4_zero(p->mat4x4);
 	mat4x4_zero(result);
 	mat4x4_zero(tmp2);
@@ -726,23 +725,32 @@ updateSpriteMat4x4(struct Sprite* p,
 	mat4x4_identity(m_scale);
 	mat4x4_scale(m_scale,sx,sy,sz);
 
-	//rx
-	mat4x4_identity(m_rx);
-	mat4x4_rotateX(m_rx,rx);
+	//	Matrix44f m_rx,m_ry,m_rz;
+	////rx
+	//mat4x4_identity(m_rx);
+	//mat4x4_rotateX(m_rx,rx);
 
-	//ry
-	mat4x4_identity(m_ry);
-	mat4x4_rotateY(m_ry,ry);
+	////ry
+	//mat4x4_identity(m_ry);
+	//mat4x4_rotateY(m_ry,ry);
 
-	//rz
-	mat4x4_identity(m_rz);
-	mat4x4_rotateZ(m_rz,rz);//PI/2
+	////rz
+	//mat4x4_identity(m_rz);
+	//mat4x4_rotateZ(m_rz,rz);//PI/2
 
-	multi2(tmp2,m_ry,m_rx);		//ry,rx¸´ºÏ±ä»»
-	multi2(tmp3,tmp2,m_rz);	//rz  *(ry * rx)¸´ºÏ±ä»»
-	multi2(result,tmp3,m_scale);//Ëõ·Å¾ØÕó
-	
-	multi2(p->mat4x4,xyz,result);//Î»ÒÆ¾ØÕó
+	//multi2(tmp2,m_ry,m_rx);		//ry,rx¸´ºÏ±ä»»
+	//multi2(tmp3,tmp2,m_rz);	//rz  *(ry * rx)¸´ºÏ±ä»»
+	//multi2(result,tmp3,m_scale);//Ëõ·Å¾ØÕó
+	//
+	//multi2(p->mat4x4,xyz,result);//Î»ÒÆ¾ØÕó
+
+
+	{
+		Matrix44f am;
+		mat4x4_rotate_vec(am,base->angle,base->ax,base->ay,base->az);
+		mat4x4_mult(3,p->mat4x4,xyz,am,m_scale);
+	}
+
 }
 //void
 //sprite_set_default_tex(void* ptr){
@@ -845,7 +853,7 @@ updateMatrix(struct Sprite* p)
 	struct HeadInfo* b = p->base;
 	//p->zScale = 1.5;
 	float sc = p->zScale;
-	updateSpriteMat4x4(p,b->x,b->y,b->z,p->mWidth*sc,p->mHeight*sc,sc,b->rx,b->ry,b->rz);
+	updateSpriteMat4x4(p,b->x,b->y,b->z,p->mWidth*sc,p->mHeight*sc,sc);
 }
 #define  _Time_Delay_  10//µã»÷µÄÑÓ³ÙÊ±¼ä(ºÁÃë)		10ºÁÃë»Ö¸´×´Ì¬
 //°´Å¥ÌØÐ§
@@ -1370,19 +1378,22 @@ static void f_refreshChildPos(void* ptr){
 void
 sprite_rotateX(struct Sprite* ptr,float rx){
 	struct HeadInfo* b = (struct HeadInfo*)ptr->base;
-	b->rx = rx;
+	//b->rx = rx;
+	base_rotate_vec(b,1,0,0,rx);
 	updateMatrix(ptr);
 }
 void
 sprite_rotateY(struct Sprite* ptr,float ry){
 	struct HeadInfo* b = (struct HeadInfo*)ptr->base;
-	b->ry = ry;
+	//b->ry = ry;
+	base_rotate_vec(b,0,1,0,ry);
 	updateMatrix(ptr);
 }
 void
 sprite_rotateZ(struct Sprite* ptr,float rz){
 	struct HeadInfo* b = (struct HeadInfo*)ptr->base;
-	b->rz = rz;
+	//b->rz = rz;
+	base_rotate_vec(b,0,0,1,rz);
 	updateMatrix(ptr);
 }
 void 

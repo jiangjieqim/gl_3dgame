@@ -659,8 +659,6 @@ base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
 
 		vec3Normalize(&pos);
 
-		
-
 		p->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);
 
 		base_updateMat4x4(p);
