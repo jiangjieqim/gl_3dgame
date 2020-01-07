@@ -1030,7 +1030,9 @@ ex_init(struct EX* p,GLdouble zfar,float sw,float sh){
 void ex_dispose(struct EX* p){
 	printf("销毁引擎设备!\n");
 	//getch();
-	
+	if(p->hit){
+		tl_free(p->hit);
+	}
 	cam_dispose(p->_3dcam);
 	p->_3dcam = 0;
 	cam_dispose(p->_2dcam);
@@ -1558,16 +1560,23 @@ f_rayPick(struct HitResultObject* hit){
 	//################HeadInfo拾取点击回调
 	{
 		void * ptr = ex_find(hit->name);
+		if(!ex_getIns()->hit){
+			ex_getIns()->hit = (struct HitResultObject*)tl_malloc(sizeof(struct HitResultObject));
+			memset(ex_getIns()->hit,0,sizeof(struct HitResultObject));
+		}
+
 		evt_dispatch((void*)base_get(ptr),EVENT_RAY_PICK,(void*)hit);//给引擎层发送事件
 		
 		{
-			char bufferXml[G_BUFFER_128_SIZE];
-			memset(bufferXml,0,G_BUFFER_128_SIZE);
+			//char bufferXml[G_BUFFER_128_SIZE];
+			//memset(bufferXml,0,G_BUFFER_128_SIZE);
 			//构造xml数据
 			//sprintf_s(bufferXml,G_BUFFER_128_SIZE,"<luadata x=\"%.3f\" y=\"%.3f\" z=\"%.3f\"/>",hit->x,hit->y,hit->z);
-			sprintf_s(bufferXml,G_BUFFER_128_SIZE,"%.3f,%.3f,%.3f",hit->x,hit->y,hit->z);
+			//sprintf_s(bufferXml,G_BUFFER_128_SIZE,"%.3f,%.3f,%.3f",hit->x,hit->y,hit->z);
 			//printf("bufferXML %0x\n",bufferXml);
-			ex_lua_evt_dispatch(ptr,EVENT_RAY_PICK,bufferXml);//给lua层发送事件
+			//ex_lua_evt_dispatch(ptr,EVENT_RAY_PICK,0);//给lua层发送事件
+			memcpy(ex_getIns()->hit,hit,sizeof(struct HitResultObject));
+			ex_lua_evt_dispatch_f(ptr,EVENT_RAY_PICK,0);
 		}
 	}
 }

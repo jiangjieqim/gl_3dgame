@@ -2,7 +2,6 @@ dofile("..\\include\\lua\\modelshow.lua")
 --************************************************************
 Editor = {
 	linelist,
-	floorm,
 	modelshow,
 };
 Editor.__index = Editor;
@@ -52,18 +51,7 @@ function Editor:new()
 	setmetatable(self, Editor);
 	self:createLine();
 	
-	local function loadfloor()
-		local n = UnitBase:new();
-		
-		n:loadvbo("\\resource\\obj\\plane.obj",
-			"//resource//material//horse.mat");
-		--n:reverse_face(true);
-		n:scale(10);
-		n:load_collide("\\resource\\obj\\plane.obj",true);
-		return n;
-	end
-	self.floorm = loadfloor();
-
+	
 	self.modelshow = ModleShow:new(self);
 	
 	return self;
@@ -82,9 +70,7 @@ function Editor:dispose()
 	if(self.linelist) then
 		stack_foreach(self.linelist,f_delLines);
 	end
-	if(self.floorm) then
-		self.floorm:dispose();
-	end
+	
 	if(self.modelshow) then
 		self.modelshow:dispose();
 	end

@@ -22,7 +22,8 @@ typedef struct HeadInfo{
 	float ry;
 	
 	//旋转轴和角度
-	float ax,ay,az,angle;
+	float ax,ay,az;
+	double angle;
 
 	/*缩放值*/
 	float scale;
@@ -52,6 +53,8 @@ typedef struct HeadInfo{
 		当前是3d物体的时候就是3dCam(md2,obj...)
 	*/
 	void* cam;
+
+	void* _ry_tp;
 }HeadInfo;
 
 /*
@@ -174,7 +177,7 @@ GLboolean base_cullface(int flag);
 /*
  *ms毫秒y轴旋转至ry
  **/
-//void base_rotate_to(HeadInfo* bp,float ms,float ry);
+void base_rotate_to(HeadInfo* bp,float ms,double a);
 
 /*
 	开始检测

@@ -152,6 +152,11 @@ local function func_look_at(o,x,y,z,time)
     time = time or 0;
 	change_attr(o,"lookat",string.format("%f,%f,%f,%f",x,y,z,time));
 end
+
+function UnitBase:look_at(x,y,z,time)
+	func_look_at(self.p,x,y,z,time);
+end
+
 function UnitBase:move(x,y,z)
     --print(x,y,z);
     x = tonumber(x);
@@ -176,7 +181,7 @@ function UnitBase:move(x,y,z)
 	local distance = vec_distance(px,py,pz,x,y,z);--求其平面距离
 	
 	func_look_at(o,x,y,z);--转向目标坐标
-	
+	--print("look at:",x,y,z);
 	func_set_anim(self.p,"run");
 	
     evt_off(o,EVENT_ENGINE_BASE_END,f_endCall);

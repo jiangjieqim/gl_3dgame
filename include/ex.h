@@ -150,7 +150,7 @@ struct EX
 		µ±Ç°Êó±ê×´Ì¬
 	*/
 	struct MouseState mouseState;
-
+	struct HitResultObject* hit;
 	lua_State* mylua;
 
 	/*

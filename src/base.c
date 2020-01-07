@@ -642,7 +642,7 @@ struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMat
 	base_seachPick(renderList,&nearPoint,&farPoint,&last);
 
 	if(last.isHit && mRayPickCallBack!=NULL){
-		log_color(0,"%s 交点:%.3f,%.3f,%.3f\n",last.name,last.x,last.y,last.z);
+		log_color(0,"name:%s 交点:%.3f,%.3f,%.3f\n",last.name,last.x,last.y,last.z);
 		mRayPickCallBack(&last);
 	}
 }
@@ -659,9 +659,11 @@ base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
 
 		vec3Normalize(&pos);
 
-		p->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);
+		//p->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);
+		
+		base_rotate_vec(p,0,1,0,vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f));
 
-		base_updateMat4x4(p);
+		//base_updateMat4x4(p);
 	}else{
 #ifdef DEBUG
 		printf("向量pos长度=0,导致计算朝向会有除0的情况,base_look_at%.3f %.3f\n",pos.x,pos.z);
@@ -670,20 +672,20 @@ base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
 }
 static void
 f_ry_tpUpdate(void* p){
-	HeadInfo* ptr = (HeadInfo*)p;
-	base_updateMat4x4(ptr);
+	struct HeadInfo* ptr = (HeadInfo*)p;
+	//base_updateMat4x4(ptr);
+	base_rotate_vec(ptr,0,1,0,ptr->angle);
 }
 
-/*
 void 
-base_rotate_to(HeadInfo* bp,float ms,float ry){
+base_rotate_to(HeadInfo* bp,float ms,double a){
 	void* _tweenPtr = bp->_ry_tp;
 	if(_tweenPtr && tween_is_play(_tweenPtr)){
 		tween_stop(_tweenPtr);
 	}
-	bp->_ry_tp=tween_to(bp,ms,0,f_ry_tpUpdate,2,&(bp->ry),ry);
+	bp->_ry_tp=tween_to(bp,ms,0,f_ry_tpUpdate,2,&(bp->angle),a);
 }
-*/
+
 void 
 base_move(HeadInfo* bp,int ms,
 		float x,float y,float z,

@@ -12,6 +12,9 @@ ModleShow = {
 	
 	u,--UnitBase
 	editor,
+	
+	floorm,
+
 };
 ModleShow.__index = ModleShow;
 
@@ -23,7 +26,7 @@ local function addmd2_fbo(fbo)
 	----bauul,triangle
 	
 	
-----[[
+--[[
 	local n = Md5Unit:new();
 	n:load(cam);
 	n:set_position(0,0,-2);
@@ -45,10 +48,11 @@ local function addmd2_fbo(fbo)
 	--anim:set_fps(1);
 	
 --]]
---[[
+----[[
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
-	n:set_position(0,0,-100);
+	--n:set_position(0,0,-100);
+	n:scale(0.02);
 	local anim = n:get_anim();
 	anim:push("jump",0,37);
 	anim:play("jump");
@@ -158,8 +162,9 @@ local function ef(data,self)
 	local label = skin:find("info_label");
 
 	local a = self.u:get_anim();
-	
-	label:set_text(a:cur_frame());
+	if(a~=nil)then
+		label:set_text(a:cur_frame());
+	end
 end
 
 local function f_cpmlete(self)
@@ -204,7 +209,27 @@ local function f_cpmlete(self)
 	local rotate = skin:find("rotate");
 	rotate:bindCallback(f_set_rotate,self);
 
-	--self.editor:dispose();
+	local function f_bindRayClick(p)
+		local x,y,z = JEngine:getIns():get_hit();
+		--print('**********',x,y,z);
+		--self.u:move(x,y,z);
+		self.u:look_at(x,y,z,1000);
+	end
+	local function loadfloor()
+		local n = UnitBase:new();
+		
+		n:loadvbo("\\resource\\obj\\plane.obj",
+			"//resource//material//horse.mat");
+		--n:reverse_face(true);
+		n:scale(10);
+		n:load_collide("\\resource\\obj\\plane.obj",true);
+		n:bindRayPick(f_bindRayClick);
+		return n;
+	end
+	self.floorm = loadfloor();
+
+
+	--	self.editor:dispose();
 end
 
 function ModleShow:new(editor)
@@ -236,6 +261,8 @@ function ModleShow:dispose()
 	if(self.u) then
 		self.u:dispose();
 	end
-	
+	if(self.floorm) then
+		self.floorm:dispose();
+	end
 	func_clearTableItem(self);
 end

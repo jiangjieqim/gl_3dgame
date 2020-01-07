@@ -32,6 +32,11 @@ function JEngine:screen_size()
 	return get_attr(nil,"screenSize");
 end
 
+--获取点击的坐标
+function JEngine:get_hit()
+	return get_attr(nil,"hit");
+end
+
 function JEngine:get_atals()
     return self.atals;
 end

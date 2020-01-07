@@ -1481,6 +1481,14 @@ REG_get_attr(lua_State *L)
 		lua_pushnumber(L,ex->_screenHeight);
 		return 2;
 	}
+	if(!strcmp(attrKey,"hit")){
+		struct EX* ex = ex_getIns();
+		struct HitResultObject* hit = ex->hit;
+		lua_pushnumber(L,hit->x);
+		lua_pushnumber(L,hit->y);
+		lua_pushnumber(L,hit->z);
+		return 3;
+	}
 	else if(!strcmp(attrKey,"get_longTime")){
 		lua_pushnumber(L,get_longTime());
 		return 1;
@@ -2075,7 +2083,8 @@ REG_change_attr(lua_State *L)
 		}else{
 			Vec3 pos;
 			//printf("==\n");
-			float ry;
+			//float ry;
+			//float a;
 			float x0 = x - base->x;
 			float y0 = y - base->y;
 			float z0 = z - base->z;
@@ -2083,10 +2092,11 @@ REG_change_attr(lua_State *L)
 			vec3Set(&pos,x,y,z);
 
 			vec3Normalize(&pos);
-			ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);
+
+			//base_rotate_vec(base,0,1,0,a);
 			//ry = abs(ry);
 			//printf("%.3f to %.3f\n",base->ry,ry);
-			//base_rotate_to(base,time,ry);
+			base_rotate_to(base,time,vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f));
 
 		}
 		
