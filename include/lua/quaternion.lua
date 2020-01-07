@@ -1,10 +1,11 @@
-cam:position(0, 0, -5);
+--cam:position(0, 0, -5);
 -- cam:rx(PI * 1.7);
+JEngine:getIns():get_cam():set_pos(0,0,-5);
 
 
 
-local function func_quat(x0, y0, x1, y1, v)
-    return quat("Quat_slerp", string.format("%f,%f,%f,%f,%f", x0, y0, x1, y1, v));
+local function func_quat(x0, y0, z0, x1, y1,z1, v)
+    return quat("Quat_slerp", x0, y0,z0, x1, y1,z1, v);
 end
 
 -- 求垂直向量
@@ -29,15 +30,18 @@ local function f_load_c()
     box1:scale(0.25);
 
     -- 信息文本
-    local tf = ftext_create(128, 128);
+    local tf = NLabel:new(256,256); 	--ftext_create(128, 128);
     -- tf_create(128,list.x,list.y + g_gap*(count),r,g,b);
-    ftext_setpos(tf, 0, 12);
+    --ftext_setpos(tf, 0, 12);
+	tf:set_pos(0,12);
 
-
-
-    local sc = scrollBar_new(0, 100)
-    scrollBar_bind(sc, function(sc)
-        local v = sc.value
+	
+    local sc = NScrollBar:new(0,100)
+    
+	
+	local function scHandler(progress)
+		local v = progress;
+		
         -- print("设置模型("..string.format("%#x",tonumber(model))..') FPS = '..	string.format("%0.2f", v))
 
         -- local frame = '[frame = '..get_attr(model,"getCurFrame")..']';
@@ -47,11 +51,19 @@ local function f_load_c()
         --    print(v);
 
         --    local x, y, w = func_quat(1, 0, 0, -1, v);
-        local x, y, w = func_quat(1, 0, 0, -1, v);
-        ftext_reset(tf, string.format("%.2f,%.2f,w=%.2f", x, y, w));
-        box1:set_position(x, y, 0);
-    end )
-    scrollBar_setRange(sc, 0, 1)
+        local x, y, z,w = func_quat(-1, 0, 0, 
+									 -1, -1,0, v);
+
+        --ftext_reset(tf, string.format("%.2f,%.2f,w=%.2f", x, y, w));
+        --tf:set_text(string.format("%.2f,%.2f,w=%.2f", x, y, w));
+		
+		--print(x, y, z,w);
+		
+		box1:set_position(x, y, z);
+	end
+	
+	sc:bindCallback(scHandler);
+    --scrollBar_setRange(sc, 0, 1)
 end
 
 

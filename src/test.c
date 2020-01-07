@@ -1199,27 +1199,36 @@ REG_ftext(lua_State *L){
 static int
 REG_Quat(lua_State *L){
 	const char* funcName = lua_tostring(L,1);
-	const char* str = lua_tostring(L,2);
+	//const char* str = lua_tostring(L,2);
 	if(!strcmp(funcName,"Quat_slerp")){
-		float x,y,x1,y1,value;
+		float x,y,z,x1,y1,z1,value;
 		Quat4_t s;
 		Quat4_t e;
 		Quat4_t o;
 		Vec3 ve,vs;
-		sscanf_s(str,"%f,%f,%f,%f,%f",&x,&y,&x1,&y1,&value);
-		ve.x = x1;ve.y = y1;ve.z = 0;
-		vec3Normalize(&ve);//单位向量化
-		vs.x = x;vs.y = y;vs.z = 0;
-		vec3Normalize(&vs);
-		s[W] = 0;	s[X] = vs.x;	s[Y] = vs.y;	s[Z] = 0;
+		//sscanf_s(str,"%f,%f,%f,%f,%f",&x,&y,&x1,&y1,&value);
 		
-		e[W] = 1;	e[X] = ve.x;	e[Y] = ve.y;	e[Z] = 0;
+		x = lua_tonumber(L,2);
+		y = lua_tonumber(L,3);
+		z = lua_tonumber(L,4);
+		x1 = lua_tonumber(L,5);
+		y1 = lua_tonumber(L,6);
+		z1 = lua_tonumber(L,7);
+		value = lua_tonumber(L,8);
+		
+		ve.x = x1;ve.y = y1;ve.z = z1;
+		vec3Normalize(&ve);//单位向量化
+		vs.x = x;vs.y = y;vs.z = z;
+		vec3Normalize(&vs);
+		s[W] = 0;	s[X] = vs.x;	s[Y] = vs.y;	s[Z] = vs.z;
+		
+		e[W] = 1;	e[X] = ve.x;	e[Y] = ve.y;	e[Z] = ve.z;
 		Quat_slerp(s,e,value,o);
 		lua_pushnumber(L,o[X]);
 		lua_pushnumber(L,o[Y]);
-		//lua_pushnumber(L,o[Z]);
+		lua_pushnumber(L,o[Z]);
 		lua_pushnumber(L,o[W]);
-		return 3;
+		return 4;
 	}
 
 	return 0;

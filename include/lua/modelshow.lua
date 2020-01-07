@@ -212,8 +212,8 @@ local function f_cpmlete(self)
 	local function f_bindRayClick(p)
 		local x,y,z = JEngine:getIns():get_hit();
 		--print('**********',x,y,z);
-		--self.u:move(x,y,z);
-		self.u:look_at(x,y,z,1000);
+		self.u:move(x,y,z);
+		self.u:look_at(x,0,y,0);
 	end
 	local function loadfloor()
 		local n = UnitBase:new();

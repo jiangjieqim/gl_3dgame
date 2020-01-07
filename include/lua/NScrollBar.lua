@@ -138,14 +138,6 @@ function NScrollBar:new(x,y,cw,ch)
 	return self;
 end
 
---[[--ÉèÖÃ×ø±ê
-function NScrollBar:set_pos(x,y)
-	local bg = self.bg;
-	local btn = self.btn;
-	bg:set_pos(x,y);
-	local cw,ch = bg:get_size();
-	btn:set_drag_rect(0,0,cw,ch);
-end--]]
 function NScrollBar:get_container()
 	local bg = self.bg;
 	return bg:get_container();

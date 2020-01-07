@@ -966,6 +966,8 @@ vec_rotateAngle(double x1,double y1, double x2,double y2) {
 	//return -angle + PI/2;//取负后加1/2的PI
 	//printf("%.3f %.3f %.3f %.3f angle:%.3f\n",x1,y1,x2,y2,angle);
 	//-1.#IO ;
+
+	//	printf("angle = %.3f\n",angle);
 	return -angle;
 }
 
