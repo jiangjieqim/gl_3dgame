@@ -932,34 +932,34 @@ REG_load_model(lua_State *L)
 /************************************************************************/
 //int REG_test_unit_01(lua_State *L);
 //int REG_test_unit_01_init(lua_State *L);
-static int
-REG_test_unit_02(lua_State *L){
-	const char* name=lua_tostring(L,1);
-	float value = lua_tonumber(L,2);
-	int n = (int)ex_find(name);
-	struct HeadInfo* h = ex_find_headinfo(ex,name);
-	
-
-	Quat4_t s;
-	Quat4_t e;
-	Quat4_t o;
-
-	s[W] = 0;
-	s[X] = 0;
-	s[Y] = 1;
-	s[Z] = 0;
-
-	e[W] = 1;
-	e[X] = 1;
-	e[Y] = 0;
-	e[Z] = 0;
-	
-	Quat_slerp(s,e,value,o);
-	
-	//Quat_to_matrrix(o,h->quat_m);
-	base_updateMat4x4(h);
-	return 0;
-}
+//static int
+//REG_test_unit_02(lua_State *L){
+//	const char* name=lua_tostring(L,1);
+//	float value = lua_tonumber(L,2);
+//	int n = (int)ex_find(name);
+//	struct HeadInfo* h = ex_find_headinfo(ex,name);
+//	
+//
+//	Quat4_t s;
+//	Quat4_t e;
+//	Quat4_t o;
+//
+//	s[W] = 0;
+//	s[X] = 0;
+//	s[Y] = 1;
+//	s[Z] = 0;
+//
+//	e[W] = 1;
+//	e[X] = 1;
+//	e[Y] = 0;
+//	e[Z] = 0;
+//	
+//	Quat_slerp(s,e,value,o);
+//	
+//	//Quat_to_matrrix(o,h->quat_m);
+//	base_updateMat4x4(h);
+//	return 0;
+//}
 
 /*
 	日志字符缓冲区512字节,打印当前内存池的内存
@@ -1211,17 +1211,35 @@ REG_Quat(lua_State *L){
 		x = lua_tonumber(L,2);
 		y = lua_tonumber(L,3);
 		z = lua_tonumber(L,4);
+
 		x1 = lua_tonumber(L,5);
 		y1 = lua_tonumber(L,6);
 		z1 = lua_tonumber(L,7);
+		
 		value = lua_tonumber(L,8);
 		
 		ve.x = x1;ve.y = y1;ve.z = z1;
 		vec3Normalize(&ve);//单位向量化
+		
 		vs.x = x;vs.y = y;vs.z = z;
 		vec3Normalize(&vs);
-		s[W] = 0;	s[X] = vs.x;	s[Y] = vs.y;	s[Z] = vs.z;
 		
+		//test code
+		{
+			float dot=vecDot(&vs,&ve);
+			struct Vec3 c3;
+			struct Vec3 d3;//vs ve的平分向量
+			vec3Cross(&vs,&ve,&c3);
+			vec3Add(&vs,&ve,&d3);
+			vec3Normalize(&d3);
+
+			printf("dot = %.3f \ta = %.3f	\t %.3f %.3f %.3f \t d3: %.3f %.3f %.3f\n",dot,
+				vec_to_angle(vs.x,vs.y,vs.z,ve.x,ve.y,ve.z) / PI * 180,
+				c3.x,c3.y,c3.z,
+				d3.x,d3.y,d3.z
+				);
+		}
+		s[W] = 0;	s[X] = vs.x;	s[Y] = vs.y;	s[Z] = vs.z;
 		e[W] = 1;	e[X] = ve.x;	e[Y] = ve.y;	e[Z] = ve.z;
 		Quat_slerp(s,e,value,o);
 		lua_pushnumber(L,o[X]);
@@ -1233,10 +1251,6 @@ REG_Quat(lua_State *L){
 
 	return 0;
 }
-
-
-
-
 
 static int
 REG_core_xml(lua_State *L){
@@ -2524,7 +2538,7 @@ runhelloTest(const char* script){
 	//lua_register(lua_state,"test_unit_01",REG_test_unit_01);
 	//lua_register(lua_state,"test_unit_01_init",REG_test_unit_01_init);
 	//单元测试案例02
-	lua_register(lua_state,"test_unit_02",REG_test_unit_02);
+	//lua_register(lua_state,"test_unit_02",REG_test_unit_02);
 
 	//获取属性
 	lua_register(lua_state,"get_attr",REG_get_attr);

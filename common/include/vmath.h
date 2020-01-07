@@ -194,7 +194,13 @@ DLLIMPORT int vec3IsZero(struct Vec3* v);
 DLLIMPORT void vec3Mult(struct Vec3* a,float value);
 
 /*
-*向量点乘
+*		向量点乘
+*		
+*		a·b>0    方向基本相同，夹角在0°到90°之间
+*
+*		a·b=0    正交，相互垂直  
+*
+*		a·b<0    方向基本相反，夹角在90°到180°之间 
 */
 DLLIMPORT float vecDot(struct Vec3* a,struct Vec3* b);
 /*
@@ -232,6 +238,8 @@ DLLIMPORT void vec3Div(struct Vec3* o,float v);
 DLLIMPORT double
 vec_rotateAngle(double x1,double y1, double x2,double y2);
 
+/**3d向量转化为角度*/
+DLLIMPORT float vec_to_angle(float x1,float y1,float z1,float x2,float y2,float z2);
 /*
 *
 *	射线与三角形的交点数据结构

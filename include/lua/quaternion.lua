@@ -2,25 +2,13 @@
 -- cam:rx(PI * 1.7);
 JEngine:getIns():get_cam():set_pos(0,0,-5);
 
-
-
-local function func_quat(x0, y0, z0, x1, y1,z1, v)
+local function quat_slerp(x0, y0, z0, x1, y1,z1, v)
     return quat("Quat_slerp", x0, y0,z0, x1, y1,z1, v);
 end
 
 -- 求垂直向量
-
-
-
 local function f_load_c()
-    local plane = UnitBase:new();
-    -- plane:load_model(nil,"//resource//material//floor.mat");
-    plane:load_model();
-    plane:setv(FLAGS_REVERSE_FACE);
-    plane:setv(FLAGS_DRAW_PLOYGON_LINE);
-    plane:scale(10);
-
-
+	
     local box = UnitBase:new();
     box:loadbox();
     box:scale(0.25);
@@ -44,15 +32,33 @@ local function f_load_c()
 		
         -- print("设置模型("..string.format("%#x",tonumber(model))..') FPS = '..	string.format("%0.2f", v))
 
-        -- local frame = '[frame = '..get_attr(model,"getCurFrame")..']';
-        -- tf_setText(fpsTF,"fps:" .. string.format("%0.0f", v));
-        --        scrollBar_label(sc, string.format("fps=%0.0f", v));
-        --        change_attr(crl.o, "fps", tostring(v))
-        --    print(v);
+		
+		
+		--顺时针
+		--0 <= angle <=90			90
+        --local x, y, z,w = quat_slerp(	0,1,0,	 1,0,0, v);
+															
+			
+		--45												
+		--local x, y, z,w = quat_slerp(	0,1,0,	 -1,1,0, v);
+	
+		
+		-- 90<angle<=180		逆时针 135
+		local x, y, z,w = quat_slerp(	1,	0,	0, 		-1,	1,	0, v);
+									
+			
+		--		顺时针 135
+		local x, y, z,w = quat_slerp(-1,	1,	0, 		1,	0,	0, v);
+									
+		--		180
+		local x, y, z,w = quat_slerp(1,0,0, 		-1,	0,	0, v);
+		
+		
+		--s 45
+		local x, y, z,w = quat_slerp(1,0,0, 		1,	-1,	0, v);
+		--s 90
+		local x, y, z,w = quat_slerp(1,0,0, 		0,	-1,	0, v);
 
-        --    local x, y, w = func_quat(1, 0, 0, -1, v);
-        local x, y, z,w = func_quat(-1, 0, 0, 
-									 -1, -1,0, v);
 
         --ftext_reset(tf, string.format("%.2f,%.2f,w=%.2f", x, y, w));
         --tf:set_text(string.format("%.2f,%.2f,w=%.2f", x, y, w));
@@ -63,31 +69,38 @@ local function f_load_c()
 	end
 	
 	sc:bindCallback(scHandler);
+	
+	scHandler(1);
     --scrollBar_setRange(sc, 0, 1)
+	
+	--local m = math.sqrt(0.707*0.707 + 0.707*0.707);	-- 1
+	--print(m);
 end
 
 
 --[[
-                             (1)y
+
+
+(-1,1)                       (0,1)y						(1,1)
                             ^
                             *
                             *
                             *
                             *
-(-1)* * * * * * * * * * * * * * * * * * * * * * * *>x  (1)
+(-1,0)* * * * * * * * * * * * * * * * * * * * * * * *>x  (1,0)
                             *0
                             *
                             *
                             *
                             *
                             *
-                            *(-1)
+ (-1,-1)                    *(0.-1)						(1,-1)			
 
 
 --]]
 
 
-local x, y, z = vec3_cross(0.72, -0.69, 0, 0, 0, 1);
+--local x, y, z = vec3_cross(0.72, -0.69, 0, 0, 0, 1);
 --loadObj();
 
 -- print(x, y, z);--求+90之后的向量

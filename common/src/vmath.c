@@ -755,21 +755,19 @@ void
 vec3Normalize(struct Vec3* v){
 	float length = vec3Length(v);
 	if(length <=0){
-		printf("length:%.3f\n",length);
+		printf("vec3Normalize length:%.3f\n",length);
 	}
 	v->x = v->x / length;
 	v->y = v->y / length;
 	v->z = v->z / length;
 }
 float 
-vecDot( struct Vec3* a,struct Vec3* b )
-{
+vecDot( struct Vec3* a,struct Vec3* b ){
 	return a->x * b->x + a->y * b->y + a->z * a->z;
 }
 
 void 
-vec3CalculateNormal(struct Vec3* a,struct Vec3* b,struct Vec3* c,struct Vec3* res)
-{
+vec3CalculateNormal(struct Vec3* a,struct Vec3* b,struct Vec3* c,struct Vec3* res){
 	struct Vec3 out1,out2;
 	vec3Sub(a,b,&out1);
 	vec3Sub(a,c,&out2);
@@ -919,6 +917,65 @@ tl_pickTriangle(float* tri,int dataCount,
 	//return _distance;
 }
 
+/*
+*	向量转化为角度
+*/
+float
+vec_to_angle(float x1,float y1,float z1,
+			 float x2,float y2,float z2){
+	float epsilon = 0.0001f;//1.0e-6;//1乘10的-6次幂,0.000001
+	float nyPI = PI;//acos(-1.0);
+	float dist, dot,angle;
+
+	// normalize 单位向量
+	dist = (float)sqrt(x1*x1 + y1*y1 + z1*z1);
+	if(dist > 1.0) dist = 1.0f;
+
+	x1 /= dist;
+	y1 /= dist;
+	z1 /= dist;
+	dist = (float)sqrt(x2*x2 + y2*y2 + z2*z2);
+
+	if(dist > 1.0) dist = 1.0f;
+
+	x2 /= dist;
+	y2 /= dist;
+	z2 /= dist;
+
+	// dot product	点乘
+	dot = x1*x2+y1*y2+z1*z2;
+	
+	if (fabs(dot-1.0f) <= epsilon)
+		angle = 0.0;
+	else if (fabs(dot+1.0f)<=epsilon){
+		angle = nyPI;
+	}else {
+		//float cross;
+
+		angle = (float)acos(dot);
+		//if(dot < 0){
+		//	angle*=-1;
+		//}
+		
+		
+
+
+
+		//cross product
+		//cross = x1*y2 - x2*y1;
+		
+
+		// a->x * b->x + a->y * b->y + a->z * a->z;
+		//cross = x1*x2 + y1*y2 + z1*z2;
+
+		// vector p2 is clockwise from vector p1 
+		// with respect to the origin (0.0)
+		//if (cross < 0) {
+		//	angle = 2 * nyPI - angle;
+		//}
+	}
+	return angle;
+}
 /*
 *	向量转化为角度
 */
