@@ -2,6 +2,21 @@
 -- cam:rx(PI * 1.7);
 JEngine:getIns():get_cam():set_pos(0,0,-5);
 
+--FpsView:getIns():show();--显示fps
+
+
+local fps = JEngine:getIns():get_plugin():load("view/FpsView");--加载插件
+fps:show();
+
+--JEngine:getIns():get_plugin():unload(fps);--卸载插件
+
+
+local function getMid(x0, y0, z0, x1, y1,z1)
+	local x2,y2,z2 =vec3_normal(x0,y0,z0);
+	local x3,y3,z3 =vec3_normal(x1,y1,z1);
+	return vec3_add(x2, y2, z2, x3, y3, z3);
+end
+
 -- 求垂直向量
 local function f_load_c()
 	
@@ -49,15 +64,20 @@ local function f_load_c()
     local sc = NScrollBar:new(0,100)
     
 	local function quat_slerp(x0, y0, z0, x1, y1,z1, v)
-		local x2,y2,z2 =vec3_normal(x1,y1,z1);
-		eg:mod(1,x2,y2,z2);
+		local _DEBUG_ = true;
 		
-		
---		mid:mod(1,0.707,-0.707,0);
-		mid:mod(1,0.383,0.924,0);
-	
-	
-		
+		if(_DEBUG_) then
+			local x2,y2,z2 =vec3_normal(x1,y1,z1);
+			eg:mod(1,x2,y2,z2);
+			
+			
+	--		mid:mod(1,0.707,-0.707,0);
+
+			local x3,y3,z3 = getMid(x0, y0, z0, x1, y1,z1);
+			x3,y3,z3=vec3_normal(x3,y3,z3);
+			
+			mid:mod(1,x3,y3,z3);
+		end
 		return quat("Quat_slerp", x0, y0,z0, x1, y1,z1, v);
 	end
 	local function scHandler(progress)
@@ -93,16 +113,20 @@ local function f_load_c()
 		
 		--s 90
 		--local x, y, z,w = quat_slerp(1,0,0, 		0,	-1,	0, v);
+		
+		--n 180
+		--local x, y, z,w = quat_slerp(1,0,0, 		-1,	0,	0, v);
+		
+		--n 135
+		--local x, y, z,w = quat_slerp(-1,0,0, 		1,	-1,	0, v);
 
-		local x, y, z,w = quat_slerp(1,0,0, 		-1,	0,	0, v);
-		
-		
+		local x, y, z,w = quat_slerp(1,0,0, 		-1,	0.1,	0, v);
 		tg:mod(1,x,y,z);
 	end
 	
 	sc:bindCallback(scHandler);
 	
-	scHandler(1);
+	scHandler(0);
     --scrollBar_setRange(sc, 0, 1)
 	
 	--local m = math.sqrt(0.707*0.707 + 0.707*0.707);	-- 1

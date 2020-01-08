@@ -1,15 +1,16 @@
 --Fps视图类
-FpsView = {
+local FpsView = {
 	label,
 	timer,
 	formatstr,
 };
 
 FpsView.__index = FpsView;
-setmetatable(FpsView, Instance);--继承自单例
+setmetatable(FpsView, IPlugin);--继承自单例
 
-function FpsView:new()
-	local self = Instance:new();
+--插件加载
+function FpsView:load()
+	local self = {};
 	setmetatable(self, FpsView);
 	self.label = NLabel:new(64,64);--label_create(64,64);
 	return self;
@@ -26,7 +27,8 @@ local function f_fps_timer(data,param)
     self.label:set_text(str);
 end
 
-function FpsView:dispose()
+--卸载插件,即销毁插件
+function FpsView:unload()
 	if(self.timer) then
 		timelater_remove(self.timer);
 	end
@@ -50,3 +52,5 @@ function FpsView:hide()
 	local timer = self.timer;
 	evt_off(timer,EVENT_TIMER,f_fps_timer);
 end
+local fps = FpsView:load();
+return fps;

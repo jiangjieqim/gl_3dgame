@@ -3,6 +3,8 @@ JEngine ={
 	atals,
 	cam2d,
 	m_cam3d,
+	
+	plugin,--插件管理器
 };
 
 JEngine.__index = JEngine;
@@ -22,8 +24,15 @@ function JEngine:new()
 	
 	self.m_cam3d = Camera:new(cam3d);
 
+	self.plugin = PluginMan:new();
+
 	return self;
 end
+--获取插件管理器的句柄
+function JEngine:get_plugin()
+	return self.plugin;
+end
+
 function JEngine:get_cam()
     return self.m_cam3d;
 end

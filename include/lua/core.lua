@@ -424,7 +424,7 @@ dofile("..\\include\\lua\\engine.lua")	--引擎1
 
 dofile("..\\include\\lua\\fbo.lua")	--fbo
 
-dofile("..\\include\\lua\\fps.lua")	--fps组件
+
 dofile("..\\include\\lua\\shape.lua")	--shape组件
 dofile("..\\include\\lua\\NPanel.lua");
 
@@ -447,3 +447,14 @@ dofile("..\\include\\lua\\UnitBase.lua");		--角色单位
 dofile("..\\include\\lua\\md5unit.lua");
 
 dofile("..\\include\\lua\\scrollview.lua")	--scrollview
+
+--[[
+local tf = dofile("..\\include\\lua\\tf.lua");
+print(tf);
+tf = nil;
+--print(tf.get());
+--]]
+
+
+dofile("..\\include\\lua\\plugin_man.lua")	--插件管理器
+

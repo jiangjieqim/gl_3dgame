@@ -18,6 +18,11 @@ function vec3_normal(x, y, z)
     return x, y, z;
 end
 
+--¼Ó
+function vec3_add(x0, y0, z0, x1, y1, z1)
+	 return x0 + x1 , y0 + y1 ,z0 + z1;
+end
+
 -- ²æ³Ë
 function vec3_cross(x0, y0, z0, x1, y1, z1)
     return y0 * z1 - z0 * y1,

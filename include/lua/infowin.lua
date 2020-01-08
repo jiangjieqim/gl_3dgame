@@ -10,9 +10,7 @@ end
 
 --------------------------------------------------------------------
 -- 信息调试面板
-
---[[local mc = FpsView:new();
-mc:show();--]]
+ 
 local _stat;
 local function f_select(self,index,param)
 	
@@ -24,7 +22,7 @@ local function f_select(self,index,param)
 
 		print("windows test!");
 		
-		FpsView:getIns():show();--显示fps
+		
 		
 		Alert:getIns():show(tostring(math.random()));
 		

@@ -22,7 +22,7 @@ ModleShow.__index = ModleShow;
 --增加一个md2渲染对象到fbo对象引用中
 local function addmd2_fbo(fbo)
 	local cam = fbo:get_cam3d();
-	cam = nil;
+	--cam = nil;
 	----bauul,triangle
 	
 	
@@ -51,8 +51,8 @@ local function addmd2_fbo(fbo)
 ----[[
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
-	--n:set_position(0,0,-100);
-	n:scale(0.02);
+	n:set_position(0,0,-100);
+	--n:scale(0.02);
 	local anim = n:get_anim();
 	anim:push("jump",0,37);
 	anim:play("jump");
