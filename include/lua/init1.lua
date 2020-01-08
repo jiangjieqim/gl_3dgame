@@ -37,7 +37,7 @@ s:push(-0.5,0.4,0.5);
 s:push( 0.5, 0.0, 0.5);
 s:push( -0.5, -0.49, -0.5);
 s:setcolor(1,0,0);
-s:pushend();
+s:graphics_end();
 
 s:mod(0,1,0,0);
 s:mod(2,0,0,0);

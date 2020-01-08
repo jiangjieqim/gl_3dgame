@@ -27,7 +27,7 @@ local function f_createLines(n,s)
 		--print(x,s);
 		ln:push(x,0,-_l);
 		ln:push(x,0,_l);
-		ln:pushend();
+		ln:graphics_end();
 		stack_push(list,ln);
 	end
 	
@@ -38,7 +38,7 @@ local function f_createLines(n,s)
 		--print(x,s);
 		ln:push(-_l,0,z);
 		ln:push(_l,0,z);
-		ln:pushend();
+		ln:graphics_end();
 		stack_push(list,ln);
 	end
 	return list;

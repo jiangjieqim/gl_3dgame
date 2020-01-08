@@ -1229,15 +1229,19 @@ REG_Quat(lua_State *L){
 			float dot=vecDot(&vs,&ve);
 			struct Vec3 c3;
 			struct Vec3 d3;//vs ve的平分向量
+			float angle = vec_to_angle(vs.x,vs.y,vs.z,ve.x,ve.y,ve.z) / PI;
 			vec3Cross(&vs,&ve,&c3);
 			vec3Add(&vs,&ve,&d3);
 			vec3Normalize(&d3);
 
-			printf("dot = %.3f \ta = %.3f	\t %.3f %.3f %.3f \t d3: %.3f %.3f %.3f\n",dot,
-				vec_to_angle(vs.x,vs.y,vs.z,ve.x,ve.y,ve.z) / PI * 180,
+			printf("value = %.3f \t dot = %.3f \ta = %.3f	\t %.3f %.3f %.3f \t d3: %.3f %.3f %.3f\n",
+				value,
+				dot,
+				angle,
 				c3.x,c3.y,c3.z,
 				d3.x,d3.y,d3.z
 				);
+				
 		}
 		s[W] = 0;	s[X] = vs.x;	s[Y] = vs.y;	s[Z] = vs.z;
 		e[W] = 1;	e[X] = ve.x;	e[Y] = ve.y;	e[Z] = ve.z;

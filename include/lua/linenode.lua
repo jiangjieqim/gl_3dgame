@@ -7,7 +7,7 @@ s:push(-0.5,0.4,0.5);
 s:push( 0.5, 0.0, 0.5);
 s:push( -0.5, -0.49, -0.5);
 s:setcolor(1,0,0);
-s:pushend();
+s:graphics_end();
 --s:dispose();--Ïú»Ù
 
 ]]
@@ -49,7 +49,8 @@ function LineNode:push(x,y,z)
 	linenode("push",self.p,x,y,z);
 end
 
-function LineNode:pushend()
+--»æÖÆ½áÊø
+function LineNode:graphics_end()
 	linenode("end",self.p);
 end
 

@@ -2,20 +2,42 @@
 -- cam:rx(PI * 1.7);
 JEngine:getIns():get_cam():set_pos(0,0,-5);
 
-local function quat_slerp(x0, y0, z0, x1, y1,z1, v)
-    return quat("Quat_slerp", x0, y0,z0, x1, y1,z1, v);
-end
-
 -- 求垂直向量
 local function f_load_c()
 	
-    local box = UnitBase:new();
+  --[[  local box = UnitBase:new();
     box:loadbox();
-    box:scale(0.25);
+    box:scale(0.25);--]]
+	
+	
+	local zeroPoint = LineNode:new(1,true);
+	zeroPoint:push(0,0,0);
+	zeroPoint:setcolor(1,0,0);
+	zeroPoint:graphics_end();
 
-    local box1 = UnitBase:new();
-    box1:loadbox();
-    box1:scale(0.25);
+	
+	
+	
+	--旋转的向量
+	local tg = LineNode:new(2);
+	tg:setcolor(0,1,0);
+	tg:push(0,0,0);
+	tg:push(0,1,0);
+	tg:graphics_end();
+	
+	--目标向量
+	local eg = LineNode:new(2);
+	eg:setcolor(0,1,1);
+	eg:push(0,0,0);
+	eg:push(0,1,0);
+	eg:graphics_end();
+	
+	--平分向量
+	local mid = LineNode:new(2);
+	mid:setcolor(1,0,1);
+	mid:push(0,0,0)
+	mid:push(0,1,0);
+	mid:graphics_end();
 
     -- 信息文本
     local tf = NLabel:new(256,256); 	--ftext_create(128, 128);
@@ -26,7 +48,18 @@ local function f_load_c()
 	
     local sc = NScrollBar:new(0,100)
     
+	local function quat_slerp(x0, y0, z0, x1, y1,z1, v)
+		local x2,y2,z2 =vec3_normal(x1,y1,z1);
+		eg:mod(1,x2,y2,z2);
+		
+		
+--		mid:mod(1,0.707,-0.707,0);
+		mid:mod(1,0.383,0.924,0);
 	
+	
+		
+		return quat("Quat_slerp", x0, y0,z0, x1, y1,z1, v);
+	end
 	local function scHandler(progress)
 		local v = progress;
 		
@@ -44,28 +77,27 @@ local function f_load_c()
 	
 		
 		-- 90<angle<=180		逆时针 135
-		local x, y, z,w = quat_slerp(	1,	0,	0, 		-1,	1,	0, v);
+		--local x, y, z,w = quat_slerp(	1,	0,	0, 		-1,	1,	0, v);
 									
 			
 		--		顺时针 135
-		local x, y, z,w = quat_slerp(-1,	1,	0, 		1,	0,	0, v);
+		--local x, y, z,w = quat_slerp(-1,	1,	0, 		1,	0,	0, v);
 									
 		--		180
-		local x, y, z,w = quat_slerp(1,0,0, 		-1,	0,	0, v);
+		--local x, y, z,w = quat_slerp(1,0,0, 		-1,	0,	0, v);
 		
 		
 		--s 45
-		local x, y, z,w = quat_slerp(1,0,0, 		1,	-1,	0, v);
+		--local x, y, z,w = quat_slerp(1,0,0, 		1,	-1,	0, v);
+		
+		
 		--s 90
-		local x, y, z,w = quat_slerp(1,0,0, 		0,	-1,	0, v);
+		--local x, y, z,w = quat_slerp(1,0,0, 		0,	-1,	0, v);
 
-
-        --ftext_reset(tf, string.format("%.2f,%.2f,w=%.2f", x, y, w));
-        --tf:set_text(string.format("%.2f,%.2f,w=%.2f", x, y, w));
+		local x, y, z,w = quat_slerp(1,0,0, 		-1,	0,	0, v);
 		
-		--print(x, y, z,w);
 		
-		box1:set_position(x, y, z);
+		tg:mod(1,x,y,z);
 	end
 	
 	sc:bindCallback(scHandler);

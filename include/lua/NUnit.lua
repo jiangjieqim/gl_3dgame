@@ -141,7 +141,7 @@ end
 --normal 是否单位化向量
 function NUnit:rotate_vec(r,x,y,z)
 --[[	if(normal) then
-		local x1,y1,z1 = vec3Normalize(x,y,z);
+		local x1,y1,z1 = vec3_normal(x,y,z);
 		
 		print(x1,y1,z1);
 	end--]]

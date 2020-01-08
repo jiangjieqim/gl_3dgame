@@ -924,7 +924,6 @@ float
 vec_to_angle(float x1,float y1,float z1,
 			 float x2,float y2,float z2){
 	float epsilon = 0.0001f;//1.0e-6;//1乘10的-6次幂,0.000001
-	float nyPI = PI;//acos(-1.0);
 	float dist, dot,angle;
 
 	// normalize 单位向量
@@ -948,7 +947,7 @@ vec_to_angle(float x1,float y1,float z1,
 	if (fabs(dot-1.0f) <= epsilon)
 		angle = 0.0;
 	else if (fabs(dot+1.0f)<=epsilon){
-		angle = nyPI;
+		angle = PI;
 	}else {
 		//float cross;
 
