@@ -6,6 +6,7 @@
 
 #include "str.h"
 #include "tlgl.h"
+#include "quat.h"
 #include "md5.h"
 #include "tmat.h"
 #include "tools.h"

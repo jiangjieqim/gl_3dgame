@@ -13,6 +13,7 @@ function FpsView:load()
 	local self = {};
 	setmetatable(self, FpsView);
 	self.label = NLabel:new(64,64);--label_create(64,64);
+	
 	return self;
 end
 local function f_fps_timer(data,param)

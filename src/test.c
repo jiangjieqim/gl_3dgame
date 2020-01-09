@@ -57,6 +57,8 @@
 #include "resload.h"
 #include "timelater.h"
 #include "linenode.h"
+
+#include "quat.h"
 /*
  *主目录路径 处理成动态自适应，如果找不到第一个路径就找第二个路径
  */
@@ -1202,10 +1204,7 @@ REG_Quat(lua_State *L){
 	//const char* str = lua_tostring(L,2);
 	if(!strcmp(funcName,"Quat_slerp")){
 		float x,y,z,x1,y1,z1,value;
-		Quat4_t s;
-		Quat4_t e;
-		Quat4_t o;
-		Vec3 ve,vs;
+		
 		//sscanf_s(str,"%f,%f,%f,%f,%f",&x,&y,&x1,&y1,&value);
 		
 		x = lua_tonumber(L,2);
@@ -1217,40 +1216,56 @@ REG_Quat(lua_State *L){
 		z1 = lua_tonumber(L,7);
 		
 		value = lua_tonumber(L,8);
-		
-		ve.x = x1;ve.y = y1;ve.z = z1;
-		vec3Normalize(&ve);//单位向量化
-		
-		vs.x = x;vs.y = y;vs.z = z;
-		vec3Normalize(&vs);
-		
-		//test code
-		{
-			float dot=vecDot(&vs,&ve);
-			struct Vec3 c3;
-			struct Vec3 d3;//vs ve的平分向量
-			float angle = vec_to_angle(vs.x,vs.y,vs.z,ve.x,ve.y,ve.z) / PI;
-			vec3Cross(&vs,&ve,&c3);
-			vec3Add(&vs,&ve,&d3);
-			vec3Normalize(&d3);
+		/*
+		if(0){
+			Quat4_t s;
+			Quat4_t e;
+			Quat4_t o;
+			Vec3 ve,vs;
+			ve.x = x1;ve.y = y1;ve.z = z1;
+			vec3Normalize(&ve);//单位向量化
+			
+			vs.x = x;vs.y = y;vs.z = z;
+			vec3Normalize(&vs);
+			
+			//test code
+			{
+				float dot=vecDot(&vs,&ve);
+				struct Vec3 c3;
+				struct Vec3 d3;//vs ve的平分向量
+				float angle = vec_to_angle(vs.x,vs.y,vs.z,ve.x,ve.y,ve.z) / PI;
+				vec3Cross(&vs,&ve,&c3);
+				vec3Add(&vs,&ve,&d3);
+				vec3Normalize(&d3);
 
-			printf("value = %.3f \t dot = %.3f \ta = %.3f	\t %.3f %.3f %.3f \t d3: %.3f %.3f %.3f\n",
-				value,
-				dot,
-				angle,
-				c3.x,c3.y,c3.z,
-				d3.x,d3.y,d3.z
-				);
-				
+				printf("value = %.3f \t dot = %.3f \tangle = %.3f	\t %.3f %.3f %.3f \t d3: %.3f %.3f %.3f\n",
+					value,
+					dot,
+					angle,
+					c3.x,c3.y,c3.z,
+					d3.x,d3.y,d3.z
+					);
+					
+			}
+			s[W] = 0;	s[X] = vs.x;	s[Y] = vs.y;	s[Z] = vs.z;
+			e[W] = 1;	e[X] = ve.x;	e[Y] = ve.y;	e[Z] = ve.z;
+			Quat_slerp(s,e,value,o);
+			lua_pushnumber(L,o[X]);
+			lua_pushnumber(L,o[Y]);
+			lua_pushnumber(L,o[Z]);
+			//lua_pushnumber(L,o[W]);
+			
 		}
-		s[W] = 0;	s[X] = vs.x;	s[Y] = vs.y;	s[Z] = vs.z;
-		e[W] = 1;	e[X] = ve.x;	e[Y] = ve.y;	e[Z] = ve.z;
-		Quat_slerp(s,e,value,o);
-		lua_pushnumber(L,o[X]);
-		lua_pushnumber(L,o[Y]);
-		lua_pushnumber(L,o[Z]);
-		lua_pushnumber(L,o[W]);
-		return 4;
+		*/
+		{
+			float px,py,pz;
+			quat_slerp_split(x,y,z,x1,y1,z1,&px,&py,&pz,value);
+			lua_pushnumber(L,px);
+			lua_pushnumber(L,py);
+			lua_pushnumber(L,pz);
+		}
+
+		return 3;
 	}
 
 	return 0;

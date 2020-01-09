@@ -1,9 +1,7 @@
 #ifndef _VMATH_H_
 #define _VMATH_H_
 #include "def.h"
-//四元数数学库
-/* Quaternion (x, y, z, w) */
-typedef float Quat4_t[4];
+
 /*
 0(0,0)	1(0,1)		2(0,2)		3(0,3)
 4(1,0)	5(1,1)		6(1,2)		7(1,3)
@@ -121,22 +119,6 @@ DLLIMPORT void mat4x4_lookAt(Matrix44f out,struct Vec3* eye,struct Vec3* center,
 
 //矩阵连乘
 DLLIMPORT void mat4x4_mult(int c,Matrix44f o,...);
-
-/*
-*	将四元数转化为矩阵
-*/
-DLLIMPORT void 
-Quat_to_matrrix(const Quat4_t qa,Matrix44f out);
-
-DLLIMPORT void Quat_computeW (Quat4_t q);
-DLLIMPORT void Quat_normalize (Quat4_t q);
-DLLIMPORT void Quat_multQuat (const Quat4_t qa, const Quat4_t qb, Quat4_t out);
-DLLIMPORT void Quat_multVec (const Quat4_t q, const Vec3_t v, Quat4_t out);
-DLLIMPORT void Quat_rotatePoint (const Quat4_t q, const Vec3_t in, Vec3_t out);
-/*点乘*/
-DLLIMPORT float Quat_dotProduct (const Quat4_t qa, const Quat4_t qb);
-
-DLLIMPORT void  Quat_slerp (const Quat4_t qa, const Quat4_t qb, float t, Quat4_t out);
 //构造透视矩阵
 DLLIMPORT void 
 mat4x4_perspective(Matrix44f M,float fov, float aspectRatio, float zNear, float zFar );

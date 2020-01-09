@@ -13,8 +13,6 @@ local function ftext_create(w, h, fw, fh,cam)
     fw = fw or 13;
     fh = fh or 12;
 --    fw = fw or 16;fh = fh or 15;
-    
-	
     local p = ftext(nil, "create", name, string.format("%s,%s,%s,%s,%s", w, h, fw, fh,cam));
     ftext_set_buffer(p,64);--…Ë÷√‘§÷∆ª∫≥Â«¯
     return p;

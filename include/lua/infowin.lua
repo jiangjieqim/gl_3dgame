@@ -19,13 +19,7 @@ local function f_select(self,index,param)
 	--local index =listbox_get_index(list);
 	---[[
     if (index == 0) then
-
 		print("windows test!");
-		
-		
-		
-		Alert:getIns():show(tostring(math.random()));
-		
     elseif (index == 1) then
         func_gc();
     elseif (index == 2) then

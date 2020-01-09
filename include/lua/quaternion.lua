@@ -76,7 +76,7 @@ local function f_load_c()
 			local x3,y3,z3 = getMid(x0, y0, z0, x1, y1,z1);
 			x3,y3,z3=vec3_normal(x3,y3,z3);
 			
-			mid:mod(1,x3,y3,z3);
+			mid:mod(1,x3,y3,z3);--设置重点的坐标
 		end
 		return quat("Quat_slerp", x0, y0,z0, x1, y1,z1, v);
 	end
@@ -101,7 +101,7 @@ local function f_load_c()
 									
 			
 		--		顺时针 135
-		--local x, y, z,w = quat_slerp(-1,	1,	0, 		1,	0,	0, v);
+		local x, y, z,w = quat_slerp(-1,	1,	0, 		1,	0,	0, v);
 									
 		--		180
 		--local x, y, z,w = quat_slerp(1,0,0, 		-1,	0,	0, v);
@@ -120,7 +120,7 @@ local function f_load_c()
 		--n 135
 		--local x, y, z,w = quat_slerp(-1,0,0, 		1,	-1,	0, v);
 
-		local x, y, z,w = quat_slerp(1,0,0, 		-1,	0.1,	0, v);
+		--local x, y, z,w = quat_slerp(1,0,0, 		-1,	0.1,	0, v);
 		tg:mod(1,x,y,z);
 	end
 	

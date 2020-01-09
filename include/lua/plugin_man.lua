@@ -14,7 +14,7 @@ end
 
 --加载插件
 function PluginMan:load(plugin)
-	local url = "..\\include\\lua\\"..plugin..".lua";
+	local url = "../include/lua/"..plugin..".lua";
 	local p = dofile(url);
 	--stack_push(self.list,p);
 	func_print("加载插件"..url);
