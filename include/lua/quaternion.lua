@@ -93,7 +93,7 @@ local function f_load_c()
 															
 			
 		--45												
-		--local x, y, z,w = quat_slerp(	0,1,0,	 -1,1,0, v);
+		local x, y, z,w = quat_slerp(	0,1,0,	 -1,1,0, v);
 	
 		
 		-- 90<angle<=180		ÄæÊ±Õë 135
@@ -101,7 +101,7 @@ local function f_load_c()
 									
 			
 		--		Ë³Ê±Õë 135
-		local x, y, z,w = quat_slerp(-1,	1,	0, 		1,	0,	0, v);
+		--local x, y, z,w = quat_slerp(-1,	1,	0, 		1,	0,	0, v);
 									
 		--		180
 		--local x, y, z,w = quat_slerp(1,0,0, 		-1,	0,	0, v);

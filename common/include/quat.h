@@ -27,7 +27,7 @@ DLLIMPORT void  Quat_slerp (const Quat4_t qa, const Quat4_t qb, float t, Quat4_t
 
 
 /*
-	四元数球面插值操作
+	四元数球面插值操作,如果两角度大于90度拆成两个四元数插值
 	不支持角位移为反向向量,如(1,0,0)到(-1,0,0)球面插值
 	输出向量	float* px,float* py,float* pz
 */

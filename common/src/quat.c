@@ -216,21 +216,27 @@ void quat_slerp_split(	float x0,float y0,float z0,
 	vec3Normalize(&ve);
 	if(vs.x + ve.x == 0 && vs.y + ve.y == 0 && vs.z + ve.z == 0){
 		assert(0);//互为反向向量,此接口不处理这种情况
-		return;
 	}else{
-		//计算中间向量
-		Vec3 vm;
-		float v1;//中点的w值
-
-		vec3Add(&vs,&ve,&vm);		
-		vec3Normalize(&vm);
-		
-		if(v >= 0.0f && v< 0.5f){
-			v1 = v / 0.5f;
-			f_get_vec(&vs,&vm,v1,px,py,pz);
+		if(vecDot(&vs,&ve) > 0){
+			//0~90度之间的夹角
+			f_get_vec(&vs,&ve,v,px,py,pz);
 		}else{
-			v1 = (v - 0.5f) / 0.5f;
-			f_get_vec(&vm,&ve,v1,px,py,pz);
+			//90~180度之间的夹角
+
+			//计算中间向量
+			Vec3 vm;
+			float v1;//中点的w值
+
+			vec3Add(&vs,&ve,&vm);		
+			vec3Normalize(&vm);
+			
+			if(v >= 0.0f && v< 0.5f){
+				v1 = v / 0.5f;
+				f_get_vec(&vs,&vm,v1,px,py,pz);
+			}else{
+				v1 = (v - 0.5f) / 0.5f;
+				f_get_vec(&vm,&ve,v1,px,py,pz);
+			}
 		}
 	}
 }
