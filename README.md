@@ -277,3 +277,7 @@ btn_bindClick(btn,f_onClick);
 <ui name="rx_label" type="Label" x="100" y="0" label="rx" parent="1"/>
 ```
 参考接口function skin_parse(skin)  
+
+### include/lua文件夹下的说明
+/..	引擎组件模块  
+view/..	业务模块  
