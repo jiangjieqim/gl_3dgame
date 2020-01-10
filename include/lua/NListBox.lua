@@ -167,7 +167,7 @@ function NListBox:dispose()
 	bg:dispose();
 	func_clearTableItem(self);
 end
-
+--p:²ÎÊý
 function NListBox:bind(func,p)
 	self.callBack = func;
 	self.param = p;

@@ -484,19 +484,6 @@ void mat4x4_orthoPerspect(Matrix44f M,  float left, float right, float top, floa
 //	}
 //}
 
-//void tl_set_vec(Vec3_t vec,float x,float y,float z)
-//{
-//	vec[X] = x;
-//	vec[Y] = y;
-//	vec[Z] = z;
-//}
-void tl_add_vec(Vec3_t a,Vec3_t b,Vec3_t vec)
-{
-	vec[X] = a[X]+b[X];
-	vec[Y] = a[Y]+b[Y];
-	vec[Z] = a[Z]+b[Z];
-}
-
 void tl_offset_vec(Vec3_t pos,float x,float y,float z)
 {
 	pos[X] += x;
@@ -766,15 +753,20 @@ vec_to_angle(float x1,float y1,float z1,
 		angle = PI;
 	}else {
 		//float cross;
+		/*printf("dot = %.3f\n",dot);
 
-		angle = (float)acos(dot);
+		if(fabs(dot) > 1){
+			if(dot < 0){
+				dot+=1;
+			}else{
+				dot-=1;
+			}
+		}*/
+		angle = (float)acos(dot);//反余弦函数 dot要在-1 ~ 1之间
 		//if(dot < 0){
 		//	angle*=-1;
 		//}
 		
-		
-
-
 
 		//cross product
 		//cross = x1*y2 - x2*y1;
@@ -791,6 +783,7 @@ vec_to_angle(float x1,float y1,float z1,
 	}
 	return angle;
 }
+
 /*
 *	向量转化为角度
 */

@@ -5,8 +5,7 @@ JEngine:getIns():get_cam():set_pos(0,0,-5);
 --FpsView:getIns():show();--显示fps
 
 
-local fps = JEngine:getIns():get_plugin():load("view/FpsView");--加载插件
-fps:show();
+
 
 --JEngine:getIns():get_plugin():unload(fps);--卸载插件
 
@@ -92,9 +91,11 @@ local function f_load_c()
         --local x, y, z,w = quat_slerp(	0,1,0,	 1,0,0, v);
 															
 			
-		--45												
+		--n 45												
 		local x, y, z,w = quat_slerp(	0,1,0,	 -1,1,0, v);
-	
+		--s 45
+		--local x, y, z,w = quat_slerp(	-1,1,0,	  0,1,0, v);
+
 		
 		-- 90<angle<=180		逆时针 135
 		--local x, y, z,w = quat_slerp(	1,	0,	0, 		-1,	1,	0, v);

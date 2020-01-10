@@ -17,12 +17,13 @@ function PluginMan:load(plugin)
 	local url = "../include/lua/"..plugin..".lua";
 	local p = dofile(url);
 	--stack_push(self.list,p);
-	func_print("加载插件"..url);
+	func_print(">>>>加载插件"..p:getName()..url);
 	return p;
 end
 
 --卸载插件
 function PluginMan:unload(p)
+	func_print("<<<<卸载插件"..p:getName());
 	p:unload();
 	p = nil;
 end

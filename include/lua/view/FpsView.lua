@@ -48,6 +48,11 @@ function FpsView:show(x,y,formatstr)
 		evt_on(timer,EVENT_TIMER,f_fps_timer,self);
 	end
 end
+
+function FpsView:getName()
+	return "FpsView:"..tostring(self);
+end
+
 function FpsView:hide()
     self.label:visible(false);
 	local timer = self.timer;

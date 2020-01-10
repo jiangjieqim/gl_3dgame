@@ -1260,6 +1260,9 @@ REG_Quat(lua_State *L){
 		{
 			float px,py,pz;
 			quat_slerp_split(x,y,z,x1,y1,z1,&px,&py,&pz,value);
+
+			//printf("角度 = %.3f\n",vec_to_angle(x,y,z,px,py,pz)/PI*180);
+
 			lua_pushnumber(L,px);
 			lua_pushnumber(L,py);
 			lua_pushnumber(L,pz);
@@ -2134,7 +2137,7 @@ REG_change_attr(lua_State *L)
 			vec3Set(&pos,x,y,z);
 
 			vec3Normalize(&pos);
-
+			
 			//base_rotate_vec(base,0,1,0,a);
 			//ry = abs(ry);
 			//printf("%.3f to %.3f\n",base->ry,ry);
@@ -2147,7 +2150,6 @@ REG_change_attr(lua_State *L)
 	if(!strcmp(attrKey,"set_position")){
 		float x,y,z;
 		sscanf_s(str,"%f,%f,%f",&x,&y,&z);
-		//base_look_at(base,x,y,z);
 		base->x = x;
 		base->y = y;
 		base->z = z;

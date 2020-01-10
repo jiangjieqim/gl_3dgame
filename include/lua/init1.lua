@@ -19,12 +19,13 @@ JEngine:getIns():get_cam():set_pos(0,-4,-15);
 
 --*******************************************
 ----[[
-infowin(150,0);
+
+local win = InfoWin:new(150,0);
 
 --local e1 = Editor:new();
 
 --dofile("..\\include\\lua\\5.lua");
-dofile("..\\include\\lua\\quaternion.lua");
+--dofile("..\\include\\lua\\quaternion.lua");
 
 --]]
 

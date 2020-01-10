@@ -14,3 +14,7 @@ end
 function IPlugin:unload()
 	func_error("IPlugin:unload()接口未实现");
 end
+
+function IPlugin:getName()
+		func_error("IPlugin:getName()接口未实现");	
+end

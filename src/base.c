@@ -646,7 +646,7 @@ struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMat
 		mRayPickCallBack(&last);
 	}
 }
-
+//ÈÃ¶ÔÏó³¯Ïò_hitx,_hity,_hitz
 void 
 base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
 	Vec3 pos;
@@ -658,8 +658,6 @@ base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
 	if(vec3Length(&pos)>0){
 
 		vec3Normalize(&pos);
-
-		//p->ry = vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f);
 		
 		base_rotate_vec(p,0,1,0,vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f));
 

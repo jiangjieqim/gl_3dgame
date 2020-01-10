@@ -123,14 +123,6 @@ DLLIMPORT void mat4x4_mult(int c,Matrix44f o,...);
 DLLIMPORT void 
 mat4x4_perspective(Matrix44f M,float fov, float aspectRatio, float zNear, float zFar );
 
-
-///*vecÉèÖÃ*/
-//DLLIMPORT void tl_set_vec(Vec3_t vec,float x,float y,float z);
-/*
-	c = a + b
-*/
-DLLIMPORT void tl_add_vec(Vec3_t a,Vec3_t b,Vec3_t c);
-
 /*
 	×ÔÆ«ÒÆ
 */
