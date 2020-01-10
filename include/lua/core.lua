@@ -434,8 +434,6 @@ dofile("..\\include\\lua\\NScrollBar.lua")	--滑动条组件
 
 dofile("..\\include\\lua\\button.lua");		--按钮组件
 
-dofile("..\\include\\lua\\infowin.lua")	--fps组件
-
 dofile("..\\include\\lua\\image.lua")	--image组件
 
 dofile("..\\include\\lua\\checkbox.lua")	--checkbox组件

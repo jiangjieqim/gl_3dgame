@@ -6,7 +6,7 @@ local FpsView = {
 };
 
 FpsView.__index = FpsView;
-setmetatable(FpsView, IPlugin);--继承自单例
+setmetatable(FpsView, IPlugin);--继承自插件接口
 
 --插件加载
 function FpsView:load()
@@ -50,7 +50,7 @@ function FpsView:show(x,y,formatstr)
 end
 
 function FpsView:getName()
-	return "FpsView:"..tostring(self);
+	return "FpsView";
 end
 
 function FpsView:hide()

@@ -119,6 +119,10 @@ function NListBox:visible(v)
 	tf:visible(v);
 end
 
+function NListBox:set_pos(x,y)
+	self.bg:set_pos(x,y);
+end
+
 --w的listBox的宽度
 --size:Label的size大小
 function NListBox:new(x,y,size,w)

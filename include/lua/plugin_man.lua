@@ -17,13 +17,13 @@ function PluginMan:load(plugin)
 	local url = "../include/lua/"..plugin..".lua";
 	local p = dofile(url);
 	--stack_push(self.list,p);
-	func_print(">>>>╪сть╡Е╪Ч"..p:getName()..url);
+	func_print(">>>>╪сть╡Е╪Ч"..p:getName()..tostring(p)..url);
 	return p;
 end
 
 --п╤ть╡Е╪Ч
 function PluginMan:unload(p)
-	func_print("<<<<п╤ть╡Е╪Ч"..p:getName());
+	func_print("<<<<п╤ть╡Е╪Ч"..p:getName()..tostring(p));
 	p:unload();
 	p = nil;
 end

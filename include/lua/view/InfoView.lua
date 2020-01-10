@@ -1,7 +1,5 @@
 --------------------------------------------------------------------
 -- 信息调试面板
-
- 
 local function f_select(list,index,p)
 	local self = p;
 	local _stat = self._stat;
@@ -32,20 +30,17 @@ local function f_select(list,index,p)
 	--]]
 end
 
-
-
-
-InfoWin = {
+local InfoWin = {
 	list,
 	_stat,
 	fps,
 };
 InfoWin.__index= InfoWin;
-function InfoWin:new(x,y)
-
+setmetatable(InfoWin, IPlugin);--继承自插件接口
+function InfoWin:load()
 	local self = {};
 	setmetatable(self, InfoWin);
-	self:init(x,y);
+	self:init();
 	return self;
 end
 --切换显示fps
@@ -59,8 +54,11 @@ function InfoWin:loadfps()
 	end
 end
 
-function InfoWin:init(x, y)
-	
+function InfoWin:set_pos(x,y)
+	self.list:set_pos(x,y);
+end
+
+function InfoWin:init()
 	
 	--[[local list  = listbox_new(x or 0, y or 0);
 	listbox_bind(list,f_select);
@@ -74,7 +72,7 @@ function InfoWin:init(x, y)
 	listbox_add(list,"重置cam");
 	listbox_set_title(list,"infowin");--]]
 	
-	local list = NListBox:new(x,y,128);
+	local list = NListBox:new(0,0,128);
 	list:addItem("引擎信息");
 	list:addItem("gc");
 	list:addItem("fps");
@@ -93,7 +91,11 @@ function InfoWin:init(x, y)
 	self.list = list;
 end
 
-function InfoWin:dispose()
+function InfoWin:getName()
+	return "InfoWin";
+end
+
+function InfoWin:unload()
 	self.list:dispose();
 	
 	if(self.fps) then
@@ -102,3 +104,6 @@ function InfoWin:dispose()
 	
 	func_clearTableItem(self);
 end
+
+local win = InfoWin:load();
+return win;

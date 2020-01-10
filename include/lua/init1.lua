@@ -20,7 +20,8 @@ JEngine:getIns():get_cam():set_pos(0,-4,-15);
 --*******************************************
 ----[[
 
-local win = InfoWin:new(150,0);
+local win = JEngine:getIns():get_plugin():load("view/InfoView");
+win:set_pos(150,150);
 
 --local e1 = Editor:new();
 
