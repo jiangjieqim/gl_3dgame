@@ -21,8 +21,8 @@ local function f_select(list,index,p)
             JEngine:getIns():setbg(0.4,0.4,0.4);
         end
 	elseif (index == 4) then
-		--创建一个mesh
-		
+		--lua gc
+		func_lua_gc();
     elseif(index == 5) then
         local cam3d = JEngine:getIns():get_cam();
         cam3d:reset();
@@ -77,7 +77,7 @@ function InfoWin:init()
 	list:addItem("gc");
 	list:addItem("fps");
 	list:addItem("背景颜色");
-	list:addItem("创建mesh");
+	list:addItem("LuaGC");
 	list:addItem("重置cam");
 	list:bind(f_select,self);
 
@@ -105,5 +105,4 @@ function InfoWin:unload()
 	func_clearTableItem(self);
 end
 
-local win = InfoWin:load();
-return win;
+return InfoWin;

@@ -10,8 +10,6 @@ setmetatable(NSkin, Base);
 local function func_dispose(n)
    
 	local _type = n.type;
---	if(_type == UI_TYPE.Label) then
---		label_dispose(n);
 	if(_type == UI_TYPE.ScrollBar) then
 		scrollBar_del(n);
 --	elseif(_type == UI_TYPE.Button)then

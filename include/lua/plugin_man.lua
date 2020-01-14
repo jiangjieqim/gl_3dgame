@@ -12,18 +12,23 @@ function PluginMan:new()
 	return self;
 end
 
+local function f_getInfo(p)
+	return p:getName().." "..tostring(p);
+end
 --加载插件
 function PluginMan:load(plugin)
 	local url = "../include/lua/"..plugin..".lua";
-	local p = dofile(url);
-	--stack_push(self.list,p);
-	func_print(">>>>加载插件"..p:getName()..tostring(p)..url);
+	local p = dofile(url):load();
+	--func_print(">>>>插件初始化完毕"..f_getInfo(p)..url);
 	return p;
 end
 
 --卸载插件
 function PluginMan:unload(p)
-	func_print("<<<<卸载插件"..p:getName()..tostring(p));
 	p:unload();
-	p = nil;
+	func_print("<<<<卸载插件"..f_getInfo(p));	
+	--setmetatable(getmetatable(p),nil);
+	--setmetatable(p, nil);
+	
+	--print(getmetatable(p));
 end

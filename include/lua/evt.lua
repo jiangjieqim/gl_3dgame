@@ -1,4 +1,47 @@
-local evtlist = {};
+--local evtlist = {};
+
+local list = NStack:new();--事件列表
+local function f_each(node,p)
+	--print(d,p);
+
+	--[[local evt = 
+	{
+		id = id;
+		func = func;
+		obj = obj;
+        params = params;
+		once = once
+	}
+--]]
+	if(node and node.obj == p.obj and node.id == p.id and node.func == p.func) then
+		p.find = true;
+		func_print("重复的事件");
+		return true;
+	end
+end
+
+local function f_find(node,p)
+	if(node and node.obj == p.obj and node.id == p.id and node.func == p.func) then
+		p.node = node;
+		return true;
+	end
+end
+
+--node and node.obj == p.obj and 
+local function f_find_dispath(node,p)
+	if(node.id == p.id) then
+		p.node = node;
+		return true;
+	end
+end
+
+local function f_find_dispath_obj(node,p)
+	if(node and node.obj == p.obj and node.id == p.id) then
+		p.node = node;
+		return true;
+	end
+end
+
 --是否是table字符串
 local function func_is_table_str(value)
 	local s = tostring(value);
@@ -23,7 +66,7 @@ end
 
 function evt_on(obj,id,func,params,once)	
 	
-	obj = f_cv(obj);
+	obj = f_cv(obj);--is number
 	
     if(func == nil) then
         func_error("func = nil");
@@ -33,26 +76,32 @@ function evt_on(obj,id,func,params,once)
 	local str = string.format("绑定事件 evt id=(%d),obj=(%s) params=(%s)",id,tostring(obj),tostring(params));
 	func_print(str);
 
-	for k, v in pairs(evtlist) do
-		local node = evtlist[k];
-		if(node and node.obj == obj and node.id == id and node.func == func) then
-			--node.func(data);
-			--重复的事件
-			
-			func_print("重复的事件");
-			return;
-		end
-	end	
+
+	local findobj = {};
+	findobj.obj = obj;
+	findobj.id = id;
+	findobj.func = func;
+	findobj.find = false;
+	
+	list:for_each(f_each,findobj);
+	if(findobj.find)then
 		
-	local evt = 
-	{
-		id = id;
-		func = func;
-		obj = obj;
-        params = params;
-		once = once
-	}
-	evtlist[evt] = evt;
+	else
+		local evt = 
+		{
+			id = id;
+			func = func;
+			obj = obj;
+			params = params;
+			once = once;
+		}
+		--local v = tonumber(f_cv(evt));
+		list:push(evt);
+		
+		func_print("add之后事件数量"..list:len());
+	end
+--	evtlist[evt] = evt;
+	findobj = nil;
 end
 
 function evt_once(obj,id,func,params)
@@ -62,6 +111,8 @@ end
 
 --移除事件 并且释放事件引用
 function evt_off(obj,id,func)
+	local ok = false;
+	--[[
 	for k, v in pairs(evtlist) do
 		local node = evtlist[k];
 		if(node and node.id == id and node.func == func and node.obj == obj) then
@@ -69,23 +120,63 @@ function evt_off(obj,id,func)
 			local str = string.format("移除事件 evt_off==> evt.id = "..id..",obj = "..obj);
 			func_print(str);
 			
-			node.id = nil
-			node.func = nil;
-			node.obj = nil;
-            node.params = nil;
+			
+
 			evtlist[node]=nil;
+			func_clearTableItem(node);
+			node = nil;
+			ok = true;
 		end
 	end
+	--]]
+	local findobj = {};
+	findobj.obj = obj;
+	findobj.id = id;
+	findobj.func = func;
+	findobj.node = nil;
+	
+	list:for_each(f_find,findobj);
+	if(findobj.node) then
+		local str = string.format("移除事件 evt_off==> evt.id = "..id..",obj = "..obj);
+		func_print(str);
+		
+		list:del(findobj.node);
+		func_print("del之后的事件数量"..list:len());
+		ok = true;
+		
+	else
+		func_print("移除事件"..id.."失败!",0xff0000);
+	end
+	
+	findobj = nil;
+	
+	--[[if(ok~=true) then
+		func_print("移除事件"..id.."失败!",0xff0000);
+	end--]]
+	
+	return ok;
 end
 --是否有该事件
 function evt_has(obj,id,func)
-	for k, v in pairs(evtlist) do
+	--[[for k, v in pairs(evtlist) do
 		local node = evtlist[k];
 		if(node and node.id == id and node.func == func and node.obj == obj) then
 			return true
 		end
 	end
-	return false
+	return false--]]
+	
+	local findobj = {};
+	findobj.obj = obj;
+	findobj.id = id;
+	findobj.func = func;
+	findobj.node = nil;
+	
+	list:for_each(f_find,findobj);
+	if(findobj.node) then
+		return true;
+	end
+	return false;
 end
 
 --全局事件
@@ -122,10 +213,17 @@ function evt_dispatch(...)
 --    if(id == 103)then
 --        print("************");
 --    end
+	
+	
+	local findobj = {};
+	findobj.obj = obj;
+	findobj.id = id;
+	findobj.node = nil;
 
+	
 	if (obj == 0) then
 		--全局事件
-		for k, v in pairs(evtlist) do
+		--[[for k, v in pairs(evtlist) do
 			local node = evtlist[k];
 			if(node and node.id == id) then
 				node.func(data,node.params);
@@ -134,14 +232,25 @@ function evt_dispatch(...)
 					--func_print("移除全局事件"..id);
 				end
 			end
+		end--]]
+		list:for_each(f_find_dispath,findobj);
+		local node = findobj.node;
+		if(node)then
+			node.func(data,node.params);
+			if(node.once) then
+				evt_off(obj,id,node.func);--obj,id,func
+				--func_print("移除全局事件"..id);
+			end
 		end
 	else
 		--print(id,data,obj);
-		for k, v in pairs(evtlist) do
-			local node = evtlist[k];
-			if(node and node.obj == obj--[[  接受事件的对象检测判断--]] and node.id == id) then
-				
-				node.func(data,node.params);--data:C层传递的参数 node.params:Lua层传递的参数
+	
+		
+		list:for_each(f_find_dispath_obj,findobj);
+
+		local node = findobj.node;
+		if(node)then
+			node.func(data,node.params);--data:C层传递的参数 node.params:Lua层传递的参数
 				
 				if(node.once) then
 					
@@ -150,7 +259,6 @@ function evt_dispatch(...)
 					
 					evt_off(obj,id,node.func);--obj,id,func
 				end
-			end
 		end
 	end
 	--print(id);

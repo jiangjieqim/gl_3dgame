@@ -91,6 +91,8 @@ local DEBUG = true;
 dofile("..\\include\\lua\\stack.lua")
 dofile("..\\include\\lua\\xml.lua")	--xml组件
 dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
+dofile("..\\include\\lua\\nstack.lua");--链栈
+
 dofile("..\\include\\lua\\evt.lua")	--事件管理器
 
 
@@ -301,6 +303,15 @@ end
 function func_gc()
 	change_attr(nil,"gc")
 	--print('gc')
+end
+
+--lua的GC
+function func_lua_gc(key)
+	local old =  collectgarbage("count");
+	--func_print("==> GC之前 LUA VM使用的总内存数:"..(collectgarbage("count")*1024).." bytes");
+	collectgarbage("collect");
+	local n = collectgarbage("count");
+	func_print((key or "").." GC完成 LUA VM使用的总内存数:\t"..(n*1024).." bytes\t("..n.."kb) gc了["..((old -  n)*1024).."]bytes",0x00ff00);
 end
 
 --创建名字

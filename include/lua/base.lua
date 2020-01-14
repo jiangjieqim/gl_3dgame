@@ -1,6 +1,5 @@
 Base = {
-	name = nil,--该对象的名字
-	type = nil,--该对象的类型
+	
 };
 Base.__index = Base;
 function Base:setname(name)
@@ -8,7 +7,10 @@ function Base:setname(name)
 end
 
 function Base:new()
-	local self = {};
+	local self = {
+		name = nil,--该对象的名字
+		type = nil,--该对象的类型
+	};
 	setmetatable(self, Base);
 	return self;
 end

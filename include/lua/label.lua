@@ -34,7 +34,7 @@ end
 -- 显示隐藏
 local function ftext_vis(txt, v)
     return ftext(txt, "vis", tostring(v));
-end     
+end
 
 -- 擦除
 local function fext_clear(txt)
@@ -74,104 +74,9 @@ local function fext_dispose(txt)
     end
 end
 
-----分割成中文和英文存储在table中
--- function func_split_cn(s)
-----    local b = string.byte(s);
---    local len = string.len(s);
---    print("len=",len);
---    for i=1,len,1 do
---        print( "["..string.sub(s,i-1,1).."]")
---    end
--- end
-
-
-
-
--- 显示单行连续的文本
--- a,b   ==> a和b
--- function func_ftext_set_much_chars(ft,s,x,y,hGap)
---    hGap = hGap or 16
---    x = x or 0;
---    y = y or 0;
---    local arr =   func_split(s,",");
-----    local i = 0;
---    local w,h;
---    for key, value in pairs(arr) do		
-----		i = i + 1
-
---        w,h = func_ftext_setchar(ft,value,x,y);
-----        print(w,h);
---        x=x+w;
--- end
-
-
-----    local len = string.len(s);
-----    print(len);
-----    for i=1,len,1 do
-----        print( string.sub(s,i-1,i))
-----    end
-
-----    "[\\0-\127\194-\244][\128-\191]*"
-----      "[\0-\x7F\xC2-\xF4][\x80-\xBF]*"
-----    for ch in string.gmatch(s, "[\\0-\127\194-\244][\128-\191]*") do
-----	    print(ch,#ch~=1)
-----    end
--- end
-
-
--- FText = {
---    str,--文本数据
---    txtWidth,--文本对象的宽度
--- };
--- FText.__index = FText;
---********************************************************
-local function label_create(w,h,cam)
-	local label = {
-		name = nil,
-		--组件类型
-		type = 1,
-		tf = nil;
-	};
-	
-	label.tf = ftext_create(w,h,13,12,cam);
-	return label;
-end
-
-local function label_dispose(label)
-	fext_dispose(label.tf);
-	func_clearTableItem(label);
-end
-
-local function label_set_text(label,s)
-	ftext_reset(label.tf,s);
-end
-
-local function label_get_text(label,s)
-	return	ftext_str(label.tf);
-end
-
-local function label_set_pos(label,x,y)
-	ftext_setpos(label.tf,x,y);
-end
-
-local function label_get_wordpos(label)
-	return ftext_get_wordpos(label.tf);
-end
-
-local function label_set_visible(label,v)
-	if(type(v) == "boolean") then
-		if(v) then 
-			v  = 1;
-		else
-			v = 0;
-		end
-	end
-	
-	ftext_vis(label.tf,v);
-end
 --***************************************************
 NLabel = {
-	tf,
+	
 };
 NLabel.__index = NLabel;
 setmetatable(NLabel, Base);
@@ -212,6 +117,7 @@ end
 function NLabel:dispose()
 	--func_error();
 	fext_dispose(self.tf);
+	--setmetatable(self, nil);
 	func_clearTableItem(self);
 end
 
