@@ -15,7 +15,7 @@ local function f_each(node,p)
 --]]
 	if(node and node.obj == p.obj and node.id == p.id and node.func == p.func) then
 		p.find = true;
-		func_print("重复的事件");
+		func_print("重复的事件,事件id = "..p.id);
 		return true;
 	end
 end
@@ -98,7 +98,7 @@ function evt_on(obj,id,func,params,once)
 		--local v = tonumber(f_cv(evt));
 		list:push(evt);
 		
-		func_print("add之后事件数量"..list:len());
+		--func_print("add之后事件"..id.."数量"..list:len());
 	end
 --	evtlist[evt] = evt;
 	findobj = nil;
@@ -141,7 +141,7 @@ function evt_off(obj,id,func)
 		func_print(str);
 		
 		list:del(findobj.node);
-		func_print("del之后的事件数量"..list:len());
+		--func_print("del之后的事件"..id.."数量"..list:len());
 		ok = true;
 		
 	else

@@ -71,8 +71,7 @@ atals_load(const char* path,const char* name){
 	memset(ptr,0,sizeof(struct Atals));
 	
 	if(strlen(name)>G_BUFFER_64_SIZE){
-		printf("文件名(%s)太长\n",name);
-		assert(0);
+		assert(0);//printf("文件名(%s)太长\n",name);
 	}
 	memcpy(ptr->name,name,strlen(name));
 	{
@@ -83,7 +82,7 @@ atals_load(const char* path,const char* name){
 		tl_free(_s);
 	}
 	getTextureInfo(ptr->xml,name,&ptr->width,&ptr->height);
-	
+	//log_color(0,"构造图集纹理:%s\n",tgaURL);
 	//创建一个材质
 	ptr->material = tmat_create("spritevbo",1,tgaURL);
 
