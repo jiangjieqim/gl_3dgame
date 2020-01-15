@@ -37,7 +37,7 @@ local InfoWin = {
 };
 InfoWin.__index= InfoWin;
 setmetatable(InfoWin, IPlugin);--继承自插件接口
-function InfoWin:load()
+function InfoWin:new()
 	local self = {};
 	setmetatable(self, InfoWin);
 	self:init();
@@ -95,7 +95,7 @@ function InfoWin:getName()
 	return "InfoWin";
 end
 
-function InfoWin:unload()
+function InfoWin:dispose()
 	self.list:dispose();
 	
 	if(self.fps) then

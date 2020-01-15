@@ -7,7 +7,7 @@ FpsView.__index = FpsView;
 setmetatable(FpsView, IPlugin);--继承自插件接口
 
 --插件加载
-function FpsView:load()
+function FpsView:new()
 	local self = {
 		label,
 		timer,
@@ -30,7 +30,7 @@ local function f_fps_timer(data,param)
 end
 
 --卸载插件,即销毁插件
-function FpsView:unload()
+function FpsView:dispose()
 	if(self.timer) then
 		timelater_remove(self.timer);
 	end

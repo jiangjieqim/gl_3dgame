@@ -6,13 +6,13 @@ IPlugin = {
 IPlugin.__index = IPlugin;
 
 --插件加载
-function IPlugin:load()
-	func_error("IPlugin:load()接口未实现");
+function IPlugin:new()
+	func_error("IPlugin:new()接口未实现");
 end
 
 --插件卸载,此接口会卸载并销毁该插件所有的资源
-function IPlugin:unload()
-	func_error("IPlugin:unload()接口未实现");
+function IPlugin:dispose()
+	func_error("IPlugin:dispose()接口未实现");
 end
 
 function IPlugin:getName()

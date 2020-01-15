@@ -21,7 +21,7 @@ end
 
 function PluginMan:load(plugin)
 	local url = "../include/lua/"..plugin..".lua";
-	local p = dofile(url):load();
+	local p = dofile(url):new();
 	func_print(">>>>插件初始化完毕"..self:getInfo(p)..url);
 	return p;
 end
