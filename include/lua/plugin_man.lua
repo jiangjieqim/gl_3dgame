@@ -12,23 +12,30 @@ function PluginMan:new()
 	return self;
 end
 
-local function f_getInfo(p)
+
+function PluginMan:getInfo(p)
 	return p:getName().." "..tostring(p);
 end
+
 --加载插件
+
 function PluginMan:load(plugin)
 	local url = "../include/lua/"..plugin..".lua";
 	local p = dofile(url):load();
-	--func_print(">>>>插件初始化完毕"..f_getInfo(p)..url);
+	func_print(">>>>插件初始化完毕"..self:getInfo(p)..url);
 	return p;
 end
 
 --卸载插件
+--内存泄漏,废弃之
+--[[
 function PluginMan:unload(p)
 	p:unload();
 	func_print("<<<<卸载插件"..f_getInfo(p));	
+	
 	--setmetatable(getmetatable(p),nil);
 	--setmetatable(p, nil);
 	
 	--print(getmetatable(p));
 end
+--]]

@@ -4,12 +4,6 @@ JEngine:getIns():get_cam():set_pos(0,0,-5);
 
 --FpsView:getIns():show();--œ‘ æfps
 
-
-
-
---JEngine:getIns():get_plugin():unload(fps);--–∂‘ÿ≤Âº˛
-
-
 local function getMid(x0, y0, z0, x1, y1,z1)
 	local x2,y2,z2 =vec3_normal(x0,y0,z0);
 	local x3,y3,z3 =vec3_normal(x1,y1,z1);

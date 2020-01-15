@@ -39,7 +39,7 @@ function FpsView:unload()
 		--print("dispose self.label!");
 		self.label:dispose();
 	end
-	setmetatable(self, nil);
+	--setmetatable(self, nil);
 	--func_clearTableItem(self);
 end
 

@@ -30,7 +30,6 @@ function f_onkey(data)
 ----[[
 		local f = JEngine:getIns():get_plugin():load("view/FpsView");--¼ÓÔØ²å¼þ
 		f:show();
-		--JEngine:getIns():get_plugin():unload(f);
 		f:unload();
 		--f = nil;
 		--]]
@@ -62,7 +61,7 @@ function f_onkey(data)
 		local tf = JEngine:getIns():get_plugin():load("view/tf");
 		tf:init();
 		tf:show("message");
-		JEngine:getIns():get_plugin():unload(tf);
+        tf:unload();
 --]]
 
 		
@@ -86,7 +85,7 @@ JEngine:getIns():get_cam():set_pos(0,-4,-15);
 --[[
 local win = JEngine:getIns():get_plugin():load("view/InfoView");
 win:set_pos(150,0);
-JEngine:getIns():get_plugin():unload(win);
+win:unload():
 win = nil;
 func_lua_gc();
 --]]
