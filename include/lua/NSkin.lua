@@ -310,9 +310,9 @@ end
 --]]
 local function f_skin_parse(self,myParent,offsetx,offsety)
 	
-	local xml = xml_load(self.xmlurl);
-
-	local cnt = xml_get_length(xml);
+	local xml = Xml:new();--xml_load(self.xmlurl);
+	xml:load(self.xmlurl);
+	local cnt = xml:len();--xml_get_length(xml);
 
 	local n = 0;
 	
@@ -321,7 +321,7 @@ local function f_skin_parse(self,myParent,offsetx,offsety)
 	local _l = stack_new();
 
 	for n = 0,cnt-1 do
-		local node = xml_get_node_by_index(xml,n);
+		local node = xml:get_index(n);--xml_get_node_by_index(xml,n);
 		stack_push(_l,node);
 	end
 		
@@ -333,8 +333,10 @@ local function f_skin_parse(self,myParent,offsetx,offsety)
 	end	
 	
 	stack_del(_l);
-	xml_del(xml);
+	--xml_del(xml);
+	xml:dispose();
 end
+
 local function f_tex_complete(self)
 	f_skin_parse(self);
 	--print(self);

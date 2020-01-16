@@ -108,9 +108,41 @@ function evt_once(obj,id,func,params)
 	evt_on(obj,id,func,params,true);
 end
 
-
+--是否有该事件
+function evt_has(obj,id,func)
+	--[[for k, v in pairs(evtlist) do
+		local node = evtlist[k];
+		if(node and node.id == id and node.func == func and node.obj == obj) then
+			return true
+		end
+	end
+	return false--]]
+	
+	local findobj = {};
+	findobj.obj = obj;
+	findobj.id = id;
+	findobj.func = func;
+	findobj.node = nil;
+	
+	list:for_each(f_find,findobj);
+	
+	if(findobj.node) then
+		return true;
+	end
+    return false;
+end
 --移除事件 并且释放事件引用
 function evt_off(obj,id,func)
+
+--[[
+	if(evt_has(obj,id,func)==false)then
+		local str = string.format("evt_has移除[%d]事件[%d]失败! 事件不存在",obj,id);
+		func_print(str);
+		return;
+	end
+--]]
+
+	
 	local ok = false;
 	--[[
 	for k, v in pairs(evtlist) do
@@ -145,7 +177,7 @@ function evt_off(obj,id,func)
 		ok = true;
 		
 	else
-		func_print("移除事件"..id.."失败!",0xff0000);
+		func_error("移除事件"..id.."失败!");
 	end
 	
 	findobj = nil;
@@ -156,28 +188,7 @@ function evt_off(obj,id,func)
 	
 	return ok;
 end
---是否有该事件
-function evt_has(obj,id,func)
-	--[[for k, v in pairs(evtlist) do
-		local node = evtlist[k];
-		if(node and node.id == id and node.func == func and node.obj == obj) then
-			return true
-		end
-	end
-	return false--]]
-	
-	local findobj = {};
-	findobj.obj = obj;
-	findobj.id = id;
-	findobj.func = func;
-	findobj.node = nil;
-	
-	list:for_each(f_find,findobj);
-	if(findobj.node) then
-		return true;
-	end
-	return false;
-end
+
 
 --全局事件
 function evt_dispatch(...)

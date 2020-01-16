@@ -136,10 +136,10 @@ function func_load_material(url)
 	local suffix = get_suffix(url);
 	--print(s);
 	local result;
-	local xml = xml_load(url);
-	
+	local xml = Xml:new();--xml_load(url);
+	xml:load(url);
 	if(suffix == "mat") then
-		local node = xml_get_node_by_index(xml,0);
+		local node = xml:get_index(0);--xml_get_node_by_index(xml,0);
 		local shader = xml_get_str(node,"shader");
 		
 		if(shader == nil) then
@@ -170,8 +170,8 @@ function func_load_material(url)
 		end
 	end
 	
-	xml_del(xml);
-	
+--	xml_del(xml);
+	xml:dispose();
 	return result;
 end
 

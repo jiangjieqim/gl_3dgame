@@ -32,7 +32,6 @@ function f_onkey(data)
 		f:show();
 		f:dispose();
 		--f = nil;
-		--]]
 		
 --[[
 		evt_on(2,EVENT_TIMER,f_fps_timer,"a");
@@ -57,7 +56,7 @@ function f_onkey(data)
 		func_lua_gc("4_1");
 
 		
---[[
+----[[
 		local tf = JEngine:getIns():get_plugin():load("view/tf");
 		tf:init();
 		tf:show("message");
@@ -100,9 +99,10 @@ func_lua_gc();
 
 
 
---local e1 = Editor:new();
+local e1 = Editor:new();
 
 --dofile("..\\include\\lua\\5.lua");
+
 --dofile("..\\include\\lua\\quaternion.lua");
 
 --]]

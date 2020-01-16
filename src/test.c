@@ -302,6 +302,7 @@ REG_tl_newName(lua_State *L){
 
 static void f_res_endCallBack(void* pResLoad,void* p){
 	//log_color(0,"参数值:[%s],index = %d,pResLoad=%d\n",p,ex_getIns()->index,pResLoad);
+	log_color(0,"构造完成纹理对象:[%s]\n",p);
 	ex_lua_evt_dispatch(pResLoad,EVENT_ENGINE_TEX_LOAD_COMPLETE,(const char*)p);
 }
 

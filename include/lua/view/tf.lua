@@ -10,7 +10,7 @@ local MyClass = {
 MyClass.__index = MyClass;
 setmetatable(MyClass, IPlugin);--继承自插件接口
 
-function MyClass:load()
+function MyClass:new()
 	local self = {name,label,tf};
 	setmetatable(self, MyClass);
 	self.name = tostring(math.random());

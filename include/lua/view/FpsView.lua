@@ -52,6 +52,7 @@ function FpsView:show(x,y,formatstr)
 --]]
 	
 	if(self.label) then
+		--创建label
 		self.label:set_pos(x or 0,y or 0);
 		self.label:visible(true);
 	end
@@ -59,6 +60,8 @@ function FpsView:show(x,y,formatstr)
 	self.formatstr = formatstr;
 	
 ----[[
+
+	--增加计时器
 	if(self.timer==nil) then
 		self.timer = timelater_new(1000);
 		evt_on(self.timer,EVENT_TIMER,f_fps_timer,self);

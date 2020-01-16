@@ -170,16 +170,17 @@ end
 -- 初始化listbox,用来测试不同的材质
 local function f_shader_init()
 	--local list = listbox_new(0,50);
-	local list = NListBox:new(200,50,128);
+	local list = NListBox:new(0,0,128);
 	list:addItem("diffuse");
 	list:addItem("ploygonLine");
 	list:addItem("outline");
 	list:addItem("point");
 	list:addItem("drawCollison");
+	
 	list:addItem("glslOutline");
 	list:addItem("normal");
-	list:addItem("diffuse");
-	list:addItem("材质测试");
+	
+--	list:addItem("材质测试");
 
 	list:bind(f_listCallBack);
 
