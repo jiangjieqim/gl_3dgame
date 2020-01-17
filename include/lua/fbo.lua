@@ -41,7 +41,13 @@ local function fboobj_dispose(fbo)
 
 	ptr_remove(fbo.spr);
 end
-
+ --[[
+	设置坐标(兼容模式)
+--]]
+local function func_setPos(p,x,y)
+	local pos = x..","..y;
+	change_attr(p,"sprite_position",pos)
+end
 local function fboobj_set_pos(fbo,x,y)
 	local spr = fbo.spr;
 	func_setPos(spr,x,y);

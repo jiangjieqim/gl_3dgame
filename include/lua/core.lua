@@ -1,26 +1,20 @@
-CONST_DIRECTION_HORIZONTAL = 0	--水平,横
-CONST_DIRECTION_VERTICAL   = 1 	--垂直,竖
-
-PI	= 3.1415929;
-
-FLAGS_RENDER_BOUND_BOX	=	0x01
-FLAGS_DRAW_RAY_COLLISION	=	0x02	--绘制射线盒子	(是否绘制射线静态包围盒,用于测试 查看射线包围盒),即使没有设置FLAGS_RAY,那么也是可以绘制射线盒子的,这样可以用来查看
-FLAGS_LINE_RENDER			=	0x04	--是否显示渲染线框
-FLAGS_OUTLINE				=	0x08	--是否显示边缘轮廓
-FLAGS_RAY					=	0x10	--16是否具有射线拾取功能(此只用于3d拾取,2d拾取不用这个标记)
-FLAGS_VISIBLE				=	0x20	--32显示或者隐藏模型,(是否加入渲染队列中)
-FLAGS_RENDER_DRAWSKELETON	=	64		--渲染骨骼节点(md5模型才会显示)
-FLAGS_ANIM_ADAPTIVE		=	128		--是否根据关键帧的帧率适配关键帧的动画(是否适配fps 1,适配  0,不适配)
-FLAGS_GLSL_OUTLINE		=	256		--用GLSL实现的轮廓线
-FLAGS_DRAW_PLOYGON_LINE	=	512		--在第一个基本材质上用线框渲染(固定管线模式设置GL_LINE)
-FLAGS_BUTTON_EFFECT		=	1024	--设置按钮特效(在有点击事件的前提下才会有该特效)
-FLAGS_DRAW_NORMAL 		= 	2048	--法线
-FLAGS_DRAG				=	4096	--是否可拖拽
-FLAGS_DRAW_PLOYGON_POINT= 	8192	--点模式
-FLAGS_DISABLE_CULL_FACE	=	16384	--设置显示双面
-FLAGS_REVERSE_FACE		=	32768	--反转渲染面,只有设置了双面渲染才有效
-
-
+FLAGS_RENDER_BOUND_BOX	=	0x01;
+FLAGS_DRAW_RAY_COLLISION	=	0x02;	--绘制射线盒子	(是否绘制射线静态包围盒,用于测试 查看射线包围盒),即使没有设置FLAGS_RAY,那么也是可以绘制射线盒子的,这样可以用来查看
+FLAGS_LINE_RENDER			=	0x04;	--是否显示渲染线框
+FLAGS_OUTLINE				=	0x08;	--是否显示边缘轮廓
+FLAGS_RAY					=	0x10;	--16是否具有射线拾取功能(此只用于3d拾取,2d拾取不用这个标记)
+FLAGS_VISIBLE				=	0x20;	--32显示或者隐藏模型,(是否加入渲染队列中)
+FLAGS_RENDER_DRAWSKELETON	=	64;		--渲染骨骼节点(md5模型才会显示)
+FLAGS_ANIM_ADAPTIVE		=	128;		--是否根据关键帧的帧率适配关键帧的动画(是否适配fps 1,适配  0,不适配)
+FLAGS_GLSL_OUTLINE		=	256;		--用GLSL实现的轮廓线
+FLAGS_DRAW_PLOYGON_LINE	=	512;		--在第一个基本材质上用线框渲染(固定管线模式设置GL_LINE)
+FLAGS_BUTTON_EFFECT		=	1024;	--设置按钮特效(在有点击事件的前提下才会有该特效)
+FLAGS_DRAW_NORMAL 		= 	2048;	--法线
+FLAGS_DRAG				=	4096;	--是否可拖拽
+FLAGS_DRAW_PLOYGON_POINT= 	8192;	--点模式
+FLAGS_DISABLE_CULL_FACE	=	16384;	--设置显示双面
+FLAGS_REVERSE_FACE		=	32768;	--反转渲染面,只有设置了双面渲染才有效
+--[[
 --//文件类型定义
 TYPE_OBJ_FILE = 0--	//obj类型
 TYPE_MD5_FILE =1 --//md5类型
@@ -32,6 +26,8 @@ TYPE_OBJ_VBO_FILE=	5--//VBO文件数据
 SUFFIX_OBJ ="obj"
 SUFFIX_MD5MESH ="md5mesh"
 SUFFIX_MD2 ="md2"
+
+--]]
 
 ------------------------------------------------------------
 EVENT_RAY_PICK = 1						--拾取点击回调
@@ -86,7 +82,6 @@ UI_TYPE = {
 
 local DEBUG = true;
 
---print(UI_TYPE.Label,UI_TYPE.ScrollBar);
 
 dofile("..\\include\\lua\\stack.lua")
 dofile("..\\include\\lua\\xml.lua")	--xml组件
@@ -264,18 +259,7 @@ function func_error(msg,func)
 	--error(msg)
     --print ( debug.getinfo(1).name )
 end
---[[
-	设置坐标(兼容模式)
---]]
-function func_setPos(p,x,y)
-	--local t = JEngine:getIns():get_type(p)
-	local pos = x..","..y;
-	--if(t == TYPE_SPRITE_FLIE) then	
-	change_attr(p,"sprite_position",pos)
-	--elseif(t == TYPE_TEXT_FILE)	then
-	--	change_attr(p,"txt_position",pos)
-	--end
-end
+
 --[[
 	设置sprite对象的相对于父对象的坐标
 --]]
@@ -385,15 +369,11 @@ function func_addnode(parent,n,x,y)
 	y = y or 0;
 	local _type = n.type;
 	
---	if(_type == UI_TYPE.Label) then
---		func_addchild(parent,ftext_get_container(n.tf),x,y);
 	if(_type == UI_TYPE.ScrollBar) then
 		func_addchild(parent,scrollBar_get_container(n),x,y);
 	elseif(_type == UI_TYPE.Button)then
 		func_addchild(parent,btn_get_container(n),x,y);
-	elseif(
-	
-		--_type == UI_TYPE.Input
+	elseif(	
 		_type == UI_TYPE.Image
 		or _type == UI_TYPE.Shape
 		) then
@@ -453,7 +433,7 @@ dofile("..\\include\\lua\\NSkin.lua");--NSkin皮肤组件
 
 dofile("..\\include\\lua\\NUnit.lua");
 dofile("..\\include\\lua\\UnitBase.lua");		--角色单位
-dofile("..\\include\\lua\\md5unit.lua");
+dofile("..\\include\\lua\\md5unit.lua");		--md5对象
 
 dofile("..\\include\\lua\\scrollview.lua")	--scrollview
 
