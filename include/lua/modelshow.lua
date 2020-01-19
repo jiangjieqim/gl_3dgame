@@ -36,7 +36,7 @@ local function addmd2_fbo(fbo)
 	--print(n:frame_count());
 --]]
 	
---[[
+----[[
 	local n = UnitBase:new();--md2简模
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);
@@ -48,7 +48,7 @@ local function addmd2_fbo(fbo)
 	--anim:set_fps(1);
 	
 --]]
-----[[
+--[[
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-100);
@@ -104,6 +104,8 @@ local function f_set_anim(progress,self)
 end
 
 local function btnClick(self)
+	print("dasdasd");
+	
 	local n = self.u;
 	print("it`s name = "..n:get_name());
 		
@@ -178,6 +180,8 @@ local function f_cpmlete(self)
 	
 	self.u = addmd2_fbo(fbo);--增加一个vbo模型
 	
+	local btn0 =skin:find("btn0");
+	btn0:bind_click(btnClick,self);
     
 
 	local scale = skin:find("scale");
@@ -198,8 +202,7 @@ local function f_cpmlete(self)
 	--self.nskin:dispose();
 	
 	
-	local btn0 =skin:find("btn0");
-	btn0:bind_click(btnClick,self);
+	
 	
 	local timer = timelater_new(1);
 	
@@ -229,7 +232,7 @@ local function f_cpmlete(self)
 	self.floorm = loadfloor();
 
 
-	--	self.editor:dispose();
+	--self.editor:dispose();
 end
 
 function ModleShow:new(editor)

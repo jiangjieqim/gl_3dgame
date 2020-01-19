@@ -177,7 +177,7 @@ function evt_off(obj,id,func)
 		ok = true;
 		
 	else
-		func_error("移除事件"..id.."失败!");
+		func_error("移除对象["..obj.."]的事件["..id.."]失败!");
 	end
 	
 	findobj = nil;
@@ -202,11 +202,9 @@ function evt_dispatch(...)
 	id  = arr[2];
 	data= arr[3];
 	
+	
 	obj = f_cv(obj);
 
-	
---	print("evt_dispatch",obj ,id,data );
-	
 	
 		
 --[[		

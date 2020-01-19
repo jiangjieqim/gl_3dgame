@@ -149,9 +149,7 @@ f_callLater(void*p){
 	// 
 	//printf("f_callLater 构造%s纹理%d结束\n",ap->icon,(void*)ap->tex);
 
-	evt_once(ex_getIns(),EVENT_ENGINE_RENDER_3D,f_render1,ap);
-	
-	//ex_lua_evt_dispatch(sprite,EVENT_ENGINE_SPRITE_CLICK,b->name);
+	evt_once(ex_getIns(),EVENT_ENGINE_RENDER_3D,f_render1,ap);	
 }
 
 static void

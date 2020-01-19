@@ -21,103 +21,105 @@ NStack = {
 
 NStack.__index = NStack;
 
-function NStack:new()
-	local self = {
-		pre,--当前的node
-		next,
-	};
-	setmetatable(self, NStack);
-	
-	return self;
-end
-
-local function createNode(data)
-	local node = {};
+local function create_node(data)
+	local node = {data,pre,next};
 	node.data = data;
 	return node;
 end
+function NStack:new()
+	local self = {node=nil};
+	setmetatable(self, NStack);
+	self.node = create_node();
+	return self;
+end
+
 
 function NStack:push(data)
-	local node = createNode(data);
+	local node = create_node(data);
 	
-	--[[
-	node.pre = self;
-	self.next = node;
-	self.cur = node;
+	node.next = self.node.next;
+	node.pre = self.node;
+	self.node.next = node;
 	
-	--]]
-	
-	node.next = self.next;
-	node.pre = self;
-	self.next = node;
 end
 
 --根据节点中的数据删除一个节点
 function NStack:del(data)
-	local node = self;
-	while(node.next~=nil)
+
+	local p = self.node;
+	
+	while(p~=nil and p.next~=nil)
 	do
-		node = node.next;
-		--f(node.data,p);
-		if(node.data == data) then
-			local n =	node.next;
-			if(n) then
-				n.pre = node.pre;
+		if(p~=nil) then
+			local pre = p;
+			p = p.next;
+			if(p.data == data) then
+				local next = p.next;
+				if(next~=nil) then
+					next.pre= pre;
+				end
+				pre.next = next;
+				p.next = nil;
+				return true;
 			end
-            node.pre.next = n;
-			break;
 		end
 	end
+	
 end
 
 function NStack:pop()
-	if(self:len()>=0) then
-		return self.cur;
+	local p;
+	local pNode;
+	p = self.node.next;
+	if(p==nil) then
+		return;
 	end
+	pNode = p.next;
+	p.pre = self.node;
+	self.node.next = p.next;
+	return p.data;	
 end
-function NStack:for_each(f,p)
-	local node = self;
-	while(node.next~=nil)
+function NStack:for_each(f,param)
+	local s = self.node;
+	local top,p;
+	top = s;
+	p = top;
+	
+	while(p.next~=nil)
 	do
-		node = node.next;
-		if(f(node.data,p)~=nil)then
+		p = p.next;
+		if(f(p.data,param)~=nil) then
 			break;
 		end
 	end
 end
 --当前的链表长度
 function NStack:len()
-	local node = self;
-	local n = 0;
-	while(node.next~=nil)
+	local p;
+	local count = 0;
+	p = self.node;
+	while(p~=nil and p.next~=nil)
 	do
-		n = n + 1;
-		node = node.next;
+		p = p.next;
+		count = count + 1;
 	end
-	return n;
+	return count;
 end
 
 --销毁链栈
-function NStack:dispose()	
-	local node = self;
-    --local n = node.next;
-	local node=self;--self.next;
-	
-	local curNode = node.next;
-	
-	while(node~=nil and curNode~=nil)
+function NStack:dispose()
+	local p;
+	local q;
+	p = self.node;
+	while(p~=nil)
 	do
-		node.data = nil;
-		node.pre = nil;
-        curNode = node.next;
-		
-		--[[
-			if(curNode) then
-				print(curNode.data);
-			end
-		--]]
-		
-		node = node.next;
+		q = p;
+		p = p.next;
+		if(q~=nil) then
+			func_clearTableItem(q);
+			q = nil;
+		end
 	end
+	self.node = nil;
 	func_clearTableItem(self);
 end

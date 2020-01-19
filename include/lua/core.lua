@@ -40,7 +40,7 @@ EVENT_ENGINE_BASE_END		 =  103		--base结束事件
 EVENT_ENGINE_SPRITE_CLICK = 104
 EVENT_ENGINE_SPRITE_CLICK_DOWN = 105
 EVENT_ENGINE_SPRITE_CLICK_MOVE = 106    --click move
-EVENT_ENGINE_TEX_LOAD_COMPLETE = 108
+EVENT_ENGINE_TEX_LOAD_COMPLETE = 108	--纹理加载结束
 EVENT_ENGINE_COMPLETE		   = 109	--完成事件
 
 CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE =110 --向lua层发送焦点变化
@@ -227,7 +227,7 @@ function func_error(msg,func)
 	--func_print(s,0xff0000)
 	--func_print('lua error:'..s,0xff0000)
 	
-	print(s);
+	func_print(s,0xff0000);
 	
 	s = ''
 	if(func) then
@@ -251,9 +251,11 @@ function func_error(msg,func)
 				end
 		end
 	end
-	print(s)
+	func_print(s,0xff0000);
 	--printTable(debug.getinfo(1))
-	print(debug.traceback())
+	--print(debug.traceback())
+	
+	func_print(debug.traceback(),0xff0000);
 	
 	--assert(nil,s)
 	--error(msg)
