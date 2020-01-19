@@ -3,19 +3,43 @@ NStack = {
 };
 
 --[[
---example:
-		local function f_each(d,p)
-			print(d,p);
-		end
+≤‚ ‘”√¿˝1:
+local function f_each(d,p)
+	print(d,p);
+end
 
-		local n = NStack:new();
-		n:push("a");
-		n:push("b");
-		n:push("c");
-		n:del("b");
-		print(n:len());
-		n:for_each(f_each,"ppp1");
-		n:dispose();
+local n = NStack:new();
+n:push("a");
+n:push("b");
+n:push("c");
+n:del("b");
+print(n:len());
+n:for_each(f_each,"ppp1");
+n:dispose();
+
+--#################################
+≤‚ ‘”√¿˝2:
+
+
+local i = 0;
+local function f_each(d,p)
+	print(i,d,p);
+	i = i + 1;
+end
+
+local n = NStack:new();
+n:push("a");
+n:push("b");
+n:push("c");
+
+n:del("b");
+local p = n:pop();
+print("len:",n:len(),p);
+
+n:for_each(f_each,"ppp1");
+n:dispose();
+--#################################
+
 
 ]]
 
