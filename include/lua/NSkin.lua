@@ -190,7 +190,9 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		local label = xml_get_str(node,"label");
 		local btn = Button:new(w,h,url);
 		btn:setname(name);
-		btn:set_label(label);
+		if(label~=nil) then
+			btn:set_label(label);
+		end
 		btn:set_pos(x,y);
 		child = btn;
 	elseif(_type == "ScrollBar") then
