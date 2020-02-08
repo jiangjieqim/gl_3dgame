@@ -36,7 +36,7 @@ local function addmd2_fbo(fbo)
 	--print(n:frame_count());
 --]]
 	
-----[[
+--[[
 	local n = UnitBase:new();--md2¼òÄ£
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);
@@ -45,10 +45,10 @@ local function addmd2_fbo(fbo)
 	anim:play("jump");
 	n:load_collide(nil,true);
 	
-	--anim:set_fps(1);
-	
+	--anim:set_fps(1);	
 --]]
---[[
+
+----[[
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-100);
@@ -184,6 +184,7 @@ end
 local function f_cpmlete(self)
 	local skin = self.nskin;
 	local x,y = skin:get_pos();
+	local namemap = skin.namemap;
 	
 	local fbo = FboRender:new(128,128);
 	fbo:set_pos(x,y);
@@ -196,7 +197,8 @@ local function f_cpmlete(self)
 	btn0:bind_click(btnClick,self);
     
 
-	local scale = skin:find("scale");
+	local scale = namemap["scale"];--skin:find("scale");
+	
 	scale:bindCallback(f_scale_handle,self);
 
 	local anim = skin:find("anim");

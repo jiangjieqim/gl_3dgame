@@ -1,10 +1,10 @@
 NSkin = {
 	xmlurl,--xml地址
 	list,-- 存储节点列表的链栈
+	namemap,--根据名字存储skin组件的tabel
 }
 NSkin.__index = NSkin;
 setmetatable(NSkin, Base);
-
 
 --销毁组件
 local function func_dispose(n)
@@ -45,7 +45,7 @@ function NSkin:new()
 end
 local function f_delAll(n)
 	func_dispose(n);
-end	
+end
 
 --销毁组件
 function NSkin:dispose()
@@ -54,6 +54,11 @@ function NSkin:dispose()
 	stack_foreach(skin.list,f_delAll,nil,true);
 	
 	stack_del(skin.list);
+
+	if(skin.namemap) then
+		func_clearTableItem(skin.namemap);
+	end
+	
 	func_clearTableItem(skin);
 	--ENGINE_EVENT_COMPLETE
 end
@@ -305,6 +310,15 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		end
 		
 		func_addnode(parent,child,x,y);
+		
+		--print("name:",name,child);
+		if(name) then
+			if(skin.namemap == nil) then
+				skin.namemap = {};
+			end
+			skin.namemap[name] = child;
+		end
+		
 		stack_push(list,child);
 	end
 	
@@ -350,6 +364,7 @@ local function f_tex_complete(self)
 	--print(self);
 	evt_dispatch(self,ENGINE_EVENT_COMPLETE,self);
 end
+
 --[[
 
 1.	加载skin	 "gundi.png;checkbox.png;smallbtn.png"
@@ -388,13 +403,13 @@ function NSkin:get_pos(x,y)
 	return node:get_pos(x,y);
 end
 
-
 --根据名字找到组件引用
 function NSkin:find(name)
 	if(self.list~=nil) then
 		return stack_find_by_name(self.list,name);
 	end
 end
+
 local function f_node_visible(n,v)
 	local _type = n.type;
 	if(	   _type == UI_TYPE.NPanel
