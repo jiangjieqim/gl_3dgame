@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:093ca94eb5b13fe2c704ab15fe3700ea:a8a067b40d8788b432fab3a462d7621e:8a3d1300b8b633a871e4b7a0741c85fc$ -->
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:72903f4831a3abd7986fa9347344f8f0$ -->
 <!--Format:
 n  => name of the sprite
 x  => sprite x pos in texture
 y  => sprite y pos in texture
 w  => sprite width (may be trimmed)
 h  => sprite height (may be trimmed)
-pX => x pos of the pivot point (relative to sprite width)
-pY => y pos of the pivot point (relative to sprite height)
 oX => sprite's x-corner offset (only available if trimmed)
 oY => sprite's y-corner offset (only available if trimmed)
 oW => sprite's original width (only available if trimmed)
 oH => sprite's original height (only available if trimmed)
 r => 'y' only set if sprite is rotated
-with polygon mode enabled:
-vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
-verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
-triangles  => sprite triangulation, 3 vertex indices per triangle
 -->
-<TextureAtlas imagePath="1.png" width="64" height="72">
-    <sprite n="arrow3.png" x="20" y="20" w="32" h="32" pX="0.5" pY="0.5"/>
-    <sprite n="checkbox.png" x="44" y="0" w="20" h="20" pX="0.5" pY="0.5"/>
-    <sprite n="dagou.png" x="4" y="0" w="20" h="20" pX="0.5" pY="0.5"/>
-    <sprite n="gunbar.png" x="24" y="0" w="20" h="20" pX="0.5" pY="0.5"/>
-    <sprite n="gundi.png" x="0" y="0" w="4" h="4" pX="0.5" pY="0.5"/>
-    <sprite n="smallbtn.png" x="0" y="52" w="60" h="20" pX="0.5" pY="0.5"/>
-    <sprite n="tri.png" x="0" y="20" w="20" h="20" pX="0.5" pY="0.5"/>
+<TextureAtlas imagePath="1.tga" width="96" height="52">
+    <sprite n="arrow3.png" x="0" y="0" w="32" h="32"/>
+    <sprite n="checkbox.png" x="32" y="0" w="20" h="20"/>
+    <sprite n="dagou.png" x="52" y="0" w="20" h="20"/>
+    <sprite n="gunbar.png" x="72" y="0" w="20" h="20"/>
+    <sprite n="gundi.png" x="92" y="0" w="4" h="4"/>
+    <sprite n="smallbtn.png" x="0" y="32" w="60" h="20"/>
+    <sprite n="tri.png" x="60" y="32" w="20" h="20"/>
+    <sprite n="tri2.png" x="80" y="32" w="15" h="15"/>
 </TextureAtlas>

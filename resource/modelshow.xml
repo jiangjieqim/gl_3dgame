@@ -15,3 +15,8 @@
 <ui name="ck" type="CheckBox" y="200" label="ck" parent="1"/>
 
 <ui name="rotate" type="NScrollBar" y="220" parent="1"/>
+
+<ui name="tri2" type="NButton" x="0" y="240" parent="1" url="tri2.png" w="15" h="15" rotatez="3.14"/>
+
+<ui name="tri3" type="NButton" x="20" y="240" parent="1" url="tri2.png" w="15" h="15"/>
+
