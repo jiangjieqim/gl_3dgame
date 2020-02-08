@@ -35,11 +35,14 @@ function Shape:init()
 	--self:setcolor(1.0);
 end
 
+--设置Z轴旋转
+function Shape:setRotateZ(v)
+	change_attr(self.container,"sprite_rotateZ",v);
+end
 
 --设置颜色
 function Shape:setcolor(r,g,b)
 	--func_error();
-	
 	r = r or 0;
 	g = g or 0;
 	b = b or 0;
@@ -48,7 +51,7 @@ function Shape:setcolor(r,g,b)
 	glsl_set(m,str);
 end
 
-
+--设置显示隐藏
 function Shape:visible(v)
 	if(v) then
 		setv(self.container,FLAGS_VISIBLE);
@@ -57,6 +60,7 @@ function Shape:visible(v)
 	end
 end
 
+--是否显示隐藏着
 function Shape:is_visible()
 	return getv(self.container,FLAGS_VISIBLE) == 1;
 end
@@ -86,6 +90,7 @@ function Shape:get_container()
 	return self.container;
 end
 
+--设置坐标
 function Shape:set_pos(x,y)
 	func_set_local_pos(self.container,x,y);
 end
@@ -94,6 +99,7 @@ function Shape:set_cam(cam)
 	set_cam(self.container,cam);
 end
 
+--激活鼠标的点击状态
 function Shape:mouseEnable(v)
 	local _status = v == true and 1 or 0;
 	--print(status);
@@ -102,6 +108,7 @@ function Shape:mouseEnable(v)
 	--func_error(string.format("%s,%s",tostring(self),tostring(v)));
 end
 
+--添加一个事件
 function Shape:on(id,func,params)
 	evt_on(self.container,id,func,params);
 end
@@ -110,7 +117,7 @@ function Shape:off(id,func)
 	evt_off(self.container,id,func);
 end
 
---销毁
+--销毁Shape
 function Shape:dispose()
 	ptr_remove(self.container);
 	func_clearTableItem(self);

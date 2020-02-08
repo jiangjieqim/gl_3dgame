@@ -35,6 +35,10 @@ end
 function Button:get_container()
 	return self.img:get_container();
 end
+--设置Z轴的旋转值
+function Button:setRotateZ(v)
+	self.img:setRotateZ(v);
+end
 
 --设置按钮效果
 function Button:btn_effect(v)

@@ -194,6 +194,12 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 			btn:set_label(label);
 		end
 		btn:set_pos(x,y);
+		
+		local rotatez = xml_get_str(node,"rotatez");
+		if(rotatez) then
+			btn:setRotateZ(rotatez);
+		end
+		
 		child = btn;
 	elseif(_type == "ScrollBar") then
 		local sc = scrollBar_new();

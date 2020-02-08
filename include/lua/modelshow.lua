@@ -153,10 +153,22 @@ local function btnClick(self)
 end
 
 local function f_set_rotate(progress,self)
---	print(progress,self);
-	--self.u:rotate_vec(PI*progress,1,0,0);
+----[[
+	if(self.u)then
+		self.u:rx(PI * progress);
+	end
+--]]
 
-	self.u:rx(PI * progress);
+
+	
+	--test code
+--[[
+	local skin = self.nskin;
+	local tri2 = skin:find("tri2");	
+	tri2:setRotateZ(math.pi * progress);
+--]]
+
+	--print(math.pi*progress);
 end
 
 local function ef(data,self)
@@ -231,6 +243,9 @@ local function f_cpmlete(self)
 	end
 	self.floorm = loadfloor();
 
+--	local tri2 = skin:find("tri2");	
+--	tri2:setRotateZ(PI/4);
+	
 
 	--self.editor:dispose();
 end
