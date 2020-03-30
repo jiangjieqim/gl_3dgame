@@ -22,7 +22,8 @@ ModleShow.__index = ModleShow;
 --增加一个md2渲染对象到fbo对象引用中
 local function addmd2_fbo(fbo)
 	local cam = fbo:get_cam3d();
-	--cam = nil;
+	cam = nil;
+	
 	----bauul,triangle
 	
 	
@@ -48,7 +49,7 @@ local function addmd2_fbo(fbo)
 	--anim:set_fps(1);	
 --]]
 
-----[[
+--[[
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-100);
@@ -62,10 +63,10 @@ local function addmd2_fbo(fbo)
 	
 	--n:set_fps(30);
 	
---[[
+----[[
 	--加载一个vbo类型的OBJ
 	local n = UnitBase:new();
-	n:loadvbo("\\resource\\obj\\pipe.obj","//resource//material//horse.mat",cam);
+	n:loadvbo("\\resource\\obj\\arrow.obj","//resource//material//horse.mat",cam);
 	--n:set_position(0,0,-5);
 	n:load_collide(nil,true);
 	
@@ -215,9 +216,6 @@ local function f_cpmlete(self)
 
 	--self.nskin:dispose();
 	
-	
-	
-	
 	local timer = timelater_new(1);
 	
 	evt_on(timer,EVENT_TIMER,ef,self);
@@ -226,11 +224,22 @@ local function f_cpmlete(self)
 	local rotate = skin:find("rotate");
 	rotate:bindCallback(f_set_rotate,self);
 
+	--构建一个测试使用的线段
+	local line = LineNode:new(2);
+	line:push(0,0,0);
+	line:push(0,0,3);
+	line:setcolor(1,1,0);
+	line:graphics_end();
+
 	local function f_bindRayClick(p)
-		local x,y,z = JEngine:getIns():get_hit();
-		--print('**********',x,y,z);
-		self.u:move(x,y,z);
-		self.u:look_at(x,0,y,0);
+		local x,y,z = JEngine:getIns():get_hit();--获取射线的交点坐标
+
+		print('射线的交点 f_bindRayClick:',x,y,z);
+		
+		line:mod(1,x,y,z);
+		
+		--self.u:move(x,y,z);
+		self.u:look_at(x,y,z,0);
 	end
 	local function loadfloor()
 		local n = UnitBase:new();

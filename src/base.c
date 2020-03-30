@@ -642,7 +642,7 @@ struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMat
 	base_seachPick(renderList,&nearPoint,&farPoint,&last);
 
 	if(last.isHit && mRayPickCallBack!=NULL){
-		log_color(0,"name:%s 交点:%.3f,%.3f,%.3f\n",last.name,last.x,last.y,last.z);
+		//	log_color(0,"name:%s 交点:%.3f,%.3f,%.3f\n",last.name,last.x,last.y,last.z);
 		mRayPickCallBack(&last);
 	}
 }

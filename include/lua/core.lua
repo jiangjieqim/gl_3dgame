@@ -1,3 +1,4 @@
+
 FLAGS_RENDER_BOUND_BOX	=	0x01;
 FLAGS_DRAW_RAY_COLLISION	=	0x02;	--绘制射线盒子	(是否绘制射线静态包围盒,用于测试 查看射线包围盒),即使没有设置FLAGS_RAY,那么也是可以绘制射线盒子的,这样可以用来查看
 FLAGS_LINE_RENDER			=	0x04;	--是否显示渲染线框
@@ -445,7 +446,6 @@ print(tf);
 tf = nil;
 --print(tf.get());
 --]]
-
 
 --				插件管理器
 --负责加载各种外置插件,例如fpsView这种挂载式小工具

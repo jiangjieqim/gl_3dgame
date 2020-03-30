@@ -125,7 +125,10 @@ s:mod(2,0,0,0);
 
 
 
-
-
 JEngine:getIns():get_cam():refresh();
 --print(_VERSION) ;
+
+-- print(1);
+
+
+-- local a = 1;

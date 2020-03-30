@@ -263,6 +263,7 @@ f_onSpriteClickCallBack(struct Sprite* sprite,int localX,int localY){
 		//	ex_callParmLuaFun((const char*)sprite->callLuaFunName,b->name);
 		//	printf("name->%s\n",b->name);
 		//}
+
 	}
 }
 
@@ -2070,6 +2071,7 @@ REG_change_attr(lua_State *L)
 	}
 	if(!strcmp(attrKey,"sprite_set_height")){
 		float h;
+
 		sscanf_s(str,"%f",&h);
 		sprite_set_height((struct Sprite*)ptr,h);
 		change = 1;
@@ -2121,19 +2123,18 @@ REG_change_attr(lua_State *L)
 		//base_updateMat4x4(base);
 		//更新缩放值
 		
-		float x,y,z,time;
+		float x,y,z,time;  
 		sscanf_s(str,"%f,%f,%f,%f",&x,&y,&z,&time);
 
 		if(time <= 0){
 			base_look_at(base,x,y,z);
 		}else{
 			Vec3 pos;
-			//printf("==\n");
-			//float ry;
-			//float a;
+			
 			float x0 = x - base->x;
 			float y0 = y - base->y;
 			float z0 = z - base->z;
+
 
 			vec3Set(&pos,x,y,z);
 
@@ -2142,6 +2143,9 @@ REG_change_attr(lua_State *L)
 			//base_rotate_vec(base,0,1,0,a);
 			//ry = abs(ry);
 			//printf("%.3f to %.3f\n",base->ry,ry);
+			
+			assert(0);//待处理
+			
 			base_rotate_to(base,time,vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f));
 
 		}
@@ -2982,6 +2986,9 @@ static void
 f_idle(void){
 	printf("idle\n");
 }
+//#pragma comment (lib,"Math.lib")
+
+ //__declspec(dllimport) double Add2(double a, double b);
 
 void main(int argc,char** argv){ 
 	
@@ -3005,7 +3012,8 @@ void main(int argc,char** argv){
 
 	w = screenWidth;
 	h = screenHeight;
-
+	
+	//printf("Add2 = %.3f\n",Add2(1,2.5));
 	//testGet("dasdsds");
 	
 //	printf("系统使用内存:%ld\n",getWin_MemUsage());

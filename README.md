@@ -281,3 +281,18 @@ btn_bindClick(btn,f_onClick);
 ### include/lua文件夹下的说明
 /..	引擎组件模块  
 view/..	业务模块  
+
+
+dll编译  
+```
+#define MYDLL __declspec(dllexport)
+
+MYDLL double Add2(double a, double b){
+    return a + b;
+}
+```
+cl -c Math.c  
+link -DLL -out:Math.dll Math.obj  
+检查一下导出的函数列表  
+dumpbin -exports Math.dll  
+
