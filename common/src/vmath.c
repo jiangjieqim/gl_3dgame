@@ -728,6 +728,8 @@ vec_to_angle(float x1,float y1,float z1,
 			 float x2,float y2,float z2){
 	float epsilon = 0.0001f;//1.0e-6;//1乘10的-6次幂,0.000001
 	float dist, dot,angle;
+	
+	
 
 	// normalize 单位向量
 	dist = (float)sqrt(x1*x1 + y1*y1 + z1*z1);
@@ -745,54 +747,35 @@ vec_to_angle(float x1,float y1,float z1,
 	z2 /= dist;
 
 	// dot product	点乘
-	dot = x1*x2+y1*y2+z1*z2;
+	dot = x1*x2 + y1*y2 + z1*z2;
 	
-	if (fabs(dot-1.0f) <= epsilon)
+	if (fabs(dot-1.0f) <= epsilon){
 		angle = 0.0;
-	else if (fabs(dot+1.0f)<=epsilon){
+		}else if (fabs(dot+1.0f)<=epsilon){
 		angle = PI;
 	}else {
-		//float cross;
-		/*printf("dot = %.3f\n",dot);
-
-		if(fabs(dot) > 1){
-			if(dot < 0){
-				dot+=1;
-			}else{
-				dot-=1;
-			}
-		}*/
+		
 		angle = (float)acos(dot);//反余弦函数 dot要在-1 ~ 1之间
-		//if(dot < 0){
-		//	angle*=-1;
-		//}
+		//printf("d = %.3f\n",d);
 		
-
-		//cross product
-		//cross = x1*y2 - x2*y1;
+			
 		
-
-		// a->x * b->x + a->y * b->y + a->z * a->z;
-		//cross = x1*x2 + y1*y2 + z1*z2;
-
-		// vector p2 is clockwise from vector p1 
-		// with respect to the origin (0.0)
-		//if (cross < 0) {
-		//	angle = 2 * nyPI - angle;
-		//}
+	//d = vecDot(&a,&b);
 	}
-	return angle;
+	
+	return angle;//求个正负角?
 }
 
 /*
-*	向量转化为角度
+*	2d 向量转化为角度
 */
 double
 vec_rotateAngle(double x1,double y1, double x2,double y2) {
 	double epsilon = 0.000001;//1.0e-6;//1乘10的-6次幂,0.000001
 	double nyPI = PI;//acos(-1.0);
 	double dist, dot,angle;
-
+	
+	
 	// normalize 单位向量
 	dist = sqrt(x1*x1 + y1*y1);
 	if(dist > 1.0) dist = 1.0f;

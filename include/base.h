@@ -7,7 +7,7 @@
 	基础结构体,用于ent3d和md2继承
 */
 typedef struct HeadInfo{
-	/*事件引用*/
+	/*事件引用 第一个作为事件的句柄,不可以删除掉*/
 	void* evtList;
 	/*类型*/
 	int curType;

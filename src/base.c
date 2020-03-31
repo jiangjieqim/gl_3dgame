@@ -646,6 +646,25 @@ struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMat
 		mRayPickCallBack(&last);
 	}
 }
+
+//判断是逆时针还是顺时针返回 0:逆时针 1:顺时针
+static int 
+f_dir(float x1,float y1,float z1,float x2,float y2,float z2,
+			 float ax,float ay,float az ){
+	 Vec3 a,b,c;
+	 a.x = x1;
+	 a.y = y1;
+	 a.z = z1;
+	
+	 b.x = x2;
+	 b.y = y2;
+	 b.z = z2;
+	 vec3Cross(&a,&b,&c);
+	 vec3Normalize(&c);
+
+	 return c.x == ax && c.y == ay && c.z == az;
+}
+
 //让对象朝向_hitx,_hity,_hitz
 void 
 base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
@@ -656,11 +675,32 @@ base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
 	float z = _hitz - p->z;
 	vec3Set(&pos,x,y,z);
 	if(vec3Length(&pos)>0){
+		float a;
+		int k;
+		float ax,ay,az,sx,sy,sz;
 
+		//基准向量
+		sx = 0;
+		sy = 0;
+		sz = 1;
+		
+		//默认的旋转轴
+		ax = 0;
+		ay = 1;
+		az = 0;
 		vec3Normalize(&pos);
 		
-		base_rotate_vec(p,0,1,0,vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f));
+		a = vec_to_angle(sx,sy,sz,pos.x,pos.y,pos.z);
+		k = f_dir(sx,sy,sz,pos.x,pos.y,pos.z,ax,ay,az);
+		if(!k){
+			a = -a;
+		}
 
+		//求向量x,y,z和0,1,0的夹角
+		//printf("base_look_at x = %.3f y = %.3f z = %.3f a = %.3f k = %d\n",pos.x,pos.y,pos.z,a,k);
+		//base_rotate_vec(p,0,1,0,vec_rotateAngle(pos.x, pos.z, 1.0f, 0.0f));
+
+		base_rotate_vec(p,ax,ay,az,a);
 		//base_updateMat4x4(p);
 	}else{
 #ifdef DEBUG
