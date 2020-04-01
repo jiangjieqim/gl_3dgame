@@ -647,23 +647,6 @@ struct LStackNode *renderList,Matrix44f perspectiveMatrix,Matrix44f modelViewMat
 	}
 }
 
-//判断是逆时针还是顺时针返回 0:逆时针 1:顺时针
-static int 
-f_dir(float x1,float y1,float z1,float x2,float y2,float z2,
-			 float ax,float ay,float az ){
-	 Vec3 a,b,c;
-	 a.x = x1;
-	 a.y = y1;
-	 a.z = z1;
-	
-	 b.x = x2;
-	 b.y = y2;
-	 b.z = z2;
-	 vec3Cross(&a,&b,&c);
-	 vec3Normalize(&c);
-
-	 return c.x == ax && c.y == ay && c.z == az;
-}
 
 //让对象朝向_hitx,_hity,_hitz
 void 
@@ -691,7 +674,7 @@ base_look_at(HeadInfo* p,float _hitx,float _hity,float _hitz){
 		vec3Normalize(&pos);
 		
 		a = vec_to_angle(sx,sy,sz,pos.x,pos.y,pos.z);
-		k = f_dir(sx,sy,sz,pos.x,pos.y,pos.z,ax,ay,az);
+		k = vec3CheckDir(sx,sy,sz,pos.x,pos.y,pos.z,ax,ay,az);
 		if(!k){
 			a = -a;
 		}

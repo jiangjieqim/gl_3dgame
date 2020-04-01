@@ -273,5 +273,7 @@ DLLIMPORT void tl_pickTriangle(float* tri,int dataCount,struct Vec3* nearPoint,s
 */
 void tl_hitTriangle(float orig[3],float dir[3],float vert0[3],float vert1[3],float vert2[3],float* out,int* pHit);
 
-
+//判断是逆时针还是顺时针返回 0:逆时针 1:顺时针
+int vec3CheckDir(float x1,float y1,float z1,float x2,float y2,float z2,
+				 float ax,float ay,float az );
 #endif

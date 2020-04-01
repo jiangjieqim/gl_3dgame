@@ -868,3 +868,13 @@ mat4x4_mult(int lim,Matrix44f o,...){
 		f_get_mat4x4(lim,arr,o);
 	}
 }
+
+//判断是逆时针还是顺时针返回 0:逆时针 1:顺时针
+int vec3CheckDir(float x1,float y1,float z1,float x2,float y2,float z2,float ax,float ay,float az ){
+	Vec3 a,b,c;
+	vec3Set(&a,x1,y1,z1);
+	vec3Set(&b,x2,y2,z2);
+	vec3Cross(&a,&b,&c);
+	vec3Normalize(&c);
+	return c.x == ax && c.y == ay && c.z == az;
+}
