@@ -2692,7 +2692,7 @@ f_init(int id,void* p,void* thisObj){
 	{
 		char outStr[G_BUFFER_256_SIZE];
 		char __ss[G_BUFFER_256_SIZE];
-		sprintf_s(__ss,G_BUFFER_256_SIZE,"//include//lua//%s",g_initLua);
+		sprintf_s(__ss,G_BUFFER_256_SIZE,"//lua//%s",g_initLua);
 		tl_convert_path(__ss,outStr,G_BUFFER_256_SIZE);
 #ifdef DEBUG
 		printf("执行Lua脚本%s\n",outStr);

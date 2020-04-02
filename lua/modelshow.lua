@@ -52,8 +52,8 @@ local function addmd2_fbo(fbo)
 --[[
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
-	n:set_position(0,0,-100);
-	--n:scale(0.02);
+	-- n:set_position(0,0,-100);
+	n:scale(0.02);
 	local anim = n:get_anim();
 	anim:push("jump",0,37);
 	anim:play("jump");
@@ -66,7 +66,8 @@ local function addmd2_fbo(fbo)
 ----[[
 	--加载一个vbo类型的OBJ
 	local n = UnitBase:new();
-	n:loadvbo("\\resource\\obj\\arrow.obj","//resource//material//horse.mat",cam);
+	n:loadvbo("\\resource\\obj\\arrow.obj",
+	"//resource//material//horse.mat",cam);
 	--n:set_position(0,0,-5);
 	n:load_collide(nil,true);
 	
@@ -234,7 +235,7 @@ local function f_cpmlete(self)
 	local function f_bindRayClick(p)
 		local x,y,z = JEngine:getIns():get_hit();--获取射线的交点坐标
 
-		print('射线的交点 f_bindRayClick:',x,y,z);
+		print('you call function: f_bindRayClick:',x,y,z);
 		
 		line:mod(1,x,y,z);
 		

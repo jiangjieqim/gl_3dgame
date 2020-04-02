@@ -1,6 +1,12 @@
-dofile("..\\include\\lua\\core.lua");
-dofile("..\\include\\lua\\editor.lua");
+package.path=";c:\\gl_3dgame\\lua\\?.lua";
+print(package.path);
+require("a");
+require("a");
 
+
+require("core");
+require("editor");
+--require("editor.lua");
 
 local function f_fps_timer(data,param)
 
@@ -101,9 +107,9 @@ func_lua_gc();
 
 local e1 = Editor:new();
 
---dofile("..\\include\\lua\\5.lua");
+--require("5.lua");
 
---dofile("..\\include\\lua\\quaternion.lua");
+--require("quaternion");
 
 --]]
 

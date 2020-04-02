@@ -4,5 +4,10 @@
 	--local n = collectgarbage("count");
 
 
-dofile("..\\include\\lua\\core.lua");
+--require("listbox_get_select_labelcore");
+
+function testfun()
+	print("hello world");
+end
+testfun();
 

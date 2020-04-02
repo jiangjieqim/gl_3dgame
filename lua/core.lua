@@ -84,12 +84,12 @@ UI_TYPE = {
 local DEBUG = true;
 
 
-dofile("..\\include\\lua\\stack.lua")
-dofile("..\\include\\lua\\xml.lua")	--xml组件
-dofile("..\\include\\lua\\vec3.lua")	--自定义数学库
-dofile("..\\include\\lua\\nstack.lua");--链栈
+require("stack")
+require("xml")	--xml组件
+require("vec3")	--自定义数学库
+require("nstack");--链栈
 
-dofile("..\\include\\lua\\evt.lua")	--事件管理器
+require("evt")	--事件管理器
 
 
 --转化出一个地址
@@ -404,44 +404,44 @@ function func_addnode(parent,n,x,y)
 	end
 end
 
-dofile("..\\include\\lua\\base.lua");
-dofile("..\\include\\lua\\linenode.lua");
+require("base");
+require("linenode");
 
-dofile("..\\include\\lua\\label.lua");--label是对ftext进行的一次封装
+require("label");--label是对ftext进行的一次封装
 
-dofile("..\\include\\lua\\input.lua");
+require("input");
 
-dofile("..\\include\\lua\\loadtexs.lua")	--资源加载器
+require("loadtexs")	--资源加载器
 
-dofile("..\\include\\lua\\cam.lua");
-dofile("..\\include\\lua\\engine.lua")	--引擎1
+require("cam");
+require("engine")	--引擎1
 
-dofile("..\\include\\lua\\fbo.lua")	--fbo
+require("fbo")	--fbo
 
 
-dofile("..\\include\\lua\\shape.lua")	--shape组件
-dofile("..\\include\\lua\\NPanel.lua");
+require("shape")	--shape组件
+require("NPanel");
 
-dofile("..\\include\\lua\\NListbox.lua")
+require("NListbox")
 
-dofile("..\\include\\lua\\NScrollBar.lua")	--滑动条组件
+require("NScrollBar")	--滑动条组件
 
-dofile("..\\include\\lua\\button.lua");		--按钮组件
+require("button");		--按钮组件
 
-dofile("..\\include\\lua\\image.lua")	--image组件
+require("image")	--image组件
 
-dofile("..\\include\\lua\\checkbox.lua")	--checkbox组件
-dofile("..\\include\\lua\\progrossbar.lua")
-dofile("..\\include\\lua\\NSkin.lua");--NSkin皮肤组件
+require("checkbox")	--checkbox组件
+require("progrossbar")
+require("NSkin");--NSkin皮肤组件
 
-dofile("..\\include\\lua\\NUnit.lua");
-dofile("..\\include\\lua\\UnitBase.lua");		--角色单位
-dofile("..\\include\\lua\\md5unit.lua");		--md5对象
+require("NUnit");
+require("UnitBase");		--角色单位
+require("md5unit");		--md5对象
 
-dofile("..\\include\\lua\\scrollview.lua")	--scrollview
+require("scrollview")	--scrollview
 
 --[[
-local tf = dofile("..\\include\\lua\\tf.lua");
+local tf = require("tf");
 print(tf);
 tf = nil;
 --print(tf.get());
@@ -452,4 +452,4 @@ tf = nil;
 --这是一种极端松散耦合的模式,这样能使用框架层足够小巧,
 --扩展功能都是依赖插件模式,比较适合需求经常发生变动的情况,
 --我们可以将这种多变的部分封装成一个插件进行挂载式的应用
-dofile("..\\include\\lua\\plugin_man.lua");
+require("plugin_man");

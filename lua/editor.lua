@@ -1,4 +1,4 @@
-dofile("..\\include\\lua\\modelshow.lua")
+require("modelshow")
 --************************************************************
 Editor = {
 	linelist,

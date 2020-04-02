@@ -1,6 +1,6 @@
 UnitBaseEvent = 10000;
 UnitBaseEndMsg = "UnitBaseEndMsg";--移动结束
-dofile("..\\include\\lua\\animator.lua")
+require("animator")
 
 --*************************************************************
 --只实现 p = TYPE_OBJ_VBO_FILE 类型的对象
@@ -69,7 +69,9 @@ function UnitBase:loadvbo(modelURL,maturl,cam)
 		self.anim = Animator:new(self.p);
 	else
 		--func_error(modelURL);
-	end
+    end
+    -- print("is loadvbo"..modelURL);
+    -- print(self);
 end
 --加载一个测试立方体
 function UnitBase:loadbox()

@@ -296,3 +296,21 @@ link -DLL -out:Math.dll Math.obj
 检查一下导出的函数列表  
 dumpbin -exports Math.dll  
 
+
+
+### 5配置lua开发环境
+[https://marketplace.visualstudio.com/items?itemName=actboy168.lua-debug]  
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lua",
+            "request": "launch",
+            "name": "launch_test_exe",
+            "port": 7003,
+            "runtimeExecutable": "${workspaceFolder}/test.exe",
+        },
+    ]
+}
+```

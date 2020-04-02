@@ -1,4 +1,4 @@
-dofile("..\\include\\lua\\IPlugin.lua")	--插件接口定义
+require("IPlugin")	--插件接口定义
 
 --print("插件管理器初始化");
 PluginMan = {
@@ -20,8 +20,8 @@ end
 --加载插件
 
 function PluginMan:load(plugin)
-	local url = "../include/lua/"..plugin..".lua";
-	local p = dofile(url):new();
+	local url = "../include/lua/"..plugin.."";
+	local p = require(url):new();
 	func_print(">>>>插件初始化完毕"..self:getInfo(p)..url);
 	return p;
 end
