@@ -1,12 +1,23 @@
+print(string.format("version = [%s]",_VERSION));
+
 package.path=";c:\\gl_3dgame\\lua\\?.lua";
 print(package.path);
 require("a");
 require("a");
 
 
-require("core");
+local core = require("core");
+
 require("editor");
 --require("editor.lua");
+print(core.now());
+
+core.setTimeout(5000,function ()
+		print(core.now());
+		end
+	);
+
+
 
 local function f_fps_timer(data,param)
 

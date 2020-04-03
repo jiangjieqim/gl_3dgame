@@ -453,3 +453,39 @@ tf = nil;
 --扩展功能都是依赖插件模式,比较适合需求经常发生变动的情况,
 --我们可以将这种多变的部分封装成一个插件进行挂载式的应用
 require("plugin_man");
+
+core = {};
+local M = core;
+--延迟ms毫秒,执行callback
+function M.setTimeout(ms,callback)
+	local timer = timelater_new(ms);
+	local o = {t=timer,c=callback};
+
+	evt_once(timer,EVENT_TIMER,function()
+			if(o.c) then
+				o.c();
+			end
+		end
+		);
+	return o;
+end
+
+function M.clearTimeout(o)
+	--evt_off(o.t,EVENT_TIMER,o.c);
+	o.c = nil;
+	o.t = nil;
+end
+
+function M.now()
+	return func_get_longTime();
+end
+
+-- local function fc()
+-- 	print("fc..."..func_get_longTime());
+-- end
+
+--print("xx..."..func_get_longTime());
+--local o = setTimeout(1000,fc);
+--clearTimeout(o);
+
+return core;

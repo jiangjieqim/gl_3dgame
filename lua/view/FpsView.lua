@@ -82,5 +82,5 @@ function FpsView:hide()
 		self.timer = nil;
 	end
 end
-
+ 
 return FpsView;
