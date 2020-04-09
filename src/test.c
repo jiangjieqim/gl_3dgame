@@ -9,12 +9,12 @@
 #include <assert.h>
 #include <string.h>
 
-#pragma comment (lib,"lua5.1.lib")
-//#pragma comment (lib,"common.lib")
+#pragma comment (lib,"lua51.lib")
+//#pragma comment (lib,"common.lib
 #pragma comment (lib,"ftfont.lib")
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
+#include "lua/lua.h"
+#include "lua/lualib.h"
+#include "lua/lauxlib.h"
 
 //=============================================
 #include "ftfont.h"
