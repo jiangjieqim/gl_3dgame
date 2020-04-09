@@ -314,3 +314,14 @@ dumpbin -exports Math.dll
     ]
 }
 ```
+
+###  TortoiseProc.exe提交的CMD
+提交文件README.md和to_do_list.md   
+```
+set PATH=C:\Program Files\TortoiseSVN\bin;
+start
+TortoiseProc.exe /command:commit /path:README.md*to_do_list.md /closeonend:1
+taskkill /f /im cmd.exe
+exit
+```
+
