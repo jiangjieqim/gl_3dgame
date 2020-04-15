@@ -286,9 +286,9 @@ function func_addchild(parent,child,x,y)
 	func_set_local_pos(child,x,y);
 end
 
---内存回收
+--内存回收C模块的
 function func_gc()
-	change_attr(nil,"gc")
+	change_attr(nil,"gc");
 	--print('gc')
 end
 
@@ -298,7 +298,7 @@ function func_lua_gc(key)
 	--func_print("==> GC之前 LUA VM使用的总内存数:"..(collectgarbage("count")*1024).." bytes");
 	collectgarbage("collect");
 	local n = collectgarbage("count");
-	func_print((key or "").." GC完成 LUA VM使用的总内存数:\t"..(n*1024).." bytes\t("..n.."kb) gc了["..((old -  n)*1024).."]bytes",0x00ff00);
+	func_print((key or "").." GC完成 LUA VM使用的总内存数:\t"..(n/1024).." mb\t("..n.."kb) gc了["..((old -  n)*1024).."]bytes",0x00ff00);
 end
 
 --创建名字
@@ -480,6 +480,10 @@ function M.now()
 	return func_get_longTime();
 end
 
+function M.gc()
+	func_lua_gc();
+end
+
 -- local function fc()
 -- 	print("fc..."..func_get_longTime());
 -- end
@@ -487,5 +491,5 @@ end
 --print("xx..."..func_get_longTime());
 --local o = setTimeout(1000,fc);
 --clearTimeout(o);
-
+M.UI_TYPE = UI_TYPE;
 return core;

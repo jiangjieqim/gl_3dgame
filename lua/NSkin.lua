@@ -40,7 +40,7 @@ end
 function NSkin:new()
 	local self = Base:new();
 	setmetatable(self, NSkin);
-	self:settype(5);
+	self:settype(UI_TYPE.Skin);	--5
 	return self;
 end
 local function f_delAll(n)

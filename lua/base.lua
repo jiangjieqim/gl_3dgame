@@ -10,8 +10,11 @@ function Base:new()
 	local self = {
 		name = nil,--该对象的名字
 		type = nil,--该对象的类型
+		address = nil,--地址
 	};
 	setmetatable(self, Base);
+	self.address=func_get_address(self);--设置其地址
+	-- print("address:"..self.address);
 	return self;
 end
 

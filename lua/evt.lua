@@ -41,12 +41,32 @@ local function f_find_dispath_obj(node,p)
 		return true;
 	end
 end
-
+--[[
 --是否是table字符串
-local function func_is_table_str(value)
-	local s = tostring(value);
-	return string.find(s,"table: ") ~= nil;
+local function is_table_str(value)
+	-- print("cnt:"..#value);
+	local theType = type(value);
+
+	if(theType == "number" or theType == "table") then
+		return theType == "table";
+	end
+	
+	func_error(theType.."\tis_table_str ================******************************************>");
+	-- assert(nil,"aoaoao");
+
+	-- if(theType == "number") then
+	-- 	return;
+	-- end
+	-- print("type:"..theType);
+	-- print(theType == "table");
+
+	-- local s = tostring(value);
+	-- return string.find(s,"table: ") ~= nil;
+
 end
+--]]
+
+
 --[[
     params:默认不传递参数
 
@@ -54,18 +74,43 @@ end
         print(c_data);--来自evt_dispatch中的	local data;--数据
     end
 ]]--
+
 --将table转化为一个Number值(其实是table的地址引用)
 local function f_cv(obj)
-	if(func_is_table_str(obj)) then
-		local n = func_get_address(obj);
-		func_print("evt_on==>"..tostring(obj).." 转化为Number:"..string.format("%0x",n));
-		return n;
+	-- func_error(111);
+
+	local theType = type(obj);
+	if(theType == "number" ) then
+		return obj;
+	elseif(theType == "table") then
+		local a = obj.address;
+		if(a == nil) then
+			func_error(tostring(obj).."未找到address字段!");
+			return 0;
+		end
+		return a;
 	end
-	return obj;
+	func_error(theType.."  >>>>>>>>>>>>> ================******************************************>");
+
+	-- if(is_table_str(obj)) then
+	-- 	local n = func_get_address(obj);
+		
+	-- 	-- print("============================>>>>>>>>>>>>"..n);
+	-- 	func_error("================******************************************>"..n);
+		
+
+	-- 	func_print("evt_on==>"..tostring(obj).." 转化为Number:"..string.format("%0x",n));
+	-- 	return n;
+	-- end
+	-- return obj;
 end
 
 function evt_on(obj,id,func,params,once)	
-	
+	if(obj == nil) then
+		func_error("obj is nil!");
+		return;
+	end
+
 	obj = f_cv(obj);--is number
 	
     if(func == nil) then
