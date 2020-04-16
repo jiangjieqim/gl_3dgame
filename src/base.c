@@ -33,6 +33,18 @@ base_get(void* p){
 	return b->base;
 }
 
+static int f_isChange(struct HeadInfo* p){
+	return getv(&p->flags,FLAGS_BASE_CHANGE);
+	}
+
+static void f_setChange(struct HeadInfo* p,int v){
+	if(v){
+		setv(&p->flags,FLAGS_BASE_CHANGE);
+		}else{
+			resetv(&p->flags,FLAGS_BASE_CHANGE);
+		}
+	}
+
 //static void f_outline(struct HeadInfo* base,GLfloat* vertex,int vertLen);
 //static void f_renderLine(struct HeadInfo* base,GLfloat* vertex,int vertLen);
 //static void f_outlineByGLSL(struct HeadInfo* base, GLfloat* vertex,int vertLen,float r,float g,float b);
@@ -62,10 +74,17 @@ base_realUpdateMat4x4(void* p){
 
 	struct HeadInfo* base = (struct HeadInfo*)p;
 	Matrix44f xyz,scale;
-	if(!base->changed){
+	if(!f_isChange(base)){
 		return;
 	}
-	base->changed = 0;
+
+	//if(!base->changed){
+		//return;
+	//}
+
+	//base->changed = 0;
+
+	f_setChange(base,0);
 
 	mat4x4_zero(*base->m);
 
@@ -110,7 +129,8 @@ base_realUpdateMat4x4(void* p){
 */
 void 
 base_updateMat4x4(struct HeadInfo* base){
-	base->changed = 1;	
+	//base->changed = 1;	
+	f_setChange(base,1);
 }
 
 /*
@@ -700,11 +720,11 @@ f_ry_tpUpdate(void* p){
 
 void 
 base_rotate_to(HeadInfo* bp,float ms,double a){
-	void* _tweenPtr = bp->_ry_tp;
+	void* _tweenPtr = bp->tp;
 	if(_tweenPtr && tween_is_play(_tweenPtr)){
 		tween_stop(_tweenPtr);
 	}
-	bp->_ry_tp=tween_to(bp,ms,0,f_ry_tpUpdate,2,&(bp->angle),a);
+	bp->tp=tween_to(bp,ms,0,f_ry_tpUpdate,2,&(bp->angle),a);
 }
 
 void 
