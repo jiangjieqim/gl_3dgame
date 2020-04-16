@@ -17,6 +17,9 @@ typedef struct HeadInfo{
 
 	/*坐标*/
 	float x,y,z;
+
+	//float rx,ry,rz;
+	//float ry;
 	
 	//旋转轴和角度
 	float ax,ay,az;
@@ -41,8 +44,7 @@ typedef struct HeadInfo{
 	Matrix44f* m;
 
 	//矩阵发生变化的时候设置为1
-	//GLbyte changed;
-	
+	GLbyte changed;
 	/*
 		当前是2dcam的时候就是2dcam(sprite)
 		用接口sprite_set2dCam来设置
@@ -92,7 +94,7 @@ struct HeadInfo* base_create(int curType,const char* name,float x,float y,float 
 	设置坐标
 */
 void base_setPos(struct HeadInfo* base,float x,float y,float z);
-void base_set_position(struct HeadInfo* base,struct Vec3* pos);
+//void base_set_position(struct HeadInfo* base,struct Vec3* pos);
 /************************************************************************/
 /* 设置对象的缩放值                                                                  
 /************************************************************************/

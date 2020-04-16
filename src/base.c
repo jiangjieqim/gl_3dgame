@@ -33,21 +33,23 @@ base_get(void* p){
 	return b->base;
 }
 
-static int f_isChange(struct HeadInfo* p){
-	return getv(&p->flags,FLAGS_BASE_CHANGE);
-	}
+static int 
+f_isChange(struct HeadInfo* p){
+	//return getv(&p->flags,FLAGS_BASE_CHANGE);
+	return p->changed == 1;
+}
 
-static void f_setChange(struct HeadInfo* p,int v){
-	if(v){
-		setv(&p->flags,FLAGS_BASE_CHANGE);
-		}else{
-			resetv(&p->flags,FLAGS_BASE_CHANGE);
-		}
-	}
+static void 
+f_setChange(struct HeadInfo* p,int v){
+	p->changed = v;
 
-//static void f_outline(struct HeadInfo* base,GLfloat* vertex,int vertLen);
-//static void f_renderLine(struct HeadInfo* base,GLfloat* vertex,int vertLen);
-//static void f_outlineByGLSL(struct HeadInfo* base, GLfloat* vertex,int vertLen,float r,float g,float b);
+	/*if(v){
+	setv(&p->flags,FLAGS_BASE_CHANGE);
+	}else{
+	resetv(&p->flags,FLAGS_BASE_CHANGE);
+	}*/
+
+}
 
 static void 
 f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
@@ -83,8 +85,8 @@ base_realUpdateMat4x4(void* p){
 	//}
 
 	//base->changed = 0;
-
 	f_setChange(base,0);
+
 
 	mat4x4_zero(*base->m);
 
@@ -137,8 +139,7 @@ base_updateMat4x4(struct HeadInfo* base){
 	ÉèÖÃ×ø±ê
 */
 void 
-base_setPos(struct HeadInfo* base,float x,float y,float z)
-{
+base_setPos(struct HeadInfo* base,float x,float y,float z){
 	base->x = x;
 	base->y = y;
 	base->z = z;
@@ -160,10 +161,10 @@ base_rotate_vec(struct HeadInfo* base,float ax,float ay,float az,float angle){
 	base_updateMat4x4(base);
 }
 
-void
-base_set_position(struct HeadInfo* base,struct Vec3* pos){
-	base_setPos(base,pos->x,pos->y,pos->z);
-}
+//void
+//base_set_position(struct HeadInfo* base,struct Vec3* pos){
+//	base_setPos(base,pos->x,pos->y,pos->z);
+//}
 
 void 
 base_set_scale(void* p,float scale){

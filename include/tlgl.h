@@ -14,24 +14,26 @@
 	单个显示对象的	FLAGS
 	2的指数次
 */
-#define FLAGS_RENDER_BOUND_BOX		0x01	//渲染显示碰撞盒子,是否渲染场景中3d对象的包围盒,包围盒用来处理射线,碰撞等等
-#define FLAGS_DRAW_RAY_COLLISION	0x02	//绘制射线盒子	(是否绘制射线静态包围盒,用于测试 查看射线包围盒),即使没有设置FLAGS_RAY,那么也是可以绘制射线盒子的,这样可以用来查看
-#define FLAGS_LINE_RENDER			0x04	//渲染方式线框
-#define FLAGS_OUTLINE				0x08	//是否显示边缘轮廓(固定管线实现)
-#define FLAGS_RAY					0x10	//16是否具有射线拾取功能(此只用于3d拾取,2d拾取不用这个标记)
-#define FLAGS_VISIBLE				0x20	//32显示或者隐藏模型,(是否加入渲染队列中)
-#define FLAGS_RENDER_DRAWSKELETON	64		//渲染骨骼节点(md5模型才会显示)
-#define FLAGS_ANIM_ADAPTIVE			128		//是否根据关键帧的帧率适配关键帧的动画(是否适配fps 1,适配  0,不适配)
-#define FLAGS_GLSL_OUTLINE			256		//用GLSL实现的轮廓线
-#define FLAGS_DRAW_PLOYGON_LINE		512		//在第一个基本材质上用线框渲染(固定管线模式设置GL_LINE),会取消掉双面显示
-#define FLAGS_BUTTON_EFFECT			1024	//设置按钮特效(在有点击事件的前提下才会有该特效)
-#define FLAGS_DRAW_NORMAL			2048	//绘制法线
-#define FLAGS_DRAG					4096	//Sprite是否可拖拽
-#define FLAGS_DRAW_PLOYGON_POINT	8192	//点模式
-#define FLAGS_DISABLE_CULL_FACE		16384	//设置显示双面
-#define FLAGS_REVERSE_FACE			32768	//反转渲染面
+#define FLAGS_RENDER_BOUND_BOX		0x01	//1 渲染显示碰撞盒子,是否渲染场景中3d对象的包围盒,包围盒用来处理射线,碰撞等等
+#define FLAGS_DRAW_RAY_COLLISION	0x02	//2 绘制射线盒子	(是否绘制射线静态包围盒,用于测试 查看射线包围盒),即使没有设置FLAGS_RAY,那么也是可以绘制射线盒子的,这样可以用来查看
+#define FLAGS_LINE_RENDER			0x04	//3 渲染方式线框
+#define FLAGS_OUTLINE				0x08	//4 是否显示边缘轮廓(固定管线实现)
+#define FLAGS_RAY					0x10	//5 16是否具有射线拾取功能(此只用于3d拾取,2d拾取不用这个标记)
+#define FLAGS_VISIBLE				0x20	//6 32显示或者隐藏模型,(是否加入渲染队列中)
+#define FLAGS_RENDER_DRAWSKELETON	64		//7 渲染骨骼节点(md5模型才会显示)
+#define FLAGS_ANIM_ADAPTIVE			128		//8 是否根据关键帧的帧率适配关键帧的动画(是否适配fps 1,适配  0,不适配)
+#define FLAGS_GLSL_OUTLINE			256		//9 用GLSL实现的轮廓线
+#define FLAGS_DRAW_PLOYGON_LINE		512		//10 在第一个基本材质上用线框渲染(固定管线模式设置GL_LINE),会取消掉双面显示
+#define FLAGS_BUTTON_EFFECT			1024	//11 设置按钮特效(在有点击事件的前提下才会有该特效)
+#define FLAGS_DRAW_NORMAL			2048	//12 绘制法线
+#define FLAGS_DRAG					4096	//13 Sprite是否可拖拽
+#define FLAGS_DRAW_PLOYGON_POINT	8192	//14 点模式
+#define FLAGS_DISABLE_CULL_FACE		16384	//15 设置显示双面
+#define FLAGS_REVERSE_FACE			32768	//16 反转渲染面
 //#define FLAGS_SPRITE_RENDER_LINE	65536	//为Sprite增加一次line选人
-#define FLAGS_BASE_CHANGE			65336	//base.h的HeadInfo变换的状态位
+
+//#define FLAGS_BASE_CHANGE			65336	//base.h的HeadInfo变换的状态位
+
 
 
 #define SHADER_FLAG_FLAT_COLOR			0x01	//设置平滑着色器
