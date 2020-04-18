@@ -1561,15 +1561,16 @@ REG_get_attr(lua_State *L)
 		lua_pushstring(L,base->name);
 		return 1;
 	}
-	else if(!strcmp(attrKey,"fps"))
-	{
-		lua_pushnumber(L,g_fps);
-		return 1;
-	}
+	//else if(!strcmp(attrKey,"fps"))
+	//{
+	//	lua_pushnumber(L,1000/ex_getIns()->delayTime);
+	//	return 1;
+	//}
 	else if(!strcmp(attrKey,"delayTime")){
-		lua_pushnumber(L,g_delayTime);
+		lua_pushnumber(L,ex_getIns()->delayTime);
 		return 1;
 	}
+
 	return 1;
 }
 
@@ -1971,6 +1972,12 @@ REG_change_attr(lua_State *L)
 			setBgColor(r,g,b);
 		}
 
+		if(!strcmp(attrKey,"custDelayMs")){
+			int ds;
+			sscanf_s(str,"%d",&ds);
+			ex_getIns()->custDelayMs = ds;
+		}
+		
 		////改变sprite渲染方式
 		//if(!strcmp(attrKey,"g_sprite_line")){
 		//	g_sprite_line = toInt(str);

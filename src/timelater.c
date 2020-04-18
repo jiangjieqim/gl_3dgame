@@ -16,6 +16,12 @@ struct TimeLaterNode{
 	void* param;
 };
 
+static long 
+getDelayTime()
+	{
+		return ex_getIns()->delayTime;
+	}
+
 void* timelater_new(int ms,void (*callBack)(void*),void* param){
 	struct TimeLaterNode* node = (struct TimeLaterNode*)tl_malloc(sizeof(struct TimeLaterNode));
 	node->delay = ms;
@@ -43,8 +49,8 @@ void timelater_remove(void* timer){
 static void 
 callBack(int data,int param){
 	struct TimeLaterNode* node =(struct TimeLaterNode*)data;
-	node->cur+=(int)g_delayTime;
-	if(node->old+g_delayTime>node->delay){
+	node->cur+=(int)getDelayTime();
+	if(node->old+getDelayTime()>node->delay){
 		//printf("old=%d\n",node->old);
 		node->old = 0;
 		if (node->callBack!=0){
@@ -52,7 +58,7 @@ callBack(int data,int param){
 		}
 		ex_lua_evt_dispatch_f(node,EVENT_TIMER,node->cur);
 	}else{
-		node->old+=g_delayTime;
+		node->old+=getDelayTime();
 	}
 }
 

@@ -197,6 +197,8 @@ struct EX
 
 	struct LStackNode* timelaterList;
 
+	long delayTime;//每一帧的间隔毫秒数
+	int custDelayMs;//自定义间隔毫秒数
 };
 
 //接口定义
@@ -328,12 +330,12 @@ ex_set_material(void* ptr,void* material);
 	当前的FPS                                                                  
 	frame per second 每一关键帧需要的毫秒
 ************************************************************************/
-extern int g_fps;
+//extern int g_fps;
 
 /************************************************************************
 	每一关键帧的延迟毫秒数                                                                    
 ************************************************************************/
-extern long g_delayTime;
+//extern long g_delayTime;
 /************************************************************************
 是否让全局的Sprite显示线框
 #define _SPRITE_RENDER_LINE_//渲染线框,用于调试,此方式可以在低配置电脑上执行,因为使用的是功耗最小的模式

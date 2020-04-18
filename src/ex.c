@@ -37,8 +37,8 @@
 //#define DEBUG_PRINT_HIT	//打印拾取日志
 
 //int g_sprite_line;
-long g_delayTime;
-int  g_fps=-1;
+//long g_delayTime;
+//int  g_fps=-1;
 static struct EX* g_ex;
 static long _longTime=0;
 struct MD2_Object
@@ -135,41 +135,25 @@ static void f_rayPick(struct HitResultObject* hit);
 /*
 	计算fps
 */
-static void 
-f_calculate_fps(){
-/*
-	//此方法会有1秒的计算延迟
-	static float _fps = 0;        
-	static float lastTime = 0.0f; 
-	float currentTime = get_longTime()*0.001;//(float)clock()*0.001f;
-
-	++_fps;
-	if( currentTime - lastTime > 1.0f ){
-		
-		lastTime = currentTime;
-		g_fps = (int)_fps;
-		_fps = 0;
-	}
-*/
-
-
-	static float _fps = 0;        
-	static float lastTime = 0.0f; 
-	float currentTime = get_longTime();//(float)clock()*0.001f;
-
-	++_fps;
-
-	//printf("_fps = %.3f g_fps = %d\n",_fps,g_fps);
-	if( currentTime - lastTime > _FPS_FACTOR_ ){
-		lastTime = currentTime;
-		g_fps = (int)(_fps*1000/_FPS_FACTOR_);//(int)(_fps/1000);
-		_fps = 0;
-	}
-
-}
+//static void 
+//f_calculate_fps(){
+//	static float _fps = 0;        
+//	static float lastTime = 0.0f; 
+//	float currentTime = get_longTime();//(float)clock()*0.001f;
+//
+//	++_fps;
+//
+//	//printf("_fps = %.3f g_fps = %d\n",_fps,g_fps);
+//	if( currentTime - lastTime > _FPS_FACTOR_ ){
+//		lastTime = currentTime;
+//		g_fps = (int)(_fps*1000/_FPS_FACTOR_);//(int)(_fps/1000);
+//		_fps = 0;
+//	}
+//
+//}
 static int 
 f_get_fps(){
-	return g_fps;
+	return 1000/ex_getIns()->delayTime;
 }
 /*
 *	md2渲染回调
@@ -463,13 +447,13 @@ ex_get_info(){
 /*
  *显示fps
  */
-static void
-f_drawFps(){
-	char _str[G_BUFFER_64_SIZE];
-	//sprintf_s(_str, G_BUFFER_64_SIZE,"%ld",/*ex_fps()*/ex_delay_time());
-	sprintf_s(_str, G_BUFFER_64_SIZE,"%d %ld",f_get_fps(),g_delayTime);
-	ex_showLog(_str);
-}
+//static void
+//f_drawFps(){
+//	char _str[G_BUFFER_64_SIZE];
+//	//sprintf_s(_str, G_BUFFER_64_SIZE,"%ld",/*ex_fps()*/ex_delay_time());
+//	sprintf_s(_str, G_BUFFER_64_SIZE,"%d %ld",f_get_fps(),g_delayTime);
+//	ex_showLog(_str);
+//}
 /*
 绘制文本
 */
@@ -851,39 +835,47 @@ f_renderFBOs(){
 }
 
 static void 
-_new(){
+_new()
+{
 	struct EX* p = ex_getIns();
 
-	//long _time;
-	if(p->_screenWidth <= 0 || p->_screenHeight<=0){
-		//屏幕尺寸0的时候不进行渲染
-		return;
-	}
 	//计算fps
-	f_calculate_fps();
-	g_delayTime = get_longTime() - _longTime;
-	_longTime =  get_longTime();
+	//f_calculate_fps();
+	p->delayTime = get_longTime() - _longTime;
 	
-	f_defaultRenderFrame();
-	//fbo_render(p->fbo);	
-
-	f_renderFBOs();
-
-	//Do the buffer Swap
-	glutSwapBuffers();
-	// Do it again
-	glutPostRedisplay();
-
-	//渐变管理器回调
-	//ramp_callBack();
-
-	tween_run(_longTime,g_delayTime);
+	//printf("custDelayMs: = %d\n",p->custDelayMs);
+	if(p->delayTime < p->custDelayMs){
 	
-	//runLastList();
-	//p->index++;
-	
-	evt_dispatch(ex_getIns(),EVENT_ENGINE_RENDER_3D,0);
-	timelater_run();
+	}else{
+		_longTime =  get_longTime();
+
+		if(p->_screenWidth <= 0 || p->_screenHeight<=0){
+			//屏幕尺寸0的时候不进行渲染
+			return;
+		}
+
+		f_defaultRenderFrame();
+		//fbo_render(p->fbo);	
+
+		f_renderFBOs();
+
+		//Do the buffer Swap
+		glutSwapBuffers();
+		// Do it again
+		glutPostRedisplay();
+
+		//渐变管理器回调
+		//ramp_callBack();
+
+		tween_run(_longTime,p->delayTime);
+
+		//runLastList();
+		//p->index++;
+
+		evt_dispatch(ex_getIns(),EVENT_ENGINE_RENDER_3D,0);
+		timelater_run();
+	}
+	sleep(1);
 }
 void ex_render(void)
 {
