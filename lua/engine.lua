@@ -1,3 +1,12 @@
+
+--				插件管理器
+--负责加载各种外置插件,例如fpsView这种挂载式小工具
+--这是一种极端松散耦合的模式,这样能使用框架层足够小巧,
+--扩展功能都是依赖插件模式,比较适合需求经常发生变动的情况,
+--我们可以将这种多变的部分封装成一个插件进行挂载式的应用
+require("plugin_man");
+
+
 -------------------------------------------------
 JEngine ={
 	atals,
@@ -65,7 +74,9 @@ function JEngine:rename(o,value)
 end
 
 function JEngine:get_fps()
-    return get_attr(nil,"fps");
+	--return get_attr(nil,"fps");
+	return 1000/self:get_delayTime();
+	-- return self:get_delayTime();
 end
 
 function JEngine:get_delayTime()
@@ -83,6 +94,10 @@ end
 
 function JEngine:setbg(r,g,b)
     change_attr(nil,"setBgColor",string.format("%s,%s,%s",r or 0,g or 0,b or 0));
+end
+--设置每一帧需要的间隔时间
+function JEngine:setDelayMs(ms)
+    change_attr(nil,"custDelayMs",ms);
 end
 
 --将对象o绑定到引擎默认的3dcam空间
@@ -122,5 +137,4 @@ function JEngine:get_type_str(p)
 	end
 end
 
-
-
+-- return  JEngine:getIns();
