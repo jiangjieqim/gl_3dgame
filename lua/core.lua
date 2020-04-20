@@ -447,12 +447,6 @@ tf = nil;
 --print(tf.get());
 --]]
 
---				插件管理器
---负责加载各种外置插件,例如fpsView这种挂载式小工具
---这是一种极端松散耦合的模式,这样能使用框架层足够小巧,
---扩展功能都是依赖插件模式,比较适合需求经常发生变动的情况,
---我们可以将这种多变的部分封装成一个插件进行挂载式的应用
-require("plugin_man");
 
 core = {};
 local M = core;
@@ -484,6 +478,24 @@ function M.gc()
 	func_lua_gc();
 end
 
+--移除模块,如果有的模块需要重新加载的初始化的,可以使用该接口
+function M.removeRequire( preName )
+    for key, _ in pairs(package.preload) do
+        if string.find(tostring(key), preName) == 1 then
+			print("preload remoeve preName:"..preName);
+			package.preload[key] = nil;
+        end
+    end
+    for key, _ in pairs(package.loaded) do
+		if string.find(tostring(key), preName) == 1 then
+			print("loaded remoeve preName:"..preName);
+            package.loaded[key] = nil;
+        end
+    end
+end
+
+
+
 -- local function fc()
 -- 	print("fc..."..func_get_longTime());
 -- end
@@ -492,4 +504,8 @@ end
 --local o = setTimeout(1000,fc);
 --clearTimeout(o);
 M.UI_TYPE = UI_TYPE;
+
+
+-- print("core init!!!");
+
 return core;

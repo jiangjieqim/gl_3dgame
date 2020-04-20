@@ -49,7 +49,7 @@ local function addmd2_fbo(fbo)
 	--anim:set_fps(1);	
 --]]
 
---[[
+----[[
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
 	-- n:set_position(0,0,-100);
@@ -63,14 +63,13 @@ local function addmd2_fbo(fbo)
 	
 	--n:set_fps(30);
 	
-----[[
+--[[
 	--加载一个vbo类型的OBJ
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\obj\\arrow.obj",
 	"//resource//material//horse.mat",cam);
-	--n:set_position(0,0,-5);
-	n:load_collide(nil,true);
-	
+	-- n:set_position(0,0,-5);
+	n:load_collide(nil,true);	
 --]]
 	
 	return n;
@@ -217,9 +216,8 @@ local function f_cpmlete(self)
 
 	--self.nskin:dispose();
 	
-	local timer = timelater_new(1);
-	
-	evt_on(timer,EVENT_TIMER,ef,self);
+	-- local timer = timelater_new(1);
+--	evt_on(timer,EVENT_TIMER,ef,self);
 	
 	
 	local rotate = skin:find("rotate");

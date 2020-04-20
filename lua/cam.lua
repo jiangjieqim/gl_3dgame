@@ -13,6 +13,7 @@ end
 
 --ÉèÖÃcameraµÄ×ø±ê
 function Camera:set_pos(x,y,z)
+	-- print(x,y,z);
 	cam(self.p,"set_xyz",x or 0,y or 0,z or 0);
 end
 

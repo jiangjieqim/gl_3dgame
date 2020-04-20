@@ -12,14 +12,16 @@ function FpsView:new()
 		label,
 		timer,
 		formatstr,
+		e,
 	};
 	setmetatable(self, FpsView);
+	self.e =JEngine:getIns();
 	return self;
 end
 
 local function f_fps_timer(data,param)
 	local self = param;
-	local _fps = JEngine:getIns():get_fps();
+	local _fps = self.e:get_fps();			--get_fps();
 	local str = _fps;
 	if(self.formatstr) then
 		str = string.format(self.formatstr,_fps);

@@ -19,20 +19,14 @@ print('package.path = '..package.path);
 
 
 
-
-
-
 local core = require("core");
 
-local e = JEngine:getIns();
-local plug = e:get_plugin();
-
 JEngine:getIns():setbg(0.4,0.4,0.4);
+
+
 require("editor");
 --require("editor.lua");
-
--- local core1 = require("core");
--- print(core.now());
+--print(core.now());
 
 
 
@@ -52,17 +46,13 @@ function f_onkey(data)
         JEngine:getIns():exit();
 	elseif(key == 13) then
 		--»Ø³µ
-
-
-		print("delayMs = "..eg:get_delayTime());
 	elseif(key == 49) then
 		--1
-		-- JEngine:getIns():print_info();	
-		e:setfps(1);
+		JEngine:getIns():print_info();	
 	elseif(key == 50) then
 		--2
-		-- func_lua_gc("2");
-		e:setfps(24);
+		func_lua_gc("2");
+		
 	elseif(key == 51) then
 		--3
 
@@ -78,17 +68,36 @@ function f_onkey(data)
 		evt_on(2,EVENT_TIMER,f_fps_timer,"a");
 		evt_off(2,EVENT_TIMER,f_fps_timer);
 --]]
+	
+		
+	
+
+
 		func_lua_gc("3_2");
+
+		
+		
+		
+		
+		
 	elseif(key == 52) then
 		--4
+
+		
 		func_lua_gc("4_1");
+
+		
 ----[[
 		local tf = JEngine:getIns():get_plugin():load("view/tf");
 		tf:init();
 		tf:show("message");
         tf:unload();
 --]]
+
+		
+		
 		func_lua_gc("4_2");
+
 	end
 end
 
@@ -96,9 +105,7 @@ local function init()
 	--print(core.now());
 	--print(cam);	
 	JEngine:getIns():setbg(0.3,0.3,0.3);
-	--JEngine:getIns():get_cam():set_pos(0,-4,-15);
-	JEngine:getIns():get_cam():set_pos(0,-1,-4);
-
+	JEngine:getIns():get_cam():set_pos(0,-4,-15);
 
 	local e1 = Editor:new();
 	JEngine:getIns():get_cam():refresh();
@@ -108,8 +115,6 @@ local function init()
 end
 
 -- init();
-
-----[[
 local btn = Button:new();
 btn:set_pos(100,100);
 btn:bind_click(function()
@@ -117,17 +122,6 @@ btn:bind_click(function()
 	-- core.gc();
 	end
 );
-
-e:setfps(12);--24
---15 nice
---	>15 will be bad 
-
-
-evt_on(btn,EVENT_ENGINE_KEYBOARD,f_onkey);
---]]
-
-
-
 
 -- local win = JEngine:getIns():get_plugin():load("view/InfoView");
 --win:set_pos(150,0);
@@ -145,18 +139,14 @@ evt_on(btn,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 
 ----[[
--- func_lua_gc();
--- local win = plug:load("view/InfoView");
--- win:set_pos(0,0);
-
+func_lua_gc();
+local win = JEngine:getIns():get_plugin():load("view/InfoView");
+win:set_pos(150,0);
 -- win:dispose();
 -- win = nil;
 --func_lua_gc();
 --]]
 
-
-local fps = plug:load("view/FpsView");
-fps:show();
 
 
 

@@ -90,7 +90,9 @@ function UnitBase:loadbox()
     self.p = obj;
 	f_set_cam(self);
 end
-
+function UnitBase:set_position(x,y,z)
+    change_attr(self.p,"set_position",string.format("%f,%f,%f",x,y,z));
+end
 function UnitBase:load_model(url,maturl)
     url =  url or "\\resource\\obj\\plane.obj";
     maturl = maturl or "//resource//material//triangle.mat"

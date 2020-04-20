@@ -12,7 +12,6 @@ function PluginMan:new()
 	return self;
 end
 
-
 function PluginMan:getInfo(p)
 	return p:getName().." "..tostring(p);
 end
@@ -20,9 +19,9 @@ end
 --加载插件
 
 function PluginMan:load(plugin)
-	local url = "../include/lua/"..plugin.."";
-	local p = require(url):new();
-	func_print(">>>>插件初始化完毕"..self:getInfo(p)..url);
+	-- local url = "../include/lua/"..plugin.."";
+	local p = require(plugin):new();
+	func_print(">>>>插件初始化完毕"..self:getInfo(p).." url="..plugin);
 	return p;
 end
 
@@ -39,3 +38,4 @@ function PluginMan:unload(p)
 	--print(getmetatable(p));
 end
 --]]
+

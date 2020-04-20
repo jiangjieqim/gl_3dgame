@@ -5,6 +5,8 @@
 #include <math.h>
 #include <stdarg.h>
 
+
+
 #include "camera.h"
 #include "tools.h"
 #include "str.h"
@@ -834,48 +836,90 @@ f_renderFBOs(){
 		LStack_ergodic_t(ex_getIns()->fboList,f_fboRenderList,0);
 }
 
-static void 
-_new()
-{
+
+static void reRender(){
+	struct EX* p = ex_getIns();
+	if(p->_screenWidth <= 0 || p->_screenHeight<=0){
+		//屏幕尺寸0的时候不进行渲染
+		return;
+	}
+
+	f_defaultRenderFrame();
+	//fbo_render(p->fbo);	
+
+	f_renderFBOs();
+
+	//Do the buffer Swap
+	glutSwapBuffers();//交换缓冲区
+
+	// Do it again
+	//glutPostRedisplay();
+
+	//渐变管理器回调
+	//ramp_callBack();
+
+	tween_run(_longTime,p->delayTime);
+
+	//runLastList();
+	//p->index++;
+
+	evt_dispatch(ex_getIns(),EVENT_ENGINE_RENDER_3D,0);
+	timelater_run();
+	//}
+	
+	//printf("render...%d\n",p->delayTime);
+}
+
+void ex_loop(){
+	//printf("loop\n");
 	struct EX* p = ex_getIns();
 
 	//计算fps
 	//f_calculate_fps();
-	p->delayTime = get_longTime() - _longTime;
-	
-	//printf("custDelayMs: = %d\n",p->custDelayMs);
+
+
+	long _l = get_longTime();
+	p->delayTime = _l - _longTime;
+
+	//printf("delayTime: = %d\n",p->delayTime);
 	if(p->delayTime < p->custDelayMs){
-	
+
 	}else{
-		_longTime =  get_longTime();
+		_longTime =  _l;
+		//if(0){
 
-		if(p->_screenWidth <= 0 || p->_screenHeight<=0){
-			//屏幕尺寸0的时候不进行渲染
-			return;
-		}
-
-		f_defaultRenderFrame();
-		//fbo_render(p->fbo);	
-
-		f_renderFBOs();
-
-		//Do the buffer Swap
-		glutSwapBuffers();
-		// Do it again
-		glutPostRedisplay();
-
-		//渐变管理器回调
-		//ramp_callBack();
-
-		tween_run(_longTime,p->delayTime);
-
-		//runLastList();
-		//p->index++;
-
-		evt_dispatch(ex_getIns(),EVENT_ENGINE_RENDER_3D,0);
-		timelater_run();
+		//printf("isDrawed=%d,",p->isDrawed);
+		//f_postDraw();
+		//reRender();
+		
+		//	glutPostRedisplay();//数据准备好了 直接提交到GPU显卡进行管线渲染
 	}
-	sleep(1);
+}
+
+
+static void 
+_new()
+{
+	//struct EX* p = ex_getIns();
+
+	//计算fps
+	//f_calculate_fps();
+	//p->delayTime = get_longTime() - _longTime;
+	//
+	//printf("## delayTime: = %d\n",p->delayTime);
+	//if(p->delayTime < p->custDelayMs){
+	//	
+	//}else{
+	//	_longTime =  get_longTime();
+	//	//if(0){
+	//	
+	//}
+
+	//glutPostRedisplay();
+	//sleep(1);
+
+
+	reRender();
 }
 void ex_render(void)
 {

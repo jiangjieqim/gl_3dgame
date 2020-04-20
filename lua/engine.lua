@@ -75,7 +75,9 @@ end
 
 function JEngine:get_fps()
 	--return get_attr(nil,"fps");
-	return 1000/self:get_delayTime();
+
+	local f = 1000/self:get_delayTime();
+	return math.floor(f*10)/10;
 	-- return self:get_delayTime();
 end
 
@@ -99,7 +101,11 @@ end
 function JEngine:setDelayMs(ms)
     change_attr(nil,"custDelayMs",ms);
 end
-
+function JEngine:setfps(v)
+	local a = math.ceil(1000/v);
+	--print("a = "..a);
+	self:setDelayMs(a);
+end
 --将对象o绑定到引擎默认的3dcam空间
 function JEngine:bind_3dcam(o)
 	self:get_cam():bind(o);

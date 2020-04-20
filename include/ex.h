@@ -199,6 +199,8 @@ struct EX
 
 	long delayTime;//每一帧的间隔毫秒数
 	int custDelayMs;//自定义间隔毫秒数
+
+	//int isDrawed;//0未绘制,1已经绘制
 };
 
 //接口定义
@@ -224,6 +226,8 @@ void ex_reshape(int w,int h);
 *	销毁引擎
 */
 void ex_dispose(struct EX* p);
+
+void ex_loop();
 
 /*
 gluUnProject -- map window coordinates to object coordinates 

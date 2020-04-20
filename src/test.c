@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <windows.h>
 
 #pragma comment (lib,"lua51.lib")
 //#pragma comment (lib,"common.lib
@@ -2997,6 +2998,27 @@ f_idle(void){
 
  //__declspec(dllimport) double Add2(double a, double b);
 
+
+
+DWORD WINAPI ThreadProc(LPVOID lpParam)
+	{
+	/*threadInfo*Info = (threadInfo*)lpParam;
+	CDC *dc = CWnd::FromHandle(Info->hWnd)->GetDC();
+	for (int i=0;i<460;i++)
+		{
+		for (int j=Info->nOffset;j<Info->nOffset+190;j++)
+			{
+			dc->SetPixel(j,460-i,Info->clrRGB);
+			}
+		}
+	DeleteObject(dc);*/
+	while(1){
+		ex_loop();
+		sleep(1);
+	}
+	return 0;
+}
+
 void main(int argc,char** argv){ 
 	
 	float rate;//比率
@@ -3143,8 +3165,14 @@ void main(int argc,char** argv){
 	
 	//初始化场景
 	initScene();
+	CreateThread(0,0,ThreadProc,0,0,0);
+		//hThead[i] = CreateThread(NULL,0,ThreadProc,&Info[i],0,&dwThreadID[i]);
+	
 
+	printf("##############################\n");
 	glutMainLoop();
+
+	
 
 	ex_dispose(ex);
 	ex = NULL;

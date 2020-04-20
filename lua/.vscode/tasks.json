@@ -8,6 +8,12 @@
             "type": "shell",
             "command": "cd..&start C:\\gl_3dgame\\runLua.bat",
             "problemMatcher":[]
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "cd..&start C:\\gl_3dgame\\test.bat\nstart C:\\gl_3dgame\\runLua.bat",
+            "problemMatcher":[]
         }
     ]
 }
