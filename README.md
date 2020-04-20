@@ -325,3 +325,8 @@ taskkill /f /im cmd.exe
 exit
 ```
 
+### glFiush和glFinish
+glFlush是异步的，发送完成之后立即返回的,glFinish要等待GPU执行完成之后再返回的  
+glFinish是阻塞模式的  
+
+
