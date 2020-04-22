@@ -73,6 +73,22 @@ set INCLUDE=C:\%ROOT%\Microsoft Visual Studio 8\VC\include;C:\%ROOT%\Microsoft V
 set LIB=C:\%ROOT%\Microsoft Visual Studio 8\VC\lib\;C:\%ROOT%\Microsoft Visual Studio 8\VC\PlatformSDK\Lib;
 ```
 
+build.bat  
+```
+call initroot.bat
+set INCLUDE=%INCLUDE%%cd%\include\;
+set LIB=%LIB%%cd%\lib\;
+cd src
+cl *.c /Ox
+link -out:test.exe *.obj
+del *.obj
+copy test.exe ..\run\test.exe
+del *.exe 
+cd ..\run\ 
+test.exe
+pause
+```
+
 esUtil_win32.obj : error LNK2019: 无法解析的外部符号 __imp__GetCursorPos@4，该符号在函数 _ESWindowProc@16 中被引用  
 解决方案:增加  #pragma comment(lib,"user32.lib")  
 
