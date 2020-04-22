@@ -329,4 +329,9 @@ exit
 glFlush是异步的，发送完成之后立即返回的,glFinish要等待GPU执行完成之后再返回的  
 glFinish是阻塞模式的  
 
-
+glutMainLoop:lut 消息事件处理函数  
+在图像绘百制的所有操作之后，要加入 glutPostRedisplay() 来重绘图像，否则图像只度有响应鼠标或键盘消息时才会更新图像。有点像窗口重绘函数一问样。它要求当前的回调函数返回时执行答显示回调函数
+glutMainLoop（）：使程序进入事件处内理循环。该函数必须是容main主函数的最后一条语句.
+```
+在处理渲染循环的时候,开辟一个线程来做计时器,当时间到了直接glutPostRedisplay(),发送渲染请求,这样就不用做无效的渲染glutPostRedisplay()请求了,此方式可以提高性能
+```

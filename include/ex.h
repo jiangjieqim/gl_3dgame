@@ -227,7 +227,7 @@ void ex_reshape(int w,int h);
 */
 void ex_dispose(struct EX* p);
 
-void ex_loop();
+//int ex_loop();
 
 /*
 gluUnProject -- map window coordinates to object coordinates 

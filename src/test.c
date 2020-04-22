@@ -3002,16 +3002,6 @@ f_idle(void){
 
 DWORD WINAPI ThreadProc(LPVOID lpParam)
 	{
-	/*threadInfo*Info = (threadInfo*)lpParam;
-	CDC *dc = CWnd::FromHandle(Info->hWnd)->GetDC();
-	for (int i=0;i<460;i++)
-		{
-		for (int j=Info->nOffset;j<Info->nOffset+190;j++)
-			{
-			dc->SetPixel(j,460-i,Info->clrRGB);
-			}
-		}
-	DeleteObject(dc);*/
 	while(1){
 		ex_loop();
 		sleep(1);

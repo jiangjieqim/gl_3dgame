@@ -869,18 +869,16 @@ static void reRender(){
 	
 	//printf("render...%d\n",p->delayTime);
 }
-
-void ex_loop(){
+int ex_loop(){
 	//printf("loop\n");
 	struct EX* p = ex_getIns();
 
 	//计算fps
 	//f_calculate_fps();
 
-
 	long _l = get_longTime();
 	p->delayTime = _l - _longTime;
-
+	
 	//printf("delayTime: = %d\n",p->delayTime);
 	if(p->delayTime < p->custDelayMs){
 
@@ -892,14 +890,13 @@ void ex_loop(){
 		//f_postDraw();
 		//reRender();
 		
-		//	glutPostRedisplay();//数据准备好了 直接提交到GPU显卡进行管线渲染
+		glutPostRedisplay();//数据准备好了 直接提交到GPU显卡进行管线渲染
+		return 1;
 	}
+	return 0;
 }
 
-
-static void 
-_new()
-{
+//static void _new(){
 	//struct EX* p = ex_getIns();
 
 	//计算fps
@@ -915,15 +912,16 @@ _new()
 	//	
 	//}
 
+
+
+	//if(f_loop()==1){
+	//	reRender();
+	//}
 	//glutPostRedisplay();
 	//sleep(1);
-
-
+//}
+void ex_render(void){
 	reRender();
-}
-void ex_render(void)
-{
-	_new();
 }
 
 struct HeadInfo* ex_find_headinfo(struct EX* p,const char* name){

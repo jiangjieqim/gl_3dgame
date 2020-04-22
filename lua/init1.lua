@@ -4,46 +4,18 @@ package.path=";c:\\gl_3dgame\\lua\\?.lua";--核心组件
 
 --增加业务模块
 package.path=package.path..";c:\\gl_3dgame\\lua\\src\\?.lua";
-
 print('package.path = '..package.path);
 
-
-
--- require("a");
--- require("a");
-
-
--- local a = {};
--- print(#a);
--- print(tonumber(a));
-
-
-
-
-
-
 local core = require("core");
-
 local e = JEngine:getIns();
 local plug = e:get_plugin();
 
 JEngine:getIns():setbg(0.4,0.4,0.4);
 require("editor");
---require("editor.lua");
-
--- local core1 = require("core");
--- print(core.now());
-
-
-
-
 
 local function f_fps_timer(data,param)
 
-
 end
-
-
 
 --func_enable_debug(false);--关闭调试日志
 function f_onkey(data)
@@ -52,8 +24,6 @@ function f_onkey(data)
         JEngine:getIns():exit();
 	elseif(key == 13) then
 		--回车
-
-
 		print("delayMs = "..eg:get_delayTime());
 	elseif(key == 49) then
 		--1
@@ -65,15 +35,11 @@ function f_onkey(data)
 		e:setfps(24);
 	elseif(key == 51) then
 		--3
-
 		func_lua_gc("3_1");
-
 ----[[
 		local f = JEngine:getIns():get_plugin():load("view/FpsView");--加载插件
 		f:show();
 		f:dispose();
-		--f = nil;
-		
 --[[
 		evt_on(2,EVENT_TIMER,f_fps_timer,"a");
 		evt_off(2,EVENT_TIMER,f_fps_timer);
@@ -106,9 +72,7 @@ local function init()
 	-- evt_on(nil,EVENT_ENGINE_KEYBOARD,f_onkey);
 
 end
-
 -- init();
-
 ----[[
 local btn = Button:new();
 btn:set_pos(100,100);
@@ -117,32 +81,19 @@ btn:bind_click(function()
 	-- core.gc();
 	end
 );
-
-e:setfps(12);--24
+e:setfps(30);--24
 --15 nice
 --	>15 will be bad 
-
-
 evt_on(btn,EVENT_ENGINE_KEYBOARD,f_onkey);
 --]]
 
-
-
-
 -- local win = JEngine:getIns():get_plugin():load("view/InfoView");
 --win:set_pos(150,0);
-
-
 --core.setTimeout(5000,init);
-
-
-
 --*******************************************
-
 --func_lua_gc();
 
 --###############################################################
-
 
 ----[[
 -- func_lua_gc();
@@ -153,28 +104,13 @@ evt_on(btn,EVENT_ENGINE_KEYBOARD,f_onkey);
 -- win = nil;
 --func_lua_gc();
 --]]
-
-
 local fps = plug:load("view/FpsView");
 fps:show();
-
-
-
-
 --]]
 --###############################################################
-
-
-
-
 --require("5.lua");
-
 --require("quaternion");
-
 --]]
-
-
-
 
 --[[
 local s= LineNode:new(3);
@@ -188,7 +124,3 @@ s:mod(0,1,0,0);
 s:mod(2,0,0,0);
 --s:dispose();--销毁
 --]]
-
-
-
-
