@@ -1,8 +1,9 @@
 NSkin = {
-	xmlurl,--xml地址 或者是xml文本格式的数据
-	list,-- 存储节点列表的链栈
-	namemap,--根据名字存储skin组件的tabel
-	xml,--xml引用
+	-- xmlurl,--xml地址 或者是xml文本格式的数据
+	-- list,-- 存储节点列表的链栈
+	-- namemap,--根据名字存储skin组件的tabel
+	-- xml,--xml引用,
+	-- panel=nil;--当前的NPanel引用
 }
 NSkin.__index = NSkin;
 setmetatable(NSkin, Base);
@@ -46,6 +47,7 @@ end
 function NSkin:new()
 	local self = Base:new();
 	setmetatable(self, NSkin);
+	
 	self.vis = true;
 	self:settype(UI_TYPE.Skin);	--5
 	return self;
@@ -173,7 +175,7 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		end
 		stack_push(list,np);
 
-		
+		skin.panel = np;
 		
 	elseif(_type == "NLabel") then
 		local str = xml_get_str(node,"label");
@@ -398,6 +400,13 @@ function NSkin:load(xmlurl,texs)
 		f_tex_complete(self);
 	end
 end
+
+--居中
+function NSkin:center()
+	local np = self.panel;
+	np:center();
+end
+
 --加载Skin中的skin组件的时候是用,注意此方法只适用于Skin的内部item组件,它们有一个共同的Parent
 function NSkin:synload(xmlurl,myParent,offsetx,offsety)
 	self.xmlurl = xmlurl;

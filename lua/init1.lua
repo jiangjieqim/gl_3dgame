@@ -32,7 +32,12 @@ function f_onkey(data)
 		if(setting==nil)then
 			setting = plug:load("view/SettingView");
 		else
-			setting:visible(not setting:is_visible());
+			if(setting:is_visible()) then
+				setting:hide();
+			else
+				setting:show(true);
+			end
+
 		end
 	elseif(key == 50) then
 		--2
