@@ -18,3 +18,22 @@ end
 function IPlugin:getName()
 	func_error("IPlugin:getName()接口未实现");	
 end
+--[[
+	视图类型的插件继承此类
+]]
+IPluginView = {
+	
+};
+
+IPluginView.__index = IPluginView;
+setmetatable(IPluginView, IPlugin);
+
+--显示/隐藏插件
+function IPluginView:visible(v)
+    self.nskin:visible(v);
+end
+
+--插件是否显示着
+function IPluginView:is_visible()
+ 	return self.nskin:is_visible();
+end

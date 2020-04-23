@@ -46,6 +46,7 @@ end
 function NSkin:new()
 	local self = Base:new();
 	setmetatable(self, NSkin);
+	self.vis = true;
 	self:settype(UI_TYPE.Skin);	--5
 	return self;
 end
@@ -445,8 +446,10 @@ local function f_node_visible(n,v)
 		func_error("未实现类型:".._type);
 	end
 end
+--设置显示隐藏皮肤
 function NSkin:visible(v)
 	local l = self.list;
+	self.vis = v;
 	--local node = stack_find_by_index(list,0);--默认取栈中0号索引中的数据
 	--node:visible(v);
 	local list = l.list;
@@ -455,9 +458,14 @@ function NSkin:visible(v)
 		--[[if(node.name == name)then
 			return node;
 		end--]]
+
 		f_node_visible(node,v);
 	end
-	
+end
+
+function NSkin:is_visible()
+	--Skin是否显示着
+	return self.vis;
 end
 
 --[[

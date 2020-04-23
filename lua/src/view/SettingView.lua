@@ -3,13 +3,11 @@ local SettingView = {
 };
 
 SettingView.__index = SettingView;
-setmetatable(SettingView, IPlugin);
+setmetatable(SettingView, IPluginView);
 function SettingView:new()
 	local self = {
-		nskin
+		nskin=0,
     };
-
-    -- print("SettingView new...");
     local function f_scale_handle(progress,self)
         local fps = math.ceil(progress*60) + 1;
         self.nskin:find("info_label"):set_text(fps);
@@ -18,12 +16,9 @@ function SettingView:new()
     end
     local function f_cpmleteHandler(skin)
         local namemap = skin.namemap;
-        local scale = namemap["scale"];--skin:find("scale");
-	
+        local scale = namemap["scale"];
         scale:bindCallback(f_scale_handle,self);
     end
-
-
 	setmetatable(self, SettingView);
     local nskin = NSkin:new();
 	self.nskin = nskin;

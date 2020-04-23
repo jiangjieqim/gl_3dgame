@@ -124,7 +124,8 @@ tl_malloc.c
 ![image](https://github.com/jiangjieqim/gl_3dgame/blob/master/resource/texture/tri.png)
 
 
-(22)1000000次随机,c使用14毫秒,lua47毫秒,所以lua是存在性能损耗的  
+(22)Lua相关  
+1000000次随机,c使用14毫秒,lua47毫秒,所以lua是存在性能损耗的  
 
 ```
 int i = 0;
@@ -142,6 +143,13 @@ for i=1,1000000,1 do
 end
 print(func_get_longTime()-t); --47 ms
 ```
+lua的三元运算符:  
+```
+local a, b, ret;
+ret = a > b and a or b
+```
+
+
 (23)
 lua继承的实现,resize之后的碰撞盒的的修正
 

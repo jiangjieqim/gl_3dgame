@@ -16,7 +16,7 @@ require("editor");
 local function f_fps_timer(data,param)
 
 end
-
+local setting;
 --func_enable_debug(false);--关闭调试日志
 function f_onkey(data)
 	local key = tonumber(data);
@@ -29,8 +29,11 @@ function f_onkey(data)
 		--1
 		-- JEngine:getIns():print_info();	
 		--e:setfps(1);
-		local setting = plug:load("view/SettingView");
-
+		if(setting==nil)then
+			setting = plug:load("view/SettingView");
+		else
+			setting:visible(not setting:is_visible());
+		end
 	elseif(key == 50) then
 		--2
 		-- func_lua_gc("2");
@@ -154,3 +157,9 @@ s:mod(2,0,0,0);
 --s:dispose();--销毁
 --]]
 
+
+
+
+
+-- local a = {key = 0};
+-- print(#a);
