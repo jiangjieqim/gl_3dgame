@@ -43,7 +43,8 @@ function f_onkey(data)
 		--2
 		-- func_lua_gc("2");
 		-- e:setfps(24);
-
+		local label = plug:load("view/FlyLabel");
+		label:set_label("ÄãºÃ");
 
 	elseif(key == 51) then
 		--3

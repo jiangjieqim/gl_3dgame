@@ -476,13 +476,13 @@ tf = nil;
 core = {};
 local M = core;
 --—”≥Ÿms∫¡√Î,÷¥––callback
-function M.setTimeout(ms,callback)
+function M.setTimeout(ms,callback,param)
 	local timer = timelater_new(ms);
 	local o = {t=timer,c=callback};
 
 	evt_once(timer,EVENT_TIMER,function()
 			if(o.c) then
-				o.c();
+				o.c(param);
 			end
 		end
 		);
@@ -528,6 +528,7 @@ end
 --print("xx..."..func_get_longTime());
 --local o = setTimeout(1000,fc);
 --clearTimeout(o);
+
 M.UI_TYPE = UI_TYPE;
 
 
