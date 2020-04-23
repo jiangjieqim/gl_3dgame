@@ -1292,15 +1292,15 @@ REG_core_xml(lua_State *L){
 		return 1;
 	}
 
-	////文本加载xml
-	//if(!strcmp(funcName,"loadstr")){
-	//	const char* str = lua_tostring(L,2);
-	//	//char* str = tl_loadfile(url,0);//lua_tostring(L,2);
-	//	int len = strlen(str);
-	//	void* xml = xml_parse(str,len);
-	//	lua_pushinteger(L,(int)xml);
-	//	return 1;
-	//}
+	//文本加载xml
+	if(!strcmp(funcName,"loadstr")){
+		char* str = lua_tostring(L,2);
+		//char* str = tl_loadfile(url,0);//lua_tostring(L,2);
+		int len = strlen(str);
+		void* xml = xml_parse(str,len);
+		lua_pushinteger(L,(int)xml);
+		return 1;
+	}
 	
 	if(!strcmp(funcName,"get_node_cnt")){
 		int ptr = lua_tointeger(L,2);

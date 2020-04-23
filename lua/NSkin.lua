@@ -1,11 +1,17 @@
 NSkin = {
-	xmlurl,--xml地址
+	xmlurl,--xml地址 或者是xml文本格式的数据
 	list,-- 存储节点列表的链栈
 	namemap,--根据名字存储skin组件的tabel
+	xml,--xml引用
 }
 NSkin.__index = NSkin;
 setmetatable(NSkin, Base);
 
+--是否是xml链接
+local function isXmlUrl(url)
+	local a = string.find(url or "","<");
+	return a == nil;
+end
 --销毁组件
 local function func_dispose(n)
    
@@ -165,6 +171,8 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 			np:set_pos(x,y);
 		end
 		stack_push(list,np);
+
+		
 		
 	elseif(_type == "NLabel") then
 		local str = xml_get_str(node,"label");
@@ -332,9 +340,14 @@ end
 --]]
 local function f_skin_parse(self,myParent,offsetx,offsety)
 	
-	local xml = Xml:new();--xml_load(self.xmlurl);
-	xml:load(self.xmlurl);
-	local cnt = xml:len();--xml_get_length(xml);
+	local xml = Xml:new();
+	
+	if(isXmlUrl(self.xmlurl))then
+		xml:load(self.xmlurl);
+	else
+		xml:loadstr(self.xmlurl);
+	end
+	local cnt = xml:len();
 
 	local n = 0;
 	
@@ -361,21 +374,22 @@ end
 
 local function f_tex_complete(self)
 	f_skin_parse(self);
-	--print(self);
 	evt_dispatch(self,ENGINE_EVENT_COMPLETE,self);
 end
 
 --[[
-
+0.  xmlurl 可能是xml纯文本数据,可能是xml链接
 1.	加载skin	 "gundi.png;checkbox.png;smallbtn.png"
 2.	texs == nil的时候不用异步加载,直接生成皮肤
-
 --]]
 function NSkin:load(xmlurl,texs)
 	if(texs == nil) then
 		func_error();
 		return;
 	end
+
+	-- print(texs);
+
 	self.xmlurl = xmlurl;
 	if(texs~=nil) then
 		loadtexs(texs,f_tex_complete,self);

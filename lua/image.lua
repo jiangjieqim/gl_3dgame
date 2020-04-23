@@ -29,7 +29,7 @@ function Image:init()
 end
 
 function Image:seticon(url)
-	func_texloadend({sprite=self.container;url=url})
+	func_texloadend({sprite=self.container;url=url});
 end
 
 --Ïß¿òÄ£Ê½äÖÈ¾

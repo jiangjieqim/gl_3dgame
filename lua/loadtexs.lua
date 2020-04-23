@@ -41,6 +41,7 @@ local function f_load(node)
 end
 
 --开始加载资源
+--callback:回调函数,p:参数
 function loadtexs(res,callback,p)
 	local node = {
 		res = res;

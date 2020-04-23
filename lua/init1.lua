@@ -28,7 +28,9 @@ function f_onkey(data)
 	elseif(key == 49) then
 		--1
 		-- JEngine:getIns():print_info();	
-		e:setfps(1);
+		--e:setfps(1);
+		local setting = plug:load("view/SettingView");
+
 	elseif(key == 50) then
 		--2
 		-- func_lua_gc("2");
@@ -74,17 +76,45 @@ local function init()
 end
 -- init();
 ----[[
-local btn = Button:new();
-btn:set_pos(100,100);
-btn:bind_click(function()
-	init();
-	-- core.gc();
+
+
+local function texCallBack()
+	-- print("加载预制贴图完成...");
+
+	local btn = Button:new();
+	btn:set_pos(100,100);
+	btn:bind_click(function()
+		init();
+		-- core.gc();
+		
+		
 	end
-);
-e:setfps(30);--24
---15 nice
---	>15 will be bad 
-evt_on(btn,EVENT_ENGINE_KEYBOARD,f_onkey);
+	);
+	e:setfps(30);--24
+	--15 nice
+	--	>15 will be bad 
+	evt_on(btn,EVENT_ENGINE_KEYBOARD,f_onkey);
+
+
+	local fps = plug:load("view/FpsView");
+	fps:show();
+end
+
+
+loadtexs("gundi.png;checkbox.png;smallbtn.png",texCallBack);
+
+
+
+
+
+
+
+
+
+
+
+
+
 --]]
 
 -- local win = JEngine:getIns():get_plugin():load("view/InfoView");
@@ -104,8 +134,7 @@ evt_on(btn,EVENT_ENGINE_KEYBOARD,f_onkey);
 -- win = nil;
 --func_lua_gc();
 --]]
-local fps = plug:load("view/FpsView");
-fps:show();
+
 --]]
 --###############################################################
 --require("5.lua");
@@ -124,3 +153,4 @@ s:mod(0,1,0,0);
 s:mod(2,0,0,0);
 --s:dispose();--销毁
 --]]
+

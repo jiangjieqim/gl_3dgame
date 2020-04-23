@@ -44,6 +44,11 @@ end
 function Xml:load(url)
 	self.p = core_xml("load",url);
 end
+--以加载文本的方式构造xml对象
+function Xml:loadstr(str)
+	self.p = core_xml("loadstr",str);
+end
+
 --xml中的节点的个数
 function Xml:len()
 	return core_xml("get_node_cnt",self.p);
