@@ -42,7 +42,9 @@ function f_onkey(data)
 	elseif(key == 50) then
 		--2
 		-- func_lua_gc("2");
-		e:setfps(24);
+		-- e:setfps(24);
+
+
 	elseif(key == 51) then
 		--3
 		func_lua_gc("3_1");

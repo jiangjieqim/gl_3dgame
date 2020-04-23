@@ -1294,7 +1294,7 @@ REG_core_xml(lua_State *L){
 
 	//文本加载xml
 	if(!strcmp(funcName,"loadstr")){
-		char* str = lua_tostring(L,2);
+		const char* str = lua_tostring(L,2);
 		//char* str = tl_loadfile(url,0);//lua_tostring(L,2);
 		int len = strlen(str);
 		void* xml = xml_parse(str,len);

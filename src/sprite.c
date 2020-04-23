@@ -1328,7 +1328,7 @@ void sprite_removeChild(void* spr,void* child){
 		log_color(0,"(parent: %s child: %s)	sprite_removeChild 成功!\n",f_get_name(spr),f_get_name(child));
 	}else{
 		//log_color(0xff0000,"(parent: %s child: %s)	sprite_removeChild 失败!\n",f_get_name(spr),f_get_name(child));
-		log_color(0xff0000,"%s ===>%0x sprite_removeChild fail,父对象%0x已经被dispose掉了\n",f_get_name(child),child,spr);
+		log_color(0xff0000,"%s ===>%0x <warnning> sprite_removeChild fail,父对象%0x已经被dispose掉了\n",f_get_name(child),child,spr);
 	}
 }
 

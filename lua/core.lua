@@ -81,6 +81,30 @@ UI_TYPE = {
 	NButton = 16,
 };
 
+--根据类型获取其类型名
+function func_getNameByUIType(t)
+	local u = UI_TYPE;
+	local a = {
+		[u.Label] = "Label",
+		[u.Button] = "Button",
+		[u.ScrollBar] = "ScrollBar", 
+		[u.Panel] = "Panel",
+		[u.CheckBox] = "CheckBox",
+		[u.ProgressBar] = "ProgressBar",
+		[u.ListBox] = "ListBox",
+		[u.Image] = "Image",
+		[u.Shape] = "Shape",
+		[u.NScrollBar] = "NScrollBar",
+		[u.NListBox] = "NListBox",
+		[u.NLabel] = "NLabel",
+		[u.NPanel] = "NPanel",
+		[u.NButton] = "NButton",
+	}
+	return a[t];
+end
+
+
+
 local DEBUG = true;
 
 
@@ -403,6 +427,7 @@ function func_addnode(parent,n,x,y)
 		func_error(string.format("type = %s未实现",tostring(_type)));
 	end
 end
+
 
 require("base");
 require("linenode");
