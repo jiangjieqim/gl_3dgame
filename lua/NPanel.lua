@@ -93,7 +93,7 @@ end
 function NPanel:dispose()
 	local bg = self.bg;
 	--self:set_click_close(false);
-	print("NPanel:dispose()");
+	-- print("NPanel:dispose()");
 	self:enable_center(false);
 	--func_error(0);
 	bg:dispose();

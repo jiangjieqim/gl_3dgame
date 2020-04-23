@@ -33,7 +33,7 @@ end
 function FlyLabel:set_label(v,ms)
     local label = self.nskin:find("info_label");
     label:set_text(v);
-    local o = core.setTimeout(ms or 1000,fc,self);
+    local o = core.setTimeout(ms or 500,fc,self);
 end
 
 function FlyLabel:getName()

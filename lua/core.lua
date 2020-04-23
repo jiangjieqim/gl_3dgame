@@ -475,17 +475,18 @@ tf = nil;
 
 core = {};
 local M = core;
+
+local function f_time(data,o)
+	if(o.c) then
+		o.c(o.p);
+	end
+end
+
 --—”≥Ÿms∫¡√Î,÷¥––callback
 function M.setTimeout(ms,callback,param)
 	local timer = timelater_new(ms);
-	local o = {t=timer,c=callback};
-
-	evt_once(timer,EVENT_TIMER,function()
-			if(o.c) then
-				o.c(param);
-			end
-		end
-		);
+	local o = {t=timer,c=callback,p=param};
+	evt_once(timer,EVENT_TIMER,f_time,o);
 	return o;
 end
 

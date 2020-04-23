@@ -7,6 +7,8 @@ package.path=package.path..";c:\\gl_3dgame\\lua\\src\\?.lua";
 print('package.path = '..package.path);
 
 local core = require("core");
+
+func_enable_debug(false);
 local e = JEngine:getIns();
 local plug = e:get_plugin();
 
@@ -44,7 +46,7 @@ function f_onkey(data)
 		-- func_lua_gc("2");
 		-- e:setfps(24);
 		local label = plug:load("view/FlyLabel");
-		label:set_label("ÄãºÃ");
+		label:set_label(math.random());
 
 	elseif(key == 51) then
 		--3
