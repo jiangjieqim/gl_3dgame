@@ -149,8 +149,8 @@ function NScrollBar:dispose()
 	bg:off(EVENT_ENGINE_SPRITE_CLICK,f_scrollBarClick);
 	bg:dispose();
 	
-	btn:dispose();
 	btn:off(EVENT_ENGINE_SPRITE_CLICK_MOVE,f_luaDrag_move);
+	btn:dispose();
 	
 	func_clearTableItem(self);
 end
