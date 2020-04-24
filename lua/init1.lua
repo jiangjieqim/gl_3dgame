@@ -45,7 +45,9 @@ function f_onkey(data)
 		-- func_lua_gc("2");
 		-- e:setfps(24);
 		local label = plug:load("view/FlyLabel");
-		label:set_label(math.random());
+		local sx,sy = core.e:screen_size();
+
+		label:set_label(math.random(),1000,sy*0.25);
 
 	elseif(key == 51) then
 		--3
