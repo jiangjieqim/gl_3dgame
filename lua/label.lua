@@ -96,7 +96,9 @@ end
 function NLabel:set_pos(x,y)
 	ftext_setpos(self.tf,x,y);
 end
-
+-- function NLabel:get_pos()
+--     return ftext_get_wordpos(self.tf);
+-- end
 function NLabel:get_size()
 	return ftext_get_wh(self.tf);
 end

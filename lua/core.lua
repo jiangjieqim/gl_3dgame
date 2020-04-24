@@ -125,16 +125,7 @@ local function getDddress(value)
 	local s = tonumber('0x'..v);
 	return s;
 end
---是否开启debug模式
-function func_enable_debug(v)
-	if(v == true)then
-		DEBUG=1;
-		log_enable(1);
-	else
-		DEBUG=nil;
-		log_enable(0);
-	end
-end
+
 --将"table: ff"转化为number
 function func_get_address(value)
 	return getDddress(value);
@@ -519,7 +510,15 @@ function M.removeRequire( preName )
         end
     end
 end
-
+function M.debug(v)--是否开启debug模式
+	if(v == true or v == 1)then
+		DEBUG=1;
+		log_enable(1);
+	elseif(v == false or v == 0)then
+		DEBUG=nil;
+		log_enable(0);
+	end
+end;
 
 
 -- local function fc()
@@ -531,8 +530,8 @@ end
 --clearTimeout(o);
 
 M.UI_TYPE = UI_TYPE;
-
-
+M.e = JEngine:getIns();
 -- print("core init!!!");
+M.p = M.e:get_plugin();
 
 return core;

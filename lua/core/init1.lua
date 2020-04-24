@@ -39,7 +39,6 @@ end
 
 
 
---func_enable_debug(false);--关闭调试日志
 function f_onkey(data)
 	local key = tonumber(data);
 	if(key == KEY_ESC) then

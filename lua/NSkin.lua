@@ -421,10 +421,10 @@ function NSkin:set_pos(x,y)
 end
 
 --获取坐标
-function NSkin:get_pos(x,y)
+function NSkin:get_pos()
 	local list = self.list;
 	local node = stack_find_by_index(list,0);--默认取栈中0号索引中的数据
-	return node:get_pos(x,y);
+	return node:get_pos();
 end
 
 --根据名字找到组件引用

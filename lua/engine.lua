@@ -34,7 +34,7 @@ function JEngine:new()
 	self.m_cam3d = Camera:new(cam3d);
 
 	self.plugin = PluginMan:new();
-
+	-- func_error(1111);
 	return self;
 end
 --获取插件管理器的句柄

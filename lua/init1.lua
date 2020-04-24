@@ -8,9 +8,9 @@ print('package.path = '..package.path);
 
 local core = require("core");
 
-func_enable_debug(false);
-local e = JEngine:getIns();
-local plug = e:get_plugin();
+local e = core.e;
+local plug = core.p;
+core.debug(0);--关闭日志
 
 JEngine:getIns():setbg(0.4,0.4,0.4);
 require("editor");
@@ -19,7 +19,6 @@ local function f_fps_timer(data,param)
 
 end
 local setting;
---func_enable_debug(false);--关闭调试日志
 function f_onkey(data)
 	local key = tonumber(data);
 	if(key == KEY_ESC) then
@@ -50,16 +49,6 @@ function f_onkey(data)
 
 	elseif(key == 51) then
 		--3
-		func_lua_gc("3_1");
-----[[
-		local f = JEngine:getIns():get_plugin():load("view/FpsView");--加载插件
-		f:show();
-		f:dispose();
---[[
-		evt_on(2,EVENT_TIMER,f_fps_timer,"a");
-		evt_off(2,EVENT_TIMER,f_fps_timer);
---]]
-		func_lua_gc("3_2");
 	elseif(key == 52) then
 		--4
 		func_lua_gc("4_1");
