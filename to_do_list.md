@@ -59,4 +59,5 @@ localToGlobal
 4.加入pool这样的内存池管理对象  
 5.2020.4.1将lua的内核和应用层剥离开来,分离出引擎层和业务层  
 6.实现一个lua的json的解析类  
-7.全局搜tostring的调用,处理掉
+7.全局搜tostring的调用,处理掉  
+8.实现onDisplay和unDisplay  
