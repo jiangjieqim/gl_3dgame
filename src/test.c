@@ -622,7 +622,8 @@ REG_sprite_set2dCam(lua_State *L){
 	int fbo = lua_tointeger(L,2);
 	struct FboInfo info;
 	fbo_info((void*)fbo,&info);
-	sprite_set2dCam((void*)sprite,info.cam2d);//fbo_get2dCam((void*)fbo)
+	//sprite_set2dCam((void*)sprite,info.cam2d);
+	sprite_set((void*)sprite,SPRITE_2DCAM,info.cam2d);
 	return 0;
 }
 //
@@ -2075,14 +2076,16 @@ REG_change_attr(lua_State *L)
 	if(!strcmp(attrKey,"sprite_set_width")){
 		float w;
 		sscanf_s(str,"%f",&w);
-		sprite_set_width((struct Sprite*)ptr,w);
+		//sprite_set_width((struct Sprite*)ptr,w);
+		sprite_set((void*)ptr,SPRITE_WIDTH,w);
 		change = 1;
 	}
 	if(!strcmp(attrKey,"sprite_set_height")){
 		float h;
 
 		sscanf_s(str,"%f",&h);
-		sprite_set_height((struct Sprite*)ptr,h);
+		//sprite_set_height((struct Sprite*)ptr,h);
+		sprite_set((void*)ptr,SPRITE_HEIGHT,h);
 		change = 1;
 	}
 

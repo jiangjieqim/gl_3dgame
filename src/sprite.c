@@ -446,9 +446,9 @@ setHitTriangle(struct Sprite* spr){
 //	sprite->pos_z = layer;
 //}
 
-
-void
-sprite_set2dCam(void* spr,void* _2dcam){
+//设置当前的sprite的2dcam,绑定2dcam的时候用
+static void
+f_sprite_set2dCam(void* spr,void* _2dcam){
 	/*struct Sprite* sprite = (struct Sprite*)spr;
 	sprite->_2dcam = _2dcam;*/
 	base_set_cam(spr,_2dcam);
@@ -501,12 +501,13 @@ void sprite_resize(struct Sprite* spr,int w,int h){
 	sprite_setpos(spr,spr->screenX,spr->screenY);
 }
 
-void sprite_set_width(struct Sprite* spr,int w){
+static void f_sprite_set_width(struct Sprite* spr,int w){
 	spr->mWidth = w;
 	sprite_setpos(spr,spr->screenX,spr->screenY);
 }
 
-void sprite_set_height(struct Sprite* spr,int h){
+static void 
+f_sprite_set_height(struct Sprite* spr,int h){
 	spr->mHeight = h;
 	sprite_setpos(spr,spr->screenX,spr->screenY);
 }
@@ -657,6 +658,8 @@ sprite_create(char* _spriteName,
 	
 	return pSpr;
 }
+
+//设置sprite的z轴的值
 static void
 f_sprite_set_z(void* p,float v){
 	struct Sprite* pSpr = (struct Sprite*)p;
@@ -1472,6 +1475,20 @@ void sprite_set(void* ptr,int flag,...){
 	else if(flag == SPRITE_ATALS){
 		int a = va_arg(ap, int);
 		f_sprite_bindAtals(ptr,(void*)a);
+	}
+	else if(flag == SPRITE_2DCAM){
+		int a = va_arg(ap, int);
+		f_sprite_set2dCam(ptr,(void*)a);
+	}
+	else if(flag == SPRITE_WIDTH){
+		int w = va_arg(ap, double);
+		//printf("w = %d\n",w);
+		f_sprite_set_width(ptr,w);
+	}
+	else if(flag == SPRITE_HEIGHT){
+		int h = va_arg(ap, double);
+		//printf("h = %d\n",h);
+		f_sprite_set_height(ptr,h);
 	}
 	va_end(ap);
 }

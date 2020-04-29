@@ -89,16 +89,14 @@ struct Sprite{
 
 
 #define SPRITE_Z 0
-#define SPRITE_XY 1
-#define SPRITE_GRID 2//九宫格
-#define SPRITE_ATALS 3//图集
-//设置z轴值
+#define SPRITE_XY 1		
+#define SPRITE_GRID 2	//九宫格
+#define SPRITE_ATALS 3	//图集
+#define SPRITE_2DCAM 4	//设置camera2d
+#define SPRITE_WIDTH  5	
+#define SPRITE_HEIGHT 6
+//设置属性
 void sprite_set(void* sprite,int flag,...);
-
-//设置sprite的z轴的值
-//void
-//sprite_set_z(void* p,float v);
-
 
 /*,
  *为spr添加一个子对象
@@ -107,23 +105,9 @@ void sprite_addChild(void* spr,void* child);
 /*移除子对象*/
 void sprite_removeChild(void* spr,void* child);
 
-//设置坐标，相对于局部坐标
-//void sprite_setLocalPos(void* ptr,int x,int y);
-
-/*
- *获取全局坐标
- */
-//void sprite_getGlobalPos(void* spr,int* px,int *py);
-
 //设置点击回调
 void
 sprite_set_clickHandle(void* p,void (*clickCallBack)(void* ,int ,int ));
-
-/*
- *在addChild之后设置其相对最表
- *如果此sprite是其他的sprite的子对象的时候,使用该接口设置其相对于父对象的坐标
- */
-//void sprite_set_self_pos(void* p,int x,int y);
 
 /* 
 	初始化按钮
@@ -221,13 +205,5 @@ sprite_get_material(void* sprite);
 //创建一个没有赋贴图的2dSprite
 void*
 sprite_createEmptyTex(int texW,int texH,void* _2dCam);
-
-//设置当前的sprite的2dcam,绑定2dcam的时候用
-void
-sprite_set2dCam(void* spr,void* _2dcam);
-
-
-void sprite_set_width(struct Sprite* spr,int w);
-void sprite_set_height(struct Sprite* spr,int h);
 
 #endif
