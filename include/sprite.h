@@ -88,9 +88,11 @@ struct Sprite{
 };
 
 
-#define SPRITE_SET_Z 2
+#define SPRITE_Z 0
+#define SPRITE_XY 1
+#define SPRITE_GRID 2//九宫格
 //设置z轴值
-void sprite_set(void* ptr,...);
+void sprite_set(void* sprite,int flag,...);
 
 //设置sprite的z轴的值
 //void
@@ -120,7 +122,7 @@ sprite_set_clickHandle(void* p,void (*clickCallBack)(void* ,int ,int ));
  *在addChild之后设置其相对最表
  *如果此sprite是其他的sprite的子对象的时候,使用该接口设置其相对于父对象的坐标
  */
-void sprite_set_self_pos(void* p,int x,int y);
+//void sprite_set_self_pos(void* p,int x,int y);
 
 /* 
 	初始化按钮
@@ -233,8 +235,8 @@ sprite_set2dCam(void* spr,void* _2dcam);
 //sprite_set9Grid(void* spr,int top,int bottom,int left,int right);
 
 //设置九宫格数据
-void
-sprite_set_grid9(void* mat,float left,float right,float top,float bottom,float w,float h);
+//void
+//f_sprite_set_grid9(void* ptr,float left,float right,float top,float bottom,float w,float h);
 
 //设置图集
 void

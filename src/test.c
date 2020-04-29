@@ -435,7 +435,7 @@ REG_sprite_set_9grid(lua_State *L){
 	atals_tex((struct Atals*)atals,icon,&ptrOut);
 
 	grid9->material = tmat_create_9grid((struct Atals*)atals,icon);
-	sprite_set_grid9(grid9,l,r,t,b,ptrOut.width,ptrOut.height);
+	sprite_set(grid9,SPRITE_GRID,l,r,t,b,ptrOut.width,ptrOut.height);//f_sprite_set_grid9
 	return 0;
 }
 
@@ -2027,7 +2027,8 @@ REG_change_attr(lua_State *L)
 	if(!strcmp(attrKey,"sprite_set_self_pos")){
 		float x,y;
 		sscanf_s(str,"%f,%f",&x,&y);
-		sprite_set_self_pos((struct Sprite*)ptr,x,y);
+		//sprite_set_self_pos((struct Sprite*)ptr,x,y);
+		sprite_set((void*)ptr,SPRITE_XY,x,y);
 	}
 
 	//设置TextField坐标

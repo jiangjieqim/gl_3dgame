@@ -512,9 +512,10 @@ void sprite_set_height(struct Sprite* spr,int h){
 }
 
 /*
+ *在addChild之后设置其相对最表
  *如果此sprite是其他的sprite的子对象的时候,使用该接口设置其相对于父对象的坐标
  */
-void sprite_set_self_pos(void* p,int x,int y){
+static void f_sprite_set_self_pos(void* p,int x,int y){
 	struct Sprite* spr = (struct Sprite*)p;	
 	if(spr->parent){
 		struct Sprite* parent = (struct Sprite*)spr->parent;
@@ -1408,9 +1409,9 @@ sprite_set_hit_rect(void*p,int x,int y,int w,int h){
 	ptr->hitX = x,	ptr->hitY = y, ptr->hitWidth = w,ptr->hitHeight = h;
 	setHitTriangle(ptr);
 }
-
-void
-sprite_set_grid9(void* ptr,float left,float right,float top,float bottom,float w,float h){
+//设置九宫格数据
+static void
+f_sprite_set_grid9(void* ptr,float left,float right,float top,float bottom,float w,float h){
 	struct Grid9Node* grid9 = 0;
 	struct Sprite *_sprite = (struct Sprite *)ptr;
 	
@@ -1440,13 +1441,31 @@ void sprite_set(void* ptr,int flag,...){
 	va_list ap;
 	va_start(ap, flag);
 	//flag = va_arg(ap, int);
-	if(flag == SPRITE_SET_Z){
+	if(flag == SPRITE_Z){
 		float v0;
 		//printf("==============>%d\n",flag);
 		v0 = va_arg(ap, double);
 		//printf("==============>v0 = %.3f\n",v0);
 
 		f_sprite_set_z(ptr,v0);
+	}
+	else if(flag == SPRITE_XY){
+		float x,y;
+		x = va_arg(ap, double);
+		y = va_arg(ap, double);
+		f_sprite_set_self_pos(ptr,x,y);
+		//printf("==============>%.3f %.3f\n",x,y);
+	}
+	else if(flag == SPRITE_GRID){
+		int left,right,top,bottom;
+		float w,h;
+		left = va_arg(ap, int);
+		right = va_arg(ap, int);
+		top = va_arg(ap, int);
+		bottom = va_arg(ap, int);
+		w = va_arg(ap, double);
+		h = va_arg(ap, double);
+		f_sprite_set_grid9(ptr,left,right,top,bottom,w,h);
 	}
 	va_end(ap);
 }
