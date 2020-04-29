@@ -229,7 +229,8 @@ atals_new_tex(struct Atals* atals,const char* icon,
 		//tl_free(pnode);
 
 		//printf("sprite = %0x\n",sprite);
-		sprite_bindAtals(sprite,atals);
+		//sprite_bindAtals(sprite,atals);
+		sprite_set(sprite,SPRITE_ATALS,atals);
 		sprite_texName(sprite,icon,0);
 		ex_add(sprite);
 		

@@ -1396,8 +1396,10 @@ sprite_set_scale_z(struct Sprite* spr,float v){
 	}
 	spr->zScale = v;
 }
-void
-sprite_bindAtals(void* p,void* atals){
+
+//设置图集
+static void
+f_sprite_bindAtals(void* p,void* atals){
 	struct Sprite* sprite = (struct Sprite*)p;
 	//设置图集
 	sprite->atals = (struct Atals*)atals;
@@ -1466,6 +1468,10 @@ void sprite_set(void* ptr,int flag,...){
 		w = va_arg(ap, double);
 		h = va_arg(ap, double);
 		f_sprite_set_grid9(ptr,left,right,top,bottom,w,h);
+	}
+	else if(flag == SPRITE_ATALS){
+		int a = va_arg(ap, int);
+		f_sprite_bindAtals(ptr,(void*)a);
 	}
 	va_end(ap);
 }

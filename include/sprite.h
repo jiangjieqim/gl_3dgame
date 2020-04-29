@@ -91,6 +91,7 @@ struct Sprite{
 #define SPRITE_Z 0
 #define SPRITE_XY 1
 #define SPRITE_GRID 2//九宫格
+#define SPRITE_ATALS 3//图集
 //设置z轴值
 void sprite_set(void* sprite,int flag,...);
 
@@ -207,12 +208,6 @@ void sprite_set_scale_z(struct Sprite* spr,float v);
 */
 int 
 sprite_isCanClick(void* p);
-//使其可以被渲染,显示出来
-//void 
-//sprite_set_render(void* p,int v);
-
-//为Sprite设置一个默认的图集
-//void sprite_set_default_tex(void* p);
 
 /*
  *设置一个点击区域的范围
@@ -230,20 +225,7 @@ sprite_createEmptyTex(int texW,int texH,void* _2dCam);
 //设置当前的sprite的2dcam,绑定2dcam的时候用
 void
 sprite_set2dCam(void* spr,void* _2dcam);
-//设置9宫格
-//void
-//sprite_set9Grid(void* spr,int top,int bottom,int left,int right);
 
-//设置九宫格数据
-//void
-//f_sprite_set_grid9(void* ptr,float left,float right,float top,float bottom,float w,float h);
-
-//设置图集
-void
-sprite_bindAtals(void* p,void* atals);
-//void sprite_refresh_local_pos(void* p);
-//移除自身
-//void sprite_removeSelf(void* p);
 
 void sprite_set_width(struct Sprite* spr,int w);
 void sprite_set_height(struct Sprite* spr,int h);
