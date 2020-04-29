@@ -1,3 +1,6 @@
+
+local ENUM = require("enum");
+
 --Fps ”Õº¿‡
 local FpsView = {
 	
@@ -21,7 +24,7 @@ end
 
 local function f_fps_timer(data,param)
 	local self = param;
-	local _fps = self.e:get_fps();			--get_fps();
+	local _fps = self.e:get(ENUM.FPS);			--get_fps();
 	local str = _fps;
 	if(self.formatstr) then
 		str = string.format(self.formatstr,_fps);

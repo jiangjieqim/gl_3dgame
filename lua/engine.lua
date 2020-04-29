@@ -5,6 +5,8 @@
 --扩展功能都是依赖插件模式,比较适合需求经常发生变动的情况,
 --我们可以将这种多变的部分封装成一个插件进行挂载式的应用
 require("plugin_man");
+local ENUM = require("enum");
+
 -------------------------------------------------
 JEngine ={
 	atals,
@@ -12,6 +14,8 @@ JEngine ={
 	m_cam3d,
 	
 	plugin,--插件管理器
+
+	
 };
 
 JEngine.__index = JEngine;
@@ -46,6 +50,12 @@ end
 --获取屏幕的尺寸
 function JEngine:screen_size()
 	return get_attr(nil,"screenSize");
+end
+
+function JEngine:get(enum)
+	if(enum == ENUM.FPS) then
+		return self:get_fps();
+	end
 end
 
 --获取点击的坐标

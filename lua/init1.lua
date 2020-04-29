@@ -18,7 +18,7 @@ require("editor");
 local function f_fps_timer(data,param)
 
 end
-local setting;
+
 function f_onkey(data)
 	local key = tonumber(data);
 	if(key == KEY_ESC) then
@@ -28,18 +28,8 @@ function f_onkey(data)
 		print("delayMs = "..eg:get_delayTime());
 	elseif(key == 49) then
 		--1
-		-- JEngine:getIns():print_info();	
-		--e:setfps(1);
-		if(setting==nil)then
-			setting = plug:load("view/SettingView");
-		else
-			if(setting:is_visible()) then
-				setting:hide();
-			else
-				setting:show(true);
-			end
-
-		end
+		plug:toggle("view/SettingView");
+		-- plug:toggle("view/SettingView");
 	elseif(key == 50) then
 		--2
 		-- func_lua_gc("2");
@@ -86,12 +76,11 @@ local function texCallBack()
 	-- print("加载预制贴图完成...");
 
 	local btn = Button:new();
+	
 	btn:set_pos(100,100);
 	btn:bind_click(function()
 		init();
 		-- core.gc();
-		
-		
 	end
 	);
 	e:setfps(30);--24
@@ -104,36 +93,19 @@ local function texCallBack()
 	fps:show();
 end
 
-
 loadtexs("gundi.png;checkbox.png;smallbtn.png",texCallBack);
 
-
-
-
-
-
-
-
-
-
-
-
-
 --]]
-
 -- local win = JEngine:getIns():get_plugin():load("view/InfoView");
 --win:set_pos(150,0);
 --core.setTimeout(5000,init);
 --*******************************************
 --func_lua_gc();
-
 --###############################################################
-
 ----[[
 -- func_lua_gc();
 -- local win = plug:load("view/InfoView");
 -- win:set_pos(0,0);
-
 -- win:dispose();
 -- win = nil;
 --func_lua_gc();
@@ -157,10 +129,3 @@ s:mod(0,1,0,0);
 s:mod(2,0,0,0);
 --s:dispose();--销毁
 --]]
-
-
-
-
-
--- local a = {key = 0};
--- print(#a);

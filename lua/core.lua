@@ -536,4 +536,6 @@ M.e = JEngine:getIns();
 -- print("core init!!!");
 M.p = M.e:get_plugin();
 
+M.ENUM = require("enum");
+M.EVENT = require("event");
 return core;

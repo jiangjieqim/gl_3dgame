@@ -373,6 +373,7 @@ local function f_skin_parse(self,myParent,offsetx,offsety)
 	stack_del(_l);
 	--xml_del(xml);
 	xml:dispose();
+	-- self:visible(false);
 end
 
 local function f_tex_complete(self)

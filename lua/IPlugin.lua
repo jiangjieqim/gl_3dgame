@@ -1,3 +1,5 @@
+local EVENT = require("event");
+
 --插件接口定义
 IPlugin = {
 	
@@ -22,7 +24,8 @@ end
 	视图类型的插件继承此类
 ]]
 IPluginView = {
-	
+	nskin = nil,
+	centerFlag,--是否居中显示
 };
 
 IPluginView.__index = IPluginView;
@@ -34,15 +37,19 @@ setmetatable(IPluginView, IPlugin);
 -- end
 
 --v = true居中
-function IPluginView:show(v)
-	if(v) then
+function IPluginView:show()
+	if(self.centerFlag) then
 		self.nskin:center();
 	end
+	-- self:onDisplay();
 	self.nskin:visible(true);
+	evt_dispatch(self,EVENT.DISPLAY,self);
 end
 
 function IPluginView:hide()
-    self.nskin:visible(false);
+	-- self:unDisplay();
+	self.nskin:visible(false);
+	evt_dispatch(self,EVENT.UNDISPLAY,self);
 end
 
 --插件是否显示着
@@ -55,3 +62,7 @@ function IPluginView:center()
 	self.nskin:center();
 end
 
+
+function IPluginView.setCenter(v)
+	self.centerFlag = v;
+end
