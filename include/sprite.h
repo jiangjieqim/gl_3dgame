@@ -1,6 +1,7 @@
 #ifndef _SPRITE_H_
 #define _SPRITE_H_
 #include "vmath.h"
+//#include <stdarg.h>
 //#define USE_VBO_SPRITE	//是否使用VBO模式的Sprite
 /************************************************************************/
 /* 九宫格结构体                                                                     */
@@ -86,9 +87,16 @@ struct Sprite{
 	
 };
 
+
+#define SPRITE_SET_Z 2
+//设置z轴值
+void sprite_set(void* ptr,...);
+
 //设置sprite的z轴的值
-void
-sprite_set_z(void* p,float v);
+//void
+//sprite_set_z(void* p,float v);
+
+
 /*,
  *为spr添加一个子对象
  **/

@@ -172,9 +172,6 @@ void tlgl_drawPloyLine();
 void tlgl_render_triangles(GLfloat* vertex,int vertexCount);
 
 
-
-
-
 /*
 	根据shader类型获取一个
 */

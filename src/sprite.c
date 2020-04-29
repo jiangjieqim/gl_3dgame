@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdarg.h>
 
 #include "common.h"
 #include "tools.h"
@@ -655,10 +656,11 @@ sprite_create(char* _spriteName,
 	
 	return pSpr;
 }
-void
-sprite_set_z(void* p,float v){
+static void
+f_sprite_set_z(void* p,float v){
 	struct Sprite* pSpr = (struct Sprite*)p;
 	pSpr->pos_z = v;
+	//printf("z = %.3f\n",pSpr->pos_z);
 }
 void 
 sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h)
@@ -814,10 +816,6 @@ renderSprite(struct Sprite* p)
 			assert(0);
 		}
 		
-
-		
-
-
 		
 		if(p->useVBO){
 			//渲染管线采用vbo模式
@@ -827,19 +825,11 @@ renderSprite(struct Sprite* p)
 				&p->mat4x4,
 				base->flags,
 				0);
-
 		}else{
 			GMaterial* __mat = (GMaterial*)material;
-			//char* type = __mat->glslType;
 			shaderName = __mat->glslType;
-		
 			//采用固定管线方式
-			tmat_renderSprite(material,
-							//"sprite",
-							shaderName,
-							p->mat4x4,p->vertexs,p->vertLen,
-							GL_T2F_V3F,
-							base_get_ploygonLineMode(base->flags));//非vbo模式
+			tmat_renderSprite(material,shaderName,p->mat4x4,p->vertexs,p->vertLen,GL_T2F_V3F,base_get_ploygonLineMode(base->flags));//非vbo模式
 		}
 	}
 }
@@ -1445,5 +1435,18 @@ sprite_set_grid9(void* ptr,float left,float right,float top,float bottom,float w
 	}
 }
 
+void sprite_set(void* ptr,int flag,...){
+	//int flag;
+	va_list ap;
+	va_start(ap, flag);
+	//flag = va_arg(ap, int);
+	if(flag == SPRITE_SET_Z){
+		float v0;
+		//printf("==============>%d\n",flag);
+		v0 = va_arg(ap, double);
+		//printf("==============>v0 = %.3f\n",v0);
 
-
+		f_sprite_set_z(ptr,v0);
+	}
+	va_end(ap);
+}

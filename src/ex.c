@@ -220,7 +220,7 @@ f_addNode(struct EX* p, void* _node){
 			assert(0);
 		}else{
 			if(b->curType == TYPE_SPRITE_FLIE){
-				sprite_set_z(_node,f_newPosZ());//设置sprite的z轴坐标
+				sprite_set(_node,SPRITE_SET_Z,f_newPosZ());//设置sprite的z轴坐标
 			}
 			LStack_push(p->renderList,_node);
 		}
