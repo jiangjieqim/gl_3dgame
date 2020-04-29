@@ -10,7 +10,7 @@ local core = require("core");
 
 local e = core.e;
 local plug = core.p;
-core.debug(0);--关闭日志
+-- core.debug(0);--关闭日志
 
 JEngine:getIns():setbg(0.4,0.4,0.4);
 require("editor");

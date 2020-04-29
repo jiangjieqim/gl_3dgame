@@ -27,7 +27,12 @@ function SettingView:new()
 <ui name="scale" type="NScrollBar" x="0" y="0" parent="1"/>
 <ui name="info_label" label="1" type="NLabel" x="128" y="0" parent="1"/>
 
+
 ]],
+
+
+--		<ui name="pb1" type="ProgressBar" x="0" y="20" parent="1"/>
+
 "gundi.png;checkbox.png;smallbtn.png");
 	return self;
 end

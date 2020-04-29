@@ -105,7 +105,6 @@ end
 
 
 
-local DEBUG = true;
 
 
 require("stack")
@@ -510,16 +509,19 @@ function M.removeRequire( preName )
         end
     end
 end
+
+local DEBUG = nil;--默认的模式
 function M.debug(v)--是否开启debug模式
 	if(v == true or v == 1)then
-		DEBUG=1;
+		DEBUG=true;
 		log_enable(1);
 	elseif(v == false or v == 0)then
 		DEBUG=nil;
 		log_enable(0);
 	end
+	print("设置debug="..v);
 end;
-
+M.debug(0);
 
 -- local function fc()
 -- 	print("fc..."..func_get_longTime());
