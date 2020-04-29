@@ -1493,7 +1493,8 @@ hitUiTest(struct Sprite* spr,float x,float y,struct HitUiInfo* outptInfo)
 
 static void 
 render_hitUiNode(int data){
-	if(sprite_isEnable(data))
+	//if(sprite_isEnable(data))
+	if(sprite_get((void*)data,SPRITE_IS_ENABLE))
 	{
 		struct EX* p = ex_getIns();
 

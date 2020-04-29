@@ -2030,7 +2030,7 @@ REG_change_attr(lua_State *L)
 		float x,y;
 		sscanf_s(str,"%f,%f",&x,&y);
 		//sprite_set_self_pos((struct Sprite*)ptr,x,y);
-		sprite_set((void*)ptr,SPRITE_XY,x,y);
+		sprite_set((void*)ptr,SPRITE_SELF_XY,x,y);
 	}
 
 	//设置TextField坐标

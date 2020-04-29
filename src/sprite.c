@@ -698,8 +698,8 @@ f_sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h)
 /*
 	是否可以渲染
 */
-int 
-sprite_isEnable(int data)
+static int 
+f_sprite_isEnable(int data)
 {
 	int objType;
 	struct HeadInfo* base = base_get((void*)data);
@@ -911,7 +911,7 @@ sprite_drawRender(int data)
 
 	struct HeadInfo* base = spr->base;
 	
-	if(!sprite_isEnable((int)spr))
+	if(!f_sprite_isEnable((int)spr))
 	{
 		return;
 	}
@@ -1091,7 +1091,7 @@ void
 sprite_mouseMove(int data)
 {
 	struct EX* e = ex_getIns();	
-	if(sprite_isEnable(data))
+	if(f_sprite_isEnable(data))
 	{
 		struct HeadInfo* base = base_get((void*)data);
 
@@ -1125,7 +1125,7 @@ sprite_mouseMove(int data)
 */
 void sprite_action(const int data)
 {
-	if(sprite_isEnable(data))
+	if(f_sprite_isEnable(data))
 	{
 		struct EX* ex = ex_getIns();
 
@@ -1163,7 +1163,7 @@ void sprite_action(const int data)
 //渲染一个正投sprite
 void sprite_updatePos(int data)
 {
-	if(sprite_isEnable(data))
+	if(f_sprite_isEnable(data))
 	{
 		struct Sprite* sprite = (struct Sprite*)data;
 		sprite_setpos(sprite,sprite->screenX,sprite->screenY);
@@ -1397,8 +1397,9 @@ f_sprite_rotateZ(struct Sprite* ptr,float rz){
 	base_rotate_vec(b,0,0,1,rz);
 	updateMatrix(ptr);
 }
-void 
-sprite_set_scale_z(struct Sprite* spr,float v){
+/*设置Z缩放  */
+static void 
+f_sprite_set_scale_z(struct Sprite* spr,float v){
 	struct HeadInfo* base = spr->base;
 	if(getv(&base->flags,FLAGS_BUTTON_EFFECT)){
 		printf("设置了按钮点击缩放特效,无法使用该接口\n");
@@ -1447,7 +1448,12 @@ f_sprite_set_grid9(void* ptr,float left,float right,float top,float bottom,float
 		assert(0);
 	}
 }
-
+int sprite_get(void* ptr,int flag){
+	if(flag == SPRITE_IS_ENABLE){
+		return f_sprite_isEnable((int)ptr);
+	}
+	return 0;
+}
 void sprite_set(void* ptr,int flag,...){
 	//int flag;
 	va_list ap;
@@ -1461,7 +1467,7 @@ void sprite_set(void* ptr,int flag,...){
 
 		f_sprite_set_z(ptr,v0);
 	}
-	else if(flag == SPRITE_XY){
+	else if(flag == SPRITE_SELF_XY){
 		float x,y;
 		x = va_arg(ap, double);
 		y = va_arg(ap, double);
@@ -1516,6 +1522,10 @@ void sprite_set(void* ptr,int flag,...){
 	else if(flag == SPRITE_RZ){
 		float v = va_arg(ap, double);
 		f_sprite_rotateZ((struct Sprite*)ptr,v);
+	}
+	else if(flag == SPRITE_SCALE_Z){
+		float v = va_arg(ap, double);
+		f_sprite_set_scale_z((struct Sprite*)ptr,v);	
 	}
 	va_end(ap);
 }

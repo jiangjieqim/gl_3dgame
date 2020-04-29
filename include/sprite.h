@@ -89,7 +89,7 @@ struct Sprite{
 
 
 #define SPRITE_Z 0
-#define SPRITE_XY 1		
+#define SPRITE_SELF_XY 1		
 #define SPRITE_GRID 2	//九宫格
 #define SPRITE_ATALS 3	//图集
 #define SPRITE_2DCAM 4	//设置camera2d
@@ -99,6 +99,12 @@ struct Sprite{
 #define SPRITE_RX 8
 #define SPRITE_RY 9
 #define SPRITE_RZ 10
+#define SPRITE_SCALE_Z 11//设置缩放值
+#define SPRITE_IS_ENABLE 12//是否是激活状态
+
+//获取属性
+int sprite_get(void* ptr,int flag);
+
 //设置属性
 void sprite_set(void* sprite,int flag,...);
 
@@ -162,20 +168,13 @@ void sprite_setpos(struct Sprite* spr,int x,int y);
 */
 void sprite_mouseMove(int data);
 
-/*
-	是否可以渲染
-*/
-int sprite_isEnable(int data);
 
 /*
 	重置sprite的尺寸
 */
 void sprite_resize(struct Sprite* spr,int w,int h);
-/*设置Z缩放  */
-void sprite_set_scale_z(struct Sprite* spr,float v);
-//开启点击此界面的之后可以穿透界面层
-//void
-//sprite_open_through(void* spr);
+
+
 /*
 	是否有鼠标事件
 */

@@ -70,7 +70,7 @@ clickCallBack(struct Sprite* spr,int x,int y){
 void intput_set_pos(void *p,int x,int y){
 	struct Input* ptr=(struct Input*)p;
 	//sprite_set_self_pos(ftext_get_container(ptr->t),x,y);
-	sprite_set(ftext_get_container(ptr->t),SPRITE_XY,x,y);
+	sprite_set(ftext_get_container(ptr->t),SPRITE_SELF_XY,x,y);
 }
 //void input_set_bg(void* p,const char* url){
 //	struct Input* ptr=(struct Input*)p;
