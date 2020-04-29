@@ -280,8 +280,10 @@ ftext_set_buffer(void* p,int bufferSize){
 
 static void
 f_rotate(struct Sprite* spr){
-	sprite_rotateZ(spr,0);
-	sprite_rotateX(spr,PI);
+	//sprite_rotateZ(spr,0);
+	sprite_set(spr,SPRITE_RZ,0);
+	//sprite_rotateX(spr,PI);
+	sprite_set(spr,SPRITE_RX,PI);
 	base_setv(spr,FLAGS_REVERSE_FACE);
 }
 

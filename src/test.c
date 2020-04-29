@@ -2062,7 +2062,8 @@ REG_change_attr(lua_State *L)
 	//设置sprite Z轴旋转
 	if(!strcmp(attrKey,"sprite_rotateZ"))
 	{
-		sprite_rotateZ((struct Sprite*)ptr,toFloat(str));
+		//sprite_rotateZ((struct Sprite*)ptr,toFloat(str));
+		sprite_set((void*)ptr,SPRITE_RZ,toFloat(str));
 		change = 1;
 	}
 

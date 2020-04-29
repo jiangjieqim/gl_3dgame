@@ -96,6 +96,9 @@ struct Sprite{
 #define SPRITE_WIDTH  5	
 #define SPRITE_HEIGHT 6
 #define SPRITE_DRAG 7	//设置可拖拽的范围
+#define SPRITE_RX 8
+#define SPRITE_RY 9
+#define SPRITE_RZ 10
 //设置属性
 void sprite_set(void* sprite,int flag,...);
 
@@ -163,13 +166,6 @@ void sprite_mouseMove(int data);
 	是否可以渲染
 */
 int sprite_isEnable(int data);
-
-void sprite_rotateX(struct Sprite* ptr,float rx);
-void sprite_rotateY(struct Sprite* ptr,float ry);
-/*
- *旋转rz轴 PI的n倍数,只变换渲染轴向
- */
-void sprite_rotateZ(struct Sprite* ptr,float rz);
 
 /*
 	重置sprite的尺寸

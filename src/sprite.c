@@ -1375,22 +1375,23 @@ static void f_refreshChildPos(void* ptr){
 //	sprite_setpos(ptr,x,y);
 //}
 
-void
-sprite_rotateX(struct Sprite* ptr,float rx){
+static void
+f_sprite_rotateX(struct Sprite* ptr,float rx){
 	struct HeadInfo* b = (struct HeadInfo*)ptr->base;
 	//b->rx = rx;
 	base_rotate_vec(b,1,0,0,rx);
 	updateMatrix(ptr);
 }
-void
-sprite_rotateY(struct Sprite* ptr,float ry){
+//旋转rz轴 PI的n倍数,只变换渲染轴向
+static void
+f_sprite_rotateY(struct Sprite* ptr,float ry){
 	struct HeadInfo* b = (struct HeadInfo*)ptr->base;
 	//b->ry = ry;
 	base_rotate_vec(b,0,1,0,ry);
 	updateMatrix(ptr);
 }
-void
-sprite_rotateZ(struct Sprite* ptr,float rz){
+static void
+f_sprite_rotateZ(struct Sprite* ptr,float rz){
 	struct HeadInfo* b = (struct HeadInfo*)ptr->base;
 	//b->rz = rz;
 	base_rotate_vec(b,0,0,1,rz);
@@ -1503,6 +1504,18 @@ void sprite_set(void* ptr,int flag,...){
 		int h = va_arg(ap, int);
 		f_sprite_setDragScope((struct Sprite*)ptr,x,y,w,h);
 		//printf("==============>%d %d %d %d\n",x,y,w,h);	
+	}
+	else if(flag == SPRITE_RX){
+		float v = va_arg(ap, double);
+		f_sprite_rotateX((struct Sprite*)ptr,v);
+	}
+	else if(flag == SPRITE_RY){
+		float v = va_arg(ap, double);
+		f_sprite_rotateY((struct Sprite*)ptr,v);
+	}
+	else if(flag == SPRITE_RZ){
+		float v = va_arg(ap, double);
+		f_sprite_rotateZ((struct Sprite*)ptr,v);
 	}
 	va_end(ap);
 }
