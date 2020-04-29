@@ -659,7 +659,8 @@ REG_sprite_setDragScope(lua_State *L)
 	int y = lua_tointeger(L,3);
 	int w = lua_tointeger(L,4);
 	int h = lua_tointeger(L,5);
-	sprite_setDragScope((struct Sprite*)ptr,x,y,w,h);
+	//sprite_setDragScope((struct Sprite*)ptr,x,y,w,h);
+	sprite_set((void*)ptr,SPRITE_DRAG,x,y,w,h);
 	return 0;
 }
 //获取内存池的大小和节点数

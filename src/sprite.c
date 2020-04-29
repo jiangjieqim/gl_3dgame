@@ -666,8 +666,14 @@ f_sprite_set_z(void* p,float v){
 	pSpr->pos_z = v;
 	//printf("z = %.3f\n",pSpr->pos_z);
 }
-void 
-sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h)
+/*
+	设置sprite可拖动范围
+	x,y:可拖拽的坐标
+	w:可拖拽的宽度
+	h:可拖拽的高度
+*/
+static void 
+f_sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h)
 {
 	struct HeadInfo* base = base_get((void*)pSpr);
 
@@ -1489,6 +1495,14 @@ void sprite_set(void* ptr,int flag,...){
 		int h = va_arg(ap, double);
 		//printf("h = %d\n",h);
 		f_sprite_set_height(ptr,h);
+	}
+	else if(flag == SPRITE_DRAG){
+		int x = va_arg(ap, int);
+		int y = va_arg(ap, int);
+		int w = va_arg(ap, int);
+		int h = va_arg(ap, int);
+		f_sprite_setDragScope((struct Sprite*)ptr,x,y,w,h);
+		//printf("==============>%d %d %d %d\n",x,y,w,h);	
 	}
 	va_end(ap);
 }

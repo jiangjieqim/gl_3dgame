@@ -95,6 +95,7 @@ struct Sprite{
 #define SPRITE_2DCAM 4	//设置camera2d
 #define SPRITE_WIDTH  5	
 #define SPRITE_HEIGHT 6
+#define SPRITE_DRAG 7	//设置可拖拽的范围
 //设置属性
 void sprite_set(void* sprite,int flag,...);
 
@@ -162,14 +163,6 @@ void sprite_mouseMove(int data);
 	是否可以渲染
 */
 int sprite_isEnable(int data);
-
-/*
-	设置sprite可拖动范围
-	x,y:可拖拽的坐标
-	w:可拖拽的宽度
-	h:可拖拽的高度
-*/
-void sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h);
 
 void sprite_rotateX(struct Sprite* ptr,float rx);
 void sprite_rotateY(struct Sprite* ptr,float ry);
