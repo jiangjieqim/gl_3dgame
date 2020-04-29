@@ -185,7 +185,7 @@ SetUV_4Vertex(float *v,const int gap,struct Vec2 a1,struct Vec2 a2,struct Vec2 a
 /*
 	设置sprite的UV,若是VBO就是glBufferSubData更新VBO数据
 */
-void sprite_setUV(struct Sprite* sprite,float x,float y,float w,float h)
+static void f_sprite_setUV(struct Sprite* sprite,float x,float y,float w,float h)
 {
 	//int i=0;
 	//交换a,b可旋转UV
@@ -569,10 +569,10 @@ InitType(struct Sprite* pSpr)
 /*
 	是否有鼠标事件,有回调句柄说明有拾取事件
 */
-int 
-sprite_isCanClick(void* n){
+static int 
+f_sprite_isCanClick(void* n){
 	struct Sprite* pSpr = (struct Sprite*)n;
-	return (int)pSpr->clickCallBack;
+	return (int)pSpr->clickCallBack!=0;
 }
 
 void
@@ -652,7 +652,7 @@ sprite_create(char* _spriteName,
 	}
 	//pSpr->pos_z = ex_newPosZ();//此处不设置z的值,在ex_add的时候再设置
 	pSpr->zScale = 1.0;
-	sprite_setUV(pSpr,0,0,1,1);//初始化设置UV
+	f_sprite_setUV(pSpr,0,0,1,1);//初始化设置UV
 	
 
 	
@@ -887,10 +887,10 @@ f_btn_push(struct Sprite* spr,int* pChange){
 	}
 }
 
-void*
-sprite_get_material(void* sprite){
-	return getMaterial((struct Sprite*)sprite);
-}
+//void*
+//sprite_get_material(void* sprite){
+//	return getMaterial((struct Sprite*)sprite);
+//}
 
 /*
 	绘制一个sprite 
@@ -1270,7 +1270,7 @@ sprite_texName(struct Sprite* ptr,
 #endif
 	
 	//设置图集UV.
-	sprite_setUV(ptr,		
+	f_sprite_setUV(ptr,		
 		1.0f-(height-n.y)/height,
 		1.0f-(width-n.x)/width,
 		n.height/height,
@@ -1415,9 +1415,11 @@ f_sprite_bindAtals(void* p,void* atals){
 	//设置图集
 	sprite->atals = (struct Atals*)atals;
 }
-
-void
-sprite_set_hit_rect(void*p,int x,int y,int w,int h){
+/*
+ *设置一个点击区域的范围
+ */
+static void
+f_sprite_set_hit_rect(void*p,int x,int y,int w,int h){
 	struct Sprite* ptr = (struct Sprite* )p;
 	ptr->hitX = x,	ptr->hitY = y, ptr->hitWidth = w,ptr->hitHeight = h;
 	setHitTriangle(ptr);
@@ -1451,6 +1453,10 @@ f_sprite_set_grid9(void* ptr,float left,float right,float top,float bottom,float
 int sprite_get(void* ptr,int flag){
 	if(flag == SPRITE_IS_ENABLE){
 		return f_sprite_isEnable((int)ptr);
+	}else if(flag == SPRITE_MOUSE_ENABLE){
+		return f_sprite_isCanClick(ptr);
+	}else if(flag == SPRITE_MATERIAL){
+		return (int)getMaterial((struct Sprite*)ptr);//获取sprite的材质句柄
 	}
 	return 0;
 }
@@ -1526,6 +1532,20 @@ void sprite_set(void* ptr,int flag,...){
 	else if(flag == SPRITE_SCALE_Z){
 		float v = va_arg(ap, double);
 		f_sprite_set_scale_z((struct Sprite*)ptr,v);	
+	}
+	else if(flag == SPRITE_UV){
+		float x = va_arg(ap, double);
+		float y = va_arg(ap, double);
+		float w = va_arg(ap, double);
+		float h = va_arg(ap, double);
+		f_sprite_setUV((struct Sprite*)ptr,x,y,w,h);
+	}
+	else if(flag == SPRITE_HIT_RECT){
+		int x1 = va_arg(ap, int);
+		int y1 = va_arg(ap, int);
+		int w1 = va_arg(ap, int);
+		int h1 = va_arg(ap, int);
+		f_sprite_set_hit_rect(ptr,x1,y1,w1,h1);
 	}
 	va_end(ap);
 }

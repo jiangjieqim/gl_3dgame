@@ -987,7 +987,7 @@ f_resize_stage2d(){
 	if(!f_init_stage2d(p,p->_screenWidth,p->_screenHeight)){
 		sprite_resize(p->stage2d,p->_screenWidth,p->_screenHeight);
 	}
-	sprite_set_hit_rect(p->stage2d,0,0,p->_screenWidth,p->_screenHeight);
+	sprite_set(p->stage2d,SPRITE_HIT_RECT,0,0,(int)p->_screenWidth,(int)p->_screenHeight);//sprite_set_hit_rect
 }
 
 static void 
@@ -1504,8 +1504,8 @@ render_hitUiNode(int data){
 		//renderSprite(data);
 		struct Sprite* spr = (struct Sprite*)data;
 		struct HitUiInfo info;
-		if(sprite_isCanClick((void*)spr))
-		{
+
+		if(sprite_get((void*)spr,SPRITE_MOUSE_ENABLE)){
 			int ox,oy;
 			void* cam = base_get_cam(spr);
 			cam_get_2dxy(cam,&ox,&oy);

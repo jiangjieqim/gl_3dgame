@@ -524,7 +524,7 @@ ftext_set_hit(void* p,
 			  void (*clickCallBack)(void* ,int ,int ),
 			  int x,int y,int w,int h){
 	FText* txt = (FText*)p;
-	sprite_set_hit_rect(txt->spr,x,y,w,h);
+	sprite_set(txt->spr,SPRITE_HIT_RECT,x,y,w,h);
 	sprite_set_clickHandle(txt->spr,clickCallBack);
 }
 

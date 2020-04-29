@@ -101,6 +101,11 @@ struct Sprite{
 #define SPRITE_RZ 10
 #define SPRITE_SCALE_Z 11//设置缩放值
 #define SPRITE_IS_ENABLE 12//是否是激活状态
+#define SPRITE_MOUSE_ENABLE 13//鼠标点击事件是否存在
+#define SPRITE_MATERIAL 14//材质
+#define SPRITE_UV 15//设置UV
+#define SPRITE_HIT_RECT 16//设置点击矩形区域
+//material
 
 //获取属性
 int sprite_get(void* ptr,int flag);
@@ -129,11 +134,6 @@ struct Sprite* sprite_create(
 	int x,int y,
 	int width,int height,
 	void (*clickCallBack)(struct Sprite* ,int ,int ),void* _2dCam);
-
-/*
-	设置sprite的UV
-*/
-void sprite_setUV(struct Sprite* sprite,float x,float y,float w,float h);
 
 /*
 	绘制一个sprite 
@@ -168,27 +168,10 @@ void sprite_setpos(struct Sprite* spr,int x,int y);
 */
 void sprite_mouseMove(int data);
 
-
 /*
 	重置sprite的尺寸
 */
 void sprite_resize(struct Sprite* spr,int w,int h);
-
-
-/*
-	是否有鼠标事件
-*/
-int 
-sprite_isCanClick(void* p);
-
-/*
- *设置一个点击区域的范围
- */
-void
-sprite_set_hit_rect(void*p,int x,int y,int width,int height);
-//获取sprite的材质句柄
-void*
-sprite_get_material(void* sprite);
 
 //创建一个没有赋贴图的2dSprite
 void*

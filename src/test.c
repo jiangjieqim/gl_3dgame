@@ -639,7 +639,7 @@ REG_sprite_set2dCam(lua_State *L){
 static int
 REG_sprite_get_material(lua_State *L){
 	void* spr= (void*)lua_tointeger(L,1);
-	lua_pushnumber(L,(int)sprite_get_material(spr));
+	lua_pushnumber(L,sprite_get(spr,SPRITE_MATERIAL));//(int)sprite_get_material(spr)
 	return 1;
 }
 //
@@ -760,7 +760,7 @@ REG_sprite_set_hit_rect(lua_State *L){
 	int w = lua_tointeger(L,4);
 	int h = lua_tointeger(L,5);
 	//sprite_setpos((struct Sprite*)sprite,x,y);
-	sprite_set_hit_rect((void*)sprite,x,y,w,h);
+	sprite_set((void*)sprite,SPRITE_HIT_RECT,x,y,w,h);
 	return 0;
 }
 
