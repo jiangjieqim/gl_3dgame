@@ -32,10 +32,9 @@ base_get(void* p){
 	b = (struct BaseInfo*)p;
 	return b->base;
 }
-
+//是否已经修改过了
 static int 
 f_isChange(struct HeadInfo* p){
-	//return getv(&p->flags,FLAGS_BASE_CHANGE);
 	return p->changed == 1;
 }
 
@@ -88,7 +87,8 @@ base_realUpdateMat4x4(void* p){
 	f_setChange(base,0);
 
 
-	mat4x4_zero(*base->m);
+	//mat4x4_zero(*base->m);
+	mat4x4_identity(*base->m);
 
 	//x,y,z坐标
 	mat4x4_identity(xyz);

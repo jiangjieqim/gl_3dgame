@@ -1492,6 +1492,11 @@ REG_get_attr(lua_State *L)
 		lua_pushnumber(L,scale);
 		return 1;
 	}
+	if(!strcmp(attrKey,"angle"))
+	{
+		lua_pushnumber(L,base->angle);
+		return 1;
+	}
 	if(!strcmp(attrKey,"xyz"))
 	{
 		lua_pushnumber(L,base->x);

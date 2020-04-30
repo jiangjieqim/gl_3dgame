@@ -21,8 +21,9 @@ typedef struct HeadInfo{
 	//float rx,ry,rz;
 	//float ry;
 	
-	//旋转轴和角度
+	//旋转轴向量
 	float ax,ay,az;
+	//旋转轴角度
 	float angle;
 
 	/*缩放值*/
