@@ -25,11 +25,24 @@ function f_onkey(data)
         JEngine:getIns():exit();
 	elseif(key == 13) then
 		--回车
-		print("delayMs = "..eg:get_delayTime());
+		-- print("delayMs = "..eg:get_delayTime());
+		e:print_info();
 	elseif(key == 49) then
 		--1
-		plug:toggle("view/SettingView");
 		-- plug:toggle("view/SettingView");
+		
+		local obj = {
+			url="\\resource\\md2\\bauul.md2",
+			mat = "//resource//material//bauul.mat",
+			scale = 0.003,
+			x = 0,
+			y = 0,
+			z = -0.5,
+		}	
+		plug:toggle("view/AvatarView",0,obj);
+	
+		
+
 	elseif(key == 50) then
 		--2
 		-- func_lua_gc("2");
@@ -71,9 +84,28 @@ end
 -- init();
 ----[[
 
+local function tc()
+	local data = {
+		url="\\resource\\md2\\bauul.md2",
+		mat = "//resource//material//bauul.mat",
+	}	
+	local cam = nil;
 
+	local fbo = FboRender:new(128,128);
+	cam = fbo:get_cam3d();
+	local url = data.url;
+	local mat = data.mat;
+	local m = UnitBase:new();
+	m:loadvbo(url,mat,cam);
+	m:scale(0.0005);
+	m:set_position(0,0,-0.5);
+	--e:get_cam():set_pos(0,0,-0.5);
+
+end
 local function texCallBack()
-	-- print("加载预制贴图完成...");
+	
+
+	print("加载预制贴图完成...");
 
 	local btn = Button:new();
 	
@@ -86,14 +118,24 @@ local function texCallBack()
 	e:setfps(30);--24
 	--15 nice
 	--	>15 will be bad 
-	evt_on(btn,EVENT_ENGINE_KEYBOARD,f_onkey);
-
-
+	
 	local fps = plug:load("view/FpsView");
 	fps:show();
+
+
+
+
 end
 
 loadtexs("gundi.png;checkbox.png;smallbtn.png",texCallBack);
+
+evt_on(0,EVENT_ENGINE_KEYBOARD,f_onkey);
+
+-- tc();
+
+
+
+
 
 --]]
 -- local win = JEngine:getIns():get_plugin():load("view/InfoView");

@@ -34,7 +34,7 @@ end
 --切换打开继承自IPluginView的模块
 --mode :
 --0 切换开启	-1	关闭 1打开
-function PluginMan:toggle(plugin,mode)
+function PluginMan:toggle(plugin,mode,data)
 	mode = mode or 0;
 	local view  = self.insList[plugin];
 	if(view)then
@@ -50,11 +50,13 @@ function PluginMan:toggle(plugin,mode)
 			view:hide();
 		else
 			view:show();
+			view:setData(data);
 		end
 	elseif(mode == -1) then
 		view:hide();
 	elseif(mode == 1) then
 		view:show();
+		view:setData(data);
 	end
 	return view;
 end

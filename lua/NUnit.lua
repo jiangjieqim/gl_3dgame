@@ -25,9 +25,9 @@ local function func_set_position(o,x,y,z)
 	change_attr(o,"set_position",string.format("%f,%f,%f",x,y,z));
 end
 
-local function func_get_scale(o)
-	return get_attr(o,"scale");
-end
+-- local function func_get_scale(o)
+-- 	return get_attr(o,"scale");
+-- end
 
 --设置坐标
 local function func_set_x(o,x)
@@ -107,7 +107,7 @@ function NUnit:is_visible()
 end
 --设置缩放比率
 function NUnit:scale(value)
-	--print(value);
+	-- print(value);
     change_attr(self.p,"scale",value);
 end
 
@@ -122,7 +122,12 @@ function NUnit:getv(v)
 end
 
 function NUnit:get_scale()
-    return func_get_scale(self.p);
+	-- return func_get_scale(self.p);
+	return get_attr(self.p,"scale");
+end
+--获取轴角度,该值是math.pi的倍数
+function NUnit:get_angle()
+	return get_attr(self.p,"angle");
 end
 
 --获取rx,ry,rz的值
@@ -148,9 +153,9 @@ function NUnit:rotate_vec(r,x,y,z)
 	change_attr(self.p,"rotate_vec",x,y,z,r);
 end
 
-
 function NUnit:rx(v)
-    --func_setRotateX(self.p,v)
+	--func_setRotateX(self.p,v)
+	-- print(v);
     self:rotate_vec(v,1,0,0);
 end
 

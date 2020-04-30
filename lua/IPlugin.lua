@@ -63,6 +63,9 @@ function IPluginView:center()
 end
 
 
-function IPluginView.setCenter(v)
+function IPluginView:setCenter(v)
 	self.centerFlag = v;
+end
+--…Ë÷√ ˝æ›
+function IPluginView:setData(data)
 end

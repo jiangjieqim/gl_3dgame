@@ -107,3 +107,11 @@ function FboRender:set_pos(x,y)
 	func_setPos(spr,x,y);
 	cam_set_2dxy(fbo.cam2d,x,y);
 end
+--ÏÔÊ¾,Òþ²ØFboµÄSprite
+function FboRender:visible(v)
+	if(v) then
+		setv(self.spr,FLAGS_VISIBLE);
+	else 
+		resetv(self.spr,FLAGS_VISIBLE);
+	end
+end

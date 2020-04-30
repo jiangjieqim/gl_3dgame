@@ -74,9 +74,9 @@ function SettingView:dispose()
     func_clearTableItem(self);
 end
 
-function SettingView:onDisplay(v)
+-- function SettingView:onDisplay(v)
    
-end
+-- end
 
 
 

@@ -81,7 +81,7 @@ local function f_sort(_pre,_next)
 	end
 	return -1;
 end
-
+--获取列表中的父对象
 local function f_get_parent(list,node)
 	local name = xml_get_str(node,"parent");
 	if(name~=nil) then
@@ -387,10 +387,11 @@ end
 2.	texs == nil的时候不用异步加载,直接生成皮肤
 --]]
 function NSkin:load(xmlurl,texs)
-	if(texs == nil) then
-		func_error();
-		return;
-	end
+	-- if(texs == nil) then
+	-- 	print("=======================> error");
+	-- 	func_error();
+	-- 	return;
+	-- end
 
 	-- print(texs);
 
@@ -407,7 +408,18 @@ function NSkin:center()
 	local np = self.panel;
 	np:center();
 end
+--获取n在父容器中的局部坐标
+function NSkin:getLocalPos(n)
+	local px,py = self.panel:get_pos();
+	local x,y = n:get_pos();
+	return x-px,y-py;
+end
 
+
+--获取其panel引用
+function NSkin:get_panel()
+	return self.panel;
+end
 --加载Skin中的skin组件的时候是用,注意此方法只适用于Skin的内部item组件,它们有一个共同的Parent
 function NSkin:synload(xmlurl,myParent,offsetx,offsety)
 	self.xmlurl = xmlurl;
