@@ -242,7 +242,7 @@ void tlgl_createRay(struct VertexData* rayVertexData,float* inputVertex,int inpu
 void tlgl_drawColorLine(
 				   Matrix44f matrix44f,struct GMaterial* m,
 				   GLfloat* vertex,int vertLen,
-				   float r,float g,float b
+				   float r,float g,float b,void* cam
 				   );
 
 //坐标和旋转轴转化成一个矩阵

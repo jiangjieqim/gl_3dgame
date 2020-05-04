@@ -323,11 +323,11 @@ ftext_create(char* txtName,int txtWidth,int txtHeight,int fw,int fh,void* cam){
 	f_rotate(spr);
 	//spr->material = tmat_create_rgba("font1",64,64,GL_BGRA);//"font"
 	
-	spr->material = tmat_create_rgba("font1",txtWidth,txtHeight,GL_BGRA);//"font"
+	spr->material = tmat_create_rgba("simple;font1",txtWidth,txtHeight,GL_BGRA);//"font"
 	
 	{
 		struct GMaterial* m =  (struct GMaterial*)spr->material;
-		m->updateVarCallback = font1_updateVarCallback;//设置着色器对象自定义回调
+		m->updateVarCallback = vboSimpleCallBack;//设置着色器对象自定义回调
 	}
 
 

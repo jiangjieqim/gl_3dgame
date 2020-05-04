@@ -73,7 +73,7 @@ void objVBO_renderNode(
 						struct GMaterial* tmat,
 						Matrix44f* m,//当前模型的矩阵
 						int flag,
-						void (*renderCallBack)(int,struct ObjVBO*));
+						void (*renderCallBack)(int,struct ObjVBO*),void* cam);
 //销毁vbo
 void vbo_dispose(struct ObjVBO* p);
 

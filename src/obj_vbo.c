@@ -64,7 +64,8 @@ objVBO_renderNode(
 				struct GMaterial* tmat,
 				Matrix44f* m,
 				int flag,
-				void (*renderCallBack)(int,struct ObjVBO*))
+				void (*renderCallBack)(int,struct ObjVBO*),
+				void* cam)
 {
 	GLboolean cull;
 	int mode = base_get_ploygonLineMode(flag);
@@ -97,7 +98,8 @@ objVBO_renderNode(
 	//Ë«Ãæ»æÖÆ
 	cull = base_cullface(flag);
 	//printf("***%s\n",base->name);
-	tmat_render(tmat,tmat->glslType,*m);
+
+	tmat_render(tmat,tmat->glslType,*m,cam);
 
 	//ÉèÖÃ×´Ì¬
 	if(renderCallBack!=NULL)
@@ -160,7 +162,7 @@ objVBO_render(int data,int parms)
 			(struct GMaterial*)base->tmat,
 			base->m,
 			base->flags,
-			ptr->renderCallBack);
+			ptr->renderCallBack,base->cam);
 	}else{
 		printf("objVBO_render(..)--->data = null!\n");
 	}

@@ -583,7 +583,7 @@ sprite_set_clickHandle(void* p,void (*clickCallBack)(void* ,int ,int )){
 void*
 sprite_createEmptyTex(int texW,int texH,void* _2dCam){
 	struct Sprite* spr = 0;
-	void* mat= tmat_create_empty("fbotex");//fbotex
+	void* mat= tmat_create_empty("simple;fbotex");//fbotex
 
 	char buffer[64];
 	tl_newName(buffer,64,"sprite");
@@ -723,11 +723,12 @@ updateSpriteMat4x4(struct Sprite* p,
 {
 
 	struct HeadInfo* base = p->base;
+	void* cam = base->cam;
 	Matrix44f xyz,m_scale, result,tmp2,tmp3;
-	mat4x4_zero(p->mat4x4);
-	mat4x4_zero(result);
-	mat4x4_zero(tmp2);
-	mat4x4_zero(tmp3);
+	mat4x4_identity(p->mat4x4);
+	mat4x4_identity(result);
+	mat4x4_identity(tmp2);
+	mat4x4_identity(tmp3);
 
 	//x,y,z
 	mat4x4_identity(xyz);
@@ -758,9 +759,34 @@ updateSpriteMat4x4(struct Sprite* p,
 
 
 	{
+		
 		Matrix44f am;
+		//Matrix44f r1;s
+		/*
+		void* model = ;
+		void* per = cam_getPerctive(cam);*/
+		//mat4x4_identity(r1);
+		//mat4x4_identity(r2);
+		//mat4x4_copy(cam_getPerctive(cam),r1);
 		mat4x4_rotate_vec(am,base->angle,base->ax,base->ay,base->az);
-		mat4x4_mult(3,p->mat4x4,xyz,am,m_scale);
+		
+		
+		
+		mat4x4_mult(5,p->mat4x4,
+			cam_getPerctive(cam),
+			cam_getModel(cam),
+			xyz,
+			am,
+			m_scale);
+		
+		//mat4x4_printf(base->name,p->mat4x4);
+		
+		{
+			
+			/*mat4x4_mult(2,r2,cam_getPerctive(cam), cam_getModel(cam));
+			
+			mat4x4_mult(2,p->mat4x4,r2,r1);*/
+		}
 	}
 
 }
@@ -834,13 +860,16 @@ renderSprite(struct Sprite* p)
 				material,
 				&p->mat4x4,
 				base->flags,
-				0);
-		}else{
-			GMaterial* __mat = (GMaterial*)material;
-			shaderName = __mat->glslType;
-			//采用固定管线方式
-			tmat_renderSprite(material,shaderName,p->mat4x4,p->vertexs,p->vertLen,GL_T2F_V3F,base_get_ploygonLineMode(base->flags));//非vbo模式
+				0,
+				base->cam
+				);
 		}
+		//}else{
+		//	GMaterial* __mat = (GMaterial*)material;
+		//	shaderName = __mat->glslType;
+		//	//采用固定管线方式
+		//	tmat_renderSprite(material,shaderName,p->mat4x4,p->vertexs,p->vertLen,GL_T2F_V3F,base_get_ploygonLineMode(base->flags));//非vbo模式
+		//}
 	}
 }
 

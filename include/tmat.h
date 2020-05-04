@@ -52,7 +52,7 @@ typedef struct GMaterial{
 	int flags;//材质标示符
 	
 	//着色器传递变量回调
-	void (*updateVarCallback)(void* material,Matrix44f m,void* param);
+	void (*updateVarCallback)(void* material,Matrix44f m,void* param,void* cam);
 	//存储一些着色器中需要使用的变量
 	void* shaderVars;
 	
@@ -62,7 +62,7 @@ typedef struct GMaterial{
 	//渲染模式		GL_TRIANGLES GL_LINE_STRIP
 	//				GL_POINTS GL_LINES
 	GLbyte rendermode;
-	
+
 }GMaterial;
 
 /*
@@ -96,8 +96,11 @@ void tmat_dispose(void* mat);
 //float x,float y,float z,float scale
 /*
 	切换为当前的材质
+
+	void* cam当前材质所使用的camera引用,如果是sprite就是正交cam,
+	如果是3d对象就是透视cam,它们又可以在各自的FBO空间内
 */
-void tmat_render(void* mat,const char* shader,Matrix44f M);  
+void tmat_render(void* mat,const char* shader,Matrix44f M,void* cam);  
 
 /*
 	获取当前材质着色器名(这是一个材质默认的一个shader)
@@ -107,7 +110,7 @@ void tmat_render(void* mat,const char* shader,Matrix44f M);
 /*
 	 绘制一个Sprite(基于正交视图的多边形),非VBO模式
 */
-void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f mat4x4,float* vertexs,int vertLen,int format,int mode);
+//void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f mat4x4,float* vertexs,int vertLen,int format,int mode,void* cam);
 /*
  *设置纯色渲染所使用的颜色,不使用的时候默认颜色为0,0,0
  */

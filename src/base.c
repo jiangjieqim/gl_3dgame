@@ -11,6 +11,7 @@
 #include "base.h"
 #include "node.h"
 #include "map.h"
+#include "camera.h"
 //#define DEBUG
 
 //接口实现部分
@@ -66,7 +67,7 @@ f_base_drawBoundBox(struct HeadInfo* base,float* vertices,int vertCount){
 		//生成包围盒数据,将数据填充到boxVert中,这里的顶点会自己变化
 		dataLength=tlgl_aabb(vertices,vertCount,boxVertPtr);
 		tlgl_drawColorLine(*base->m,base->tmat,boxVertPtr,dataLength,
-			BOX_R,0,0);
+			BOX_R,0,0,base->cam);
 	}
 }
 
@@ -75,9 +76,11 @@ base_realUpdateMat4x4(void* p){
 
 	struct HeadInfo* base = (struct HeadInfo*)p;
 	Matrix44f xyz,scale;
+	void* cam;
 	if(!f_isChange(base)){
 		return;
 	}
+	cam = base->cam;
 
 	//if(!base->changed){
 		//return;
@@ -122,7 +125,12 @@ base_realUpdateMat4x4(void* p){
 	{
 		Matrix44f am;
 		mat4x4_rotate_vec(am,base->angle,base->ax,base->ay,base->az);
-		mat4x4_mult(3,*base->m,xyz,am,scale);
+		mat4x4_mult(5,*base->m,
+			cam_getPerctive(cam),
+			cam_getModel(cam),
+			xyz,am,scale);
+	
+		//mat4x4_printf(base->name,*base->m);
 	}
 }
 /*
@@ -512,7 +520,7 @@ void base_renderByMaterial(struct HeadInfo* base,GLfloat* vertex,int vertLen)
 	glLineWidth(1.0f);
 
 	//指定着色器及贴图,传递坐标(该坐标传递到着色器矩阵中)
-	tmat_render(base->tmat,base->tmat->glslType,*base->m);
+	tmat_render(base->tmat,base->tmat->glslType,*base->m,base->cam);
 
 	//设置渲染模式
 	glPolygonMode (GL_FRONT_AND_BACK,mode);
@@ -556,7 +564,7 @@ static void f_outlineByGLSL(struct HeadInfo* base, GLfloat* vertex,int vertLen,f
 	//===================================================
 
 	//指定着色器及贴图,传递坐标(该坐标传递到着色器矩阵中)
-	tmat_render(base->tmat,"line",*base->m);
+	tmat_render(base->tmat,"line",*base->m,base->cam);
 
 	//设置渲染模式
 	glPolygonMode (GL_FRONT_AND_BACK,GL_FILL);

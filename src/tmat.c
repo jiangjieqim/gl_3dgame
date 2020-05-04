@@ -348,7 +348,7 @@ tmat_getTextureByIndex(struct GMaterial* pmat,int index)
 	struct GMaterial* mat:	材质引用
 	float x,float y,float z	坐标
 */
-void tmat_render(void* pvoid,const char* shader,Matrix44f M)
+void tmat_render(void* pvoid,const char* shader,Matrix44f M,void* cam)
 	 //float x,float y,float z,float scale,
 {
 	GLuint program3D;
@@ -374,7 +374,7 @@ void tmat_render(void* pvoid,const char* shader,Matrix44f M)
 	}
 
 	if(material->updateVarCallback){
-		material->updateVarCallback(material,M,material->params);
+		material->updateVarCallback(material,M,material->params,cam);
 	}else{
 		program3D = ex_getProgrom3D(shader);//mat->glslType
 
@@ -606,19 +606,19 @@ tmat_create_rgba(const char* glslType,GLint width,GLint height,GLenum rgbaType){
 //	//tmat->_DiscardAlpha = value;
 //}
 
-void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f mat4x4,GLfloat* vertexs,int vertLen,int format,int mode)
-{
-	tmat_render(_material,shader,mat4x4);	
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);//剔除前面
-	glPolygonMode (GL_BACK,mode);
-	glInterleavedArrays(format,0,vertexs);
-	glDrawArrays(GL_TRIANGLES,0,(GLsizei)vertLen);
-	glDisable(GL_CULL_FACE);
-}
+//void tmat_renderSprite(struct GMaterial *_material,const char* shader,Matrix44f mat4x4,GLfloat* vertexs,int vertLen,int format,int mode)
+//{
+//	tmat_render(_material,shader,mat4x4);
+//	glEnable(GL_CULL_FACE);
+//	glCullFace(GL_FRONT);//剔除前面
+//	glPolygonMode (GL_BACK,mode);
+//	glInterleavedArrays(format,0,vertexs);
+//	glDrawArrays(GL_TRIANGLES,0,(GLsizei)vertLen);
+//	glDisable(GL_CULL_FACE);
+//}
 //创建一个九宫格材质
 void* tmat_create_9grid(struct Atals* atals,const char* icon){
-	void* _mater = tmat_create_empty("grid9vbo");
+	void* _mater = tmat_create_empty("simple;grid9vbo");
 	struct GMaterial* _matarial = (struct GMaterial*)_mater;
 	GLuint tex =  atals_new_tex(atals,icon,0,0);
 	_matarial->updateVarCallback = grid9CallBack;

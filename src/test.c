@@ -899,6 +899,20 @@ REG_tmat_pushTex(lua_State *L){
 	return 0;
 }
 
+static int
+REG_tmat_setCallBack(lua_State *L){
+	int mat = lua_tointeger(L,1);
+	int type = lua_tointeger(L,2);
+	struct GMaterial* _matarial = (struct GMaterial*)mat;
+	switch(type){
+		case SHADER_VBO_SIMPLE:
+		_matarial->updateVarCallback = vboSimpleCallBack;
+		break;
+	}
+	log_color(0,"设置了回调type:%d\n",type);
+	return 0;
+}
+
 /*
 	注册设置材质
 	void 
@@ -2568,6 +2582,7 @@ runhelloTest(const char* script){
 	lua_register(lua_state,"createMaterial",REG_tmat_createMaterial);
 	lua_register(lua_state,"createMaterialTex",REG_tmat_createMaterialTex);
 	lua_register(lua_state,"tmat_pushTex",REG_tmat_pushTex);
+	lua_register(lua_state,"tmat_setCallBack",REG_tmat_setCallBack);
 
 	lua_register(lua_state,"load_model",REG_load_model);
 	lua_register(lua_state,"load_animConfig",REG_load_animConf);

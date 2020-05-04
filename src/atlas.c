@@ -15,6 +15,7 @@
 #include "map.h"
 #include "gettime.h"
 #include "evt.h"
+#include "shader.h"
 //#define DEBUG_SHOW_TIME
 
 /*
@@ -84,8 +85,11 @@ atals_load(const char* path,const char* name){
 	getTextureInfo(ptr->xml,name,&ptr->width,&ptr->height);
 	//log_color(0,"构造图集纹理:%s\n",tgaURL);
 	//创建一个材质
-	ptr->material = tmat_create("spritevbo",1,tgaURL);
-
+	ptr->material = tmat_create("simple;spritevbo",1,tgaURL);
+	{
+		struct GMaterial* m = (struct GMaterial*)ptr->material;
+		m->updateVarCallback= vboSimpleCallBack;//设置渲染管线回调
+	}
 	return ptr;
 }
 

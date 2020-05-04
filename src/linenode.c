@@ -88,7 +88,7 @@ void linenode_render(void* p){
 	struct LineNode* line = (struct LineNode*)p;
 	struct HeadInfo* base = line->base;
 	if(line->vbo){
-		objVBO_renderNode(line->vbo,base->tmat,base->m,base->flags,0);
+		objVBO_renderNode(line->vbo,base->tmat,base->m,base->flags,0,base->cam);
 	}
 }
 void linenode_dispose(void* p){
