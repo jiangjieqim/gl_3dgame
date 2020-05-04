@@ -85,9 +85,11 @@ DLLIMPORT void mat4x4_rotateY(Matrix44f M, float radian);
 DLLIMPORT void mat4x4_rotateZ(Matrix44f M, float radian);
 
 DLLIMPORT void mat4x4_rotateXYZ(Matrix44f M, float radian, float x, float y, float z); 
-
+//构造一个透视平截头体矩阵
 DLLIMPORT void perspectiveFrustum(Matrix44f M, float left, float right, float top, float bottom, float near, float far); //透视投影
-DLLIMPORT void mat4x4_orthoPerspect(Matrix44f M, float left, float right, float top, float bottom, float near, float far);  //正交投影
+
+//正交投影矩阵
+DLLIMPORT void mat4x4_orthoPerspect(Matrix44f M, float left, float right, float top, float bottom, float near, float far);
 
 //绕x,y,z方向向量旋转r度
 DLLIMPORT void mat4x4_rotate_vec(Matrix44f M,float r,float x,float y,float z);
@@ -271,9 +273,9 @@ DLLIMPORT void tl_pickTriangle(float* tri,int dataCount,struct Vec3* nearPoint,s
 	printf("是否有交点 %d,交点坐标 x:%f y:%f z:%f\n",hit,out[0],out[1],out[2]);
 }
 */
-void tl_hitTriangle(float orig[3],float dir[3],float vert0[3],float vert1[3],float vert2[3],float* out,int* pHit);
+DLLIMPORT void tl_hitTriangle(float orig[3],float dir[3],float vert0[3],float vert1[3],float vert2[3],float* out,int* pHit);
 
 //判断是逆时针还是顺时针返回 0:逆时针 1:顺时针
-int vec3CheckDir(float x1,float y1,float z1,float x2,float y2,float z2,
+DLLIMPORT int vec3CheckDir(float x1,float y1,float z1,float x2,float y2,float z2,
 				 float ax,float ay,float az );
 #endif

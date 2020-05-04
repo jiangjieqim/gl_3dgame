@@ -844,7 +844,7 @@ f_get_mat4x4(int lim,int* arr,Matrix44f o){
 void 
 mat4x4_mult(int lim,Matrix44f o,...){
 
-	mat4x4_zero(o);
+	mat4x4_identity(o);
 
 	if(lim>_Matrix44_Max_Size_){
 		printf("mat4x4_mult³¤¶È³¬³ö%d\n",_Matrix44_Max_Size_);
