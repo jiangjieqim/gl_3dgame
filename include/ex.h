@@ -55,7 +55,8 @@
 #define EVENT_ENGINE_KEYBOARD  101				//全局键盘事件
 #define EVENT_ENGINE_RESIZE	   102				//resize事件
 
-#define EVENT_ENGINE_BASE_UPDATE	   102				//base更新事件
+
+//#define EVENT_ENGINE_BASE_UPDATE	   102				//base更新事件
 #define EVENT_ENGINE_BASE_END		   103				//base结束事件
 
 #define EVENT_ENGINE_SPRITE_CLICK		   104//click
@@ -201,6 +202,10 @@ struct EX
 	int custDelayMs;//自定义间隔毫秒数
 
 	//int isDrawed;//0未绘制,1已经绘制
+	
+	//是否需要强制渲染,默认是0,需要强制绘制的时候会设置成1,
+	//目的为了解决cam矩阵发生变化的时候要强制计算一下每个渲染节点的矩阵
+	GLbyte bForceRender;
 };
 
 //接口定义

@@ -3,7 +3,7 @@
 
 #include "tlgl.h"
 #include "camera.h"
-
+#include "ex.h"
 #include "vmath.h"
 
 struct Camera{
@@ -158,4 +158,5 @@ void cam_offsetZ(void* p,float v){
 void cam_refreshModel(void *p){
 	struct Camera* c = (struct Camera*)p;
 	cam_setModePosition(p,c->x,c->y,c->z,c->rx,c->ry,c->rz);
+	ex_getIns()->bForceRender = 1;
 }

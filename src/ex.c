@@ -646,10 +646,10 @@ getAllVertex(int data)
 /*
 渲染一个3d节点
 */
-void 
+static void 
 f_render3dNode(int data)
 {
-	struct EX*ex = ex_getIns();
+	struct EX* ex = ex_getIns();
 	void* checkcam = ex->_3dCurCam;
 	struct HeadInfo* base = base_get((void*)data);
 	int objType = base->curType;
@@ -677,6 +677,10 @@ f_render3dNode(int data)
 	if(checkcam!=targetCam){
 		//printf("======>name:%s\n",base->name);
 		return;//不在同一个渲染矩阵空间,返回之
+	}
+
+	if(ex->bForceRender){
+		base_updateMat4x4(base);//强制更新变换矩阵
 	}
 
 	base_realUpdateMat4x4(base);
@@ -843,10 +847,11 @@ static void reRender(){
 		//屏幕尺寸0的时候不进行渲染
 		return;
 	}
-
+	//默认的FBO帧 
 	f_defaultRenderFrame();
 	//fbo_render(p->fbo);	
 
+	//自定义的FBO帧
 	f_renderFBOs();
 
 	//Do the buffer Swap
@@ -854,7 +859,7 @@ static void reRender(){
 
 	// Do it again
 	//glutPostRedisplay();
-
+	
 	//渐变管理器回调
 	//ramp_callBack();
 
@@ -868,6 +873,10 @@ static void reRender(){
 	//}
 	
 	//printf("render...%d\n",p->delayTime);
+
+	if(p->bForceRender){
+		p->bForceRender = 0;
+	}
 }
 int ex_loop(){
 	//printf("loop\n");
@@ -1740,9 +1749,6 @@ ex_cam_set_pos(float x,float y,float z){
 	cam_setX(_c,x);
 	cam_setY(_c,y);
 	cam_setZ(_c,z);
-
-	//更新渲染列表中的矩阵
-	//f_renderlistCall(update3DNode);
 	cam_refreshModel(ex_getIns()->_3dcam);
 }
 
