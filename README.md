@@ -343,3 +343,32 @@ glutMainLoop（）：使程序进入事件处内理循环。该函数必须是�
 ```
 在处理渲染循环的时候,开辟一个线程来做计时器,当时间到了直接glutPostRedisplay(),发送渲染请求,这样就不用做无效的渲染glutPostRedisplay()请求了,此方式可以提高性能
 ```
+### 矩阵相关
+下面是顶点着色器器代码  
+```
+gl_Position = ui_PerspectiveMatrix4x4 * ui_ModelViewMatrix4x4 * _mat1*vec4(_Position, 1.0);
+```
+顶点输出矩阵 = 透视矩阵(ui_PerspectiveMatrix4x4) * Camera模型视图矩阵(ui_ModelViewMatrix4x4)* 模型变换矩阵(_mat1) * 顶点坐标矩阵(_Position)  
+
+这里经常要变换的矩阵是ui_ModelViewMatrix4x4和_mat1  
+
+_Position是模型的模型空间的的顶点坐标.加载模型的时候确定的  
+
+最优化的顶点着色器代码,该着色器会在外部将矩阵_mat1全部计算好之后再传递到着色器程序中,  
+因为每个顶点都会计算一次.这样不用每个顶点都计算一次，只要计算好一次 将平截头体,视图变换矩阵全部计算好即可.  
+```
+Matrix44f am;
+mat4x4_rotate_vec(am,base->angle,base->ax,base->ay,base->az);
+mat4x4_mult(5,*base->m,cam_getPerctive(cam),cam_getModel(cam),xyz,am,scale);
+```
+```
+#version 110
+attribute vec3 _Position;
+attribute vec2 _TexCoord;
+varying vec2 out_texcoord;
+uniform mat4 _mat1;
+void main(){
+	out_texcoord = _TexCoord;
+	gl_Position = _mat1*vec4(_Position, 1.0);
+}
+```
