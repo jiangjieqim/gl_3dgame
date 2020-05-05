@@ -36,7 +36,7 @@ EVENT_ENGINE_RENDER_3D =100				--引擎渲染回调
 EVENT_ENGINE_KEYBOARD  =101				--全局键盘事件
 EVENT_ENGINE_RESIZE	   =102				--resize事件
 
-EVENT_ENGINE_BASE_UPDATE	 =  102		--base更新事件
+-- EVENT_ENGINE_BASE_UPDATE	 =  102		--base更新事件
 EVENT_ENGINE_BASE_END		 =  103		--base结束事件
 EVENT_ENGINE_SPRITE_CLICK = 104
 EVENT_ENGINE_SPRITE_CLICK_DOWN = 105
@@ -169,6 +169,10 @@ function func_load_material(url)
 				xml_get_str(node,"tex6"),
 				xml_get_str(node,"tex7")
 			);
+			local cb = xml_get_float(node,"cb");
+			if(cb~=0) then
+				tmat_setCallBack(result,cb);--设置找色器回调
+			end
 
 			if(shader == "diffuseStateBox") then
 				local _lineColor =    xml_get_str(node,"_lineColor");
@@ -521,7 +525,7 @@ function M.debug(v)--是否开启debug模式
 	end
 	print("设置debug="..v);
 end;
-M.debug(0);
+-- M.debug(0);
 
 -- local function fc()
 -- 	print("fc..."..func_get_longTime());
