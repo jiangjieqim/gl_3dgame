@@ -1,3 +1,11 @@
+--[[
+    --案例使用:
+    local lb = LineBox:new(0.5);
+	lb:setPos(0,0.0,0);
+	lb:setRadius(1);
+	-- lb:dispose();--销毁
+]]
+
 LineBox = {
     
 };
@@ -17,7 +25,7 @@ end
 --设置坐标
 function LineBox:setPos(x,y,z)    
     local r = self.radius;
-    
+
     local line = self.p;
     x = x or 0;
     y = y or 0;
