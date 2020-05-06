@@ -14,13 +14,15 @@ s:graphics_end();
 
 --绘制自定义的线段
 LineNode = {
-	p,--C层的linenode指针
-}
+	
+};
 LineNode.__index = LineNode;
 
 --isPoint = true 使用点模式渲染
 function LineNode:new(cnt,isPoint,name)
-	local self = {};
+	local self = {
+		p,--C层的linenode指针
+	};
 	setmetatable(self, LineNode);
 	local _type = 0;
 	if(isPoint) then
