@@ -24,7 +24,7 @@
 #define FLAGS_ANIM_ADAPTIVE			128		//8 是否根据关键帧的帧率适配关键帧的动画(是否适配fps 1,适配  0,不适配)
 #define FLAGS_GLSL_OUTLINE			256		//9 用GLSL实现的轮廓线
 #define FLAGS_DRAW_PLOYGON_LINE		512		//10 在第一个基本材质上用线框渲染(固定管线模式设置GL_LINE),会取消掉双面显示
-#define FLAGS_BUTTON_EFFECT			1024	//11 设置按钮特效(在有点击事件的前提下才会有该特效)
+//#define FLAGS_BUTTON_EFFECT			1024	//11 设置按钮特效(在有点击事件的前提下才会有该特效)
 #define FLAGS_DRAW_NORMAL			2048	//12 绘制法线
 #define FLAGS_DRAG					4096	//13 Sprite是否可拖拽
 #define FLAGS_DRAW_PLOYGON_POINT	8192	//14 点模式

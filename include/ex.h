@@ -206,6 +206,10 @@ struct EX
 	//是否需要强制渲染,默认是0,需要强制绘制的时候会设置成1,
 	//目的为了解决cam矩阵发生变化的时候要强制计算一下每个渲染节点的矩阵
 	GLbyte bForceRender;
+
+	//vbo的DrawCall次数
+	int _tempVboDC;
+	int vboDrawCall;
 };
 
 //接口定义

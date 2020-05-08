@@ -738,40 +738,9 @@ updateSpriteMat4x4(struct Sprite* p,
 	mat4x4_identity(m_scale);
 	mat4x4_scale(m_scale,sx,sy,sz);
 
-	//	Matrix44f m_rx,m_ry,m_rz;
-	////rx
-	//mat4x4_identity(m_rx);
-	//mat4x4_rotateX(m_rx,rx);
-
-	////ry
-	//mat4x4_identity(m_ry);
-	//mat4x4_rotateY(m_ry,ry);
-
-	////rz
-	//mat4x4_identity(m_rz);
-	//mat4x4_rotateZ(m_rz,rz);//PI/2
-
-	//multi2(tmp2,m_ry,m_rx);		//ry,rx复合变换
-	//multi2(tmp3,tmp2,m_rz);	//rz  *(ry * rx)复合变换
-	//multi2(result,tmp3,m_scale);//缩放矩阵
-	//
-	//multi2(p->mat4x4,xyz,result);//位移矩阵
-
-
 	{
-		
 		Matrix44f am;
-		//Matrix44f r1;s
-		/*
-		void* model = ;
-		void* per = cam_getPerctive(cam);*/
-		//mat4x4_identity(r1);
-		//mat4x4_identity(r2);
-		//mat4x4_copy(cam_getPerctive(cam),r1);
 		mat4x4_rotate_vec(am,base->angle,base->ax,base->ay,base->az);
-		
-		
-		
 		mat4x4_mult(5,p->mat4x4,
 			cam_getPerctive(cam),
 			cam_getModel(cam),
@@ -780,15 +749,7 @@ updateSpriteMat4x4(struct Sprite* p,
 			m_scale);
 		
 		//mat4x4_printf(base->name,p->mat4x4);
-		
-		{
-			
-			/*mat4x4_mult(2,r2,cam_getPerctive(cam), cam_getModel(cam));
-			
-			mat4x4_mult(2,p->mat4x4,r2,r1);*/
-		}
 	}
-
 }
 //void
 //sprite_set_default_tex(void* ptr){
@@ -884,6 +845,8 @@ updateMatrix(struct Sprite* p)
 	float sc = p->zScale;
 	updateSpriteMat4x4(p,b->x,b->y,b->z,p->mWidth*sc,p->mHeight*sc,sc);
 }
+
+/*
 #define  _Time_Delay_  10//点击的延迟时间(毫秒)		10毫秒恢复状态
 //按钮特效
 static void
@@ -915,7 +878,7 @@ f_btn_push(struct Sprite* spr,int* pChange){
 		}
 	}
 }
-
+*/
 //void*
 //sprite_get_material(void* sprite){
 //	return getMaterial((struct Sprite*)sprite);
@@ -962,16 +925,14 @@ sprite_drawRender(int data)
 	base->y = y;
 	base->z = z;
 	
-	if(getv(&base->flags,FLAGS_BUTTON_EFFECT)){
-		f_btn_push(spr,&isChange);//按钮特效代码,需要移到业务组件层!!!
-	}
+	//if(getv(&base->flags,FLAGS_BUTTON_EFFECT)){
+	//	f_btn_push(spr,&isChange);//按钮特效代码,需要移到业务组件层!!!
+	//}
 	if(spr->m_bPressed)
 	{
 		//左键鼠标按下的时候,会一直执行这里逻辑
 		ex_lua_evt_dispatch(spr,EVENT_ENGINE_SPRITE_CLICK_DOWN,base->name);
-	}
-	else
-	{
+	}else{
 	}
 	if(isChange)
 	{
@@ -1430,10 +1391,10 @@ f_sprite_rotateZ(struct Sprite* ptr,float rz){
 static void 
 f_sprite_set_scale_z(struct Sprite* spr,float v){
 	struct HeadInfo* base = spr->base;
-	if(getv(&base->flags,FLAGS_BUTTON_EFFECT)){
-		printf("设置了按钮点击缩放特效,无法使用该接口\n");
-		assert(0);
-	}
+	//if(getv(&base->flags,FLAGS_BUTTON_EFFECT)){
+	//	printf("设置了按钮点击缩放特效,无法使用该接口\n");
+	//	assert(0);
+	//}
 	spr->zScale = v;
 }
 

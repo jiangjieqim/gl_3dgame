@@ -83,7 +83,7 @@ struct Sprite{
 	int localx,localy;
 	//九宫格引用
 	//struct Grid9Node* grid9;
-	 long btntime;//做计时器存储的变量
+	 //long btntime;//做计时器存储的变量
 	
 };
 

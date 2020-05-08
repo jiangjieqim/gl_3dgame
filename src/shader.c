@@ -106,25 +106,63 @@ struct GM_SpriteVBO
 	GLuint program3D;
 	GLint matrix;
 };
+//设置初始的材质
+static struct GM_SpriteVBO* f_initShader(struct GMaterial* gm){
+	struct GM_SpriteVBO* f;
+	GLuint program3D = ex_getProgrom3D(gm->glslType);
+	//获取第1个矩阵引用
+	GLint _matrix4x4 = glGetUniformLocation(program3D,"_mat1");
+
+	gm->shaderVars = tl_malloc(sizeof(struct GM_SpriteVBO));
+	f = (struct GM_SpriteVBO*)gm->shaderVars;
+	f->matrix = _matrix4x4;
+	f->program3D = program3D;
+	return f;
+}
+
 //VboSimple着色器回调
 void
 vboSimpleCallBack(void* material,Matrix44f M,void* param,void* cam){
 	struct GMaterial* gm =  (struct GMaterial*)material;
 	struct GM_SpriteVBO* f;
 	if(!gm->shaderVars){
-
-		GLuint program3D = ex_getProgrom3D(gm->glslType);
-		//获取第1个矩阵引用
-		GLint _matrix4x4 = glGetUniformLocation(program3D,"_mat1");
-
-		gm->shaderVars = tl_malloc(sizeof(struct GM_SpriteVBO));
-		f = (struct GM_SpriteVBO*)gm->shaderVars;
-		f->matrix = _matrix4x4;
-		f->program3D = program3D;
+		f = f_initShader(gm);
 	}
 	f = (struct GM_SpriteVBO*)gm->shaderVars;
 	glUseProgram(f->program3D);
 	tmat_updateTexture(f->program3D,gm);
 
 	tmat_uploadMat4x4(f->matrix,M);
+}
+/////////////////////////////////////////////////////////////////////
+
+struct GM_LineVBO
+{
+	GLuint program3D;
+	GLint matrix;
+	GLint lineColor;//线段颜色的句柄
+};
+void 
+vboLineCallBack(void* material,Matrix44f M,void* param,void* cam){
+	struct GMaterial* gm =  (struct GMaterial*)material;
+	struct GM_LineVBO* f;
+	if(!gm->shaderVars){
+		GLuint program3D = ex_getProgrom3D(gm->glslType);
+		//获取第1个矩阵引用
+		GLint _matrix4x4 = glGetUniformLocation(program3D,"_mat1");
+		GLint lineColor = glGetUniformLocation(program3D,"_lineColor");
+		gm->shaderVars = tl_malloc(sizeof(struct GM_LineVBO));
+		f = (struct GM_LineVBO*)gm->shaderVars;
+		f->matrix = _matrix4x4;
+		f->lineColor = lineColor;
+		f->program3D = program3D;
+	}
+	f = (struct GM_LineVBO*)gm->shaderVars;
+	glUseProgram(f->program3D);
+	//tmat_updateTexture(f->program3D,gm);
+	{
+		struct Vec4 c = gm->_lineColor;
+		glUniform4f(f->lineColor,c.x,c.y,c.z,0.0);
+	}
+	glUniformMatrix4fv(f->matrix,1,GL_TRUE,M);
 }

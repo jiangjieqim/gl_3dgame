@@ -148,6 +148,7 @@ objVBO_renderNode(
 	if(cull){
 		glDisable(GL_CULL_FACE);//Çå³ýË«Ãæ×´Ì¬
 	}
+	ex_getIns()->_tempVboDC++;
 }
 
 void

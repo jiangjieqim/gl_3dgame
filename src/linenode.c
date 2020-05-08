@@ -7,7 +7,7 @@
 #include "ex.h"
 #include "obj_vbo.h"
 #include "tmat.h"
-
+#include "shader.h"
 
 /*
  * 点绘制的时候的点的尺寸
@@ -28,8 +28,9 @@ void* linenode_create(const char* name,int vertcnt,void* cam,int point){
 	line->base = base_create(TYPE_LINENODE,name,0,0,0);
 	//setv(&line->base->flags,FLAGS_DISABLE_CULL_FACE);
 	base_set_cam(line,cam);
-	tmat = tmat_create_empty("linenode");
-
+	tmat = tmat_create_empty("simp;linenode");
+	tmat->updateVarCallback = vboLineCallBack;
+	
 	if(point){
 		tmat->rendermode = GL_POINT;
 		glPointSize(POINT_SIZE);

@@ -416,8 +416,8 @@ ex_get_info(){
 		cam_getRY(_cam)/PI,
 		cam_getRZ(_cam)/PI);
 	
-	log_color(0xff00ff,"draw call渲染节点个数:%d,sw=%.3f,sh=%.3f\n",LStack_length(ex->renderList),ex->_screenWidth,ex->_screenHeight);
-	
+	log_color(0xff00ff,"draw call渲染节点个数:%d(包含visible = 0的渲染节点),sw=%.3f,sh=%.3f\n",LStack_length(ex->renderList),ex->_screenWidth,ex->_screenHeight);
+	log_color(0xff0000, "obj_vbo DrawCall = %d\n",ex->vboDrawCall);
 	//mat4x4_printf("ex->_2dcam",cam_getPerctive(ex->_2dcam));
 	{
 		/*void* _cam = fbo_get2dCam(ex->fbo);
@@ -429,6 +429,7 @@ ex_get_info(){
 	log_color(0,"程序已执行:%.3f 秒\n",get_longTime()*0.001);
 	log_color(0,"内存池已使用 %d bytes(%.3f kb),闲置节点数 %d 总内存池使用 %.3f kb\n",totleByte,(float)(totleByte/1024),nodeCnt,(float)pg_total/1024);
 	
+
 	//printf( "%s\n","F4:静态多边形显示线框 \nF12:包围盒显示");
 	
 	log_color(0, "vbo使用:%d bytes\n",tlgl_getVboSize());
@@ -443,6 +444,7 @@ ex_get_info(){
 	
 	log_color(0,"************ 当前的fbo节点数:%d\n",LStack_length(ex_getIns()->fboList));
 	
+
 	map_info(ex->mapptr);
 }
 
@@ -672,7 +674,7 @@ f_render3dNode(int data)
 		log_color(0,"************name = (%s) type=%d 没有指定任何cam\n",base->name,base->curType);		
 		//getchar();
 		return;
-	} 
+	}
 	
 	if(checkcam!=targetCam){
 		//printf("======>name:%s\n",base->name);
@@ -847,6 +849,7 @@ static void reRender(){
 		//屏幕尺寸0的时候不进行渲染
 		return;
 	}
+	p->_tempVboDC = 0;
 	//默认的FBO帧 
 	f_defaultRenderFrame();
 	//fbo_render(p->fbo);	
@@ -877,6 +880,7 @@ static void reRender(){
 	if(p->bForceRender){
 		p->bForceRender = 0;
 	}
+	p->vboDrawCall = p->_tempVboDC;
 }
 int ex_loop(){
 	//printf("loop\n");
@@ -1035,6 +1039,8 @@ ex_reshape(int w,int h){
 	//printf("============> %d,%d\n",w,h);
 
 	evt_dispatch(ex_getIns(),EVENT_ENGING_INIT,0);
+
+	p->bForceRender = 1;
 }
 
 void 

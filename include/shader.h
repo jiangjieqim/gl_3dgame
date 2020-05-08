@@ -14,4 +14,7 @@ grid9CallBack(void* material,Matrix44f M,void* param,void* cam);
 void
 vboSimpleCallBack(void* material,Matrix44f M,void* param,void* cams);
 
+//Ïß¿òäÖÈ¾×ÅÉ«Æ÷
+void 
+vboLineCallBack(void* material,Matrix44f M,void* param,void* cam);
 #endif
