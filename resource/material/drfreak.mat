@@ -1,1 +1,1 @@
-<mat shader="vboDiffuse" tex0="\resource\texture\drfreak.tga"/>
+<mat shader="simple;vboDiffuse" tex0="\resource\texture\drfreak.tga"/>
