@@ -1,9 +1,6 @@
 Button = {
-	img, -- Image
-	label,-- NLabel
 	
-	callBack,--回调函数
-	param,--回调函数的参数
+
 };
 
 Button.__index = Button;
@@ -11,9 +8,23 @@ Button.__index = Button;
 setmetatable(Button, Base);
 
 function Button:new(w,h,url)
+	w = w or 80;
+	h = h or 18;
 	local self = Base:new();
+	--***********************************************
+	self.img = 0;--Image
+	self.label = 0;--NLabel
+	self.callBack = 0;--回调函数
+	self.param = 0;--回调函数的参数
+	self.effect = 0;--是否设置有按下去的效果
+	self.oldw = w;
+	self.oldh = h;
+
+	self.oldx = 0;
+	self.oldy = 0;
+	--***********************************************
 	setmetatable(self, Button);
-	local img = Image:new(w or 80,h or 18);
+	local img = Image:new(w,h);
 	img:seticon(url or "smallbtn.png");
 	img:mouseEnable(true);
 	self:settype(16);
@@ -42,17 +53,37 @@ end
 
 --设置按钮效果
 function Button:btn_effect(v)
-	local container = self.img:get_container();
-	if(v) then
-		setv(container,FLAGS_BUTTON_EFFECT);
-	else
-		resetv(container,FLAGS_BUTTON_EFFECT);
-	end
+	-- local container = self.img:get_container();
+	-- if(v) then
+	-- 	setv(container,FLAGS_BUTTON_EFFECT);
+	-- else
+	-- 	resetv(container,FLAGS_BUTTON_EFFECT);
+	-- end
+
+	
+	--e = (a > b and c) or d
+
+	self.effect = (v == true and 1) or 0;
+	-- print(self.effect);
+end
+
+local function f_btnScaleEnd(self)
+	self.img:set_size(self.oldw,self.oldh);
+	self.img:set_pos(self.oldx,self.oldy);
 end
 
 local function f_click(name,self)
 	if(self.callBack) then
 		self.callBack(self.param);
+	end
+
+	--实现按钮点击下去的缩放效果
+	if(self.effect == 1) then
+		local w,h=self.img:get_size();
+		local scale = 0.95;
+		self.img:set_size(self.oldw*scale,self.oldh*scale);
+		self.img:set_pos(self.oldx+w*(1-scale)/2,self.oldy+h*(1-scale)/2);
+		core.setTimeout(50,f_btnScaleEnd,self);
 	end
 end
 
@@ -70,8 +101,10 @@ function Button:dispose()
 	end
 	func_clearTableItem(self);
 end
-
+--设置按钮的坐标
 function Button:set_pos(x,y)
+	self.oldx = x;
+	self.oldy = y;
 	self.img:set_pos(x,y);
 end
 

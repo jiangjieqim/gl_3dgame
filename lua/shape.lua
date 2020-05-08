@@ -26,7 +26,7 @@ function Shape:init()
 	self:settype(11);
 	local sprite = sprite_create_typical(nil,0,0,self.w,self.h);
 	self.container = sprite;
-	JEngine:getIns():add(sprite);	
+	JEngine:getIns():add(sprite);
 	local material = func_load_material("//resource//material//shape.mat");
 	setMaterial(self.container,material);
 	self:mouseEnable(false);--默认关闭鼠标事件
@@ -54,9 +54,9 @@ end
 --设置显示隐藏
 function Shape:visible(v)
 	if(v) then
-		setv(self.container,FLAGS_VISIBLE);
+		setv(self:get_container(),FLAGS_VISIBLE);
 	else
-		resetv(self.container,FLAGS_VISIBLE);
+		resetv(self:get_container(),FLAGS_VISIBLE);
 	end
 end
 
@@ -70,6 +70,7 @@ function Shape:get_size()
 	--func_error("*");
 	return self.w,self.h;
 end
+
 --获取Shape的坐标
 function Shape:get_pos()
 	local p = self:get_container();
