@@ -35,7 +35,7 @@ end
 -- end
 local function f_time(data,self)
     if(self.endtime<core.now()) then
-        evt_off(self.timer,EVENT_TIMER,f_time);
+        evt_off(self.timer,core.EVENT.TIMER,f_time);
         self:dispose();
     else
         local x,y = self.nskin:get_pos();
@@ -69,7 +69,7 @@ function FlyLabel:set_label(v,ms,ty)
     -- print(sx,sy,x,y);
     self.sy = y;--起始y轴坐标
 
-    evt_on(self.timer,EVENT_TIMER,f_time,self);
+    evt_on(self.timer,core.EVENT.TIMER,f_time,self);
 end
 
 function FlyLabel:getName()

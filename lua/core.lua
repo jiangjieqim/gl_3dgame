@@ -48,11 +48,11 @@ EVENT_ENGINE_COMPLETE		   = 109	--完成事件
 CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE =110 --向lua层发送焦点变化
 CUST_LUA_EVENT_INPUT_CHANGE = 111		--input输入内容发生变化
 
-EVENT_TIMER = 201--计时器
+-- EVENT_TIMER = 201--计时器
 
 ENGINE_EVENT_COMPLETE = 1000;	--结束事件
 
---键值枚举
+--键值枚举P
  KEY_ESC = 27
  KEY_1 = 49
  KEY_2 = 50
@@ -495,7 +495,7 @@ end
 function M.setTimeout(ms,callback,param)
 	local timer = timelater_new(ms);
 	local o = {t=timer,c=callback,p=param};
-	evt_once(timer,EVENT_TIMER,f_time,o);
+	evt_once(timer,core.EVENT.TIMER,f_time,o);
 	return o;
 end
 

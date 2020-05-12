@@ -23,6 +23,8 @@ core.debug(1);
 
 
 
+
+
 JEngine:getIns():setbg(0.4,0.4,0.4);
 require("editor");
 
