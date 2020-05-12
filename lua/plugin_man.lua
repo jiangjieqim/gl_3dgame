@@ -11,9 +11,9 @@ function PluginMan:new()
 	setmetatable(self, PluginMan);
 	self.insList = {}--单例列表
 	--self.list = stack_new();
+	
 	return self;
 end
-
 function PluginMan:getInfo(p)
 	return p:getName().." "..tostring(p);
 end
@@ -36,15 +36,39 @@ end
 --0 切换开启	-1	关闭 1打开
 function PluginMan:toggle(plugin,mode,data)
 	mode = mode or 0;
+
+	---@type IPluginView
 	local view  = self.insList[plugin];
+	
 	if(view)then
 		-- print("获取的是单例"..tostring(view));
+		if( view.nskin:isSkinLoaded() == false) then
+			view:setData(data,mode);
+			core.warning("界面没有加载完成!!!!!");
+			return;
+		end
+		view:showByMode(mode);
 	else
 		self.insList[plugin] = self:load(plugin);
 		view = self.insList[plugin];
-		view:hide();
+		view:setData(data,mode);
+
+		-- local f = view.nskin:isSkinLoaded();
+		-- print("isSkinLoaded = ",f);
+
+		-- view:hide();
+		-- print("================================> 222  mode:",mode,view:is_visible());
 	end
 
+
+	-- view:show();
+
+	
+
+	--print("mode=",mode,"is_visible = ",view:is_visible());
+
+
+--[[
 	if(mode == 0) then
 		if(view:is_visible()) then
 			view:hide();
@@ -58,6 +82,8 @@ function PluginMan:toggle(plugin,mode,data)
 		view:show();
 		view:setData(data);
 	end
+--]]
+
 	return view;
 end
 

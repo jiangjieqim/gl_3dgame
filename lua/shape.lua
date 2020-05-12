@@ -53,7 +53,7 @@ end
 
 --…Ë÷√œ‘ æ“˛≤ÿ
 function Shape:visible(v)
-	if(v) then
+	if(v == true) then
 		setv(self:get_container(),FLAGS_VISIBLE);
 	else
 		resetv(self:get_container(),FLAGS_VISIBLE);

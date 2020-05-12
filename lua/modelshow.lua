@@ -51,12 +51,15 @@ local function addmd2_fbo(fbo)
 
 ----[[
 	local n = UnitBase:new();
-	n:loadvbo("\\resource\\md2\\bauul.md2","//resource//material//bauul.mat",cam);
+	--	bauul.md2
+	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	-- n:set_position(0,0,-100);
-	n:scale(0.01);
+	-- n:scale(0.01);
+	n:scale(0.1);
+	n:set_position(0,0,-0.5);
 	local anim = n:get_anim();
-	anim:push("jump",0,37);
-	anim:play("jump");
+	-- anim:push("jump",0,37);
+	-- anim:play("jump");
 	n:load_collide(nil,true);
 	--anim:set_fps(1);
 --]]
@@ -219,16 +222,17 @@ local function f_cpmlete(self)
 	-- local timer = timelater_new(1);
 --	evt_on(timer,EVENT_TIMER,ef,self);
 	
+
 	
 	local rotate = skin:find("rotate");
 	rotate:bindCallback(f_set_rotate,self);
 
 	--构建一个测试使用的线段
-	local line = LineNode:new(2);
-	line:push(0,0,0);
-	line:push(0,0,3);
-	line:setcolor(1,1,0);
-	line:graphics_end();
+	-- local line = LineNode:new(2);
+	-- line:push(0,0,0);
+	-- line:push(0,0,3);
+	-- line:setcolor(1,1,0);
+	-- line:graphics_end();
 
 	local function f_bindRayClick(p)
 		local x,y,z = JEngine:getIns():get_hit();--获取射线的交点坐标
@@ -247,7 +251,7 @@ local function f_cpmlete(self)
 			"//resource//material//horse.mat");
 		--n:reverse_face(true);
 		n:scale(10);
-		n:load_collide("\\resource\\obj\\plane.obj",true);
+		-- n:load_collide("\\resource\\obj\\plane.obj",true);
 		n:bindRayPick(f_bindRayClick);
 		return n;
 	end

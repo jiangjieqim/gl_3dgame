@@ -4,6 +4,7 @@ NSkin = {
 	-- namemap,--根据名字存储skin组件的tabel
 	-- xml,--xml引用,
 	-- panel=nil;--当前的NPanel引用
+	-- isLoaded = nil;--皮肤是否已经加载完成了
 }
 NSkin.__index = NSkin;
 setmetatable(NSkin, Base);
@@ -47,7 +48,7 @@ end
 function NSkin:new()
 	local self = Base:new();
 	setmetatable(self, NSkin);
-	
+	self.isLoaded = false;--是否skin已经加载完成了
 	self.vis = true;
 	self:settype(UI_TYPE.Skin);	--5
 	return self;
@@ -378,7 +379,14 @@ end
 
 local function f_tex_complete(self)
 	f_skin_parse(self);
-	evt_dispatch(self,ENGINE_EVENT_COMPLETE,self);
+	self.isLoaded = true;
+	-- print("skin is load end!");
+	evt_dispatch(self,ENGINE_EVENT_COMPLETE,self);--加载完成
+end
+
+--皮肤是否已经加载完成了
+function NSkin:isSkinLoaded()
+	return self.isLoaded;
 end
 
 --[[
@@ -475,7 +483,8 @@ function NSkin:visible(v)
 	--local node = stack_find_by_index(list,0);--默认取栈中0号索引中的数据
 	--node:visible(v);
 	local list = l.list;
-	for i=0,l.cnt-1,1 do
+	local cnt = l.cnt;
+	for i=0,cnt-1,1 do
 		local node = list[i];
 		--[[if(node.name == name)then
 			return node;

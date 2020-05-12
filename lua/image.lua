@@ -28,6 +28,10 @@ function Image:init()
 	JEngine:getIns():add(img);
 end
 
+---* 设置的是单独的icon,非合并的大图集,
+---* 直接用的是sprite_set_9grid接口,
+---* 这个是每个url就是一个texture
+---@param url string
 function Image:seticon(url)
 	func_texloadend({sprite=self.container;url=url});
 end

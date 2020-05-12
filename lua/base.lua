@@ -13,8 +13,7 @@ function Base:new()
 		address = nil,--地址
 	};
 	setmetatable(self, Base);
-	self.address=func_get_address(self);--设置其地址
-	-- print("address:"..self.address);
+	core.bindAddress(self);--设置其地址
 	return self;
 end
 

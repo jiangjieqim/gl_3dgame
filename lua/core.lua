@@ -1,3 +1,4 @@
+local DEBUG = 0;--默认的模式0:开启,1关闭
 
 FLAGS_RENDER_BOUND_BOX	=	0x01;
 FLAGS_DRAW_RAY_COLLISION	=	0x02;	--绘制射线盒子	(是否绘制射线静态包围盒,用于测试 查看射线包围盒),即使没有设置FLAGS_RAY,那么也是可以绘制射线盒子的,这样可以用来查看
@@ -126,7 +127,7 @@ local function getDddress(value)
 end
 
 --将"table: ff"转化为number
-function func_get_address(value)
+local function f_get_address(value)
 	return getDddress(value);
 end
 
@@ -227,7 +228,7 @@ end
 
 --打印一个有颜色的日志到控制台
 function func_print(s,c)
-	if(DEBUG~=nil)then
+	if(DEBUG == 1)then
 		c = c or 0xffff00
 		--c = c or 0;
 		
@@ -238,11 +239,12 @@ function func_print(s,c)
 		--dofunc("LogPut",string.format("lua stack: %s\n",debug.traceback()),0x00ff00);
 	end
 end
+---程序异常的时候做一次输出
 function func_error(msg,func)
 	msg = msg or "";
 	local s = ''
 	
-	s = 'lua:'..msg..''
+	s = 'lua error '..msg..''
 	--func_print(s,0xff0000)
 	--func_print('lua error:'..s,0xff0000)
 	
@@ -275,8 +277,11 @@ function func_error(msg,func)
 	--print(debug.traceback())
 	
 	func_print(debug.traceback(),0xff0000);
+	if(DEBUG == 0) then
+		print(debug.traceback());--当没有设置输出日志的时候,控制台默认输出日志.
+	end
+	assert(nil,s);
 	
-	--assert(nil,s)
 	--error(msg)
     --print ( debug.getinfo(1).name )
 end
@@ -476,7 +481,17 @@ local function f_time(data,o)
 	end
 end
 
---延迟ms毫秒,执行callback
+---获取Tabel的长度,会计算Tabel中的所有键值数据
+---@param tb Tabel
+function M.getLen(tb)
+	local n = 0;
+	for k, v in pairs(tb) do
+		n = n + 1;
+	end
+	return n;
+end
+
+---@param ms 延迟ms毫秒执行callback
 function M.setTimeout(ms,callback,param)
 	local timer = timelater_new(ms);
 	local o = {t=timer,c=callback,p=param};
@@ -493,7 +508,16 @@ end
 function M.now()
 	return func_get_longTime();
 end
-
+---输出警告信息
+---@param str string
+function M.warning(str)
+	str = string.format("warning >>>>>>>>>>>>>>> [%s] %s",str or "",debug.traceback());
+	if(DEBUG == 1) then
+		func_print(str,0xff00ff);
+	else
+		print(str);
+	end
+end
 function M.gc()
 	func_lua_gc();
 end
@@ -514,16 +538,15 @@ function M.removeRequire( preName )
     end
 end
 
-local DEBUG = nil;--默认的模式
 function M.debug(v)--是否开启debug模式
 	if(v == true or v == 1)then
-		DEBUG=true;
+		DEBUG=1;
 		log_enable(1);
 	elseif(v == false or v == 0)then
-		DEBUG=nil;
+		DEBUG=0;
 		log_enable(0);
 	end
-	print("设置debug="..v);
+	print(string.format("设置了debug开启状态:%s",v));
 end;
 -- M.debug(0);
 
@@ -536,8 +559,17 @@ end;
 --clearTimeout(o);
 
 M.UI_TYPE = UI_TYPE;
+---@type JEngine
 M.e = JEngine:getIns();
 -- print("core init!!!");
+
+---为Tabel设置其地址
+---@param o Tabel
+function M.bindAddress(o)
+	o.address=f_get_address(o);
+end
+
+---@type PluginMan
 M.p = M.e:get_plugin();
 
 M.ENUM = require("enum");

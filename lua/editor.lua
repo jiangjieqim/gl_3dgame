@@ -50,10 +50,7 @@ function Editor:new()
 	local self = {};
 	setmetatable(self, Editor);
 	self:createLine();
-	
-	
-	self.modelshow = ModleShow:new(self);
-	
+	--self.modelshow = ModleShow:new(self);
 	return self;
 end
 
