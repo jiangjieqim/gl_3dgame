@@ -372,3 +372,71 @@ void main(){
 	gl_Position = _mat1*vec4(_Position, 1.0);
 }
 ```
+### VS2005相关
+1.恢复默认设置  
+法一、在Vistual Studio 2005 命令提示符下(目录X:\Program Files\Microsoft Visual Studio 8\Common7\IDE下)  
+输入devenv /resetuserdata，重新打开就会出现语言选择提示，选择C#就可以了。如果打开VS后发现字体颜色及大小异常，请再次输入devenv /ResetSettings恢复 IDE 的默认设置。  
+
+法二、在VS2005中选择“工具--导入导出设置--重置所有设置”，再在系统模版中选C#就行了。  
+
+### VsCode使用emmyLua插件
+在Setting里直接修改EmmyLua的选项的相关设置 
+https://emmylua.github.io/zh_CN 
+
+```
+--transport定义为类Transport模板
+
+---@class Transport @parent class
+---@public field name string
+local transport = {}
+
+function transport:move()end
+
+--Car : Transport继承的
+
+---@class Car : Transport @Car extends Transport
+local car = {}
+function car:move()end
+
+---@class Ship : Transport @Ship extends Transport
+local ship = {}
+
+---@param type number @parameter type
+---@return Car|Ship @may return Car or Ship
+local function create(type)
+-- ignored
+end
+
+local obj = create(1)
+---now you can see completion for obj
+
+--定义变量类型为Car
+
+---@type Car
+local obj2
+---now you can see completion for obj2
+
+local list = { obj, obj2 }
+---@param v Transport
+for _, v in ipairs(list) do
+---not you can see completion for v
+end
+```
+*关于调试的一些问题*  
+增加一个断点入口
+Ctrl +  Shift + P : EmmyLua:Inster Emmy Debugger Code  
+
+```
+package.cpath = package.cpath .. ";c:/Users/Administrator.B124KVZ6GK0IWF6/.vscode/extensions/tangzx.emmylua-0.3.49/debugger/emmy/windows/x86/?.dll"
+local dbg = require("emmy_core")
+dbg.tcpListen("localhost", 9966)
+```
+
+加断点,此方法是强制加断点  
+```
+dbg.breakHere();
+```
+IDE等待
+```
+dbg.waitIDE();
+```
