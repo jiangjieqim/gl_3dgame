@@ -1,3 +1,4 @@
+---@class Button : Base
 Button = {
 	
 
@@ -10,20 +11,25 @@ setmetatable(Button, Base);
 function Button:new(w,h,url)
 	w = w or 80;
 	h = h or 18;
-	local self = Base:new();
-	--***********************************************
-	self.img = 0;--Image
-	self.label = 0;--NLabel
-	self.callBack = 0;--回调函数
-	self.param = 0;--回调函数的参数
-	self.effect = 0;--是否设置有按下去的效果
-	self.oldw = w;
-	self.oldh = h;
 
-	self.oldx = 0;
-	self.oldy = 0;
+	local self = Base:new();
+	
+	--***********************************************
+
 	--***********************************************
 	setmetatable(self, Button);
+
+	self.img = nil;--Image
+	self.label = nil;--NLabel
+	self.callBack = nil;--回调函数
+	self.param = nil;--回调函数的参数
+	self.effect = nil;--是否设置有按下去的效果
+	self.oldw = w;
+	self.oldh = h;
+	self.oldx = nil;
+	self.oldy = nil;
+
+
 	local img = Image:new(w,h);
 	img:seticon(url or "smallbtn.png");
 	img:mouseEnable(true);
