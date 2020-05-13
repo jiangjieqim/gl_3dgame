@@ -3044,6 +3044,11 @@ void main(int argc,char** argv){
 	int isMemory;//是否使用内存池
 	int screenWidth,screenHeight,winpos;
 
+
+	DWORD _PID;
+	_PID=GetCurrentProcessId();
+	printf("pid:%d\n",_PID);
+	
 	//设置局部路径
 	f_set_local_path(_MAIN_PATH_);
 	//tl_memInit("32,512@64,100@512,200@8192,200@81920,200@262144,100@5242880,25");//"64,100@512,200@8192,200@81920,200@262144,100@5242880,200"
@@ -3184,8 +3189,7 @@ void main(int argc,char** argv){
 	CreateThread(0,0,ThreadProc,0,0,0);
 		//hThead[i] = CreateThread(NULL,0,ThreadProc,&Info[i],0,&dwThreadID[i]);
 	
-
-	printf("##############################\n");
+	//printf("##############################\n");
 	glutMainLoop();
 
 	

@@ -17,6 +17,7 @@
 #include "fbotex.h"
 #include "camera.h"
 #include "map.h"
+#include "spritehit.h"
 
 //#define _SET_POS_DEBUG_
 
@@ -387,7 +388,7 @@ setHitTriangle(struct Sprite* spr){
 	int i = 0;
 	struct Vec2 a1,a2,a3,a4;
 	
-	if(!spr->hitTriangle){
+	if(!spr->pHit->hitTriangle){
 		//没有设置可碰撞属性
 		return;
 	}
@@ -404,6 +405,8 @@ setHitTriangle(struct Sprite* spr){
 	a4.x = spr->screenX;
 	a4.y =  spr->screenY + spr->hitHeight;//spr->mHeight;
 
+	spritehit_hitTriangle(spr->pHit,a1,a2,a3,a4);
+	/*
 	//a1
 	spr->hitTriangle[0] = a1.x ;
 	spr->hitTriangle[1] = a1.y ;
@@ -420,7 +423,7 @@ setHitTriangle(struct Sprite* spr){
 	spr->hitTriangle[8] = 0;
 
 	////===================================================
-
+	
 	//a1
 	spr->hitTriangle[9] =  a1.x;
 	spr->hitTriangle[10] = a1.y;
@@ -435,6 +438,7 @@ setHitTriangle(struct Sprite* spr){
 	spr->hitTriangle[15] =  a3.x;
 	spr->hitTriangle[16] =  a3.y;
 	spr->hitTriangle[17] = 0;
+	*/
 }
 //
 ///*
@@ -610,11 +614,17 @@ sprite_create(char* _spriteName,
 	struct HeadInfo* base = NULL;
 	//初始化按钮
 	struct Sprite* pSpr =	(struct Sprite*)tl_malloc(sizeof(struct Sprite));//new Button;
+	struct SpriteHit* pHit = (struct SpriteHit*)tl_malloc(sizeof(struct SpriteHit));
+	memset(pHit,0,sizeof(struct SpriteHit));
 	
 	//log_color(0,"sprite_create name=(%s)\n",_spriteName);
 
 	memset(pSpr,0,sizeof(struct Sprite));
 	
+	pSpr->pHit = pHit;
+
+
+
 	pSpr->m_bPressed = 0;
 	//pSpr->_renderState = 1;
 
@@ -624,7 +634,7 @@ sprite_create(char* _spriteName,
 	pSpr->mHeight = height;
 	pSpr->hitWidth = width;
 	pSpr->hitHeight = height;
-	pSpr->hitTriangle = tl_malloc(sizeof(float)*SPRITE_TRIANGLE_COUNT);
+	pSpr->pHit->hitTriangle = tl_malloc(sizeof(float)*SPRITE_TRIANGLE_COUNT);
 	//printf("pSpr = %0x\n",pSpr);
 	//设置顶点组织方式
 	InitType(pSpr);
@@ -1185,8 +1195,8 @@ void sprite_dipose(struct Sprite* spr){
 	}
 
 	//spr->ptr_luaCallBack = 0;
-	if(spr->hitTriangle)
-		tl_free(spr->hitTriangle);
+	if(spr->pHit->hitTriangle)
+		tl_free(spr->pHit->hitTriangle);
 
 	if(spr->vertexs)
 		tl_free(spr->vertexs);
@@ -1213,6 +1223,8 @@ void sprite_dipose(struct Sprite* spr){
 		objVBO_dispose(spr->vbo);
 	}
 	LStack_delNode(ex_getIns()->renderList,(int)spr);//从渲染节点列表中移除
+
+	spritehit_dispose(spr->pHit);
 
 	tl_free(spr);
 }

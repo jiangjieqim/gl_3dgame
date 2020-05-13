@@ -1,6 +1,8 @@
 #ifndef _SPRITE_H_
 #define _SPRITE_H_
 #include "vmath.h"
+#include "spritehit.h"
+
 //#include <stdarg.h>
 //#define USE_VBO_SPRITE	//是否使用VBO模式的Sprite
 /************************************************************************/
@@ -51,7 +53,7 @@ struct Sprite{
 	/*
 		做射线拾取的时候使用
 	*/
-	float *hitTriangle;
+	//float *hitTriangle;
 	//float *triangle2;
 	
 	/*
@@ -84,6 +86,8 @@ struct Sprite{
 	//九宫格引用
 	//struct Grid9Node* grid9;
 	 //long btntime;//做计时器存储的变量
+
+	struct SpriteHit* pHit;
 	
 };
 

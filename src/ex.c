@@ -1494,7 +1494,7 @@ hitUiTest(struct Sprite* spr,float x,float y,struct HitUiInfo* outptInfo)
 	farPoint.y = y;
 	farPoint.z = -10;
 
-	tl_pickTriangle(spr->hitTriangle,SPRITE_TRIANGLE_COUNT,&nearPoint,&farPoint,&pos,&hit);
+	tl_pickTriangle(spr->pHit->hitTriangle,SPRITE_TRIANGLE_COUNT,&nearPoint,&farPoint,&pos,&hit);
 	if(hit.isHit){
 		outptInfo->localX = hit.x - spr->screenX;
 		outptInfo->localY = hit.y - spr->screenY;
