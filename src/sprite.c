@@ -697,12 +697,13 @@ f_sprite_setDragScope(struct Sprite* pSpr,int x,int y,int w,int h)
 	log_color(0,"Sprite name=[%s]设置FLAGS_DRAG\n",base->name);
 
 	setv(&base->flags,FLAGS_DRAG);
-	pSpr->oldx = pSpr->screenX;
+	/*pSpr->oldx = pSpr->screenX;
 	pSpr->oldy = pSpr->screenY;
 	pSpr->dragX = x;
 	pSpr->dragY = y;
 	pSpr->dragWidth = w;
-	pSpr->dragHeight = h;
+	pSpr->dragHeight = h;*/
+	spritehit_setData(pSpr->pHit,x,y,w,h,pSpr->screenX,pSpr->screenY);
 }
 
 /*
@@ -952,18 +953,18 @@ sprite_drawRender(int data)
 	renderSprite(spr);
 }
 
-/*
-	是否设置了拖拽范围区间
-*/
-static int
-haveDragScope(struct Sprite* ptr){
-	//if(ptr->m_fPosX+ptr->dragWidth - ptr->m_fWidth)
-	if(ptr->dragWidth || ptr->dragHeight)
-	{
-		return 1;
-	}
-	return 0;
-}
+///*
+//	是否设置了拖拽范围区间
+//*/
+//static int
+//haveDragScope(struct Sprite* ptr){
+//	//if(ptr->m_fPosX+ptr->dragWidth - ptr->m_fWidth)
+//	if(ptr->dragWidth || ptr->dragHeight)
+//	{
+//		return 1;
+//	}
+//	return 0;
+//}
 //static void 
 //fLuaDragMove(const char* luaFunName,const char* name,float progress)
 //{
@@ -975,14 +976,7 @@ haveDragScope(struct Sprite* ptr){
 //		printf("error %s\n", lua_tostring(L,-1));
 //	}
 //}
-/*
-	是否是纵向
-*/
-static int 
-IsDragDirection(struct Sprite* sprite)
-{
-	return sprite->dragDirection;
-}
+
 //========================================================
 //#define _ZERO_
 
@@ -1033,56 +1027,20 @@ f_get_global(struct Sprite* p,int* px,int* py){
 static void 
 changeDragXY(struct Sprite* p,int* px,int* py){
 //检查ScrollBar ScrollBarBG_Click接口
-	if(haveDragScope(p)){
-		int cx0,cx1,cy0,cy1,oldx,oldy;
+	if(spritehit_haveDragScope(p->pHit)){
+		//int cx0,cx1,cy0,cy1,oldx,oldy;
 		float progress;
-		//sprite_refresh_local_pos((void*)p);
 
 		int ppx=0,ppy=0;
+
 		f_get_global(p,&ppx,&ppy);
-	/*	ppx-=p->localx;
-		ppy-=p->localy;*/
 
-		
-		oldx = p->oldx;
-		oldy = p->oldy;
+		spritehit_changeDragXY(p->pHit,GetWidth(p),GetHeight(p),
+			ppx,ppy,p->screenX,p->screenY,
+			px,py,&progress);
 
-		cx0 = p->dragX+oldx + ppx;
-		cx1 = oldx+p->dragWidth - GetWidth(p) + ppx;
 
-		cy0 = p->dragY+oldy + ppy; 
-		cy1 = oldy+p->dragHeight- GetHeight(p) + ppy;
-
-		if(*px <= cx0)
-			*px = cx0;
-		else if(*px>=cx1) 
-			*px = cx1;
-
-		if(*py <= cy0) 
-			*py = cy0;
-		else if(*py>=cy1)
-			*py = cy1;
-		
-		if(IsDragDirection(p))
-			progress = (p->screenY-p->oldy-ppy)/(p->dragHeight - GetWidth(p));//纵向比率
-		else
-			progress = (p->screenX-p->oldx-ppx)/(p->dragWidth - GetHeight(p));//横向比率
-		
-		//if(p->callLuaDragMove)
-		//	fLuaDragMove(p->callLuaDragMove,progress);//发送更新事件
-		//if(p->callLuaDragMove)
-		//{
-		//	struct HeadInfo* b = base_get(p);
-		//	fLuaDragMove(p->callLuaDragMove,b->name,progress);
-		//}
-
-	
 		 //发送事件给lua
-//		char _str[G_BUFFER_64_SIZE];
-//		struct HeadInfo* b = base_get(p);
-//		sprintf_s(_str, G_BUFFER_64_SIZE,"%s,%d,%d,%.3f",b->name,*px,*py,progress);	
-			
-		//printf("c=[%s]lx = %.3f,ly = %.3f %d %d,0x%0x	\t cx0 = %d cx1 = %d\n",_str,p->screenX,p->screenY,p->localx,p->localy,p->parent,cx0,cx1);
 		ex_lua_evt_dispatch_f(p,EVENT_ENGINE_SPRITE_CLICK_MOVE,progress);
 	}
 }
@@ -1316,8 +1274,6 @@ void sprite_addChild(void* p,void* child){
 		//printf("is exist!!!\n");
 		return;
 	}
-	
-	//设置相对坐标
 	LStack_push(spr->childs,child);
 }
 

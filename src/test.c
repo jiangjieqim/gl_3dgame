@@ -253,8 +253,8 @@ f_onSpriteClickCallBack(struct Sprite* sprite,int localX,int localY){
 		//鼠标点击了Sprite
 
 		struct HeadInfo* b = base_get(sprite);
-		sprite->mouseLocalX = localX;
-		sprite->mouseLocalY = localY;
+		sprite->pHit->mouseLocalX = localX;
+		sprite->pHit->mouseLocalY = localY;
 		ex_lua_evt_dispatch(sprite,EVENT_ENGINE_SPRITE_CLICK,b->name);
 
 		//if((int)strlen((const char*)sprite->callLuaFunName)>0)
@@ -494,7 +494,7 @@ static int
 REG_sprite_set_direction(lua_State *L){
 	struct Sprite* spr=(struct Sprite*)lua_tointeger(L,1);
 	int dir = lua_tointeger(L,2);
-	spr->dragDirection = dir;
+	spr->pHit->dragDirection = dir;
 	return 0;
 }
 
@@ -547,7 +547,7 @@ REG_sprite_create(lua_State *L)
 	//copyMoveFuncStr(ptr,_move);
 	//copyMouseDownFuncStr(ptr,_mouseDown);
 	
-	ptr->dragDirection = direction;//拖拽的方向
+	ptr->pHit->dragDirection = direction;//拖拽的方向
 
 	//这里去引擎中的图集myAtals
 	//ptr->atals = ex_getInstance()->myAtals;
@@ -1460,8 +1460,8 @@ REG_get_attr(lua_State *L)
 	if(!strcmp(attrKey,"spriteLocalXY"))
 	{
 		struct Sprite* sprite = (struct Sprite*)ptr;
-		lua_pushinteger(L,sprite->mouseLocalX);
-		lua_pushinteger(L,sprite->mouseLocalY);
+		lua_pushinteger(L,sprite->pHit->mouseLocalX);
+		lua_pushinteger(L,sprite->pHit->mouseLocalY);
 		return 2;
 	}
 
@@ -1481,7 +1481,7 @@ REG_get_attr(lua_State *L)
 	}
 	else if(!strcmp(attrKey,"dragDirection")){
 		struct Sprite* sprite = (struct Sprite*)ptr;
-		lua_pushnumber(L,sprite->dragDirection);
+		lua_pushnumber(L,sprite->pHit->dragDirection);
 		return 1;
 	}
 

@@ -21,8 +21,6 @@ struct Sprite{
 	
 	//z轴的缩放
 	float zScale;
-	//鼠标相对于面板的点击局部坐标
-	int mouseLocalX,mouseLocalY;
 
 	//屏幕坐标,从左上角开始计算0,0
 	float screenX;
@@ -61,16 +59,6 @@ struct Sprite{
 	*/
 	void (*clickCallBack)(struct Sprite* ptrSprite,int localX,int localY);
 
-	/*
-		以Sprire相对的0,0坐标设置的拖拽范围,如果设置的是0,没有范围限制
-	*/
-	int	dragX,dragY,dragWidth,dragHeight,oldx,oldy;
-
-	/*
-		--0:横向拖动滑块,1纵向拖动滑块
-	*/
-	int	dragDirection;
-
 	//char* luaTablePtr;
 	int parseType;
 	int useVBO;//是否使用VBO模式
@@ -90,7 +78,6 @@ struct Sprite{
 	struct SpriteHit* pHit;
 	
 };
-
 
 #define SPRITE_Z 0
 #define SPRITE_SELF_XY 1		
