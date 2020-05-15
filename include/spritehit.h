@@ -29,7 +29,7 @@ struct SpriteHit{
 void spritehit_dispose(struct SpriteHit* phit);
 
 //设置可点击区域
-void spritehit_hitTriangle(struct SpriteHit* phit,struct Vec2 a1,struct Vec2 a2,struct Vec2 a3,struct Vec2 a4);
+void spritehit_hitTriangle(struct SpriteHit* phit,float screenX,float screenY);
 
 //设置碰撞的数据
 void spritehit_setData(struct SpriteHit* pSpr,

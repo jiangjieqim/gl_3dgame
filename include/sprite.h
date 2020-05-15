@@ -32,8 +32,6 @@ struct Sprite{
 
 	int mouseDownX,mouseDownY;//鼠标左键点击下的坐标
 
-	int hitX,hitY,hitWidth,hitHeight;//点击的区域范围矩形
-
 	void* vertexs;//GLfloat*顶点缓存数据,使用完之后要删除tl_free
 	int	vertLen;
 
@@ -49,21 +47,13 @@ struct Sprite{
 	Matrix44f mat4x4;
 	
 	/*
-		做射线拾取的时候使用
-	*/
-	//float *hitTriangle;
-	//float *triangle2;
-	
-	/*
 		Sprite点击回调
 	*/
 	void (*clickCallBack)(struct Sprite* ptrSprite,int localX,int localY);
 
-	//char* luaTablePtr;
 	int parseType;
-	int useVBO;//是否使用VBO模式
+	//int useVBO;//是否使用VBO模式
 	struct Obj_vbo_model* vbo;
-
 
 	//子对象列表
 	struct LStackNode *childs;
@@ -71,12 +61,8 @@ struct Sprite{
 	void* parent;
 	//局部坐标,相对于父对象,如果是在stage上就为0,0
 	int localx,localy;
-	//九宫格引用
-	//struct Grid9Node* grid9;
-	 //long btntime;//做计时器存储的变量
 
 	struct SpriteHit* pHit;
-	
 };
 
 #define SPRITE_Z 0

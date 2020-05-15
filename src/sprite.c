@@ -19,6 +19,8 @@
 #include "map.h"
 #include "spritehit.h"
 
+#define USE_VBO	//是否使用VBO模式
+
 //#define _SET_POS_DEBUG_
 
 //#define _UV_DEBUG_
@@ -380,66 +382,7 @@ load_vbo(int ParseType){
 	return 0;
 }
 
-/*
-	构建2个点击三角形,这两个三角形构成一个矩形的点击区域,用来检测是否点击到该区域
-*/
-static void
-setHitTriangle(struct Sprite* spr){
-	int i = 0;
-	struct Vec2 a1,a2,a3,a4;
-	
-	if(!spr->pHit->hitTriangle){
-		//没有设置可碰撞属性
-		return;
-	}
 
-	a1.x =  spr->screenX + spr->hitX;
-	a1.y =	spr->screenY + spr->hitY;
-	
-	a2.x = spr->screenX +  spr->hitWidth;//+spr->mWidth;
-	a2.y = spr->screenY;
-
-	a3.x = spr->screenX+ spr->hitWidth;//spr->mWidth;
-	a3.y = spr->screenY+ spr->hitHeight;//spr->mHeight;
-
-	a4.x = spr->screenX;
-	a4.y =  spr->screenY + spr->hitHeight;//spr->mHeight;
-
-	spritehit_hitTriangle(spr->pHit,a1,a2,a3,a4);
-	/*
-	//a1
-	spr->hitTriangle[0] = a1.x ;
-	spr->hitTriangle[1] = a1.y ;
-	spr->hitTriangle[2] = 0;
-
-	//a2
-	spr->hitTriangle[3] = a2.x;
-	spr->hitTriangle[4] = a2.y;
-	spr->hitTriangle[5] = 0;
-
-	//a3
-	spr->hitTriangle[6] = a3.x;
-	spr->hitTriangle[7] = a3.y;
-	spr->hitTriangle[8] = 0;
-
-	////===================================================
-	
-	//a1
-	spr->hitTriangle[9] =  a1.x;
-	spr->hitTriangle[10] = a1.y;
-	spr->hitTriangle[11] = 0;
-
-	//a4
-	spr->hitTriangle[12] = a4.x;
-	spr->hitTriangle[13] = a4.y;
-	spr->hitTriangle[14] = 0;
-
-	//a3
-	spr->hitTriangle[15] =  a3.x;
-	spr->hitTriangle[16] =  a3.y;
-	spr->hitTriangle[17] = 0;
-	*/
-}
 //
 ///*
 //	设置层级
@@ -537,15 +480,6 @@ static void f_sprite_set_self_pos(void* p,int x,int y){
 	sprite_setpos(spr,x,y);
 }
 
-//void sprite_refresh_local_pos(void* p){
-//	struct Sprite* spr = (struct Sprite*)p;	
-//	if(spr->parent){
-//		struct Sprite* parent = (struct Sprite*)spr->parent;
-//		spr->localx = parent->screenX - spr->screenX;
-//		spr->localy = parent->screenY - spr->screenY;
-//	}
-//}
-
 //设置绝对坐标
 void sprite_setpos(struct Sprite* spr,int x,int y){
 	//printf("%d,%d\n",x,y);
@@ -553,7 +487,7 @@ void sprite_setpos(struct Sprite* spr,int x,int y){
 	//evt_once(NextFrame)到下一个关键帧的时候更新数据,这样不会抖屏
 	
 	setSpriteScreenPos(spr,x,y);//更新屏幕坐标
-	setHitTriangle(spr);//更新点击区域
+	spritehit_hitTriangle(spr->pHit,spr->screenX,spr->screenY);//更新点击区域
 	f_refreshLocalPos(spr);
 	f_refreshChildPos(spr);//更新sprite的子对象的坐标
 }
@@ -561,14 +495,14 @@ void sprite_setpos(struct Sprite* spr,int x,int y){
 static void 
 InitType(struct Sprite* pSpr)
 {
-	pSpr->useVBO = 1;
-	if(pSpr->useVBO){
+	//pSpr->useVBO = 1;
+#ifdef USE_VBO
 		pSpr->parseType = Type_4Vertex;//Type_4Vertex,Type_6Vertex;
-		
 		pSpr->vbo=load_vbo(pSpr->parseType);//使用VBO
 		//printf("pSpr->vbo = %0x\n",pSpr->vbo);
-	}else
+#else
 		pSpr->vertexs = LoadQuadObj(&pSpr->vertLen);//加载顶点数据(非VBO实现)
+#endif
 }
 /*
 	是否有鼠标事件,有回调句柄说明有拾取事件
@@ -632,9 +566,10 @@ sprite_create(char* _spriteName,
 
 	pSpr->mWidth  = width;
 	pSpr->mHeight = height;
-	pSpr->hitWidth = width;
-	pSpr->hitHeight = height;
+	
 	pSpr->pHit->hitTriangle = tl_malloc(sizeof(float)*SPRITE_TRIANGLE_COUNT);
+	pSpr->pHit->hitWidth = width;
+	pSpr->pHit->hitHeight = height;
 	//printf("pSpr = %0x\n",pSpr);
 	//设置顶点组织方式
 	InitType(pSpr);
@@ -825,7 +760,7 @@ renderSprite(struct Sprite* p)
 		}
 		
 		
-		if(p->useVBO){
+#ifdef USE_VBO
 			//渲染管线采用vbo模式
 			objVBO_renderNode(
 				getvbo(p),
@@ -835,13 +770,8 @@ renderSprite(struct Sprite* p)
 				0,
 				base->cam
 				);
-		}
-		//}else{
-		//	GMaterial* __mat = (GMaterial*)material;
-		//	shaderName = __mat->glslType;
-		//	//采用固定管线方式
-		//	tmat_renderSprite(material,shaderName,p->mat4x4,p->vertexs,p->vertLen,GL_T2F_V3F,base_get_ploygonLineMode(base->flags));//非vbo模式
-		//}
+#endif
+		
 	}
 }
 
@@ -1378,9 +1308,11 @@ f_sprite_bindAtals(void* p,void* atals){
  */
 static void
 f_sprite_set_hit_rect(void*p,int x,int y,int w,int h){
-	struct Sprite* ptr = (struct Sprite* )p;
+	struct Sprite* pp = (struct Sprite* )p;
+	struct SpriteHit* ptr = pp->pHit;
 	ptr->hitX = x,	ptr->hitY = y, ptr->hitWidth = w,ptr->hitHeight = h;
-	setHitTriangle(ptr);
+	//setHitTriangle(ptr);
+	spritehit_hitTriangle(pp->pHit,pp->screenX,pp->screenY);
 }
 //设置九宫格数据
 static void

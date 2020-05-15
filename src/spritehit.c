@@ -1,5 +1,4 @@
 #include "tl_malloc.h"
-
 #include "spritehit.h"
 
 void spritehit_dispose(struct SpriteHit* phit){
@@ -17,7 +16,27 @@ void spritehit_setData(struct SpriteHit* pSpr,
 	pSpr->dragHeight = dragHeight;
 }
 
-void spritehit_hitTriangle(struct SpriteHit* spr,struct Vec2 a1,struct Vec2 a2,struct Vec2 a3,struct Vec2 a4){
+void spritehit_hitTriangle(struct SpriteHit* spr,
+			float screenX,float screenY){
+	struct Vec2 a1,a2,a3,a4;
+	if(!spr->hitTriangle){
+		//没有设置可碰撞属性
+		return;
+	}
+	
+	a1.x =  screenX + spr->hitX;
+	a1.y =	screenY + spr->hitY;
+	
+	a2.x = screenX +  spr->hitWidth;//+spr->mWidth;
+	a2.y = screenY;
+
+	a3.x = screenX+ spr->hitWidth;//spr->mWidth;
+	a3.y = screenY+ spr->hitHeight;//spr->mHeight;
+
+	a4.x = screenX;
+	a4.y = screenY + spr->hitHeight;//spr->mHeight;
+			
+				
 	//a1
 	spr->hitTriangle[0] = a1.x ;
 	spr->hitTriangle[1] = a1.y ;
