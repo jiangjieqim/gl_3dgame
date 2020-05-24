@@ -61,3 +61,14 @@ localToGlobal
 6.实现一个lua的json的解析类  
 7.全局搜tostring的调用,处理掉  
 8.实现onDisplay和unDisplay  
+9.将很多可以一改成Lua的C模块改成Lua的 
+10.用Line绘制各种立方盒子  
+11.button穿透的时候还有点击效果  
+12.构造shader,剔除掉glslType  
+13.材质直接引用矩阵空间  
+14.余以为尽可除去固定管线不用..
+15.将相同图集的Sprite合并到一个网格
+16.将Sprite按下效果处理到button.lua模块中  
+17.直接修改Sprite的顶点值来处理x,y,w,h
+18.BUG: bauul.mat的 cb="1"的时候 <mat shader="simple;vboSimple" cb="10" tex0="\resource\texture\bauul.tga"/>
+19.将Sprite分成点击拾取模块

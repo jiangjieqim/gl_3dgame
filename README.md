@@ -422,6 +422,15 @@ for _, v in ipairs(list) do
 ---not you can see completion for v
 end
 ```
+*单独的注释用---*  
+```
+---为Tabel设置其地址
+---@param o Tabel
+function M.bindAddress(o)
+	o.address=f_get_address(o);
+end
+```
+
 *关于调试的一些问题*  
 增加一个断点入口
 Ctrl +  Shift + P : EmmyLua:Inster Emmy Debugger Code  
