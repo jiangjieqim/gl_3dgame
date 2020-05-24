@@ -37,11 +37,8 @@ function AvatarView:refreshView()
             m:scale(o.scale);
 
             m:set_position(o.x,o.y,o.z);
-            
             self.mScale = o.scale;
             self.m = m;
-
-           
         end
     end
 
@@ -145,9 +142,8 @@ function AvatarView:new()
 <ui name="rotate" type="NScrollBar" x="10" y="180" parent="1"/>
 <ui name="tri2" type="NButton" x="0" y="200" parent="1" url="tri2.png" w="15" h="15" rotatez="3.14"/>
 <ui name="tri3" type="NButton" x="20" y="200" parent="1" url="tri2.png" w="15" h="15"/>
-]],
-
-"gundi.png;checkbox.png;smallbtn.png"
+]]
+,"gundi.png;checkbox.png;smallbtn.png"
 );
 
 --[[

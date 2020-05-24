@@ -152,12 +152,6 @@ local function texCallBack()
 	);
 ]]
 	
-	-- loadAvatarView();
-	
-	
-
-	
-
 
 	-- local lb = LineBox:new(0.5);
 	-- lb:setPos(0,0.2,0);
@@ -168,6 +162,9 @@ local function texCallBack()
 	-- fps:show();
 end
 e:setfps(24);--24
+
+plug:load("view/FpsView"):show();
+
 -- loadtexs("gundi.png;checkbox.png;smallbtn.png",texCallBack);
 evt_on(0,EVENT_ENGINE_KEYBOARD,f_onkey);
 

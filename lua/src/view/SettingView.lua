@@ -47,7 +47,7 @@ function SettingView:new()
     local nskin = NSkin:new();
 	self.nskin = nskin;
     evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmleteHandler);
-    
+    core.bindAddress(self);
     evt_on(self,core.EVENT.DISPLAY,onDisplay);
 
 	nskin:load([[<ui name="1" type="NPanel" drag="1" center="1" width="200" height="30"/>
